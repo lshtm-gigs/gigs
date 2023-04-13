@@ -9,7 +9,7 @@
 [![Project Status: WIP – Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![codecov](https://app.codecov.io/gh/simpar1471/gigs/branch/master/graph/badge.svg?token=MOB85DYT23)](https://app.codecov.io/gh/simpar1471/newborn)
+[![test-coverage](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml)
 <!-- badges: end -->
 
 ## Overview
