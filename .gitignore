@@ -1,0 +1,11 @@
+.idea
+docs
+data-raw/tables/*/stata/
+/exclude/
+/pkgdown/
+.Rproj.user
+.Rhistory
+*.Rproj
+/doc/
+/Meta/
+inst/doc

@@ -1,0 +1,78 @@
+---
+title: "Introduction to gigs"
+description: >
+  Learn how to get started with the basics of gigs.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to gigs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr_opts, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+`gigs` is designed to make working with outputs from either the INTERGROWTH-21<sup>st</sup> project and World Health
+Organisation Child Growth Standards as easy as possible. It also provides functions for easy and reproducible
+classification of newborn and infant growth.
+
+Which functions you want to use depend on whether you're **classifying observations**, or **converting between values
+and z-scores/percentiles**. Let's start by loading the package.
+
+```{r setup}
+library(gigs)
+```
+
+## Converting between z-scores/percentiles and values
+
+### From values to z-scores/percentiles
+Much of the time, you'll want to know where a measurement for a given case lies relative to 'expected' values for that
+case. This is where the `value2zscore` and `value2percentile` functions come in:
+
+#### Example 1a: Converting newborn weights
+```{r example_1a}
+df_newborn_weights <- data.frame(
+        weight_kg = c(0.91, 3.33, 3.03, 3.35, 3.47, 1.90),
+        gest_age = c(26 + 1/7, 40, 41 + 6/7, 37, 39 + 4/7, 33),
+        sex = c(rep("M", 3), rep("F", 3))
+)
+df_newborn_weights$weight_p <- round(ig_nbs_value2percentile(y = df_newborn_weights$weight_kg,
+                                                             gest_age = df_newborn_weights$gest_age,
+                                                             sex = df_newborn_weights$sex,
+                                                             acronym = "wfga"),
+                                     digits = 2)
+
+df_newborn_weights$weight_z <- round(ig_nbs_value2zscore(y = df_newborn_weights$weight_kg,
+                                                         gest_age = df_newborn_weights$gest_age,
+                                                         sex = df_newborn_weights$sex,
+                                                         acronym = "wfga"),
+                                     digits = 2)
+head(df_newborn_weights)
+```
+
+Given that the outputs of these functions are vectors, gain functions integrate easily with `dplyr` verbs.
+
+### From z-scores/percentiles to values
+
+Alternatively, you may wish to calculate reference values for median head circumference in female newborns for
+gestational ages from 38 to 38 + 6/7 weeks. This is achievable through the relevant `percentile2value` function:
+```{r conversion_hcfga}
+ig_nbs_hcfga_percentile2value(p = 0.5, gest_age = seq(38, 38 + 6/7, by = 1/7), sex = "M") |>
+        round(digits = 1)
+```
+
+## Classifying z-scores/percentiles and values
+
+Sometimes it is more valuable to classify observed z-scores/percentiles than to work with the raw values, for example
+when evaluating size for gestational age in newborns. The classification functions offered by this package allow the
+user to easily classify growth status:
+
+### Classifying size for gestational age
+```{r example_2}
+df_newborn_weights$classification <- classify_sga(y = df_newborn_weights$weight_kg,
+                                                  gest_age = df_newborn_weights$gest_age,
+                                                  sex = df_newborn_weights$sex,
+                                                  acronym = "wfga")
+head(df_newborn_weights)
+```

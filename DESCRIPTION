@@ -1,0 +1,30 @@
+Type: Package
+Package: gigs
+Title: Assess Growth in Infants and Newborns
+Version: 0.1.0
+Date: 2023-04-13
+Authors@R: c(
+    person(given = "Simon", family = "Parker", email = "simon.parker@lshtm.ac.uk", role = c("aut", "cre")),
+    person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
+    )
+Description: Convert between z-scores/percentiles and anthropometric measures in multiple growth standards, and classify
+    infant growth accordingly.
+License: GPL (>= 3)
+URL: https://github.com/simpar1471/gigs/,
+    https://simpar1471.github.io/gigs/
+BugReports: https://github.com/simpar1471/gigs/issues
+Depends: 
+    R (>= 4.1.0)
+Imports:
+    gamlss.dist
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-GB
+LazyData: true
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)

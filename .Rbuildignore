@@ -1,0 +1,17 @@
+^.idea$
+^.gitignore$
+^README\.Rmd$
+^data-raw$
+^\.Rprofile$
+^\.github$
+^LICENSE\.md$
+^_pkgdown\.yml$
+^docs$
+^exclude$
+^pkgdown$
+^vignettes/articles$
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
+^cran-comments\.md$

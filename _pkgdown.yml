@@ -1,0 +1,40 @@
+url: https://simpar1471.github.io/gigs/
+template:
+  bootstrap: 5
+  bootswatch: journal
+articles:
+- title: All vignettes
+  contents:
+  - gigs
+  - articles/ig-nbs-body-composition
+reference:
+  - title: Growth classification
+    desc: Classify size for gestational age, stunting, wasting and under/overweight
+    contents:
+      - classify_sga
+      - classify_stunting
+      - classify_wasting
+      - classify_wfa
+  - title: INTERGROWTH-21st newborn size standards (including very preterm)
+    desc: Conversion functions the INTERGROWTH-21st newborn size standards (including very preterm)
+    contents:
+      - ig_nbs_percentile2value
+      - ig_nbs_value2percentile
+  - title: INTERGROWTH-21st post-natal growth in preterm infants
+    desc: Conversion functions for the INTERGROWTH-21st post-natal growth standards for preterm infants
+    contents:
+      - ig_png_value2zscore
+      - ig_png_zscore2value
+  - title: WHO Growth Standards
+    desc: Conversion functions for the WHO Growth Standards
+    contents:
+      - who_gs_zscore2value
+      - who_gs_value2zscore
+  - title: Reference data and coefficients tables
+    desc: Lists containing tables of reference values/model parameters for INTERGROWTH-21st and WHO standards.
+    contents:
+      - ig_nbs
+      - ig_nbs_coeffs
+      - ig_png
+      - who_gs
+      - who_gs_coeffs
