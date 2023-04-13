@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gigs <img src="man/figures/logo.png" align="right" height="138" />
+# gigs: Assess Growth in Infants and Newborns <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
 
@@ -10,16 +10,18 @@
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![test-coverage](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/github/simpar1471/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/simpar1471/gigs)
 <!-- badges: end -->
 
 ## Overview
 
-gigs provides a single, simple interface for working with the WHO Child
-Growth Standards and outputs from the INTERGROWTH-21<sup>st</sup>
-project. You will find functions for converting between anthropometric
-measures (e.g. weight or length) to z-scores and percentiles, and the
-inverse. Also included are functions for classifying newborn growth
-according to DHS guidelines.
+Produced as part of the Guidance for International Growth Standards
+project, `gigs` provides a single, simple interface for working with the
+WHO Child Growth Standards and outputs from the
+INTERGROWTH-21<sup>st</sup> project. You will find functions for
+converting between anthropometric measures (e.g. weight or length) to
+z-scores and percentiles, and the inverse. Also included are functions
+for classifying newborn growth according to DHS guidelines.
 
 ## Installation
 
