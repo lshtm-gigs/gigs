@@ -27,7 +27,7 @@ library(gigs)
 Produced as part of the Guidance for International Growth Standards project, `gigs` provides a single, simple interface
 for working with the WHO Child Growth Standards and outputs from the INTERGROWTH-21<sup>st</sup> project. You will find
 functions for converting between anthropometric measures (e.g. weight or length) to z-scores and percentiles, and the
-inverse. Also included are functions for classifying newborn growth according to DHS guidelines.
+inverse. Also included are functions for classifying newborn and infant growth according to DHS guidelines.
 
 ## Installation
 ```r

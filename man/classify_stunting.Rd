@@ -19,8 +19,7 @@ classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 standing height.}
 }
 \value{
-Factor variable with stunting classification(s). Can be \code{"stunting_severe"}, \code{"stunting"},
-\code{"normal"}, or \code{"implausible"}.
+Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
 }
 \description{
 Classify stunting (low height-for-age) using INTERGROWTH-21st or WHO Growth Standards depending on the gestational

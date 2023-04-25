@@ -16,8 +16,7 @@ classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 }
 \value{
-Factor variable with weight classification(s). Can be \code{"underweight_severe"}, \code{"underweight"},
-\code{"normal"}, \code{"overweight"}, or \code{"implausible"}.
+Factor of weight classification(s) with levels \code{c("implausible", "underweight_severe", "underweight", "normal", "overweight")}.
 }
 \description{
 Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards depending on the gestational age
