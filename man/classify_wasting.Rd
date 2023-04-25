@@ -17,8 +17,7 @@ classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
 standing height.}
 }
 \value{
-Factor variable with wasting classification(s). Can be \code{"wasting_severe"}, \code{"wasting"},
-\code{"normal"}, \code{"overweight"}, or \code{"implausible"}.
+Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
 }
 \description{
 Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth Standards depending on the gestational age

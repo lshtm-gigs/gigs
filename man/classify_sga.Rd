@@ -19,9 +19,8 @@ or \code{"hcfga"}. Default = \code{"wfga"}.}
 \item{coarse}{If \code{FALSE}, specify which SGA values are below the third percentile. Default = \code{TRUE}.}
 }
 \value{
-Factor variable with gestational age classification(s). If \code{coarse = TRUE}, can be \code{"SGA"},
-\code{"AGA"}, or \code{"LGA"}. If \code{coarse = FALSE}, can be \code{"SGA(<3)"}, \code{"SGA"}, \code{"AGA"}, or
-\code{"LGA"}.
+Factor with gestational age classification(s). If \code{coarse = TRUE}, levels are \code{c("SGA", "AGA",  "LGA")}.
+If \code{coarse = FALSE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
 Sizes for gestational age (SGAs) are generally split in three categories: small-for-GA (SGA), appropriate-for-GA

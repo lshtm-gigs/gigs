@@ -15,11 +15,11 @@ test_that("Size for GA classification works", {
            classify_sga(y = weight, sex = psex, gest_age = gestage, coarse = F)),
     expected = factor(c("AGA", "SGA(<3)", "SGA", "LGA", "LGA", "AGA", "LGA", "LGA", "SGA",
                       "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
-                      "SGA(<3)", "SGA(<3)", "AGA", "SGA")))
+                      "SGA(<3)", "SGA(<3)", "AGA", "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
   expect_equal(
     object = classify_sga(y = c(32.6, 34.2, 36.0), gest_age = 39 + 4/7,
              sex = "M", acronym = "hcfga"),
-    expected = factor(c("SGA",  "AGA", "LGA")))
+    expected = factor(c("SGA", "AGA", "LGA"), levels = c("SGA", "AGA",  "LGA")))
 })
 
 
@@ -31,17 +31,18 @@ test_that("Stunting classification works", {
                  # term, age, <-2
                  # term, age, healthy
                  ## ALL MALE ALL "H"
-                 with(data.frame(lenht = c(40.1, 73.6, 39.3, 75.4, 72.83),
+                 with(data.frame(lenht = c(57.5, 73.6, 44.1, 75.4, 72.83),
                                  ga_at_birth = c(34, 35, 36, 37, 38),
-                                 pma_days = c(252, 455, 294, 525, 245),
+                                 age_days = c(180, 455, 294, 525, 245),
                                  psex = "M", len_method = "H"),
                       classify_stunting(lenht_cm = lenht,
-                                        age_days = pma_days,
+                                        age_days = age_days,
                                         ga_at_birth = ga_at_birth,
                                         sex = psex,
                                         lenht_method = len_method)),
                expected = factor(
-                 c("stunting_severe", "normal", "implausible", "stunting", "normal")
+                 c("stunting_severe", "normal", "implausible", "stunting", "normal"),
+                 levels = c("implausible", "stunting_severe", "stunting", "normal")
                  ))
 })
 
@@ -63,7 +64,8 @@ test_that("Wasting classification works", {
                             sex = psex,
                             lenht_method = lenht_meth)),
     expected = factor(
-      c("wasting_severe", "wasting",  NA_character_, "implausible", "normal", NA_character_))
+      c("wasting_severe", "wasting",  NA_character_, "implausible", "normal", NA_character_),
+      levels =  c("implausible", "wasting_severe", "wasting", "normal", "overweight"))
     )
 })
 
@@ -87,7 +89,8 @@ test_that("Weight-for-age classification works", {
                         sex = psex)),
     expected = factor(
       c("underweight", "underweight_severe", "implausible", "normal", "implausible", "overweight",
-        NA_character_))
+        NA_character_),
+      levels = c("implausible", "underweight_severe", "underweight", "normal", "overweight"))
     )
   
   expect_error(
