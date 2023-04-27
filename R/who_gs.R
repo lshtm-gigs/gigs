@@ -1,82 +1,3 @@
-########################################################################################################################
-########################################################################################################################
-
-#' Get LMS values for WHO Growth Standards models
-#'
-#'
-#' @param x X value(s) at which to retrieve LMS values. Must be within bounds of available x values for given acronym.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Valid acronym for WHO Growth Standards datasets: one of `"wfa"` (weight-for-age), `"bfa"`
-#' (bmi-for-age), `"lhfa"` (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
-#' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"` (arm circumference-for-age),
-#' `"ssfa"` (subscapular skinfold-for-age), or `"tsfa"` (triceps skinfold-for-age),
-#'
-#' @returns A dataframe with lambda, mu and sigma values for the WHO growth standard(s) specified by the `acronym`
-#' parameter, for the supplied `x` and `sex` values.
-#'
-#' @references
-#' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The WHO Multicentre Growth Reference
-#' Study: planning, study design, and methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.**
-#' doi: [10.1177/15648265040251s104](https://journals.sagepub.com/doi/10.1177/15648265040251S104)
-#'
-#' @rdname who_gs_lms
-#' @keywords internal
-who_gs_lms <- function(x, sex, acronym) {
-  checked_params <- check_who_params(sex, acronym)
-  new_df <- data.frame(sex = checked_params$sex,
-                       x =  x,
-                       acronym = checked_params$acronym,
-                       sort = seq(from = 1, to = length(x)))
-
-  load_lms_with_sex_acronym <- function(sex, acronym) {
-    coeff_tbl <- gigs::who_gs_coeffs[[acronym]][[sex]]
-    cbind(coeff_tbl,
-          sex = rep_len(ifelse(sex == "male", yes = "M", no = "F"), length.out = nrow(coeff_tbl)),
-          acronym = rep_len(acronym, length.out = nrow(coeff_tbl)))
-  }
-
-  sexes_to_load <- intersect(c("male", "female"), ifelse(unique(sex) == "M", yes = "male", no = "female"))
-  acronyms_to_load <- intersect(names(gigs::who_gs_coeffs), unique(acronym))
-  tot_len <- length(sexes_to_load) * length(acronyms_to_load)
-  who_gs_coeffs_long <- do.call(rbind,
-                                mapply(x = rep_len(sexes_to_load, length.out = tot_len),
-                                       y = rep_len(acronyms_to_load, length.out = tot_len),
-                                       SIMPLIFY = F,
-                                       FUN = function(x, y) load_lms_with_sex_acronym(sex = x, acronym = y)))
-  if (!is.null(who_gs_coeffs_long)) {
-    names(who_gs_coeffs_long)[1] <- "x"
-    out <- merge(new_df, who_gs_coeffs_long, all.x = TRUE, sort = FALSE)
-    out <- out[order(out$sort), ]
-  } else {
-    out <- new_df
-    out$L <- NA
-    out$M <- NA
-    out$S <- NA
-  }
-  out[, -which(names(out) == "sort")]
-}
-
-########################################################################################################################
-########################################################################################################################
-
-#' Get standard deviations for WHO Growth Standards data from LMS values
-#' @param l Lambda value as provided by [who_gs_lms]
-#' @param m Mu value as provided by [who_gs_lms]
-#' @param s Sigma value as provided by [who_gs_lms]
-#' @param n_sd Number of SD from the median to be computed
-#' @references
-#' de Onis M *et al.* (2006) **'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
-#' WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'** *in* World Health Organization (ed.)
-#' *WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
-#' body mass index-for-age: methods and development*. Geneva: World Health Organization, pp. 301-304.
-#' @keywords internal
-who_gs_lms2sd <- function(l, m, s, n_sd) {
-  m * (1 + l * s * n_sd)^(1 / l)
-}
-
-########################################################################################################################
-########################################################################################################################
-
 #' Convert z-score/percentiles to WHO growth standards values
 #'
 #' @param z,p Z-score(s)/percentile(s) to convert from.
@@ -229,9 +150,6 @@ who_gs_tsfa_zscore2value <- function(z, x, sex) {
   who_gs_zscore2value(z = z, x = x, sex = sex, acronym = "tsfa")
 }
 
-########################################################################################################################
-########################################################################################################################
-
 #' @rdname who_gs_zscore2value
 #' @importFrom stats qnorm
 #' @export
@@ -292,9 +210,6 @@ who_gs_ssfa_percentile2value <- function(p, x, sex) {
 who_gs_tsfa_percentile2value <- function(p, x, sex) {
   who_gs_percentile2value(p = p, x = x, sex = sex, acronym = "tsfa")
 }
-
-########################################################################################################################
-########################################################################################################################
 
 #' Convert anthropometric measures to WHO Growth Standards z-scores
 #'
@@ -449,9 +364,6 @@ who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
   who_gs_value2zscore(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-########################################################################################################################
-########################################################################################################################
-
 #' @rdname who_gs_value2zscore
 #' @importFrom stats pnorm
 #' @export
@@ -513,5 +425,72 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
   who_gs_value2percentile(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-########################################################################################################################
-########################################################################################################################
+#' Get LMS values for WHO Growth Standards models
+#'
+#'
+#' @param x X value(s) at which to retrieve LMS values. Must be within bounds of available x values for given acronym.
+#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param acronym Valid acronym for WHO Growth Standards datasets: one of `"wfa"` (weight-for-age), `"bfa"`
+#' (bmi-for-age), `"lhfa"` (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
+#' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"` (arm circumference-for-age),
+#' `"ssfa"` (subscapular skinfold-for-age), or `"tsfa"` (triceps skinfold-for-age),
+#'
+#' @returns A dataframe with lambda, mu and sigma values for the WHO growth standard(s) specified by the `acronym`
+#' parameter, for the supplied `x` and `sex` values.
+#'
+#' @references
+#' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The WHO Multicentre Growth Reference
+#' Study: planning, study design, and methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.**
+#' doi: [10.1177/15648265040251s104](https://journals.sagepub.com/doi/10.1177/15648265040251S104)
+#'
+#' @rdname who_gs_lms
+#' @keywords internal
+who_gs_lms <- function(x, sex, acronym) {
+  checked_params <- check_who_params(sex, acronym)
+  new_df <- data.frame(sex = checked_params$sex,
+                       x =  x,
+                       acronym = checked_params$acronym,
+                       sort = seq(from = 1, to = length(x)))
+
+  load_lms_with_sex_acronym <- function(sex, acronym) {
+    coeff_tbl <- gigs::who_gs_coeffs[[acronym]][[sex]]
+    cbind(coeff_tbl,
+          sex = rep_len(ifelse(sex == "male", yes = "M", no = "F"), length.out = nrow(coeff_tbl)),
+          acronym = rep_len(acronym, length.out = nrow(coeff_tbl)))
+  }
+
+  sexes_to_load <- intersect(c("male", "female"), ifelse(unique(sex) == "M", yes = "male", no = "female"))
+  acronyms_to_load <- intersect(names(gigs::who_gs_coeffs), unique(acronym))
+  tot_len <- length(sexes_to_load) * length(acronyms_to_load)
+  who_gs_coeffs_long <- do.call(rbind,
+                                mapply(x = rep_len(sexes_to_load, length.out = tot_len),
+                                       y = rep_len(acronyms_to_load, length.out = tot_len),
+                                       SIMPLIFY = F,
+                                       FUN = function(x, y) load_lms_with_sex_acronym(sex = x, acronym = y)))
+  if (!is.null(who_gs_coeffs_long)) {
+    names(who_gs_coeffs_long)[1] <- "x"
+    out <- merge(new_df, who_gs_coeffs_long, all.x = TRUE, sort = FALSE)
+    out <- out[order(out$sort), ]
+  } else {
+    out <- new_df
+    out$L <- NA
+    out$M <- NA
+    out$S <- NA
+  }
+  out[, -which(names(out) == "sort")]
+}
+
+#' Get standard deviations for WHO Growth Standards data from LMS values
+#' @param l Lambda value as provided by [who_gs_lms]
+#' @param m Mu value as provided by [who_gs_lms]
+#' @param s Sigma value as provided by [who_gs_lms]
+#' @param n_sd Number of SD from the median to be computed
+#' @references
+#' de Onis M *et al.* (2006) **'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
+#' WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'** *in* World Health Organization (ed.)
+#' *WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
+#' body mass index-for-age: methods and development*. Geneva: World Health Organization, pp. 301-304.
+#' @keywords internal
+who_gs_lms2sd <- function(l, m, s, n_sd) {
+  m * (1 + l * s * n_sd)^(1 / l)
+}
