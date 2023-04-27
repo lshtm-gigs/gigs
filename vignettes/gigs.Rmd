@@ -70,9 +70,8 @@ user to easily classify growth status:
 
 ### Classifying size for gestational age
 ```{r example_2}
-df_newborn_weights$classification <- classify_sga(y = df_newborn_weights$weight_kg,
+df_newborn_weights$classification <- classify_sga(weight_kg = df_newborn_weights$weight_kg,
                                                   gest_age = df_newborn_weights$gest_age,
-                                                  sex = df_newborn_weights$sex,
-                                                  acronym = "wfga")
+                                                  sex = df_newborn_weights$sex)
 head(df_newborn_weights)
 ```

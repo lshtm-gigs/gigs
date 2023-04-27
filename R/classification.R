@@ -1,14 +1,12 @@
 #' Classify size for gestational age using INTERGROWTH-21st Newborn Size Standards (including very preterm)
 #'
-#' Sizes for gestational age (SGAs) are generally split in three categories: small-for-GA (SGA), appropriate-for-GA
-#' (AGA) and large-for-GA (LGA). SGA is <10th percentile, LGA is >90th percentile, and AGA is in between. Some prefer to
-#' delineate between SGA children and children below the 3rd percentile of growth, which this function also permits.
+#' Size for gestational age categories are split by centile: small-for-GA (SGA), appropriate-for-GA (AGA) and
+#' large-for-GA (LGA). SGA is <10th centile, LGA is >90th centile, and AGA is in between. Some prefer to note children
+#' below the third centile as severely SGA.
 #'
-#' @param y Anthropometric measurement(s) to assess.
+#' @param weight_kg Anthropometric measurement(s) to assess.
 #' @param gest_age Gestational age(s) at birth in weeks. Must be between `24` and `42 + 6/7`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym The INTERGROWTH-21st standard in use for classification. Must be one of `"wfga"`, `"lfga"`,
-#' or `"hcfga"`. Default = `"wfga"`.
 #' @param coarse If `FALSE`, specify which SGA values are below the third percentile. Default = `TRUE`.
 #' @returns Factor with gestational age classification(s). If `coarse = TRUE`, levels are `c("SGA", "AGA",  "LGA")`.
 #' If `coarse = FALSE`, levels are `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
@@ -18,8 +16,7 @@
 #' classify_sga(
 #'   y = c(2.2, 3.4, 4.2),
 #'   gest_age = 38 + 1/7,
-#'   sex = "F",
-#'   acronym = "wfga"
+#'   sex = "F"
 #' )
 #'
 #' # With coarse = FALSE, highlights p < 0.03
@@ -27,12 +24,11 @@
 #'   y = c(2.2, 3.4, 4.2),
 #'   gest_age = 38 + 1/7,
 #'   sex = "F",
-#'   acronym = "wfga",
 #'   coarse = FALSE
 #' )
 #' @export
-classify_sga <- function(y, gest_age, sex, acronym = "wfga", coarse = TRUE) {
-  percentiles <- ig_nbs_value2percentile(y = y, sex = sex, gest_age = gest_age, acronym = acronym)
+classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
+  percentiles <- ig_nbs_wfga_value2percentile(weight_kg = weight_kg, sex = sex, gest_age = gest_age)
   out <- rep(NA_character_, length(percentiles))
   out[which(percentiles <= 0.1)] <- "SGA"
   out[which(percentiles > 0.1 & percentiles < 0.9)] <- "AGA"

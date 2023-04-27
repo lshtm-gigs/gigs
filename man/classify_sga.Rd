@@ -4,17 +4,14 @@
 \alias{classify_sga}
 \title{Classify size for gestational age using INTERGROWTH-21st Newborn Size Standards (including very preterm)}
 \usage{
-classify_sga(y, gest_age, sex, acronym = "wfga", coarse = TRUE)
+classify_sga(weight_kg, gest_age, sex, coarse = TRUE)
 }
 \arguments{
-\item{y}{Anthropometric measurement(s) to assess.}
+\item{weight_kg}{Anthropometric measurement(s) to assess.}
 
 \item{gest_age}{Gestational age(s) at birth in weeks. Must be between \code{24} and \code{42 + 6/7}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
-
-\item{acronym}{The INTERGROWTH-21st standard in use for classification. Must be one of \code{"wfga"}, \code{"lfga"},
-or \code{"hcfga"}. Default = \code{"wfga"}.}
 
 \item{coarse}{If \code{FALSE}, specify which SGA values are below the third percentile. Default = \code{TRUE}.}
 }
@@ -23,17 +20,16 @@ Factor with gestational age classification(s). If \code{coarse = TRUE}, levels a
 If \code{coarse = FALSE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
-Sizes for gestational age (SGAs) are generally split in three categories: small-for-GA (SGA), appropriate-for-GA
-(AGA) and large-for-GA (LGA). SGA is <10th percentile, LGA is >90th percentile, and AGA is in between. Some prefer to
-delineate between SGA children and children below the 3rd percentile of growth, which this function also permits.
+Size for gestational age categories are split by centile: small-for-GA (SGA), appropriate-for-GA (AGA) and
+large-for-GA (LGA). SGA is <10th centile, LGA is >90th centile, and AGA is in between. Some prefer to note children
+below the third centile as severely SGA.
 }
 \examples{
 # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
 classify_sga(
   y = c(2.2, 3.4, 4.2),
   gest_age = 38 + 1/7,
-  sex = "F",
-  acronym = "wfga"
+  sex = "F"
 )
 
 # With coarse = FALSE, highlights p < 0.03
@@ -41,7 +37,6 @@ classify_sga(
   y = c(2.2, 3.4, 4.2),
   gest_age = 38 + 1/7,
   sex = "F",
-  acronym = "wfga",
   coarse = FALSE
 )
 }

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gigs: Assess Growth in Infants and Newborns <img src="man/figures/logo.png" align="right" height="138" />
+# gigs: Assess growth in infants and newborns <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
 
@@ -21,7 +21,7 @@ WHO Child Growth Standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
 converting between anthropometric measures (e.g. weight or length) to
 z-scores and percentiles, and the inverse. Also included are functions
-for classifying newborn growth according to DHS guidelines.
+for classifying newborn and infant growth according to DHS guidelines.
 
 ## Installation
 
@@ -138,14 +138,13 @@ at-risk infants through classification of suboptimal growth.
 
 ``` r
 # Size for gestational age
-classify_sga(
-        y = c(32.6, 34.2, 36.0),
+gigs::classify_sga(
+        weight_kg = c(2.5, 3.2, 4.0),
         gest_age = 39 + 4/7,
-        sex = "M",
-        acronym = "hcfga"
+        sex = "M"
 )
 #> [1] SGA AGA LGA
-#> Levels: AGA LGA SGA
+#> Levels: SGA AGA LGA
 
 # Stunting, i.e. low length increase relative to age
 classify_stunting(
@@ -155,8 +154,8 @@ classify_stunting(
         sex = "M",
         lenht_method = "H"
 )
-#> [1] normal   stunting normal  
-#> Levels: normal stunting
+#> [1] implausible stunting    normal     
+#> Levels: implausible stunting_severe stunting normal
 
 # Wasting, i.e. low weight increase relative to length/height
 classify_wasting(
@@ -166,7 +165,7 @@ classify_wasting(
         lenht_method = c("H", "L", "L", "H")
 )
 #> [1] wasting_severe wasting        normal         implausible   
-#> Levels: implausible normal wasting wasting_severe
+#> Levels: implausible wasting_severe wasting normal overweight
 
 # Weight-for-age, i.e. low weight increase relative to age
 classify_wfa(
@@ -177,5 +176,5 @@ classify_wfa(
 )
 #> [1] implausible        underweight_severe underweight        normal            
 #> [5] overweight        
-#> Levels: implausible normal overweight underweight underweight_severe
+#> Levels: implausible underweight_severe underweight normal overweight
 ```

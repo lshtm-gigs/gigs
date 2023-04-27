@@ -12,14 +12,10 @@ test_that("Size for GA classification works", {
                                  0.993918, 0.987215, 0.736120, 1.21361, 0.555279, 0.951882,
                                  0.284086, 0.609805, 0.803476, 0.696198),
                       psex = "M", gestage = seq(24, 27, by = 1/7)),
-           classify_sga(y = weight, sex = psex, gest_age = gestage, coarse = F)),
+           classify_sga(weight_kg = weight, sex = psex, gest_age = gestage, coarse = F)),
     expected = factor(c("AGA", "SGA(<3)", "SGA", "LGA", "LGA", "AGA", "LGA", "LGA", "SGA",
                       "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
                       "SGA(<3)", "SGA(<3)", "AGA", "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
-  expect_equal(
-    object = classify_sga(y = c(32.6, 34.2, 36.0), gest_age = 39 + 4/7,
-             sex = "M", acronym = "hcfga"),
-    expected = factor(c("SGA", "AGA", "LGA"), levels = c("SGA", "AGA",  "LGA")))
 })
 
 
