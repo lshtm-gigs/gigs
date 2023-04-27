@@ -54,8 +54,8 @@ ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 \arguments{
 \item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{24} and \code{42 + 6/7} for weight/length/head
-circumference-for-gestational age, or from \code{38} to \code{42} for body composition equations.}
+\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300} for weight/length/head
+circumference-for-gestational age, or from \code{266} to \code{294} for body composition equations.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
@@ -74,32 +74,32 @@ Input vectors will be recycled to the length of the longest vector.
 \examples{
 # Convert percentiles to values
 p <- 0.25 # 25th percentile
-ig_nbs_percentile2value(p = p, gest_age = 40, sex = "M", acronym = "wfga") |>
+ig_nbs_percentile2value(p = p, gest_age = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Or z-scores to values
 z <- qnorm(p)
-ig_nbs_zscore2value(z = z, gest_age = 40, sex = "M", acronym = "wfga") |>
+ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_zscore2value(z = z, gest_age = 40, sex = "M", acronym = "lfga") |>
+ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_zscore2value(z = z, gest_age = 40, sex = "M") |>
+ig_nbs_lfga_zscore2value(z = z, gest_age = 280, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
-                         gest_age = 40,
+                         gest_age = 280,
                          sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 20 weeks gest_age
-# is outside the bounds of the INTERGROWTH-21st newborn size standards
+# Bad inputs will not stop the function but will instead return NA - here 140 days for
+# gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
 ig_nbs_hcfga_zscore2value(z = z,
-                          gest_age = c(20, 26, 32, 38),
+                          gest_age = c(140, 182, 224, 266),
                           sex = "F") |>
   round(digits = 2)
 }

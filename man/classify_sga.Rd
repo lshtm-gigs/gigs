@@ -9,7 +9,7 @@ classify_sga(weight_kg, gest_age, sex, coarse = TRUE)
 \arguments{
 \item{weight_kg}{Anthropometric measurement(s) to assess.}
 
-\item{gest_age}{Gestational age(s) at birth in weeks. Must be between \code{24} and \code{42 + 6/7}.}
+\item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168} and \code{300}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
@@ -27,15 +27,15 @@ below the third centile as severely SGA.
 \examples{
 # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
 classify_sga(
-  y = c(2.2, 3.4, 4.2),
-  gest_age = 38 + 1/7,
+  weight_kg = c(2.2, 3.4, 4.2),
+  gest_age = 267,
   sex = "F"
 )
 
 # With coarse = FALSE, highlights p < 0.03
 classify_sga(
-  y = c(2.2, 3.4, 4.2),
-  gest_age = 38 + 1/7,
+  weight_kg = c(2.2, 3.4, 4.2),
+  gest_age = 267,
   sex = "F",
   coarse = FALSE
 )

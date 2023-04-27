@@ -1,7 +1,7 @@
 package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
   get_gest_ages <- function(lower, upper) {
     ga <- gigs::ig_nbs$wfga$male$zscores$gest_age
-    ga[which(ga >= lower & ga <= upper)]
+    ga[which(ga >= lower & ga <= upper)] * 7
   }
   roundto <- ifelse(acronym == "wfga", yes = 2, no = 1)
   tbl_names <- c("SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3")
@@ -16,7 +16,7 @@ package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
     do.call(what = cbind) |>
     as.data.frame()
   names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper)
+  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper) / 7
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
   sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$zscores
@@ -25,6 +25,10 @@ package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
   rownames(ref_tbl) <- NULL
   list(package = pkg_tbl, reference = ref_tbl)
 }
+
+lower <- 24.5
+upper <- 26.7
+wfga_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wfga")
 
 test_that("Conversion of z-scores to values works", {
   lower <- 24.5
@@ -51,7 +55,7 @@ test_that("Conversion of z-scores to values works", {
 
   # Test undefined sex values gives average - we already know these functions give accurate values out
   with(
-    list(sex = c("M", "F", "U"), z_scores = 1, age = 24),
+    list(sex = c("M", "F", "U"), z_scores = 1, age = 7 * 24),
     expr = {
       vals <- ig_nbs_wfga_zscore2value(sex = sex, gest_age = age, z = z_scores)
       expect_equal(object = mean(vals[1:2]), expected = vals[3])
@@ -63,7 +67,7 @@ test_that("Conversion of z-scores to values works", {
 
   # # Test that bad input gives NA
   with(
-    list(sex = c("M", "F", "U", "X", "M"), z_scores = 1, age = c(23, 24, 25, 26, 30)),
+    list(sex = c("M", "F", "U", "X", "M"), z_scores = 1, age = c(23, 24, 25, 26, 30) * 7),
     expr = {
       sapply(X = c("wfga", "lfga", "hcfga"), FUN = function(x) {
         fn <- switch(x,
@@ -83,7 +87,7 @@ test_that("Conversion of z-scores to values works", {
 package_ref_percentile_tbls <- function(sex, age_lower, age_upper, acronym) {
   get_gest_ages <- function(lower, upper) {
     ga <- gigs::ig_nbs$wfga$male$zscores$gest_age
-    ga[which(ga >= lower & ga <= upper)]
+    ga[which(ga >= lower & ga <= upper)] * 7
   }
   roundto <- ifelse(acronym == "wfga", yes = 2, no = 1)
   tbl_names <- c("P03", "P05", "P10", "P50", "P90", "P95", "P97")
@@ -98,7 +102,7 @@ package_ref_percentile_tbls <- function(sex, age_lower, age_upper, acronym) {
     do.call(what = cbind) |>
     as.data.frame()
   names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper)
+  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper) / 7
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
   sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$percentiles

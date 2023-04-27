@@ -7,7 +7,7 @@
 ig_nbs_msnt(gest_age, sex, acronym)
 }
 \arguments{
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{33} and \code{42 + 6/7}.}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{231} and \code{300}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
@@ -29,7 +29,7 @@ testing these values output the INTERGROWTH-21st standards exactly.
 }
 \examples{
 # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks' gestational age
-gigs:::ig_nbs_msnt(gest_age = 40, sex = "M", acronym = "wfga")
+gigs:::ig_nbs_msnt(gest_age = 40 * 7, sex = "M", acronym = "wfga")
 
 }
 \references{

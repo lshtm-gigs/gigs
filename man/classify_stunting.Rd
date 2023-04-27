@@ -11,12 +11,13 @@ classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 
 \item{age_days}{Age(s) in days for each child.}
 
-\item{ga_at_birth}{Gestational age(s) at birth in weeks.}
+\item{ga_at_birth}{Gestational age(s) at birth in days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was recorded as recumbent length or
-standing height.}
+standing height. \code{NA} values will be set to \code{"L"} for children <731 days old and to \code{"H"} for children 731
+days old or more. Default = \code{NA}.}
 }
 \value{
 Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
@@ -38,7 +39,7 @@ criteria from the DHS manual.
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),
-  ga_at_birth = c(28, 41, 38),
+  ga_at_birth = c(196, 287, 266),
   sex = c("M", "M", "F"),
   lenht_method = c("H", "H", "H")
 )

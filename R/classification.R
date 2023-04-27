@@ -5,7 +5,7 @@
 #' below the third centile as severely SGA.
 #'
 #' @param weight_kg Anthropometric measurement(s) to assess.
-#' @param gest_age Gestational age(s) at birth in weeks. Must be between `24` and `42 + 6/7`.
+#' @param gest_age Gestational age(s) at birth in days. Must be between `168` and `300`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param coarse If `FALSE`, specify which SGA values are below the third percentile. Default = `TRUE`.
 #' @returns Factor with gestational age classification(s). If `coarse = TRUE`, levels are `c("SGA", "AGA",  "LGA")`.
@@ -14,15 +14,15 @@
 #' @examples
 #' # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
 #' classify_sga(
-#'   y = c(2.2, 3.4, 4.2),
-#'   gest_age = 38 + 1/7,
+#'   weight_kg = c(2.2, 3.4, 4.2),
+#'   gest_age = 267,
 #'   sex = "F"
 #' )
 #'
 #' # With coarse = FALSE, highlights p < 0.03
 #' classify_sga(
-#'   y = c(2.2, 3.4, 4.2),
-#'   gest_age = 38 + 1/7,
+#'   weight_kg = c(2.2, 3.4, 4.2),
+#'   gest_age = 267,
 #'   sex = "F",
 #'   coarse = FALSE
 #' )
@@ -49,9 +49,10 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param age_days Age(s) in days for each child.
-#' @param ga_at_birth Gestational age(s) at birth in weeks.
+#' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was recorded as recumbent length or
-#' standing height.
+#' standing height. `NA` values will be set to `"L"` for children <731 days old and to `"H"` for children 731
+#' days old or more. Default = `NA`.
 #' @returns Factor of stunting classification(s) with levels `c("implausible", "stunting_severe", "stunting",
 #' "normal")`.
 #'
@@ -74,7 +75,7 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' classify_stunting(
 #'   lenht_cm = c(52.2, 75.4, 63.1),
 #'   age_days = c(357, 375, 250),
-#'   ga_at_birth = c(28, 41, 38),
+#'   ga_at_birth = c(196, 287, 266),
 #'   sex = c("M", "M", "F"),
 #'   lenht_method = c("H", "H", "H")
 #' )
@@ -94,9 +95,9 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
   lenht_cm2 <- ifelse(age_days < 731 & tolower(lenht_method) == "h",
                       yes = lenht_cm + 0.7,
                       no = lenht_cm2)
-  pma_weeks <- round((age_days + ga_at_birth * 7) / 7)
+  pma_weeks <- round((age_days + ga_at_birth) / 7)
   z_scores <- ifelse(
-    pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_at_birth >= 26 & ga_at_birth < 37,
+    pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_at_birth >= 182 & ga_at_birth < 259,
     yes = ig_png_lfa_value2zscore(length_cm = lenht_cm2, pma_weeks = pma_weeks, sex = sex),
     no = who_gs_lhfa_value2zscore(lenht_cm = lenht_cm2, age_days = age_days, sex = sex)
   )
@@ -193,7 +194,7 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' )
 #' @export
 classify_wfa <- function(weight_kg, age_days, ga_at_birth, sex) {
-  pma_weeks <- round((age_days + ga_at_birth * 7) / 7)
+  pma_weeks <- round((age_days + ga_at_birth) / 7)
   z_scores <- ifelse(
     test = pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_at_birth >= 26 & ga_at_birth < 37,
     yes = ig_png_wfa_value2zscore(weight_kg = weight_kg, pma_weeks = pma_weeks, sex = sex),

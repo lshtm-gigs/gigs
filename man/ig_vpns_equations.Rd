@@ -7,7 +7,7 @@
 ig_vpns_equations(gest_age, sex, acronym)
 }
 \arguments{
-\item{gest_age}{Gestational age in weeks. Must be between \code{24} and \code{32 + 6/7} weeks.}
+\item{gest_age}{Gestational age in days. Must be between \code{168} and \code{230} days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 

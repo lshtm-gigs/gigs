@@ -11,7 +11,7 @@ test_that("Size for GA classification works", {
                                  1.05958, 1.10986, 0.570546, 0.606674, 0.453822, 0.974013,
                                  0.993918, 0.987215, 0.736120, 1.21361, 0.555279, 0.951882,
                                  0.284086, 0.609805, 0.803476, 0.696198),
-                      psex = "M", gestage = seq(24, 27, by = 1/7)),
+                      psex = "M", gestage = seq(24, 27, by = 1/7) * 7),
            classify_sga(weight_kg = weight, sex = psex, gest_age = gestage, coarse = F)),
     expected = factor(c("AGA", "SGA(<3)", "SGA", "LGA", "LGA", "AGA", "LGA", "LGA", "SGA",
                       "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
@@ -28,7 +28,7 @@ test_that("Stunting classification works", {
                  # term, age, healthy
                  ## ALL MALE ALL "H"
                  with(data.frame(lenht = c(57.5, 73.6, 44.1, 75.4, 72.83),
-                                 ga_at_birth = c(34, 35, 36, 37, 38),
+                                 ga_at_birth = c(34, 35, 36, 37, 38) * 7,
                                  age_days = c(180, 455, 294, 525, 245),
                                  psex = "M", len_method = "H"),
                       classify_stunting(lenht_cm = lenht,
@@ -77,7 +77,7 @@ test_that("Weight-for-age classification works", {
       # 496, NA    ,   42  ,   N  , ~0 ZSCORE, NA
       with(data.frame(wght_kg =     c(7.2, 6.1, 2.1, 9.1, 24 , 9.4, 10.8),
                       pma_days =    c(501, 323, 435, 201, 707, 154, 496),
-                      ga_at_birth = c(27,  37,  36,  40,  41,  28,  42),
+                      ga_at_birth = c(27,  37,  36,  40,  41,  28,  42) * 7,
                       psex = c(rep(c("F", "M"), 3), NA_character_)),
            classify_wfa(weight_kg = wght_kg,
                         age_days = pma_days,

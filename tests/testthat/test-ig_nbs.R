@@ -3,9 +3,9 @@ package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
     if (lower < 33) lower <- 33
     if (lower > 42 + 6/7) upper <- 42 + 13/14
     ga <- gigs::ig_nbs$wfga$male$zscores$gest_age
-    ga[which(ga >= lower & ga <= upper)]
+    ga[which(ga >= lower & ga <= upper)] * 7
   }
-  roundto <- ifelse(acronym == "wfga", yes = 2, no = 1)
+  roundto <- ifelse(acronym %in% c("wfga", "wlrfga"), yes = 2, no = 1)
   tbl_names <- c("SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3")
   pkg_tbl <- lapply(X = -3:3,
                     FUN = function (x) {
@@ -19,7 +19,7 @@ package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
     do.call(what = cbind) |>
     as.data.frame()
   names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper)
+  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper) / 7
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
   sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$zscores
@@ -28,6 +28,10 @@ package_ref_zscore_tbls <- function(sex, age_lower, age_upper, acronym) {
   rownames(ref_tbl) <- NULL
   list(package = pkg_tbl, reference = ref_tbl)
 }
+
+lower <- 37
+upper <- 41
+wlrfga_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wlrfga")
 
 test_that("Conversion of z-scores to values works", {
   lower <- 37
@@ -52,7 +56,7 @@ test_that("Conversion of z-scores to values works", {
   hcfga_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "hcfga")
   expect_equal(object = hcfga_f$package, expected = hcfga_f$reference, tolerance = tolerance)
 
-  # Head circumference for gestational age
+  # Weight-length ratio for gestational age
   wlrfga_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wlrfga")
   expect_equal(object = wlrfga_m$package, expected = wlrfga_m$reference, tolerance = tolerance)
   wlrga_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "wlrfga")
@@ -64,7 +68,7 @@ test_that("Conversion of z-scores to values works", {
 package_ref_percentile_tbls <- function(sex, age_lower, age_upper, acronym) {
   get_gest_ages <- function(lower, upper) {
     ga <- gigs::ig_nbs$wfga$male$zscores$gest_age
-    ga[which(ga >= lower & ga <= upper)]
+    ga[which(ga >= lower & ga <= upper)] * 7
   }
   roundto <- ifelse(acronym == "wfga", yes = 2, no = 1)
   tbl_names <- c("P03", "P05", "P10", "P50", "P90", "P95", "P97")
@@ -80,7 +84,7 @@ package_ref_percentile_tbls <- function(sex, age_lower, age_upper, acronym) {
     do.call(what = cbind) |>
     as.data.frame()
   names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper)
+  pkg_tbl$gest_age <- get_gest_ages(age_lower, age_upper) / 7
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
   sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$percentiles
@@ -101,13 +105,13 @@ test_that("Conversion of percentiles to values works", {
   wfga_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "wfga")
   expect_equal(object = wfga_f$package, expected = wfga_f$reference, tolerance = tolerance)
 
-  # # Head circumference for gestational age
+  # Length for gestational age
   lfga_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "lfga")
   expect_equal(object = lfga_m$package, expected = lfga_m$reference, tolerance = tolerance)
   lfga_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "lfga")
   expect_equal(object = lfga_f$package, expected = lfga_f$reference, tolerance = tolerance)
 
-  # # Head circumference for gestational age
+  # Weight-length ratio for gestational age
   hcfga_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "hcfga")
   expect_equal(object = hcfga_m$package, expected = hcfga_m$reference, tolerance = tolerance)
   hcfga_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "hcfga")
@@ -157,45 +161,41 @@ testthat_v2x <- function(y, gest_age, sex, acronym, z_or_p = "zscores") {
                             "lfga"  = ig_nbs_lfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex),
                             "hcfga" = ig_nbs_hcfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex),
                             "wlrfga" = ig_nbs_wlrfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex)))
-  return(all(round(y, digits = 3) == round(out_value, digits = 3), na.rm = TRUE))
+  expect_equal(round(y, digits = 3), round(out_value, digits = 3))
 }
 
 test_that("Conversion of values to z-scores works", {
   # Weight for gestational age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 36, sex = "M", acronym = "wfga"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 40, sex = "F", acronym = "wfga"))
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 36 * 7, sex = "M", acronym = "wfga")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 40 * 7, sex = "F", acronym = "wfga")
 
   # Length for gestational age
-  expect_true(testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 34, sex = "M", acronym = "lfga"))
-  expect_true(testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 41 + 3/7, sex = "F", acronym = "lfga"))
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 7 * 34, sex = "M", acronym = "lfga")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 7 * (41 + 3/7), sex = "F", acronym = "lfga")
 
   # Head circumference for gestational age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), gest_age = 42 + 2/7, sex = "M", acronym = "hcfga"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), gest_age = 37 + 4/7, sex = "F", acronym = "hcfga"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), gest_age = 7 * (42 + 2/7), sex = "M", acronym = "hcfga")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), gest_age = 7 * (37 + 4/7), sex = "F", acronym = "hcfga")
 
-  # Head circumference for gestational age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 42 + 2/7, sex = "M", acronym = "wlrfga"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 37 + 4/7, sex = "F", acronym = "wlrfga"))
-
-  # NA should arise in final vector, will be reflected in this function
-  expect_true(testthat_v2x(y = 26.3, gest_age = 40:46, sex = "F", acronym = "hcfga"))
+  # Weight-length ratio for gestational age
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * (42 + 2/7), sex = "M", acronym = "wlrfga")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * (37 + 4/7), sex = "F", acronym = "wlrfga")
 })
 
 test_that("Conversion of values to percentiles works", {
-
   # Weight for gestational age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 36, sex = "M", acronym = "wfga", z_or_p = "percentiles"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 40, sex = "F", acronym = "wfga", z_or_p = "percentiles"))
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 36, sex = "M", acronym = "wfga", z_or_p = "percentiles")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 40, sex = "F", acronym = "wfga", z_or_p = "percentiles")
 
   # Length circumference for gestational age
-  expect_true(testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 35, sex = "M", acronym = "lfga", z_or_p = "percentiles"))
-  expect_true(testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 35, sex = "F", acronym = "lfga", z_or_p = "percentiles"))
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 7 * 36, sex = "M", acronym = "lfga", z_or_p = "percentiles")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 7 * 40, sex = "F", acronym = "lfga", z_or_p = "percentiles")
 
   # Head circumference for gestational age
-  expect_true(testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 35, sex = "M", acronym = "hcfga", z_or_p = "percentiles"))
-  expect_true(testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 35, sex = "F", acronym = "hcfga", z_or_p = "percentiles"))
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_age = 7 * 36, sex = "M", acronym = "hcfga", z_or_p = "percentiles")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_age = 7 * 40, sex = "F", acronym = "hcfga", z_or_p = "percentiles")
 
-  # Head circumference for gestational age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 35, sex = "M", acronym = "wlrfga", z_or_p = "percentiles"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 35, sex = "F", acronym = "wlrfga", z_or_p = "percentiles"))
+  # Weight-length ratio for gestational age
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 36, sex = "M", acronym = "wlrfga", z_or_p = "percentiles")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "percentiles")
 })

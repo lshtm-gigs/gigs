@@ -40,13 +40,13 @@ devtools::install_github("lshtm_mnhg/gigs")
   Component standards
   </summary>
 
-  - `wfga` - Weight (kg) for gestational age
-  - `lfga` - Length (cm) for gestational age
-  - `hcfga` - Head circumference (cm) for gestational age
-  - `wlrfga` - Weight-to-length ratio for gestational age
-  - `fmfga` - Fat mass (g) for gestational age
-  - `bfpfga` - Body fat percentage for gestational age
-  - `ffmfga` - Fat-free mass (g) for gestational age
+  - `wfga` - Weight (kg) for gestational age (days)
+  - `lfga` - Length (cm) for gestational age (days)
+  - `hcfga` - Head circumference (cm) for gestational age (days)
+  - `wlrfga` - Weight-to-length ratio for gestational age (days)
+  - `fmfga` - Fat mass (g) for gestational age (days)
+  - `bfpfga` - Body fat percentage for gestational age (days)
+  - `ffmfga` - Fat-free mass (g) for gestational age (days)
 
   </details>
 - `ig_png` - INTERGROWTH-21<sup>st</sup> standards for post-natal growth
@@ -56,9 +56,9 @@ devtools::install_github("lshtm_mnhg/gigs")
   Component standards
   </summary>
 
-  - `wfa` - Weight (kg) for age (weeks)
-  - `lfa` - Length (cm) for age (weeks)
-  - `hcfa` - Head circumference (cm) for age (weeks)
+  - `wfa` - Weight (kg) for post-mentstrual age (weeks)
+  - `lfa` - Length (cm) for post-mentstrual age (weeks)
+  - `hcfa` - Head circumference (cm) for post-mentstrual age (weeks)
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
@@ -89,12 +89,12 @@ component standard, then the type of conversion, e.g.:
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_zscore2value(z = 0, gest_age = 26, sex = "F", acronym = "wfga") |>
+ig_nbs_zscore2value(z = 0, gest_age = 182, sex = "F", acronym = "wfga") |>
         round(digits = 3)
 #> [1] 0.785
 
 # .. or for multiple inputs
-ig_nbs_wfga_zscore2value(z = 0, gest_age = 26:29, sex = "F") |>
+ig_nbs_wfga_zscore2value(z = 0, gest_age = seq(182, 204, by = 7), sex = "F") |>
         round(digits = 3)
 #> [1] 0.785 0.893 1.013 1.147
 
@@ -113,12 +113,12 @@ percentiles for the standard used.
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_value2zscore(y = 0.785, gest_age = 26, sex = "F", acronym = "wfga") |>
+ig_nbs_value2zscore(y = 0.785, gest_age = 182, sex = "F", acronym = "wfga") |>
         round(digits = 2)
 #> [1] 0
 
 # .. or for multiple inputs
-ig_nbs_wfga_value2percentile(weight_kg = 0.785, gest_age = 25:28, sex = "F") |>
+ig_nbs_wfga_value2percentile(weight_kg = 0.785, gest_age = seq(175, 196, by = 7), sex = "F") |>
         round(digits = 2)
 #> [1] 0.75 0.50 0.25 0.09
 
@@ -140,7 +140,7 @@ at-risk infants through classification of suboptimal growth.
 # Size for gestational age
 gigs::classify_sga(
         weight_kg = c(2.5, 3.2, 4.0),
-        gest_age = 39 + 4/7,
+        gest_age = 277,
         sex = "M"
 )
 #> [1] SGA AGA LGA
@@ -150,7 +150,7 @@ gigs::classify_sga(
 classify_stunting(
         lenht_cm = c(42.3, 75.4, 72.83),
         age_days = c(252, 525, 245),
-        ga_at_birth = c(34, 37, 38),
+        ga_at_birth = c(238, 259, 266),
         sex = "M",
         lenht_method = "H"
 )
