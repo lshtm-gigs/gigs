@@ -125,7 +125,7 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 #'
 #'
 #' @note Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-#' manual.
+#' manual. Observations with invalid or missing `lenht_method` values will be returned as `NA`.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
 #' *Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5

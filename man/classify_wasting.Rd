@@ -26,7 +26,7 @@ at birth for the infant. Severe wasting is less than 3 SD relative to growth sta
 }
 \note{
 Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-manual.
+manual. Observations with invalid or missing \code{lenht_method} values will be returned as \code{NA}.
 }
 \examples{
 # Where no lenht_method is given, classify_wasting() returns NA.
