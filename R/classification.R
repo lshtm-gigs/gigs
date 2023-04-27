@@ -80,14 +80,20 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' )
 #' @export
 classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA) {
-  if (!anyNA(lenht_cm)) {
-    lenht_cm2 <- ifelse(which(age_days >= 731 & tolower(lenht_method) == "l"),
-                        yes = lenht_cm - 0.7,
-                        no = lenht_cm)
-    lenht_cm2 <- ifelse(age_days < 731 & tolower(lenht_method) == "h",
-                        yes = lenht_cm + 0.7,
-                        no = lenht_cm2)
+  lgth_lenht_method <- length(lenht_method)
+  lgth_age_days <- length(age_days)
+  if (lgth_lenht_method != 1 & lgth_lenht_method != lgth_age_days) {
+    stop(paste0("lenht_method should be as long as the input vectors or length 1. Your input was length",
+                lgth_lenht_method), call. = F)
   }
+  if (lgth_lenht_method != lgth_age_days) lenht_method <- rep_to_longest(list(age_days, lenht_method))[[2]]
+  lenht_method <- ifelse(is.na(lenht_method), yes = ifelse(age_days < 731, yes = "L", no = "H"), no = lenht_method)
+  lenht_cm2 <- ifelse(age_days >= 731 & tolower(lenht_method) == "l",
+                      yes = lenht_cm - 0.7,
+                      no = lenht_cm)
+  lenht_cm2 <- ifelse(age_days < 731 & tolower(lenht_method) == "h",
+                      yes = lenht_cm + 0.7,
+                      no = lenht_cm2)
   pma_weeks <- round((age_days + ga_at_birth * 7) / 7)
   z_scores <- ifelse(
     pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_at_birth >= 26 & ga_at_birth < 37,
