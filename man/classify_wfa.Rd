@@ -11,7 +11,7 @@ classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 
 \item{age_days}{Age(s) at recording of each infant in days.}
 
-\item{ga_at_birth}{Gestational age(s) at birth in weeks.}
+\item{ga_at_birth}{Gestational age(s) at birth in days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 }

@@ -169,7 +169,7 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #'
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param age_days Age(s) at recording of each infant in days.
-#' @param ga_at_birth Gestational age(s) at birth in weeks.
+#' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @returns Factor of weight classification(s) with levels `c("implausible", "underweight_severe", "underweight",
 #' "normal", "overweight")`.
