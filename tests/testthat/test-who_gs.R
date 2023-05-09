@@ -1,4 +1,4 @@
-package_ref_zscore_tbls <- function(sex, x_lower, x_upper, acronym) {
+test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   range_x <- seq(x_lower, x_upper, by = ifelse(acronym == "wfl" | acronym == "wfh", yes = 0.1, no = 1))
   tbl_names <- c("SD4neg", "SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3", "SD4")
   pkg_tbl <- lapply(X = -4:4,
@@ -30,78 +30,16 @@ package_ref_zscore_tbls <- function(sex, x_lower, x_upper, acronym) {
   ref_tbl <- gigs::who_gs[[acronym]][[sex_]]$zscores[in_or_out, ] |> as.data.frame()
   rownames(pkg_tbl) <- NULL
   rownames(ref_tbl) <- NULL
-  list(package = pkg_tbl, reference = ref_tbl)
+  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
 test_that("Conversion of z-scores to WHO values works", {
+  sex <- rep(c("M", "F"), length(names(gigs::who_gs)))
+  lower <-  rep(c(1, 201, 670, 45, 65, 410, 500, 700, 500), times =  rep(2, length(names(gigs::who_gs))))
+  upper <- rep(c(10, 211, 690, 110, 120, 530, 620, 850, 620), times =  rep(2, length(names(gigs::who_gs))))
+  acronyms <- rep(names(gigs::who_gs), times =  rep(2, length(names(gigs::who_gs))))
   tolerance <- 1e-3
-
-  # Weight for age
-  lower <- 1
-  upper <- 10
-  wfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wfa")
-  expect_equal(object = wfa_m$package, expected = wfa_m$reference, tolerance = tolerance)
-  wfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "wfa")
-  expect_equal(object = wfa_f$package, expected = wfa_f$reference, tolerance = tolerance)
-
-  # BMI for age
-  lower <- 201
-  upper <- 211
-  bfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "bfa")
-  expect_equal(object = bfa_m$package, expected = bfa_m$reference, tolerance = tolerance)
-  bfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "bfa")
-  expect_equal(object = bfa_f$package, expected = bfa_f$reference, tolerance = tolerance)
-
-  # Length/height for age
-  lower <- 670
-  upper <- 690
-  lhfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "lhfa")
-  expect_equal(object = lhfa_m$package, expected = lhfa_m$reference, tolerance = tolerance)
-  lhfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "lhfa")
-  expect_equal(object = lhfa_f$package, expected = lhfa_f$reference, tolerance = tolerance)
-
-  # Weight for length
-  lower <- 45
-  upper <- 110
-  wfl_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wfl")
-  expect_equal(object = wfl_m$package, expected = wfl_m$reference, tolerance = tolerance)
-  wfl_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "wfl")
-  expect_equal(object = wfl_f$package, expected = wfl_f$reference, tolerance = tolerance)
-
-  # Weight for height
-  lower <- 65; upper <- 120
-  wfh_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "wfh")
-  expect_equal(object = wfh_m$package, expected = wfh_m$reference, tolerance = tolerance)
-  wfh_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "wfh")
-  expect_equal(object = wfh_f$package, expected = wfh_f$reference, tolerance = tolerance)
-
-  # Head circumference for age
-  lower <- 410; upper <- 530
-  hcfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "hcfa")
-  expect_equal(object = hcfa_m$package, expected = hcfa_m$reference, tolerance = tolerance)
-  hcfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "hcfa")
-  expect_equal(object = hcfa_m$package, expected = hcfa_m$reference, tolerance = tolerance)
-
-  # Arm circumference for age
-  lower <- 500; upper <- 620
-  acfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "acfa")
-  expect_equal(object = acfa_m$package, expected = acfa_m$reference, tolerance = tolerance)
-  acfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "acfa")
-  expect_equal(object = acfa_f$package, expected = acfa_f$reference, tolerance = tolerance)
-
-  # Subscapular skinfold for age
-  lower <- 700; upper <- 850
-  ssfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "ssfa")
-  expect_equal(object = ssfa_m$package, expected = ssfa_m$reference, tolerance = tolerance)
-  ssfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "ssfa")
-  expect_equal(object = ssfa_f$package, expected = ssfa_f$reference, tolerance = tolerance)
-
-  # Triceps skinfold for age
-  lower <- 500; upper <- 620
-  tsfa_m <- package_ref_zscore_tbls(sex = "M", lower, upper, acronym = "tsfa")
-  expect_equal(object = tsfa_m$package, expected = tsfa_m$reference, tolerance = tolerance)
-  tsfa_f <- package_ref_zscore_tbls(sex = "F", lower, upper, acronym = "tsfa")
-  expect_equal(object = tsfa_f$package, expected = tsfa_f$reference, tolerance = tolerance)
+  invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
 })
 
 test_that("Inputs with only incorrect acronyms return NA values", {
@@ -111,7 +49,7 @@ test_that("Inputs with only incorrect acronyms return NA values", {
                expected = rep(NA, length(-3:3)))
 })
 
-package_ref_percentile_tbls <- function(sex, x_lower, x_upper, acronym) {
+test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   range_x <- seq(x_lower, x_upper, by = ifelse(acronym == "wfl" | acronym == "wfh", yes = 0.1, no = 1))
   tbl_names <- c("P01", "P1", "P3", "P5", "P10", "P15", "P25", "P50", "P75", "P85", "P90", "P95", "P97", "P99", "P999")
   pkg_tbl <- lapply(X = c(0.001, 0.01, 0.03, 0.05, 0.10, 0.15, 0.25, 0.50, 0.75, 0.85, 0.90, 0.95, 0.97, 0.99, 0.999),
@@ -144,74 +82,16 @@ package_ref_percentile_tbls <- function(sex, x_lower, x_upper, acronym) {
   rownames(pkg_tbl) <- NULL
   rownames(ref_tbl) <- NULL
   list(package = pkg_tbl, reference = ref_tbl)
+  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
 test_that("Conversion of percentiles to values works", {
+  sex <- rep(c("M", "F"), length(names(gigs::who_gs)))
+  lower <-  rep(c(1, 201, 670, 45, 65, 410, 500, 700, 500), times =  rep(2, length(names(gigs::who_gs))))
+  upper <- rep(c(10, 211, 690, 110, 120, 530, 620, 850, 620), times =  rep(2, length(names(gigs::who_gs))))
+  acronyms <- rep(names(gigs::who_gs), times =  rep(2, length(names(gigs::who_gs))))
   tolerance <- 1e-2
-
-  # Weight for age
-  lower <- 1
-  upper <- 10
-  wfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "wfa")
-  expect_equal(object = wfa_m$package, expected = wfa_m$reference, tolerance = tolerance)
-  wfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "wfa")
-  expect_equal(object = wfa_f$package, expected = wfa_f$reference, tolerance = tolerance)
-
-  # BMI for age
-  lower <- 201; upper <- 211
-  bfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "bfa")
-  expect_equal(object = bfa_m$package, expected = bfa_m$reference, tolerance = tolerance)
-  bfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "bfa")
-  expect_equal(object = bfa_f$package, expected = bfa_f$reference, tolerance = tolerance)
-
-  # Length/height for age
-  lower <- 670; upper <- 690
-  lhfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "lhfa")
-  expect_equal(object = lhfa_m$package, expected = lhfa_m$reference, tolerance = tolerance)
-  lhfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "lhfa")
-  expect_equal(object = lhfa_f$package, expected = lhfa_f$reference, tolerance = tolerance)
-
-  # Weight for length
-  lower <- 45; upper <- 110
-  wfl_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "wfl")
-  expect_equal(object = wfl_m$package, expected = wfl_m$reference, tolerance = tolerance)
-  wfl_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "wfl")
-  expect_equal(object = wfl_f$package, expected = wfl_f$reference, tolerance = tolerance)
-
-  # Weight for height
-  lower <- 65; upper <- 120
-  wfh_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "wfh")
-  expect_equal(object = wfh_m$package, expected = wfh_m$reference, tolerance = tolerance)
-  wfh_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "wfh")
-  expect_equal(object = wfh_f$package, expected = wfh_f$reference, tolerance = tolerance)
-
-    # Head circumference for age
-  lower <- 410; upper <- 530
-  hcfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "hcfa")
-  expect_equal(object = hcfa_m$package, expected = hcfa_m$reference, tolerance = tolerance)
-  hcfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "hcfa")
-  expect_equal(object = hcfa_m$package, expected = hcfa_m$reference, tolerance = tolerance)
-
-  # Arm circumference for age
-  lower <- 500; upper <- 620
-  acfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "acfa")
-  expect_equal(object = acfa_m$package, expected = acfa_m$reference, tolerance = tolerance)
-  acfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "acfa")
-  expect_equal(object = acfa_f$package, expected = acfa_f$reference, tolerance = tolerance)
-
-  # Subscapular skinfold for age
-  lower <- 700; upper <- 850
-  ssfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "ssfa")
-  expect_equal(object = ssfa_m$package, expected = ssfa_m$reference, tolerance = tolerance)
-  ssfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "ssfa")
-  expect_equal(object = ssfa_f$package, expected = ssfa_f$reference, tolerance = tolerance)
-
-  # Triceps skinfold for age
-  lower <- 500; upper <- 620
-  tsfa_m <- package_ref_percentile_tbls(sex = "M", lower, upper, acronym = "tsfa")
-  expect_equal(object = tsfa_m$package, expected = tsfa_m$reference, tolerance = tolerance)
-  tsfa_f <- package_ref_percentile_tbls(sex = "F", lower, upper, acronym = "tsfa")
-  expect_equal(object = tsfa_f$package, expected = tsfa_f$reference, tolerance = tolerance)
+  invisible(mapply(FUN = test_percentile_tbls, sex, lower, upper, acronyms, tolerance))
 })
 
 testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscores") {
@@ -258,40 +138,39 @@ testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscores") {
                             "acfa" = who_gs_acfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
                             "ssfa" = who_gs_ssfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
                             "tsfa" = who_gs_tsfa_percentile2value(p = out_z_or_p, x = x, sex = sex)))
-  bool <- all(round(y, digits = 3) == round(out_value, digits = 3), na.rm = TRUE)
-  return(bool)
+  expect_true(all(round(y, digits = 3) == round(out_value, digits = 3), na.rm = TRUE))
 }
 
 test_that("Conversion of values to z-scores works", {
   # Weight for age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa"))
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa")
   # BMI for age
-  expect_true(testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa"))
-  expect_true(testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 28, x = 36, sex = "F", acronym = "bfa"))
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 28, x = 36, sex = "F", acronym = "bfa")
   # Length/height for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa")
   # Length/height for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 70, sex = "M", acronym = "wfl"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 75, sex = "F", acronym = "wfl"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 70, sex = "M", acronym = "wfl")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 75, sex = "F", acronym = "wfl")
   # Length/height for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "wfh"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "wfh"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "wfh")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "wfh")
   # Head circumference for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa")
   # Arm circumference for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 200, sex = "M", acronym = "acfa"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 200, sex = "F", acronym = "acfa"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 200, sex = "M", acronym = "acfa")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 200, sex = "F", acronym = "acfa")
   # Subscapular skinfold for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 301, sex = "M", acronym = "ssfa"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 301, sex = "F", acronym = "ssfa"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 301, sex = "M", acronym = "ssfa")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 301, sex = "F", acronym = "ssfa")
   # Triceps skinfold for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 403, sex = "M", acronym = "tsfa"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 403, sex = "F", acronym = "tsfa"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 403, sex = "M", acronym = "tsfa")
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 403, sex = "F", acronym = "tsfa")
   # NA should arise in final vector, will be reflected in this function
-  expect_true(testthat_v2x(y = 26.3, x = 50:65, sex = "F", acronym = "lhfa"))
+  testthat_v2x(y = 26.3, x = 50:65, sex = "F", acronym = "lhfa")
 })
 
 test_that("Conversion of values to percentiles works", {

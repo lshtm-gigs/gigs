@@ -74,9 +74,9 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
     (z + 3) * sd23neg + sd3neg
   }
 
-  y_from_LMS <- function(l, m, s, z) {
+  y_from_LMS <- function(l, m, s, z, acronym) {
     ifelse(
-      test = abs(z) <= 3,
+      test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
       yes = ifelse(
         test = l != 0,
         yes = exponent(z * s * l + 1, (1 / l)) * m,
@@ -93,7 +93,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                                      arg1 = z,
                                      x_arg = max_len_vecs$x,
                                      acronym = max_len_vecs$acronym),
-         no = y_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$z))
+         no = y_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$z, max_len_vecs$acronym))
 }
 
 #' @rdname who_gs_zscore2value
@@ -289,12 +289,12 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
     -3 + (y - sd3neg) / sd23neg
   }
 
-  z_from_LMS <- function(l, m, s, y) {
+  z_from_LMS <- function(l, m, s, y, acronym) {
     z <- ifelse(test = l != 0,
                 yes = (abs((y / m)^l) - 1) / (s * l),
                 no = log(y / m) / s)
     ifelse(
-      test = abs(z) <= 3,
+      test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
       yes = z,
       no = ifelse(test = z > 3,
                   yes = z_over_three(l, m, s, y),
@@ -307,7 +307,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
            who_gs_value2zscore(y = max_len_vecs$y, x = lms$x, sex = "M", acronym = max_len_vecs$acronym),
            who_gs_value2zscore(y = max_len_vecs$y, x = lms$x, sex = "F", acronym = max_len_vecs$acronym)
          )),
-         no = z_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$y))
+         no = z_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$y, max_len_vecs$acronym))
 }
 
 #' @rdname who_gs_value2zscore
