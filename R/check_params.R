@@ -19,7 +19,7 @@ check_nbs_params <- function(gest_age, sex, acronym) {
                acronym = acronym,
                allowed_acronyms = names(gigs::ig_nbs),
                age = gest_age,
-               age_range = gigs::ig_nbs$wfga$male$zscores$gest_age * 7)
+               age_range = gigs::ig_nbs$wfga$male$zscores$gest_age)
 }
 
 check_png_params <- function(pma_weeks, sex, acronym) {
