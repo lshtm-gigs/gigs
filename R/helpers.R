@@ -9,7 +9,7 @@ rep_to_longest <- function(vec_list) {
   if (any(lengths != 1 & lengths != max_len)) {
     bad_len <- lengths[which(lengths != 1 & lengths != max_len)]
     stop(paste0("Inputs must be length 1 or the length of the longest input vector (", max_len, 
-                ")."),
+                "). You provided an input/input with length(s)", bad_len, "."),
          .call = NULL)
   }
   lengthened <- lapply(X = vec_list, FUN = rep_len, length.out = max_len)
