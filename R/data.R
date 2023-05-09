@@ -21,7 +21,7 @@ NULL
 #' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different z-scores/percentiles for valid gestational
-#' ages. The list is ordered by acronym first, then by sex and finally z-score/percentile.
+#' ages in days. The list is ordered by acronym first, then by sex and finally z-score/percentile.
 #'
 #' @source
 #' [INTERGROWTH-21st Newborn Size in Very Preterm
