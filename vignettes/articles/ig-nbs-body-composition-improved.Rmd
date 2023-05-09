@@ -1,10 +1,10 @@
 ---
-title: "INTERGROWTH-21st Body Composition Equations"
+title: "INTERGROWTH-21st Body Composition Equations: Improved"
 description: >
-  Our process for deriving the INTERGROWTH-21<sup>st</sup> body composition equations.
+  Our improved process for deriving the INTERGROWTH-21<sup>st</sup> body composition equations.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{INTERGROWTH-21st Body Composition Equations}
+  %\VignetteIndexEntry{INTERGROWTH-21st Body Composition Equations: Improved}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,7 @@ library(gigs)
 Though Villar *et al.* (2017) published centiles for body composition (fat mass, body fat percentage, and fat-free
 mass) in newborns from the INTERGROWTH-21<sup>st</sup> project, they did not publish the parameters of the models used
 to generate their centiles. To implement these standards in our package we re-derives these values, in this case using
-the published data to work back to linear equations.
+the published data to work back to linear equations for the median and SD of each standard.
 
 # Extracting models from published data
 
@@ -115,7 +115,7 @@ repl_centile_tbls <- function (sex, acronym) {
     purrr::set_names(c("P03", "P10", "P50", "P90", "P97"))
   tbl <- purrr::map(.x = centiles, .f = ~ {
       p <- .x
-      col <- 38:42 * 7 |>
+      col <- 38:42 |>
         purrr::set_names(paste(1:5)) |>
         purrr::map_dfc(.f  = ~ {
           GA <- .x
