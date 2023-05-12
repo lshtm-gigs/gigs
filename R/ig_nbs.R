@@ -93,7 +93,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
   
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(gest_age = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
@@ -302,7 +302,7 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   }
   
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(gest_age = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
@@ -469,7 +469,7 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 
 #' INTERGROWTH-21st Weight-to-length ratio medians/standard deviations
 #'
-#' @param gest_age Gestational age(s) in weeks. Must be between `24` and `42 + 6/7`.
+#' @param ga_days Gestational age(s) in weeks. Must be between `24` and `42 + 6/7`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @returns Weight-to-length ratio medians and standard deviations for the given `sex`/`gest_age` combinations.
 #'
@@ -484,28 +484,28 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 #'
 #' @rdname ig_nbs_wlr
 #' @keywords internal
-ig_nbs_wlr <- function(gest_age, sex) {
-  new_df <- data.frame(gest_age = gest_age, sex = sex, sort = seq(from = 1, to = length(sex)))
+ig_nbs_wlr <- function(ga_days, sex) {
+  new_df <- data.frame(gest_age = ga_days, sex = sex, sort = seq(from = 1, to = length(sex)))
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   mu <- ifelse(
-    test = gest_age < 33,
-    yes = 3.400617 + (-0.0103163 * gest_age ^ 2) + (0.0003407 * gest_age ^ 3) + (0.1382809 * sex_as_numeric),
+    test = ga_days < 33,
+    yes = 3.400617 + (-0.0103163 * ga_days ^ 2) + (0.0003407 * ga_days ^ 3) + (0.1382809 * sex_as_numeric),
     no = ifelse(
       test = sex == "M",
-      yes = -17.84615 + (-3778.768 * (gest_age ^ -1)) + (1291.477 * ((gest_age ^ -1) * log(gest_age))),
-      no = -5.542927 + (0.0018926 * (gest_age ^ 3)) + (-0.0004614 * ((gest_age ^ 3)* log(gest_age)))
+      yes = -17.84615 + (-3778.768 * (ga_days ^ -1)) + (1291.477 * ((ga_days ^ -1) * log(ga_days))),
+      no = -5.542927 + (0.0018926 * (ga_days ^ 3)) + (-0.0004614 * ((ga_days ^ 3)* log(ga_days)))
     )
   )
   sigma <- ifelse(
-    test = gest_age < 33,
+    test = ga_days < 33,
     yes = sqrt(0.3570057),
     no = ifelse(
       test = sex == "M",
-      yes = 1.01047 + (-0.0080948 * gest_age),
+      yes = 1.01047 + (-0.0080948 * ga_days),
       no = 0.6806229
     )
   )
-  wlr_params <- data.frame(gest_age, sex, mu = mu, sigma = sigma)
+  wlr_params <- data.frame(ga_days, sex, mu = mu, sigma = sigma)
   out <- merge(new_df, wlr_params, all.x = TRUE, sort = FALSE)
   out <- out[order(out$sort), ]
   out <- out[, -which(names(out) == "sort")]
