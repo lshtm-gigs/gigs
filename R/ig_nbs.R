@@ -518,11 +518,7 @@ ig_nbs_wlr <- function(ga_days, sex) {
       no = 0.6806229
     )
   )
-  wlr_params <- data.frame(ga_days, sex, mu = mu, sigma = sigma)
-  out <- merge(new_df, wlr_params, all.x = TRUE, sort = FALSE)
-  out <- out[order(out$sort), ]
-  out <- out[, -which(names(out) == "sort")]
-  return(out)
+  data.frame(gest_age = ga_days * 7, sex, mu = mu, sigma = sigma)
 }
 
 #' INTERGROWTH-21st Body Composition Equation Parameters
