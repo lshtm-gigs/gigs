@@ -25,3 +25,18 @@ rep_to_longest <- function(vec_list) {
 mean_if_sex_undefined <- function(fn, arg1, x_arg, acronym) {
   rowMeans(cbind(fn(arg1, x_arg, "M", acronym), fn(arg1, x_arg, "F", acronym)))
 }
+
+#' Round, but round 0.5 up in all cases
+#'
+#' @param x Value(s) to round
+#' @param digits Number of digits to round to
+#' @note Taken from https://stackoverflow.com/questions/12688717/round-up-from-5
+#' @keywords internal
+round2 <- function(x, digits) {
+  posneg <- sign(x)
+  z <- abs(x) * 10 ^ digits
+  z <- z + 0.5 + sqrt(.Machine$double.eps)
+  z <- trunc(z)
+  z <- z / 10 ^ digits
+  z*posneg
+}

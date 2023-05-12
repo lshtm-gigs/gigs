@@ -447,8 +447,11 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' @keywords internal
 who_gs_lms <- function(x, sex, acronym) {
   checked_params <- check_who_params(sex, acronym)
+  x <- ifelse(test = acronym %in% c("wfl", "wfh"),
+              yes = round2(x = x, digits = 1),
+              no = x)
   new_df <- data.frame(sex = checked_params$sex,
-                       x =  x,
+                       x = x,
                        acronym = checked_params$acronym,
                        sort = seq(from = 1, to = length(x)))
 
