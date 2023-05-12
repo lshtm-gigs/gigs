@@ -115,10 +115,10 @@ repl_centile_tbls <- function (sex, acronym) {
     purrr::set_names(c("P03", "P10", "P50", "P90", "P97"))
   tbl <- purrr::map(.x = centiles, .f = ~ {
       p <- .x
-      col <- 38:42 * 7 |>
+      col <- seq(266, 294, by = 7) |>
         purrr::set_names(paste(1:5)) |>
         purrr::map_dfc(.f  = ~ {
-          GA <- .x
+          GA <- .x / 7
           z <- qnorm(p)
           if (sex == "M") {
             switch(acronym,
@@ -140,7 +140,7 @@ repl_centile_tbls <- function (sex, acronym) {
     })
   tbl <- suppressMessages(suppressWarnings(dplyr::bind_cols(tbl)))
   colnames(tbl) <- names(centiles)
-  dplyr::mutate(tbl, gest_age = 38:42, .before = P03)
+  dplyr::mutate(tbl, gest_age = (38:42 * 7), .before = P03)
 }
 
 comparison_plot <- function(obs_tbl, pred_tbl, title, xlab, ylab, legend.pos = "none") {
@@ -179,23 +179,23 @@ comparison_plot <- function(obs_tbl, pred_tbl, title, xlab, ylab, legend.pos = "
 
 altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") {
   diff_tbl_long <- diff_tbl |>
-    dplyr::mutate(gest_age = 38:42) |>
+    dplyr::mutate(gest_age = (38:42 * 7)) |>
     tidyr::pivot_longer(cols = tidyselect::contains("P", ignore.case = F),
                         names_to = "Percentile", values_to = "yval") |>
     dplyr::mutate(gest_age = purrr::map2_vec(.x = gest_age,
                                          .y = Percentile,
                                          .f = ~ .x + switch(.y,
-                                               "P03" = -0.2,
-                                               "P10" = -0.1,
+                                               "P03" = 2,
+                                               "P10" = 1,
                                                "P50" = 0,
-                                               "P90" = 0.1,
-                                               "P97" = 0.2))) |>
+                                               "P90" = 1,
+                                               "P97" = 2))) |>
     dplyr::filter(!is.na(yval))
   suppressWarnings(suppressMessages(
     plot <- ggplot2::ggplot(data = diff_tbl_long,
                             ggplot2::aes(x = gest_age, y = yval)) +
       ggplot2::geom_point(ggplot2::aes(colour = Percentile),
-                          shape = as.factor(1),
+                          shape = as.factor(x = 1),
                           fill = NA,
                           stroke = 1.3,
                           size = 1.5) +
@@ -212,24 +212,79 @@ altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") 
       ggplot2::theme(legend.position = legend.pos)
     ))
 }
+
+bland_altman_plot <- function(actual, predicted, title, xlab, ylab, legend.pos = "none") {
+  actual_long <- actual |>
+    tidyr::pivot_longer(cols = tidyselect::starts_with(match = "P")) |>
+    dplyr::rename(reference = value)
+  predicted_long <- predicted |>
+    tidyr::pivot_longer(cols = tidyselect::starts_with(match = "P")) |>
+    dplyr::rename(predicted = value)
+  ba_tbl <- dplyr::full_join(actual_long, predicted_long) |>
+    dplyr::rename(centile = name) |>
+    dplyr::mutate(average = (reference + predicted) / 2,
+                  difference = reference - predicted)
+  hlinesize <- 1.1
+  labelsize <- 2.5
+  plot <- ggplot2::ggplot(data = ba_tbl,
+                            ggplot2::aes(x = average, y = difference)) +
+      ggplot2::geom_point(alpha = 0.5) +
+
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T)),
+                          linetype = "dashed", colour = "black", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T),
+                                       label = paste("Mean = ",
+                                                     round(mean(difference,
+                                                                na.rm = T),
+                                                           digits = 3))),
+                         hjust = 0, colour = "black", fontface = "bold", size = labelsize) +
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE)),
+                          linetype = "dashed", colour = "red", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE),
+                                       label = paste("Mean + 1.96 SD = ",
+                                                     round(mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE),
+                                                           digits = 3))),
+                          hjust = 0, colour = "red", fontface = "bold", size = labelsize) +
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE)),
+                          linetype = "dashed", colour = "red", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE),
+                                       label = paste("Mean - 1.96 SD = ",
+                                                     round(mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE),
+                                                           digits = 3))),
+                          hjust = 0, colour = "red", fontface = "bold", size = labelsize) +
+      ggplot2::labs(title = ggplot2::element_text(title),
+                    x = ggplot2::element_text(xlab),
+                    y = ggplot2::element_text(ylab)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position = legend.pos)
+}
 ```
 
 ```{r fmfga_plots, echo = F}
 fmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "fmfga")
 fmfga_male_p1 <- comparison_plot(obs_tbl = fmfga_male , pred_tbl = fmfga_pred_male,
-                                 xlab = "Gestational age (weeks)", ylab = "Fat mass (g)",
+                                 xlab = "Gestational age (days)", ylab = "Fat mass (g)",
                                  title = "", legend.pos = "bottom")
 fmfga_male_p2 <- altman_esque_plot(diff_tbl = fmfga_pred_male - fmfga_male,
                                    xlab = "", ylab = "Difference from\nobserved (g)",
                                    title = "", legend.pos = "bottom")
+fmfga_male_p3 <- bland_altman_plot(actual = fmfga_male, predicted = fmfga_pred_male,
+                                   xlab = "", ylab = "Difference in\nmeasurements (%)",
+                                   title = "")
 
 fmfga_pred_female <- repl_centile_tbls(sex = "F", acronym = "fmfga")
 fmfga_female_p1 <- comparison_plot(obs_tbl = fmfga_female , pred_tbl = fmfga_pred_female,
-                      xlab = "Gestational age (weeks)", ylab = "",
+                      xlab = "Gestational age (days)", ylab = "",
                       title = "")
 fmfga_female_p2 <- altman_esque_plot(diff_tbl = fmfga_pred_female - fmfga_female,
                         xlab = "", ylab = "",
                         title = "")
+fmfga_female_p3 <- bland_altman_plot(actual = fmfga_female, predicted = fmfga_pred_female,
+                                     xlab = "", ylab = "",
+                                     title = "")
 ```
 
 ```{r bfpfga_plots, echo = F}
@@ -240,6 +295,9 @@ bfpfga_male_p1 <- comparison_plot(obs_tbl = bfpfga_male , pred_tbl = bfpfga_pred
 bfpfga_male_p2 <- altman_esque_plot(diff_tbl = bfpfga_pred_male - bfpfga_male,
                         xlab = "", ylab = "Difference from\nobserved (%)",
                         title = "")
+bfpfga_male_p3 <- bland_altman_plot(actual = bfpfga_male, predicted = bfpfga_pred_male,
+                                     xlab = "", ylab = "Difference in\nmeasurements (%)",
+                                     title = "")
 
 bfpfga_pred_female <- repl_centile_tbls(sex = "F", acronym = "bfpfga")
 bfpfga_female_p1 <- comparison_plot(obs_tbl = bfpfga_female , pred_tbl = bfpfga_pred_female,
@@ -248,24 +306,33 @@ bfpfga_female_p1 <- comparison_plot(obs_tbl = bfpfga_female , pred_tbl = bfpfga_
 bfpfga_female_p2 <- altman_esque_plot(diff_tbl = bfpfga_pred_female - bfpfga_female,
                         xlab = "", ylab = "",
                         title = "")
+bfpfga_female_p3 <- bland_altman_plot(actual = bfpfga_female, predicted = bfpfga_pred_female,
+                                     xlab = "", ylab = "",
+                                     title = "")
 ```
 
 ```{r ffmfga_plots, echo = F}
 ffmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "ffmfga")
 ffmfga_male_p1 <- comparison_plot(obs_tbl = ffmfga_male , pred_tbl = ffmfga_pred_male,
-                      xlab = "Gestational age (weeks)", ylab = "Fat-free mass (g)",
+                      xlab = "Gestational age (days)", ylab = "Fat-free mass (g)",
                       title =  "")
 ffmfga_male_p2 <- altman_esque_plot(diff_tbl = ffmfga_pred_male - ffmfga_male,
-                        xlab = "Gestational age (weeks)", ylab = "Difference from\nobserved (g)",
+                        xlab = "Gestational age (days)", ylab = "Difference from\nobserved (g)",
                         title = "")
+ffmfga_male_p3 <- bland_altman_plot(actual = ffmfga_male, predicted = ffmfga_pred_male,
+                                    xlab = "Average measurement (g)", ylab = "Difference in\nmeasurements (g)",
+                                    title = "")
 
 ffmfga_pred_female <- repl_centile_tbls(sex = "F", acronym = "ffmfga")
 ffmfga_female_p1 <- comparison_plot(obs_tbl = ffmfga_female , pred_tbl = ffmfga_pred_female,
-                      xlab = "Gestational age (weeks)", ylab = "",
+                      xlab = "Gestational age (days)", ylab = "",
                       title = "")
 ffmfga_female_p2 <- altman_esque_plot(diff_tbl = ffmfga_pred_female - ffmfga_female,
-                        xlab = "Gestational age (weeks)", ylab = "",
+                        xlab = "Gestational age (days)", ylab = "",
                         title = "")
+ffmfga_female_p3 <- bland_altman_plot(actual = ffmfga_female, predicted = ffmfga_pred_female,
+                                      xlab = "Average measurement (g)", ylab = "",
+                                      title = "")
 ```
 
 ## Observed vs fitted values
@@ -282,12 +349,20 @@ suppressWarnings( expr = {
 
 ## Difference between observed and fitted values
 ```{r altman_esque_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Difference between observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age, coloured by centiles (3rd, 10th, 50th, 90th and 97th)."}
-suppressWarnings( expr = {
+suppressWarnings(expr = {
   overall_legend <- cowplot::get_legend(fmfga_male_p2)
   fmfga_male_p2_noleg <- fmfga_male_p2 + ggplot2::theme(legend.position = "none")
   plotlist <- list(fmfga_male_p2_noleg, fmfga_female_p2, bfpfga_male_p2, bfpfga_female_p2, ffmfga_male_p2, ffmfga_female_p2)
   cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
   cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
+})
+```
+
+## Bland-Altman plots for reference and predicted values
+```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements."}
+suppressWarnings( expr = {
+  plotlist <- list(fmfga_male_p3, fmfga_female_p3, bfpfga_male_p3, bfpfga_female_p3, ffmfga_male_p3, ffmfga_female_p3)
+  cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
 })
 ```
 
