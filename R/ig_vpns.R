@@ -28,7 +28,7 @@
 #' @keywords internal
 ig_vpns_equations <- function(gest_age, sex, acronym) {
   checked_params <- check_nbs_params(gest_age = gest_age, sex = sex, acronym = acronym)
-  checked_params$age[checked_params$age >= 230] <- NA
+  checked_params$age[checked_params$age >= 231] <- NA
   wfga_logmedian <- function(ga_weeks, sex) {
     -7.00303 + 1.325911 * ga_weeks ^ 0.5 + 0.0571937 * sex
   }
@@ -78,11 +78,19 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' @rdname ig_vpns_zscore2value
 #' @keywords internal
 ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(z = z, gest_age = gest_age, sex = sex, acronym = acronym))
-  df <- cbind(z, ig_vpns_equations(gest_age = max_len_vecs$gest_age, sex = max_len_vecs$sex, acronym = max_len_vecs$acronym))
+  max_len_vecs <- rep_to_longest(list(z = z,
+                                      gest_age = gest_age,
+                                      sex = sex,
+                                      acronym = acronym))
+  df <- cbind(z, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
+                                   sex = max_len_vecs$sex,
+                                   acronym = max_len_vecs$acronym))
   ifelse(
     test = max_len_vecs$sex == "U",
-    yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value, arg1 = df$z, x_arg = df$gest_age, acronym = df$acronym),
+    yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value,
+                                arg1 = df$z,
+                                x_arg = df$gest_age,
+                                acronym = df$acronym),
     no = ifelse(
       test = df$acronym == "wfga",
       yes = exp(df$median + z * df$stddev),
@@ -107,11 +115,19 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' @rdname ig_vpns_value2zscore
 #' @keywords internal
 ig_vpns_value2zscore <- function(y, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(y = y, gest_age = gest_age, sex = sex, acronym = acronym))
-  df <- cbind(y, ig_vpns_equations(gest_age = max_len_vecs$gest_age, sex = max_len_vecs$sex, acronym = max_len_vecs$acronym))
+  max_len_vecs <- rep_to_longest(list(y = y,
+                                      gest_age = gest_age,
+                                      sex = sex,
+                                      acronym = acronym))
+  df <- cbind(y, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
+                                   sex = max_len_vecs$sex,
+                                   acronym = max_len_vecs$acronym))
   ifelse(
     test = max_len_vecs$sex == "U",
-    yes = mean_if_sex_undefined(fn = ig_vpns_value2zscore, arg1 = df$y, x_arg = df$gest_age, acronym = df$acronym),
+    yes = mean_if_sex_undefined(fn = ig_vpns_value2zscore,
+                                arg1 = df$y,
+                                x_arg = df$gest_age,
+                                acronym = df$acronym),
     no = ifelse(
       test = df$acronym == "wfga",
       yes = (log(y) - df$median) / df$stddev,

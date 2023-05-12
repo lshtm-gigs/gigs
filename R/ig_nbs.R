@@ -70,9 +70,15 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     }
     msnt_no_na$out <- ifelse(
       test = msnt_no_na$sex == "U",
-      yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = msnt_no_na$p,
-                                   x_arg = msnt_no_na$gest_age, acronym = msnt_no_na$acronym),
-      no = gamlss.dist::qST3(msnt_no_na$p, mu = msnt_no_na$mu, sigma = msnt_no_na$sigma, nu = msnt_no_na$nu, tau = msnt_no_na$tau)
+      yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value,
+                                   arg1 = msnt_no_na$p,
+                                   x_arg = msnt_no_na$gest_age,
+                                   acronym = msnt_no_na$acronym),
+      no = gamlss.dist::qST3(msnt_no_na$p,
+                             mu = msnt_no_na$mu,
+                             sigma = msnt_no_na$sigma,
+                             nu = msnt_no_na$nu,
+                             tau = msnt_no_na$tau)
     )
     merged <- merge(msnt, msnt_no_na, all.x = TRUE)
     merged_ordered <- merged[order(merged$n_), ]
@@ -81,23 +87,30 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex, acronym = max_len_vec_li$acronym)
-    max_len_vec_li$p[max_len_vec_li$gest_age < 266 | max_len_vec_li$gest_age > 294] <- NA
+    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex,
+                                 acronym = max_len_vec_li$acronym)
+    ga_in_range <- max_len_vec_li$gest_age < 266 | max_len_vec_li$gest_age > 294
+    max_len_vec_li$p[ga_in_range] <- NA
     lm_out <- ifelse(
       max_len_vec_li$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym),
+      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
+                                  arg1 = max_len_vec_li$p,
+                                  x_arg = max_len_vec_li$gest_age,
+                                  acronym = max_len_vec_li$acronym),
       no = body_comp$y_intercept + body_comp$ga_coeff * (max_len_vec_li$gest_age / 7) +
              qnorm(max_len_vec_li$p) * body_comp$std_dev)
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
   
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7,
+                      sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym),
+      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
+                                  arg1 = max_len_vec_li$p,
+                                  x_arg = max_len_vec_li$gest_age,
+                                  acronym = max_len_vec_li$acronym),
       no = qnorm(max_len_vec_li$p) * wlr$sigma + wlr$mu
     )
   }
