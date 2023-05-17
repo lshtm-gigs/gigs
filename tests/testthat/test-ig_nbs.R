@@ -29,13 +29,13 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
   expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
-test_that("Conversion of z-scores to values works", {
+test_that(desc = "Conversion of z-scores to values works", {
   sex <- rep(c("M", "F"), length(names(gigs::ig_nbs)) - 3)
   lower <- rep(168, length(sex))
   upper <- rep(300, length(sex))
   acronyms <- rep(names(gigs::ig_nbs)[1:4], times = rep(2, length(names(gigs::ig_nbs)) - 3))
   tolerance <- 0.01
-  mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance)
+  invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
 })
 
 test_percentile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
@@ -179,3 +179,12 @@ test_that("Conversion of values to percentiles works", {
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 36, sex = "M", acronym = "wlrfga", z_or_p = "percentiles")
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "percentiles")
 })
+
+test_that(desc = "Interpolation of LMS values can be performed",
+          code = {
+            testthat::expect_false(
+              anyNA(ig_nbs_value2zscore(y = 4.5,
+                                        gest_age = seq(260, 264, by = 0.5),
+                                        sex = "M",
+                                        acronym = "wfga")))
+          })

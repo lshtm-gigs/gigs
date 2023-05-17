@@ -42,6 +42,29 @@ test_that("Stunting classification works", {
                  ))
 })
 
+test_that("classify_stunting() fails with inputs of incorrect length", {
+  expect_error(object =
+                  classify_stunting(lenht_cm = c(57.5, 73.6, 44.1, 75.4, 72.83),
+                                         age_days = c(34, 35, 36, 37, 38) * 7,
+                                         ga_at_birth = c(180, 455, 294, 525, 245),
+                                         sex = "M",
+                                         lenht_method = c("H", "L")),
+               regexp = "lenht_method should be as long as the input vectors or length 1.")
+})
+
+test_that("classify_stunting() fails with inputs of incorrect length", {
+  expect_equal(object =
+                  classify_stunting(lenht_cm = c(57.5, 73.6, 44.1, 75.4, 72.83),
+                                    age_days = c(34, 35, 36, 37, 38) * 7,
+                                    ga_at_birth = c(180, 455, 294, 525, 245),
+                                    sex = "M",
+                                    lenht_method = "H"),
+               expected = factor(
+                 c("stunting_severe", "normal", "implausible", "normal", "normal"),
+                 levels = c("implausible", "stunting_severe", "stunting", "normal")
+                 ))
+})
+
 test_that("Wasting classification works", {
   expect_equal(
       # H or L,  SEX  ,   ZSCORE   CLASS

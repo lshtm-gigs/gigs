@@ -103,7 +103,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
   
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7,
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
                       sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
@@ -315,7 +315,7 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   }
   
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_days = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
@@ -458,31 +458,55 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 ig_nbs_msnt <- function(gest_age, sex, acronym) {
   new_df <- data.frame(gest_age = gest_age,
                        sex = sex,
-                       acronym = acronym,
-                       sort = seq(from = 1, to = length(sex)))
+                       acronym = acronym)
+  new_df$sort <- seq_along(new_df$gest_age)
   load_msnt_with_sex_acronym <- function(sex, acronym) {
     coeff_tbl <- gigs::ig_nbs_coeffs[[acronym]][[sex]]
     cbind(coeff_tbl,
           sex = rep(ifelse(sex == "male", yes = "M", no = "F"), length(coeff_tbl)),
           acronym = rep(acronym, length(coeff_tbl)))
   }
-  sexes_to_load <- intersect(c("male", "female"), ifelse(unique(sex) == "M", yes = "male", no = "female"))
+  sexes_to_load <- intersect(c("male", "female"), ifelse(sex == "M", yes = "male", no = "female"))
   acronyms_to_load <- intersect(names(gigs::ig_nbs_coeffs), unique(acronym))
   tot_len <- length(sexes_to_load) * length(acronyms_to_load)
-  ig_nbs_coeffs_long <- do.call(rbind,
-                    mapply(x = rep_len(sexes_to_load, length.out = tot_len),
-                           y = rep_len(acronyms_to_load, length.out = tot_len),
-                           SIMPLIFY = F,
-                           FUN = function(x, y) load_msnt_with_sex_acronym(sex = x, acronym = y)))
-  out <- merge(new_df, ig_nbs_coeffs_long, all.x = TRUE, sort = FALSE)
+  ig_nbs_coeffs_long <- do.call(
+    rbind,
+    mapply(x = rep_len(sexes_to_load, length.out = tot_len),
+           y = rep_len(acronyms_to_load, length.out = tot_len),
+           SIMPLIFY = F,
+           FUN = function(x, y) load_msnt_with_sex_acronym(sex = x,
+                                                           acronym = y)))
+
+  not_in_coeff_tbl <- which(!gest_age %in% ig_nbs_coeffs_long$gest_age &
+                              gest_age >= 231)
+  if (length(not_in_coeff_tbl)) {
+    in_coeff_tbl <- which(!seq_along(gest_age) %in% not_in_coeff_tbl)
+    not_in_coeff_tbl_df <- new_df[not_in_coeff_tbl, ]
+    coeffs_interpolated <- do.call(rbind,
+            mapply(xvars = not_in_coeff_tbl_df$gest_age,
+                   sex = not_in_coeff_tbl_df$sex,
+                   acronym = not_in_coeff_tbl_df$acronym,
+                   SIMPLIFY = F,
+                   FUN = function(xvars, sex, acronym) {
+                     interpolate_coeffs(ig_nbs_coeffs_long, xvars, sex, acronym)
+                   })) |>
+      merge(not_in_coeff_tbl_df)
+  } else {
+    in_coeff_tbl <- seq_along(gest_age)
+  }
+
+  merge_df <- new_df[in_coeff_tbl, ]
+  out <- merge(merge_df, ig_nbs_coeffs_long, all.x = TRUE, sort = FALSE)
+  if (exists(x = "coeffs_interpolated")) {
+    out <- rbind(out, coeffs_interpolated)
+  }
   out <- out[order(out$sort), ]
-  out <- out[, -which(names(out) == "sort")]
-  return(out)
+  out[, -which(names(out) == "sort")]
 }
 
 #' INTERGROWTH-21st Weight-to-length ratio medians/standard deviations
 #'
-#' @param ga_days Gestational age(s) in weeks. Must be between `24` and `42 + 6/7`.
+#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 + 6/7`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @returns Weight-to-length ratio medians and standard deviations for the given `sex`/`gest_age` combinations.
 #'
@@ -497,28 +521,28 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 #'
 #' @rdname ig_nbs_wlr
 #' @keywords internal
-ig_nbs_wlr <- function(ga_days, sex) {
-  new_df <- data.frame(gest_age = ga_days, sex = sex, sort = seq(from = 1, to = length(sex)))
+ig_nbs_wlr <- function(ga_weeks, sex) {
+  new_df <- data.frame(gest_age = ga_weeks, sex = sex, sort = seq(from = 1, to = length(sex)))
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   mu <- ifelse(
-    test = ga_days < 33,
-    yes = 3.400617 + (-0.0103163 * ga_days ^ 2) + (0.0003407 * ga_days ^ 3) + (0.1382809 * sex_as_numeric),
+    test = ga_weeks < 33,
+    yes = 3.400617 + (-0.0103163 * ga_weeks ^ 2) + (0.0003407 * ga_weeks ^ 3) + (0.1382809 * sex_as_numeric),
     no = ifelse(
       test = sex == "M",
-      yes = -17.84615 + (-3778.768 * (ga_days ^ -1)) + (1291.477 * ((ga_days ^ -1) * log(ga_days))),
-      no = -5.542927 + (0.0018926 * (ga_days ^ 3)) + (-0.0004614 * ((ga_days ^ 3)* log(ga_days)))
+      yes = -17.84615 + (-3778.768 * (ga_weeks ^ -1)) + (1291.477 * ((ga_weeks ^ -1) * log(ga_weeks))),
+      no = -5.542927 + (0.0018926 * (ga_weeks ^ 3)) + (-0.0004614 * ((ga_weeks ^ 3)* log(ga_weeks)))
     )
   )
   sigma <- ifelse(
-    test = ga_days < 33,
+    test = ga_weeks < 33,
     yes = sqrt(0.3570057),
     no = ifelse(
       test = sex == "M",
-      yes = 1.01047 + (-0.0080948 * ga_days),
+      yes = 1.01047 + (-0.0080948 * ga_weeks),
       no = 0.6806229
     )
   )
-  data.frame(gest_age = ga_days * 7, sex, mu = mu, sigma = sigma)
+  data.frame(gest_age = ga_weeks * 7, sex, mu = mu, sigma = sigma)
 }
 
 #' INTERGROWTH-21st Body Composition Equation Parameters

@@ -279,26 +279,26 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
   lms <- who_gs_lms(x = max_len_vecs$x, sex = max_len_vecs$sex, acronym = max_len_vecs$acronym)
 
   z_over_three <- function(l, m, s, y) {
-    sd3pos <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
+    sd3pos <-  who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
     sd23pos <- sd3pos - who_gs_lms2sd(l = l, m = m, s = s, n_sd = 2)
     3 + (y - sd3pos) / sd23pos
   }
   z_under_minus_three <- function(l, m, s, y) {
-    sd3neg <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = -3)
+    sd3neg <-  who_gs_lms2sd(l = l, m = m, s = s, n_sd = -3)
     sd23neg <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = -2) - sd3neg
     -3 + (y - sd3neg) / sd23neg
   }
 
   z_from_LMS <- function(l, m, s, y, acronym) {
     z <- ifelse(test = l != 0,
-                yes = (abs((y / m)^l) - 1) / (s * l),
+                yes = (abs((y / m) ^ l) - 1) / (s * l),
                 no = log(y / m) / s)
     ifelse(
       test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
       yes = z,
       no = ifelse(test = z > 3,
                   yes = z_over_three(l, m, s, y),
-                  no = z_under_minus_three(l, m, s, y))
+                  no =  z_under_minus_three(l, m, s, y))
     )
   }
 
@@ -450,36 +450,83 @@ who_gs_lms <- function(x, sex, acronym) {
   x <- ifelse(test = acronym %in% c("wfl", "wfh"),
               yes = round2(x = x, digits = 1),
               no = x)
-  new_df <- data.frame(sex = checked_params$sex,
-                       x = x,
+
+  new_df <- data.frame(x = x,
+                       sex = checked_params$sex,
                        acronym = checked_params$acronym,
                        sort = seq(from = 1, to = length(x)))
 
-  load_lms_with_sex_acronym <- function(sex, acronym) {
+  load_lms_tables <- function(sex, acronym) {
     coeff_tbl <- gigs::who_gs_coeffs[[acronym]][[sex]]
-    cbind(coeff_tbl,
+    coeff_tbl <- cbind(coeff_tbl,
           sex = rep_len(ifelse(sex == "male", yes = "M", no = "F"), length.out = nrow(coeff_tbl)),
-          acronym = rep_len(acronym, length.out = nrow(coeff_tbl)))
+          acronym = rep_len(acronym, length.out = nrow(coeff_tbl))) |>
+      setNames(c("x", "L", "M", "S", "sex", "acronym" ))
   }
 
-  sexes_to_load <- intersect(c("male", "female"), ifelse(unique(sex) == "M", yes = "male", no = "female"))
+  sexes_to_load <- intersect(c("male", "female"), ifelse(sex == "M", yes = "male", no = "female"))
   acronyms_to_load <- intersect(names(gigs::who_gs_coeffs), unique(acronym))
   tot_len <- length(sexes_to_load) * length(acronyms_to_load)
-  who_gs_coeffs_long <- do.call(rbind,
-                                mapply(x = rep_len(sexes_to_load, length.out = tot_len),
-                                       y = rep_len(acronyms_to_load, length.out = tot_len),
-                                       SIMPLIFY = F,
-                                       FUN = function(x, y) load_lms_with_sex_acronym(sex = x, acronym = y)))
-  if (!is.null(who_gs_coeffs_long)) {
-    names(who_gs_coeffs_long)[1] <- "x"
-    out <- merge(new_df, who_gs_coeffs_long, all.x = TRUE, sort = FALSE)
-    out <- out[order(out$sort), ]
-  } else {
+  who_gs_coeffs_li <- mapply(x = rep_len(sexes_to_load, length.out = tot_len),
+                             y = rep_len(acronyms_to_load, length.out = tot_len),
+                             SIMPLIFY = FALSE,
+                             FUN = \(x, y) load_lms_tables(sex = x, acronym = y))
+  if (!length(who_gs_coeffs_li)) {
     out <- new_df
     out$L <- NA
     out$M <- NA
     out$S <- NA
+    return(out)
   }
+
+  sexes_to_load <- intersect(c("M", "F"), ifelse(sexes_to_load == "male",
+                                                 yes = "M", no = "F"))
+  who_gs_coeffs_long <- do.call(rbind, who_gs_coeffs_li)
+  if (length(who_gs_coeffs_li)) {
+    names(who_gs_coeffs_li) <- paste0(sexes_to_load, "_", acronyms_to_load)
+
+    if (length(acronyms_to_load) == 1) {
+      who_x <- who_gs_coeffs_li[[1]]$x
+      within_coeff_lims <- inrange(new_df$x, who_x)
+    } else {
+      index_per_acronym <- sapply(acronyms_to_load,
+                                  FUN = \(x) grep(pattern = x,
+                                                  names(who_gs_coeffs_li))[[1]][1])
+      who_gs_xlims <- lapply(index_per_acronym,
+                             FUN = \(x) who_gs_coeffs_li[[x]][, 1] )
+      within_coeff_lims <- sapply(seq_along(new_df$acronym),
+                                  FUN = \(x) {
+                                    temp_acro <- new_df$acronym[x]
+                                    temp_x <- new_df$x[x]
+                                    inrange(temp_x, who_gs_xlims[[temp_acro]])
+                                  })
+    }
+    needs_lerp <- which(!x %in% who_gs_coeffs_long$x & within_coeff_lims)
+  }
+  # Linear interpolation for values not in table but within bounds for that
+  # acronym
+  if (exists(x = "needs_lerp") && length(needs_lerp)) {
+    in_coeff_tbl <- which(!seq_along(x) %in% needs_lerp)
+    not_in_coeff_tbl_df <- new_df[needs_lerp, ]
+    coeffs_interpolated <- do.call(rbind,
+            mapply(xvars = not_in_coeff_tbl_df$x,
+                   sex = not_in_coeff_tbl_df$sex,
+                   acronym = not_in_coeff_tbl_df$acronym,
+                   SIMPLIFY = F,
+                   FUN = \(xvars, sex, acronym) {
+                     interpolate_coeffs(who_gs_coeffs_long, xvars, sex, acronym)
+                   })) |>
+      merge(not_in_coeff_tbl_df)
+  } else {
+    in_coeff_tbl <- seq_along(x)
+  }
+
+  merge_df <- new_df[in_coeff_tbl, ]
+  out <- merge(merge_df, who_gs_coeffs_long, all.x = TRUE, sort = FALSE)
+  if (exists(x = "coeffs_interpolated")) {
+    out <- rbind(out, coeffs_interpolated)
+  }
+  out <- out[order(out$sort), ]
   out[, -which(names(out) == "sort")]
 }
 

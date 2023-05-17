@@ -84,8 +84,8 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
   lgth_lenht_method <- length(lenht_method)
   lgth_age_days <- length(age_days)
   if (lgth_lenht_method != 1 & lgth_lenht_method != lgth_age_days) {
-    stop(paste0("lenht_method should be as long as the input vectors or length 1. Your input was length",
-                lgth_lenht_method), call. = F)
+    stop(paste0("lenht_method should be as long as the input vectors or length 1. Your input was length ",
+                lgth_lenht_method, "."), call. = F)
   }
   if (lgth_lenht_method != lgth_age_days) lenht_method <- rep_to_longest(list(age_days, lenht_method))[[2]]
   lenht_method <- ifelse(is.na(lenht_method), yes = ifelse(age_days < 731, yes = "L", no = "H"), no = lenht_method)

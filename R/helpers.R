@@ -40,3 +40,47 @@ round2 <- function(x, digits) {
   z <- z / 10 ^ digits
   z*posneg
 }
+
+#' Linearly interpolate between LMS or MSNT coefficients
+#'
+#' @param coeff_tbl_long A table of reference LMS/MSNT coefficients, from within
+#' `gigs::who_gs_coeffs` or `gigs:::ig_nbs_coeffs`
+#' @param xvar A value of x which is not found in a coefficient table but is
+#' between two values in that coefficient table
+#' @param sex A character denoting male (`"M"`) or female (`"F"`)
+#' @notes All inputs should be length one. The function will also fail if
+#' `coeff_tbl_long` does not contain named LMS/MSNT values.
+#' @keywords internal
+interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {
+  xfloor <- floor(xvar)
+  xceiling <- ceiling(xvar)
+  coeffs <- data.frame(c(xfloor, xceiling),
+                       sex = rep_len(sex, length.out = 2),
+                       acronym = rep_len(acronym, length.out = 2))
+  if (all(c("L", "M", "S") %in% names(coeff_tbl_long))) {
+    coeff_names <-  c("L", "M", "S")
+  } else if (all(c("mu", "sigma", "nu", "tau") %in% names(coeff_tbl_long))) {
+    coeff_names <- c("mu", "sigma", "nu", "tau")
+  }
+  names(coeffs)[1] <- names(coeff_tbl_long[1])
+
+  coeffs <- merge(coeffs, coeff_tbl_long, all.x = TRUE, sort = FALSE)
+  n <- 100
+  interval <- (xvar - xfloor) / (xceiling - xfloor) * n
+  lerped_coeffs <- sapply(
+    X = 4:length(names(coeffs)),
+    FUN = function(x) {
+      # Do not bother lerping if adjacent LMS/MSNT values are equal
+      if (coeffs[1, x] == coeffs[2, x]) {
+        return(coeffs[1, x])
+      } else {
+        approx(seq_along(coeffs[, x]), coeffs[, x], n = n)$y[interval]
+      }
+    }) |>
+    t()|>
+    as.data.frame()
+  names(lerped_coeffs) <- coeff_names
+  final_df <- cbind(coeffs[1, 1:3], lerped_coeffs)
+  final_df[1,1] <- xvar
+  final_df
+}
