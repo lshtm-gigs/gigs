@@ -14,7 +14,7 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
                                    "lfga" = ig_nbs_lfga_zscore2value,
                                    "hcfga" = ig_nbs_hcfga_zscore2value,
                                    "wlrfga" = ig_nbs_wlrfga_zscore2value)
-                      round(fn(z = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex), digits = roundto)
+                      round2(fn(z = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -52,7 +52,7 @@ test_percentile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) 
                                    "lfga" = ig_nbs_lfga_percentile2value,
                                    "hcfga" = ig_nbs_hcfga_percentile2value,
                                    "wlrfga" = ig_nbs_wlrfga_percentile2value)
-                      round(fn(p = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex), digits = roundto)
+                      round2(fn(p = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -141,7 +141,7 @@ testthat_v2x <- function(y, gest_age, sex, acronym, z_or_p = "zscores") {
                             "lfga"  = ig_nbs_lfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex),
                             "hcfga" = ig_nbs_hcfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex),
                             "wlrfga" = ig_nbs_wlrfga_percentile2value(p = out_z_or_p, gest_age = gest_age, sex = sex)))
-  expect_equal(round(y, digits = 3), round(out_value, digits = 3))
+  expect_equal(round2(y, digits = 3), round2(out_value, digits = 3))
 }
 
 test_that("Conversion of values to z-scores works", {

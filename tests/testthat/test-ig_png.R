@@ -11,7 +11,7 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
                                    "wfa" = ig_png_wfa_zscore2value,
                                    "lfa" = ig_png_lfa_zscore2value,
                                    "hcfa" = ig_png_hcfa_zscore2value)
-                      round(fn(z = x, pma_weeks = get_pm_ages(age_lower, age_upper), sex = sex), digits = roundto)
+                      round2(fn(z = x, pma_weeks = get_pm_ages(age_lower, age_upper), sex = sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -48,7 +48,7 @@ test_percentile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) 
                                    "wfa" = ig_png_wfa_percentile2value,
                                    "lfa" = ig_png_lfa_percentile2value,
                                    "hcfa" = ig_png_hcfa_percentile2value)
-                      round(fn(p = x, pma_weeks = get_pm_ages(age_lower, age_upper), sex = sex), digits = roundto)
+                      round2(fn(p = x, pma_weeks = get_pm_ages(age_lower, age_upper), sex = sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -91,7 +91,7 @@ testthat_v2x <- function(y, pma_weeks, sex, acronym, z_or_p = "zscores") {
                             "wfa"  = ig_png_wfa_percentile2value(p = out_z_or_p, pma_weeks = pma_weeks, sex = sex),
                             "lfa"  = ig_png_lfa_percentile2value(p = out_z_or_p, pma_weeks = pma_weeks, sex = sex),
                             "hcfa" = ig_png_hcfa_percentile2value(p = out_z_or_p, pma_weeks = pma_weeks, sex = sex)))
-  return(all(round(y, digits = 3) == round(out_value, digits = 3), na.rm = TRUE))
+  return(all(round2(y, digits = 3) == round2(out_value, digits = 3), na.rm = TRUE))
 }
 
 test_that("Conversion of values to z-scores works", {
