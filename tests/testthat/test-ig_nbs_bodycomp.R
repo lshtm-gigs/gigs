@@ -11,7 +11,7 @@ test_percentile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) 
                      "fmfga" =  ig_nbs_fmfga_percentile2value,
                      "bfpfga" =  ig_nbs_bfpfga_percentile2value,
                      "ffmfga" = ig_nbs_ffmfga_percentile2value)
-                  round(fn(p = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex),
+                  round2(fn(p = x, gest_age = get_gest_ages(age_lower, age_upper), sex = sex),
                         digits = digits)
                 }) |>
     do.call(what = cbind) |>
@@ -67,7 +67,7 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
                      "fmfga" =   ig_nbs_fmfga_zscore2value,
                      "bfpfga" =  ig_nbs_bfpfga_zscore2value,
                      "ffmfga" =  ig_nbs_ffmfga_zscore2value)
-                   round(fn(sex = sex, gest_age = get_gest_ages(age_lower, age_upper), z = x),
+                   round2(fn(sex = sex, gest_age = get_gest_ages(age_lower, age_upper), z = x),
                          digits = digits)
                 }) |>
     do.call(what = cbind) |>

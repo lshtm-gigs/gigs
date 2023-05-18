@@ -13,7 +13,7 @@ test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
                                    "acfa" = who_gs_acfa_zscore2value,
                                    "ssfa" = who_gs_ssfa_zscore2value,
                                    "tsfa" = who_gs_tsfa_zscore2value)
-                      round(fn(z = x, x = range_x, sex = sex), digits = 3)
+                      round2(fn(z = x, x = range_x, sex = sex), digits = 3)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -27,7 +27,7 @@ test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   }
   sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
   in_or_out <- round2(unname(unlist(gigs::who_gs[[acronym]][[sex_]]$zscores[, 1],
-                                   use.names = FALSE)), digits = 1) %in% round(range_x, 1)
+                                    use.names = FALSE)), digits = 1) %in% round2(range_x, digits =  1)
   ref_tbl <- gigs::who_gs[[acronym]][[sex_]]$zscores[in_or_out, ] |> as.data.frame()
   rownames(pkg_tbl) <- NULL
   rownames(ref_tbl) <- NULL
@@ -35,10 +35,13 @@ test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
 }
 
 test_that("Conversion of z-scores to WHO values works", {
-  sex <- rep(c("M", "F"), length(names(gigs::who_gs)))
-  lower <-  rep(c(  0,    0,    0,  45,  65,    0,   91,   91,   91), times =  rep(2, length(names(gigs::who_gs))))
-  upper <- rep(c(1856, 1856, 1856, 110, 120, 1856, 1856, 1856, 1856), times =  rep(2, length(names(gigs::who_gs))))
-  acronyms <- rep(names(gigs::who_gs), times =  rep(2, length(names(gigs::who_gs))))
+  acronyms <- names(gigs::who_gs)
+  sex <- c("M", "F")
+  times <- rep(length(sex), length(acronyms))
+  sexes <- rep(sex, length(acronyms))
+  lower <-  rep(c(0, 0, 0, 45, 65, 0, 91, 91, 91), times =  times)
+  upper <- rep(c(rep(1856, 3), 110, 120, rep(1856, 4)), times = times)
+  acronyms <- rep(acronyms, times =  rep(length(sex), length(acronyms)))
   tolerance <- 1e-3
   invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
 })
@@ -87,7 +90,7 @@ test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   rownames(ref_tbl) <- NULL
   list(package = pkg_tbl, reference = ref_tbl)
 
-  # For now - remove P01 and P999 as these are not being adjusted correctly in
+  # For now - remove P01 and P999 as these were not adjusted correctly in
   # WHO standards
   pkg_tbl <- pkg_tbl[, c(1, 3:15)]
   ref_tbl <- ref_tbl[, c(1, 3:15)]
@@ -95,7 +98,7 @@ test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
 }
 
 test_that("Conversion of percentiles to values works", {
-  acronyms <- names(gigs::who_gs)[1]
+  acronyms <- names(gigs::who_gs)
   sex <- c("M", "F")
   times <- rep(length(sex), length(acronyms))
   sexes <- rep(sex, length(acronyms))
