@@ -65,16 +65,16 @@ interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {
   names(coeffs)[1] <- names(coeff_tbl_long[1])
 
   coeffs <- merge(coeffs, coeff_tbl_long, all.x = TRUE, sort = FALSE)
-  n <- 100
-  interval <- (xvar - xfloor) / (xceiling - xfloor) * n
   lerped_coeffs <- sapply(
     X = 4:length(names(coeffs)),
     FUN = function(x) {
-      # Do not bother lerping if adjacent LMS/MSNT values are equal
-      if (coeffs[1, x] == coeffs[2, x]) {
-        return(coeffs[1, x])
+      coeff1 <- coeffs[1, x]
+      coeff2 <- coeffs[2, x]
+      # Do not lerp if adjacent LMS/MSNT values are equal
+      if (coeff1 == coeff2) {
+        return(coeff1)
       } else {
-        approx(seq_along(coeffs[, x]), coeffs[, x], n = n)$y[interval]
+        approx(c(xfloor, xceiling), c(coeff1, coeff2), xout = xvar)$y
       }
     }) |>
     t()|>
