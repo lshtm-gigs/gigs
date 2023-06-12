@@ -28,7 +28,7 @@ for classifying newborn and infant growth according to DHS guidelines.
 ``` r
 # Install the development version from GitHub:
 # install.packages("devtools")
-devtools::install_github("lshtm_mnhg/gigs")
+devtools::install_github("lshtm-gigs/gigs")
 ```
 
 ## Available standards
@@ -81,35 +81,29 @@ devtools::install_github("lshtm_mnhg/gigs")
 
 ## Conversion functions
 
-n.b. functions are named according to the main standard in use, the
-component standard, then the type of conversion, e.g.:
-`ig_nbs`/`_wfga`/`_zscore2percentile()`
+Conversion functions are named according to the set of standards in use,
+the component standard from that set, then the type of conversion. For
+example, to convert *values to z-scores* in the *weight-for-GA* standard
+from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
+`ig_nbs`/`_wfga`/`_value2zscore()`
 
-### Z-scores/percentiles to values
+Similarly, the conversion of length-for-age values to centiles in term
+and preterm infants could be performed with the WHO Child Growth
+Standards and INTERGROWTH-21<sup>st</sup> Post-natal Growth of Preterm
+Infants Standards, respectively:
 
-``` r
-# Convert from z-scores for individual values...
-ig_nbs_zscore2value(z = 0, gest_age = 182, sex = "F", acronym = "wfga") |>
-        round(digits = 3)
-#> [1] 0.785
+- Term infants: `who_gs`/`_lhfa`/`_value2zscore()`
+- Preterm infants: `ig_nbs`/`_lfa`/`_value2percentile()`
 
-# .. or for multiple inputs
-ig_nbs_wfga_zscore2value(z = 0, gest_age = seq(182, 204, by = 7), sex = "F") |>
-        round(digits = 3)
-#> [1] 0.785 0.893 1.013 1.147
-
-# You can do the same for percentiles
-ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
-                            pma_weeks = 40,
-                            sex = "M") |>
-        round(digits = 2)
-#> [1] 2.87 3.12 3.43 3.77 4.11
-```
+If the component standard is not included in the function call, it
+should be passed to the `acronym` parameter of the general function
+call. A vector of `acronym` values can be used if you want to convert
+with different standards for each input.
 
 ### Values to z-scores/percentiles
 
-These functions allow easy from measured values to z-scores and
-percentiles for the standard used.
+These functions allow easy conversion from measured values to z-scores
+or percentiles for the standard used.
 
 ``` r
 # Convert from z-scores for individual values...
@@ -130,15 +124,68 @@ ig_png_wfa_value2percentile(weight_kg = c(2.86, 3.12, 3.12, 3.43, 3.77, 4.10),
 #> [1] 0.10 0.25 0.25 0.50 0.75 0.90
 ```
 
+### Z-scores/percentiles to values
+
+These functions convert z-scores to expected anthropometric
+measurements. They are mostly useful for the creation of reference
+curves (see below).
+
+``` r
+# Convert from z-scores for individual values...
+ig_nbs_zscore2value(z = 0, gest_age = 182, sex = "F", acronym = "wfga") |>
+        round(digits = 3)
+#> [1] 0.785
+
+# .. or for multiple inputs
+ig_nbs_wfga_zscore2value(z = 0, gest_age = seq(182, 204, by = 7), sex = "F") |>
+        round(digits = 3)
+#> [1] 0.785 0.893 1.013 1.147
+
+# You can do the same for percentiles
+ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
+                            pma_weeks = 40,
+                            sex = "M") |>
+        round(digits = 2)
+#> [1] 2.87 3.12 3.43 3.77 4.11
+```
+
+#### Reference curves
+
+We can use `gigs` to generate reference curves for the standards by
+getting curves for the expected weight at multiple z-scores across
+multiple gestational ages. We would usually recommend
+[`ggplot2`](https://ggplot2.tidyverse.org/) for such visualisation, but
+do not use it here to reduce our package’s dependencies.
+
+``` r
+z_score_range <- -2:2
+gestage_range <- 168:230
+ref <- mapply(z_score_range,
+             FUN = function(z) {
+               gigs::ig_nbs_wfga_zscore2value(z = z,
+                                        gest_age = gestage_range,
+                                        sex = "F")
+             })
+matplot(ref, x = gestage_range, col = 1:5, type = "l", lty = 2:6,
+        xlab = "Gestational age (days)",
+        ylab = "Weight (kg)")
+title(main = "Weight-for-GA in very preterm newborns")
+legend(x = min(gestage_range) + 1, y = ref[length(ref)], legend = 2:-2,
+       title = "Z-score", col = 5:1, lty = 2:6)
+```
+
+<img src="man/figures/README-example_zp2v_curves-1.png" width="100%" />
+
 ## Classification functions
 
-These functions apply DHS guidelines to z-scores/percentiles generated
-by the conversion functions. This allows for quick identification of
-at-risk infants through classification of suboptimal growth.
+These functions allow for quick identification of at-risk infants
+through classification of suboptimal growth. The cut-offs used are
+sourced from research literature; you can check the function
+documentation to see these sources.
 
 ``` r
 # Size for gestational age
-gigs::classify_sga(
+classify_sga(
         weight_kg = c(2.5, 3.2, 4.0),
         gest_age = 277,
         sex = "M"
