@@ -14,12 +14,12 @@ test_that("Size for GA classification works", {
                       psex = "M", gestage = seq(24, 27, by = 1/7) * 7),
            classify_sga(weight_kg = weight, sex = psex, gest_age = gestage, coarse = F)),
     expected = factor(c("AGA", "SGA(<3)", "SGA", "LGA", "LGA", "AGA", "LGA", "LGA", "SGA",
-                      "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
-                      "SGA(<3)", "SGA(<3)", "AGA", "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
+                        "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
+                        "SGA(<3)", "SGA(<3)", "AGA", "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
 })
 
 
-test_that("Stunting classification works", {
+test_that(desc = "Stunting classification works", {
   expect_equal(object =
                  # pre-term, below age cutoff, <-2 on IG
                  # pre-term, above age cutoff, <-2 on WHO
@@ -45,10 +45,10 @@ test_that("Stunting classification works", {
 test_that("classify_stunting() fails with inputs of incorrect length", {
   expect_error(object =
                   classify_stunting(lenht_cm = c(57.5, 73.6, 44.1, 75.4, 72.83),
-                                         age_days = c(34, 35, 36, 37, 38) * 7,
-                                         ga_at_birth = c(180, 455, 294, 525, 245),
-                                         sex = "M",
-                                         lenht_method = c("H", "L")),
+                                    age_days = c(34, 35, 36, 37, 38) * 7,
+                                    ga_at_birth = c(180, 455, 294, 525, 245),
+                                    sex = "M",
+                                    lenht_method = c("H", "L")),
                regexp = "lenht_method should be as long as the input vectors or length 1.")
 })
 
