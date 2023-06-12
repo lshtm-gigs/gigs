@@ -2,27 +2,33 @@
 % Please edit documentation in R/classification.R
 \name{classify_sga}
 \alias{classify_sga}
-\title{Classify size for gestational age using INTERGROWTH-21st Newborn Size Standards (including very preterm)}
+\title{Classify size for gestational age using INTERGROWTH-21st Newborn Size
+Standards (including very preterm)}
 \usage{
 classify_sga(weight_kg, gest_age, sex, coarse = TRUE)
 }
 \arguments{
 \item{weight_kg}{Anthropometric measurement(s) to assess.}
 
-\item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168} and \code{300}.}
+\item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168}
+and \code{300}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{coarse}{If \code{FALSE}, specify which SGA values are below the third percentile. Default = \code{TRUE}.}
+\item{coarse}{If \code{FALSE}, specify which SGA values are below the third
+percentile. Default = \code{TRUE}.}
 }
 \value{
-Factor with gestational age classification(s). If \code{coarse = TRUE}, levels are \code{c("SGA", "AGA",  "LGA")}.
+Factor with gestational age classification(s). If \code{coarse = TRUE},
+levels are \code{c("SGA", "AGA",  "LGA")}.
 If \code{coarse = FALSE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
-Size for gestational age categories are split by centile: small-for-GA (SGA), appropriate-for-GA (AGA) and
-large-for-GA (LGA). SGA is <10th centile, LGA is >90th centile, and AGA is in between. Some prefer to note children
-below the third centile as severely SGA.
+Size for gestational age categories are split by centile: small-for-GA (SGA;
+10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} to
+90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile) and large-for-GA (LGA, >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile).
+This function also supports classification of severe SGA (<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}}
+centile).
 }
 \examples{
 # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
@@ -39,4 +45,14 @@ classify_sga(
   sex = "F",
   coarse = FALSE
 )
+}
+\references{
+WHO. \strong{Physical status: the use and interpretation of anthropometry. Report
+of a WHO Expert Committee.} \emph{World Health Organisation Technical Report
+Series 1995,} \strong{854: 1–452}
+
+Royal College of Obstetricians and Gynaecologists. \strong{The Investigation and
+Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
+31.} \emph{Technical report, Royal College of Obstetricians and Gynaecologists,
+London, 2013.}
 }
