@@ -2,9 +2,10 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  ig-nbs-body-composition-improved: ig-nbs-body-composition-improved.html
   ig-nbs-body-composition: ig-nbs-body-composition.html
   gigs: gigs.html
-last_built: 2023-04-13T15:24Z
+last_built: 2023-06-12T13:48Z
 urls:
   reference: https://simpar1471.github.io/gigs/reference
   article: https://simpar1471.github.io/gigs/articles

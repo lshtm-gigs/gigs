@@ -113,10 +113,12 @@
 
 
 <dt>acronym</dt>
-<dd><p>Valid acronym for WHO Growth Standards datasets: one of <code>"wfa"</code> (weight-for-age), <code>"bfa"</code>
-(bmi-for-age), <code>"lhfa"</code> (length/height-for-age), <code>"wfl"</code> (weight-for-length), or <code>"wfh"</code>
-(weight-for-height), <code>"hcfa"</code> (head circumference-for-age), <code>"acfa"</code> (arm circumference-for-age),
-<code>"ssfa"</code> (subscapular skinfold-for-age), or <code>"tsfa"</code> (triceps skinfold-for-age),</p></dd>
+<dd><p>Valid acronym for WHO Growth Standards datasets: one of
+<code>"wfa"</code> (weight-for-age), <code>"bfa"</code> (bmi-for-age), <code>"lhfa"</code>
+(length/height-for-age), <code>"wfl"</code> (weight-for-length), or <code>"wfh"</code>
+(weight-for-height), <code>"hcfa"</code> (head circumference-for-age), <code>"acfa"</code>
+(arm circumference-for-age), <code>"ssfa"</code> (subscapular skinfold-for-age), or
+<code>"tsfa"</code> (triceps skinfold-for-age).</p></dd>
 
 
 <dt>weight_kg</dt>
@@ -161,15 +163,21 @@
 </dl></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. <strong>The WHO Multicentre Growth Reference
-Study: planning, study design, and methodology</strong> <em>Food Nutr Bull.</em> 2004, <strong>25(1 Suppl):S15-26.</strong>
-doi: <a href="https://journals.sagepub.com/doi/10.1177/15648265040251S104" class="external-link">10.1177/15648265040251s104</a></p>
-<p>de Onis M <em>et al.</em> (2006) <strong>'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
-WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'</strong> <em>in</em> World Health Organization (ed.)
-<em>WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
-body mass index-for-age: methods and development</em>. Geneva: World Health Organization, pp. 301-304.</p>
-<p>Cole TJ <strong>The LMS method for constructing normalized growth standards</strong> <em>Eur J Clin Nutr.</em> 1990,
-<strong>44(1):45-60.</strong> PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/2354692/" class="external-link">2354692</a></p>
+    <p>de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. <strong>The
+WHO Multicentre Growth Reference Study: planning, study design, and
+methodology</strong> <em>Food Nutr Bull.</em> 2004, <strong>25(1 Suppl):S15-26.</strong> doi:
+<a href="https://journals.sagepub.com/doi/10.1177/15648265040251S104" class="external-link">10.1177/15648265040251s104</a></p>
+<p>World Health Organisation. <strong>WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.</strong> <em>Technical report,
+WHO, Geneva</em>, 2006.
+World Health Organisation. <strong>WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.</strong> <em>Technical
+report, WHO, Geneva</em>, 2007.</p>
+<p>Cole TJ. <strong>The LMS method for constructing normalized growth standards</strong> <em>Eur
+J Clin Nutr.</em> 1990, <strong>44(1):45-60.</strong> PMID:
+<a href="https://pubmed.ncbi.nlm.nih.gov/2354692/" class="external-link">2354692</a></p>
     </div>
 
     <div class="section level2">
@@ -201,8 +209,9 @@ body mass index-for-age: methods and development</em>. Geneva: World Health Orga
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.44 0.47 0.50 0.52 0.54</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return NA - here 121 cm</span></span></span>
-<span class="r-in"><span><span class="co"># height_cm is incompatible with the WHO Growth Standard for weight-for-height</span></span></span>
+<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return NA - here</span></span></span>
+<span class="r-in"><span><span class="co"># 121 cm for height_cm is incompatible with the WHO Growth Standard for</span></span></span>
+<span class="r-in"><span><span class="co"># weight-for-height</span></span></span>
 <span class="r-in"><span><span class="fu">who_gs_wfh_value2zscore</span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7.4</span>, <span class="fl">14.2</span>, <span class="fl">21.8</span>, <span class="fl">22.4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                        height_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">65</span>, <span class="fl">95</span>, <span class="fl">120</span>, <span class="fl">121</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                        sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>

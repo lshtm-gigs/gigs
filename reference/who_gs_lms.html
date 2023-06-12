@@ -63,7 +63,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>X value(s) at which to retrieve LMS values. Must be within bounds of available x values for given acronym.</p></dd>
+<dd><p>X value(s) at which to retrieve LMS values. Must be within bounds of
+available x values for given acronym.</p></dd>
 
 
 <dt>sex</dt>
@@ -71,26 +72,35 @@
 
 
 <dt>acronym</dt>
-<dd><p>Valid acronym for WHO Growth Standards datasets: one of <code>"wfa"</code> (weight-for-age), <code>"bfa"</code>
-(bmi-for-age), <code>"lhfa"</code> (length/height-for-age), <code>"wfl"</code> (weight-for-length), or <code>"wfh"</code>
-(weight-for-height), <code>"hcfa"</code> (head circumference-for-age), <code>"acfa"</code> (arm circumference-for-age),
-<code>"ssfa"</code> (subscapular skinfold-for-age), or <code>"tsfa"</code> (triceps skinfold-for-age),</p></dd>
+<dd><p>Valid acronym for WHO Growth Standards datasets: one of
+<code>"wfa"</code> (weight-for-age), <code>"bfa"</code> (bmi-for-age), <code>"lhfa"</code>
+(length/height-for-age), <code>"wfl"</code> (weight-for-length), or <code>"wfh"</code>
+(weight-for-height), <code>"hcfa"</code> (head circumference-for-age), <code>"acfa"</code>
+(arm circumference-for-age), <code>"ssfa"</code> (subscapular skinfold-for-age), or
+<code>"tsfa"</code> (triceps skinfold-for-age).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A dataframe with lambda, mu and sigma values for the WHO growth standard(s) specified by the <code>acronym</code></p>
-
-
-<p>parameter, for the supplied <code>x</code> and <code>sex</code> values.</p>
+<p>A dataframe with lambda, mu and sigma values for the WHO growth
+standard(s) specified by the <code>acronym</code> parameter, for the supplied <code>x</code> and
+<code>sex</code> values.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. <strong>The WHO Multicentre Growth Reference
-Study: planning, study design, and methodology</strong> <em>Food Nutr Bull.</em> 2004, <strong>25(1 Suppl):S15-26.</strong>
-doi: <a href="https://journals.sagepub.com/doi/10.1177/15648265040251S104" class="external-link">10.1177/15648265040251s104</a></p>
+    <p>World Health Organisation. <strong>WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.</strong> <em>Technical report,
+WHO, Geneva</em>, 2006.</p>
+<p>World Health Organisation. <strong>WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.</strong> <em>Technical
+report, WHO, Geneva</em>, 2007.</p>
+<p>Cole TJ. <strong>The LMS method for constructing normalized growth standards</strong> <em>Eur
+J Clin Nutr.</em> 1990, <strong>44(1):45-60.</strong> PMID:
+<a href="https://pubmed.ncbi.nlm.nih.gov/2354692/" class="external-link">2354692</a></p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

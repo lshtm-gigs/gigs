@@ -116,7 +116,7 @@ come in:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_newborn_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>        weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.91</span>, <span class="fl">3.33</span>, <span class="fl">3.03</span>, <span class="fl">3.35</span>, <span class="fl">3.47</span>, <span class="fl">1.90</span><span class="op">)</span>,</span>
-<span>        gest_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">26</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">40</span>, <span class="fl">41</span> <span class="op">+</span> <span class="fl">6</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">37</span>, <span class="fl">39</span> <span class="op">+</span> <span class="fl">4</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">33</span><span class="op">)</span>,</span>
+<span>        gest_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">183</span>, <span class="fl">280</span>, <span class="fl">293</span>, <span class="fl">259</span>, <span class="fl">277</span>, <span class="fl">231</span><span class="op">)</span>,</span>
 <span>        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">weight_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/ig_nbs_value2percentile.html">ig_nbs_value2percentile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">weight_kg</span>,</span>
@@ -132,12 +132,12 @@ come in:</p>
 <span>                                     digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_newborn_weights</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   weight_kg gest_age sex weight_p weight_z</span></span>
-<span><span class="co">#&gt; 1      0.91 26.14286   M     0.65     0.37</span></span>
-<span><span class="co">#&gt; 2      3.33 40.00000   M     0.45    -0.14</span></span>
-<span><span class="co">#&gt; 3      3.03 41.85714   M     0.07    -1.48</span></span>
-<span><span class="co">#&gt; 4      3.35 37.00000   F     0.91     1.34</span></span>
-<span><span class="co">#&gt; 5      3.47 39.57143   F     0.74     0.65</span></span>
-<span><span class="co">#&gt; 6      1.90 33.00000   F     0.56     0.14</span></span></code></pre></div>
+<span><span class="co">#&gt; 1      0.91      183   M     0.65     0.37</span></span>
+<span><span class="co">#&gt; 2      3.33      280   M     0.45    -0.14</span></span>
+<span><span class="co">#&gt; 3      3.03      293   M     0.07    -1.48</span></span>
+<span><span class="co">#&gt; 4      3.35      259   F     0.91     1.34</span></span>
+<span><span class="co">#&gt; 5      3.47      277   F     0.74     0.65</span></span>
+<span><span class="co">#&gt; 6      1.90      231   F     0.56     0.14</span></span></code></pre></div>
 <p>Given that the outputs of these functions are vectors, gain functions
 integrate easily with <code>dplyr</code> verbs.</p>
 </div>
@@ -146,11 +146,13 @@ integrate easily with <code>dplyr</code> verbs.</p>
 <h3 id="from-z-scorespercentiles-to-values">From z-scores/percentiles to values<a class="anchor" aria-label="anchor" href="#from-z-scorespercentiles-to-values"></a>
 </h3>
 <p>Alternatively, you may wish to calculate reference values for median
-head circumference in female newborns for gestational ages from 38 to 38
-+ 6/7 weeks. This is achievable through the relevant
+head circumference in female newborns for gestational ages across a
+range of gestational ages. You can do this with the relevant
 <code>percentile2value</code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/ig_nbs_percentile2value.html">ig_nbs_hcfga_percentile2value</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.5</span>, gest_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">38</span>, <span class="fl">38</span> <span class="op">+</span> <span class="fl">6</span><span class="op">/</span><span class="fl">7</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span><span class="op">)</span>, sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ig_nbs_percentile2value.html">ig_nbs_hcfga_percentile2value</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                              gest_age <span class="op">=</span> <span class="fl">266</span><span class="op">:</span><span class="fl">272</span>,</span>
+<span>                              sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 33.5 33.5 33.6 33.7 33.7 33.8 33.8</span></span></code></pre></div>
 </div>
@@ -167,18 +169,17 @@ growth status:</p>
 <h3 id="classifying-size-for-gestational-age">Classifying size for gestational age<a class="anchor" aria-label="anchor" href="#classifying-size-for-gestational-age"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">classification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_sga.html">classify_sga</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">weight_kg</span>,</span>
+<code class="sourceCode R"><span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">classification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_sga.html">classify_sga</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">weight_kg</span>,</span>
 <span>                                                  gest_age <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">gest_age</span>,</span>
-<span>                                                  sex <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">sex</span>,</span>
-<span>                                                  acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span>
+<span>                                                  sex <span class="op">=</span> <span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_newborn_weights</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   weight_kg gest_age sex weight_p weight_z classification</span></span>
-<span><span class="co">#&gt; 1      0.91 26.14286   M     0.65     0.37            AGA</span></span>
-<span><span class="co">#&gt; 2      3.33 40.00000   M     0.45    -0.14            AGA</span></span>
-<span><span class="co">#&gt; 3      3.03 41.85714   M     0.07    -1.48            SGA</span></span>
-<span><span class="co">#&gt; 4      3.35 37.00000   F     0.91     1.34            LGA</span></span>
-<span><span class="co">#&gt; 5      3.47 39.57143   F     0.74     0.65            AGA</span></span>
-<span><span class="co">#&gt; 6      1.90 33.00000   F     0.56     0.14            AGA</span></span></code></pre></div>
+<span><span class="co">#&gt; 1      0.91      183   M     0.65     0.37            AGA</span></span>
+<span><span class="co">#&gt; 2      3.33      280   M     0.45    -0.14            AGA</span></span>
+<span><span class="co">#&gt; 3      3.03      293   M     0.07    -1.48            SGA</span></span>
+<span><span class="co">#&gt; 4      3.35      259   F     0.91     1.34            LGA</span></span>
+<span><span class="co">#&gt; 5      3.47      277   F     0.74     0.65            AGA</span></span>
+<span><span class="co">#&gt; 6      1.90      231   F     0.56     0.14            AGA</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
