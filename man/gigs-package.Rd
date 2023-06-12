@@ -6,9 +6,10 @@
 \alias{gigs}
 \title{gigs: Assess Growth in Infants and Newborns}
 \description{
-Convert between anthropometric measures and z-scores/percentiles using WHO and INTERGROWTH-21st growth standards.
-This package also enables conversion of z-scores/percentiles to newborn and infant size classifications, including
-size for gestational age, stunting, and wasting.
+Convert between anthropometric measures and z-scores/percentiles using WHO
+and INTERGROWTH-21st growth standards. This includes functions for
+classification of newborn and infant growth, including size-for-gestational
+age, stunting, wasting, and weight-for-age.
 }
 \examples{
 \dontrun{
