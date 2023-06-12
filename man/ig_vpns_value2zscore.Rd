@@ -2,26 +2,29 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_value2zscore}
 \alias{ig_vpns_value2zscore}
-\title{Convert anthropometric values to INTERGROWTH-21st very preterm newborn size z-score/percentiles}
+\title{Convert anthropometric values to INTERGROWTH-21st very preterm newborn size
+z-score/percentiles}
 \usage{
 ig_vpns_value2zscore(y, gest_age, sex, acronym)
 }
 \arguments{
 \item{y}{Value(s) to convert to z-scores/percentiles.}
 
-\item{gest_age}{Gestational age in weeks. Must be between \code{24} and \code{32 + 6/7} weeks.}
+\item{gest_age}{Gestational age in weeks. Must be between \code{24} and \code{32 + 6/7}
+weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use. Must be one of \code{"wfga"},
-\code{"lfga"}, or \code{"hcfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
+Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
 }
 \description{
-Convert anthropometric values to INTERGROWTH-21st very preterm newborn size z-score/percentiles
+Convert anthropometric values to INTERGROWTH-21st very preterm newborn size
+z-score/percentiles
 }
 \references{
-Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al. \strong{INTERGROWTH-21st very
-preterm size at birth reference charts.} \emph{Lancet} 2016, \strong{387(10021):844-45.}
-\doi{10.1016/S0140-6736(16)00384-6}
+Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
+2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
 }
 \keyword{internal}

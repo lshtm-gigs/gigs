@@ -2,36 +2,42 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_equations}
 \alias{ig_vpns_equations}
-\title{INTERGROWTH-21st regression equations for newborn size in very preterm infants}
+\title{INTERGROWTH-21st regression equations for newborn size in very preterm
+infants}
 \usage{
 ig_vpns_equations(gest_age, sex, acronym)
 }
 \arguments{
-\item{gest_age}{Gestational age in days. Must be between \code{168} and \code{230} days.}
+\item{gest_age}{Gestational age in days. Must be between \code{168} and \code{230}
+days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use. Must be one of \code{"wfga"},
-\code{"lfga"}, or \code{"hcfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
+Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
 }
 \value{
-A dataframe with mean and standard deviation values for each provided sex/gestational age/acronym
+A dataframe with mean and standard deviation values for each
+provided sex/gestational age/acronym
 combination
 }
 \description{
-Calculates median/standard deviation values for newborn size in very preterm infants with varying gestational ages
+Calculates median/standard deviation values for newborn size in very preterm
+infants with varying gestational ages
 and sexes.
 }
 \note{
-This function returns the \strong{natural log} of the median and standard deviations for weight (kg) for
-gestational age. In contrast, the medians and standard deviations for length and head circumference for gestational
-age have no logarithm applied. Though these functions are not given in the supplied reference, they were provided
-directly by Dr Eric Ohuma, and replicate the INTERGROWTH-21st standards from the reference at all relevant
+This function returns the \strong{natural log} of the median and standard
+deviations for weight (kg) for gestational age. In contrast, the medians and
+standard deviations for length and head circumference for gestational age
+have no logarithm applied. Though these functions are not given in the
+supplied reference, they were provided directly by Dr Eric Ohuma, and
+replicate the INTERGROWTH-21st standards from the reference at all relevant
 gestational ages.
 }
 \references{
-Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al. \strong{INTERGROWTH-21st very
-preterm size at birth reference charts.} \emph{Lancet} 2016, \strong{387(10021):844-45.}
-\doi{10.1016/S0140-6736(16)00384-6}
+Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
+2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
 }
 \keyword{internal}
