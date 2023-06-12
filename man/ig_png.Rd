@@ -8,17 +8,18 @@
 \href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21st Post-natal Growth of Preterm Infants}
 }
 \description{
-A set of nested lists containing tables with reference values at different z-scores/percentiles for valid
-postmenstrual ages. The list is ordered by acronym first, then by sex and finally z-score/percentile.
+A set of nested lists containing tables with reference values at different
+z-scores/percentiles for valid postmenstrual ages. The list is ordered by
+acronym first, then by sex and finally z-score/percentile.
 }
 \examples{
 names(gigs::ig_png)
 head(gigs::ig_png$wfa$male$zscores)
 }
 \references{
-Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. \strong{International
-standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-Study of the INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
-\doi{10.1016/S0140-6736(14)60932-6}
+Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
+\strong{Postnatal growth standards for preterm infants: the Preterm Postnatal
+Follow-up Study of the INTERGROWTH-21st Project.} \emph{Lancet Glob Health} 2015,
+\emph{3(11):e681-e691.} \doi{10.1016/S2214-109X(15)00163-1}
 }
 \keyword{data}
