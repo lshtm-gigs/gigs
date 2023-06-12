@@ -52,6 +52,7 @@ round2 <- function(x, digits) {
 #' @param sex A character denoting male (`"M"`) or female (`"F"`)
 #' @note All inputs should be length one. The function will also fail if
 #' `coeff_tbl_long` does not contain named LMS/MSNT values.
+#' @importFrom stats approx
 #' @keywords internal
 interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {
   xfloor <- floor(xvar)
@@ -76,7 +77,7 @@ interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {
       if (coeffs[1, x] == coeffs[2, x]) {
         return(coeffs[1, x])
       } else {
-        approx(seq_along(coeffs[, x]), coeffs[, x], n = n)$y[interval]
+        stats::approx(seq_along(coeffs[, x]), coeffs[, x], n = n)$y[interval]
       }
     }) |>
     t()|>

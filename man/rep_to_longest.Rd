@@ -7,7 +7,8 @@
 rep_to_longest(vec_list)
 }
 \arguments{
-\item{vec_list}{List of vectors to extend out to the length of the longest vector in that list.}
+\item{vec_list}{List of vectors to extend out to the length of the longest
+vector in that list.}
 }
 \value{
 List of vectors recycled to length of longest vector in input list.
