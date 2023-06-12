@@ -54,13 +54,15 @@ ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 \arguments{
 \item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300} for weight/length/head
-circumference-for-gestational age, or from \code{266} to \code{294} for body composition equations.}
+\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+for weight/length/head circumference-for-gestational age, or from \code{266} to
+\code{294} for body composition equations.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must be one of \code{"wfga"}, \code{"lfga"},
-\code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
+be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"},
+or \code{"ffmfga"}.}
 }
 \value{
 Vector of anthropometric measures.
@@ -104,12 +106,15 @@ ig_nbs_hcfga_zscore2value(z = z,
   round(digits = 2)
 }
 \references{
-Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. \strong{International
-standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-Study of the INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
+Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+\strong{International standards for newborn weight, length, and head circumference
+by gestational age and sex: the Newborn Cross-Sectional Study of the
+INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
 
-Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. \strong{Body composition at
-birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-INTERGROWTH-21st project.} \emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
+Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+\strong{Body composition at birth and its relationship with neonatal anthropometric
+ratios: the newborn body composition study of the INTERGROWTH-21st
+project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
+\doi{10.1038/pr.2017.52}
 }

@@ -1,24 +1,29 @@
 #' Convert z-scores/percentiles to INTERGROWTH-21st newborn size values
 #'
 #' @param p,z Percentile(s)/z-score(s) to convert to a value/values.
-#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300` for weight/length/head
-#' circumference-for-gestational age, or from `266` to `294` for body composition equations.
+#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300`
+#' for weight/length/head circumference-for-gestational age, or from `266` to
+#' `294` for body composition equations.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH NBS standard to use. Must be one of `"wfga"`, `"lfga"`,
-#' `"hcfga"`, `"wlrfga"`, `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
+#' be one of `"wfga"`, `"lfga"`, `"hcfga"`, `"wlrfga"`, `"fmfga"`, `"bfpfga"`,
+#' or `"ffmfga"`.
 #' @returns Vector of anthropometric measures.
 #'
 #' @note Input vectors will be recycled to the length of the longest vector.
 #'
 #' @references
-#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. **International
-#' standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-#' Study of the INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
+#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+#' **International standards for newborn weight, length, and head circumference
+#' by gestational age and sex: the Newborn Cross-Sectional Study of the
+#' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #'
-#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. **Body composition at
-#' birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-#' INTERGROWTH-21st project.** *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
+#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+#' **Body composition at birth and its relationship with neonatal anthropometric
+#' ratios: the newborn body composition study of the INTERGROWTH-21st
+#' project.** *Pediatric Research* 2017, **82:305-316.**
+#' \doi{10.1038/pr.2017.52}
 #'
 #' @examples
 #' # Convert percentiles to values
@@ -218,15 +223,17 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
   ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "ffmfga")
 }
 
-#' Convert anthropometric values to INTERGROWTH-21st newborn size z-score/percentiles
+#' Convert anthropometric values to INTERGROWTH-21st newborn size
+#' z-score/percentiles
 #'
 #' @param y Value(s) to convert to z-scores/percentiles
-#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300` for weight/length/head
-#' circumference-for-gestational age, or from `266` to `294` for body composition standards (`"fmfga"`, `"bfpfga"`, or
-#' `"ffmfga"`).
+#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300`
+#' for weight/length/head circumference-for-gestational age, or from `266` to
+#' `294` for body composition standards (`"fmfga"`, `"bfpfga"`, or `"ffmfga"`).
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH NBS standard to use. Must be one of `"wfga"`, `"lfga"`,
-#' `"hcfga"`, `"wlrfga"`, `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
+#' be one of `"wfga"`, `"lfga"`, `"hcfga"`, `"wlrfga"`, `"fmfga"`, `"bfpfga"`,
+#' or `"ffmfga"`.
 #' @param weight_kg Birth weight(s) in kg
 #' @param length_cm Birth length(s) in cm
 #' @param headcirc_cm Birth head circumference(s) in cm
@@ -238,14 +245,17 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' @returns Vector of z-scores/percentiles.
 #'
 #' @references
-#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. **International
-#' standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-#' Study of the INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
+#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+#' **International standards for newborn weight, length, and head circumference
+#' by gestational age and sex: the Newborn Cross-Sectional Study of the
+#' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #'
-#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. **Body composition at
-#' birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-#' INTERGROWTH-21st project.** *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
+#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+#' **Body composition at birth and its relationship with neonatal anthropometric
+#' ratios: the newborn body composition study of the INTERGROWTH-21st
+#' project.** *Pediatric Research* 2017, **82:305-316.**
+#' \doi{10.1038/pr.2017.52}
 #'
 #' @examples
 #' # Convert values to percentiles
@@ -409,7 +419,6 @@ ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, sex, gest_age) {
   ig_nbs_value2zscore(y = wei_len_ratio, gest_age = gest_age, sex = sex, acronym = "wlrfga")
 }
 
-
 #' @rdname ig_nbs_value2percentile
 #' @export
 ig_nbs_fmfga_value2zscore <- function(fat_mass_g, gest_age, sex) {
@@ -430,23 +439,26 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 
 #' Retrieve GAMLSS coefficients for INTERGROWTH-21st Newborn Size standards
 #'
-#' @description Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of z-scores/percentiles in the
-#' INTERGROWTH-21st Newborn Size standards
+#' @description Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
+#' z-scores/percentiles in the INTERGROWTH-21st Newborn Size standards
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param gest_age Gestational age(s) in days. Must be between `231` and `300`.
-#' @param acronym Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st standard to use. Must be one of `"wfga"`,
-#' `"lfga"`, or `"hcfga"`.
-#' @returns A dataframe containing mu, sigma, nu, and tau values for each provided sex/gestational age/acronym
-#' combination.
+#' @param acronym Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st
+#' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
+#' @returns A dataframe containing mu, sigma, nu, and tau values for each
+#' provided sex/gestational age/acronym combination.
 #'
-#' @note These coefficients are not included in the referenced publication, and were instead supplied directly by Eric
-#' Ohuma. However, Villar *et al.* used these coefficients to construct the growth curves they described, and in
-#' testing these values output the INTERGROWTH-21st standards exactly.
+#' @note These coefficients are not included in the referenced publication, and
+#' were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
+#' these coefficients to construct the growth curves they described, and in
+#' testing we found these coefficients output the INTERGROWTH-21st standards
+#' exactly.
 #'
 #' @references
-#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. **International
-#' standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-#' Study of the INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
+#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+#' **International standards for newborn weight, length, and head circumference
+#' by gestational age and sex: the Newborn Cross-Sectional Study of the
+#' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #'
 #' @examples
@@ -463,10 +475,12 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
   load_msnt_with_sex_acronym <- function(sex, acronym) {
     coeff_tbl <- gigs::ig_nbs_coeffs[[acronym]][[sex]]
     cbind(coeff_tbl,
-          sex = rep(ifelse(sex == "male", yes = "M", no = "F"), length(coeff_tbl)),
+          sex = rep(ifelse(sex == "male", yes = "M", no = "F"),
+                    length(coeff_tbl)),
           acronym = rep(acronym, length(coeff_tbl)))
   }
-  sexes_to_load <- intersect(c("male", "female"), ifelse(sex == "M", yes = "male", no = "female"))
+  sexes_to_load <- intersect(c("male", "female"),
+                             ifelse(sex == "M", yes = "male", no = "female"))
   acronyms_to_load <- intersect(names(gigs::ig_nbs_coeffs), unique(acronym))
   tot_len <- length(sexes_to_load) * length(acronyms_to_load)
   ig_nbs_coeffs_long <- do.call(
@@ -506,36 +520,43 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 
 #' INTERGROWTH-21st Weight-to-length ratio medians/standard deviations
 #'
-#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 + 6/7`.
+#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 +
+#' 6/7`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @returns Weight-to-length ratio medians and standard deviations for the given `sex`/`gest_age` combinations.
+#' @returns Weight-to-length ratio medians and standard deviations for the given
+#' `sex`/`gest_age` combinations.
 #'
-#' @note These equations are not included in the referenced publication. Rather, they were taken from weight-to-length
-#' ratio calculating Excel files available on the
+#' @note These equations are not included in the referenced publication. Rather,
+#' they were taken from weight-to-length ratio calculating Excel files available
+#' on the
 #' [INTERGROWTH-21st website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
 #'
 #' @references
-#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. **Body composition at
-#' birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-#' INTERGROWTH-21st project.** *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
+#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+#' **Body composition at birth and its relationship with neonatal anthropometric
+#' ratios: the newborn body composition study of the INTERGROWTH-21st
+#' project.** *Pediatric Research* 2017, **82:305-316.**
+#' \doi{10.1038/pr.2017.52}
 #'
 #' @rdname ig_nbs_wlr
 #' @keywords internal
 ig_nbs_wlr <- function(ga_weeks, sex) {
-  new_df <- data.frame(gest_age = ga_weeks, sex = sex, sort = seq(from = 1, to = length(sex)))
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   mu <- ifelse(
     test = ga_weeks < 33,
-    yes = 3.400617 + (-0.0103163 * ga_weeks ^ 2) + (0.0003407 * ga_weeks ^ 3) + (0.1382809 * sex_as_numeric),
+    yes = 3.400617 + (-0.0103163 * ga_weeks ^ 2) + (0.0003407 * ga_weeks ^ 3) +
+      (0.1382809 * sex_as_numeric),
     no = ifelse(
       test = sex == "M",
-      yes = -17.84615 + (-3778.768 * (ga_weeks ^ -1)) + (1291.477 * ((ga_weeks ^ -1) * log(ga_weeks))),
-      no = -5.542927 + (0.0018926 * (ga_weeks ^ 3)) + (-0.0004614 * ((ga_weeks ^ 3)* log(ga_weeks)))
+      yes = -17.84615 + (-3778.768 * (ga_weeks ^ -1)) +
+        (1291.477 * ((ga_weeks ^ -1) * log(ga_weeks))),
+      no = -5.542927 + (0.0018926 * (ga_weeks ^ 3)) +
+        (-0.0004614 * ((ga_weeks ^ 3)* log(ga_weeks)))
     )
   )
   sigma <- ifelse(
     test = ga_weeks < 33,
-    yes = sqrt(0.3570057),
+    yes = sqrt(x = 0.3570057),
     no = ifelse(
       test = sex == "M",
       yes = 1.01047 + (-0.0080948 * ga_weeks),
@@ -548,23 +569,28 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
 #' INTERGROWTH-21st Body Composition Equation Parameters
 #'
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21st NBS body composition standard to use. Must be one of
-#' `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
-#' @returns Body composition equation parameters for each provided age/sex/acronym combination.
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21st NBS body composition
+#' standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @returns Body composition equation parameters for each provided
+#' age/sex/acronym combination.
 #'
-#' @note These parameters are not included in the referenced publication, and were instead derived from centile tables
-#' S1, S2 and S3 using linear models. As a result, z-scores/percentiles derived from these parameters differ slightly
-#' from the Villar *et al.*'s published values.
+#' @note These parameters are not included in the referenced publication, and
+#' were instead derived from centile tables S1, S2 and S3 using linear models.
+#' As a result, z-scores/percentiles derived from these parameters differ
+#' slightly from the Villar *et al.*'s published values.
 #'
 #' @references
-#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. **Body composition at
-#' birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-#' INTERGROWTH-21st project.** *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
+#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+#' **Body composition at birth and its relationship with neonatal anthropometric
+#' ratios: the newborn body composition study of the INTERGROWTH-21st
+#' project.** *Pediatric Research* 2017, **82:305-316.**
+#' \doi{10.1038/pr.2017.52}
 #'
 #' @rdname ig_nbs_bodycomp
 #' @keywords internal
 ig_nbs_bodycomp <- function(sex, acronym) {
-  new_df <- data.frame(sex = sex, acronym = acronym, sort = seq(from = 1, to = length(sex)))
+  new_df <- data.frame(sex = sex, acronym = acronym,
+                       sort = seq(from = 1, to = length(sex)))
   bodycomp_params <- data.frame(
       sex = c(rep("M", 3), rep("F", 3)),
       acronym = c("fmfga", "bfpfga", "ffmfga"),

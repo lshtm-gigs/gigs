@@ -11,21 +11,23 @@ ig_nbs_msnt(gest_age, sex, acronym)
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st standard to use. Must be one of \code{"wfga"},
-\code{"lfga"}, or \code{"hcfga"}.}
+\item{acronym}{Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st
+standard to use. Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
 }
 \value{
-A dataframe containing mu, sigma, nu, and tau values for each provided sex/gestational age/acronym
-combination.
+A dataframe containing mu, sigma, nu, and tau values for each
+provided sex/gestational age/acronym combination.
 }
 \description{
-Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of z-scores/percentiles in the
-INTERGROWTH-21st Newborn Size standards
+Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
+z-scores/percentiles in the INTERGROWTH-21st Newborn Size standards
 }
 \note{
-These coefficients are not included in the referenced publication, and were instead supplied directly by Eric
-Ohuma. However, Villar \emph{et al.} used these coefficients to construct the growth curves they described, and in
-testing these values output the INTERGROWTH-21st standards exactly.
+These coefficients are not included in the referenced publication, and
+were instead supplied directly by Eric Ohuma. However, Villar \emph{et al.} used
+these coefficients to construct the growth curves they described, and in
+testing we found these coefficients output the INTERGROWTH-21st standards
+exactly.
 }
 \examples{
 # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks' gestational age
@@ -33,9 +35,10 @@ gigs:::ig_nbs_msnt(gest_age = 40 * 7, sex = "M", acronym = "wfga")
 
 }
 \references{
-Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. \strong{International
-standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-Study of the INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
+Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+\strong{International standards for newborn weight, length, and head circumference
+by gestational age and sex: the Newborn Cross-Sectional Study of the
+INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
 }
 \keyword{internal}
