@@ -227,9 +227,10 @@ ig_png_hcfa_value2percentile <- function(headcirc_cm, pma_weeks, sex) {
 #' with no logarithm applied.
 #'
 #' @references
-#' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. **Postnatal growth
-#' standards for preterm infants: the Preterm Postnatal Follow-up Study of the INTERGROWTH-21st Project.** *Lancet
-#' Glob Health* 2015, *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
+#' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
+#' **Postnatal growth standards for preterm infants: the Preterm Postnatal
+#' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
+#' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
 #'
 #' @rdname ig_png_equations
 #' @keywords internal
