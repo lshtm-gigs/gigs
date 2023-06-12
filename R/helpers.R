@@ -1,6 +1,7 @@
 #' Extend vectors in list to the length of the longest vector
 #'
-#' @param vec_list List of vectors to extend out to the length of the longest vector in that list.
+#' @param vec_list List of vectors to extend out to the length of the longest
+#' vector in that list.
 #' @returns List of vectors recycled to length of longest vector in input list.
 #' @keywords internal
 rep_to_longest <- function(vec_list) {
@@ -8,7 +9,8 @@ rep_to_longest <- function(vec_list) {
   max_len <-  max(lengths)
   if (any(lengths != 1 & lengths != max_len)) {
     bad_len <- lengths[which(lengths != 1 & lengths != max_len)]
-    stop(paste0("Inputs must be length 1 or the length of the longest input vector (", max_len, 
+    stop(paste0("Inputs must be length 1 or the length of the longest input ",
+                "vector (", max_len,
                 "). You provided an input/input with length(s)", bad_len, "."),
          .call = NULL)
   }
@@ -48,7 +50,7 @@ round2 <- function(x, digits) {
 #' @param xvar A value of x which is not found in a coefficient table but is
 #' between two values in that coefficient table
 #' @param sex A character denoting male (`"M"`) or female (`"F"`)
-#' @notes All inputs should be length one. The function will also fail if
+#' @note All inputs should be length one. The function will also fail if
 #' `coeff_tbl_long` does not contain named LMS/MSNT values.
 #' @keywords internal
 interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {

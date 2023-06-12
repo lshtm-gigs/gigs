@@ -68,7 +68,8 @@ ig_coeffs_readxl_wrap <- function(path) {
   tbl <- readxl::read_excel(path = path, sheet = 2) |>
     dplyr::relocate(sex, GA, mu, sigma, nu, tau) |>
     dplyr::select(!anthro) |>
-    dplyr::rename(gest_age = GA)
+    dplyr::rename(gest_age = GA) |>
+    as.data.frame()
   return(list(
     male = dplyr::filter(tbl, sex == "Male") |> dplyr::select(!sex),
     female = dplyr::filter(tbl, sex == "Female") |> dplyr::select(!sex)
