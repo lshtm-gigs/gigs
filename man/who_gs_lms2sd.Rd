@@ -19,9 +19,18 @@ who_gs_lms2sd(l, m, s, n_sd)
 Get standard deviations for WHO Growth Standards data from LMS values
 }
 \references{
-de Onis M \emph{et al.} (2006) \strong{'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
-WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'} \emph{in} World Health Organization (ed.)
-\emph{WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
-body mass index-for-age: methods and development}. Geneva: World Health Organization, pp. 301-304.
+World Health Organisation. \strong{WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.} \emph{Technical report,
+WHO, Geneva}, 2006.
+
+World Health Organisation. \strong{WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.} \emph{Technical
+report, WHO, Geneva}, 2007.
+
+Cole TJ. \strong{The LMS method for constructing normalized growth standards} \emph{Eur
+J Clin Nutr.} 1990, \strong{44(1):45-60.} PMID:
+\href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
 }
 \keyword{internal}

@@ -13,7 +13,7 @@ test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
                                    "acfa" = who_gs_acfa_zscore2value,
                                    "ssfa" = who_gs_ssfa_zscore2value,
                                    "tsfa" = who_gs_tsfa_zscore2value)
-                      round2(fn(z = x, x = range_x, sex = sex), digits = 3)
+                      round2(fn(z = x, range_x, sex = sex), digits = 3)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -70,7 +70,7 @@ test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
                                    "acfa" = who_gs_acfa_percentile2value,
                                    "ssfa" = who_gs_ssfa_percentile2value,
                                    "tsfa" = who_gs_tsfa_percentile2value)
-                      round2(fn(p = x, x = range_x, sex = sex), digits = 3)
+                      round2(fn(p = x, range_x, sex = sex), digits = 3)
                 }) |>
     do.call(what = cbind) |>
     as.data.frame()
@@ -113,47 +113,47 @@ test_that("Conversion of percentiles to values works", {
 testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscores") {
   out_z_or_p <- switch(z_or_p,
          "zscores" = switch(acronym,
-                            "wfa" = who_gs_wfa_value2zscore(weight_kg = y, age_days = x, sex = sex),
-                            "bfa" = who_gs_bfa_value2zscore(bmi = y, age_days = x, sex = sex),
-                            "lhfa" = who_gs_lhfa_value2zscore(lenht_cm = y, age_days = x, sex = sex),
-                            "wfl" = who_gs_wfl_value2zscore(weight_kg = y, length_cm = x, sex = sex),
-                            "wfh" = who_gs_wfh_value2zscore(weight_kg = y, height_cm = x, sex = sex),
+                            "wfa" = who_gs_wfa_value2zscore(y, x, sex),
+                            "bfa" = who_gs_bfa_value2zscore(y, x, sex),
+                            "lhfa" = who_gs_lhfa_value2zscore(y, x, sex),
+                            "wfl" = who_gs_wfl_value2zscore(y, x, sex),
+                            "wfh" = who_gs_wfh_value2zscore(y, x, sex),
                             "hcfa" = who_gs_hcfa_value2zscore(y, x, sex),
                             "acfa" = who_gs_acfa_value2zscore(y, x, sex),
                             "ssfa" = who_gs_ssfa_value2zscore(y, x, sex),
                             "tsfa" = who_gs_tsfa_value2zscore(y, x, sex)
          ),
          "percentiles" = switch(acronym,
-                                "wfa" = who_gs_wfa_value2percentile(weight_kg = y, age_days = x, sex = sex),
-                                "bfa" = who_gs_bfa_value2percentile(bmi = y, age_days = x, sex = sex),
-                                "lhfa" = who_gs_lhfa_value2percentile(lenht_cm = y, age_days = x, sex = sex),
-                                "wfl" = who_gs_wfl_value2percentile(weight_kg = y, length_cm = x, sex = sex),
-                                "wfh" = who_gs_wfh_value2percentile(weight_kg = y, height_cm = x, sex = sex),
+                                "wfa" = who_gs_wfa_value2percentile(y, x, sex),
+                                "bfa" = who_gs_bfa_value2percentile(y, x, sex),
+                                "lhfa" = who_gs_lhfa_value2percentile(y, x, sex),
+                                "wfl" = who_gs_wfl_value2percentile(y, x, sex),
+                                "wfh" = who_gs_wfh_value2percentile(y, x, sex),
                                 "hcfa" = who_gs_hcfa_value2percentile(y, x, sex),
                                 "acfa" = who_gs_acfa_value2percentile(y, x, sex),
                                 "ssfa" = who_gs_ssfa_value2percentile(y, x, sex),
                                 "tsfa" = who_gs_tsfa_value2percentile(y, x, sex)))
   out_value <- switch(z_or_p,
          "zscores" = switch(acronym,
-                            "wfa"  = who_gs_wfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "bfa"  = who_gs_bfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "lhfa" = who_gs_lhfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "wfl" =  who_gs_wfl_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "wfh" =  who_gs_wfh_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "hcfa" = who_gs_hcfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "acfa" = who_gs_acfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "ssfa" = who_gs_ssfa_zscore2value(z = out_z_or_p, x = x, sex = sex),
-                            "tsfa" = who_gs_tsfa_zscore2value(z = out_z_or_p, x = x, sex = sex)),
+                            "wfa"  = who_gs_wfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "bfa"  = who_gs_bfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "lhfa" = who_gs_lhfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "wfl" =  who_gs_wfl_zscore2value(z = out_z_or_p, length_cm = x, sex = sex),
+                            "wfh" =  who_gs_wfh_zscore2value(z = out_z_or_p, height_cm = x, sex = sex),
+                            "hcfa" = who_gs_hcfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "acfa" = who_gs_acfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "ssfa" = who_gs_ssfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
+                            "tsfa" = who_gs_tsfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex)),
          "percentiles" = switch(acronym,
-                            "wfa"  = who_gs_wfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "bfa"  = who_gs_bfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "lhfa" = who_gs_lhfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "wfl" =  who_gs_wfl_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "wfh" =  who_gs_wfh_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "hcfa" = who_gs_hcfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "acfa" = who_gs_acfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "ssfa" = who_gs_ssfa_percentile2value(p = out_z_or_p, x = x, sex = sex),
-                            "tsfa" = who_gs_tsfa_percentile2value(p = out_z_or_p, x = x, sex = sex)))
+                            "wfa"  = who_gs_wfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "bfa"  = who_gs_bfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "lhfa" = who_gs_lhfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "wfl" =  who_gs_wfl_percentile2value(p = out_z_or_p, length_cm = x, sex = sex),
+                            "wfh" =  who_gs_wfh_percentile2value(p = out_z_or_p, height_cm = x, sex = sex),
+                            "hcfa" = who_gs_hcfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "acfa" = who_gs_acfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "ssfa" = who_gs_ssfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex),
+                            "tsfa" = who_gs_tsfa_percentile2value(p = out_z_or_p, age_days = x, sex = sex)))
   expect_true(all(round2(y, digits = 3) == round2(out_value, digits = 3), na.rm = TRUE))
 }
 

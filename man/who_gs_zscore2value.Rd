@@ -25,56 +25,61 @@
 \usage{
 who_gs_zscore2value(z, x, sex, acronym)
 
-who_gs_wfa_zscore2value(z, x, sex)
+who_gs_wfa_zscore2value(z, age_days, sex)
 
-who_gs_bfa_zscore2value(z, x, sex)
+who_gs_bfa_zscore2value(z, age_days, sex)
 
-who_gs_lhfa_zscore2value(z, x, sex)
+who_gs_lhfa_zscore2value(z, age_days, sex)
 
-who_gs_wfl_zscore2value(z, x, sex)
+who_gs_wfl_zscore2value(z, length_cm, sex)
 
-who_gs_wfh_zscore2value(z, x, sex)
+who_gs_wfh_zscore2value(z, height_cm, sex)
 
-who_gs_hcfa_zscore2value(z, x, sex)
+who_gs_hcfa_zscore2value(z, age_days, sex)
 
-who_gs_acfa_zscore2value(z, x, sex)
+who_gs_acfa_zscore2value(z, age_days, sex)
 
-who_gs_ssfa_zscore2value(z, x, sex)
+who_gs_ssfa_zscore2value(z, age_days, sex)
 
-who_gs_tsfa_zscore2value(z, x, sex)
+who_gs_tsfa_zscore2value(z, age_days, sex)
 
 who_gs_percentile2value(p, x, sex, acronym)
 
-who_gs_wfa_percentile2value(p, x, sex)
+who_gs_wfa_percentile2value(p, age_days, sex)
 
-who_gs_bfa_percentile2value(p, x, sex)
+who_gs_bfa_percentile2value(p, age_days, sex)
 
-who_gs_lhfa_percentile2value(p, x, sex)
+who_gs_lhfa_percentile2value(p, age_days, sex)
 
-who_gs_wfl_percentile2value(p, x, sex)
+who_gs_wfl_percentile2value(p, length_cm, sex)
 
-who_gs_wfh_percentile2value(p, x, sex)
+who_gs_wfh_percentile2value(p, height_cm, sex)
 
-who_gs_hcfa_percentile2value(p, x, sex)
+who_gs_hcfa_percentile2value(p, age_days, sex)
 
-who_gs_acfa_percentile2value(p, x, sex)
+who_gs_acfa_percentile2value(p, age_days, sex)
 
-who_gs_ssfa_percentile2value(p, x, sex)
+who_gs_ssfa_percentile2value(p, age_days, sex)
 
-who_gs_tsfa_percentile2value(p, x, sex)
+who_gs_tsfa_percentile2value(p, age_days, sex)
 }
 \arguments{
 \item{z, p}{Z-score(s)/percentile(s) to convert from.}
 
-\item{x}{X value at which to convert z-score to a value. Must be within bounds of available x values for given
-acronym.}
+\item{x, age_days, length_cm, height_cm}{X value at which to convert z-score to
+a value. Must be within bounds of available x values for given acronym. The
+standard-specific versions of each function specify a specific type of \code{x},
+either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
+measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
 
-\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of \code{"wfa"} (weight-for-age), \code{"bfa"}
-(bmi-for-age), \code{"lhfa"} (length/height-for-age), \code{"wfl"} (weight-for-length), \code{"wfh"}
-(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"} (arm circumference-for-age),
-\code{"ssfa"} (subscapular skinfold-for-age), or \code{"tsfa"} (triceps skinfold-for-age),}
+\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
+\code{"wfa"} (weight-for-age), \code{"bfa"} (bmi-for-age), \code{"lhfa"}
+(length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
+(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
+(arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
+\code{"tsfa"} (triceps skinfold-for-age).}
 }
 \description{
 Convert z-score/percentiles to WHO growth standards values
@@ -95,32 +100,40 @@ who_gs_zscore2value(z = z, x = 300, sex = "M", acronym = "lhfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-who_gs_lhfa_zscore2value(z = z, x = 300, sex = "M") |>
+who_gs_lhfa_zscore2value(z = z, age_days = 300, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 who_gs_ssfa_percentile2value(p = seq(0.1, 0.9, by = 0.2),
-                             x = 670,
+                             age_days = 670,
                              sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 60 cm
-# for height_cm is incompatible with the WHO Growth Standard for weight-for-height
+# Bad inputs will not stop the function but will instead return NA - here 60
+# cm for height_cm is incompatible with the WHO Growth Standard for
+# weight-for-height
 who_gs_wfh_zscore2value(z = 0,
-                        x = c(60, 85, 105, 120),
+                        height_cm = c(60, 85, 105, 120),
                         sex = "M") |>
   round(digits = 2)
 }
 \references{
-de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The WHO Multicentre Growth Reference
-Study: planning, study design, and methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
-doi: \href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
+WHO Multicentre Growth Reference Study: planning, study design, and
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
+\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
 
-de Onis M \emph{et al.} (2006) \strong{'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
-WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'} \emph{in} World Health Organization (ed.)
-\emph{WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
-body mass index-for-age: methods and development}. Geneva: World Health Organization, pp. 301-304.
+World Health Organisation. \strong{WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.} \emph{Technical report,
+WHO, Geneva}, 2006.
 
-Cole TJ \strong{The LMS method for constructing normalized growth standards} \emph{Eur J Clin Nutr.} 1990,
-\strong{44(1):45-60.} PMID: \href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
+World Health Organisation. \strong{WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.} \emph{Technical
+report, WHO, Geneva}, 2007.
+
+Cole TJ. \strong{The LMS method for constructing normalized growth standards} \emph{Eur
+J Clin Nutr.} 1990, \strong{44(1):45-60.} PMID:
+\href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
 }

@@ -70,10 +70,12 @@ who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
 
-\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of \code{"wfa"} (weight-for-age), \code{"bfa"}
-(bmi-for-age), \code{"lhfa"} (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
-(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"} (arm circumference-for-age),
-\code{"ssfa"} (subscapular skinfold-for-age), or \code{"tsfa"} (triceps skinfold-for-age),}
+\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
+\code{"wfa"} (weight-for-age), \code{"bfa"} (bmi-for-age), \code{"lhfa"}
+(length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
+(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
+(arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
+\code{"tsfa"} (triceps skinfold-for-age).}
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
@@ -121,23 +123,30 @@ who_gs_ssfa_value2percentile(subscap_sf_mm = 6.1,
                              sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 121 cm
-# height_cm is incompatible with the WHO Growth Standard for weight-for-height
+# Bad inputs will not stop the function but will instead return NA - here
+# 121 cm for height_cm is incompatible with the WHO Growth Standard for
+# weight-for-height
 who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
                         height_cm = c(65, 95, 120, 121),
                         sex = "M") |>
   round(digits = 2)
 }
 \references{
-de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The WHO Multicentre Growth Reference
-Study: planning, study design, and methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
-doi: \href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
+WHO Multicentre Growth Reference Study: planning, study design, and
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
+\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
 
-de Onis M \emph{et al.} (2006) \strong{'COMPUTATION OF CENTILES AND Z-SCORES FOR LENGTH/HEIGHT-FOR-AGE,
-WEIGHT-FOR-AGE, WEIGHT-FOR-LENGTH, WEIGHT-FOR-HEIGHT AND BMI-FOR-AGE'} \emph{in} World Health Organization (ed.)
-\emph{WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and
-body mass index-for-age: methods and development}. Geneva: World Health Organization, pp. 301-304.
+World Health Organisation. \strong{WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.} \emph{Technical report,
+WHO, Geneva}, 2006.
+World Health Organisation. \strong{WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.} \emph{Technical
+report, WHO, Geneva}, 2007.
 
-Cole TJ \strong{The LMS method for constructing normalized growth standards} \emph{Eur J Clin Nutr.} 1990,
-\strong{44(1):45-60.} PMID: \href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
+Cole TJ. \strong{The LMS method for constructing normalized growth standards} \emph{Eur
+J Clin Nutr.} 1990, \strong{44(1):45-60.} PMID:
+\href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
 }
