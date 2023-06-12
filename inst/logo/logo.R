@@ -1,7 +1,7 @@
 # Make plot of HCFA in very-preterm newborn infants
 load("data/ig_nbs.rda")
 long_tbl <- ig_nbs$wfga$female$zscores |>
-  dplyr::filter(gest_age > 33)
+  dplyr::filter(gest_age > 231)
 tidy_tbl <- tidyr::pivot_longer(long_tbl, cols = tidyselect::starts_with("SD"), names_to = "SD",
                                 values_to = "weight_kg")
 sm <- function(x) predict(smooth.spline(x = x))$y

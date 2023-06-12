@@ -5,7 +5,7 @@ make_ig_nbs_list <- function(raw_stem, x, y) {
                     header = F, sep = " ") |>
       as.data.frame() |>
       dplyr::rename(gest_age = V1, SD3neg = V2, SD2neg = V3, SD1neg = V4, SD0 = V5, SD1 = V6, SD2 = V7, SD3 = V8) |>
-      dplyr::mutate(gest_age = seq(from = 24, to = 42 + 6/7, by = 1/7))
+      dplyr::mutate(gest_age = 168:300)
     return(tbl)
   }
 
@@ -15,7 +15,7 @@ make_ig_nbs_list <- function(raw_stem, x, y) {
                     sep = " ") |>
       as.data.frame() |>
       dplyr::rename(gest_age = V1, P03 = V2, P05 = V3, P10 = V4, P50 = V5, P90 = V6, P95 = V7, P97 = V8) |>
-      dplyr::mutate(gest_age = seq(from = 24, to = 42 + 6/7, by = 1/7))
+      dplyr::mutate(gest_age = 168:300)
     return(tbl)
   }
   return(list(male = list(zscores = make_zscore_tbl(sex = "male"),
@@ -68,7 +68,8 @@ ig_coeffs_readxl_wrap <- function(path) {
   tbl <- readxl::read_excel(path = path, sheet = 2) |>
     dplyr::relocate(sex, GA, mu, sigma, nu, tau) |>
     dplyr::select(!anthro) |>
-    dplyr::rename(gest_age = GA)
+    dplyr::rename(gest_age = GA) |>
+    as.data.frame()
   return(list(
     male = dplyr::filter(tbl, sex == "Male") |> dplyr::select(!sex),
     female = dplyr::filter(tbl, sex == "Female") |> dplyr::select(!sex)

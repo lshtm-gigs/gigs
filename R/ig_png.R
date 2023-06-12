@@ -1,72 +1,3 @@
-########################################################################################################################
-########################################################################################################################
-
-#' INTERGROWTH-21st equations for postnatal size for age in preterm infants
-#'
-#' Estimates median and standard deviation for different measures of postnatal growth in preterm infants.
-#'
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27` and `64`.
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for post-natal growth in preterm infants. Should be
-#' one of `"wfa"`, `"lhfa"`, `"hcfa"`.
-#'
-#' @note Weight for age and length for age values are logarithmic, so require slightly different treatment to use in
-#' z-score conversions. In contrast, head circumference for gestational age returns the median and standard deviation
-#' with no logarithm applied.
-#'
-#' @references
-#' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. **Postnatal growth
-#' standards for preterm infants: the Preterm Postnatal Follow-up Study of the INTERGROWTH-21st Project.** *Lancet
-#' Glob Health* 2015, *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
-#'
-#' @rdname ig_png_equations
-#' @keywords internal
-ig_png_equations <- function(pma_weeks, sex, acronym) {
-  checked_params <- check_png_params(pma_weeks = pma_weeks, sex = sex, acronym = acronym)
-
-  wfa_logmedian <- function(pma_weeks, sex) {
-    2.591277 - (0.01155 * (pma_weeks ^ 0.5)) - (2201.705 * (pma_weeks ^ -2)) + (0.0911639 * sex)
-  }
-  lfa_logmedian <- function(pma_weeks, sex) {
-    4.136244 - (547.0018 * (pma_weeks ^ -2)) + 0.0026066 * pma_weeks + 0.0314961 * sex
-  }
-  hcfa_median <- function(pma_weeks, sex) {
-    55.53617 - (852.0059 * (pma_weeks ^ -1)) + 0.7957903 * sex
-  }
-  wfa_stddev <- function(pma_weeks) {
-    0.1470258 + 505.92394 / pma_weeks ^ 2 - 140.0576 / (pma_weeks ^ 2) * log(pma_weeks)
-  }
-  lfa_stddev <- function(pma_weeks) {
-    0.050489 + (310.44761 * (pma_weeks ^ -2)) - (90.0742 * (pma_weeks ^ -2)) * log(pma_weeks)
-  }
-  hcfa_stddev <- function(pma_weeks) {
-    3.0582292 + (3910.05 * (pma_weeks ^ -2)) - 180.5625 * pma_weeks ^ -1
-  }
-
-  out_df <- data.frame(pma_weeks = checked_params$age,
-                       sex = checked_params$sex,
-                       acronym = checked_params$acronym)
-  sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
-  out_df$median <- ifelse(acronym == "wfa",
-                          yes = wfa_logmedian(out_df$pma_weeks, sex_as_numeric),
-                          no = ifelse(acronym == "lfa",
-                                      yes = lfa_logmedian(out_df$pma_weeks, sex_as_numeric),
-                                      no = hcfa_median(out_df$pma_weeks, sex_as_numeric)))
-  out_df$stddev <- ifelse(acronym == "wfa",
-                          yes = wfa_stddev(out_df$pma_weeks),
-                          no = ifelse(acronym == "lfa",
-                                      yes = lfa_stddev(out_df$pma_weeks),
-                                      no = hcfa_stddev(out_df$pma_weeks)))
-  out_df$logarithmic <- ifelse(acronym == "wfa", yes = T, no = ifelse(acronym == "lfa", yes = T, no = F))
-  out_df$median <- ifelse(is.na(checked_params$age) | is.na(checked_params$sex) | is.na(checked_params$acronym),
-                          yes = NA,
-                          no = out_df$median)
-  return(out_df)
-}
-
-########################################################################################################################
-########################################################################################################################
-
 #' Convert z-score/percentiles to INTERGROWTH-21st postnatal growth standards for preterm infants values
 #'
 #' @param z,p Z-score(s)/percentile(s) to convert to a value.
@@ -148,9 +79,6 @@ ig_png_hcfa_zscore2value <- function(z, pma_weeks, sex) {
   ig_png_zscore2value(z = z, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
 
-########################################################################################################################
-########################################################################################################################
-
 #' @rdname ig_png_zscore2value
 #' @importFrom stats qnorm
 #' @export
@@ -175,9 +103,6 @@ ig_png_lfa_percentile2value <- function(p, pma_weeks, sex) {
 ig_png_hcfa_percentile2value <- function(p, pma_weeks, sex) {
   ig_png_percentile2value(p = p, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
-
-########################################################################################################################
-########################################################################################################################
 
 #' Convert postnatal growth measures to INTERGROWTH-21st postnatal growth standards
 #'
@@ -263,9 +188,6 @@ ig_png_hcfa_value2zscore <- function(headcirc_cm, pma_weeks, sex) {
   ig_png_value2zscore(y = headcirc_cm, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
 
-########################################################################################################################
-########################################################################################################################
-
 #' @rdname ig_png_value2zscore
 #' @importFrom stats pnorm
 #' @export
@@ -291,5 +213,66 @@ ig_png_hcfa_value2percentile <- function(headcirc_cm, pma_weeks, sex) {
   ig_png_value2percentile(y = headcirc_cm, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
 
-########################################################################################################################
-########################################################################################################################
+#' INTERGROWTH-21st equations for postnatal size for age in preterm infants
+#'
+#' Estimates median and standard deviation for different measures of postnatal growth in preterm infants.
+#'
+#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27` and `64`.
+#' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for post-natal growth in preterm infants. Should be
+#' one of `"wfa"`, `"lhfa"`, `"hcfa"`.
+#'
+#' @note Weight for age and length for age values are logarithmic, so require slightly different treatment to use in
+#' z-score conversions. In contrast, head circumference for gestational age returns the median and standard deviation
+#' with no logarithm applied.
+#'
+#' @references
+#' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
+#' **Postnatal growth standards for preterm infants: the Preterm Postnatal
+#' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
+#' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
+#'
+#' @rdname ig_png_equations
+#' @keywords internal
+ig_png_equations <- function(pma_weeks, sex, acronym) {
+  checked_params <- check_png_params(pma_weeks = pma_weeks, sex = sex, acronym = acronym)
+
+  wfa_logmedian <- function(pma_weeks, sex) {
+    2.591277 - (0.01155 * (pma_weeks ^ 0.5)) - (2201.705 * (pma_weeks ^ -2)) + (0.0911639 * sex)
+  }
+  lfa_logmedian <- function(pma_weeks, sex) {
+    4.136244 - (547.0018 * (pma_weeks ^ -2)) + 0.0026066 * pma_weeks + 0.0314961 * sex
+  }
+  hcfa_median <- function(pma_weeks, sex) {
+    55.53617 - (852.0059 * (pma_weeks ^ -1)) + 0.7957903 * sex
+  }
+  wfa_stddev <- function(pma_weeks) {
+    0.1470258 + 505.92394 / pma_weeks ^ 2 - 140.0576 / (pma_weeks ^ 2) * log(pma_weeks)
+  }
+  lfa_stddev <- function(pma_weeks) {
+    0.050489 + (310.44761 * (pma_weeks ^ -2)) - (90.0742 * (pma_weeks ^ -2)) * log(pma_weeks)
+  }
+  hcfa_stddev <- function(pma_weeks) {
+    3.0582292 + (3910.05 * (pma_weeks ^ -2)) - 180.5625 * pma_weeks ^ -1
+  }
+
+  out_df <- data.frame(pma_weeks = checked_params$age,
+                       sex = checked_params$sex,
+                       acronym = checked_params$acronym)
+  sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
+  out_df$median <- ifelse(acronym == "wfa",
+                          yes = wfa_logmedian(out_df$pma_weeks, sex_as_numeric),
+                          no = ifelse(acronym == "lfa",
+                                      yes = lfa_logmedian(out_df$pma_weeks, sex_as_numeric),
+                                      no = hcfa_median(out_df$pma_weeks, sex_as_numeric)))
+  out_df$stddev <- ifelse(acronym == "wfa",
+                          yes = wfa_stddev(out_df$pma_weeks),
+                          no = ifelse(acronym == "lfa",
+                                      yes = lfa_stddev(out_df$pma_weeks),
+                                      no = hcfa_stddev(out_df$pma_weeks)))
+  out_df$logarithmic <- ifelse(acronym == "wfa", yes = T, no = ifelse(acronym == "lfa", yes = T, no = F))
+  out_df$median <- ifelse(is.na(checked_params$age) | is.na(checked_params$sex) | is.na(checked_params$acronym),
+                          yes = NA,
+                          no = out_df$median)
+  return(out_df)
+}

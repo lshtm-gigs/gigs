@@ -9,23 +9,27 @@ ig_nbs_bodycomp(sex, acronym)
 \arguments{
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st NBS body composition standard to use. Must be one of
-\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st NBS body composition
+standard to use. Must be one of \code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}.}
 }
 \value{
-Body composition equation parameters for each provided age/sex/acronym combination.
+Body composition equation parameters for each provided
+age/sex/acronym combination.
 }
 \description{
 INTERGROWTH-21st Body Composition Equation Parameters
 }
 \note{
-These parameters are not included in the referenced publication, and were instead derived from centile tables
-S1, S2 and S3 using linear models. As a result, z-scores/percentiles derived from these parameters differ slightly
-from the Villar \emph{et al.}'s published values.
+These parameters are not included in the referenced publication, and
+were instead derived from centile tables S1, S2 and S3 using linear models.
+As a result, z-scores/percentiles derived from these parameters differ
+slightly from the Villar \emph{et al.}'s published values.
 }
 \references{
-Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. \strong{Body composition at
-birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-INTERGROWTH-21st project.} \emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
+Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+\strong{Body composition at birth and its relationship with neonatal anthropometric
+ratios: the newborn body composition study of the INTERGROWTH-21st
+project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
+\doi{10.1038/pr.2017.52}
 }
 \keyword{internal}

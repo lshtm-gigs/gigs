@@ -17,7 +17,8 @@
 \alias{ig_nbs_fmfga_value2zscore}
 \alias{ig_nbs_bfpfga_value2zscore}
 \alias{ig_nbs_ffmfga_value2zscore}
-\title{Convert anthropometric values to INTERGROWTH-21st newborn size z-score/percentiles}
+\title{Convert anthropometric values to INTERGROWTH-21st newborn size
+z-score/percentiles}
 \usage{
 ig_nbs_value2percentile(y, gest_age, sex, acronym)
 
@@ -54,12 +55,15 @@ ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 \arguments{
 \item{y}{Value(s) to convert to z-scores/percentiles}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{24} and \code{42 + 6/7}.}
+\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+for weight/length/head circumference-for-gestational age, or from \code{266} to
+\code{294} for body composition standards (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must be one of \code{"wfga"}, \code{"lfga"},
-\code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
+be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"},
+or \code{"ffmfga"}.}
 
 \item{weight_kg}{Birth weight(s) in kg}
 
@@ -79,45 +83,49 @@ ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 Vector of z-scores/percentiles.
 }
 \description{
-Convert anthropometric values to INTERGROWTH-21st newborn size z-score/percentiles
+Convert anthropometric values to INTERGROWTH-21st newborn size
+z-score/percentiles
 }
 \examples{
 # Convert values to percentiles
-ig_nbs_value2percentile(y = 3.12, gest_age = 40, sex = "M", acronym = "wfga") |>
+ig_nbs_value2percentile(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_nbs_value2zscore(y = 3.12, gest_age = 40, sex = "M", acronym = "wfga") |>
+ig_nbs_value2zscore(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_value2zscore(y = 48.84, gest_age = 40, sex = "F", acronym = "lfga") |>
+ig_nbs_value2zscore(y = 48.84, gest_age = 280, sex = "F", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_age = 40, sex = "F") |>
+ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_age = 280, sex = "F") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
-                           gest_age = 40,
+                           gest_age = 280,
                            sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 43 weeks gest_age
-# is outside the bounds of the INTERGROWTH-21st newborn size standards
+# Bad inputs will not stop the function but will instead return NA - here 301 days
+# gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
 ig_nbs_hcfga_value2percentile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
-                              gest_age = c(24, 31, 38, 43),
+                              gest_age = c(168, 217, 266, 301),
                               sex = "F") |>
   round(digits = 2)
 }
 \references{
-Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. \strong{International
-standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional
-Study of the INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
+Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
+\strong{International standards for newborn weight, length, and head circumference
+by gestational age and sex: the Newborn Cross-Sectional Study of the
+INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
 
-Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. \strong{Body composition at
-birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the
-INTERGROWTH-21st project.} \emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
+Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
+\strong{Body composition at birth and its relationship with neonatal anthropometric
+ratios: the newborn body composition study of the INTERGROWTH-21st
+project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
+\doi{10.1038/pr.2017.52}
 }

@@ -23,8 +23,9 @@ z-score conversions. In contrast, head circumference for gestational age returns
 with no logarithm applied.
 }
 \references{
-Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. \strong{Postnatal growth
-standards for preterm infants: the Preterm Postnatal Follow-up Study of the INTERGROWTH-21st Project.} \emph{Lancet
-Glob Health} 2015, \emph{3(11):e681-e691.} \doi{10.1016/S2214-109X(15)00163-1}
+Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
+\strong{Postnatal growth standards for preterm infants: the Preterm Postnatal
+Follow-up Study of the INTERGROWTH-21st Project.} \emph{Lancet Glob Health} 2015,
+\emph{3(11):e681-e691.} \doi{10.1016/S2214-109X(15)00163-1}
 }
 \keyword{internal}

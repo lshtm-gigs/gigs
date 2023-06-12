@@ -2,7 +2,8 @@
 % Please edit documentation in R/classification.R
 \name{classify_wfa}
 \alias{classify_wfa}
-\title{Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal growth standards}
+\title{Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal
+growth standards}
 \usage{
 classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 }
@@ -11,22 +12,22 @@ classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 
 \item{age_days}{Age(s) at recording of each infant in days.}
 
-\item{ga_at_birth}{Gestational age(s) at birth in weeks.}
+\item{ga_at_birth}{Gestational age(s) at birth in days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 }
 \value{
-Factor variable with weight classification(s). Can be \code{"underweight_severe"}, \code{"underweight"},
-\code{"normal"}, \code{"overweight"}, or \code{"implausible"}.
+Factor of weight classification(s) with levels \code{c("implausible", "underweight_severe", "underweight", "normal", "overweight")}.
 }
 \description{
-Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards depending on the gestational age
-at birth for the infant. Severely underweight is less than 3 SD below the median, underweight is less than 2 SD below
-the median, and overweight is > 2 SDs above the median.
+Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards
+depending on the gestational age at birth for the infant. Severely
+underweight is less than 3 SD below the median, underweight is less than 2 SD
+below the median, and overweight is > 2 SDs above the median.
 }
 \note{
-Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-manual.
+Implausible z-score bounds are sourced from the referenced WHO report,
+and classification criteria from the DHS manual.
 }
 \examples{
 classify_wfa(
@@ -38,10 +39,13 @@ classify_wfa(
 }
 \references{
 \strong{'Implausible z-score values'} \emph{in} World Health Organization (ed.)
-\emph{Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5
-years old}. Geneva: World Health Organization and the United Nations Children’s Fund UNICEF, (2019). pp. 64-65.
+\emph{Recommendations for data collection, analysis and reporting on
+anthropometric indicators in children under 5 years old}. Geneva: World
+Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+pp. 64-65.
 
-\strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores for stunting, wasting and
-underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7} Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+\strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores
+for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
+Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
 }

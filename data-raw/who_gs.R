@@ -20,7 +20,8 @@ read_who_data <- function(indicator, expand_var, acronym, sex, tbl_type, tbls_va
   if (!file.exists(local_file)) {
     download.file(url = who_url, destfile = local_file, mode = "wb")
   }
-  tbl <- readxl::read_xlsx(local_file)
+  tbl <- readxl::read_xlsx(local_file) |>
+    as.data.frame()
   colnames(tbl)[1] <- switch(colnames(tbl)[1],
                              "Day" = "age_days",
                              "Age" = "age_days",

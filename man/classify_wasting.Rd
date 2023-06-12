@@ -13,21 +13,22 @@ classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was recorded as recumbent length or
-standing height.}
+\item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was
+recorded as recumbent length or standing height.}
 }
 \value{
-Factor variable with wasting classification(s). Can be \code{"wasting_severe"}, \code{"wasting"},
-\code{"normal"}, \code{"overweight"}, or \code{"implausible"}.
+Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
 }
 \description{
-Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth Standards depending on the gestational age
-at birth for the infant. Severe wasting is less than 3 SD relative to growth standards, whereas moderate wasting is
+Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth
+Standards depending on the gestational age at birth for the infant. Severe
+wasting is <-3SD relative to growth standards, whereas moderate  wasting is
 -2SD from the median.
 }
 \note{
-Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-manual.
+Implausible z-score bounds are sourced from the referenced WHO report,
+and classification criteria from the DHS manual. Observations with invalid or
+missing \code{lenht_method} values will be returned as \code{NA}.
 }
 \examples{
 # Where no lenht_method is given, classify_wasting() returns NA.
@@ -40,10 +41,13 @@ classify_wasting(
 }
 \references{
 \strong{'Implausible z-score values'} \emph{in} World Health Organization (ed.)
-\emph{Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5
-years old}. Geneva: World Health Organization and the United Nations Children’s Fund UNICEF, (2019). pp. 64-65.
+\emph{Recommendations for data collection, analysis and reporting on
+anthropometric indicators in children under 5 years old}. Geneva: World
+Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+pp. 64-65.
 
-\strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores for stunting, wasting and
-underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7} Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+\strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores
+for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
+Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
 }

@@ -1,39 +1,51 @@
-#' Classify size for gestational age using INTERGROWTH-21st Newborn Size Standards (including very preterm)
+#' Classify size for gestational age using INTERGROWTH-21st Newborn Size
+#' Standards (including very preterm)
 #'
-#' Sizes for gestational age (SGAs) are generally split in three categories: small-for-GA (SGA), appropriate-for-GA
-#' (AGA) and large-for-GA (LGA). SGA is <10th percentile, LGA is >90th percentile, and AGA is in between. Some prefer to
-#' delineate between SGA children and children below the 3rd percentile of growth, which this function also permits.
+#' Size for gestational age categories are split by centile: small-for-GA (SGA;
+#' 10<sup>th</sup> centile), appropriate-for-GA (AGA; 10<sup>th</sup> to
+#' 90<sup>th</sup> centile) and large-for-GA (LGA, >90<sup>th</sup> centile).
+#' This function also supports classification of severe SGA (<3<sup>rd</sup>
+#' centile).
 #'
-#' @param y Anthropometric measurement(s) to assess.
-#' @param gest_age Gestational age(s) at birth in weeks. Must be between `24` and `42 + 6/7`.
+#' @param weight_kg Anthropometric measurement(s) to assess.
+#' @param gest_age Gestational age(s) at birth in days. Must be between `168`
+#' and `300`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym The INTERGROWTH-21st standard in use for classification. Must be one of `"wfga"`, `"lfga"`,
-#' or `"hcfga"`. Default = `"wfga"`.
-#' @param coarse If `FALSE`, specify which SGA values are below the third percentile. Default = `TRUE`.
-#' @returns Factor variable with gestational age classification(s). If `coarse = TRUE`, can be `"SGA"`, 
-#' `"AGA"`, or `"LGA"`. If `coarse = FALSE`, can be `"SGA(<3)"`, `"SGA"`, `"AGA"`, or 
-#' `"LGA"`.
+#' @param coarse If `FALSE`, specify which SGA values are below the third
+#' percentile. Default = `TRUE`.
+#' @returns Factor with gestational age classification(s). If `coarse = TRUE`,
+#' levels are `c("SGA", "AGA",  "LGA")`.
+#' If `coarse = FALSE`, levels are `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
 #'
 #' @examples
 #' # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
 #' classify_sga(
-#'   y = c(2.2, 3.4, 4.2),
-#'   gest_age = 38 + 1/7,
-#'   sex = "F",
-#'   acronym = "wfga"
+#'   weight_kg = c(2.2, 3.4, 4.2),
+#'   gest_age = 267,
+#'   sex = "F"
 #' )
 #'
 #' # With coarse = FALSE, highlights p < 0.03
 #' classify_sga(
-#'   y = c(2.2, 3.4, 4.2),
-#'   gest_age = 38 + 1/7,
+#'   weight_kg = c(2.2, 3.4, 4.2),
+#'   gest_age = 267,
 #'   sex = "F",
-#'   acronym = "wfga",
 #'   coarse = FALSE
 #' )
+#' @references
+#' WHO. **Physical status: the use and interpretation of anthropometry. Report
+#' of a WHO Expert Committee.** *World Health Organisation Technical Report
+#' Series 1995,* **854: 1–452**
+#'
+#' Royal College of Obstetricians and Gynaecologists. **The Investigation and
+#' Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
+#' 31.** *Technical report, Royal College of Obstetricians and Gynaecologists,
+#' London, 2013.*
 #' @export
-classify_sga <- function(y, gest_age, sex, acronym = "wfga", coarse = TRUE) {
-  percentiles <- ig_nbs_value2percentile(y = y, sex = sex, gest_age = gest_age, acronym = acronym)
+classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
+  percentiles <- ig_nbs_wfga_value2percentile(weight_kg = weight_kg,
+                                              sex = sex,
+                                              gest_age = gest_age)
   out <- rep(NA_character_, length(percentiles))
   out[which(percentiles <= 0.1)] <- "SGA"
   out[which(percentiles > 0.1 & percentiles < 0.9)] <- "AGA"
@@ -41,61 +53,87 @@ classify_sga <- function(y, gest_age, sex, acronym = "wfga", coarse = TRUE) {
   if (!coarse) {
     out[which(percentiles < 0.03)] <- "SGA(<3)"
   }
-  return(as.factor(out))
+  levels <- if (coarse) c("SGA", "AGA",  "LGA") else c("SGA(<3)", "SGA",
+                                                       "AGA", "LGA")
+  factor(out, levels = levels)
 }
 
-#' Classify stunting according to WHO or INTERGROWTH-21st length/height-for-age standards
+#' Classify stunting according to WHO or INTERGROWTH-21st length/height-for-age
+#' standards
 #'
-#' Classify stunting (low height-for-age) using INTERGROWTH-21st or WHO Growth Standards depending on the gestational
-#' age at birth of the infant. Severe stunting is less than 3 SD relative to growth standards, whereas moderate stunting
-#' is -2SD from the median.
+#' Classify stunting (low height-for-age) using INTERGROWTH-21st or WHO Growth
+#' Standards depending on the gestational age at birth of the infant. Severe
+#' stunting is below <-3 SD relative to growth standards, whereas moderate
+#' stunting is -2SD from the median.
 #'
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param age_days Age(s) in days for each child.
-#' @param ga_at_birth Gestational age(s) at birth in weeks.
-#' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was recorded as recumbent length or
-#' standing height.
-#' @returns Factor variable with stunting classification(s). Can be `"stunting_severe"`, `"stunting"`,
-#' `"normal"`, or `"implausible"`.
+#' @param ga_at_birth Gestational age(s) at birth in days.
+#' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was
+#' recorded as recumbent length or #' standing height. `NA` values will be set
+#' to `"L"` for children <731 days old and to `"H"` for children 731 days old or
+#' more. Default = `NA`.
 #'
-#' @note WHO guidelines stipulate that recumbent length should not be measured after 730 days. Therefore recumbent
-#' length values for children over 730 days old have 0.7 cm taken away, and height values for children less than 731
-#' days old have 0.7 cm added on. Implausible z-scores are sourced from the referenced WHO report, and classification
-#' criteria from the DHS manual.
+#' @returns Factor of stunting classification(s) with levels `c("implausible",
+#' "stunting_severe", "stunting", "normal")`.
+#'
+#' @note WHO guidelines stipulate that recumbent length should not be measured
+#' after 730 days. Therefore recumbent #' length values for children over 730
+#' days old have 0.7 cm taken away, and height values for children less than 731
+#' days old have 0.7 cm added on. Implausible z-scores are sourced from the
+#' referenced WHO report, and classification criteria from the DHS manual.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
-#' *Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5
-#' years old*. Geneva: World Health Organization and the United Nations Children's Fund UNICEF, (2019). pp. 64-65.
+#' *Recommendations for data collection, analysis and reporting on
+#' anthropometric indicators in children under 5 years old*. Geneva: World
+#' Health Organization and the United Nations Children's Fund UNICEF, (2019).
+#' pp. 64-65.
 #'
-#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores for stunting, wasting and
-#' underweight'** *in* *Guide to DHS Statistics DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores
+#' for stunting, wasting and #' underweight'** *in* *Guide to DHS Statistics
+#' DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
 #'
 #' @examples
-#' # The first observation uses the INTERGROWTH-21st post-natal growth standards; the next two
-#' # use the WHO Growth Standards.
+#' # The first observation uses the INTERGROWTH-21st post-natal growth
+#' # standards; the next two use the WHO Growth Standards.
 #' classify_stunting(
 #'   lenht_cm = c(52.2, 75.4, 63.1),
 #'   age_days = c(357, 375, 250),
-#'   ga_at_birth = c(28, 41, 38),
+#'   ga_at_birth = c(196, 287, 266),
 #'   sex = c("M", "M", "F"),
 #'   lenht_method = c("H", "H", "H")
 #' )
 #' @export
 classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA) {
-  if (!anyNA(lenht_cm)) {
-    lenht_cm2 <- ifelse(which(age_days >= 731 & tolower(lenht_method) == "l"),
-                        yes = lenht_cm - 0.7,
-                        no = lenht_cm)
-    lenht_cm2 <- ifelse(age_days < 731 & tolower(lenht_method) == "h",
-                        yes = lenht_cm + 0.7,
-                        no = lenht_cm2)
+  lgth_lenht_method <- length(lenht_method)
+  lgth_age_days <- length(age_days)
+  if (lgth_lenht_method != 1 & lgth_lenht_method != lgth_age_days) {
+    stop(paste0("lenht_method should be as long as the input vectors or length",
+                " 1. Your input was length ", lgth_lenht_method, "."),
+         call. = F)
   }
+  if (lgth_lenht_method != lgth_age_days) {
+    lenht_method <- rep_to_longest(list(age_days, lenht_method))[[2]]
+  }
+  lenht_method <- ifelse(is.na(lenht_method),
+                         yes = ifelse(age_days < 731, yes = "L", no = "H"),
+                         no = lenht_method)
+  lenht_cm2 <- ifelse(age_days >= 731 & tolower(lenht_method) == "l",
+                      yes = lenht_cm - 0.7,
+                      no = lenht_cm)
+  lenht_cm2 <- ifelse(age_days < 731 & tolower(lenht_method) == "h",
+                      yes = lenht_cm + 0.7,
+                      no = lenht_cm2)
+  pma_weeks <- round((age_days + ga_at_birth) / 7)
+  ga_in_ig_png_range <- ga_at_birth >= 182 & ga_at_birth < 259
   z_scores <- ifelse(
-    ga_at_birth >= 26 & ga_at_birth < 37 & age_days / 7 < 64,
-    yes = ig_png_lfa_value2zscore(length_cm = lenht_cm2, pma_weeks = round(age_days / 7), sex = sex),
-    no = who_gs_lhfa_value2zscore(lenht_cm = lenht_cm2, age_days = age_days, sex = sex)
+    pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_in_ig_png_range,
+    yes = ig_png_lfa_value2zscore(length_cm = lenht_cm2, pma_weeks = pma_weeks,
+                                  sex = sex),
+    no = who_gs_lhfa_value2zscore(lenht_cm = lenht_cm2, age_days = age_days,
+                                  sex = sex)
   )
   out <- rep(NA_character_, length(z_scores))
   out[which(z_scores <= -2)] <- "stunting"
@@ -103,33 +141,40 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
   out[which(z_scores < -6)] <- "implausible"
   out[which(z_scores > -2)] <- "normal"
   out[which(z_scores > 6)] <- "implausible"
-  return(as.factor(out))
+  factor(
+    out, levels = c("implausible", "stunting_severe", "stunting", "normal")
+  )
 }
 
 #' Classify wasting according to WHO weight-for-length/height standards
 #'
-#' Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth Standards depending on the gestational age
-#' at birth for the infant. Severe wasting is less than 3 SD relative to growth standards, whereas moderate wasting is
+#' Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth
+#' Standards depending on the gestational age at birth for the infant. Severe
+#' wasting is <-3SD relative to growth standards, whereas moderate  wasting is
 #' -2SD from the median.
 #'
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was recorded as recumbent length or
-#' standing height.
-#' @returns Factor variable with wasting classification(s). Can be `"wasting_severe"`, `"wasting"`, 
-#' `"normal"`, `"overweight"`, or `"implausible"`.
+#' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was
+#' recorded as recumbent length or standing height.
+#' @returns Factor of wasting classification(s) with levels `c("implausible",
+#' "wasting_severe", "wasting", "normal", "overweight")`.
 #'
 #'
-#' @note Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-#' manual.
+#' @note Implausible z-score bounds are sourced from the referenced WHO report,
+#' and classification criteria from the DHS manual. Observations with invalid or
+#' missing `lenht_method` values will be returned as `NA`.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
-#' *Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5
-#' years old*. Geneva: World Health Organization and the United Nations Children’s Fund UNICEF, (2019). pp. 64-65.
+#' *Recommendations for data collection, analysis and reporting on
+#' anthropometric indicators in children under 5 years old*. Geneva: World
+#' Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+#' pp. 64-65.
 #'
-#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores for stunting, wasting and
-#' underweight'** *in* *Guide to DHS Statistics DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores
+#' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
+#' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
 #'
 #' @examples
@@ -145,8 +190,10 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
   weight_kg[which(!lenht_method %in% c("H", "L"))] <- NA_real_
   z_scores <- suppressWarnings(
     ifelse(tolower(lenht_method) == "h",
-           yes = who_gs_wfh_value2zscore(weight_kg = weight_kg, height_cm = lenht_cm, sex = sex),
-           no = who_gs_wfl_value2zscore(weight_kg = weight_kg, length_cm = lenht_cm, sex = sex))
+           yes = who_gs_wfh_value2zscore(weight_kg = weight_kg,
+                                         height_cm = lenht_cm, sex = sex),
+           no = who_gs_wfl_value2zscore(weight_kg = weight_kg,
+                                        length_cm = lenht_cm, sex = sex))
   )
   out <- rep(NA_character_, length(z_scores))
   out[which(z_scores <= -2)] <- "wasting"
@@ -154,31 +201,37 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
   out[which(abs(z_scores) < 2)] <- "normal"
   out[which(z_scores >= 2)] <- "overweight"
   out[which(abs(z_scores) > 5)] <- "implausible"
-  return(as.factor(out))
+  factor(out, levels = c("implausible", "wasting_severe", "wasting", "normal",
+                         "overweight"))
 }
 
-#' Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal growth standards
+#' Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal
+#' growth standards
 #'
-#' Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards depending on the gestational age
-#' at birth for the infant. Severely underweight is less than 3 SD below the median, underweight is less than 2 SD below
-#' the median, and overweight is > 2 SDs above the median.
+#' Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards
+#' depending on the gestational age at birth for the infant. Severely
+#' underweight is less than 3 SD below the median, underweight is less than 2 SD
+#' below the median, and overweight is > 2 SDs above the median.
 #'
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param age_days Age(s) at recording of each infant in days.
-#' @param ga_at_birth Gestational age(s) at birth in weeks.
+#' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @returns Factor variable with weight classification(s). Can be `"underweight_severe"`, `"underweight"`, 
-#' `"normal"`, `"overweight"`, or `"implausible"`.
+#' @returns Factor of weight classification(s) with levels `c("implausible",
+#' "underweight_severe", "underweight", "normal", "overweight")`.
 #'
-#' @note Implausible z-score bounds are sourced from the referenced WHO report, and classification criteria from the DHS
-#' manual.
+#' @note Implausible z-score bounds are sourced from the referenced WHO report,
+#' and classification criteria from the DHS manual.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
-#' *Recommendations for data collection, analysis and reporting on anthropometric indicators in children under 5
-#' years old*. Geneva: World Health Organization and the United Nations Children’s Fund UNICEF, (2019). pp. 64-65.
+#' *Recommendations for data collection, analysis and reporting on
+#' anthropometric indicators in children under 5 years old*. Geneva: World
+#' Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+#' pp. 64-65.
 #'
-#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores for stunting, wasting and
-#' underweight'** *in* *Guide to DHS Statistics DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+#' **'Percentage of children stunted, wasted, and underweight, and mean z-scores
+#' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
+#' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
 #'
 #' @examples
@@ -190,13 +243,15 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' )
 #' @export
 classify_wfa <- function(weight_kg, age_days, ga_at_birth, sex) {
-  z_PNG <- ig_png_wfa_value2zscore(weight_kg = weight_kg, pma_weeks = round(age_days / 7), sex = sex)
-  z_WHO <- who_gs_wfa_value2zscore(weight_kg = weight_kg, age_days = age_days, sex = sex)
+  pma_weeks <- round((age_days + ga_at_birth) / 7)
+  pma_in_ig_png_range <- pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks
+  ga_in_ig_png_range <- ga_at_birth >= 182 & ga_at_birth < 259
   z_scores <- ifelse(
-    test = round(age_days / 7) %in% gigs::ig_png$wfa$male$zscores$pma_weeks & ga_at_birth >= 26 & ga_at_birth < 37 &
-      age_days / 7 < 64,
-    yes = z_PNG,
-    no = z_WHO
+    test = pma_in_ig_png_range & ga_in_ig_png_range,
+    yes = ig_png_wfa_value2zscore(weight_kg = weight_kg, pma_weeks = pma_weeks,
+                                  sex = sex),
+    no = who_gs_wfa_value2zscore(weight_kg = weight_kg, age_days = age_days,
+                                 sex = sex)
   )
   out <- rep(NA_character_, length(z_scores))
   out[which(z_scores <= -2)] <- "underweight"
@@ -205,5 +260,6 @@ classify_wfa <- function(weight_kg, age_days, ga_at_birth, sex) {
   out[which(abs(z_scores) < 2)] <- "normal"
   out[which(z_scores >= 2)] <- "overweight"
   out[which(z_scores > 5)] <- "implausible"
-  return(as.factor(out))
+  factor(out, levels = c("implausible", "underweight_severe", "underweight",
+                         "normal", "overweight"))
 }

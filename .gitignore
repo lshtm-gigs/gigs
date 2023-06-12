@@ -9,3 +9,4 @@ data-raw/tables/*/stata/
 /doc/
 /Meta/
 inst/doc
+/tests/outputs/

@@ -34,7 +34,7 @@ case. This is where the `value2zscore` and `value2percentile` functions come in:
 ```{r example_1a}
 df_newborn_weights <- data.frame(
         weight_kg = c(0.91, 3.33, 3.03, 3.35, 3.47, 1.90),
-        gest_age = c(26 + 1/7, 40, 41 + 6/7, 37, 39 + 4/7, 33),
+        gest_age = c(183, 280, 293, 259, 277, 231),
         sex = c(rep("M", 3), rep("F", 3))
 )
 df_newborn_weights$weight_p <- round(ig_nbs_value2percentile(y = df_newborn_weights$weight_kg,
@@ -56,9 +56,11 @@ Given that the outputs of these functions are vectors, gain functions integrate 
 ### From z-scores/percentiles to values
 
 Alternatively, you may wish to calculate reference values for median head circumference in female newborns for
-gestational ages from 38 to 38 + 6/7 weeks. This is achievable through the relevant `percentile2value` function:
+gestational ages across a range of gestational ages. You can do this with the relevant `percentile2value` function:
 ```{r conversion_hcfga}
-ig_nbs_hcfga_percentile2value(p = 0.5, gest_age = seq(38, 38 + 6/7, by = 1/7), sex = "M") |>
+ig_nbs_hcfga_percentile2value(p = 0.5,
+                              gest_age = 266:272,
+                              sex = "M") |>
         round(digits = 1)
 ```
 
@@ -70,9 +72,8 @@ user to easily classify growth status:
 
 ### Classifying size for gestational age
 ```{r example_2}
-df_newborn_weights$classification <- classify_sga(y = df_newborn_weights$weight_kg,
+df_newborn_weights$classification <- classify_sga(weight_kg = df_newborn_weights$weight_kg,
                                                   gest_age = df_newborn_weights$gest_age,
-                                                  sex = df_newborn_weights$sex,
-                                                  acronym = "wfga")
+                                                  sex = df_newborn_weights$sex)
 head(df_newborn_weights)
 ```

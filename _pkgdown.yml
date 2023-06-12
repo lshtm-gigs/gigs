@@ -7,6 +7,7 @@ articles:
   contents:
   - gigs
   - articles/ig-nbs-body-composition
+  - articles/ig-nbs-body-composition-improved
 reference:
   - title: Growth classification
     desc: Classify size for gestational age, stunting, wasting and under/overweight
@@ -18,8 +19,8 @@ reference:
   - title: INTERGROWTH-21st newborn size standards (including very preterm)
     desc: Conversion functions the INTERGROWTH-21st newborn size standards (including very preterm)
     contents:
-      - ig_nbs_percentile2value
       - ig_nbs_value2percentile
+      - ig_nbs_percentile2value
   - title: INTERGROWTH-21st post-natal growth in preterm infants
     desc: Conversion functions for the INTERGROWTH-21st post-natal growth standards for preterm infants
     contents:
@@ -28,8 +29,8 @@ reference:
   - title: WHO Growth Standards
     desc: Conversion functions for the WHO Growth Standards
     contents:
-      - who_gs_zscore2value
       - who_gs_value2zscore
+      - who_gs_zscore2value
   - title: Reference data and coefficients tables
     desc: Lists containing tables of reference values/model parameters for INTERGROWTH-21st and WHO standards.
     contents:

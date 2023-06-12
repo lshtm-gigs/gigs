@@ -8,16 +8,30 @@
 \href{https://www.who.int/tools/child-growth-standards/standards}{WHO Child Growth Standards}
 }
 \description{
-A set of nested lists containing tables with reference values at different z-scores/percentiles for valid
-postmenstrual ages. The list is ordered by acronym first, then by sex and finally z-score/percentile.
+A set of nested lists containing tables with reference values at different
+z-scores/percentiles for valid x values (usually age in days, also
+length or height in cm for weight-for-length (\code{wfl}) and weight-for-height
+(\code{wfh}) standards, respectively. The list is ordered by acronym first, then
+by sex and finally z-score/percentile.
 }
 \examples{
 names(gigs::who_gs)
 head(gigs::who_gs$wfa$male$zscores)
 }
 \references{
-de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The WHO Multicentre Growth Reference
-Study: planning, study design, and methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
-doi: \href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
+WHO Multicentre Growth Reference Study: planning, study design, and
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
+\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+
+World Health Organisation. \strong{WHO child growth standards:
+length/height-for-age, weight-for-age, weight-for-length, weight-for-height
+and body mass index-for-age: methods and development.} \emph{Technical report,
+WHO, Geneva}, 2006.
+
+World Health Organisation. \strong{WHO child growth standards: head
+circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
+and subscapular skinfold-for-age: methods and development.} \emph{Technical
+report, WHO, Geneva}, 2007.
 }
 \keyword{data}
