@@ -43,10 +43,12 @@
 #'                          pma_weeks = c(25, 27, 46, 64),
 #'                          sex = "M") |>
 #'   round(digits = 2)
+#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_zscore2value <- function(z, pma_weeks, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(z = z, pma_weeks = pma_weeks, sex = sex, acronym = acronym))
+  max_len_vecs <- vctrs::vec_recycle_common(z = z, pma_weeks = pma_weeks,
+                                            sex = sex, acronym = acronym)
 
   df <- cbind(z, ig_png_equations(pma_weeks = max_len_vecs$pma_weeks, sex = max_len_vecs$sex, acronym = max_len_vecs$acronym))
 
@@ -151,11 +153,12 @@ ig_png_hcfa_percentile2value <- function(p, pma_weeks, sex) {
 #'                              pma_weeks = c(25, 27, 46, 64),
 #'                              sex = "M") |>
 #'   round(digits = 2)
-#'
+#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_value2zscore <- function(y, pma_weeks, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(y = y, pma_weeks = pma_weeks, sex = sex, acronym = acronym))
+  max_len_vecs <- vctrs::vec_recycle_common(y = y, pma_weeks = pma_weeks,
+                                            sex = sex, acronym = acronym)
 
   df <- cbind(y, ig_png_equations(pma_weeks = max_len_vecs$pma_weeks, sex = max_len_vecs$sex, acronym = max_len_vecs$acronym))
 

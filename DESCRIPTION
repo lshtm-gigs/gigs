@@ -23,7 +23,8 @@ BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    gamlss.dist
+    gamlss.dist,
+    vctrs
 Suggests: 
     knitr,
     rmarkdown,

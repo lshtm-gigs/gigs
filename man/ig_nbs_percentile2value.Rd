@@ -98,8 +98,9 @@ ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
                          sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 140 days for
-# gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
+# Bad inputs will not stop the function but will instead return NA - here 140
+# days for gest_age is outside the bounds of the INTERGROWTH-21st newborn
+# size standards
 ig_nbs_hcfga_zscore2value(z = z,
                           gest_age = c(140, 182, 224, 266),
                           sex = "F") |>

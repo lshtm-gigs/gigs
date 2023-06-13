@@ -1,22 +1,3 @@
-#' Extend vectors in list to the length of the longest vector
-#'
-#' @param vec_list List of vectors to extend out to the length of the longest
-#' vector in that list.
-#' @returns List of vectors recycled to length of longest vector in input list.
-#' @keywords internal
-rep_to_longest <- function(vec_list) {
-  lengths <- vapply(X = vec_list, FUN = length, FUN.VALUE = numeric(length = 1))
-  max_len <-  max(lengths)
-  if (any(lengths != 1 & lengths != max_len)) {
-    bad_len <- lengths[which(lengths != 1 & lengths != max_len)]
-    stop(paste0("Inputs must be length 1 or the length of the longest input ",
-                "vector (", max_len,
-                "). You provided an input/input with length(s)", bad_len, "."),
-         .call = NULL)
-  }
-  lengthened <- lapply(X = vec_list, FUN = rep_len, length.out = max_len)
-}
-
 #' Return male/female mean if sex is undefined
 #'
 #' @param fn Conversion function to call

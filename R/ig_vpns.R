@@ -81,13 +81,14 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #'
+#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_vpns_zscore2value
 #' @keywords internal
 ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(z = z,
+  max_len_vecs <- vctrs::vec_recycle_common(z = z,
                                       gest_age = gest_age,
                                       sex = sex,
-                                      acronym = acronym))
+                                      acronym = acronym)
   df <- cbind(z, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
                                    sex = max_len_vecs$sex,
                                    acronym = max_len_vecs$acronym))
@@ -120,13 +121,14 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #'
+#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_vpns_value2zscore
 #' @keywords internal
 ig_vpns_value2zscore <- function(y, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(y = y,
+  max_len_vecs <- vctrs::vec_recycle_common(y = y,
                                       gest_age = gest_age,
                                       sex = sex,
-                                      acronym = acronym))
+                                      acronym = acronym)
   df <- cbind(y, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
                                    sex = max_len_vecs$sex,
                                    acronym = max_len_vecs$acronym))

@@ -117,6 +117,6 @@ test_that("Weight-for-age classification works", {
                           age_days = c(501, 323, 435, 201),
                           ga_at_birth = 37,
                           sex = c("F", "M")),
-    regexp = "^Inputs must be length 1"
+    regexp = "^Can't recycle"
   )
 })
