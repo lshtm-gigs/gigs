@@ -29,8 +29,8 @@ sticker <- hexSticker::sticker(
   s_x = 1, s_y = 1, s_height = 1.09, s_width = 1.9,
   package = "gigs", p_size = name_size, p_x = 0.85, p_y = 1.425,  p_color = "#000000", p_family = title_font,
   h_fill = "#FFFFFF", h_color = "#fe7b3b",
-  url = "https://www.github.com/lshtm_mnhg/gigs", u_x = 1.00, u_y = 0.055, u_size = url_size, u_angle = 30, u_family = url_font) +
-  cowplot::draw_image(image = "inst/logo/temp2.png", x = 0.6, y = 0.180, width = 1, height = 1, scale = 0.95)
+  url = "https://www.github.com/lshtm-gigs/gigs", u_x = 1.05, u_y = 0.085, u_size = url_size, u_angle = 30, u_family = url_font) +
+  cowplot::draw_image(image = "inst/logo/temp2.png", x = 0.625, y = 0.190, width = 1, height = 1, scale = 0.925)
 unlink(temp)
 ggplot2::ggsave(sticker,
                 filename = "man/figures/logo.png",
