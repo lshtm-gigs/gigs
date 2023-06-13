@@ -2,24 +2,31 @@ Type: Package
 Package: gigs
 Title: Assess Growth in Infants and Newborns
 Version: 0.1.0
-Date: 2023-04-13
+Date: 2023-06-13
 Authors@R: c(
-    person(given = "Simon", family = "Parker", email = "simon.parker@lshtm.ac.uk", role = c("aut", "cre")),
+    person(given = "Simon", family = "Parker",
+           email = "simon.parker@lshtm.ac.uk",
+           role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
+    person(given = "Eric", family = "Ohuma", role = c("dtc", "rev"),
+           comment = c(ORCID = "0000-0002-3116-2593")),
     person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
     )
-Description: Convert between z-scores/percentiles and anthropometric measures in multiple growth standards, and classify
-    infant growth accordingly. With a simple, single interface to the WHO Child Growth Standards and various
-    INTERGROWTH-21st Standards, 'gigs' makes growth assessment easy and reproducible for clinicians, researchers and
-    policy-makers.
+Description: Convert between z-scores/percentiles and anthropometric measures in
+    multiple growth standards, and classify infant growth accordingly. With a
+    simple, single interface to WHO Child Growth Standards and various
+    INTERGROWTH-21st Standards, 'gigs' makes growth assessment easy and
+    reproducible for clinicians, researchers and policy-makers.
 License: GPL (>= 3)
-URL: https://github.com/simpar1471/gigs/,
-    https://simpar1471.github.io/gigs/
-BugReports: https://github.com/simpar1471/gigs/issues
+URL: https://github.com/lshtm-gigs/gigs/,
+    https://lshtm-gigs.github.io/gigs/
+BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    gamlss.dist
-Suggests: 
+    gamlss.dist,
+    stats,
+    vctrs
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

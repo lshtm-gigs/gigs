@@ -105,6 +105,7 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #'   sex = c("M", "M", "F"),
 #'   lenht_method = c("H", "H", "H")
 #' )
+#' @importFrom vctrs vec_recycle_common
 #' @export
 classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA) {
   lgth_lenht_method <- length(lenht_method)
@@ -115,7 +116,7 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
          call. = F)
   }
   if (lgth_lenht_method != lgth_age_days) {
-    lenht_method <- rep_to_longest(list(age_days, lenht_method))[[2]]
+    lenht_method <- vctrs::vec_recycle_common(age_days, lenht_method)[[2]]
   }
   lenht_method <- ifelse(is.na(lenht_method),
                          yes = ifelse(age_days < 731, yes = "L", no = "H"),

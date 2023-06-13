@@ -50,17 +50,22 @@
 #'                          sex = "M") |>
 #'   round(digits = 2)
 #'
-#' # Bad inputs will not stop the function but will instead return NA - here 140 days for
-#' # gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
+#' # Bad inputs will not stop the function but will instead return NA - here 140
+#' # days for gest_age is outside the bounds of the INTERGROWTH-21st newborn
+#' # size standards
 #' ig_nbs_hcfga_zscore2value(z = z,
 #'                           gest_age = c(140, 182, 224, 266),
 #'                           sex = "F") |>
 #'   round(digits = 2)
 #' @importFrom gamlss.dist qST3
+#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_nbs_percentile2value
 #' @export
 ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(p = p, gest_age = gest_age, sex = sex, acronym = acronym))
+  max_len_vecs <- vctrs::vec_recycle_common(p = p,
+                                            gest_age = gest_age,
+                                            sex = sex,
+                                            acronym = acronym)
   checked_params <- check_nbs_params(sex = max_len_vecs$sex, gest_age = max_len_vecs$gest_age, acronym = max_len_vecs$acronym)
   checked_p <- max_len_vecs$p
   checked_p[which(abs(max_len_vecs$p) >= 1)] <- NA
@@ -280,17 +285,19 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #'                            sex = "M") |>
 #'   round(digits = 2)
 #'
-#' # Bad inputs will not stop the function but will instead return NA - here 301 days
-#' # gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
+#' # Bad inputs will not stop the function but will instead return NA - here 301
+#' # days gest_age is outside the bounds of the INTERGROWTH-21st newborn size
+#' # standards
 #' ig_nbs_hcfga_value2percentile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
 #'                               gest_age = c(168, 217, 266, 301),
 #'                               sex = "F") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2percentile
 #' @importFrom gamlss.dist pST3
+#' @importFrom vctrs vec_recycle_common
 #' @export
 ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(y = y, gest_age = gest_age, sex = sex, acronym = acronym))
+  max_len_vecs <- vctrs::vec_recycle_common(y = y, gest_age = gest_age, sex = sex, acronym = acronym)
   checked_params <- check_nbs_params(sex = max_len_vecs$sex, gest_age = max_len_vecs$gest_age, acronym = max_len_vecs$acronym)
   input <- list(y = y, gest_age = checked_params$age, sex = checked_params$sex, acronym = checked_params$acronym)
 

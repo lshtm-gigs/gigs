@@ -29,7 +29,7 @@ NULL
 #' [INTERGROWTH-21st Newborn Size in Very Preterm
 #' Infants](https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1)\cr
 #' [INTERGROWTH-21st Newborn Size Standards](https://intergrowth21.tghn.org/newborn-size-birth/#ns1)\cr
-#' [INTERGROWTH-21st Newborn Size Standards - Body Composition](https://doi.org/10.1038/pr.2017.52)
+#' [INTERGROWTH-21st Newborn Size Standards - Body Composition](https://www.nature.com/articles/pr201752)
 #' @note
 #' The tables in this package are combined versions of the tables published by
 #' Villar *et al.* (2014) and Villar *et al.* (2016), so they cover 133 to 300

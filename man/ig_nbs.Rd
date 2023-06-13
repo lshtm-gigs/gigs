@@ -7,7 +7,7 @@
 \source{
 \href{https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1}{INTERGROWTH-21st Newborn Size in Very Preterm Infants}\cr
 \href{https://intergrowth21.tghn.org/newborn-size-birth/#ns1}{INTERGROWTH-21st Newborn Size Standards}\cr
-\href{https://doi.org/10.1038/pr.2017.52}{INTERGROWTH-21st Newborn Size Standards - Body Composition}
+\href{https://www.nature.com/articles/pr201752}{INTERGROWTH-21st Newborn Size Standards - Body Composition}
 }
 \description{
 A set of nested lists containing tables with reference values at different

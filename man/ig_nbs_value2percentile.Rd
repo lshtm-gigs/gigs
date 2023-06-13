@@ -109,8 +109,9 @@ ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
                            sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 301 days
-# gest_age is outside the bounds of the INTERGROWTH-21st newborn size standards
+# Bad inputs will not stop the function but will instead return NA - here 301
+# days gest_age is outside the bounds of the INTERGROWTH-21st newborn size
+# standards
 ig_nbs_hcfga_value2percentile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
                               gest_age = c(168, 217, 266, 301),
                               sex = "F") |>

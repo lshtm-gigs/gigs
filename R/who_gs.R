@@ -66,13 +66,14 @@
 #'                         height_cm = c(60, 85, 105, 120),
 #'                         sex = "M") |>
 #'   round(digits = 2)
+#' @importFrom vctrs vec_recycle_common
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(z = z,
+  max_len_vecs <- vctrs::vec_recycle_common(z = z,
                                       x = x,
                                       sex = sex,
-                                      acronym = acronym))
+                                      acronym = acronym)
   lms <- who_gs_lms(x = max_len_vecs$x, sex = max_len_vecs$sex,
                     acronym = max_len_vecs$acronym)
 
@@ -299,11 +300,14 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #'                         height_cm = c(65, 95, 120, 121),
 #'                         sex = "M") |>
 #'   round(digits = 2)
+#' @importFrom vctrs vec_recycle_common
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_value2zscore <- function(y, x, sex, acronym) {
-  max_len_vecs <- rep_to_longest(list(y = y, x = x,
-                                      sex = sex, acronym = acronym))
+  max_len_vecs <- vctrs::vec_recycle_common(y = y,
+                                            x = x,
+                                            sex = sex,
+                                            acronym = acronym)
   lms <- who_gs_lms(x = max_len_vecs$x,
                     sex = max_len_vecs$sex,
                     acronym = max_len_vecs$acronym)
