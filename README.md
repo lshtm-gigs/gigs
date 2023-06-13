@@ -21,7 +21,8 @@ WHO Child Growth Standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
 converting between anthropometric measures (e.g. weight or length) to
 z-scores and percentiles, and the inverse. Also included are functions
-for classifying newborn and infant growth according to DHS guidelines.
+for classifying newborn and infant growth according to literature-based
+cut-offs.
 
 ## Installation
 
@@ -96,7 +97,7 @@ Standards and INTERGROWTH-21<sup>st</sup> Post-natal Growth of Preterm
 Infants Standards, respectively:
 
 - Term infants: `who_gs`/`_lhfa`/`_value2zscore()`
-- Preterm infants: `ig_nbs`/`_lfa`/`_value2percentile()`
+- Preterm infants: `ig_png`/`_lfa`/`_value2percentile()`
 
 If the component standard is not included in the function call, it
 should be passed to the `acronym` parameter of the general function
@@ -164,11 +165,11 @@ do not use it here to reduce our package’s dependencies.
 z_score_range <- -2:2
 gestage_range <- 168:230
 ref <- mapply(z_score_range,
-             FUN = function(z) {
-               gigs::ig_nbs_wfga_zscore2value(z = z,
-                                        gest_age = gestage_range,
-                                        sex = "F")
-             })
+               FUN = function(z) {
+                 gigs::ig_nbs_wfga_zscore2value(z = z,
+                                                gest_age = gestage_range,
+                                                sex = "F")
+               })
 matplot(ref, x = gestage_range, col = 1:5, type = "l", lty = 2:6,
         xlab = "Gestational age (days)",
         ylab = "Weight (kg)")
