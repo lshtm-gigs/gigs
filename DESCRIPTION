@@ -2,7 +2,7 @@ Type: Package
 Package: gigs
 Title: Assess Growth in Infants and Newborns
 Version: 0.1.0
-Date: 2023-04-13
+Date: 2023-06-13
 Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker@lshtm.ac.uk",
@@ -24,8 +24,9 @@ Depends:
     R (>= 4.1.0)
 Imports:
     gamlss.dist,
+    stats,
     vctrs
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

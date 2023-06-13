@@ -5,12 +5,12 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/simpar1471/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: WIP – Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![test-coverage](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/simpar1471/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/simpar1471/gigs)
+[![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml)
+[![codecov](https://app.codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
@@ -26,7 +26,10 @@ for classifying newborn and infant growth according to DHS guidelines.
 ## Installation
 
 ``` r
-# Install the development version from GitHub:
+# Install directly from the CRAN:
+install.packages("gigs")
+
+# Or install the development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("lshtm-gigs/gigs")
 ```
