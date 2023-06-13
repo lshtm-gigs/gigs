@@ -7,19 +7,27 @@
 ig_png_equations(pma_weeks, sex, acronym)
 }
 \arguments{
-\item{pma_weeks}{Post-menstrual age(s) in exact weeks. Must be between \code{27} and \code{64}.}
+\item{pma_weeks}{Post-menstrual age(s) in exact weeks. Must be between \code{27}
+and \code{64}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for post-natal growth in preterm infants. Should be
-one of \code{"wfa"}, \code{"lhfa"}, \code{"hcfa"}.}
+\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
+post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+\code{"hcfa"}.}
+}
+\value{
+A table with median(s) and standard deviation(s) for each
+\code{age}/\code{sex}/\code{acronym} combination provided to the function.
 }
 \description{
-Estimates median and standard deviation for different measures of postnatal growth in preterm infants.
+Estimates median and standard deviation for different measures of postnatal
+growth in preterm infants.
 }
 \note{
-Weight for age and length for age values are logarithmic, so require slightly different treatment to use in
-z-score conversions. In contrast, head circumference for gestational age returns the median and standard deviation
+Weight for age and length for age values are logarithmic, so require
+slightly different treatment to use in z-score conversions. In contrast, head
+circumference for gestational age returns the median and standard deviation
 with no logarithm applied.
 }
 \references{

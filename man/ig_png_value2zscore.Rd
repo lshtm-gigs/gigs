@@ -9,7 +9,8 @@
 \alias{ig_png_wfa_value2percentile}
 \alias{ig_png_lfa_value2percentile}
 \alias{ig_png_hcfa_value2percentile}
-\title{Convert postnatal growth measures to INTERGROWTH-21st postnatal growth standards}
+\title{Convert postnatal growth measures to INTERGROWTH-21st postnatal growth
+standards}
 \usage{
 ig_png_value2zscore(y, pma_weeks, sex, acronym)
 
@@ -30,12 +31,14 @@ ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
 \arguments{
 \item{y}{Value of the anthropometric measure.}
 
-\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between 27 and 64.}
+\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between 27 and
+64 weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for post-natal growth in preterm infants. Should be
-one of \code{"wfa"}, \code{"lhfa"}, \code{"hcfa"}.}
+\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
+post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+\code{"hcfa"}.}
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
@@ -44,10 +47,11 @@ one of \code{"wfa"}, \code{"lhfa"}, \code{"hcfa"}.}
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 }
 \value{
-Z-score or percentile
+Z-score(s) or percentile(s) depending on the function used
 }
 \description{
-Convert postnatal growth measures to INTERGROWTH-21st postnatal growth standards
+Convert postnatal growth measures to INTERGROWTH-21st postnatal growth
+standards
 }
 \examples{
 # Convert values to percentiles
@@ -72,16 +76,17 @@ ig_png_lfa_value2zscore(length_cm = c(51.10, 51.48, 51.86, 52.24, 52.63),
                         sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 25 weeks post-
-# menstrual age is outside the bounds of the INTERGROWTH-21st postnatal growth standards
-# for preterm infants
+# Bad inputs will not stop the function but will instead return NA - here 25
+# weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
+# postnatal growth standards for preterm infants
 ig_png_hcfa_value2percentile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
                              pma_weeks = c(25, 27, 46, 64),
                              sex = "M") |>
   round(digits = 2)
 }
 \references{
-Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. \strong{Postnatal growth
-standards for preterm infants: the Preterm Postnatal Follow-up Study of the INTERGROWTH-21st Project.} \emph{Lancet
-Glob Health} 2015, \emph{3(11):e681-e691.} \doi{10.1016/S2214-109X(15)00163-1}
+Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
+\strong{Postnatal growth standards for preterm infants: the Preterm Postnatal
+Follow-up Study of the INTERGROWTH-21st Project.} \emph{Lancet Glob Health} 2015,
+\emph{3(11):e681-e691.} \doi{10.1016/S2214-109X(15)00163-1}
 }
