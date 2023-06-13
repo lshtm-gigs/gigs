@@ -79,7 +79,6 @@ ig_png_hcfa_value2percentile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
                              pma_weeks = c(25, 27, 46, 64),
                              sex = "M") |>
   round(digits = 2)
-
 }
 \references{
 Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. \strong{Postnatal growth
