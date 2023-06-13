@@ -9,8 +9,8 @@
 [![Project Status: WIP – Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/simpar1471/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://app.codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
+[![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
