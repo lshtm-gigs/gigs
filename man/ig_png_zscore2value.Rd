@@ -9,8 +9,8 @@
 \alias{ig_png_wfa_percentile2value}
 \alias{ig_png_lfa_percentile2value}
 \alias{ig_png_hcfa_percentile2value}
-\title{Convert z-score/percentiles to INTERGROWTH-21st postnatal growth standards
-for preterm infants values}
+\title{Convert z-score/percentiles to values in the INTERGROWTH-21st Postnatal growth standards
+for preterm infants measurements}
 \usage{
 ig_png_zscore2value(z, pma_weeks, sex, acronym)
 
@@ -40,9 +40,13 @@ and \code{64}.}
 post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 }
+\value{
+Expected measurements for each combination of z-score/centile,
+post-menstrual age, sex, and acronym provided to the function.
+}
 \description{
-Convert z-score/percentiles to INTERGROWTH-21st postnatal growth standards
-for preterm infants values
+Convert z-score/percentiles to values in the INTERGROWTH-21st Postnatal growth standards
+for preterm infants measurements
 }
 \examples{
 # Convert percentiles to values

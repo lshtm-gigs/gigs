@@ -14,6 +14,7 @@ mean_if_sex_undefined <- function(fn, arg1, x_arg, acronym) {
 #' @param x Value(s) to round
 #' @param digits Number of digits to round to
 #' @note Taken from https://stackoverflow.com/questions/12688717/round-up-from-5
+#' @returns Values of `x` rounded to `digits` number of digits.
 #' @keywords internal
 round2 <- function(x, digits) {
   posneg <- sign(x)
@@ -25,12 +26,13 @@ round2 <- function(x, digits) {
 }
 
 #' Linearly interpolate between LMS or MSNT coefficients
-#'
 #' @param coeff_tbl_long A table of reference LMS/MSNT coefficients, from within
 #' `gigs::who_gs_coeffs` or `gigs:::ig_nbs_coeffs`
 #' @param xvar A value of x which is not found in a coefficient table but is
 #' between two values in that coefficient table
 #' @param sex A character denoting male (`"M"`) or female (`"F"`)
+#' @returns Data frame containing LMS/MSNT values which have been sourced from
+#' interpolated between existing LMS/MSNT values.
 #' @note All inputs should be length one. The function will also fail if
 #' `coeff_tbl_long` does not contain named LMS/MSNT values.
 #' @importFrom stats approx

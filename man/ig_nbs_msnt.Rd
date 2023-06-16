@@ -16,7 +16,7 @@ standard to use. Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.
 }
 \value{
 A dataframe containing mu, sigma, nu, and tau values for each
-provided sex/gestational age/acronym combination.
+provided combination of sex, gestational age, and acronym.
 }
 \description{
 Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
@@ -32,7 +32,6 @@ exactly.
 \examples{
 # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks' gestational age
 gigs:::ig_nbs_msnt(gest_age = 40 * 7, sex = "M", acronym = "wfga")
-
 }
 \references{
 Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.

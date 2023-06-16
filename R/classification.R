@@ -14,8 +14,8 @@
 #' @param coarse If `FALSE`, specify which SGA values are below the third
 #' percentile. Default = `TRUE`.
 #' @returns Factor with gestational age classification(s). If `coarse = TRUE`,
-#' levels are `c("SGA", "AGA",  "LGA")`.
-#' If `coarse = FALSE`, levels are `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
+#' levels are `c("SGA", "AGA",  "LGA")`. If `coarse = FALSE`, levels are `
+#' c("SGA(<3)", "SGA", "AGA",  "LGA")`.
 #'
 #' @examples
 #' # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
@@ -74,10 +74,8 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' recorded as recumbent length or #' standing height. `NA` values will be set
 #' to `"L"` for children <731 days old and to `"H"` for children 731 days old or
 #' more. Default = `NA`.
-#'
 #' @returns Factor of stunting classification(s) with levels `c("implausible",
 #' "stunting_severe", "stunting", "normal")`.
-#'
 #' @note WHO guidelines stipulate that recumbent length should not be measured
 #' after 730 days. Therefore recumbent #' length values for children over 730
 #' days old have 0.7 cm taken away, and height values for children less than 731
@@ -94,7 +92,6 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' for stunting, wasting and #' underweight'** *in* *Guide to DHS Statistics
 #' DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
 #' # The first observation uses the INTERGROWTH-21st post-natal growth
 #' # standards; the next two use the WHO Growth Standards.
@@ -161,8 +158,6 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 #' recorded as recumbent length or standing height.
 #' @returns Factor of wasting classification(s) with levels `c("implausible",
 #' "wasting_severe", "wasting", "normal", "overweight")`.
-#'
-#'
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual. Observations with invalid or
 #' missing `lenht_method` values will be returned as `NA`.
@@ -177,7 +172,6 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 #' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
 #' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
 #' # Where no lenht_method is given, classify_wasting() returns NA.
 #' classify_wasting(
@@ -220,7 +214,6 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @returns Factor of weight classification(s) with levels `c("implausible",
 #' "underweight_severe", "underweight", "normal", "overweight")`.
-#'
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual.
 #' @references
@@ -234,7 +227,6 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
 #' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
 #' classify_wfa(
 #'   weight_kg = c(7.2, 4.5, 9.1, 24),

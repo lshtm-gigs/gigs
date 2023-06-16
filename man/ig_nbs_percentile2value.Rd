@@ -65,7 +65,8 @@ be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"
 or \code{"ffmfga"}.}
 }
 \value{
-Vector of anthropometric measures.
+Expected measurements for each combination of z-score/percentile,
+gestational age, sex, and acronym provided to the function.
 }
 \description{
 Convert z-scores/percentiles to INTERGROWTH-21st newborn size values

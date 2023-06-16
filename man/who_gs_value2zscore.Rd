@@ -21,7 +21,7 @@
 \alias{who_gs_acfa_value2percentile}
 \alias{who_gs_ssfa_value2percentile}
 \alias{who_gs_tsfa_value2percentile}
-\title{Convert anthropometric measures to WHO Growth Standards z-scores}
+\title{Convert values to z-score/percentiles in the WHO Child Growth Standards}
 \usage{
 who_gs_value2zscore(y, x, sex, acronym)
 
@@ -97,8 +97,12 @@ who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 
 \item{triceps_sf_mm}{Triceps skinfold measurement(s) in mm.}
 }
+\value{
+Z-scores/percentiles for each combination of measurement, x
+variable, sex, and acronym provided to the function.
+}
 \description{
-Convert anthropometric measures to WHO Growth Standards z-scores
+Convert values to z-score/percentiles in the WHO Child Growth Standards
 }
 \examples{
 # Convert values to percentiles

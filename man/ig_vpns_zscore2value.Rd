@@ -2,26 +2,29 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_zscore2value}
 \alias{ig_vpns_zscore2value}
-\title{Convert z-score/percentiles to INTERGROWTH-21st very preterm newborn size
-values}
+\title{Convert z-scores to values in the INTERGROWTH-21st Newborn Size Standards for
+Very Preterm Infants}
 \usage{
 ig_vpns_zscore2value(z, gest_age, sex, acronym)
 }
 \arguments{
 \item{z}{Z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age in weeks. Must be between \code{24} and \code{32 + 6/7}
+\item{gest_age}{Gestational age in days. Must be between \code{168} and \code{230}.
 weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-Must be one of \code{"wfga"},
-\code{"lfga"}, or \code{"hcfga"}.}
+Must be one of \code{"wfga"}, "lfga"\verb{, or }"hcfga"`.}
+}
+\value{
+Expected measurements for each combination of z-score, gestational
+age, sex, and acronym provided to the function.
 }
 \description{
-Convert z-score/percentiles to INTERGROWTH-21st very preterm newborn size
-values
+Convert z-scores to values in the INTERGROWTH-21st Newborn Size Standards for
+Very Preterm Infants
 }
 \references{
 Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.

@@ -80,7 +80,8 @@ or \code{"ffmfga"}.}
 \item{fatfree_mass_g}{Fat-free mass(es) in g}
 }
 \value{
-Vector of z-scores/percentiles.
+Z-scores/percentiles for each combination of measurement,
+gestational age, sex, and acronym provided to the function.
 }
 \description{
 Convert anthropometric values to INTERGROWTH-21st newborn size

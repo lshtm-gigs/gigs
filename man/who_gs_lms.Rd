@@ -2,7 +2,7 @@
 % Please edit documentation in R/who_gs.R
 \name{who_gs_lms}
 \alias{who_gs_lms}
-\title{Get LMS values for WHO Growth Standards models}
+\title{Retrieve LMS values for WHO Child Growth Standards}
 \usage{
 who_gs_lms(x, sex, acronym)
 }
@@ -25,7 +25,7 @@ standard(s) specified by the \code{acronym} parameter, for the supplied \code{x}
 \code{sex} values.
 }
 \description{
-Get LMS values for WHO Growth Standards models
+Retrieve LMS values for WHO Child Growth Standards
 }
 \references{
 World Health Organisation. \strong{WHO child growth standards:

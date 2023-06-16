@@ -20,8 +20,7 @@ percentile. Default = \code{TRUE}.}
 }
 \value{
 Factor with gestational age classification(s). If \code{coarse = TRUE},
-levels are \code{c("SGA", "AGA",  "LGA")}.
-If \code{coarse = FALSE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
+levels are \code{c("SGA", "AGA",  "LGA")}. If \code{coarse = FALSE}, levels are \code{ c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
 Size for gestational age categories are split by centile: small-for-GA (SGA;

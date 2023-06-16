@@ -21,7 +21,7 @@
 \alias{who_gs_acfa_percentile2value}
 \alias{who_gs_ssfa_percentile2value}
 \alias{who_gs_tsfa_percentile2value}
-\title{Convert z-score/percentiles to WHO growth standards values}
+\title{Convert z-score/percentiles to values in the WHO Child Growth Standards}
 \usage{
 who_gs_zscore2value(z, x, sex, acronym)
 
@@ -81,8 +81,12 @@ measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in cm)
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
 \code{"tsfa"} (triceps skinfold-for-age).}
 }
+\value{
+Expected measurements for each combination of z-score/percentile, x
+variable, sex, and acronym provided to the function.
+}
 \description{
-Convert z-score/percentiles to WHO growth standards values
+Convert z-score/percentiles to values in the WHO Child Growth Standards
 }
 \examples{
 # Convert percentiles to values

@@ -1,4 +1,4 @@
-#' Convert z-score/percentiles to WHO growth standards values
+#' Convert z-score/percentiles to values in the WHO Child Growth Standards
 #'
 #' @param z,p Z-score(s)/percentile(s) to convert from.
 #' @param x,age_days,length_cm,height_cm X value at which to convert z-score to
@@ -13,7 +13,8 @@
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
-#'
+#' @returns Expected measurements for each combination of z-score/percentile, x
+#' variable, sex, and acronym provided to the function.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
@@ -33,7 +34,6 @@
 #' Cole TJ. **The LMS method for constructing normalized growth standards** *Eur
 #' J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
-#'
 #' @examples
 #' # Convert percentiles to values
 #' p <- 0.25 # 25th percentile
@@ -230,7 +230,7 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
   who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-#' Convert anthropometric measures to WHO Growth Standards z-scores
+#' Convert values to z-score/percentiles in the WHO Child Growth Standards
 #'
 #' @param y Y value(s) for growth standard.
 #' @param x X value(s) for growth standard.
@@ -251,6 +251,8 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #' @param armcirc_cm Arm circumference measurement(s) in cm.
 #' @param subscap_sf_mm Subscapular skinfold measurement(s) in mm.
 #' @param triceps_sf_mm Triceps skinfold measurement(s) in mm.
+#' @returns Z-scores/percentiles for each combination of measurement, x
+#' variable, sex, and acronym provided to the function.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
@@ -269,7 +271,6 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #' Cole TJ. **The LMS method for constructing normalized growth standards** *Eur
 #' J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
-#'
 #' @examples
 #' # Convert values to percentiles
 #' who_gs_value2percentile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
@@ -462,7 +463,7 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
   who_gs_value2percentile(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-#' Get LMS values for WHO Growth Standards models
+#' Retrieve LMS values for WHO Child Growth Standards
 #'
 #' @param x X value(s) at which to retrieve LMS values. Must be within bounds of
 #' available x values for given acronym.
@@ -473,11 +474,9 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
-#'
 #' @returns A dataframe with lambda, mu and sigma values for the WHO growth
 #' standard(s) specified by the `acronym` parameter, for the supplied `x` and
 #' `sex` values.
-#'
 #' @references
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -492,7 +491,6 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' Cole TJ. **The LMS method for constructing normalized growth standards** *Eur
 #' J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
-#'
 #' @rdname who_gs_lms
 #' @keywords internal
 who_gs_lms <- function(x, sex, acronym) {
@@ -584,11 +582,15 @@ who_gs_lms <- function(x, sex, acronym) {
   out[, -which(names(out) == "sort")]
 }
 
-#' Get standard deviations for WHO Growth Standards data from LMS values
+#' Get a value which is a specific z-score from the median using LMS
+#' coefficients
+#'
 #' @param l Lambda value as provided by [who_gs_lms]
 #' @param m Mu value as provided by [who_gs_lms]
 #' @param s Sigma value as provided by [who_gs_lms]
 #' @param n_sd Number of SD from the median to be computed
+#' @returns Value(s) which are `n_sd` from the median for each `l`/`m`/`s`
+#' combination.
 #' @references
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -605,5 +607,5 @@ who_gs_lms <- function(x, sex, acronym) {
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @keywords internal
 who_gs_lms2sd <- function(l, m, s, n_sd) {
-  m * (1 + l * s * n_sd)^(1 / l)
+  m * (1 + l * s * n_sd) ^ (1 / l)
 }

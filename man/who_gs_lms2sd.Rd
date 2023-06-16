@@ -2,7 +2,8 @@
 % Please edit documentation in R/who_gs.R
 \name{who_gs_lms2sd}
 \alias{who_gs_lms2sd}
-\title{Get standard deviations for WHO Growth Standards data from LMS values}
+\title{Get a value which is a specific z-score from the median using LMS
+coefficients}
 \usage{
 who_gs_lms2sd(l, m, s, n_sd)
 }
@@ -15,8 +16,13 @@ who_gs_lms2sd(l, m, s, n_sd)
 
 \item{n_sd}{Number of SD from the median to be computed}
 }
+\value{
+Value(s) which are \code{n_sd} from the median for each \code{l}/\code{m}/\code{s}
+combination.
+}
 \description{
-Get standard deviations for WHO Growth Standards data from LMS values
+Get a value which is a specific z-score from the median using LMS
+coefficients
 }
 \references{
 World Health Organisation. \strong{WHO child growth standards:

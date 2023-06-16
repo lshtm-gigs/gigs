@@ -47,7 +47,8 @@ post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 }
 \value{
-Z-score(s) or percentile(s) depending on the function used
+Z-scores/percentiles for each combination of measurement,
+post-menstrual age, sex, and acronym provided to the function.
 }
 \description{
 Convert postnatal growth measures to INTERGROWTH-21st postnatal growth

@@ -1,5 +1,5 @@
-#' Convert z-score/percentiles to INTERGROWTH-21st postnatal growth standards
-#' for preterm infants values
+#' Convert z-score/percentiles to values in the INTERGROWTH-21st Postnatal growth standards
+#' for preterm infants measurements
 #'
 #' @param z,p Z-score(s)/percentile(s) to convert to a value.
 #' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27`
@@ -8,13 +8,13 @@
 #' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for
 #' post-natal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
 #' `"hcfa"`.
-#'
+#' @returns Expected measurements for each combination of z-score/centile,
+#' post-menstrual age, sex, and acronym provided to the function.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
 #' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
-#'
 #' @examples
 #' # Convert percentiles to values
 #' p <- 0.25 # 25th percentile
@@ -127,14 +127,13 @@ ig_png_hcfa_percentile2value <- function(p, pma_weeks, sex) {
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param length_cm Recumbent length measurement(s) in cm.
 #' @param headcirc_cm Head circumference measurement(s) in cm.
-#' @returns Z-score(s) or percentile(s) depending on the function used
-#'
+#' @returns Z-scores/percentiles for each combination of measurement,
+#' post-menstrual age, sex, and acronym provided to the function.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
 #' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
-#'
 #' @examples
 #' # Convert values to percentiles
 #' ig_png_value2percentile(y = 5.94, pma_weeks = 55, sex = "M", acronym = "wfa") |>
@@ -245,18 +244,15 @@ ig_png_hcfa_value2percentile <- function(headcirc_cm, pma_weeks, sex) {
 #' `"hcfa"`.
 #' @returns A table with median(s) and standard deviation(s) for each
 #' `age`/`sex`/`acronym` combination provided to the function.
-#'
 #' @note Weight for age and length for age values are logarithmic, so require
 #' slightly different treatment to use in z-score conversions. In contrast, head
 #' circumference for gestational age returns the median and standard deviation
 #' with no logarithm applied.
-#'
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
 #' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
-#'
 #' @rdname ig_png_equations
 #' @keywords internal
 ig_png_equations <- function(pma_weeks, sex, acronym) {

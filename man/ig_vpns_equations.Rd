@@ -2,8 +2,8 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_equations}
 \alias{ig_vpns_equations}
-\title{INTERGROWTH-21st regression equations for newborn size in very preterm
-infants}
+\title{Regression equations for the INTERGROWTH-21st Newborn Size Standards for Very
+Preterm Infants}
 \usage{
 ig_vpns_equations(gest_age, sex, acronym)
 }
@@ -18,13 +18,11 @@ Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
 }
 \value{
 A dataframe with mean and standard deviation values for each
-provided sex/gestational age/acronym
-combination
+provided combination of sex, gestational age, and acronym.
 }
 \description{
 Calculates median/standard deviation values for newborn size in very preterm
-infants with varying gestational ages
-and sexes.
+infants with varying gestational ages and sexes.
 }
 \note{
 This function returns the \strong{natural log} of the median and standard
