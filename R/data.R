@@ -180,3 +180,49 @@ NULL
 #' @docType data
 #' @keywords data
 NULL
+
+#' Data from the Low birthweight Infant Feeding Exploration study
+#'
+#' A dataset with anthropometric data for infants enrolled in the Low
+#' birthweight Infant Feeding Exploration (LIFE) study. The variables are as
+#' follows:
+#'
+#' @format A data frame with 10,026 rows and 24 variables:
+#' \itemize{
+#'   \item {`infantid`}{Unique ID for each infant in the dataset. First number is site, second is facility ID (1--5) for that site. The last number denotes whether the infant is a singleton or twin.}
+#'   \item {`motherid`}{Unique ID for each mother in the dataset. Same convention as `infantid`, but without sibling status.}
+#'   \item {`site`}{Site ID, derived from first number of `infantid` (1 = Tanzania; 2 = Malawi; 3 = India-Karnataka; 4 = India-Odisha).}
+#'   \item {`facility`}{Facility ID, derived from third number of `infantid` (1--5).}
+#'   \item {`birthdate`}{Date of birth for a given infant.}
+#'   \item {`visitweek`}{Chronological age in weeks when study visit occurred (0--26).}
+#'   \item {`visitattend`}{Was this visit attended (1 = Attended; 2 = Missed).}
+#'   \item {`visitdate`}{Date of visit.}
+#'   \item {`visittime`}{Time of visit.}
+#'   \item {`withdrawalrsn`}{Reason for withdrawal, if withdrawn (1 = Baby died; 2 = Mother moved away; 3 = Lost contact with mother; 4 = Mother withdrew consent; 5 = Mother died and new caregiver withdrew consent; 6 = Other; NA = No withdrawal).}
+#'   \item {`deliverymode2`}{Mode of delivery for baby (1 = Vaginal delivery; 2 = Caesarean delivery).}
+#'   \item {`birthcount`}{Number of babies born in delivery (1 = Singleton; 2 = Twins). Note: not all babies from twin births were enrolled in the study.}
+#'   \item {`sibling`}{Siblings enrolled in the study (1--2)}
+#'   \item {`sex`}{Sex of the infant (1 = Male; 2 = Female).}
+#'   \item {`gestage`}{Best obstetric estimate of gestational age (132--311). Note: missing or implausible (<24 weeks) values excluded from analysis}
+#'   \item {`preterm`}{Term status based on `gestage` (0 = Term (≥37 weeks `gestage`); 1 = Preterm (<37 weeks `gestage`).}
+#'   \item {`sizega`}{Size for gestational age (1 = Small for GA (SGA); 2 = Appropriate for GA (AGA); 3 = Large for GA (LGA)).}
+#'   \item {`LBWtype4`}{Low birthweight type (1 = Preterm + SGA; 2 = Preterm + AGA; 3 = Preterm + LGA; 4 = Term + SGA).}
+#'   \item {`pma`}{Post-menstrual age in days (133--545)}
+#'   \item {`age_days`}{Chronological age in days derived from `gestage` and `pma` (0--245).}
+#'   \item {`meaninfwgt`}{Mean weight in g (1233.33--9905).}
+#'   \item {`meaninflen`}{Mean length in cm (35.03--72.93).}
+#'   \item {`meanhead`}{Mean head circumference in cm (23.20--45.73).}
+#'   \item {`meanmuac`}{Mean mid-upper arm circumference (5.97--17.03).}
+#' }
+#' @name life6mo
+#' @references
+#' Vesel L, Kisenge R, Koujalagi M, Kusagur V, Manji K, Mvalo Tisungane, Nayak
+#' R, Phiri M, Saidi F, Semrau K, Sudfeld C. **Low Birthweight Infant Feeding
+#' Practices and Growth Patterns in the First Six Months of Life in
+#' Resource-Limited Settings** *Curr. Dev. Nutr.* 2022, **6(1 Suppl.):611.**
+#' \doi{10.1093/cdn/nzac060.069}
+#' @examples
+#' head(gigs::life6mo)
+#' @docType data
+#' @keywords data
+NULL
