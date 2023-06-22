@@ -4,7 +4,7 @@ get_time <- function(ymd_hms) {
                lubridate::minute(ymd_hms2),
                stringr::str_pad(lubridate::second(ymd_hms2), width = 2, pad = "0", side = "right"),
                sep = ":")
-  lubridate::hms(hms, quiet = TRUE)
+  lubridate::hms(hms, quiet = TRUE) |> as.character()
 }
 
 life6mo <- readxl::read_xls(file.path("data-raw", "tables", "life6mo", "LIFE6mo_growth dataset.xls")) |>

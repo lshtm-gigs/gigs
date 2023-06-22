@@ -14,8 +14,8 @@ A data frame with 10,026 rows and 24 variables:
 \item {\code{birthdate}}{Date of birth for a given infant.}
 \item {\code{visitweek}}{Chronological age in weeks when study visit occurred (0--26).}
 \item {\code{visitattend}}{Was this visit attended (1 = Attended; 2 = Missed).}
-\item {\code{visitdate}}{Date of visit.}
-\item {\code{visittime}}{Time of visit.}
+\item {\code{visitdate}}{Date of visit as double.}
+\item {\code{visittime}}{Time of visit as character.}
 \item {\code{withdrawalrsn}}{Reason for withdrawal, if withdrawn (1 = Baby died; 2 = Mother moved away; 3 = Lost contact with mother; 4 = Mother withdrew consent; 5 = Mother died and new caregiver withdrew consent; 6 = Other; NA = No withdrawal).}
 \item {\code{deliverymode2}}{Mode of delivery for baby (1 = Vaginal delivery; 2 = Caesarean delivery).}
 \item {\code{birthcount}}{Number of babies born in delivery (1 = Singleton; 2 = Twins). Note: not all babies from twin births were enrolled in the study.}

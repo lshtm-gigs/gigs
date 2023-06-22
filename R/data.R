@@ -196,8 +196,8 @@ NULL
 #'   \item {`birthdate`}{Date of birth for a given infant.}
 #'   \item {`visitweek`}{Chronological age in weeks when study visit occurred (0--26).}
 #'   \item {`visitattend`}{Was this visit attended (1 = Attended; 2 = Missed).}
-#'   \item {`visitdate`}{Date of visit.}
-#'   \item {`visittime`}{Time of visit.}
+#'   \item {`visitdate`}{Date of visit as double.}
+#'   \item {`visittime`}{Time of visit as character.}
 #'   \item {`withdrawalrsn`}{Reason for withdrawal, if withdrawn (1 = Baby died; 2 = Mother moved away; 3 = Lost contact with mother; 4 = Mother withdrew consent; 5 = Mother died and new caregiver withdrew consent; 6 = Other; NA = No withdrawal).}
 #'   \item {`deliverymode2`}{Mode of delivery for baby (1 = Vaginal delivery; 2 = Caesarean delivery).}
 #'   \item {`birthcount`}{Number of babies born in delivery (1 = Singleton; 2 = Twins). Note: not all babies from twin births were enrolled in the study.}
