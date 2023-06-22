@@ -58,9 +58,9 @@ devtools::install_github("lshtm-gigs/gigs")
 * `ig_png` - INTERGROWTH-21<sup>st</sup> standards for post-natal growth in preterm infants
   <details><summary>Component standards</summary>
 
-  + `wfa` - Weight (kg) for post-mentstrual age (weeks)
-  + `lfa` - Length (cm) for post-mentstrual age (weeks)
-  + `hcfa` - Head circumference (cm) for post-mentstrual age (weeks)
+  + `wfa` - Weight (kg) for post-menstrual age (weeks)
+  + `lfa` - Length (cm) for post-menstrual age (weeks)
+  + `hcfa` - Head circumference (cm) for post-menstrual age (weeks)
   </details>
 * `who_gs` - WHO Child Growth Standards for term infants
   <details><summary>Component standards</summary>
