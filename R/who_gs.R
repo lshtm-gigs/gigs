@@ -8,7 +8,7 @@
 #' measurement(s) in cm) or `height_cm` (standing height measurement(s) in cm).
 #' @param sex Sex(es), either `"M"` (male) or `"F"`  (female).
 #' @param acronym Valid acronym for WHO Growth Standards datasets: one of
-#' `"wfa"` (weight-for-age), `"bfa"` (bmi-for-age), `"lhfa"`
+#' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
 #' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
@@ -236,7 +236,7 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #' @param x X value(s) for growth standard.
 #' @param sex Sex(es), either `"M"` (male) or `"F"`  (female).
 #' @param acronym Valid acronym for WHO Growth Standards datasets: one of
-#' `"wfa"` (weight-for-age), `"bfa"` (bmi-for-age), `"lhfa"`
+#' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
 #' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
@@ -469,7 +469,7 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' available x values for given acronym.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Valid acronym for WHO Growth Standards datasets: one of
-#' `"wfa"` (weight-for-age), `"bfa"` (bmi-for-age), `"lhfa"`
+#' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
 #' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or

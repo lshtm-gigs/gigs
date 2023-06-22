@@ -13,7 +13,7 @@ available x values for given acronym.}
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
-\code{"wfa"} (weight-for-age), \code{"bfa"} (bmi-for-age), \code{"lhfa"}
+\code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
