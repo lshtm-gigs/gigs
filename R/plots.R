@@ -136,42 +136,42 @@ geom_growthstandard <- function(mapping = NULL, data = NULL,
 }
 
 # Test geom for WHO GS
-indiv_who <- gigs::life6mo |>
-  dplyr::filter(visitweek != 0,
-                sex == "M",
-                gestage > 37 * 7,
-                stringr::str_detect(infantid, pattern = "101")) |>
-  dplyr::mutate(meaninfwgt = meaninfwgt / 1000,
-                gest_age = gestage)
-
-ggplot2::ggplot(indiv_who, ggplot2::aes(x = age_days, y = meaninfwgt, group = infantid)) +
-  geom_growthstandard(ggplot2::aes(growthstandard = "who_gs-wfa-male-zscores",
-                                   palette = "Blues"),
-                      na.rm = TRUE) +
-  ggplot2::geom_line(na.rm = TRUE) +
-  ggplot2::geom_point(na.rm = TRUE) +
-  ggplot2::theme_bw()
-
-# Test geom for IG NBS
-indiv_ig_nbs <- gigs::life6mo |>
-  dplyr::filter(visitweek == 0,
-                sex == "M",
-                gestage > 24 * 7,
-                stringr::str_detect(infantid, pattern = "101")) |>
-  dplyr::mutate(meaninfwgt = meaninfwgt / 1000,
-                gest_age = gestage)
-
-ggplot2::ggplot(indiv_ig_nbs, ggplot2::aes(x = gestage, y = meaninfwgt, group = infantid), na.rm = TRUE) +
-  geom_growthstandard(ggplot2::aes(x = gestage, y = meaninfwgt, growthstandard = "ig_nbs-wfga-male-percentiles",
-                                   palette = "Blues")) +
-  ggplot2::geom_point() +
-  ggplot2::theme_bw()
-
-plot(gigs::ig_png$hcfa$male$zscores |>
-       new_gigsgrowthstandard(standard = "ig_nbs",
-                              acronym = "wlrfga",
-                              sex = "male",
-                              zc = "zscores",
-                              xvar = "pma_weeks",
-                              yvar = "headcirc_cm"),
-     palette = "Oranges")
+# indiv_who <- gigs::life6mo |>
+#   dplyr::filter(visitweek != 0,
+#                 sex == "M",
+#                 gestage > 37 * 7,
+#                 stringr::str_detect(infantid, pattern = "101")) |>
+#   dplyr::mutate(meaninfwgt = meaninfwgt / 1000,
+#                 gest_age = gestage)
+#
+# ggplot2::ggplot(indiv_who, ggplot2::aes(x = age_days, y = meaninfwgt, group = infantid)) +
+#   geom_growthstandard(ggplot2::aes(growthstandard = "who_gs-wfa-male-zscores",
+#                                    palette = "Blues"),
+#                       na.rm = TRUE) +
+#   ggplot2::geom_line(na.rm = TRUE) +
+#   ggplot2::geom_point(na.rm = TRUE) +
+#   ggplot2::theme_bw()
+#
+# # Test geom for IG NBS
+# indiv_ig_nbs <- gigs::life6mo |>
+#   dplyr::filter(visitweek == 0,
+#                 sex == "M",
+#                 gestage > 24 * 7,
+#                 stringr::str_detect(infantid, pattern = "101")) |>
+#   dplyr::mutate(meaninfwgt = meaninfwgt / 1000,
+#                 gest_age = gestage)
+#
+# ggplot2::ggplot(indiv_ig_nbs, ggplot2::aes(x = gestage, y = meaninfwgt, group = infantid), na.rm = TRUE) +
+#   geom_growthstandard(ggplot2::aes(x = gestage, y = meaninfwgt, growthstandard = "ig_nbs-wfga-male-percentiles",
+#                                    palette = "Blues")) +
+#   ggplot2::geom_point() +
+#   ggplot2::theme_bw()
+#
+# plot(gigs::ig_png$hcfa$male$zscores |>
+#        new_gigsgrowthstandard(standard = "ig_nbs",
+#                               acronym = "wlrfga",
+#                               sex = "male",
+#                               zc = "zscores",
+#                               xvar = "pma_weeks",
+#                               yvar = "headcirc_cm"),
+#      palette = "Oranges")
