@@ -263,6 +263,7 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
 #' and body mass index-for-age: methods and development.** *Technical report,
 #' WHO, Geneva*, 2006.
+#'
 #' World Health Organisation. **WHO child growth standards: head
 #' circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 #' and subscapular skinfold-for-age: methods and development.** *Technical
