@@ -54,7 +54,7 @@ ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 \arguments{
 \item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
 for weight/length/head circumference-for-gestational age, or from \code{266} to
 \code{294} for body composition equations.}
 

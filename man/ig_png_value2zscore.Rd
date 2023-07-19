@@ -31,13 +31,13 @@ ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
 \arguments{
 \item{y}{Value of the anthropometric measure.}
 
-\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between 27 and
-64 weeks.}
+\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between \code{27} and
+\code{64} weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
-post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 
 \item{weight_kg}{Weight measurement(s) in kg.}

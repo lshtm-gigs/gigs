@@ -13,7 +13,7 @@ and \code{64}.}
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
-post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 }
 \value{
@@ -25,10 +25,10 @@ Estimates median and standard deviation for different measures of postnatal
 growth in preterm infants.
 }
 \note{
-Weight for age and length for age values are logarithmic, so require
-slightly different treatment to use in z-score conversions. In contrast, head
-circumference for gestational age returns the median and standard deviation
-with no logarithm applied.
+The weight-for-age and length-for-age standards are logarithmic, so
+require slightly different treatment to use in z-score conversions. In
+contrast, head circumference for gestational age returns the median and
+standard deviation with no logarithm applied.
 }
 \references{
 Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.

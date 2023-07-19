@@ -13,12 +13,14 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-`gigs` is designed to make working with outputs from either the INTERGROWTH-21<sup>st</sup> project and World Health
-Organisation Child Growth Standards as easy as possible. It also provides functions for easy and reproducible
-classification of newborn and infant growth.
+`gigs` is designed to make working with outputs from either the
+INTERGROWTH-21<sup>st</sup> project and World Health Organisation Child Growth
+Standards as easy as possible. It also provides functions for easy and
+reproducible classification of newborn and infant growth.
 
-Which functions you want to use depend on whether you're **classifying observations**, or **converting between values
-and z-scores/percentiles**. Let's start by loading the package.
+Which functions you want to use depend on whether you're **converting between
+values and z-scores/percentiles**, or **classifying observations**. Let's start
+by loading the package.
 
 ```{r setup}
 library(gigs)
@@ -27,36 +29,39 @@ library(gigs)
 ## Converting between z-scores/percentiles and values
 
 ### From values to z-scores/percentiles
-Much of the time, you'll want to know where a measurement for a given case lies relative to 'expected' values for that
-case. This is where the `value2zscore` and `value2percentile` functions come in:
+Much of the time, you'll want to know where a measurement for a given
+observation lies relative to 'expected' values for that observation. This is
+where the `value2zscore` and `value2percentile` functions are useful:
 
 #### Example 1a: Converting newborn weights
 ```{r example_1a}
 df_newborn_weights <- data.frame(
-        weight_kg = c(0.91, 3.33, 3.03, 3.35, 3.47, 1.90),
+        weight_kg = c(0.91, 3.33, 2.75, 3.35, 3.47, 1.90),
         gest_age = c(183, 280, 293, 259, 277, 231),
         sex = c(rep("M", 3), rep("F", 3))
 )
-df_newborn_weights$weight_p <- round(ig_nbs_value2percentile(y = df_newborn_weights$weight_kg,
-                                                             gest_age = df_newborn_weights$gest_age,
-                                                             sex = df_newborn_weights$sex,
-                                                             acronym = "wfga"),
-                                     digits = 2)
+df_newborn_weights$weight_p <- ig_nbs_value2percentile(y = df_newborn_weights$weight_kg,
+                                                       gest_age = df_newborn_weights$gest_age,
+                                                       sex = df_newborn_weights$sex,
+                                                       acronym = "wfga") |>
+        round(digits = 2)
 
-df_newborn_weights$weight_z <- round(ig_nbs_value2zscore(y = df_newborn_weights$weight_kg,
-                                                         gest_age = df_newborn_weights$gest_age,
-                                                         sex = df_newborn_weights$sex,
-                                                         acronym = "wfga"),
-                                     digits = 2)
+df_newborn_weights$weight_z <- ig_nbs_value2zscore(y = df_newborn_weights$weight_kg,
+                                                   gest_age = df_newborn_weights$gest_age,
+                                                   sex = df_newborn_weights$sex,
+                                                   acronym = "wfga") |>
+        round(digits = 2)
 head(df_newborn_weights)
 ```
 
-Given that the outputs of these functions are vectors, gain functions integrate easily with `dplyr` verbs.
+Given that the outputs of these functions are vectors, gain functions integrate
+easily with `dplyr` verbs. We only avoid using them here to reduce the package
+dependencies for `gigs`.
 
 ### From z-scores/percentiles to values
-
-Alternatively, you may wish to calculate reference values for median head circumference in female newborns for
-gestational ages across a range of gestational ages. You can do this with the relevant `percentile2value` function:
+Alternatively, you may wish to calculate reference values for median head
+circumference in female newborns across a range of gestational ages. You can do
+this with the relevant `percentile2value` function:
 ```{r conversion_hcfga}
 ig_nbs_hcfga_percentile2value(p = 0.5,
                               gest_age = 266:272,
@@ -64,16 +69,26 @@ ig_nbs_hcfga_percentile2value(p = 0.5,
         round(digits = 1)
 ```
 
-## Classifying z-scores/percentiles and values
-
-Sometimes it is more valuable to classify observed z-scores/percentiles than to work with the raw values, for example
-when evaluating size for gestational age in newborns. The classification functions offered by this package allow the
-user to easily classify growth status:
+## Classifying observations
+Sometimes it is more valuable to classify observed z-scores/percentiles than to
+work with the raw values, for example when evaluating size for gestational age
+in newborns. The classification functions offered by this package allow the user
+to easily classify growth status:
 
 ### Classifying size for gestational age
+The `classify_sga()` function offers size-for-GA classifications based on
+cut-offs from the research literature. Typically, the 10<sup>th</sup> and
+90<sup>th</sup> centiles are used as the size-for-GA cut-offs, but some
+publications also specify severely small-for-GA newborns as those below the
+third weight-for-GA centile. Whether you do this depends on the `coarse`
+parameter in `classify_sga()`:
 ```{r example_2}
 df_newborn_weights$classification <- classify_sga(weight_kg = df_newborn_weights$weight_kg,
                                                   gest_age = df_newborn_weights$gest_age,
                                                   sex = df_newborn_weights$sex)
+df_newborn_weights$classification2 <- classify_sga(weight_kg = df_newborn_weights$weight_kg,
+                                                   gest_age = df_newborn_weights$gest_age,
+                                                   sex = df_newborn_weights$sex,
+                                                   coarse = FALSE)
 head(df_newborn_weights)
 ```

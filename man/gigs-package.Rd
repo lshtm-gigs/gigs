@@ -14,7 +14,7 @@ age, stunting, wasting, and weight-for-age.
 \examples{
 \dontrun{
 help(package = "gigs")
-browseURL("https://www.github.com/simpar1471/gigs")
+browseURL("https://www.github.com/lshtm-gigs/gigs")
 }
 }
 \keyword{internal}
