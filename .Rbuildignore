@@ -15,5 +15,3 @@
 ^doc$
 ^Meta$
 ^cran-comments\.md$
-^R/plots\.R$
-^R/gigsgrowthstandard\.R$
