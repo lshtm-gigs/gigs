@@ -145,7 +145,9 @@ geom_growthstandard <- function(mapping = NULL, data = NULL,
 #                 gest_age = gestage)
 #
 # ggplot2::ggplot(indiv_who, ggplot2::aes(x = age_days, y = meaninfwgt, group = infantid)) +
-#   geom_growthstandard(ggplot2::aes(growthstandard = "who_gs-wfa-male-zscores",
+#   geom_growthstandard(ggplot2::aes(x = age_days,
+#                                    y = meaninfwgt,
+#                                    growthstandard = "who_gs-wfa-male-zscores",
 #                                    palette = "Blues"),
 #                       na.rm = TRUE) +
 #   ggplot2::geom_line(na.rm = TRUE) +

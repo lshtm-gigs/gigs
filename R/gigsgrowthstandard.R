@@ -149,9 +149,9 @@ autoplot.gigsgrowthstandard <- function(object, ...) {
 
   plot +
     ggplot2::geom_line(data = dplyr::filter(obj_long, .data[[namesto]] == median_str),
-                         mapping = ggplot2::aes(x = .data[[xvar]],
-                                                y = sm(.data[[yvar]])),
-                         colour = "black", linewidth = 1) +
+                       mapping = ggplot2::aes(x = .data[[xvar]],
+                                              y = sm(.data[[yvar]])),
+                       colour = "black", linewidth = 1) +
     ggplot2::labs(x = gigsgrowthstandard_xvars[[xvar]],
                   y = gigsgrowthstandard_yvars[[yvar]]) +
     ggplot2::scale_fill_manual(
@@ -172,67 +172,23 @@ autoplot.gigsgrowthstandard <- function(object, ...) {
 #                          zc = "zscores",
 #                          xvar = "gest_age",
 #                          yvar = "weight_kg")
+# plot(zscores)
 #
-# zscores2 <- gigs::who_gs$wfa$male$zscores |>
+# centiles <- gigs::who_gs$lhfa$female$percentiles |>
 #   new_gigsgrowthstandard(standard = "who_gs",
 #                          acronym = "wfa",
-#                          sex = "male",
-#                          zc = "zscores",
-#                          xvar = "age_days",
-#                          yvar = "weight_kg")
-#
-# zscores3 <- gigs::ig_png$hcfa$female$zscores |>
-#   new_gigsgrowthstandard(standard = "ig_png",
-#                          acronym = "hcfa",
-#                          sex = "female",
-#                          zc = "zscores",
-#                          xvar = "pma_weeks",
-#                          yvar = "headcirc_cm")
-#
-# centiles <- gigs::ig_nbs$wfga$female$percentiles |>
-#   dplyr::filter(gest_age > 231) |>
-#   new_gigsgrowthstandard(standard = "ig_nbs",
-#                          acronym = "wfga",
 #                          sex = "female",
 #                          zc = "centiles",
-#                          xvar = "gest_age",
-#                          yvar = "weight_kg")
-#
-# centiles2 <- gigs::who_gs$hcfa$male$percentiles |>
-#   dplyr::rename(P001 = "P01", P01 = "P1", P03 = "P3", P05 = "P5") |>
-#   new_gigsgrowthstandard(standard = "who_gs",
-#                          acronym = "hcfa",
-#                          sex = "male",
-#                          zc = "centiles",
 #                          xvar = "age_days",
-#                          yvar = "headcirc_cm")
+#                          yvar = "lenht_cm")
 #
-# centiles3 <- gigs::ig_png$wfa$male$percentiles |>
+# centiles2 <- gigs::ig_png$hcfa$male$percentiles |>
 #   new_gigsgrowthstandard(standard = "ig_png",
-#                          acronym = "wfa",
+#                          acronym = "hcfa",
 #                          sex = "male",
 #                          zc = "centiles",
 #                          xvar = "pma_weeks",
-#                          yvar = "weight_kg")
-#
-# plot(zscores2, palette = "OrRd")
-# plot(zscores3, palette = "Greys")
+#                          yvar = "headcirc_cm")
+# plot(zscores, palette = "OrRd")
 # plot(centiles, palette = "Blues")
 # plot(centiles2, palette = "Greens")
-# plot(centiles3, palette = "Oranges")
-#
-#
-# # And for plotting individual data on top?
-# indiv <- gigs::life6mo |>
-#   dplyr::filter(visitweek != 0,
-#                 sex == "M",
-#                 gestage > 37 * 7,
-#                 stringr::str_detect(infantid, pattern = "101")) |>
-#   dplyr::mutate(meaninfwgt = meaninfwgt / 1000,
-#                 gest_age = gestage)
-#
-# s <- zscores2 |>
-#    dplyr::filter(age_days < (max(indiv$age_days, na.rm = T) + 5)) |>
-#   ggplot2::autoplot(palette = "Reds") +
-#   ggplot2::geom_line(data = indiv, ggplot2::aes(x = age_days, y = meaninfwgt, group = infantid)) +
-#   ggplot2::geom_point(data = indiv, ggplot2::aes(x = age_days, y = meaninfwgt, group = infantid))
