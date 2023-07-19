@@ -1,7 +1,7 @@
 #' Convert z-scores/percentiles to INTERGROWTH-21st newborn size values
 #'
 #' @param p,z Percentile(s)/z-score(s) to convert to a value/values.
-#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300`
+#' @param gest_age Gestational age(s) in days. Must be between `168` and `300`
 #' for weight/length/head circumference-for-gestational age, or from `266` to
 #' `294` for body composition equations.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
@@ -230,7 +230,7 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' z-score/percentiles
 #'
 #' @param y Value(s) to convert to z-scores/percentiles
-#' @param gest_age Gestational age(s) in weeks. Must be between `168` and `300`
+#' @param gest_age Gestational age(s) in days. Must be between `168` and `300`
 #' for weight/length/head circumference-for-gestational age, or from `266` to
 #' `294` for body composition standards (`"fmfga"`, `"bfpfga"`, or `"ffmfga"`).
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).

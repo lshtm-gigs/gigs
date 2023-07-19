@@ -3,9 +3,9 @@
 \docType{data}
 \name{ig_png}
 \alias{ig_png}
-\title{INTERGROWTH-21st Post-natal Growth Standards tables}
+\title{INTERGROWTH-21st Postnatal Growth Standards tables}
 \source{
-\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21st Post-natal Growth of Preterm Infants}
+\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21st Postnatal Growth of Preterm Infants}
 }
 \description{
 A set of nested lists containing tables with reference values at different

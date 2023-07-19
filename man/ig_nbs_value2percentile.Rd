@@ -55,7 +55,7 @@ ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 \arguments{
 \item{y}{Value(s) to convert to z-scores/percentiles}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
 for weight/length/head circumference-for-gestational age, or from \code{266} to
 \code{294} for body composition standards (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}).}
 

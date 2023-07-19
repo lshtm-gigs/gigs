@@ -37,7 +37,7 @@ and \code{64}.}
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
-post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 }
 \value{

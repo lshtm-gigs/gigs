@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' help(package = "gigs")
-#' browseURL("https://www.github.com/simpar1471/gigs")
+#' browseURL("https://www.github.com/lshtm-gigs/gigs")
 #' }
 #' @keywords internal
 NULL
@@ -85,7 +85,7 @@ NULL
 #' @keywords data
 NULL
 
-#' INTERGROWTH-21st Post-natal Growth Standards tables
+#' INTERGROWTH-21st Postnatal Growth Standards tables
 #'
 #' @name ig_png
 #' @docType data
@@ -101,7 +101,7 @@ NULL
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
 #'
 #' @source
-#' [INTERGROWTH-21st Post-natal Growth of Preterm
+#' [INTERGROWTH-21st Postnatal Growth of Preterm
 #' Infants](https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1)
 #'
 #' @examples
