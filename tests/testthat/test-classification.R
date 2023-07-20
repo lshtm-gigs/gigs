@@ -99,11 +99,11 @@ test_that("Weight-for-age classification works", {
       # 154, MALE  ,   28  ,   Y  , >2 ZSCORE, OVER_W
       # 496, NA    ,   42  ,   N  , ~0 ZSCORE, NA
       with(data.frame(wght_kg =     c(7.2, 6.1, 2.1, 9.1, 24 , 9.4, 10.8),
-                      pma_days =    c(501, 323, 435, 201, 707, 154, 496),
+                      days_old =    c(501, 323, 435, 201, 707, 154, 496),
                       ga_at_birth = c(27,  37,  36,  40,  41,  28,  42) * 7,
                       psex = c(rep(c("F", "M"), 3), NA_character_)),
            classify_wfa(weight_kg = wght_kg,
-                        age_days = pma_days,
+                        age_days = days_old,
                         ga_at_birth = ga_at_birth,
                         sex = psex)),
     expected = factor(

@@ -7,14 +7,14 @@
 \title{gigs: Assess Growth in Infants and Newborns}
 \description{
 Convert between anthropometric measures and z-scores/percentiles using WHO
-and INTERGROWTH-21st growth standards. This includes functions for
+and INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} growth standards. This includes functions for
 classification of newborn and infant growth, including size-for-gestational
 age, stunting, wasting, and weight-for-age.
 }
 \examples{
 \dontrun{
 help(package = "gigs")
-browseURL("https://www.github.com/simpar1471/gigs")
+browseURL("https://www.github.com/lshtm-gigs/gigs")
 }
 }
 \keyword{internal}

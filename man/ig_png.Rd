@@ -3,14 +3,14 @@
 \docType{data}
 \name{ig_png}
 \alias{ig_png}
-\title{INTERGROWTH-21st Post-natal Growth Standards tables}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth Standards tables}
 \source{
-\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21st Post-natal Growth of Preterm Infants}
+\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth of Preterm Infants}
 }
 \description{
 A set of nested lists containing tables with reference values at different
 z-scores/percentiles for valid postmenstrual ages. The list is ordered by
-acronym first, then by sex and finally z-score/percentile.
+acronym first, then by sex, and finally by z-score/percentile.
 }
 \examples{
 names(gigs::ig_png)

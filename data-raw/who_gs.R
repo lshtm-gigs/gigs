@@ -22,6 +22,9 @@ read_who_data <- function(indicator, expand_var, acronym, sex, tbl_type, tbls_va
   }
   tbl <- readxl::read_xlsx(local_file) |>
     as.data.frame()
+  if (all(c("P01", "P03", "P05") %in% colnames(tbl))) {
+    tbl <- dplyr::rename(tbl, P001 = P01, P01 = P1, P03 = P3, P05 = P5)
+  }
   colnames(tbl)[1] <- switch(colnames(tbl)[1],
                              "Day" = "age_days",
                              "Age" = "age_days",
@@ -84,7 +87,6 @@ who_gs <- who_gs |>
     return(.x)
   })
 usethis::use_data(who_gs, overwrite = TRUE)
-
 
 write_dta_lmsfiles <- function(who_gs_lms) {
   dta_dir <- file.path("data-raw", "tables", "who_gs", "stata")

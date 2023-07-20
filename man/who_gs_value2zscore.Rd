@@ -21,7 +21,7 @@
 \alias{who_gs_acfa_value2percentile}
 \alias{who_gs_ssfa_value2percentile}
 \alias{who_gs_tsfa_value2percentile}
-\title{Convert anthropometric measures to WHO Growth Standards z-scores}
+\title{Convert values to z-score/percentiles in the WHO Child Growth Standards}
 \usage{
 who_gs_value2zscore(y, x, sex, acronym)
 
@@ -66,12 +66,17 @@ who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 \arguments{
 \item{y}{Y value(s) for growth standard.}
 
-\item{x}{X value(s) for growth standard.}
+\item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
+value to a z-score/percentile. Must be within bounds of available \code{x} values
+for given acronym. The standard-specific versions of each function specify a
+specific type of \code{x}, either \code{age_days} (age since birth in days),
+\code{length_cm} (recumbent length measurement(s) in cm) or \code{height_cm}
+(standing height measurement(s) in cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
 
 \item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
-\code{"wfa"} (weight-for-age), \code{"bfa"} (bmi-for-age), \code{"lhfa"}
+\code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
@@ -79,15 +84,9 @@ who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
-\item{age_days}{Age since birth in days.}
-
 \item{bmi}{Body mass index measurement(s).}
 
 \item{lenht_cm}{Length/height measurement(s) in cm.}
-
-\item{length_cm}{Recumbent length measurement(s) in cm.}
-
-\item{height_cm}{Standing height measurement(s) in cm.}
 
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 
@@ -97,8 +96,12 @@ who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 
 \item{triceps_sf_mm}{Triceps skinfold measurement(s) in mm.}
 }
+\value{
+Z-scores/percentiles for each combination of measurement, x
+variable, sex, and acronym provided to the function.
+}
 \description{
-Convert anthropometric measures to WHO Growth Standards z-scores
+Convert values to z-score/percentiles in the WHO Child Growth Standards
 }
 \examples{
 # Convert values to percentiles
@@ -141,6 +144,7 @@ World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height
 and body mass index-for-age: methods and development.} \emph{Technical report,
 WHO, Geneva}, 2006.
+
 World Health Organisation. \strong{WHO child growth standards: head
 circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 and subscapular skinfold-for-age: methods and development.} \emph{Technical

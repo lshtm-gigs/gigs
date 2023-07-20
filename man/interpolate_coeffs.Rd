@@ -15,6 +15,10 @@ between two values in that coefficient table}
 
 \item{sex}{A character denoting male (\code{"M"}) or female (\code{"F"})}
 }
+\value{
+Data frame containing LMS/MSNT values which have been sourced from
+interpolated between existing LMS/MSNT values.
+}
 \description{
 Linearly interpolate between LMS or MSNT coefficients
 }

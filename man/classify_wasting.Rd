@@ -20,10 +20,10 @@ recorded as recumbent length or standing height.}
 Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
 }
 \description{
-Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth
-Standards depending on the gestational age at birth for the infant. Severe
-wasting is <-3SD relative to growth standards, whereas moderate  wasting is
--2SD from the median.
+Classify wasting (low weight-for-length/height) using WHO Growth Standards,
+with the weight-for-length or weight-for-height depending on the age of the
+child. Severe wasting is <-3SD relative to the median expected weight,
+whereas moderate wasting is -2SD from the median.
 }
 \note{
 Implausible z-score bounds are sourced from the referenced WHO report,

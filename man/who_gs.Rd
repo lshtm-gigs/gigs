@@ -3,7 +3,7 @@
 \docType{data}
 \name{who_gs}
 \alias{who_gs}
-\title{WHO Growth Standards tables}
+\title{WHO Child Growth Standards tables}
 \source{
 \href{https://www.who.int/tools/child-growth-standards/standards}{WHO Child Growth Standards}
 }
@@ -11,7 +11,7 @@
 A set of nested lists containing tables with reference values at different
 z-scores/percentiles for valid x values (usually age in days, also
 length or height in cm for weight-for-length (\code{wfl}) and weight-for-height
-(\code{wfh}) standards, respectively. The list is ordered by acronym first, then
+(\code{wfh}) standards, respectively). The list is ordered by acronym first, then
 by sex and finally z-score/percentile.
 }
 \examples{

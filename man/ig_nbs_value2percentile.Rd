@@ -17,18 +17,18 @@
 \alias{ig_nbs_fmfga_value2zscore}
 \alias{ig_nbs_bfpfga_value2zscore}
 \alias{ig_nbs_ffmfga_value2zscore}
-\title{Convert anthropometric values to INTERGROWTH-21st newborn size
+\title{Convert anthropometric values to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
 z-score/percentiles}
 \usage{
 ig_nbs_value2percentile(y, gest_age, sex, acronym)
 
-ig_nbs_wfga_value2percentile(weight_kg, sex, gest_age)
+ig_nbs_wfga_value2percentile(weight_kg, gest_age, sex)
 
-ig_nbs_lfga_value2percentile(length_cm, sex, gest_age)
+ig_nbs_lfga_value2percentile(length_cm, gest_age, sex)
 
-ig_nbs_hcfga_value2percentile(headcirc_cm, sex, gest_age)
+ig_nbs_hcfga_value2percentile(headcirc_cm, gest_age, sex)
 
-ig_nbs_wlrfga_value2percentile(wei_len_ratio, sex, gest_age)
+ig_nbs_wlrfga_value2percentile(wei_len_ratio, gest_age, sex)
 
 ig_nbs_fmfga_value2percentile(fat_mass_g, gest_age, sex)
 
@@ -44,7 +44,7 @@ ig_nbs_lfga_value2zscore(length_cm, gest_age, sex)
 
 ig_nbs_hcfga_value2zscore(headcirc_cm, gest_age, sex)
 
-ig_nbs_wlrfga_value2zscore(wei_len_ratio, sex, gest_age)
+ig_nbs_wlrfga_value2zscore(wei_len_ratio, gest_age, sex)
 
 ig_nbs_fmfga_value2zscore(fat_mass_g, gest_age, sex)
 
@@ -55,7 +55,7 @@ ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 \arguments{
 \item{y}{Value(s) to convert to z-scores/percentiles}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
 for weight/length/head circumference-for-gestational age, or from \code{266} to
 \code{294} for body composition standards (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}).}
 
@@ -80,10 +80,11 @@ or \code{"ffmfga"}.}
 \item{fatfree_mass_g}{Fat-free mass(es) in g}
 }
 \value{
-Vector of z-scores/percentiles.
+Z-scores/percentiles for each combination of measurement,
+gestational age, sex, and acronym provided to the function.
 }
 \description{
-Convert anthropometric values to INTERGROWTH-21st newborn size
+Convert anthropometric values to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
 z-score/percentiles
 }
 \examples{
@@ -123,6 +124,10 @@ Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 by gestational age and sex: the Newborn Cross-Sectional Study of the
 INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
+
+Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
+2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
 
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric

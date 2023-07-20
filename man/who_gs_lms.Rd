@@ -2,7 +2,7 @@
 % Please edit documentation in R/who_gs.R
 \name{who_gs_lms}
 \alias{who_gs_lms}
-\title{Get LMS values for WHO Growth Standards models}
+\title{Retrieve LMS values for WHO Child Growth Standards}
 \usage{
 who_gs_lms(x, sex, acronym)
 }
@@ -13,7 +13,7 @@ available x values for given acronym.}
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
-\code{"wfa"} (weight-for-age), \code{"bfa"} (bmi-for-age), \code{"lhfa"}
+\code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
@@ -25,7 +25,7 @@ standard(s) specified by the \code{acronym} parameter, for the supplied \code{x}
 \code{sex} values.
 }
 \description{
-Get LMS values for WHO Growth Standards models
+Retrieve LMS values for WHO Child Growth Standards
 }
 \references{
 World Health Organisation. \strong{WHO child growth standards:

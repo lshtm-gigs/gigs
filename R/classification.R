@@ -1,21 +1,21 @@
-#' Classify size for gestational age using INTERGROWTH-21st Newborn Size
-#' Standards (including very preterm)
+#' Classify size for gestational age using INTERGROWTH-21<sup>st</sup>
+#' Newborn Size Standards (including very preterm)
 #'
 #' Size for gestational age categories are split by centile: small-for-GA (SGA;
 #' 10<sup>th</sup> centile), appropriate-for-GA (AGA; 10<sup>th</sup> to
 #' 90<sup>th</sup> centile) and large-for-GA (LGA, >90<sup>th</sup> centile).
 #' This function also supports classification of severe SGA (<3<sup>rd</sup>
-#' centile).
+#' centile) using the `coarse` parameter.
 #'
-#' @param weight_kg Anthropometric measurement(s) to assess.
+#' @param weight_kg Weight value(s) in kg.
 #' @param gest_age Gestational age(s) at birth in days. Must be between `168`
 #' and `300`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param coarse If `FALSE`, specify which SGA values are below the third
 #' percentile. Default = `TRUE`.
 #' @returns Factor with gestational age classification(s). If `coarse = TRUE`,
-#' levels are `c("SGA", "AGA",  "LGA")`.
-#' If `coarse = FALSE`, levels are `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
+#' levels are `c("SGA", "AGA",  "LGA")`. If `coarse = FALSE`, levels are `
+#' c("SGA(<3)", "SGA", "AGA",  "LGA")`.
 #'
 #' @examples
 #' # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
@@ -58,28 +58,28 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
   factor(out, levels = levels)
 }
 
-#' Classify stunting according to WHO or INTERGROWTH-21st length/height-for-age
-#' standards
+#' Classify stunting according to WHO or INTERGROWTH-21<sup>st</sup>
+#' length/height-for-age standards
 #'
-#' Classify stunting (low height-for-age) using INTERGROWTH-21st or WHO Growth
-#' Standards depending on the gestational age at birth of the infant. Severe
-#' stunting is below <-3 SD relative to growth standards, whereas moderate
-#' stunting is -2SD from the median.
+#' Classify stunting (low length/height-for-age) using
+#' INTERGROWTH-21<sup>st</sup> or WHO Growth Standards depending on the
+#' gestational age at birth of the child. Severe stunting is below <-3 SD
+#' relative to growth standards, whereas moderate stunting is -2SD from the
+#' median.
 #'
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param age_days Age(s) in days for each child.
+#' @param age_days Age(s) in days for each child. Should be between `0` to
+#' `1856` days.
 #' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was
-#' recorded as recumbent length or #' standing height. `NA` values will be set
-#' to `"L"` for children <731 days old and to `"H"` for children 731 days old or
+#' recorded as recumbent length or standing height. `NA` values will be set to
+#' `"L"` for children <731 days old and to `"H"` for children 731 days old or
 #' more. Default = `NA`.
-#'
 #' @returns Factor of stunting classification(s) with levels `c("implausible",
 #' "stunting_severe", "stunting", "normal")`.
-#'
 #' @note WHO guidelines stipulate that recumbent length should not be measured
-#' after 730 days. Therefore recumbent #' length values for children over 730
+#' after 730 days. Therefore recumbent length values for children over 730
 #' days old have 0.7 cm taken away, and height values for children less than 731
 #' days old have 0.7 cm added on. Implausible z-scores are sourced from the
 #' referenced WHO report, and classification criteria from the DHS manual.
@@ -91,13 +91,12 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
 #' pp. 64-65.
 #'
 #' **'Percentage of children stunted, wasted, and underweight, and mean z-scores
-#' for stunting, wasting and #' underweight'** *in* *Guide to DHS Statistics
-#' DHS-7* Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+#' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
+#' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
-#' # The first observation uses the INTERGROWTH-21st post-natal growth
-#' # standards; the next two use the WHO Growth Standards.
+#' # The first observation uses the INTERGROWTH-21st postnatal growth standards;
+#' # the next two use the WHO Growth Standards.
 #' classify_stunting(
 #'   lenht_cm = c(52.2, 75.4, 63.1),
 #'   age_days = c(357, 375, 250),
@@ -149,10 +148,10 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 
 #' Classify wasting according to WHO weight-for-length/height standards
 #'
-#' Classify wasting (low weight-for-height) using INTERGROWTH or WHO Growth
-#' Standards depending on the gestational age at birth for the infant. Severe
-#' wasting is <-3SD relative to growth standards, whereas moderate  wasting is
-#' -2SD from the median.
+#' Classify wasting (low weight-for-length/height) using WHO Growth Standards,
+#' with the weight-for-length or weight-for-height depending on the age of the
+#' child. Severe wasting is <-3SD relative to the median expected weight,
+#' whereas moderate wasting is -2SD from the median.
 #'
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param lenht_cm Length/height measurement(s) in cm.
@@ -161,8 +160,6 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 #' recorded as recumbent length or standing height.
 #' @returns Factor of wasting classification(s) with levels `c("implausible",
 #' "wasting_severe", "wasting", "normal", "overweight")`.
-#'
-#'
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual. Observations with invalid or
 #' missing `lenht_method` values will be returned as `NA`.
@@ -177,7 +174,6 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
 #' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
 #' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
 #' # Where no lenht_method is given, classify_wasting() returns NA.
 #' classify_wasting(
@@ -206,21 +202,22 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
                          "overweight"))
 }
 
-#' Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal
-#' growth standards
+#' Classify weight-for-age according to INTERGROWTH-21<sup>st</sup> postnatal
+#' growth and WHO growth standards
 #'
-#' Classify weight-for-ages using INTERGROWTH-21st data or WHO Growth Standards
-#' depending on the gestational age at birth for the infant. Severely
-#' underweight is less than 3 SD below the median, underweight is less than 2 SD
-#' below the median, and overweight is > 2 SDs above the median.
+#' Classify weight-for-age z-scores using the INTERGROWTH-21<sup>st</sup>
+#' Postnatal Growth standards or WHO Child Growth Standards depending on the
+#' gestational age at birth for the infant. Severely underweight is less than 3
+#' SD below the median, underweight is less than 2 SD below the median, and
+#' overweight is > 2 SDs above the median.
 #'
 #' @param weight_kg Weight measurement(s) in kg.
-#' @param age_days Age(s) at recording of each infant in days.
+#' @param age_days Age(s) at recording of each infant in days. Should be between
+#' `0` and `1856`.
 #' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @returns Factor of weight classification(s) with levels `c("implausible",
 #' "underweight_severe", "underweight", "normal", "overweight")`.
-#'
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual.
 #' @references
@@ -234,7 +231,6 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' for stunting, wasting and underweight'** *in* *Guide to DHS Statistics DHS-7*
 #' Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
-#'
 #' @examples
 #' classify_wfa(
 #'   weight_kg = c(7.2, 4.5, 9.1, 24),

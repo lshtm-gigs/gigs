@@ -11,6 +11,9 @@ round2(x, digits)
 
 \item{digits}{Number of digits to round to}
 }
+\value{
+Values of \code{x} rounded to \code{digits} number of digits.
+}
 \description{
 Round, but round 0.5 up in all cases
 }

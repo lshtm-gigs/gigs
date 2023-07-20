@@ -17,7 +17,8 @@
 \alias{ig_nbs_fmfga_zscore2value}
 \alias{ig_nbs_bfpfga_zscore2value}
 \alias{ig_nbs_ffmfga_zscore2value}
-\title{Convert z-scores/percentiles to INTERGROWTH-21st newborn size values}
+\title{Convert z-scores/percentiles to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
+values}
 \usage{
 ig_nbs_percentile2value(p, gest_age, sex, acronym)
 
@@ -54,7 +55,7 @@ ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 \arguments{
 \item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age(s) in weeks. Must be between \code{168} and \code{300}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
 for weight/length/head circumference-for-gestational age, or from \code{266} to
 \code{294} for body composition equations.}
 
@@ -65,10 +66,12 @@ be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"
 or \code{"ffmfga"}.}
 }
 \value{
-Vector of anthropometric measures.
+Expected measurements for each combination of z-score/percentile,
+gestational age, sex, and acronym provided to the function.
 }
 \description{
-Convert z-scores/percentiles to INTERGROWTH-21st newborn size values
+Convert z-scores/percentiles to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
+values
 }
 \note{
 Input vectors will be recycled to the length of the longest vector.
@@ -112,6 +115,10 @@ Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 by gestational age and sex: the Newborn Cross-Sectional Study of the
 INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
+
+Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
+2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
 
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric

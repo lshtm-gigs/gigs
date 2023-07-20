@@ -21,8 +21,8 @@ reference:
     contents:
       - ig_nbs_value2percentile
       - ig_nbs_percentile2value
-  - title: INTERGROWTH-21st post-natal growth in preterm infants
-    desc: Conversion functions for the INTERGROWTH-21st post-natal growth standards for preterm infants
+  - title: INTERGROWTH-21st postnatal growth in preterm infants
+    desc: Conversion functions for the INTERGROWTH-21st postnatal growth standards for preterm infants
     contents:
       - ig_png_value2zscore
       - ig_png_zscore2value
@@ -39,3 +39,4 @@ reference:
       - ig_png
       - who_gs
       - who_gs_coeffs
+      - life6mo

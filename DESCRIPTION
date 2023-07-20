@@ -1,8 +1,8 @@
 Type: Package
 Package: gigs
 Title: Assess Growth in Infants and Newborns
-Version: 0.1.0
-Date: 2023-06-13
+Version: 0.1.1
+Date: 2023-07-20
 Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker@lshtm.ac.uk",
