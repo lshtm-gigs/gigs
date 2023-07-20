@@ -8,11 +8,11 @@ coefficients}
 who_gs_lms2sd(l, m, s, n_sd)
 }
 \arguments{
-\item{l}{Lambda value as provided by \link{who_gs_lms}}
+\item{l}{Lambda value as provided by \code{\link[=who_gs_lms]{who_gs_lms()}}}
 
-\item{m}{Mu value as provided by \link{who_gs_lms}}
+\item{m}{Mu value as provided by \code{\link[=who_gs_lms]{who_gs_lms()}}}
 
-\item{s}{Sigma value as provided by \link{who_gs_lms}}
+\item{s}{Sigma value as provided by \code{\link[=who_gs_lms]{who_gs_lms()}}}
 
 \item{n_sd}{Number of SD from the median to be computed}
 }

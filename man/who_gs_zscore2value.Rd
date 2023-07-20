@@ -66,11 +66,12 @@ who_gs_tsfa_percentile2value(p, age_days, sex)
 \arguments{
 \item{z, p}{Z-score(s)/percentile(s) to convert from.}
 
-\item{x, age_days, length_cm, height_cm}{X value at which to convert z-score to
-a value. Must be within bounds of available x values for given acronym. The
-standard-specific versions of each function specify a specific type of \code{x},
-either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
-measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in cm).}
+\item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
+z-score/percentile to a value. Must be within bounds of available \code{x} values
+for given acronym. The standard-specific versions of each function specify a
+specific type of \code{x}, either \code{age_days} (age since birth in days),
+\code{length_cm} (recumbent length measurement(s) in cm) or \code{height_cm}
+(standing height measurement(s) in cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
 
@@ -95,7 +96,7 @@ who_gs_percentile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p)
+z <- qnorm(p) # Z-score equivalent of 25th percentile
 who_gs_zscore2value(z = z, x = 501, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 

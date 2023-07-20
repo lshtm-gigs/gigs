@@ -1,3 +1,9 @@
+# gigs 0.1.1
+
+* Major documentation updates
+* Added `life6mo` dataset
+* Added 'Getting Started' vignette
+
 # gigs 0.1.0
 
 * Created package

@@ -3,23 +3,23 @@
 \docType{data}
 \name{ig_nbs}
 \alias{ig_nbs}
-\title{INTERGROWTH-21st Newborn Standards (including very preterm) tables}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Standards (including very preterm) tables}
 \source{
-\href{https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1}{INTERGROWTH-21st Newborn Size in Very Preterm Infants}\cr
-\href{https://intergrowth21.tghn.org/newborn-size-birth/#ns1}{INTERGROWTH-21st Newborn Size Standards}\cr
-\href{https://www.nature.com/articles/pr201752}{INTERGROWTH-21st Newborn Size Standards - Body Composition}
+\href{https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size in Very Preterm Infants}\cr
+\href{https://intergrowth21.tghn.org/newborn-size-birth/#ns1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards}\cr
+\href{https://www.nature.com/articles/pr201752}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards - Body Composition}
 }
 \description{
 A set of nested lists containing tables with reference values at different
 z-scores/percentiles for valid gestational ages in days. The list is ordered
-by acronym first, then by sex and finally z-score/percentile.
+by acronym first, then by sex and finally by z-score/percentile.
 }
 \note{
 The tables in this package are combined versions of the tables published by
-Villar \emph{et al.} (2014) and Villar \emph{et al.} (2016), so they cover 133 to 300
-days' gestational age. The body composition tables (\code{ffmfga}, \code{bfpfga}, and
-\code{fmfga}) cover less gestational ages than the other newborn standards as the
-published standards only covered 38 to 42 weeks' gestational age.
+Villar \emph{et al.} (2014) and Villar \emph{et al.} (2016), so they cover \code{133} to
+\code{300} days' gestational age. The body composition tables (\code{ffmfga}, \code{bfpfga},
+and \code{fmfga}) cover a smaller gestational age span, ranging from only \code{266} to
+\code{294} days' (38 to 42 weeks') gestational age.
 }
 \examples{
 names(gigs::ig_nbs)

@@ -2,7 +2,8 @@
 % Please edit documentation in R/ig_png.R
 \name{ig_png_equations}
 \alias{ig_png_equations}
-\title{INTERGROWTH-21st equations for postnatal size for age in preterm infants}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} equations for postnatal size for age in preterm
+infants}
 \usage{
 ig_png_equations(pma_weeks, sex, acronym)
 }
@@ -12,8 +13,8 @@ and \code{64}.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
-postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
+for postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 }
 \value{

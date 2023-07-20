@@ -2,8 +2,8 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_zscore2value}
 \alias{ig_vpns_zscore2value}
-\title{Convert z-scores to values in the INTERGROWTH-21st Newborn Size Standards for
-Very Preterm Infants}
+\title{Convert z-scores to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size
+Standards for Very Preterm Infants}
 \usage{
 ig_vpns_zscore2value(z, gest_age, sex, acronym)
 }
@@ -15,16 +15,16 @@ weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-Must be one of \code{"wfga"}, "lfga"\verb{, or }"hcfga"`.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} VPNS
+standard to use. Must be one of \code{"wfga"}, "lfga"\verb{, or }"hcfga"`.}
 }
 \value{
 Expected measurements for each combination of z-score, gestational
 age, sex, and acronym provided to the function.
 }
 \description{
-Convert z-scores to values in the INTERGROWTH-21st Newborn Size Standards for
-Very Preterm Infants
+Convert z-scores to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size
+Standards for Very Preterm Infants
 }
 \references{
 Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.

@@ -1,4 +1,5 @@
-#' Convert z-scores/percentiles to INTERGROWTH-21st newborn size values
+#' Convert z-scores/percentiles to INTERGROWTH-21<sup>st</sup> newborn size
+#' values
 #'
 #' @param p,z Percentile(s)/z-score(s) to convert to a value/values.
 #' @param gest_age Gestational age(s) in days. Must be between `168` and `300`
@@ -17,6 +18,10 @@
 #' by gestational age and sex: the Newborn Cross-Sectional Study of the
 #' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
+#'
+#' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+#' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
+#' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #'
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
@@ -226,7 +231,7 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
   ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "ffmfga")
 }
 
-#' Convert anthropometric values to INTERGROWTH-21st newborn size
+#' Convert anthropometric values to INTERGROWTH-21<sup>st</sup> newborn size
 #' z-score/percentiles
 #'
 #' @param y Value(s) to convert to z-scores/percentiles
@@ -252,6 +257,10 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' by gestational age and sex: the Newborn Cross-Sectional Study of the
 #' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
+#'
+#' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+#' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
+#' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #'
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
@@ -351,25 +360,25 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wfga_value2percentile <- function(weight_kg, sex, gest_age) {
+ig_nbs_wfga_value2percentile <- function(weight_kg, gest_age, sex) {
   ig_nbs_value2percentile(y = weight_kg, gest_age = gest_age, sex = sex, acronym = "wfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_lfga_value2percentile <- function(length_cm, sex, gest_age) {
+ig_nbs_lfga_value2percentile <- function(length_cm, gest_age, sex) {
   ig_nbs_value2percentile(y = length_cm, gest_age = gest_age, sex = sex, acronym = "lfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_hcfga_value2percentile <- function(headcirc_cm, sex, gest_age) {
+ig_nbs_hcfga_value2percentile <- function(headcirc_cm, gest_age, sex) {
   ig_nbs_value2percentile(y = headcirc_cm, gest_age = gest_age, sex = sex, acronym = "hcfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wlrfga_value2percentile <- function(wei_len_ratio, sex, gest_age) {
+ig_nbs_wlrfga_value2percentile <- function(wei_len_ratio, gest_age, sex) {
   ig_nbs_value2percentile(y = wei_len_ratio, gest_age = gest_age, sex = sex, acronym = "wlrfga")
 }
 
@@ -418,7 +427,7 @@ ig_nbs_hcfga_value2zscore <- function(headcirc_cm, gest_age, sex) {
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, sex, gest_age) {
+ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, gest_age, sex) {
   ig_nbs_value2zscore(y = wei_len_ratio, gest_age = gest_age, sex = sex, acronym = "wlrfga")
 }
 
@@ -440,21 +449,24 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
   ig_nbs_value2zscore(y = fatfree_mass_g, gest_age = gest_age, sex = sex, acronym = "ffmfga")
 }
 
-#' Retrieve GAMLSS coefficients for INTERGROWTH-21st Newborn Size standards
+#' Retrieve GAMLSS coefficients for INTERGROWTH-21<sup>st</sup> Newborn Size
+#' standards
 #'
 #' @description Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
-#' z-scores/percentiles in the INTERGROWTH-21st Newborn Size standards
+#' z-scores/percentiles in the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' standards
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param gest_age Gestational age(s) in days. Must be between `231` and `300`.
-#' @param acronym Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st
-#' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
+#' @param acronym Acronym(s) denoting which GAMLSS-based
+#' INTERGROWTH-21<sup>st</sup> standard to use. Must be one of `"wfga"`,
+#' `"lfga"`, or `"hcfga"`.
 #' @returns A dataframe containing mu, sigma, nu, and tau values for each
 #' provided combination of sex, gestational age, and acronym.
 #' @note These coefficients are not included in the referenced publication, and
 #' were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
 #' these coefficients to construct the growth curves they described, and in
-#' testing we found these coefficients output the INTERGROWTH-21st standards
-#' exactly.
+#' testing we found these coefficients output the INTERGROWTH-21<sup>st</sup>
+#' standards exactly once rounded to the correct number of decimal places.
 #' @references
 #' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 #' **International standards for newborn weight, length, and head circumference
@@ -517,7 +529,8 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
   out[, -which(names(out) == "sort")]
 }
 
-#' INTERGROWTH-21st Weight-to-length ratio medians/standard deviations
+#' INTERGROWTH-21<sup>st</sup> weight-to-length ratio medians/standard
+#' deviations
 #'
 #' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 +
 #' 6/7`.
@@ -527,12 +540,12 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 #' @note These equations are not included in the referenced publication. Rather,
 #' they were taken from weight-to-length ratio calculating Excel files available
 #' on the
-#' [INTERGROWTH-21st website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
+#' [INTERGROWTH-21<sup>st</sup> website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
-#' ratios: the newborn body composition study of the INTERGROWTH-21st
-#' project.** *Pediatric Research* 2017, **82:305-316.**
+#' ratios: the newborn body composition study of the INTERGROWTH-21st project.**
+#' *Pediatric Research* 2017, **82:305-316.**
 #' \doi{10.1038/pr.2017.52}
 #' @rdname ig_nbs_wlr
 #' @keywords internal
@@ -562,17 +575,19 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
   data.frame(gest_age = ga_weeks * 7, sex, mu = mu, sigma = sigma)
 }
 
-#' INTERGROWTH-21st Body Composition Equation Parameters
+#' INTERGROWTH-21<sup>st</sup> body composition equation parameters
 #'
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21st NBS body composition
-#' standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS body
+#' composition standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or
+#' `"ffmfga"`.
 #' @returns Body composition equation parameters for each provided
 #' age/sex/acronym combination.
-#' @note These parameters are not included in the referenced publication, and
-#' were instead derived from centile tables S1, S2 and S3 using linear models.
-#' As a result, z-scores/percentiles derived from these parameters differ
-#' slightly from the Villar *et al.*'s published values.
+#' @note These parameters are not included in the referenced publication, but
+#' the associated supplementary materials. We used centile tables S1, S2 and S3
+#' and linear models to derive the equations. As a result, z-scores/percentiles
+#' derived from these parameters differ slightly from the Villar *et al.*'s
+#' published values.
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
