@@ -87,7 +87,7 @@ NULL
 #' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
-#' z-scores/percentiles for valid postmenstrual ages. The list is ordered by
+#' z-scores/percentiles for valid post-menstrual ages. The list is ordered by
 #' acronym first, then by sex, and finally by z-score/percentile.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
