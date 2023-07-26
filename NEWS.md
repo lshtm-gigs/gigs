@@ -1,3 +1,15 @@
+# gigs 0.1.2
+
+* `classify_sga()` now uses `<` and `>`, not `<=` and `>=` to determine LGA/SGA
+  cut-offs. This aligns this function with the 'correct' methodology for 
+  calculating size for GA.
+
+# gigs 0.1.1
+
+* Major documentation updates
+* Added `life6mo` dataset
+* Added 'Getting Started' vignette
+
 # gigs 0.1.0
 
 * Created package

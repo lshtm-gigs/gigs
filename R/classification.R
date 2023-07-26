@@ -47,9 +47,9 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
                                               sex = sex,
                                               gest_age = gest_age)
   out <- rep(NA_character_, length(percentiles))
-  out[which(percentiles <= 0.1)] <- "SGA"
-  out[which(percentiles > 0.1 & percentiles < 0.9)] <- "AGA"
-  out[which(percentiles >= 0.9)] <- "LGA"
+  out[which(percentiles < 0.1)] <- "SGA"
+  out[which(percentiles >= 0.1 & percentiles <= 0.9)] <- "AGA"
+  out[which(percentiles > 0.9)] <- "LGA"
   if (!coarse) {
     out[which(percentiles < 0.03)] <- "SGA(<3)"
   }
