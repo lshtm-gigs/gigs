@@ -2,44 +2,46 @@
 % Please edit documentation in R/classification.R
 \name{classify_stunting}
 \alias{classify_stunting}
-\title{Classify stunting according to WHO or INTERGROWTH-21st length/height-for-age
-standards}
+\title{Classify stunting according to WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+length/height-for-age standards}
 \usage{
 classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 }
 \arguments{
 \item{lenht_cm}{Length/height measurement(s) in cm.}
 
-\item{age_days}{Age(s) in days for each child.}
+\item{age_days}{Age(s) in days for each child. Should be between \code{0} to
+\code{1856} days.}
 
 \item{ga_at_birth}{Gestational age(s) at birth in days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was
-recorded as recumbent length or #' standing height. \code{NA} values will be set
-to \code{"L"} for children <731 days old and to \code{"H"} for children 731 days old or
+recorded as recumbent length or standing height. \code{NA} values will be set to
+\code{"L"} for children <731 days old and to \code{"H"} for children 731 days old or
 more. Default = \code{NA}.}
 }
 \value{
 Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
 }
 \description{
-Classify stunting (low height-for-age) using INTERGROWTH-21st or WHO Growth
-Standards depending on the gestational age at birth of the infant. Severe
-stunting is below <-3 SD relative to growth standards, whereas moderate
-stunting is -2SD from the median.
+Classify stunting (low length/height-for-age) using
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} or WHO Growth Standards depending on the
+gestational age at birth of the child. Severe stunting is below <-3 SD
+relative to growth standards, whereas moderate stunting is -2SD from the
+median.
 }
 \note{
 WHO guidelines stipulate that recumbent length should not be measured
-after 730 days. Therefore recumbent #' length values for children over 730
+after 730 days. Therefore recumbent length values for children over 730
 days old have 0.7 cm taken away, and height values for children less than 731
 days old have 0.7 cm added on. Implausible z-scores are sourced from the
 referenced WHO report, and classification criteria from the DHS manual.
 }
 \examples{
-# The first observation uses the INTERGROWTH-21st post-natal growth
-# standards; the next two use the WHO Growth Standards.
+# The first observation uses the INTERGROWTH-21st postnatal growth standards;
+# the next two use the WHO Growth Standards.
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),
@@ -56,7 +58,7 @@ Health Organization and the United Nations Children's Fund UNICEF, (2019).
 pp. 64-65.
 
 \strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores
-for stunting, wasting and #' underweight'} \emph{in} \emph{Guide to DHS Statistics
-DHS-7} Rockville, Maryland, USA: ICF (2020). pp. 431-435.
+for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
+Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
 }

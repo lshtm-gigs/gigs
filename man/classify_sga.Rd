@@ -2,13 +2,13 @@
 % Please edit documentation in R/classification.R
 \name{classify_sga}
 \alias{classify_sga}
-\title{Classify size for gestational age using INTERGROWTH-21st Newborn Size
-Standards (including very preterm)}
+\title{Classify size for gestational age using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size Standards (including very preterm)}
 \usage{
 classify_sga(weight_kg, gest_age, sex, coarse = TRUE)
 }
 \arguments{
-\item{weight_kg}{Anthropometric measurement(s) to assess.}
+\item{weight_kg}{Weight value(s) in kg.}
 
 \item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168}
 and \code{300}.}
@@ -27,7 +27,7 @@ Size for gestational age categories are split by centile: small-for-GA (SGA;
 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} to
 90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile) and large-for-GA (LGA, >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile).
 This function also supports classification of severe SGA (<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}}
-centile).
+centile) using the \code{coarse} parameter.
 }
 \examples{
 # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10

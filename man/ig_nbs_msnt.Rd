@@ -2,7 +2,8 @@
 % Please edit documentation in R/ig_nbs.R
 \name{ig_nbs_msnt}
 \alias{ig_nbs_msnt}
-\title{Retrieve GAMLSS coefficients for INTERGROWTH-21st Newborn Size standards}
+\title{Retrieve GAMLSS coefficients for INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size
+standards}
 \usage{
 ig_nbs_msnt(gest_age, sex, acronym)
 }
@@ -11,8 +12,9 @@ ig_nbs_msnt(gest_age, sex, acronym)
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting which GAMLSS-based INTERGROWTH-21st
-standard to use. Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
+\item{acronym}{Acronym(s) denoting which GAMLSS-based
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard to use. Must be one of \code{"wfga"},
+\code{"lfga"}, or \code{"hcfga"}.}
 }
 \value{
 A dataframe containing mu, sigma, nu, and tau values for each
@@ -20,14 +22,15 @@ provided combination of sex, gestational age, and acronym.
 }
 \description{
 Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
-z-scores/percentiles in the INTERGROWTH-21st Newborn Size standards
+z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size
+standards
 }
 \note{
 These coefficients are not included in the referenced publication, and
 were instead supplied directly by Eric Ohuma. However, Villar \emph{et al.} used
 these coefficients to construct the growth curves they described, and in
-testing we found these coefficients output the INTERGROWTH-21st standards
-exactly.
+testing we found these coefficients output the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+standards exactly once rounded to the correct number of decimal places.
 }
 \examples{
 # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks' gestational age

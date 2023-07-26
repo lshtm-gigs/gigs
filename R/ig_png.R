@@ -1,12 +1,12 @@
-#' Convert z-score/percentiles to values in the INTERGROWTH-21st Postnatal growth standards
-#' for preterm infants measurements
+#' Convert z-score/percentiles to values in the INTERGROWTH-21<sup>st</sup>
+#' postnatal growth standards for preterm infants
 #'
 #' @param z,p Z-score(s)/percentile(s) to convert to a value.
 #' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27`
 #' and `64`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for
-#' post-natal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
+#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
+#' for postnatal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
 #' `"hcfa"`.
 #' @returns Expected measurements for each combination of z-score/centile,
 #' post-menstrual age, sex, and acronym provided to the function.
@@ -114,15 +114,15 @@ ig_png_hcfa_percentile2value <- function(p, pma_weeks, sex) {
   ig_png_percentile2value(p = p, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
 
-#' Convert postnatal growth measures to INTERGROWTH-21st postnatal growth
-#' standards
+#' Convert postnatal growth measures to INTERGROWTH-21<sup>st</sup> postnatal
+#' growth standards
 #'
 #' @param y Value of the anthropometric measure.
-#' @param pma_weeks Post-menstrual age in exact weeks. Must be between 27 and
-#' 64 weeks.
+#' @param pma_weeks Post-menstrual age in exact weeks. Must be between `27` and
+#' `64` weeks.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for
-#' post-natal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
+#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
+#' for postnatal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
 #' `"hcfa"`.
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param length_cm Recumbent length measurement(s) in cm.
@@ -231,7 +231,8 @@ ig_png_hcfa_value2percentile <- function(headcirc_cm, pma_weeks, sex) {
   ig_png_value2percentile(y = headcirc_cm, pma_weeks = pma_weeks, sex = sex, acronym = "hcfa")
 }
 
-#' INTERGROWTH-21st equations for postnatal size for age in preterm infants
+#' INTERGROWTH-21<sup>st</sup> equations for postnatal size for age in preterm
+#' infants
 #'
 #' Estimates median and standard deviation for different measures of postnatal
 #' growth in preterm infants.
@@ -239,15 +240,15 @@ ig_png_hcfa_value2percentile <- function(headcirc_cm, pma_weeks, sex) {
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27`
 #' and `64`.
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21st standard for
-#' post-natal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
+#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
+#' for postnatal growth in preterm infants. Should be one of `"wfa"`, `"lhfa"`,
 #' `"hcfa"`.
 #' @returns A table with median(s) and standard deviation(s) for each
 #' `age`/`sex`/`acronym` combination provided to the function.
-#' @note Weight for age and length for age values are logarithmic, so require
-#' slightly different treatment to use in z-score conversions. In contrast, head
-#' circumference for gestational age returns the median and standard deviation
-#' with no logarithm applied.
+#' @note The weight-for-age and length-for-age standards are logarithmic, so
+#' require slightly different treatment to use in z-score conversions. In
+#' contrast, head circumference for gestational age returns the median and
+#' standard deviation with no logarithm applied.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal

@@ -44,25 +44,29 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  - `wfga` - Weight (kg) for gestational age (days)
-  - `lfga` - Length (cm) for gestational age (days)
-  - `hcfga` - Head circumference (cm) for gestational age (days)
-  - `wlrfga` - Weight-to-length ratio for gestational age (days)
-  - `fmfga` - Fat mass (g) for gestational age (days)
-  - `bfpfga` - Body fat percentage for gestational age (days)
-  - `ffmfga` - Fat-free mass (g) for gestational age (days)
+  | Acronym  | Description                                | Unit  | `gest_age()` range |
+  |----------|--------------------------------------------|-------|--------------------|
+  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days    |
+  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days    |
+  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days    |
+  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days    |
+  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days    |
+  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days    |
+  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days    |
 
   </details>
-- `ig_png` - INTERGROWTH-21<sup>st</sup> standards for post-natal growth
+- `ig_png` - INTERGROWTH-21<sup>st</sup> standards for postnatal growth
   in preterm infants
   <details>
   <summary>
   Component standards
   </summary>
 
-  - `wfa` - Weight (kg) for post-menstrual age (weeks)
-  - `lfa` - Length (cm) for post-menstrual age (weeks)
-  - `hcfa` - Head circumference (cm) for post-menstrual age (weeks)
+  | Acronym | Description                | Unit | `pma_weeks()` range    |
+  |---------|----------------------------|------|------------------------|
+  | `wfa`   | weight-for-age             | kg   | 27 to \<64 exact weeks |
+  | `lfa`   | length-for-age             | cm   | 27 to \<64 exact weeks |
+  | `hcfa`  | head circumference-for-age | cm   | 27 to \<64 exact weeks |
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
@@ -71,15 +75,17 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  - `wfa` Weight (kg) for age (days)
-  - `bfa` Body mass index for age (days)
-  - `lhfa` Length/height (cm) for age (days)
-  - `wfl` Weight (kg) for recumbent length (cm)
-  - `wfh` Weight (kg) for standing height (cm)
-  - `hcfa` Head circumference (mm) for age (days)
-  - `acfa` Arm circumference (mm) for age (days)
-  - `ssfa` Subscapular skinfold (mm) for age (days)
-  - `tsfa` Triceps skinfold (mm) for age (days)
+  | Acronym | Description                  | Unit             | `xvar()` range  |
+  |---------|------------------------------|------------------|-----------------|
+  | `wfa`   | weight-for-age               | kg               | 0 to 1856 days  |
+  | `bfa`   | BMI-for-age                  | kg/m<sup>2</sup> | 0 to 1856 days  |
+  | `lhfa`  | length/height-for-age        | cm               | 0 to 1856 days  |
+  | `hcfa`  | head circumference-for-age   | cm               | 0 to 1856 days  |
+  | `wfl`   | weight-for-height            | kg               | 45 to 110 cm    |
+  | `wfh`   | weight-for-length            | kg               | 65 to 120 cm    |
+  | `acfa`  | arm circumference-for-age    | cm               | 91 to 1856 days |
+  | `ssfa`  | subscapular skinfold-for-age | mm               | 91 to 1856 days |
+  | `tsfa`  | triceps skinfold-for-age     | mm               | 91 to 1856 days |
 
   </details>
 
@@ -93,7 +99,7 @@ from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
 
 Similarly, the conversion of length-for-age values to centiles in term
 and preterm infants could be performed with the WHO Child Growth
-Standards and INTERGROWTH-21<sup>st</sup> Post-natal Growth of Preterm
+Standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
 Infants Standards, respectively:
 
 - Term infants: `who_gs`/`_lhfa`/`_value2zscore()`
@@ -101,8 +107,21 @@ Infants Standards, respectively:
 
 If the component standard is not included in the function call, it
 should be passed to the `acronym` parameter of the general function
-call. A vector of `acronym` values can be used if you want to convert
-with different standards for each input.
+call. For example, these two function calls would behave in the same
+way:
+
+``` r
+ig_nbs_value2zscore(y = 25.7, gest_age = 182, sex = "F", acronym = "hcfga") |>
+        round(digits = 2)
+#> [1] 1.18
+
+ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_age = 182, sex = "F") |>
+        round(digits = 2)
+#> [1] 1.18
+```
+
+A vector of `acronym` values can be used if you want to convert with
+different standards for each input.
 
 ### Values to z-scores/percentiles
 

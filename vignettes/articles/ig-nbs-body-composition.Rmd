@@ -263,7 +263,7 @@ bland_altman_plot <- function(actual, predicted, title, xlab, ylab, legend.pos =
 }
 ```
 
-```{r fmfga_plots, echo = F}
+```{r fmfga_plots, echo = F, warning = FALSE, message = FALSE}
 fmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "fmfga")
 fmfga_male_p1 <- comparison_plot(obs_tbl = fmfga_male , pred_tbl = fmfga_pred_male,
                                  xlab = "Gestational age (days)", ylab = "Fat mass (g)",
@@ -287,7 +287,7 @@ fmfga_female_p3 <- bland_altman_plot(actual = fmfga_female, predicted = fmfga_pr
                                      title = "")
 ```
 
-```{r bfpfga_plots, echo = F}
+```{r bfpfga_plots, echo = F, warning = FALSE, message = FALSE}
 bfpfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "bfpfga")
 bfpfga_male_p1 <- comparison_plot(obs_tbl = bfpfga_male , pred_tbl = bfpfga_pred_male,
                       xlab = "", ylab = "% Body fat",
@@ -311,7 +311,7 @@ bfpfga_female_p3 <- bland_altman_plot(actual = bfpfga_female, predicted = bfpfga
                                      title = "")
 ```
 
-```{r ffmfga_plots, echo = F}
+```{r ffmfga_plots, echo = F, warning = FALSE, message = FALSE}
 ffmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "ffmfga")
 ffmfga_male_p1 <- comparison_plot(obs_tbl = ffmfga_male , pred_tbl = ffmfga_pred_male,
                       xlab = "Gestational age (days)", ylab = "Fat-free mass (g)",
@@ -337,33 +337,27 @@ ffmfga_female_p3 <- bland_altman_plot(actual = ffmfga_female, predicted = ffmfga
 
 ## Observed vs fitted values
 
-```{r comparison_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values."}
-suppressWarnings( expr = {
-  overall_legend <- cowplot::get_legend(fmfga_male_p1)
-  fmfga_male_p1_noleg <- fmfga_male_p1 + ggplot2::theme(legend.position = "none")
-  plotlist <- list(fmfga_male_p1_noleg, fmfga_female_p1, bfpfga_male_p1, bfpfga_female_p1, ffmfga_male_p1, ffmfga_female_p1)
-  cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
-  cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
-})
+```{r comparison_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values.", warning = FALSE, message = FALSE}
+overall_legend <- cowplot::get_legend(fmfga_male_p1)
+fmfga_male_p1_noleg <- fmfga_male_p1 + ggplot2::theme(legend.position = "none")
+plotlist <- list(fmfga_male_p1_noleg, fmfga_female_p1, bfpfga_male_p1, bfpfga_female_p1, ffmfga_male_p1, ffmfga_female_p1)
+cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
+cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
 ```
 
 ## Difference between observed and fitted values
-```{r altman_esque_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Difference between observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age, coloured by centiles (3rd, 10th, 50th, 90th and 97th)."}
-suppressWarnings(expr = {
-  overall_legend <- cowplot::get_legend(fmfga_male_p2)
-  fmfga_male_p2_noleg <- fmfga_male_p2 + ggplot2::theme(legend.position = "none")
-  plotlist <- list(fmfga_male_p2_noleg, fmfga_female_p2, bfpfga_male_p2, bfpfga_female_p2, ffmfga_male_p2, ffmfga_female_p2)
-  cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
-  cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
-})
+```{r altman_esque_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Difference between observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age, coloured by centiles (3rd, 10th, 50th, 90th and 97th).", warning = FALSE, message = FALSE}
+overall_legend <- cowplot::get_legend(fmfga_male_p2)
+fmfga_male_p2_noleg <- fmfga_male_p2 + ggplot2::theme(legend.position = "none")
+plotlist <- list(fmfga_male_p2_noleg, fmfga_female_p2, bfpfga_male_p2, bfpfga_female_p2, ffmfga_male_p2, ffmfga_female_p2)
+cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
+cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
 ```
 
 ## Bland-Altman plots for reference and predicted values
-```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements."}
-suppressWarnings( expr = {
-  plotlist <- list(fmfga_male_p3, fmfga_female_p3, bfpfga_male_p3, bfpfga_female_p3, ffmfga_male_p3, ffmfga_female_p3)
-  cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
-})
+```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements.", warning = FALSE, message = FALSE}
+plotlist <- list(fmfga_male_p3, fmfga_female_p3, bfpfga_male_p3, bfpfga_female_p3, ffmfga_male_p3, ffmfga_female_p3)
+cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
 ```
 
 # References
