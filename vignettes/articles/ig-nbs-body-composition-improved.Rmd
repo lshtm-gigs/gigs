@@ -295,7 +295,7 @@ bland_altman_plot <- function(actual, predicted, title, xlab, ylab, legend.pos =
 }
 ```
 
-```{r fmfga_plots, echo = F}
+```{r fmfga_plots, echo = F, warning = FALSE, message = FALSE}
 fmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "fmfga")
 fmfga_male_p1 <- comparison_plot(obs_tbl = fmfga_male , pred_tbl = fmfga_pred_male,
                                  xlab = "Gestational age (days)", ylab = "Fat mass (g)",
@@ -319,7 +319,7 @@ fmfga_female_p3 <- bland_altman_plot(actual = fmfga_female, predicted = fmfga_pr
                                      title = "")
 ```
 
-```{r bfpfga_plots, echo = F}
+```{r bfpfga_plots, echo = F, warning = FALSE, message = FALSE}
 bfpfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "bfpfga")
 bfpfga_male_p1 <- comparison_plot(obs_tbl = bfpfga_male , pred_tbl = bfpfga_pred_male,
                       xlab = "", ylab = "% Body fat",
@@ -343,7 +343,7 @@ bfpfga_female_p3 <- bland_altman_plot(actual = bfpfga_female, predicted = bfpfga
                                      title = "")
 ```
 
-```{r ffmfga_plots, echo = F}
+```{r ffmfga_plots, echo = F, warning = FALSE, message = FALSE}
 ffmfga_pred_male <- repl_centile_tbls(sex = "M", acronym = "ffmfga")
 ffmfga_male_p1 <- comparison_plot(obs_tbl = ffmfga_male , pred_tbl = ffmfga_pred_male,
                       xlab = "Gestational age (days)", ylab = "Fat-free mass (g)",

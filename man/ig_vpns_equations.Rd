@@ -2,8 +2,8 @@
 % Please edit documentation in R/ig_vpns.R
 \name{ig_vpns_equations}
 \alias{ig_vpns_equations}
-\title{Regression equations for the INTERGROWTH-21st Newborn Size Standards for Very
-Preterm Infants}
+\title{Regression equations for the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size
+Standards for Very Preterm Infants}
 \usage{
 ig_vpns_equations(gest_age, sex, acronym)
 }
@@ -13,8 +13,8 @@ days.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} VPNS
+standard to use. Must be one of \code{"wfga"}, \code{"lfga"}, or \code{"hcfga"}.}
 }
 \value{
 A dataframe with mean and standard deviation values for each
@@ -30,8 +30,8 @@ deviations for weight (kg) for gestational age. In contrast, the medians and
 standard deviations for length and head circumference for gestational age
 have no logarithm applied. Though these functions are not given in the
 supplied reference, they were provided directly by Dr Eric Ohuma, and
-replicate the INTERGROWTH-21st standards from the reference at all relevant
-gestational ages.
+replicate the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standards from the reference at all
+relevant gestational ages.
 }
 \references{
 Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.

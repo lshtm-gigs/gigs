@@ -2,7 +2,8 @@
 % Please edit documentation in R/ig_nbs.R
 \name{ig_nbs_wlr}
 \alias{ig_nbs_wlr}
-\title{INTERGROWTH-21st Weight-to-length ratio medians/standard deviations}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-to-length ratio medians/standard
+deviations}
 \usage{
 ig_nbs_wlr(ga_weeks, sex)
 }
@@ -16,19 +17,20 @@ Weight-to-length ratio medians and standard deviations for the given
 \code{sex}/\code{gest_age} combinations.
 }
 \description{
-INTERGROWTH-21st Weight-to-length ratio medians/standard deviations
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-to-length ratio medians/standard
+deviations
 }
 \note{
 These equations are not included in the referenced publication. Rather,
 they were taken from weight-to-length ratio calculating Excel files available
 on the
-\href{https://intergrowth21.tghn.org/newborn-size-birth/#c4}{INTERGROWTH-21st website}.
+\href{https://intergrowth21.tghn.org/newborn-size-birth/#c4}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} website}.
 }
 \references{
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric
-ratios: the newborn body composition study of the INTERGROWTH-21st
-project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
+ratios: the newborn body composition study of the INTERGROWTH-21st project.}
+\emph{Pediatric Research} 2017, \strong{82:305-316.}
 \doi{10.1038/pr.2017.52}
 }
 \keyword{internal}

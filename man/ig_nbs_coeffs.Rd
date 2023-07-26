@@ -3,13 +3,15 @@
 \docType{data}
 \name{ig_nbs_coeffs}
 \alias{ig_nbs_coeffs}
-\title{INTERGROWTH-21st Newborn Size Standards GAMLSS coefficients}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards GAMLSS coefficients}
 \source{
-Provided by Dr Eric Ohuma, produced for the provided reference.
+MSNT values were provided by Dr Eric Ohuma.
 }
 \description{
 A set of nested lists containing mu, sigma, nu and tau values across
-gestational ages for either sex. The list is ordered by acronym then sex.
+gestational ages for either sex, for the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+weight/length/head circumference-for-gestational age standards. The lists are
+ordered by acronym, then sex.
 }
 \examples{
 names(gigs::ig_nbs_coeffs)

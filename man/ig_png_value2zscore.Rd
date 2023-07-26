@@ -9,8 +9,8 @@
 \alias{ig_png_wfa_value2percentile}
 \alias{ig_png_lfa_value2percentile}
 \alias{ig_png_hcfa_value2percentile}
-\title{Convert postnatal growth measures to INTERGROWTH-21st postnatal growth
-standards}
+\title{Convert postnatal growth measures to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
+growth standards}
 \usage{
 ig_png_value2zscore(y, pma_weeks, sex, acronym)
 
@@ -31,13 +31,13 @@ ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
 \arguments{
 \item{y}{Value of the anthropometric measure.}
 
-\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between 27 and
-64 weeks.}
+\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between \code{27} and
+\code{64} weeks.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21st standard for
-post-natal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
+\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
+for postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
 \code{"hcfa"}.}
 
 \item{weight_kg}{Weight measurement(s) in kg.}
@@ -51,8 +51,8 @@ Z-scores/percentiles for each combination of measurement,
 post-menstrual age, sex, and acronym provided to the function.
 }
 \description{
-Convert postnatal growth measures to INTERGROWTH-21st postnatal growth
-standards
+Convert postnatal growth measures to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
+growth standards
 }
 \examples{
 # Convert values to percentiles

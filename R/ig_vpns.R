@@ -1,5 +1,5 @@
-#' Regression equations for the INTERGROWTH-21st Newborn Size Standards for Very
-#' Preterm Infants
+#' Regression equations for the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' Standards for Very Preterm Infants
 #'
 #' Calculates median/standard deviation values for newborn size in very preterm
 #' infants with varying gestational ages and sexes.
@@ -7,8 +7,8 @@
 #' @param gest_age Gestational age in days. Must be between `168` and `230`
 #' days.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-#' Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
+#' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
 #' @returns A dataframe with mean and standard deviation values for each
 #' provided combination of sex, gestational age, and acronym.
 #' @note This function returns the **natural log** of the median and standard
@@ -16,8 +16,8 @@
 #' standard deviations for length and head circumference for gestational age
 #' have no logarithm applied. Though these functions are not given in the
 #' supplied reference, they were provided directly by Dr Eric Ohuma, and
-#' replicate the INTERGROWTH-21st standards from the reference at all relevant
-#' gestational ages.
+#' replicate the INTERGROWTH-21<sup>st</sup> standards from the reference at all
+#' relevant gestational ages.
 #' @references
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
@@ -60,15 +60,15 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
   return(out_df)
 }
 
-#' Convert z-scores to values in the INTERGROWTH-21st Newborn Size Standards for
-#' Very Preterm Infants
+#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' Standards for Very Preterm Infants
 #'
 #' @param z Z-score(s) to convert to a value/values.
 #' @param gest_age Gestational age in days. Must be between `168` and `230`.
 #' weeks.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-#' Must be one of `"wfga"`, "lfga"`, or `"hcfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
+#' standard to use. Must be one of `"wfga"`, "lfga"`, or `"hcfga"`.
 #' @returns Expected measurements for each combination of z-score, gestational
 #' age, sex, and acronym provided to the function.
 #' @references
@@ -100,15 +100,15 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
   )
 }
 
-#' Convert values to z-scores in the INTERGROWTH-21st Newborn Size Standards for
-#' Very Preterm Infants
+#' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' Standards for Very Preterm Infants
 #'
 #' @param y Value(s) to convert to z-scores.
 #' @param gest_age Gestational age in weeks. Must be between `24` and `32 + 6/7`
 #' weeks.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21st VPNS standard to use.
-#' Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
+#' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
 #' @returns Z-scores for each combination of measurement, gestational age, sex,
 #' and acronym provided to the function.
 #' @references
