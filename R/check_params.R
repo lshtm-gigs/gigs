@@ -1,43 +1,49 @@
-check_params <- function(sex, acronym, allowed_acronyms, standard, xvars = NULL, xvar_range = NULL) {
+check_sex_acronym <- function(sex, acronym, allowed_acronyms) {
   acronym[which(!acronym %in% allowed_acronyms)] <- NA_character_
   sex[which(!sex %in% c("M", "F", "U"))] <- NA_character_
-  if (standard == "who_gs") {
-   return(list(sex = sex, acronym = acronym))
-  }
-  bools_standard <- rep_len(standard == "ig_nbs", length(acronym))
-  bools_acronyms <- !acronym %in% names(gigs::ig_nbs)[4:7]
-  uses_coeffs <- bools_standard & bools_acronyms
-  invalid_x <- ifelse(uses_coeffs,
-                      yes = !inrange(xvars, xvar_range),
-                      no = !xvars %in% xvar_range)
-  xvars[invalid_x] <- NA_real_
-  list(age = xvars, sex = sex, acronym = acronym)
+  list(sex = sex, acronym = acronym)
 }
 
 check_who_params <- function(sex, acronym) {
-  check_params(sex = sex,
-               acronym = acronym,
-               allowed_acronyms = names(gigs::who_gs),
-               standard = "who_gs")
+  check_sex_acronym(sex = sex,
+                    acronym = acronym,
+                    allowed_acronyms = names(gigs::who_gs))
 }
 
 check_nbs_params <- function(gest_age, sex, acronym) {
-  check_params(sex = sex,
-               acronym = acronym,
-               allowed_acronyms = names(gigs::ig_nbs),
-               standard = "ig_nbs",
-               xvars = gest_age,
-               xvar_range = gigs::ig_nbs$wfga$male$zscores$gest_age)
+  sex_acro <- check_sex_acronym(sex = sex,
+                                acronym = acronym,
+                                allowed_acronyms = names(gigs::ig_nbs))
+  # The bfpfga, fmfga, and ffmfga standards have a smaller range of gestational
+  # ages than the other INTERGROWTH-21st standards --> this code specify which
+  # range of GAs to compare with 'gest_age'
+  has_lower_xrange <- acronym %in% names(gigs::ig_nbs)[5:7]
+  small_xrange <- gigs::ig_nbs$bfpfga$male$percentiles$gest_age
+  full_xrange <- gigs::ig_nbs$wfga$male$zscores$gest_age
+  valid_x <- ifelse(has_lower_xrange,
+                    yes = inrange(gest_age, small_xrange),
+                    no = inrange(gest_age, full_xrange))
+  gest_age[!valid_x] <- NA_real_
+  list(age = gest_age, sex = sex_acro$sex, acronym = sex_acro$acronym)
 }
 
-check_png_params <- function(pma_weeks, sex, acronym) {
-  check_params(sex = sex,
-               acronym = acronym,
-               allowed_acronyms = names(gigs::ig_png),
-               standard = "ig_png",
-               xvars = pma_weeks,
-               xvar_range = gigs::ig_png$wfa$male$zscores$pma_weeks)
+check_png_params <- function(x, sex, acronym) {
+  sex_acro <- check_sex_acronym(sex = sex,
+                    acronym = acronym,
+                    allowed_acronyms = names(gigs::ig_png))
+  # The wfa, lfa and hcfa standards use post-menstrual age, whereas the wfl
+  # standard uses length in cm --> this code specifies whether to compare x to
+  # PMA or length in cm
+  uses_pma <- acronym %in% names(gigs::ig_png)[1:3]
+  pma_range <- gigs::ig_png$wfa$male$zscores$pma_weeks
+  len_range <- gigs::ig_png$wfl$male$zscores$length_cm
+  valid_x <- ifelse(uses_pma,
+                    yes = x %in% pma_range,
+                    no = inrange(x, len_range))
+  x[!valid_x] <- NA_real_
+  list(x = x, sex = sex_acro$sex, acronym = sex_acro$acronym)
 }
+
 
 #' Check if x is within upper and lower bounds of a vector
 #' @keywords internal

@@ -67,6 +67,7 @@ devtools::install_github("lshtm-gigs/gigs")
   | `wfa`   | weight-for-age             | kg   | 27 to \<64 exact weeks |
   | `lfa`   | length-for-age             | cm   | 27 to \<64 exact weeks |
   | `hcfa`  | head circumference-for-age | cm   | 27 to \<64 exact weeks |
+  | `wfl`   | weight-for-length          | kg   | 35 to 65 cm            |
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
