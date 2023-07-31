@@ -5,14 +5,16 @@
 \alias{ig_png_wfa_zscore2value}
 \alias{ig_png_lfa_zscore2value}
 \alias{ig_png_hcfa_zscore2value}
+\alias{ig_png_wfl_zscore2value}
 \alias{ig_png_percentile2value}
 \alias{ig_png_wfa_percentile2value}
 \alias{ig_png_lfa_percentile2value}
 \alias{ig_png_hcfa_percentile2value}
+\alias{ig_png_wfl_percentile2value}
 \title{Convert z-score/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 postnatal growth standards for preterm infants}
 \usage{
-ig_png_zscore2value(z, pma_weeks, sex, acronym)
+ig_png_zscore2value(z, x, sex, acronym)
 
 ig_png_wfa_zscore2value(z, pma_weeks, sex)
 
@@ -20,29 +22,37 @@ ig_png_lfa_zscore2value(z, pma_weeks, sex)
 
 ig_png_hcfa_zscore2value(z, pma_weeks, sex)
 
-ig_png_percentile2value(p, pma_weeks, sex, acronym)
+ig_png_wfl_zscore2value(z, length_cm, sex)
+
+ig_png_percentile2value(p, x, sex, acronym)
 
 ig_png_wfa_percentile2value(p, pma_weeks, sex)
 
 ig_png_lfa_percentile2value(p, pma_weeks, sex)
 
 ig_png_hcfa_percentile2value(p, pma_weeks, sex)
+
+ig_png_wfl_percentile2value(p, length_cm, sex)
 }
 \arguments{
 \item{z, p}{Z-score(s)/percentile(s) to convert to a value.}
 
-\item{pma_weeks}{Post-menstrual age(s) in exact weeks. Must be between \code{27}
-and \code{64}.}
+\item{x, pma_weeks, length_cm}{The \code{x} value at which to convert a
+z-score/percentile to a value. Must be within bounds of available \code{x} values
+for a given acronym. The standard-specific versions of each function specify a
+specific type of \code{x}, either \code{pma_weeks} (exact post-menstrual age since
+birth in weeks), or \code{length_cm} (recumbent length measurement(s) in cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
-for postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
-\code{"hcfa"}.}
+for postnatal growth in preterm infants. Should be one of \code{"wfa"}
+(weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
+(head circumference-for-age), or \code{"wfl"} (weight-for-length).}
 }
 \value{
-Expected measurements for each combination of z-score/centile,
-post-menstrual age, sex, and acronym provided to the function.
+Expected measurements for each combination of z-score/percentile,
+x variable, sex, and acronym provided to the function.
 }
 \description{
 Convert z-score/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
@@ -51,16 +61,16 @@ postnatal growth standards for preterm infants
 \examples{
 # Convert percentiles to values
 p <- 0.25 # 25th percentile
-ig_png_percentile2value(p = p, pma_weeks = 55, sex = "M", acronym = "wfa") |>
+ig_png_percentile2value(p = p, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values
 z <- qnorm(p)
-ig_png_zscore2value(z = z, pma_weeks = 55, sex = "M", acronym = "wfa") |>
+ig_png_zscore2value(z = z, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_png_zscore2value(z = z, pma_weeks = 55, sex = "M", acronym = "lfa") |>
+ig_png_zscore2value(z = z, x = 55, sex = "M", acronym = "lfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function

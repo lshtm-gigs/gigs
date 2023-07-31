@@ -5,17 +5,18 @@
 \title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} equations for postnatal size for age in preterm
 infants}
 \usage{
-ig_png_equations(pma_weeks, sex, acronym)
+ig_png_equations(x, sex, acronym)
 }
 \arguments{
-\item{pma_weeks}{Post-menstrual age(s) in exact weeks. Must be between \code{27}
-and \code{64}.}
-
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
-for postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
-\code{"hcfa"}.}
+for postnatal growth in preterm infants. Should be one of \code{"wfa"}
+(weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
+(head circumference-for-age), or \code{"wfl"} (weight-for-length).}
+
+\item{pma_weeks}{Post-menstrual age(s) in exact weeks. Must be between \code{27}
+and \code{64}.}
 }
 \value{
 A table with median(s) and standard deviation(s) for each
@@ -29,7 +30,9 @@ growth in preterm infants.
 The weight-for-age and length-for-age standards are logarithmic, so
 require slightly different treatment to use in z-score conversions. In
 contrast, head circumference for gestational age returns the median and
-standard deviation with no logarithm applied.
+standard deviation with no logarithm applied. The weight-for-length standard
+is not within the provided reference, but was instead supplied directly by
+Dr Eric Ohuma.
 }
 \references{
 Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.

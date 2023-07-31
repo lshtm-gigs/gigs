@@ -78,9 +78,6 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex, gest_age = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym)
     msnt <- cbind(p = max_len_vec_li$p, msnt, n_ = seq(1, nrow(msnt)))
     msnt_no_na <- msnt[which(!is.na(msnt$p) & !is.na(msnt$mu)), ]
-    if (nrow(msnt_no_na) == 0) {
-      return(rep_len(x = NA, length.out = length(max_len_vec_li$p)))
-    }
     msnt_no_na$out <- ifelse(
       test = msnt_no_na$sex == "U",
       yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value,
@@ -310,9 +307,6 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
     msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex, gest_age = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym)
     msnt <- cbind(y = max_len_vec_li$y, msnt, n_ = seq(1, nrow(msnt)))
     msnt_no_na <- msnt[which(!is.na(msnt$y) & !is.na(msnt$mu)), ]
-    if (nrow(msnt_no_na) == 0) {
-      return(rep_len(x = NA, length.out = length(max_len_vec_li$y)))
-    }
     msnt_no_na$out <- ifelse(
       test = msnt_no_na$sex == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile, arg1 = msnt_no_na$y,
