@@ -5,14 +5,16 @@
 \alias{ig_png_wfa_value2zscore}
 \alias{ig_png_lfa_value2zscore}
 \alias{ig_png_hcfa_value2zscore}
+\alias{ig_png_wfl_value2zscore}
 \alias{ig_png_value2percentile}
 \alias{ig_png_wfa_value2percentile}
 \alias{ig_png_lfa_value2percentile}
 \alias{ig_png_hcfa_value2percentile}
+\alias{ig_png_wfl_value2percentile}
 \title{Convert postnatal growth measures to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
 growth standards}
 \usage{
-ig_png_value2zscore(y, pma_weeks, sex, acronym)
+ig_png_value2zscore(y, x, sex, acronym)
 
 ig_png_wfa_value2zscore(weight_kg, pma_weeks, sex)
 
@@ -20,29 +22,39 @@ ig_png_lfa_value2zscore(length_cm, pma_weeks, sex)
 
 ig_png_hcfa_value2zscore(headcirc_cm, pma_weeks, sex)
 
-ig_png_value2percentile(y, pma_weeks, sex, acronym)
+ig_png_wfl_value2zscore(weight_kg, length_cm, sex)
+
+ig_png_value2percentile(y, x, sex, acronym)
 
 ig_png_wfa_value2percentile(weight_kg, pma_weeks, sex)
 
 ig_png_lfa_value2percentile(length_cm, pma_weeks, sex)
 
 ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
+
+ig_png_wfl_value2percentile(weight_kg, length_cm, sex)
 }
 \arguments{
 \item{y}{Value of the anthropometric measure.}
 
-\item{pma_weeks}{Post-menstrual age in exact weeks. Must be between \code{27} and
-\code{64} weeks.}
+\item{x, pma_weeks}{The \code{x} value at which to convert a
+value to a z-score/percentile. Must be within bounds of available \code{x} values
+for given acronym. The standard-specific versions of each function specify a
+specific type of \code{x}, either \code{pma_weeks} (post-menstrual age in exact weeks;
+between \code{27} and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s)
+in cm; between \code{35} and \code{65} cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
-for postnatal growth in preterm infants. Should be one of \code{"wfa"}, \code{"lhfa"},
-\code{"hcfa"}.}
+for postnatal growth in preterm infants. Should be one of \code{"wfa"}
+(weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
+(head circumference-for-age), or \code{"wfl"} (weight-for-length).}
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
-\item{length_cm}{Recumbent length measurement(s) in cm.}
+\item{length_cm}{Recumbent length measurement(s) in cm. Can be either an \code{x}
+or \code{y} variable depending on the standard-specific function used.}
 
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 }
@@ -56,15 +68,15 @@ growth standards
 }
 \examples{
 # Convert values to percentiles
-ig_png_value2percentile(y = 5.94, pma_weeks = 55, sex = "M", acronym = "wfa") |>
+ig_png_value2percentile(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_png_value2zscore(y = 5.94, pma_weeks = 55, sex = "M", acronym = "wfa") |>
+ig_png_value2zscore(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_png_value2zscore(y = 65.1, pma_weeks = 55, sex = "F", acronym = "lfa") |>
+ig_png_value2zscore(y = 65.1, x = 55, sex = "F", acronym = "lfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
