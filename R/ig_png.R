@@ -4,8 +4,8 @@
 #' @param z,p Z-score(s)/percentile(s) to convert to a value.
 #' @param x,pma_weeks,length_cm The `x` value at which to convert a
 #' z-score/percentile to a value. Must be within bounds of available `x` values
-#' for a given acronym. The standard-specific versions of each function specify a
-#' specific type of `x`, either `pma_weeks` (exact post-menstrual age since
+#' for a given acronym. The standard-specific versions of each function specify
+#' a specific type of `x`, either `pma_weeks` (exact post-menstrual age since
 #' birth in weeks), or `length_cm` (recumbent length measurement(s) in cm).
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
@@ -334,11 +334,11 @@ ig_png_equations <- function(x, sex, acronym) {
   wfl_stddev <- function(length_cm, sex) {
     ifelse(
       sex == "M",
-      yes = exp(-1.830098 + 0.0049708 * (length_cm / 10)^3),
+      yes = exp(-1.830098 + 0.0049708 * (length_cm / 10) ^ 3),
       no = ifelse(
         sex == "F",
-        yes = 0.2195888 -0.0046046 * (length_cm / 10) ^ 3 + 0.0033017 *
-        (length_cm / 10) ^ 3 * log(length_cm/10),
+        yes = 0.2195888 - 0.0046046 * (length_cm / 10) ^ 3 + 0.0033017 *
+        (length_cm / 10) ^ 3 * log(length_cm / 10),
         no = NA_real_))
   }
   out_df <- data.frame(x = checked_params$x,
