@@ -16,7 +16,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 ## Overview
 
 Produced as part of the Guidance for International Growth Standards
-project, `gigs` provides a single, simple interface for working with the
+project, gigs provides a single, simple interface for working with the
 WHO Child Growth Standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
 converting between anthropometric measures (e.g. weight or length) to
@@ -44,15 +44,15 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym  | Description                                | Unit  | `gest_age()` range |
-  |----------|--------------------------------------------|-------|--------------------|
-  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days    |
-  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days    |
-  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days    |
-  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days    |
-  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days    |
-  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days    |
-  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days    |
+  | Acronym  | Description                                | Unit  | `gest_age` range |
+  |----------|--------------------------------------------|-------|------------------|
+  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days  |
+  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days  |
+  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days  |
+  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days  |
+  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days  |
+  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days  |
+  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days  |
 
   </details>
 - `ig_png` - INTERGROWTH-21<sup>st</sup> standards for postnatal growth
@@ -62,7 +62,7 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym | Description                | Unit | `pma_weeks()` range    |
+  | Acronym | Description                | Unit | `x` range              |
   |---------|----------------------------|------|------------------------|
   | `wfa`   | weight-for-age             | kg   | 27 to \<64 exact weeks |
   | `lfa`   | length-for-age             | cm   | 27 to \<64 exact weeks |
@@ -76,7 +76,7 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym | Description                  | Unit             | `xvar()` range  |
+  | Acronym | Description                  | Unit             | `x` range       |
   |---------|------------------------------|------------------|-----------------|
   | `wfa`   | weight-for-age               | kg               | 0 to 1856 days  |
   | `bfa`   | BMI-for-age                  | kg/m<sup>2</sup> | 0 to 1856 days  |
@@ -175,10 +175,10 @@ ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
 
 #### Reference curves
 
-We can use `gigs` to generate reference curves for the standards by
+We can use gigs to generate reference curves for the standards by
 getting curves for the expected weight at multiple z-scores across
 multiple gestational ages. We would usually recommend
-[`ggplot2`](https://ggplot2.tidyverse.org/) for such visualisation, but
+[ggplot2](https://ggplot2.tidyverse.org/) for such visualisation, but
 do not use it here to reduce our package’s dependencies.
 
 ``` r

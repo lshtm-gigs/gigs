@@ -39,8 +39,8 @@ ig_png_wfl_percentile2value(p, length_cm, sex)
 
 \item{x, pma_weeks, length_cm}{The \code{x} value at which to convert a
 z-score/percentile to a value. Must be within bounds of available \code{x} values
-for a given acronym. The standard-specific versions of each function specify a
-specific type of \code{x}, either \code{pma_weeks} (exact post-menstrual age since
+for a given acronym. The standard-specific versions of each function specify
+a specific type of \code{x}, either \code{pma_weeks} (exact post-menstrual age since
 birth in weeks), or \code{length_cm} (recumbent length measurement(s) in cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}

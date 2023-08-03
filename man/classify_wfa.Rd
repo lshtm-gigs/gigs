@@ -34,8 +34,8 @@ and classification criteria from the DHS manual.
 \examples{
 classify_wfa(
   weight_kg = c(7.2, 4.5, 9.1, 24),
-  age_days = c(501, 435, 201, 707),
-  ga_at_birth = c(27, 36, 40, 41),
+  age_days = c(401, 185, 101, 607),
+  ga_at_birth = 7 * c(27, 36, 40, 41),
   sex = c("F", "M", "F", "M")
 )
 }

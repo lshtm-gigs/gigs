@@ -3,34 +3,35 @@
 #'
 #' Size for gestational age categories are split by centile: small-for-GA (SGA;
 #' 10<sup>th</sup> centile), appropriate-for-GA (AGA; 10<sup>th</sup> to
-#' 90<sup>th</sup> centile) and large-for-GA (LGA, >90<sup>th</sup> centile).
+#' 90<sup>th</sup> centile) and large-for-GA (LGA; >90<sup>th</sup> centile).
 #' This function also supports classification of severe SGA (<3<sup>rd</sup>
-#' centile) using the `coarse` parameter.
+#' centile) using the `severe` parameter.
 #'
 #' @param weight_kg Weight value(s) in kg.
 #' @param gest_age Gestational age(s) at birth in days. Must be between `168`
 #' and `300`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param coarse If `FALSE`, specify which SGA values are below the third
-#' percentile. Default = `TRUE`.
+#' @param severe If `TRUE`, specify which SGA values are below the third
+#' percentile. Default = `FALSE`.
 #' @returns Factor with gestational age classification(s). If `coarse = TRUE`,
 #' levels are `c("SGA", "AGA",  "LGA")`. If `coarse = FALSE`, levels are `
 #' c("SGA(<3)", "SGA", "AGA",  "LGA")`.
 #'
 #' @examples
-#' # Without coarse flag, does not differentiate between p < 0.03 and p < 0.10
+#' # Without severe flag, does not differentiate between
+#' # p < 0.03 and p < 0.10
 #' classify_sga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_age = 267,
 #'   sex = "F"
 #' )
 #'
-#' # With coarse = FALSE, highlights p < 0.03
+#' # With severe = TRUE, highlights p < 0.03
 #' classify_sga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_age = 267,
 #'   sex = "F",
-#'   coarse = FALSE
+#'   severe = TRUE
 #' )
 #' @references
 #' WHO. **Physical status: the use and interpretation of anthropometry. Report
@@ -42,7 +43,7 @@
 #' 31.** *Technical report, Royal College of Obstetricians and Gynaecologists,
 #' London, 2013.*
 #' @export
-classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
+classify_sga <- function(weight_kg, gest_age, sex, severe = FALSE) {
   percentiles <- ig_nbs_wfga_value2percentile(weight_kg = weight_kg,
                                               sex = sex,
                                               gest_age = gest_age)
@@ -50,22 +51,22 @@ classify_sga <- function(weight_kg, gest_age, sex, coarse = TRUE) {
   out[which(percentiles < 0.1)] <- "SGA"
   out[which(percentiles >= 0.1 & percentiles <= 0.9)] <- "AGA"
   out[which(percentiles > 0.9)] <- "LGA"
-  if (!coarse) {
+  if (severe) {
     out[which(percentiles < 0.03)] <- "SGA(<3)"
   }
-  levels <- if (coarse) c("SGA", "AGA",  "LGA") else c("SGA(<3)", "SGA",
-                                                       "AGA", "LGA")
+  levels <- c("SGA", "AGA", "LGA")
+  levels <- if (severe) c("SGA(<3)", levels) else levels
   factor(out, levels = levels)
 }
 
-#' Classify stunting according to WHO or INTERGROWTH-21<sup>st</sup>
+#' Classify stunting using WHO or INTERGROWTH-21<sup>st</sup>
 #' length/height-for-age standards
 #'
-#' Classify stunting (low length/height-for-age) using
-#' INTERGROWTH-21<sup>st</sup> or WHO Growth Standards depending on the
+#' Classify stunting (low length/height-for-age) using #' WHO or
+#' INTERGROWTH-21<sup>st</sup> length/height-for-age standards depending on the
 #' gestational age at birth of the child. Severe stunting is below <-3 SD
-#' relative to growth standards, whereas moderate stunting is -2SD from the
-#' median.
+#' relative to median length/height at a given age, whereas moderate stunting is
+#' -2SD from the median.
 #'
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
@@ -234,15 +235,17 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' @examples
 #' classify_wfa(
 #'   weight_kg = c(7.2, 4.5, 9.1, 24),
-#'   age_days = c(501, 435, 201, 707),
-#'   ga_at_birth = c(27, 36, 40, 41),
+#'   age_days = c(401, 185, 101, 607),
+#'   ga_at_birth = 7 * c(27, 36, 40, 41),
 #'   sex = c("F", "M", "F", "M")
 #' )
 #' @export
 classify_wfa <- function(weight_kg, age_days, ga_at_birth, sex) {
   pma_weeks <- round((age_days + ga_at_birth) / 7)
   pma_in_ig_png_range <- pma_weeks %in% gigs::ig_png$wfa$male$zscores$pma_weeks
-  ga_in_ig_png_range <- ga_at_birth >= 182 & ga_at_birth < 259
+  # INTERGROWTH-21st PNG standards designed for babies born from 26 to before 37
+  # weeks' GA
+  ga_in_ig_png_range <- ga_at_birth >= 26 * 7 & ga_at_birth < 64 * 7
   z_scores <- ifelse(
     test = pma_in_ig_png_range & ga_in_ig_png_range,
     yes = ig_png_wfa_value2zscore(weight_kg = weight_kg, pma_weeks = pma_weeks,
