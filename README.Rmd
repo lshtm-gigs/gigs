@@ -21,7 +21,7 @@ library(gigs)
 [![R-CMD-check](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
+[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
@@ -93,7 +93,7 @@ convert *values to z-scores* in the *weight-for-GA* standard from the
 *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
   `ig_nbs`/`_wfga`/`_value2zscore()`
 
-Similarly, the conversion of length-for-age values to centiles in term and
+Similarly, the conversion of length-for-age values to percentiles in term and
 preterm infants could be performed with the WHO Child Growth Standards and
 INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants Standards,
 respectively:

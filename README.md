@@ -10,7 +10,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
+[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
@@ -98,8 +98,8 @@ example, to convert *values to z-scores* in the *weight-for-GA* standard
 from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
 `ig_nbs`/`_wfga`/`_value2zscore()`
 
-Similarly, the conversion of length-for-age values to centiles in term
-and preterm infants could be performed with the WHO Child Growth
+Similarly, the conversion of length-for-age values to percentiles in
+term and preterm infants could be performed with the WHO Child Growth
 Standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
 Infants Standards, respectively:
 
@@ -178,7 +178,7 @@ ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
 We can use gigs to generate reference curves for the standards by
 getting curves for the expected weight at multiple z-scores across
 multiple gestational ages. We would usually recommend
-[ggplot2](https://ggplot2.tidyverse.org/) for such visualisation, but
+[`ggplot2`](https://ggplot2.tidyverse.org/) for such visualisation, but
 do not use it here to reduce our package’s dependencies.
 
 ``` r

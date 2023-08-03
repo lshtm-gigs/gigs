@@ -1,11 +1,11 @@
-#' Classify size for gestational age using INTERGROWTH-21<sup>st</sup>
-#' Newborn Size Standards (including very preterm)
+#' Classify size for gestational age using the INTERGROWTH-21<sup>st</sup>
+#' weight-for-gestational age standard
 #'
-#' Size for gestational age categories are split by centile: small-for-GA (SGA;
-#' 10<sup>th</sup> centile), appropriate-for-GA (AGA; 10<sup>th</sup> to
-#' 90<sup>th</sup> centile) and large-for-GA (LGA; >90<sup>th</sup> centile).
+#' Size for gestational age categories are split by percentile: small-for-GA (SGA;
+#' 10<sup>th</sup> percentile), appropriate-for-GA (AGA; 10<sup>th</sup> to
+#' 90<sup>th</sup> percentile) and large-for-GA (LGA; >90<sup>th</sup> percentile).
 #' This function also supports classification of severe SGA (<3<sup>rd</sup>
-#' centile) using the `severe` parameter.
+#' percentile) using the `severe` parameter.
 #'
 #' @param weight_kg Weight value(s) in kg.
 #' @param gest_age Gestational age(s) at birth in days. Must be between `168`
@@ -13,8 +13,8 @@
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param severe If `TRUE`, specify which SGA values are below the third
 #' percentile. Default = `FALSE`.
-#' @returns Factor with gestational age classification(s). If `coarse = TRUE`,
-#' levels are `c("SGA", "AGA",  "LGA")`. If `coarse = FALSE`, levels are `
+#' @return Factor with gestational age classification(s). If `severe = FALSE`,
+#' levels are `c("SGA", "AGA",  "LGA")`. If `severe = TRUE`, levels are `
 #' c("SGA(<3)", "SGA", "AGA",  "LGA")`.
 #'
 #' @examples
@@ -59,10 +59,9 @@ classify_sga <- function(weight_kg, gest_age, sex, severe = FALSE) {
   factor(out, levels = levels)
 }
 
-#' Classify stunting using WHO or INTERGROWTH-21<sup>st</sup>
-#' length/height-for-age standards
+#' Classify stunting using WHO or INTERGROWTH-21<sup>st</sup> length/height-for-age standards
 #'
-#' Classify stunting (low length/height-for-age) using #' WHO or
+#' Classify stunting (low length/height-for-age) using WHO or
 #' INTERGROWTH-21<sup>st</sup> length/height-for-age standards depending on the
 #' gestational age at birth of the child. Severe stunting is below <-3 SD
 #' relative to median length/height at a given age, whereas moderate stunting is
@@ -74,10 +73,10 @@ classify_sga <- function(weight_kg, gest_age, sex, severe = FALSE) {
 #' `1856` days.
 #' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was
-#' recorded as recumbent length or standing height. `NA` values will be set to
-#' `"L"` for children <731 days old and to `"H"` for children 731 days old or
-#' more. Default = `NA`.
-#' @returns Factor of stunting classification(s) with levels `c("implausible",
+#' recorded as recumbent length or standing height. Missing (`NA`) values will
+#' be set to `"L"` for children <731 days old and to `"H"` for children 731 days
+#' old or more. Default = `NA`.
+#' @return Factor of stunting classification(s) with levels `c("implausible",
 #' "stunting_severe", "stunting", "normal")`.
 #' @note WHO guidelines stipulate that recumbent length should not be measured
 #' after 730 days. Therefore recumbent length values for children over 730
@@ -97,7 +96,7 @@ classify_sga <- function(weight_kg, gest_age, sex, severe = FALSE) {
 #' <https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm>
 #' @examples
 #' # The first observation uses the INTERGROWTH-21st postnatal growth standards;
-#' # the next two use the WHO Growth Standards.
+#' # the next two use the WHO Child Growth Standards.
 #' classify_stunting(
 #'   lenht_cm = c(52.2, 75.4, 63.1),
 #'   age_days = c(357, 375, 250),
@@ -147,19 +146,20 @@ classify_stunting <- function(lenht_cm, age_days, ga_at_birth, sex, lenht_method
   )
 }
 
-#' Classify wasting according to WHO weight-for-length/height standards
+#' Classify wasting using WHO weight-for-length/height standards
 #'
-#' Classify wasting (low weight-for-length/height) using WHO Growth Standards,
-#' with the weight-for-length or weight-for-height depending on the age of the
-#' child. Severe wasting is <-3SD relative to the median expected weight,
-#' whereas moderate wasting is -2SD from the median.
+#' Classify wasting (low weight-for-length/height) using the WHO Child Growth
+#' Standards, specifically either the weight-for-length or weight-for-height
+#' standard depending on the age of the child. Severe wasting is <-3SD relative
+#' to the median expected weight, whereas moderate wasting is -2SD from the
+#' median.
 #'
 #' @param weight_kg Weight measurement(s) in kg.
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param lenht_method `"H"` or `"L"` value(s) describing whether lenht_cm was
-#' recorded as recumbent length or standing height.
-#' @returns Factor of wasting classification(s) with levels `c("implausible",
+#' @param lenht_method `"L"` or `"H"` value(s) describing whether `lenht_cm` was
+#' recorded as recumbent length or standing height, respectively.
+#' @return Factor of wasting classification(s) with levels `c("implausible",
 #' "wasting_severe", "wasting", "normal", "overweight")`.
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual. Observations with invalid or
@@ -203,11 +203,10 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
                          "overweight"))
 }
 
-#' Classify weight-for-age according to INTERGROWTH-21<sup>st</sup> postnatal
-#' growth and WHO growth standards
+#' Classify weight-for-age using WHO or INTERGROWTH-21<sup>st</sup> standards
 #'
-#' Classify weight-for-age z-scores using the INTERGROWTH-21<sup>st</sup>
-#' Postnatal Growth standards or WHO Child Growth Standards depending on the
+#' Classify weight-for-age z-scores using the WHO Child Growth Standards or
+#' INTERGROWTH-21<sup>st</sup> Postnatal Growth standards depending on the
 #' gestational age at birth for the infant. Severely underweight is less than 3
 #' SD below the median, underweight is less than 2 SD below the median, and
 #' overweight is > 2 SDs above the median.
@@ -217,7 +216,7 @@ classify_wasting <- function(weight_kg, lenht_cm, sex, lenht_method) {
 #' `0` and `1856`.
 #' @param ga_at_birth Gestational age(s) at birth in days.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @returns Factor of weight classification(s) with levels `c("implausible",
+#' @return Factor of weight classification(s) with levels `c("implausible",
 #' "underweight_severe", "underweight", "normal", "overweight")`.
 #' @note Implausible z-score bounds are sourced from the referenced WHO report,
 #' and classification criteria from the DHS manual.

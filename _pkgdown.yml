@@ -10,33 +10,36 @@ articles:
 reference:
   - title: Growth classification
     desc: >
-      Classify size for gestational age, stunting, wasting and under/overweight
+      Classify size for gestational age, stunting, wasting and under/overweight.
     contents:
       - classify_sga
       - classify_stunting
       - classify_wasting
       - classify_wfa
-  - title: "INTERGROWTH-21st Newborn Size Standards"
-    desc: "Conversion functions the INTERGROWTH-21st Newborn Size Standards"
+  - title: INTERGROWTH-21<sup>st</sup> Newborn Size Standards
+    desc: >
+      Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
+      Standards.
     contents:
       - ig_nbs_value2percentile
       - ig_nbs_percentile2value
-  - title: "INTERGROWTH-21st Postnatal Growth Standards for Preterm Infants"
+  - title: >
+      INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants
     desc: > 
-      Conversion functions for the INTERGROWTH-21st Postnatal Growth Standards
-      for Preterm Infants
+      Conversion functions for the INTERGROWTH-21<sup>st</sup> Postnatal Growth
+      Standards for Preterm Infants.
     contents:
       - ig_png_value2zscore
       - ig_png_zscore2value
-  - title: "WHO Child Growth Standards"
-    desc: "Conversion functions for the WHO Child Growth Standards"
+  - title: WHO Child Growth Standards
+    desc: Conversion functions for the WHO Child Growth Standards.
     contents:
       - who_gs_value2zscore
       - who_gs_zscore2value
-  - title: "Reference data and coefficients tables"
+  - title: "Reference data and coefficient tables"
     desc: >
-      Lists containing growth curve data, model parameters for INTERGROWTH-21st
-      and WHO standards, and data from the LIFE study.
+      Lists containing growth curve data, model parameters for WHO and some
+      INTERGROWTH-21<sup>st</sup> standards, and data from the LIFE study.
     contents:
       - ig_nbs
       - ig_nbs_coeffs

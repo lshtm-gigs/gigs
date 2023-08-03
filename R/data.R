@@ -2,7 +2,7 @@
 #'
 #' Convert between anthropometric measures and z-scores/percentiles using WHO
 #' and INTERGROWTH-21<sup>st</sup> growth standards. This includes functions for
-#' classification of newborn and infant growth, including size-for-gestational
+#' classification of newborn and infant growth, including size for gestational
 #' age, stunting, wasting, and weight-for-age.
 #'
 #' @docType package
@@ -16,7 +16,8 @@
 #' @keywords internal
 NULL
 
-#' INTERGROWTH-21<sup>st</sup> Newborn Standards (including very preterm) tables
+#' INTERGROWTH-21<sup>st</sup> Newborn Size Standards (including very preterm)
+#' growth curve data
 #'
 #' @name ig_nbs
 #' @docType data
@@ -81,7 +82,7 @@ NULL
 #' @keywords data
 NULL
 
-#' INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards tables
+#' INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards growth curve data
 #'
 #' @name ig_png
 #' @docType data
@@ -104,7 +105,7 @@ NULL
 #' @keywords data
 NULL
 
-#' WHO Child Growth Standards tables
+#' WHO Child Growth Standards growth curve data
 #'
 #' @name who_gs
 #' @description
@@ -137,7 +138,7 @@ NULL
 #' @keywords data
 NULL
 
-#' WHO Growth Standards LMS coefficients
+#' WHO Child Growth Standards LMS coefficients
 #'
 #' @name who_gs_coeffs
 #' @description
@@ -159,6 +160,10 @@ NULL
 #' circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 #' and subscapular skinfold-for-age: methods and development.** *Technical
 #' report, WHO, Geneva*, 2007.
+#'
+#' Cole TJ. **The LMS method for constructing normalized growth standards.**
+#' *Eur J Clin Nutr.* 1990, **44(1):45-60.** PMID:
+#' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @source
 #' [WHO Child Growth Standards](https://www.who.int/tools/child-growth-standards/standards)
 #' @examples

@@ -11,8 +11,8 @@
 \alias{ig_png_lfa_percentile2value}
 \alias{ig_png_hcfa_percentile2value}
 \alias{ig_png_wfl_percentile2value}
-\title{Convert z-score/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-postnatal growth standards for preterm infants}
+\title{Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Postnatal Growth Standards for preterm infants}
 \usage{
 ig_png_zscore2value(z, x, sex, acronym)
 
@@ -35,13 +35,14 @@ ig_png_hcfa_percentile2value(p, pma_weeks, sex)
 ig_png_wfl_percentile2value(p, length_cm, sex)
 }
 \arguments{
-\item{z, p}{Z-score(s)/percentile(s) to convert to a value.}
+\item{z, p}{Z-score(s)/percentiles to convert to a value/values.}
 
 \item{x, pma_weeks, length_cm}{The \code{x} value at which to convert a
-z-score/percentile to a value. Must be within bounds of available \code{x} values
-for a given acronym. The standard-specific versions of each function specify
-a specific type of \code{x}, either \code{pma_weeks} (exact post-menstrual age since
-birth in weeks), or \code{length_cm} (recumbent length measurement(s) in cm).}
+value to a z-score/percentile. Must be within bounds of available \code{x} values
+for given acronym. The standard-specific versions of each function specify
+\code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
+and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
+between \code{35} and \code{65} cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
@@ -55,8 +56,12 @@ Expected measurements for each combination of z-score/percentile,
 x variable, sex, and acronym provided to the function.
 }
 \description{
-Convert z-score/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-postnatal growth standards for preterm infants
+Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Postnatal Growth Standards for preterm infants
+}
+\note{
+Input vectors will be recycled to the length of the longest vector
+according to the rules of \code{vctrs::vec_recycle_common()}.
 }
 \examples{
 # Convert percentiles to values

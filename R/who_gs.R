@@ -1,20 +1,20 @@
-#' Convert z-score/percentiles to values in the WHO Child Growth Standards
+#' Convert z-scores/percentiles to values in the WHO Child Growth Standards
 #'
-#' @param z,p Z-score(s)/percentile(s) to convert from.
+#' @param z,p Z-score(s)/percentiles to convert to a value/values.
 #' @param x,age_days,length_cm,height_cm The `x` value at which to convert a
-#' z-score/percentile to a value. Must be within bounds of available `x` values
-#' for given acronym. The standard-specific versions of each function specify a
-#' specific type of `x`, either `age_days` (age since birth in days),
-#' `length_cm` (recumbent length measurement(s) in cm) or `height_cm`
-#' (standing height measurement(s) in cm).
-#' @param sex Sex(es), either `"M"` (male) or `"F"`  (female).
-#' @param acronym Valid acronym for WHO Growth Standards datasets: one of
+#' value to a z-score/percentile. Must be within bounds of available `x` values
+#' for given acronym. The standard-specific versions of each function specify
+#' `x`, either `age_days` (age since birth in days), `length_cm` (recumbent
+#' length measurement(s) in cm) or `height_cm` (standing height measurement(s)
+#' in cm).
+#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param acronym Valid acronym(s) for the WHO Child Growth Standards: either
 #' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
 #' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
-#' @returns Expected measurements for each combination of z-score/percentile, x
+#' @return Expected measurements for each combination of z-score/percentile, x
 #' variable, sex, and acronym provided to the function.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
@@ -231,30 +231,31 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
   who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-#' Convert values to z-score/percentiles in the WHO Child Growth Standards
+#' Convert values to z-scores/percentiles in the WHO Child Growth Standards
 #'
-#' @param y Y value(s) for growth standard.
+#' @param y Value(s) to convert to either a z-score/z-scores or a
+#' percentile/percentiles.
 #' @param x,age_days,length_cm,height_cm The `x` value at which to convert a
 #' value to a z-score/percentile. Must be within bounds of available `x` values
-#' for given acronym. The standard-specific versions of each function specify a
-#' specific type of `x`, either `age_days` (age since birth in days),
-#' `length_cm` (recumbent length measurement(s) in cm) or `height_cm`
-#' (standing height measurement(s) in cm).
-#' @param sex Sex(es), either `"M"` (male) or `"F"`  (female).
-#' @param acronym Valid acronym for WHO Growth Standards datasets: one of
+#' for given acronym. The standard-specific versions of each function specify
+#' `x`, either `age_days` (age since birth in days), `length_cm` (recumbent
+#' length measurement(s) in cm) or `height_cm` (standing height measurement(s)
+#' in cm).
+#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param acronym Valid acronym(s) for the WHO Child Growth Standards: either
 #' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
 #' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
 #' @param weight_kg Weight measurement(s) in kg.
-#' @param bmi Body mass index measurement(s).
+#' @param bmi Body mass index measurement(s) in kg/m<sup>2</sup>.
 #' @param lenht_cm Length/height measurement(s) in cm.
 #' @param headcirc_cm Head circumference measurement(s) in cm.
 #' @param armcirc_cm Arm circumference measurement(s) in cm.
 #' @param subscap_sf_mm Subscapular skinfold measurement(s) in mm.
 #' @param triceps_sf_mm Triceps skinfold measurement(s) in mm.
-#' @returns Z-scores/percentiles for each combination of measurement, x
+#' @return Z-scores/percentiles for each combination of measurement, x
 #' variable, sex, and acronym provided to the function.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
@@ -478,7 +479,7 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
-#' @returns A dataframe with lambda, mu and sigma values for the WHO growth
+#' @return A dataframe with lambda, mu and sigma values for the WHO growth
 #' standard(s) specified by the `acronym` parameter, for the supplied `x` and
 #' `sex` values.
 #' @references
@@ -497,6 +498,7 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @rdname who_gs_lms
 #' @keywords internal
+#' @noRd
 who_gs_lms <- function(x, sex, acronym) {
   checked_params <- check_who_params(sex, acronym)
   x <- ifelse(test = acronym %in% c("wfl", "wfh"),
@@ -593,7 +595,7 @@ who_gs_lms <- function(x, sex, acronym) {
 #' @param m Mu value as provided by [who_gs_lms()]
 #' @param s Sigma value as provided by [who_gs_lms()]
 #' @param n_sd Number of SD from the median to be computed
-#' @returns Value(s) which are `n_sd` from the median for each `l`/`m`/`s`
+#' @return Value(s) which are `n_sd` from the median for each `l`/`m`/`s`
 #' combination.
 #' @references
 #' World Health Organisation. **WHO child growth standards:
@@ -610,6 +612,7 @@ who_gs_lms <- function(x, sex, acronym) {
 #' J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @keywords internal
+#' @noRd
 who_gs_lms2sd <- function(l, m, s, n_sd) {
   m * (1 + l * s * n_sd) ^ (1 / l)
 }

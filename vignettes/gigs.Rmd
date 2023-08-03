@@ -79,18 +79,18 @@ work with the raw values, for example when evaluating size for gestational age
 in newborns. The classification functions offered by this package allow the user
 to easily classify growth status:
 
-### Size-for-gestational age
-The `classify_sga()` function offers size-for-GA classifications based on
+### Size for gestational age
+The `classify_sga()` function offers size for GA classifications based on
 cut-offs from the research literature. Typically, the 10<sup>th</sup> and
-90<sup>th</sup> centiles are used as the size-for-GA cut-offs, but some
+90<sup>th</sup> percentiles are used as the size for GA cut-offs, but some
 publications also specify severely small-for-GA newborns as those below the
-third weight-for-GA centile. Whether you do this depends on the `coarse`
+third weight-for-GA percentile. Whether you do this depends on the `severe`
 parameter in `classify_sga()`:
 ```{r example_2}
 df_newborn_weights$sga <- with(
         df_newborn_weights,
         classify_sga(weight_kg = weight_kg, gest_age = gest_age, sex = sex))
-df_newborn_weights$sga_coarse <- with(
+df_newborn_weights$sga_severe <- with(
         df_newborn_weights,
         classify_sga(weight_kg = weight_kg,
                      gest_age = gest_age,
@@ -102,7 +102,7 @@ df_newborn_weights
 ### Stunting
 The `classify_stunting()` function offers stunting (length/height-for-age)
 classifications based on cut-offs from the research literature. The output is a
-factor with levels corresponding to either different degrees of stunting:
+factor with levels corresponding to different degrees of stunting:
 ```{r example_stunting}
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
@@ -116,7 +116,7 @@ classify_stunting(
 ### Wasting
 The `classify_wasting()` function offers wasting (weight-for-length)
 classifications based on cut-offs from the research literature. The output is a
-factor with levels corresponding to either different degrees of wasting:
+factor with levels corresponding to different degrees of wasting:
 ```{r example_wasting}
 classify_wasting(
   weight_kg = c(5.75, 2.18, 3.00, 6.75),
@@ -129,7 +129,7 @@ classify_wasting(
 ### Weight-for-age
 The `classify_wfa()` function offers weight-for-age classifications based on
 cut-offs from the research literature. The output is a factor with levels
-corresponding to either different degrees of underweight and overweight:
+corresponding to different degrees of underweight and overweight:
 ```{r example_weight_for_age}
 classify_wfa(
   weight_kg = c(7.2, 4.5, 9.1, 24),

@@ -3,7 +3,7 @@
 \docType{data}
 \name{who_gs}
 \alias{who_gs}
-\title{WHO Child Growth Standards tables}
+\title{WHO Child Growth Standards growth curve data}
 \source{
 \href{https://www.who.int/tools/child-growth-standards/standards}{WHO Child Growth Standards}
 }

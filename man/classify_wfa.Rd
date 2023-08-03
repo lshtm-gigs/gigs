@@ -2,8 +2,7 @@
 % Please edit documentation in R/classification.R
 \name{classify_wfa}
 \alias{classify_wfa}
-\title{Classify weight-for-age according to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
-growth and WHO growth standards}
+\title{Classify weight-for-age using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standards}
 \usage{
 classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 }
@@ -21,8 +20,8 @@ classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 Factor of weight classification(s) with levels \code{c("implausible", "underweight_severe", "underweight", "normal", "overweight")}.
 }
 \description{
-Classify weight-for-age z-scores using the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-Postnatal Growth standards or WHO Child Growth Standards depending on the
+Classify weight-for-age z-scores using the WHO Child Growth Standards or
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standards depending on the
 gestational age at birth for the infant. Severely underweight is less than 3
 SD below the median, underweight is less than 2 SD below the median, and
 overweight is > 2 SDs above the median.

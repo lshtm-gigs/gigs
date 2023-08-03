@@ -17,8 +17,8 @@
 \alias{ig_nbs_fmfga_value2zscore}
 \alias{ig_nbs_bfpfga_value2zscore}
 \alias{ig_nbs_ffmfga_value2zscore}
-\title{Convert anthropometric values to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
-z-score/percentiles}
+\title{Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size Standards}
 \usage{
 ig_nbs_value2percentile(y, gest_age, sex, acronym)
 
@@ -53,17 +53,20 @@ ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_age, sex)
 ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 }
 \arguments{
-\item{y}{Value(s) to convert to z-scores/percentiles}
+\item{y}{Value(s) to convert to either a z-score/z-scores or a
+percentile/percentiles.}
 
-\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
-for weight/length/head circumference-for-gestational age, or from \code{266} to
-\code{294} for body composition standards (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}).}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{266} to \code{294}
+for body composition equations (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}), or
+between \code{168} and \code{300} for the other standards.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
-be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"},
-or \code{"ffmfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
+standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
+(length-for-GA), \code{"hcfga"} (head circumference-for-GA), \code{"wlrfga"}
+(weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
+(body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
 
 \item{weight_kg}{Birth weight(s) in kg}
 
@@ -84,8 +87,12 @@ Z-scores/percentiles for each combination of measurement,
 gestational age, sex, and acronym provided to the function.
 }
 \description{
-Convert anthropometric values to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
-z-score/percentiles
+Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size Standards
+}
+\note{
+Input vectors will be recycled to the length of the longest vector
+according to the rules of \code{vctrs::vec_recycle_common()}.
 }
 \examples{
 # Convert values to percentiles

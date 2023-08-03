@@ -2,8 +2,7 @@
 % Please edit documentation in R/classification.R
 \name{classify_stunting}
 \alias{classify_stunting}
-\title{Classify stunting according to WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-length/height-for-age standards}
+\title{Classify stunting using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards}
 \usage{
 classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 }
@@ -18,19 +17,19 @@ classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
 \item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was
-recorded as recumbent length or standing height. \code{NA} values will be set to
-\code{"L"} for children <731 days old and to \code{"H"} for children 731 days old or
-more. Default = \code{NA}.}
+recorded as recumbent length or standing height. Missing (\code{NA}) values will
+be set to \code{"L"} for children <731 days old and to \code{"H"} for children 731 days
+old or more. Default = \code{NA}.}
 }
 \value{
 Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
 }
 \description{
-Classify stunting (low length/height-for-age) using
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} or WHO Growth Standards depending on the
+Classify stunting (low length/height-for-age) using WHO or
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards depending on the
 gestational age at birth of the child. Severe stunting is below <-3 SD
-relative to growth standards, whereas moderate stunting is -2SD from the
-median.
+relative to median length/height at a given age, whereas moderate stunting is
+-2SD from the median.
 }
 \note{
 WHO guidelines stipulate that recumbent length should not be measured
@@ -41,7 +40,7 @@ referenced WHO report, and classification criteria from the DHS manual.
 }
 \examples{
 # The first observation uses the INTERGROWTH-21st postnatal growth standards;
-# the next two use the WHO Growth Standards.
+# the next two use the WHO Child Growth Standards.
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),

@@ -11,8 +11,8 @@
 \alias{ig_png_lfa_value2percentile}
 \alias{ig_png_hcfa_value2percentile}
 \alias{ig_png_wfl_value2percentile}
-\title{Convert postnatal growth measures to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
-growth standards}
+\title{Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Postnatal Growth Standards for preterm infants}
 \usage{
 ig_png_value2zscore(y, x, sex, acronym)
 
@@ -35,36 +35,42 @@ ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
 ig_png_wfl_value2percentile(weight_kg, length_cm, sex)
 }
 \arguments{
-\item{y}{Value of the anthropometric measure.}
+\item{y}{Value(s) to convert to either a z-score/z-scores or a
+percentile/percentiles.}
 
 \item{x, pma_weeks}{The \code{x} value at which to convert a
 value to a z-score/percentile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify a
-specific type of \code{x}, either \code{pma_weeks} (post-menstrual age in exact weeks;
-between \code{27} and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s)
-in cm; between \code{35} and \code{65} cm).}
+for given acronym. The standard-specific versions of each function specify
+\code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
+and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
+between \code{35} and \code{65} cm).}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
-for postnatal growth in preterm infants. Should be one of \code{"wfa"}
+\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal
+Growth standard for preterm infants. Should be one of \code{"wfa"}
 (weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
 (head circumference-for-age), or \code{"wfl"} (weight-for-length).}
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
 \item{length_cm}{Recumbent length measurement(s) in cm. Can be either an \code{x}
-or \code{y} variable depending on the standard-specific function used.}
+variable when using the length-for-age standard (\code{"lfa"}), or a \code{y} variable
+when using the weight-for-length (\code{"wfl"}) standard.}
 
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 }
 \value{
-Z-scores/percentiles for each combination of measurement,
-post-menstrual age, sex, and acronym provided to the function.
+Z-scores/percentiles for each combination of measurement, x
+variable, sex, and acronym provided to the function.
 }
 \description{
-Convert postnatal growth measures to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} postnatal
-growth standards
+Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Postnatal Growth Standards for preterm infants
+}
+\note{
+Input vectors will be recycled to the length of the longest vector
+according to the rules of \code{vctrs::vec_recycle_common()}.
 }
 \examples{
 # Convert values to percentiles

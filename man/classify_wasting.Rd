@@ -2,7 +2,7 @@
 % Please edit documentation in R/classification.R
 \name{classify_wasting}
 \alias{classify_wasting}
-\title{Classify wasting according to WHO weight-for-length/height standards}
+\title{Classify wasting using WHO weight-for-length/height standards}
 \usage{
 classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
 }
@@ -13,17 +13,18 @@ classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was
-recorded as recumbent length or standing height.}
+\item{lenht_method}{\code{"L"} or \code{"H"} value(s) describing whether \code{lenht_cm} was
+recorded as recumbent length or standing height, respectively.}
 }
 \value{
 Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
 }
 \description{
-Classify wasting (low weight-for-length/height) using WHO Growth Standards,
-with the weight-for-length or weight-for-height depending on the age of the
-child. Severe wasting is <-3SD relative to the median expected weight,
-whereas moderate wasting is -2SD from the median.
+Classify wasting (low weight-for-length/height) using the WHO Child Growth
+Standards, specifically either the weight-for-length or weight-for-height
+standard depending on the age of the child. Severe wasting is <-3SD relative
+to the median expected weight, whereas moderate wasting is -2SD from the
+median.
 }
 \note{
 Implausible z-score bounds are sourced from the referenced WHO report,

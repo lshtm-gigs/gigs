@@ -8,7 +8,7 @@
 \description{
 Convert between anthropometric measures and z-scores/percentiles using WHO
 and INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} growth standards. This includes functions for
-classification of newborn and infant growth, including size-for-gestational
+classification of newborn and infant growth, including size for gestational
 age, stunting, wasting, and weight-for-age.
 }
 \examples{

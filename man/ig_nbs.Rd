@@ -3,7 +3,8 @@
 \docType{data}
 \name{ig_nbs}
 \alias{ig_nbs}
-\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Standards (including very preterm) tables}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards (including very preterm)
+growth curve data}
 \source{
 \href{https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size in Very Preterm Infants}\cr
 \href{https://intergrowth21.tghn.org/newborn-size-birth/#ns1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards}\cr

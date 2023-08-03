@@ -9,7 +9,7 @@
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
 #' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
-#' @returns A dataframe with mean and standard deviation values for each
+#' @return A dataframe with mean and standard deviation values for each
 #' provided combination of sex, gestational age, and acronym.
 #' @note This function returns the **natural log** of the median and standard
 #' deviations for weight (kg) for gestational age. In contrast, the medians and
@@ -24,6 +24,7 @@
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @rdname ig_vpns_equations
 #' @keywords internal
+#' @noRd
 ig_vpns_equations <- function(gest_age, sex, acronym) {
   checked_params <- check_nbs_params(gest_age = gest_age, sex = sex, acronym = acronym)
   checked_params$age[checked_params$age >= 231] <- NA
@@ -69,7 +70,7 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
 #' standard to use. Must be one of `"wfga"`, "lfga"`, or `"hcfga"`.
-#' @returns Expected measurements for each combination of z-score, gestational
+#' @return Expected measurements for each combination of z-score, gestational
 #' age, sex, and acronym provided to the function.
 #' @references
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
@@ -78,6 +79,7 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' @importFrom vctrs vec_recycle_common
 #' @rdname ig_vpns_zscore2value
 #' @keywords internal
+#' @noRd
 ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(z = z,
                                       gest_age = gest_age,
@@ -109,7 +111,7 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
 #' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
-#' @returns Z-scores for each combination of measurement, gestational age, sex,
+#' @return Z-scores for each combination of measurement, gestational age, sex,
 #' and acronym provided to the function.
 #' @references
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
@@ -118,6 +120,7 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' @importFrom vctrs vec_recycle_common
 #' @rdname ig_vpns_value2zscore
 #' @keywords internal
+#' @noRd
 ig_vpns_value2zscore <- function(y, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y,
                                       gest_age = gest_age,
