@@ -17,8 +17,8 @@
 \alias{ig_nbs_fmfga_zscore2value}
 \alias{ig_nbs_bfpfga_zscore2value}
 \alias{ig_nbs_ffmfga_zscore2value}
-\title{Convert z-scores/percentiles to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
-values}
+\title{Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size Standards}
 \usage{
 ig_nbs_percentile2value(p, gest_age, sex, acronym)
 
@@ -55,26 +55,29 @@ ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 \arguments{
 \item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
 
-\item{gest_age}{Gestational age(s) in days. Must be between \code{168} and \code{300}
-for weight/length/head circumference-for-gestational age, or from \code{266} to
-\code{294} for body composition equations.}
+\item{gest_age}{Gestational age(s) in days. Must be between \code{266} to \code{294}
+for body composition equations (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}), or
+between \code{168} and \code{300} for the other standards.}
 
 \item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH NBS standard to use. Must
-be one of \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, \code{"wlrfga"}, \code{"fmfga"}, \code{"bfpfga"},
-or \code{"ffmfga"}.}
+\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
+standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
+(length-for-GA), \code{"hcfga"} (head circumference-for-GA), \code{"wlrfga"}
+(weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
+(body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
 }
 \value{
 Expected measurements for each combination of z-score/percentile,
 gestational age, sex, and acronym provided to the function.
 }
 \description{
-Convert z-scores/percentiles to INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} newborn size
-values
+Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size Standards
 }
 \note{
-Input vectors will be recycled to the length of the longest vector.
+Input vectors will be recycled to the length of the longest vector
+according to the rules of \code{vctrs::vec_recycle_common()}.
 }
 \examples{
 # Convert percentiles to values

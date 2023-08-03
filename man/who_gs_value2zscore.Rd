@@ -21,7 +21,7 @@
 \alias{who_gs_acfa_value2percentile}
 \alias{who_gs_ssfa_value2percentile}
 \alias{who_gs_tsfa_value2percentile}
-\title{Convert values to z-score/percentiles in the WHO Child Growth Standards}
+\title{Convert values to z-scores/percentiles in the WHO Child Growth Standards}
 \usage{
 who_gs_value2zscore(y, x, sex, acronym)
 
@@ -64,18 +64,19 @@ who_gs_ssfa_value2percentile(subscap_sf_mm, age_days, sex)
 who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 }
 \arguments{
-\item{y}{Y value(s) for growth standard.}
+\item{y}{Value(s) to convert to either a z-score/z-scores or a
+percentile/percentiles.}
 
 \item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
 value to a z-score/percentile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify a
-specific type of \code{x}, either \code{age_days} (age since birth in days),
-\code{length_cm} (recumbent length measurement(s) in cm) or \code{height_cm}
-(standing height measurement(s) in cm).}
+for given acronym. The standard-specific versions of each function specify
+\code{x}, either \code{age_days} (age since birth in days), \code{length_cm} (recumbent
+length measurement(s) in cm) or \code{height_cm} (standing height measurement(s)
+in cm).}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
+\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
+\item{acronym}{Valid acronym(s) for the WHO Child Growth Standards: either
 \code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
@@ -84,7 +85,7 @@ specific type of \code{x}, either \code{age_days} (age since birth in days),
 
 \item{weight_kg}{Weight measurement(s) in kg.}
 
-\item{bmi}{Body mass index measurement(s).}
+\item{bmi}{Body mass index measurement(s) in kg/m\if{html}{\out{<sup>}}2\if{html}{\out{</sup>}}.}
 
 \item{lenht_cm}{Length/height measurement(s) in cm.}
 
@@ -101,7 +102,7 @@ Z-scores/percentiles for each combination of measurement, x
 variable, sex, and acronym provided to the function.
 }
 \description{
-Convert values to z-score/percentiles in the WHO Child Growth Standards
+Convert values to z-scores/percentiles in the WHO Child Growth Standards
 }
 \examples{
 # Convert values to percentiles

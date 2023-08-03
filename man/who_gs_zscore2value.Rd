@@ -21,7 +21,7 @@
 \alias{who_gs_acfa_percentile2value}
 \alias{who_gs_ssfa_percentile2value}
 \alias{who_gs_tsfa_percentile2value}
-\title{Convert z-score/percentiles to values in the WHO Child Growth Standards}
+\title{Convert z-scores/percentiles to values in the WHO Child Growth Standards}
 \usage{
 who_gs_zscore2value(z, x, sex, acronym)
 
@@ -64,18 +64,18 @@ who_gs_ssfa_percentile2value(p, age_days, sex)
 who_gs_tsfa_percentile2value(p, age_days, sex)
 }
 \arguments{
-\item{z, p}{Z-score(s)/percentile(s) to convert from.}
+\item{z, p}{Z-score(s)/percentiles to convert to a value/values.}
 
 \item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
-z-score/percentile to a value. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify a
-specific type of \code{x}, either \code{age_days} (age since birth in days),
-\code{length_cm} (recumbent length measurement(s) in cm) or \code{height_cm}
-(standing height measurement(s) in cm).}
+value to a z-score/percentile. Must be within bounds of available \code{x} values
+for given acronym. The standard-specific versions of each function specify
+\code{x}, either \code{age_days} (age since birth in days), \code{length_cm} (recumbent
+length measurement(s) in cm) or \code{height_cm} (standing height measurement(s)
+in cm).}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"}  (female).}
+\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
 
-\item{acronym}{Valid acronym for WHO Growth Standards datasets: one of
+\item{acronym}{Valid acronym(s) for the WHO Child Growth Standards: either
 \code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
@@ -87,7 +87,7 @@ Expected measurements for each combination of z-score/percentile, x
 variable, sex, and acronym provided to the function.
 }
 \description{
-Convert z-score/percentiles to values in the WHO Child Growth Standards
+Convert z-scores/percentiles to values in the WHO Child Growth Standards
 }
 \examples{
 # Convert percentiles to values

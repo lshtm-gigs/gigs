@@ -1,3 +1,17 @@
+# gigs 0.2.1
+
+* Renamed `coarse` parameter in `classify_sga()` to `severe` to better reflect 
+  its function; now setting `severe` to `FALSE` will cause `classify_sga()` to
+  specify which SGA cases are below the 3rd percentile.
+* Documentation updates:
+  * Full use of \<sup\> tags for pkgdown website
+  * Standardised titles in documentation for conversion + classification 
+    functions
+  * Updated "Introduction to gigs" article to include all available 
+    classification functions
+  * Extra docs changes which can be viewed in the diffs for this commit (e.g.,
+    replacing all `@returns` Roxygen tags with `@return`)
+
 # gigs 0.2.0
 
 * Added INTERGROWTH-21st Postnatal Growth tables + functions for a new 

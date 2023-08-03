@@ -10,13 +10,13 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
+[![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
 
 Produced as part of the Guidance for International Growth Standards
-project, `gigs` provides a single, simple interface for working with the
+project, gigs provides a single, simple interface for working with the
 WHO Child Growth Standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
 converting between anthropometric measures (e.g. weight or length) to
@@ -44,15 +44,15 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym  | Description                                | Unit  | `gest_age()` range |
-  |----------|--------------------------------------------|-------|--------------------|
-  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days    |
-  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days    |
-  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days    |
-  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days    |
-  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days    |
-  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days    |
-  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days    |
+  | Acronym  | Description                                | Unit  | `gest_age` range |
+  |----------|--------------------------------------------|-------|------------------|
+  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days  |
+  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days  |
+  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days  |
+  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days  |
+  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days  |
+  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days  |
+  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days  |
 
   </details>
 - `ig_png` - INTERGROWTH-21<sup>st</sup> standards for postnatal growth
@@ -62,7 +62,7 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym | Description                | Unit | `pma_weeks()` range    |
+  | Acronym | Description                | Unit | `x` range              |
   |---------|----------------------------|------|------------------------|
   | `wfa`   | weight-for-age             | kg   | 27 to \<64 exact weeks |
   | `lfa`   | length-for-age             | cm   | 27 to \<64 exact weeks |
@@ -76,7 +76,7 @@ devtools::install_github("lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym | Description                  | Unit             | `xvar()` range  |
+  | Acronym | Description                  | Unit             | `x` range       |
   |---------|------------------------------|------------------|-----------------|
   | `wfa`   | weight-for-age               | kg               | 0 to 1856 days  |
   | `bfa`   | BMI-for-age                  | kg/m<sup>2</sup> | 0 to 1856 days  |
@@ -98,8 +98,8 @@ example, to convert *values to z-scores* in the *weight-for-GA* standard
 from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
 `ig_nbs`/`_wfga`/`_value2zscore()`
 
-Similarly, the conversion of length-for-age values to centiles in term
-and preterm infants could be performed with the WHO Child Growth
+Similarly, the conversion of length-for-age values to percentiles in
+term and preterm infants could be performed with the WHO Child Growth
 Standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
 Infants Standards, respectively:
 
@@ -175,7 +175,7 @@ ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
 
 #### Reference curves
 
-We can use `gigs` to generate reference curves for the standards by
+We can use gigs to generate reference curves for the standards by
 getting curves for the expected weight at multiple z-scores across
 multiple gestational ages. We would usually recommend
 [`ggplot2`](https://ggplot2.tidyverse.org/) for such visualisation, but

@@ -1,22 +1,39 @@
-test_that("Size for GA classification works", {
-  expect_equal(
-    object =
-      # pre-term, below age cutoff, <-2 on IG
-      # pre-term, above age cutoff, <-2 on WHO
-      # pre-term, below age cutoff, < normal on IG
-      # term, age, <-2
-      # term, age, healthy
-      ## ALL MALE ALL "H"
-      with(data.frame(weight = c(0.811730, 0.191618, 0.511245, 1.14117, 1.21483, 0.841630,
-                                 1.05958, 1.10986, 0.570546, 0.606674, 0.453822, 0.974013,
-                                 0.993918, 0.987215, 0.736120, 1.21361, 0.555279, 0.951882,
-                                 0.284086, 0.609805, 0.803476, 0.696198),
-                      psex = "M", gestage = seq(24, 27, by = 1/7) * 7),
-           classify_sga(weight_kg = weight, sex = psex, gest_age = gestage, coarse = F)),
-    expected = factor(c("AGA", "SGA(<3)", "SGA", "LGA", "LGA", "AGA", "LGA", "LGA", "SGA",
-                        "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA", "LGA", "SGA(<3)", "AGA",
-                        "SGA(<3)", "SGA(<3)", "AGA", "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
-})
+test_that(
+  desc = "Size for GA classification works - with and without `severe` flag",
+  code = {
+    # pre-term, below age cutoff, <-2 on IG
+    # pre-term, above age cutoff, <-2 on WHO
+    # pre-term, below age cutoff, < normal on IG
+    # term, age, <-2
+    # term, age, healthy
+    ## ALL MALE ALL "H"
+    weight_df <- data.frame(weight = c(0.811730, 0.191618, NA, 1.14117, 1.21483,
+                                       0.841630, 1.05958, 1.10986, 0.570546,
+                                       0.606674, 0.453822, 0.974013, 0.993918,
+                                       0.987215, 0.736120, 1.21361, 0.555279,
+                                       0.951882, 0.284086, 0.609805, 0.803476,
+                                       0.696198),
+                            psex = "M", gestage = seq(24, 27, by = 1/7) * 7)
+    expect_equal(
+      object = with(weight_df,
+                    classify_sga(weight_kg = weight, sex = psex,
+                                 gest_age = gestage, severe = FALSE)),
+      expected = factor(c("AGA", "SGA", NA, "LGA", "LGA", "AGA", "LGA", "LGA",
+                          "SGA", "AGA", "SGA", "AGA", "AGA", "AGA", "AGA", "LGA",
+                          "SGA", "AGA", "SGA", "SGA", "AGA", "SGA"),
+                        levels = c("SGA", "AGA",  "LGA")))
+
+    expect_equal(
+      object =
+        with(weight_df,
+             classify_sga(weight_kg = weight, sex = psex, gest_age = gestage,
+                          severe = TRUE)),
+      expected = factor(c("AGA", "SGA(<3)", NA, "LGA", "LGA", "AGA", "LGA", "LGA",
+                          "SGA", "AGA", "SGA(<3)", "AGA", "AGA", "AGA", "AGA",
+                          "LGA", "SGA(<3)", "AGA", "SGA(<3)", "SGA(<3)", "AGA",
+                          "SGA"), levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
+  }
+)
 
 
 test_that(desc = "Stunting classification works", {

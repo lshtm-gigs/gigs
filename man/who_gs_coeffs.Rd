@@ -3,7 +3,7 @@
 \docType{data}
 \name{who_gs_coeffs}
 \alias{who_gs_coeffs}
-\title{WHO Growth Standards LMS coefficients}
+\title{WHO Child Growth Standards LMS coefficients}
 \source{
 \href{https://www.who.int/tools/child-growth-standards/standards}{WHO Child Growth Standards}
 }
@@ -31,5 +31,9 @@ World Health Organisation. \strong{WHO child growth standards: head
 circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 and subscapular skinfold-for-age: methods and development.} \emph{Technical
 report, WHO, Geneva}, 2007.
+
+Cole TJ. \strong{The LMS method for constructing normalized growth standards.}
+\emph{Eur J Clin Nutr.} 1990, \strong{44(1):45-60.} PMID:
+\href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
 }
 \keyword{data}
