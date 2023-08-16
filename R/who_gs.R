@@ -561,11 +561,14 @@ who_gs_lms <- function(x, sex, acronym) {
     }
     needs_lerp <- which(!x %in% who_gs_coeffs_long$x & within_coeff_lims)
   }
+
   # Linear interpolation for values not in table but within bounds for that
   # acronym
   if (exists(x = "needs_lerp") && length(needs_lerp)) {
     in_coeff_tbl <- which(!seq_along(x) %in% needs_lerp)
     not_in_coeff_tbl_df <- new_df[needs_lerp, ]
+    # OPTIMISE: Currently merges with each set of variables supplied to
+    # mapply(), which is blindingly slower than merging on all variables at once
     coeffs_interpolated <- do.call(rbind,
             mapply(xvars = not_in_coeff_tbl_df$x,
                    sex = not_in_coeff_tbl_df$sex,
