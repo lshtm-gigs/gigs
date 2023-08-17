@@ -566,14 +566,12 @@ who_gs_lms <- function(x, sex, acronym) {
   if (exists(x = "needs_lerp") && length(needs_lerp)) {
     in_coeff_tbl <- which(!seq_along(x) %in% needs_lerp)
     not_in_coeff_tbl_df <- new_df[needs_lerp, ]
-    coeffs_interpolated <- do.call(rbind,
-            mapply(xvars = not_in_coeff_tbl_df$x,
-                   sex = not_in_coeff_tbl_df$sex,
-                   acronym = not_in_coeff_tbl_df$acronym,
-                   SIMPLIFY = F,
-                   FUN = \(xvars, sex, acronym) {
-                     interpolate_coeffs(who_gs_coeffs_long, xvars, sex, acronym)
-                   })) |>
+    coeffs_interpolated <- interpolate_coeffs(
+      who_gs_coeffs_long,
+      xvars = not_in_coeff_tbl_df$x,
+      sex = not_in_coeff_tbl_df$sex,
+      acronym = not_in_coeff_tbl_df$acronym
+    ) |>
       merge(not_in_coeff_tbl_df)
   } else {
     in_coeff_tbl <- seq_along(x)

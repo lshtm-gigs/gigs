@@ -40,36 +40,19 @@ round2 <- function(x, digits) {
 #' @importFrom stats approx
 #' @keywords internal
 #' @noRd
-interpolate_coeffs <- function(coeff_tbl_long, xvar, sex, acronym) {
-  xfloor <- floor(xvar)
-  xceiling <- ceiling(xvar)
-  coeffs <- data.frame(c(xfloor, xceiling),
-                       sex = rep_len(sex, length.out = 2),
-                       acronym = rep_len(acronym, length.out = 2))
+interpolate_coeffs <- function(coeff_tbl_long, xvars, sex, acronym) {
   if (all(c("L", "M", "S") %in% names(coeff_tbl_long))) {
     coeff_names <-  c("L", "M", "S")
+    out <- data.frame(x = xvars, sex = sex, acronym = acronym)
   } else if (all(c("mu", "sigma", "nu", "tau") %in% names(coeff_tbl_long))) {
     coeff_names <- c("mu", "sigma", "nu", "tau")
+    out <- data.frame(gest_age = xvars, sex = sex, acronym = acronym)
   }
-  names(coeffs)[1] <- names(coeff_tbl_long[1])
-
-  coeffs <- merge(coeffs, coeff_tbl_long, all.x = TRUE, sort = FALSE)
-  lerped_coeffs <- sapply(
-    X = 4:length(names(coeffs)),
-    FUN = function(x) {
-      coeff1 <- coeffs[1, x]
-      coeff2 <- coeffs[2, x]
-      # Do not lerp if adjacent LMS/MSNT values are equal
-      if (coeff1 == coeff2) {
-        return(coeff1)
-      } else {
-        approx(c(xfloor, xceiling), c(coeff1, coeff2), xout = xvar)$y
-      }
-    }) |>
-    t()|>
-    as.data.frame()
-  names(lerped_coeffs) <- coeff_names
-  final_df <- cbind(coeffs[1, 1:3], lerped_coeffs)
-  final_df[1,1] <- xvar
-  final_df
+  for (coeff in coeff_names) {
+    out[coeff] <- approx(x = coeff_tbl_long[,1],
+                         y = coeff_tbl_long[,coeff],
+                         xout = xvars)$y
+  }
+  out
+  stop("Fails when multiple standards/sexes are in use. Needs a refactor OR apply() use.")
 }

@@ -511,14 +511,12 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
   if (length(not_in_coeff_tbl)) {
     in_coeff_tbl <- which(!seq_along(gest_age) %in% not_in_coeff_tbl)
     not_in_coeff_tbl_df <- new_df[not_in_coeff_tbl, ]
-    coeffs_interpolated <- do.call(rbind,
-            mapply(xvars = not_in_coeff_tbl_df$gest_age,
-                   sex = not_in_coeff_tbl_df$sex,
-                   acronym = not_in_coeff_tbl_df$acronym,
-                   SIMPLIFY = F,
-                   FUN = function(xvars, sex, acronym) {
-                     interpolate_coeffs(ig_nbs_coeffs_long, xvars, sex, acronym)
-                   })) |>
+    coeffs_interpolated <- interpolate_coeffs(
+      ig_nbs_coeffs_long,
+      xvars = not_in_coeff_tbl_df$gest_age,
+      sex = not_in_coeff_tbl_df$sex,
+      acronym = not_in_coeff_tbl_df$acronym
+    ) |>
       merge(not_in_coeff_tbl_df)
   } else {
     in_coeff_tbl <- seq_along(gest_age)
