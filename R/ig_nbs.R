@@ -72,13 +72,20 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                                             gest_age = gest_age,
                                             sex = sex,
                                             acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex, gest_age = max_len_vecs$gest_age, acronym = max_len_vecs$acronym)
+  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
+                                     gest_age = max_len_vecs$gest_age,
+                                     acronym = max_len_vecs$acronym)
   checked_p <- max_len_vecs$p
   checked_p[which(abs(max_len_vecs$p) >= 1)] <- NA
-  input <- list(p = checked_p, gest_age = checked_params$age, sex = checked_params$sex, acronym = checked_params$acronym)
+  input <- list(p = checked_p,
+                gest_age = checked_params$age,
+                sex = checked_params$sex,
+                acronym = checked_params$acronym)
 
   fromMSNT_p2v <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex, gest_age = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym)
+    msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex,
+                        gest_age = max_len_vec_li$gest_age,
+                        acronym = max_len_vec_li$acronym)
     msnt <- cbind(p = max_len_vec_li$p, msnt, n_ = seq(1, nrow(msnt)))
     msnt_no_na <- msnt[which(!is.na(msnt$p) & !is.na(msnt$mu)), ]
     msnt_no_na$out <- ifelse(
@@ -456,7 +463,7 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #'
 #' @description Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
 #' z-scores/percentiles in the INTERGROWTH-21<sup>st</sup> Newborn Size
-#' standards
+#' standards.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param gest_age Gestational age(s) in days. Must be between `231` and `300`.
 #' @param acronym Acronym(s) denoting which GAMLSS-based
@@ -483,52 +490,9 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #' @keywords internal
 #' @noRd
 ig_nbs_msnt <- function(gest_age, sex, acronym) {
-  new_df <- data.frame(gest_age = gest_age,
-                       sex = sex,
-                       acronym = acronym)
-  new_df$sort <- seq_along(new_df$gest_age)
-  load_msnt_with_sex_acronym <- function(sex, acronym) {
-    coeff_tbl <- gigs::ig_nbs_coeffs[[acronym]][[sex]]
-    cbind(coeff_tbl,
-          sex = rep(ifelse(sex == "male", yes = "M", no = "F"),
-                    length(coeff_tbl)),
-          acronym = rep(acronym, length(coeff_tbl)))
-  }
-  sexes_to_load <- intersect(c("male", "female"),
-                             ifelse(sex == "M", yes = "male", no = "female"))
-  acronyms_to_load <- intersect(names(gigs::ig_nbs_coeffs), unique(acronym))
-  tot_len <- length(sexes_to_load) * length(acronyms_to_load)
-  ig_nbs_coeffs_long <- do.call(
-    rbind,
-    mapply(x = rep_len(sexes_to_load, length.out = tot_len),
-           y = rep_len(acronyms_to_load, length.out = tot_len),
-           SIMPLIFY = F,
-           FUN = function(x, y) load_msnt_with_sex_acronym(sex = x,
-                                                           acronym = y)))
-
-  not_in_coeff_tbl <- which(!gest_age %in% ig_nbs_coeffs_long$gest_age &
-                              gest_age >= 231)
-  if (length(not_in_coeff_tbl)) {
-    in_coeff_tbl <- which(!seq_along(gest_age) %in% not_in_coeff_tbl)
-    not_in_coeff_tbl_df <- new_df[not_in_coeff_tbl, ]
-    coeffs_interpolated <- interpolate_coeffs(
-      ig_nbs_coeffs_long,
-      xvars = not_in_coeff_tbl_df$gest_age,
-      sex = not_in_coeff_tbl_df$sex,
-      acronym = not_in_coeff_tbl_df$acronym
-    ) |>
-      merge(not_in_coeff_tbl_df)
-  } else {
-    in_coeff_tbl <- seq_along(gest_age)
-  }
-
-  merge_df <- new_df[in_coeff_tbl, ]
-  out <- merge(merge_df, ig_nbs_coeffs_long, all.x = TRUE, sort = FALSE)
-  if (exists(x = "coeffs_interpolated")) {
-    out <- rbind(out, coeffs_interpolated)
-  }
-  out <- out[order(out$sort), ]
-  out[, -which(names(out) == "sort")]
+  stop("Why is this failing in devtools::test()?")
+  retrieve_coefficients(gest_age, sex, acronym, gigs::ig_nbs_coeffs,
+                        c("mu", "sigma", "nu", "tau"))
 }
 
 #' INTERGROWTH-21<sup>st</sup> weight-to-length ratio medians/standard

@@ -72,10 +72,11 @@
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(z = z,
-                                      x = x,
-                                      sex = sex,
-                                      acronym = acronym)
-  lms <- who_gs_lms(x = max_len_vecs$x, sex = max_len_vecs$sex,
+                                            x = x,
+                                            sex = sex,
+                                            acronym = acronym)
+  lms <- who_gs_lms(x = max_len_vecs$x,
+                    sex = max_len_vecs$sex,
                     acronym = max_len_vecs$acronym)
 
   # from https://stackoverflow.com/questions/29920302/raising-vector-with-negative-numbers-to-a-fractional-exponent-in-r
@@ -470,6 +471,8 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 
 #' Retrieve LMS values for WHO Child Growth Standards
 #'
+#' @description Retrieves lambda/mu/sigma values for LMS-based calculation of
+#' z-scores/percentiles in the WHO Child Growth Standards.
 #' @param x X value(s) at which to retrieve LMS values. Must be within bounds of
 #' available x values for given acronym.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
@@ -479,9 +482,8 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #' `"tsfa"` (triceps skinfold-for-age).
-#' @return A dataframe with lambda, mu and sigma values for the WHO growth
-#' standard(s) specified by the `acronym` parameter, for the supplied `x` and
-#' `sex` values.
+#' @return A dataframe with lambda, mu and sigma values for the WHO standard(s)
+#' specified by the `acronym` parameter, for the supplied `x` and `sex` values.
 #' @references
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -500,90 +502,10 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 #' @keywords internal
 #' @noRd
 who_gs_lms <- function(x, sex, acronym) {
-  checked_params <- check_who_params(sex, acronym)
-  x <- ifelse(test = acronym %in% c("wfl", "wfh"),
-              yes = round2(x = x, digits = 1),
-              no = x)
-
-  new_df <- data.frame(x = x,
-                       sex = checked_params$sex,
-                       acronym = checked_params$acronym,
-                       sort = seq(from = 1, to = length(x)))
-
-  load_lms_tables <- function(sex, acronym) {
-    coeff_tbl <- gigs::who_gs_coeffs[[acronym]][[sex]]
-    coeff_tbl <- cbind(coeff_tbl,
-          sex = rep_len(ifelse(sex == "male", yes = "M", no = "F"),
-                        length.out = nrow(coeff_tbl)),
-          acronym = rep_len(acronym, length.out = nrow(coeff_tbl)))
-    names(coeff_tbl) <- c("x", "L", "M", "S", "sex", "acronym" )
-    coeff_tbl
-  }
-
-  sexes_to_load <- intersect(c("male", "female"),
-                             ifelse(sex == "M", yes = "male", no = "female"))
-  acronyms_to_load <- intersect(names(gigs::who_gs_coeffs), unique(acronym))
-  tot_len <- length(sexes_to_load) * length(acronyms_to_load)
-  who_gs_coeffs_li <- mapply(x = rep_len(sexes_to_load, length.out = tot_len),
-                             y = rep_len(acronyms_to_load, length.out = tot_len),
-                             SIMPLIFY = FALSE,
-                             FUN = \(x, y) load_lms_tables(sex = x, acronym = y))
-  if (!length(who_gs_coeffs_li)) {
-    out <- new_df
-    out$L <- NA
-    out$M <- NA
-    out$S <- NA
-    return(out)
-  }
-
-  sexes_to_load <- intersect(c("M", "F"), ifelse(sexes_to_load == "male",
-                                                 yes = "M", no = "F"))
-  who_gs_coeffs_long <- do.call(rbind, who_gs_coeffs_li)
-  if (length(who_gs_coeffs_li)) {
-    names(who_gs_coeffs_li) <- paste0(sexes_to_load, "_", acronyms_to_load)
-
-    if (length(acronyms_to_load) == 1) {
-      who_x <- who_gs_coeffs_li[[1]]$x
-      within_coeff_lims <- inrange(new_df$x, who_x)
-    } else {
-      index_per_acronym <- sapply(
-        acronyms_to_load,
-        FUN = \(x) grep(pattern = x, names(who_gs_coeffs_li))[[1]][1]
-      )
-      who_gs_xlims <- lapply(index_per_acronym,
-                             FUN = \(x) who_gs_coeffs_li[[x]][, 1] )
-      within_coeff_lims <- sapply(seq_along(new_df$acronym),
-                                  FUN = \(x) {
-                                    temp_acro <- new_df$acronym[x]
-                                    temp_x <- new_df$x[x]
-                                    inrange(temp_x, who_gs_xlims[[temp_acro]])
-                                  })
-    }
-    needs_lerp <- which(!x %in% who_gs_coeffs_long$x & within_coeff_lims)
-  }
-  # Linear interpolation for values not in table but within bounds for that
-  # acronym
-  if (exists(x = "needs_lerp") && length(needs_lerp)) {
-    in_coeff_tbl <- which(!seq_along(x) %in% needs_lerp)
-    not_in_coeff_tbl_df <- new_df[needs_lerp, ]
-    coeffs_interpolated <- interpolate_coeffs(
-      who_gs_coeffs_long,
-      xvars = not_in_coeff_tbl_df$x,
-      sex = not_in_coeff_tbl_df$sex,
-      acronym = not_in_coeff_tbl_df$acronym
-    ) |>
-      merge(not_in_coeff_tbl_df)
-  } else {
-    in_coeff_tbl <- seq_along(x)
-  }
-
-  merge_df <- new_df[in_coeff_tbl, ]
-  out <- merge(merge_df, who_gs_coeffs_long, all.x = TRUE, sort = FALSE)
-  if (exists(x = "coeffs_interpolated")) {
-    out <- rbind(out, coeffs_interpolated)
-  }
-  out <- out[order(out$sort), ]
-  out[, -which(names(out) == "sort")]
+  checked <- check_who_params(sex, acronym)
+  retrieve_coefficients(x = x, sex = checked$sex, acronym = checked$acronym,
+                        coeff_tbls = gigs::who_gs_coeffs,
+                        coeff_names = c("L", "M", "S"))
 }
 
 #' Get a value which is a specific z-score from the median using LMS

@@ -180,11 +180,20 @@ test_that("Conversion of values to percentiles works", {
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "percentiles")
 })
 
-test_that(desc = "Interpolation of LMS values can be performed",
+test_that(desc = "Interpolation of MSNT values can be performed",
           code = {
             testthat::expect_false(
               anyNA(ig_nbs_value2zscore(y = 4.5,
                                         gest_age = seq(260, 264, by = 0.5),
+                                        sex = "M",
+                                        acronym = "wfga")))
+          })
+
+test_that(desc = "Interpolation of MSNT values isn't performed when unnecessary",
+          code = {
+            testthat::expect_false(
+              anyNA(ig_nbs_value2zscore(y = 4.5,
+                                        gest_age = seq(260, 264, by = 1),
                                         sex = "M",
                                         acronym = "wfga")))
           })
