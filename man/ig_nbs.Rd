@@ -17,7 +17,7 @@ by acronym first, then by sex and finally by z-score/percentile.
 }
 \note{
 The tables in this package are combined versions of the tables published by
-Villar \emph{et al.} (2014) and Villar \emph{et al.} (2016), so they cover \code{133} to
+Villar \emph{et al.} (2014) and Villar \emph{et al.} (2016), so they cover \code{168} to
 \code{300} days' gestational age. The body composition tables (\code{ffmfga}, \code{bfpfga},
 and \code{fmfga}) cover a smaller gestational age span, ranging from only \code{266} to
 \code{294} days' (38 to 42 weeks') gestational age.

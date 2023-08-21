@@ -9,6 +9,8 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/lshtm-gigs/gigs/branch/master/graph/badge.svg?token=G5BIYGV5JL)](https://app.codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
