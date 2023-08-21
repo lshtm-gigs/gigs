@@ -63,8 +63,10 @@
 #'                           gest_age = c(140, 182, 224, 266),
 #'                           sex = "F") |>
 #'   round(digits = 2)
-#' @importFrom gamlss.dist qST3
 #' @importFrom vctrs vec_recycle_common
+#' @importFrom data.table setcolorder
+#' @importFrom gamlss.dist qST3
+#' @importFrom data.table merge.data.table
 #' @rdname ig_nbs_percentile2value
 #' @export
 ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
@@ -83,11 +85,15 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                 acronym = checked_params$acronym)
 
   fromMSNT_p2v <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex,
-                        gest_age = max_len_vec_li$gest_age,
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
+                        sex = max_len_vec_li$sex,
                         acronym = max_len_vec_li$acronym)
-    msnt <- cbind(p = max_len_vec_li$p, msnt, n_ = seq(1, nrow(msnt)))
-    msnt_no_na <- msnt[which(!is.na(msnt$p) & !is.na(msnt$mu)), ]
+    msnt[, c("p", "n_") := list(max_len_vec_li$p, seq_along(max_len_vec_li$p))]
+    data.table::setcolorder(msnt, neworder = c("n_", "p"))
+
+    # Remove NA values for p or mu, or qST3() will fail
+    is_na_p_or_mu <- which(is.na(msnt$p) | is.na(msnt$mu))
+    msnt_no_na <- msnt[!is_na_p_or_mu, ]
     msnt_no_na$out <- ifelse(
       test = msnt_no_na$sex == "U",
       yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value,
@@ -100,24 +106,25 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                              nu = msnt_no_na$nu,
                              tau = msnt_no_na$tau)
     )
-    merged <- merge(msnt, msnt_no_na, all.x = TRUE)
-    merged_ordered <- merged[order(merged$n_), ]
-    msnt_out <- merged_ordered$out
-    return(msnt_out)
+    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
+                                             by = colnames(msnt))
+    data.table::setorder(all_vals, "n_")
+    all_vals$out
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
     body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex,
                                  acronym = max_len_vec_li$acronym)
-    ga_in_range <- max_len_vec_li$gest_age < 266 | max_len_vec_li$gest_age > 294
-    max_len_vec_li$p[ga_in_range] <- NA
+    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
+    max_len_vec_li$p[not_in_LM_bounds] <- NA
     lm_out <- ifelse(
       max_len_vec_li$sex == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
                                   arg1 = max_len_vec_li$p,
                                   x_arg = max_len_vec_li$gest_age,
                                   acronym = max_len_vec_li$acronym),
-      no = body_comp$y_intercept + body_comp$ga_coeff * (max_len_vec_li$gest_age / 7) +
+      no = body_comp$y_intercept +
+             body_comp$ga_coeff * (max_len_vec_li$gest_age / 7) +
              qnorm(max_len_vec_li$p) * body_comp$std_dev)
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
@@ -135,7 +142,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     )
   }
 
-  vpns_lim <- 231
+  vpns_lim <- 231 # start of INTERGROWTH-21st Newborn Size Standards (not VP)
   out <- ifelse(
     test = input$gest_age >= vpns_lim,
     yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
@@ -310,59 +317,92 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #'                               sex = "F") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2percentile
-#' @importFrom gamlss.dist pST3
 #' @importFrom vctrs vec_recycle_common
+#' @importFrom gamlss.dist pST3
+#' @importFrom data.table merge.data.table setorder
+#' @importFrom data.table setorder
 #' @export
 ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(y = y, gest_age = gest_age, sex = sex, acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex, gest_age = max_len_vecs$gest_age, acronym = max_len_vecs$acronym)
-  input <- list(y = y, gest_age = checked_params$age, sex = checked_params$sex, acronym = checked_params$acronym)
+  max_len_vecs <- vctrs::vec_recycle_common(y = y,
+                                            gest_age = gest_age,
+                                            sex = sex,
+                                            acronym = acronym)
+  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
+                                     gest_age = max_len_vecs$gest_age,
+                                     acronym = max_len_vecs$acronym)
+  input <- list(y = y,
+                gest_age = checked_params$age,
+                sex = checked_params$sex,
+                acronym = checked_params$acronym)
 
   fromMSNT_v2p <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(sex = max_len_vec_li$sex, gest_age = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym)
-    msnt <- cbind(y = max_len_vec_li$y, msnt, n_ = seq(1, nrow(msnt)))
-    msnt_no_na <- msnt[which(!is.na(msnt$y) & !is.na(msnt$mu)), ]
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
+                        sex = max_len_vec_li$sex,
+                        acronym = max_len_vec_li$acronym)
+    msnt[, c("y", "n_") := list(max_len_vec_li$y, seq_along(max_len_vec_li$y))]
+    data.table::setcolorder(msnt, neworder = c("n_", "y"))
+
+    # Remove NA values for y or mu, or pST3() will fail
+    is_na_y_or_mu <- which(is.na(msnt$y) | is.na(msnt$mu))
+    msnt_no_na <- msnt[!is_na_y_or_mu, ]
     msnt_no_na$out <- ifelse(
       test = msnt_no_na$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile, arg1 = msnt_no_na$y,
-                                  x_arg = msnt_no_na$gest_age, acronym = msnt_no_na$acronym),
-      no = gamlss.dist::pST3(msnt_no_na$y, mu = msnt_no_na$mu, sigma = msnt_no_na$sigma, nu = msnt_no_na$nu, tau = msnt_no_na$tau)
+      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
+                                  arg1 = msnt_no_na$y,
+                                  x_arg = msnt_no_na$gest_age,
+                                  acronym = msnt_no_na$acronym),
+      no = gamlss.dist::pST3(msnt_no_na$y,
+                             mu = msnt_no_na$mu,
+                             sigma = msnt_no_na$sigma,
+                             nu = msnt_no_na$nu,
+                             tau = msnt_no_na$tau)
     )
-    merged <- merge(msnt, msnt_no_na, all.x = TRUE)
-    merged_ordered <- merged[order(merged$n_), ]
-    msnt_out <- merged_ordered$out
-    return(msnt_out)
+    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
+                                             by = colnames(msnt))
+    data.table::setorder(all_vals, "n_")
+    all_vals$out
   }
 
   fromLM_v2p <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex, acronym = max_len_vec_li$acronym)
-    max_len_vec_li$p[max_len_vec_li$gest_age < 266 | max_len_vec_li$gest_age > 294] <- NA
+    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex,
+                                 acronym = max_len_vec_li$acronym)
+    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
+    max_len_vec_li$p[not_in_LM_bounds] <- NA
     ifelse(
       max_len_vec_li$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile, arg1 = max_len_vec_li$y,
-                                  x_arg = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym),
-      no = pnorm((max_len_vec_li$y - body_comp$y_intercept - body_comp$ga_coeff * (max_len_vec_li$gest_age / 7)) / body_comp$std_dev)
+      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
+                                  arg1 = max_len_vec_li$y,
+                                  x_arg = max_len_vec_li$gest_age,
+                                  acronym = max_len_vec_li$acronym),
+      no = pnorm((max_len_vec_li$y - body_comp$y_intercept -
+                    body_comp$ga_coeff * (max_len_vec_li$gest_age / 7)) /
+                      body_comp$std_dev)
     )
   }
   
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7, sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
+                      sex = max_len_vec_li$sex)
     wlr_out <- ifelse(
       max_len_vec_li$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value, arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age, acronym = max_len_vec_li$acronym),
+      yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
+                                  arg1 = max_len_vec_li$p,
+                                  x_arg = max_len_vec_li$gest_age,
+                                  acronym = max_len_vec_li$acronym),
       no = pnorm((max_len_vec_li$y - wlr$mu) / wlr$sigma)
     )
   }
 
   vpns_lim <- 231
-  out <- ifelse(test = input$gest_age >= vpns_lim,
-         yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
-                      yes = fromMSNT_v2p(input),
-                      no = fromLM_v2p(input)),
-         no = pnorm(
-           ig_vpns_value2zscore(y = input$y, gest_age = input$gest_age, sex = input$sex, acronym = input$acronym)
-         )
+  out <- ifelse(
+    test = input$gest_age >= vpns_lim,
+    yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
+                 yes = fromMSNT_v2p(input),
+                 no = fromLM_v2p(input)),
+    no = pnorm(ig_vpns_value2zscore(y = input$y,
+                                    gest_age = input$gest_age,
+                                    sex = input$sex,
+                                    acronym = input$acronym))
   )
   ifelse(test = input$acronym == "wlrfga", yes = fromWLR_v2p(input), no = out)
 }
@@ -490,7 +530,6 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #' @keywords internal
 #' @noRd
 ig_nbs_msnt <- function(gest_age, sex, acronym) {
-  stop("Why is this failing in devtools::test()?")
   retrieve_coefficients(gest_age, sex, acronym, gigs::ig_nbs_coeffs,
                         c("mu", "sigma", "nu", "tau"))
 }

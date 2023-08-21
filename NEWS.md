@@ -1,7 +1,14 @@
-# gigs (development version)
+# gigs 0.2.2
 
-* Optimised where lots of `x` variables which need interpolation are supplied to
- `who_gs_...()` or  `ig_nbs_...()` functions.
+* Optimised interpolation for coefficient-based `who_gs_...()`/`ig_nbs_...()` 
+  functions. No more for-loops with rbind - instead, the `approx()` function for
+  interpolation is called on vectors.
+* Began using `data.table` for retrieving/merging coefficient tables, in a new 
+  helper function named `retrive_coefficients()`. This approach is slower for 
+  smaller inputs than the old `data.frame` approach, but maintains a much lower
+  time as the number of inputs are increased. It also concentrates all the 
+  coefficient-retrieval logic in one group of common functions.
+* Minor changes to `README.md` and small refactors for readability.
 
 # gigs 0.2.1
 

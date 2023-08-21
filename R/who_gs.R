@@ -471,8 +471,6 @@ who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
 
 #' Retrieve LMS values for WHO Child Growth Standards
 #'
-#' @description Retrieves lambda/mu/sigma values for LMS-based calculation of
-#' z-scores/percentiles in the WHO Child Growth Standards.
 #' @param x X value(s) at which to retrieve LMS values. Must be within bounds of
 #' available x values for given acronym.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).

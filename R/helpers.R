@@ -39,34 +39,40 @@ round2 <- function(x, digits) {
 #' @return A dataframe containing coefficients (where avilable) for each
 #' provided combination of sex, gestational age, and acronym.
 #' @rdname retrieve_coefficients
+#' @importFrom data.table rbindlist
+#' @importFrom data.table merge.data.table
+#' @importFrom data.table setorder
 #' @keywords internal
 #' @noRd
 retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
-  # 1. Make DF with x, sex and acronym
-  new_dt <- data.table(x = x, sex = sex, acronym = acronym,
-                       sex_acronym = paste0(sex, "_", acronym),
-                       sort = seq_along(x))
+  # 1. Make DT with x, sex and acronym
+  new_dt <- data.table::data.table(x = x, sex = sex, acronym = acronym,
+                                   sex_acronym = paste0(sex, "_", acronym),
+                                   sort = seq_along(x))
 
   # 2. Load coeff tables as needed
   unique_sex_acronym <- unique(.subset2(new_dt, "sex_acronym"))
   coeffs_li <- lapply(
     X = unique_sex_acronym,
-    FUN = \(x) load_coeff_tables(sex_acronym = x, coeff_tbls = coeff_tbls)) |>
-    setNames(unique_sex_acronym)
+    FUN = \(x) load_coeff_tables(sex_acronym = x, coeff_tbls = coeff_tbls))
 
   # 2a. Return NA coefficient values if no coeff tables were loaded
-  if (length(coeffs_li) == 0) {
+  no_coeff_tables <- all(vapply(coeffs_li,
+                                FUN = is.null,
+                                FUN.VALUE = logical(length = length(1))))
+  if (no_coeff_tables) {
     new_dt[, (coeff_names) := as.list(rep(NA, length(coeff_names)))]
-    return(new_dt[, sort := NULL])
+    return(new_dt[, c("sort", "sex_acronym") := NULL])
   }
 
   # For each set of sex/acronym combination, check against the coefficient table
-
+  names(coeffs_li) <- unique_sex_acronym
   coeffs_interpolated <- lapply(
     X = unique_sex_acronym,
     FUN = \(sex_acro) {
       coeff_dt <- .subset2(coeffs_li, sex_acro)
-      current <- new_dt[sex_acronym == sex_acro]
+      is_curr_sex_acro <- new_dt$sex_acronym == sex_acro
+      current <- new_dt[is_curr_sex_acro, ]
       not_in_coeff_tbl <- !current$x %in% coeff_dt$x &
                             inrange(current$x, coeff_dt$x)
       if (length(not_in_coeff_tbl)) {
@@ -85,12 +91,16 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
   coeffs_long <- data.table::rbindlist(coeffs_li)
   in_coeff_tbl <- x %in% coeffs_long$x & inrange(x, coeffs_long$x)
   merge_dt <- new_dt[in_coeff_tbl, ]
-  out <- merge.data.table(merge_dt, coeffs_long, all.x = TRUE, sort = FALSE,
-                          by = c("x", "sex", "acronym"))
+  # This merge.data.table call is the slowest one - find a faster alternative to
+  # a full table match *if* speed becomes an issue
+  out <- data.table::merge.data.table(merge_dt, coeffs_long,
+                                      all.x = TRUE, sort = FALSE,
+                                      by = c("x", "sex", "acronym"))
   if (exists(x = "coeffs_interpolated")) {
     out <- rbind(out, coeffs_interpolated, fill = TRUE)
   }
-  out <- out[order(out$sort), ]
+  out <- data.table::merge.data.table(new_dt, out, all.x = TRUE)
+  data.table::setorder(out, sort)
   out[, c("sort", "sex_acronym") := NULL]
 }
 
@@ -100,12 +110,18 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
 #' @param acronym Acronym denoting which coefficient table is needed.
 #' @param coeff_tbls A nested list of coefficient tables from either the WHO
 #' Child Growth Standards/INTERGROWTH-21<sup>st</sup> project.
-#' @return A data.table containing coefficients specified by the combination of
-#' `sex`, `acronym` and `coeff_tbls`.
+#' @return A `data.table` containing coefficients specified by the combination
+#' of `sex`, `acronym` and `coeff_tbls`.
+#' @importFrom data.table as.data.table
+#' @keywords internal
+#' @noRd
 load_coeff_tables <- function(sex_acronym, coeff_tbls) {
   split <- unlist(strsplit(sex_acronym, split = "_"))
   sex <- split[1]
   acronym <- split[2]
+  if (acronym == "NA") {
+    return(NULL)
+  }
   sex_long <- if (sex == "M") "male" else "female"
   coeff_tbl <- data.table::as.data.table(coeff_tbls[[acronym]][[sex_long]])
   coeff_tbl[, c("sex", "acronym") := list(sex, acronym)]
@@ -117,8 +133,8 @@ load_coeff_tables <- function(sex_acronym, coeff_tbls) {
 #' @param coeff_tbl_long A table of reference LMS/MSNT coefficients, from within
 #' `gigs::who_gs_coeffs` or `gigs:::ig_nbs_coeffs`
 #' @param xvar A value of x which is not found in a coefficient table but is
-#' between two values in that coefficient table
-#' @param sex A character denoting male (`"M"`) or female (`"F"`)
+#' between two values in that coefficient table.
+#' @param sex A character denoting male (`"M"`) or female (`"F"`).
 #' @return Data frame containing LMS/MSNT values which have been sourced from
 #' interpolated between existing LMS/MSNT values.
 #' @note All inputs should be length one. The function will also fail if
@@ -127,12 +143,13 @@ load_coeff_tables <- function(sex_acronym, coeff_tbls) {
 #' @keywords internal
 #' @noRd
 interpolate_coeffs <- function(needs_interp_dt, coeff_tbl_long, coeff_names) {
-  interpolated <- lapply(X = coeff_names,
-                         FUN = \(coeff_name) {
-                           approx(x = .subset2(coeff_tbl_long, "x"),
-                                  y = .subset2(coeff_tbl_long, coeff_name),
-                                  xout = .subset2(needs_interp_dt, "x"))$y
-                         }) |>
-    setNames(coeff_names)
+  interpolated <- lapply(
+    X = coeff_names,
+    FUN = \(coeff_name) {
+      stats::approx(x = .subset2(coeff_tbl_long, "x"),
+                    y = .subset2(coeff_tbl_long, coeff_name),
+                    xout = .subset2(needs_interp_dt, "x"))$y
+    })
+  names(interpolated) <- coeff_names
   needs_interp_dt[, names(interpolated) := interpolated]
 }
