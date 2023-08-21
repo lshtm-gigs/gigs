@@ -36,7 +36,7 @@ reference:
     contents:
       - who_gs_value2zscore
       - who_gs_zscore2value
-  - title: "Reference data and coefficient tables"
+  - title: Reference data and coefficient tables
     desc: >
       Lists containing growth curve data, model parameters for WHO and some
       INTERGROWTH-21<sup>st</sup> standards, and data from the LIFE study.

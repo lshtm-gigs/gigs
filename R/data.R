@@ -32,7 +32,7 @@ NULL
 #' [INTERGROWTH-21<sup>st</sup> Newborn Size Standards - Body Composition](https://www.nature.com/articles/pr201752)
 #' @note
 #' The tables in this package are combined versions of the tables published by
-#' Villar *et al.* (2014) and Villar *et al.* (2016), so they cover `133` to
+#' Villar *et al.* (2014) and Villar *et al.* (2016), so they cover `168` to
 #' `300` days' gestational age. The body composition tables (`ffmfga`, `bfpfga`,
 #' and `fmfga`) cover a smaller gestational age span, ranging from only `266` to
 #' `294` days' (38 to 42 weeks') gestational age.

@@ -1,3 +1,8 @@
+# gigs (development version)
+
+* Optimised where lots of `x` variables which need interpolation are supplied to
+ `who_gs_...()` or  `ig_nbs_...()` functions.
+
 # gigs 0.2.1
 
 * Renamed `coarse` parameter in `classify_sga()` to `severe` to better reflect 
