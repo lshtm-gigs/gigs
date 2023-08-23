@@ -112,7 +112,7 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
 #' Child Growth Standards/INTERGROWTH-21<sup>st</sup> project.
 #' @return A `data.table` containing coefficients specified by the combination
 #' of `sex`, `acronym` and `coeff_tbls`.
-#' @importFrom data.table as.data.table
+#' @importFrom data.table setDT
 #' @keywords internal
 #' @noRd
 load_coeff_tables <- function(sex_acronym, coeff_tbls) {
@@ -123,7 +123,7 @@ load_coeff_tables <- function(sex_acronym, coeff_tbls) {
     return(NULL)
   }
   sex_long <- if (sex == "M") "male" else "female"
-  coeff_tbl <- data.table::as.data.table(coeff_tbls[[acronym]][[sex_long]])
+  coeff_tbl <- data.table::setDT(coeff_tbls[[acronym]][[sex_long]])
   coeff_tbl[, c("sex", "acronym") := list(sex, acronym)]
   colnames(coeff_tbl)[1] <- "x"
   coeff_tbl
