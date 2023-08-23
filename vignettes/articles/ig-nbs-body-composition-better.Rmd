@@ -1,0 +1,538 @@
+---
+title: "INTERGROWTH-21st Body Composition Equations"
+description: >
+  Deriving the INTERGROWTH-21<sup>st</sup> body composition equations.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{INTERGROWTH-21st Body Composition Equations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, size = "tiny", dev.args = list(png = list(type = "cairo")))
+library(gigs)
+fmfga_male <- tibble::as_tibble(gigs::ig_nbs$fmfga$male$percentiles)
+fmfga_female <- tibble::as_tibble(gigs::ig_nbs$fmfga$female$percentiles)
+bfpfga_male <- tibble::as_tibble(gigs::ig_nbs$bfpfga$male$percentiles)
+bfpfga_female <- tibble::as_tibble(gigs::ig_nbs$bfpfga$female$percentiles)
+ffmfga_male <- tibble::as_tibble(gigs::ig_nbs$ffmfga$male$percentiles)
+ffmfga_female <- tibble::as_tibble(gigs::ig_nbs$ffmfga$female$percentiles)
+```
+
+Though Villar *et al.* (2017) published centiles for body composition (fat mass,
+body fat percentage, and fat-free mass) in newborns from the
+INTERGROWTH-21<sup>st</sup> project, they did not publish the parameters of the
+models used to generate their centiles. To implement these standards in `gigs`,
+we re-derived these values, in this case using the published data to work back
+to linear equations.
+
+## Contextual clues
+To identify the way in which these body composition standards were modelled,
+we need to look into how the published percentile tables are formatted. Consider
+the standard for fat mass for gestational age (`"fmfga"`) in females:
+```{r looking_into_data_1}
+fmfga_female
+```
+
+### Differences between each GA
+Let's first compare the differences over time in fat-mass for GA. In each
+column, we'll subtract the value of the previous row from the current row to
+produce a table of differences (see `check_differences()`). Then, using
+`diff_equality()`, we'll check that the differences in each row are equal for
+all percentiles.
+```{r looking_into_data_2}
+check_differences <- function(percentile_tbl) {
+  percentile_tbl |>
+    dplyr::mutate(dplyr::across(.cols = tidyselect::starts_with(match = "P"),
+                                .fns = list(diff = \(x) x - dplyr::lag(x))),
+                  .keep = "unused") |>
+    dplyr::filter(dplyr::if_any(
+            tidyselect::starts_with(match = "P"), ~ !is.na(.))) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      all_equal = dplyr::n_distinct(P03_diff, P10_diff, P50_diff, P90_diff, P97_diff,
+                                    na.rm = TRUE),
+      all_equal = as.logical(all_equal)) |>
+    dplyr::ungroup()
+}
+```
+
+Let's check this out for `fmfga_female`:
+```{r looking_into_data_3}
+check_differences(fmfga_female)
+```
+The differences in fat mass are equal across percentiles. This hints that to
+construct the percentile curves, the mean value ($\mu$) for fat mass was
+calculated first, then summed with the product of the desired
+$z$-score/percentile with an SD ($\sigma$) that is constant across the
+different GAs:
+\begin{align*}
+y = \mu + z\times\sigma
+\end{align*}
+
+#### In the other standards
+Does this equality hold for the other percentile tables?
+```{r looking_into_data_4}
+other_standards <- list(fmfga_male, bfpfga_male, bfpfga_female, ffmfga_male,
+                        ffmfga_female)
+sapply(X = other_standards, FUN = \(x) all(check_differences(x)$all_equal))
+```
+**No.** The first value, corresponding to `fmfga_male`, is `FALSE`. Let's see
+what the differences look like for this table:
+```{r looking_into_data_5}
+check_differences(fmfga_male)
+```
+The issue here is a value of `38` rather than the `39`s in the `P10_diff`
+column - but this difference is small enough to be a consequence of rounding, as
+opposed to a real difference in $\sigma$ for this GA.
+
+## Conclusion
+**We need to determine equations for P50 in each standard, as well as the
+standard deviation.**
+
+# Extracting models from published tables
+## Custom functions
+The following custom functions fit models to each INTERGROWTH-21<sup>st</sup>
+body composition standard using `lm()`. They then print the adjusted R-squared
+for each
+```{r custom_functions, echo = TRUE}
+#' Extract standard deviation from percentiles
+#' @param P50 Value of y at mean
+#' @param PX Value of y at percentile specified by p
+#' @param p Percentile at which y = PX
+std_deviation <- function(P50, PX, p) (PX - P50) / qnorm(p = p)
+
+#' Get modal values of vector x
+modes <- function(x) {
+  ux <- unique(x)
+  tab <- tabulate(match(x, ux))
+  ux[tab == max(tab)]
+}
+
+run_LMs <- function(df) {
+  model_linear <- lm(P50 ~ gest_age, data = df)
+  model_poly1 <- lm(P50 ~ poly(gest_age, degree = 1, raw = TRUE), data = df)
+  model_poly2 <- lm(P50 ~ poly(gest_age, degree = 2, raw = TRUE), data = df)
+  model_poly3 <- lm(P50 ~ poly(gest_age, degree = 3, raw = TRUE), data = df)
+  list(model_linear, model_poly1, model_poly2, model_poly3)
+}
+
+extract_SDs <- function(df) {
+  stddev_03 <- std_deviation(df$P50, df$P03, p = 0.03)
+  stddev_10 <- std_deviation(df$P50, df$P10, p = 0.10)
+  stddev_90 <- std_deviation(df$P50, df$P90, p = 0.90)
+  stddev_97 <- std_deviation(df$P50, df$P97, p = 0.97)
+  stddevs <- c(stddev_03, stddev_10, stddev_90, stddev_97)
+  mean(stddevs, na.rm = TRUE)
+}
+
+#' Extract equation and standard deviation; print to console
+#' @param df A percentile table for `fmfga`, `bfpfga` or `ffmfga`.
+extract_eqn <- function(df, verbose = TRUE) {
+  li_models <- run_LMs(df)
+  r_sq_adj <- sapply(X = li_models, FUN = \(x) summary(x)$adj.r.squared)
+  chosen_model <- li_models[[which(r_sq_adj == max(r_sq_adj))]]
+  if (!verbose) {
+    return(chosen_model)
+  }
+  model_coeffs <- coef(chosen_model)
+  coef_str <- lapply(
+    X = 2:length(model_coeffs),
+    FUN = \(x) {
+      start_str <- if (sign(model_coeffs[x]) == -1) "" else "+"
+      end_str <- if (x == 2) "* x" else paste0("* x^", x - 1)
+      paste(start_str, round(model_coeffs[x], 5), end_str)
+    }) |>
+    paste(collapse = " ")
+  sign_ <- if (sign(model_coeffs[2]) == -1) "" else "+"
+  cat(paste("y =", round(model_coeffs[[1]], 5), sign_, coef_str), sep = "\n")
+
+  SDs <- extract_SDs(df)
+
+  cat(paste("sigma =", round(mean(SDs, na.rm = TRUE), digits = 4)), sep = "\n")
+  invisible(chosen_model)
+}
+```
+
+
+## **Fat mass**
+### Males
+```{r fmfga_male_equation}
+fmfga_male <- gigs::ig_nbs$fmfga$male$percentiles
+extract_eqn(fmfga_male)
+```
+
+### Females
+```{r fmfga_female_equation}
+fmfga_female <- gigs::ig_nbs$fmfga$female$percentiles
+extract_eqn(fmfga_female)
+```
+
+## **Body fat percentage**
+
+### Males
+```{r bfpfga_male_equation}
+bfpfga_male <- gigs::ig_nbs$bfpfga$male$percentiles
+extract_eqn(bfpfga_male)
+```
+
+### Females
+
+```{r bfpfga_female_equation}
+bfpfga_female <- gigs::ig_nbs$bfpfga$female$percentiles
+extract_eqn(bfpfga_female)
+```
+
+## **Fat-free mass**
+### Males
+
+```{r ffmfga_male_equation}
+ffmfga_male <- gigs::ig_nbs$ffmfga$male$percentiles
+extract_eqn(ffmfga_male)
+```
+
+### Females
+
+```{r ffmfga_female_equation}
+ffmfga_female <- gigs::ig_nbs$ffmfga$female$percentiles
+extract_eqn(ffmfga_female)
+```
+
+## Summary
+
+### Equations for the mean:
+
+| Standard      | Sex    | Equation for the mean ($\mu$)                                                                                                   |
+|---------------|--------|---------------------------------------------------------------------------------------------------------------------------------|
+| Fat mass      | Male   | $\mu = 96787.8 - 1056.77381\times\operatorname{GA} + 3.83673\times\operatorname{GA}^2 - 0.00462\times\operatorname{GA}^3$       |
+| Fat mass      | Female | $\mu = 44432.51429 - 490.7602\times\operatorname{GA} + 1.80321\times\operatorname{GA}^2 - 0.00219\times\operatorname{GA}^3$     |
+| Body fat %    | Male   | $\mu = 1521.84857 - 16.62398\times\operatorname{GA} + 0.0605\times\operatorname{GA}^2 - 0.00007\times\operatorname{GA}^3$       |
+| Body fat %    | Female | $\mu = -66.09143 + 0.48102\times\operatorname{GA} - 0.00073\times\operatorname{GA}^2$                                           |
+| Fat-free mass | Male   | $\mu = 347879.97143 - 3780.52721\times\operatorname{GA} + 13.73032\times\operatorname{GA}^2 - 0.01652\times\operatorname{GA}^3$ |
+| Fat-free mass | Female | $\mu = 154457.42857 - 1689.0085\times\operatorname{GA} + 6.20845\times\operatorname{GA}^2 - 0.00753\times\operatorname{GA}^3$   |
+
+### Standard deviations:
+| Standard      | Sex    | Standard deviation ($\sigma$) |
+|---------------|--------|-------------------------------|
+| Fat mass      | Male   | $152.0728$                    |
+| Fat mass      | Female | $156.8449$                    |
+| Body fat %    | Male   | $3.6562$                      |
+| Body fat %    | Female | $3.9547$                      |
+| Fat-free mass | Male   | $276.5094$                    |
+| Fat-free mass | Female | $261.0625$                    |
+
+# Comparing fitted values with published values
+All plotting code for this section can be found in the source code for this
+vignette.
+
+## Reconstructing the equations in R
+
+First, we will bind the coefficients from each model into a table. This table
+can then be used to look up the coefficients for each body composition standard.
+```{r normative_bodycomp_functions, message = FALSE, warning = FALSE, error = FALSE}
+all_standards <- list(fmfga_male, fmfga_female, bfpfga_male, bfpfga_female,
+                      ffmfga_male, ffmfga_female)
+models <- lapply(all_standards, FUN = \(standard) {
+  model_coeffs <- standard |>
+    extract_eqn(verbose = FALSE) |>
+    coef() |>
+    t() |>
+    as.data.frame()
+  if (ncol(model_coeffs) == 3) model_coeffs$extra <- 0
+  names(model_coeffs) <- c("intercept", "x", "x^2", "x^3")
+  model_coeffs$SD <- extract_SDs(standard)
+  model_coeffs
+}) |>
+  do.call(what = "rbind")
+rownames(models) <- c("fmfga_M" , "fmfga_F" , "bfpfga_M", "bfpfga_F",
+                      "ffmfga_M", "ffmfga_F")
+models
+```
+
+The `body_comp_percentile2value()` will estimate `y` for a given gestational age
+in days (`x`), `sex` and `acronym`. The `body_comp_percentile2value_old()`
+function does the same, but uses parameters from simpler linear model for each
+standard.
+```{r body_comp_function}
+ig_nbs_bc_percentile2value <- function(p, x, sex, acronym) {
+  params <- t(models)[, paste0(acronym, "_", sex)]
+  SD <- params[[5]]
+  mu <- params[[1]] + params[[2]] * x + params[[3]] * x^2 + params[[4]] * x^3
+  mu + qnorm(p) * SD
+}
+
+ig_nbs_bc_percentile2value_old <- function(p, x, sex, acronym) {
+  z <- qnorm(p)
+  if (sex == "M") {
+    switch(acronym,
+           "fmfga"  = -1134.2 + 37.2  * x/7 + z * 152.1593,
+           "bfpfga" = -17.68  + 0.69  * x/7 + z * 3.6674,
+           "ffmfga" = -2487.6 + 139.9 * x/7 + z * 276.2276,
+           stop("Bad acronym", .call = F))
+  } else if (sex == "F") {
+    switch(acronym,
+           "fmfga"  = -840.2 + 30.7  * x/7 + z * 156.8411,
+           "bfpfga" = -9.02  + 0.51  * x/7 + z * 3.9405,
+           "ffmfga" = -1279  + 105.3 * x/7 + z * 260.621,
+           stop("Bad acronym", .call = F))
+  }
+}
+```
+
+# Comparing fitted values with published values
+## Making percentile tables
+```{r repl_fns}
+#' Replicate centile tables as presented by Villar et al.
+repl_centile_tbls <- function(sex, acronym, bodycomp_fn) {
+  centiles <- c(0.03, 0.1, 0.5, 0.9, 0.97) |>
+    purrr::set_names(c("P03", "P10", "P50", "P90", "P97"))
+  tbl <- purrr::map(.x = centiles, .f = ~ {
+      p <- .x
+      column <- seq(266, 294, by = 7) |>
+        purrr::set_names(paste(1:5)) |>
+        purrr::map_dfc(.f  = ~ {
+          bodycomp_fn(p, .x, sex, acronym)
+        }) |>
+      t()
+    column[which(column <= 0)] <- NA_real_
+    as.data.frame(column)
+    })
+  tbl <- suppressMessages(suppressWarnings(dplyr::bind_cols(tbl)))
+  colnames(tbl) <- names(centiles)
+  dplyr::mutate(tbl, gest_age = (38:42 * 7), .before = P03)
+}
+
+#' Make percentile tables based on parameters from new polynomial models
+repl_centile_tbls_new <- function(sex, acronym) {
+  repl_centile_tbls(sex, acronym, ig_nbs_bc_percentile2value)
+}
+
+#' Make percentile tables based on parameters from linear models
+repl_centile_tbls_old <- function(sex, acronym) {
+  repl_centile_tbls(sex, acronym, ig_nbs_bc_percentile2value_old)
+}
+```
+
+```{r plotting_functions}
+comparison_plot <- function(obs_tbl, pred_tbl, title, xlab, ylab, legend.pos = "none") {
+  tbl <- dplyr::bind_rows(obs_tbl, pred_tbl) |>
+    dplyr::mutate(predicted = c(rep("Observed", 5), rep("Fitted", 5))) |>
+    tidyr::pivot_longer(cols = tidyselect::contains("P", ignore.case = F),
+                        names_to = "Fitted", values_to = "yval") |>
+    dplyr::filter(!is.na(yval))
+  suppressWarnings(suppressMessages(
+    plot <- ggplot2::ggplot(data = tbl, ggplot2::aes(x = gest_age, y = yval)) +
+      ggplot2::geom_point(data = subset(tbl, predicted == "Observed"),
+                          ggplot2::aes(shape = as.factor(1)),
+                          colour = "red", fill = NA,
+                          stroke = 1.3,
+                          size = 1.5) +
+      ggplot2::geom_line(data = subset(tbl, predicted == "Fitted"),
+                         ggplot2::aes(colour = Fitted),
+                         linetype = "dashed", size = 1.1) +
+      ggplot2::labs(title = ggplot2::element_text(title),
+                    x = ggplot2::element_text(xlab),
+                    y = ggplot2::element_text(ylab)) +
+      ggplot2::scale_shape_manual(name = "", values = c(1, rep(NA, 5)),
+                                  labels = c("Observed", rep(NA, 5))) +
+      ggplot2::scale_linetype(name = "") +#, values = c(NA, rep("dashed", 5))) +
+      viridis::scale_color_viridis(name = "",
+                                   labels = c("Fitted - P03", "Fitted - P10",
+                                              "Fitted - P50", "Fitted - P90",
+                                              "Fitted - P97"),
+                                   discrete = T, option = "turbo") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position = legend.pos) +
+      ggplot2::guides(colour = ggplot2::guide_legend(order = 2),
+                      shape = ggplot2::guide_legend(order = 1))
+    ))
+}
+
+altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") {
+  diff_tbl_long <- diff_tbl |>
+    dplyr::mutate(gest_age = (38:42 * 7)) |>
+    tidyr::pivot_longer(cols = tidyselect::contains("P", ignore.case = F),
+                        names_to = "Percentile", values_to = "yval") |>
+    dplyr::mutate(gest_age = purrr::map2_vec(.x = gest_age,
+                                         .y = Percentile,
+                                         .f = ~ .x + switch(.y,
+                                               "P03" = 2,
+                                               "P10" = 1,
+                                               "P50" = 0,
+                                               "P90" = 1,
+                                               "P97" = 2))) |>
+    dplyr::filter(!is.na(yval))
+  suppressWarnings(suppressMessages(
+    plot <- ggplot2::ggplot(data = diff_tbl_long,
+                            ggplot2::aes(x = gest_age, y = yval)) +
+      ggplot2::geom_point(ggplot2::aes(colour = Percentile),
+                          shape = as.factor(x = 1),
+                          fill = NA,
+                          stroke = 1.3,
+                          size = 1.5) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dashed", size = 1.1) +
+      ggplot2::labs(title = ggplot2::element_text(title),
+                    x = ggplot2::element_text(xlab),
+                    y = ggplot2::element_text(ylab)) +
+      viridis::scale_color_viridis(name = "Percentile",
+                                   labels = c("Fitted - P03", "Fitted - P10",
+                                              "Fitted - P50", "Fitted - P90",
+                                              "Fitted - P97"),
+                                   discrete = T, option = "turbo") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position = legend.pos)
+    ))
+}
+
+bland_altman_plot <- function(actual, predicted, title, xlab, ylab, legend.pos = "none") {
+  actual_long <- actual |>
+    tidyr::pivot_longer(cols = tidyselect::starts_with(match = "P")) |>
+    dplyr::rename(reference = value)
+  predicted_long <- predicted |>
+    tidyr::pivot_longer(cols = tidyselect::starts_with(match = "P")) |>
+    dplyr::rename(predicted = value)
+  ba_tbl <- dplyr::full_join(actual_long, predicted_long) |>
+    dplyr::rename(centile = name) |>
+    dplyr::mutate(average = (reference + predicted) / 2,
+                  difference = reference - predicted)
+  hlinesize <- 1.1
+  labelsize <- 2.5
+  plot <- ggplot2::ggplot(data = ba_tbl,
+                            ggplot2::aes(x = average, y = difference)) +
+      ggplot2::geom_point(alpha = 0.5) +
+
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T)),
+                          linetype = "dashed", colour = "black", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T),
+                                       label = paste("Mean = ",
+                                                     round(mean(difference,
+                                                                na.rm = T),
+                                                           digits = 3))),
+                         hjust = 0, colour = "black", fontface = "bold", size = labelsize) +
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE)),
+                          linetype = "dashed", colour = "red", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE),
+                                       label = paste("Mean + 1.96 SD = ",
+                                                     round(mean(difference, na.rm = T) + 1.96 * sd(difference, na.rm = TRUE),
+                                                           digits = 3))),
+                          hjust = 0, colour = "red", fontface = "bold", size = labelsize) +
+      ggplot2::geom_hline(ggplot2::aes(yintercept = mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE)),
+                          linetype = "dashed", colour = "red", size = hlinesize) +
+      ggplot2::geom_label(ggplot2::aes(x = -Inf,
+                                       y = mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE),
+                                       label = paste("Mean - 1.96 SD = ",
+                                                     round(mean(difference, na.rm = T) - 1.96 * sd(difference, na.rm = TRUE),
+                                                           digits = 3))),
+                          hjust = 0, colour = "red", fontface = "bold", size = labelsize) +
+      ggplot2::labs(title = ggplot2::element_text(title),
+                    x = ggplot2::element_text(xlab),
+                    y = ggplot2::element_text(ylab)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position = legend.pos)
+}
+```
+
+```{r fmfga_plots, echo = F, warning = FALSE, message = FALSE}
+fmfga_pred_male <- repl_centile_tbls_new(sex = "M", acronym = "fmfga")
+fmfga_male_p1 <- comparison_plot(obs_tbl = fmfga_male , pred_tbl = fmfga_pred_male,
+                                 xlab = "Gestational age (days)", ylab = "Fat mass (g)",
+                                 title = "", legend.pos = "bottom")
+fmfga_male_p2 <- bland_altman_plot(actual = fmfga_male, predicted = fmfga_pred_male,
+                                   xlab = "", ylab = "Difference in\nmeasurements (g)",
+                                   title = "")
+fmfga_male_p3 <- bland_altman_plot(actual = fmfga_male, predicted = repl_centile_tbls_old(sex = "M", acronym = "fmfga"),
+                                   xlab = "", ylab = "Difference in\nmeasurements (g)",
+                                   title = "")
+
+fmfga_pred_female <- repl_centile_tbls_new(sex = "F", acronym = "fmfga")
+fmfga_female_p1 <- comparison_plot(obs_tbl = fmfga_female , pred_tbl = fmfga_pred_female,
+                      xlab = "Gestational age (days)", ylab = "",
+                      title = "")
+fmfga_female_p2 <- bland_altman_plot(actual = fmfga_female, predicted = fmfga_pred_female,
+                                     xlab = "", ylab = "",
+                                     title = "")
+fmfga_female_p3 <- bland_altman_plot(actual = fmfga_male, predicted = repl_centile_tbls_old(sex = "F", acronym = "fmfga"),
+                                     xlab = "Gestational age (days)", ylab = "",
+                                     title = "")
+```
+
+```{r bfpfga_plots, echo = F, warning = FALSE, message = FALSE}
+bfpfga_pred_male <- repl_centile_tbls_new(sex = "M", acronym = "bfpfga")
+bfpfga_male_p1 <- comparison_plot(obs_tbl = bfpfga_male , pred_tbl = bfpfga_pred_male,
+                      xlab = "", ylab = "% Body fat",
+                      title = "")
+bfpfga_male_p2 <- bland_altman_plot(actual = bfpfga_male, predicted = bfpfga_pred_male,
+                                     xlab = "", ylab = "Difference in\nmeasurements (%)",
+                                     title = "")
+bfpfga_male_p3 <- bland_altman_plot(actual = bfpfga_male, predicted = repl_centile_tbls_old(sex = "M", acronym = "bfpfga"),
+                                    xlab = "", ylab = "Difference in\nmeasurements (%)",
+                                    title = "")
+
+bfpfga_pred_female <- repl_centile_tbls_new(sex = "F", acronym = "bfpfga")
+bfpfga_female_p1 <- comparison_plot(obs_tbl = bfpfga_female , pred_tbl = bfpfga_pred_female,
+                      xlab = "", ylab = "% Body fat",
+                      title = "")
+bfpfga_female_p2 <- bland_altman_plot(actual = bfpfga_female, predicted = bfpfga_pred_female,
+                                     xlab = "", ylab = "",
+                                     title = "")
+bfpfga_female_p3 <- bland_altman_plot(actual = bfpfga_male, predicted = repl_centile_tbls_old(sex = "F", acronym = "bfpfga"),
+                                      xlab = "", ylab = "",
+                                      title = "")
+```
+
+```{r ffmfga_plots, echo = F, warning = FALSE, message = FALSE}
+ffmfga_pred_male <- repl_centile_tbls_new(sex = "M", acronym = "ffmfga")
+ffmfga_male_p1 <- comparison_plot(obs_tbl = ffmfga_male , pred_tbl = ffmfga_pred_male,
+                      xlab = "Gestational age (days)", ylab = "Fat-free mass (g)",
+                      title =  "")
+ffmfga_male_p2 <- bland_altman_plot(actual = ffmfga_male, predicted = ffmfga_pred_male,
+                                    xlab = "Average measurement", ylab = "Difference in\nmeasurements (g)",
+                                    title = "")
+ffmfga_male_p3 <- bland_altman_plot(actual = ffmfga_male, predicted = repl_centile_tbls_old(sex = "M", acronym = "ffmfga"),
+                                    xlab = "Average measurement", ylab = "Difference in\nmeasurements (g)",
+                                    title = "")
+
+ffmfga_pred_female <- repl_centile_tbls_new(sex = "F", acronym = "ffmfga")
+ffmfga_female_p1 <- comparison_plot(obs_tbl = ffmfga_female , pred_tbl = ffmfga_pred_female,
+                      xlab = "Gestational age (days)", ylab = "",
+                      title = "")
+ffmfga_female_p2 <- bland_altman_plot(actual = ffmfga_female, predicted = ffmfga_pred_female,
+                                      xlab = "Average measurement", ylab = "",
+                                      title = "")
+ffmfga_female_p3 <- bland_altman_plot(actual = ffmfga_female, predicted = repl_centile_tbls_old(sex = "F", acronym = "ffmfga"),
+                                      xlab = "Average measurement", ylab = "",
+                                      title = "")
+```
+
+## Observed vs fitted values
+
+```{r comparison_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values.", warning = FALSE, message = FALSE}
+overall_legend <- cowplot::get_legend(fmfga_male_p1)
+fmfga_male_p1_noleg <- fmfga_male_p1 + ggplot2::theme(legend.position = "none")
+plotlist <- list(fmfga_male_p1_noleg, fmfga_female_p1, bfpfga_male_p1, bfpfga_female_p1, ffmfga_male_p1, ffmfga_female_p1)
+cp <- cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
+cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1, rel_heights = c(1, .1))
+```
+
+## Bland-Altman plots
+### Reference vs. predicted values
+```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements.", warning = FALSE, message = FALSE}
+plotlist <- list(fmfga_male_p2, fmfga_female_p2, bfpfga_male_p2, bfpfga_female_p2, ffmfga_male_p2, ffmfga_female_p2)
+cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
+```
+
+### Reference vs. predicted values (linear models)
+```{r bland_altman_plots2, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements.", warning = FALSE, message = FALSE}
+plotlist <- list(fmfga_male_p3, fmfga_female_p3, bfpfga_male_p3, bfpfga_female_p3, ffmfga_male_p3, ffmfga_female_p3)
+cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
+```
+
+# References
+Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, *et al.*
+**Body composition at birth and its relationship with neonatal anthropometric
+ratios: the newborn body composition study of the INTERGROWTH-21st project**
+*Pediatric Research* 2017, **82:305-316.** doi:
+[10.1038/pr.2017.52](https://doi.org/10.1038/pr.2017.52)
