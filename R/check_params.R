@@ -45,7 +45,9 @@ check_png_params <- function(x, sex, acronym) {
 }
 
 
-#' Check if x is within upper and lower bounds of a vector
+#' Check if x is within upper and lower bounds of a vector, ignoring NA
 #' @keywords internal
 #' @noRd
-inrange <- function(x, vec) x >= min(vec) & x <= max(vec)
+inrange <- function(x, vec) {
+  x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
+}

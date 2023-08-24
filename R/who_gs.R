@@ -113,7 +113,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                                      arg1 = z,
                                      x_arg = max_len_vecs$x,
                                      acronym = max_len_vecs$acronym),
-         no = y_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$z,
+         no = y_from_LMS(lms[,1], lms[,2], lms[,3], max_len_vecs$z,
                          max_len_vecs$acronym))
 }
 
@@ -350,8 +350,9 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
            who_gs_value2zscore(y = max_len_vecs$y, x = lms$x,
                                sex = "F", acronym = max_len_vecs$acronym)
          )),
-         no = z_from_LMS(lms$L, lms$M, lms$S, max_len_vecs$y,
-                         max_len_vecs$acronym))
+         no = z_from_LMS(l = lms[,1], m = lms[,2], s = lms[,3],
+                         y = max_len_vecs$y,
+                         acronym = max_len_vecs$acronym))
 }
 
 #' @rdname who_gs_value2zscore

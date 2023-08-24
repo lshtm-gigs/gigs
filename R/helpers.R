@@ -56,30 +56,26 @@ round2 <- function(x, digits) {
 #' @return A dataframe containing coefficients (where avilable) for each
 #' provided combination of sex, gestational age, and acronym.
 #' @rdname retrieve_coefficients
-#' @importFrom data.table rbindlist
-#' @importFrom data.table merge.data.table
-#' @importFrom data.table setorder
 #' @keywords internal
 #' @noRd
 retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
-  # 1. Make DT with x, sex and acronym
-  new_dt <- data.table::data.table(x = x, sex = sex, acronym = acronym,
-                                   sex_acronym = paste0(sex, "_", acronym),
-                                   sort = seq_along(x))
+  stop("Run devtools::testthat() --> interpolation tests are broken")
+  sex_acronym <- paste0(sex, "_", acronym)
+  key_x <- seq_along(x)
 
   # 2. Load coeff tables as needed
-  unique_sex_acronym <- unique(.subset2(new_dt, "sex_acronym"))
+  unique_sex_acronym <- unique(sex_acronym)
   coeffs_li <- lapply(
     X = unique_sex_acronym,
-    FUN = \(x) load_coeff_tables(sex_acronym = x, coeff_tbls = coeff_tbls))
+    FUN = \(x) load_coeff_matrices(sex_acronym = x, coeff_tbls = coeff_tbls)
+  )
 
   # 2a. Return NA coefficient values if no coeff tables were loaded
   no_coeff_tables <- all(vapply(coeffs_li,
                                 FUN = is.null,
-                                FUN.VALUE = logical(length = length(1))))
+                                FUN.VALUE = logical(length = 1L)))
   if (no_coeff_tables) {
-    new_dt[, (coeff_names) := as.list(rep(NA, length(coeff_names)))]
-    return(new_dt[, c("sort", "sex_acronym") := NULL])
+    return(matrix(ncol = length(coeff_names), nrow = length(x)))
   }
 
   # For each set of sex/acronym combination, check against the coefficient table
@@ -87,52 +83,81 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
   coeffs_interpolated <- lapply(
     X = unique_sex_acronym,
     FUN = \(sex_acro) {
-      coeff_dt <- .subset2(coeffs_li, sex_acro)
-      is_curr_sex_acro <- new_dt$sex_acronym == sex_acro
-      current <- new_dt[is_curr_sex_acro, ]
-      not_in_coeff_tbl <- !current$x %in% coeff_dt$x &
-                            inrange(current$x, coeff_dt$x)
-      if (length(not_in_coeff_tbl)) {
-        not_in_coeff_tbl_dt <- current[not_in_coeff_tbl, ]
-        interp_dt <- interpolate_coeffs(
-          needs_interp_dt = not_in_coeff_tbl_dt,
-          coeff_names = coeff_names,
-          coeff_tbl_long = coeff_dt)
+      coeff_mat <- .subset2(coeffs_li, sex_acro)
+      is_curr_sex_acro <- sex_acronym == sex_acro
+      current_x <- x[is_curr_sex_acro]
+      not_in_coeff_tbl <- !current_x %in% coeff_mat[,1] &
+                            inrange(current_x, coeff_mat[,1])
+      if (any(not_in_coeff_tbl)) {
+        key_interped_coeffs <- key_x[is_curr_sex_acro][not_in_coeff_tbl]
+        interpolated <- interpolate_coeffs(
+          x_to_interp = current_x[not_in_coeff_tbl],
+          coeff_mat = coeff_mat,
+          coeff_names = coeff_names)
+          rownames(interpolated) <- key_interped_coeffs
+        interpolated
       }
     }
   ) |>
-    data.table::rbindlist()
+    do.call(what = "rbind")
 
   # 4. Get coeffs for variables not needing interpolation; combine
   #    non-interpolated with interpolated coeffs if necessary; return
-  coeffs_long <- data.table::rbindlist(coeffs_li)
-  in_coeff_tbl <- x %in% coeffs_long$x & inrange(x, coeffs_long$x)
-  merge_dt <- new_dt[in_coeff_tbl, ]
-  # This merge.data.table call is the slowest one - find a faster alternative to
-  # a full table match *if* speed becomes an issue
-  out <- data.table::merge.data.table(merge_dt, coeffs_long,
-                                      all.x = TRUE, sort = FALSE,
-                                      by = c("x", "sex", "acronym"))
-  if (exists(x = "coeffs_interpolated")) {
-    out <- rbind(out, coeffs_interpolated, fill = TRUE)
+
+  # 4a. Get matrix keys
+  #       i. Add an NA matrix to the end of coeffs_li
+  coeffs_li[[length(coeffs_li) + 1]] <- matrix(nrow = 1,
+                                               ncol = 1 + length(coeff_names),
+                                               dimnames = list("NA_matkey"))
+  #      ii. Bind list of matrices into one big matrix
+  coeffs_long_mat <- do.call(what = "rbind", coeffs_li)
+  #     iii. Test which members of X are in this long coefficient matrix
+  # TODO: Broken -> if x is a standard from 91 days this returns TRUE, this causes
+  # TODO: the right behaviour but is NOT clear
+  in_coeff_tbl <- x %in% coeffs_long_mat[,1] & inrange(x, coeffs_long_mat[,1])
+  if (any(in_coeff_tbl)) {
+    # 4b. Merge on matrix keys IF all matrix keys are valid
+    #       i. Make logical vector based on set inclusion
+    mat_keys <- paste0(sex_acronym[in_coeff_tbl], "_", x)
+    valid_mat_keys_lgl <- mat_keys %in% rownames(coeffs_long_mat)
+    # If any matrix keys are invalid, set to NA row accessor
+    if (!all(valid_mat_keys_lgl)) mat_keys[!valid_mat_keys_lgl] <- "NA_matkey"
+    #    ii. Subset now all mat_keys are valid
+    coeffs_no_lerp <- coeffs_long_mat[mat_keys,
+                                      2:(1 + length(coeff_names)),
+                                      drop = FALSE]
+    rownames(coeffs_no_lerp) <- key_x
   }
-  out <- data.table::merge.data.table(new_dt, out, all.x = TRUE)
-  data.table::setorder(out, sort)
-  out[, c("sort", "sex_acronym") := NULL]
+
+  notnull_interp <- !is.null(coeffs_interpolated)
+  exists_no_lerp <- exists(x = "coeffs_no_lerp")
+  if (exists_no_lerp && notnull_interp) {
+    out <- rbind(coeffs_no_lerp, coeffs_interpolated)
+  } else if (notnull_interp) {
+    out <- coeffs_interpolated
+  } else if (exists_no_lerp) {
+    out <- coeffs_no_lerp
+  } else {
+    return(matrix(ncol = length(coeff_names), nrow = length(x)))
+  }
+  out[as.character(key_x), , drop = FALSE]
 }
 
 #' Load coefficient tables for `retrieve_coefficients()`
 #'
 #' @param sex Sex, either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym denoting which coefficient table is needed.
-#' @param coeff_tbls A nested list of coefficient tables from either the WHO
-#' Child Growth Standards/INTERGROWTH-21<sup>st</sup> project.
-#' @return A `data.table` containing coefficients specified by the combination
-#' of `sex`, `acronym` and `coeff_tbls`.
-#' @importFrom data.table setDT
+#' @param coeff_tbls A nested list of coefficient tables, either
+#' `gigs::ig_nbs_coeffs` or `gigs::who_gs_coeffs` for the coefficient-based
+#' INTERGROWTH-21<sup>st</sup> Newborn Size standards or WHO Child Growth
+#' Standards, respectively.
+#' @note Uses the internal `coeff_rownames` object, information on which can be
+#' found in `data-raw/sysdata.R`.
+#' @returns A matrix with coefficients from `coeff_tbls` specified by the
+#' combination of `sex` and `acronym`.
 #' @keywords internal
 #' @noRd
-load_coeff_tables <- function(sex_acronym, coeff_tbls) {
+load_coeff_matrices <- function(sex_acronym, coeff_tbls) {
   split <- unlist(strsplit(sex_acronym, split = "_"))
   sex <- split[1]
   acronym <- split[2]
@@ -140,33 +165,31 @@ load_coeff_tables <- function(sex_acronym, coeff_tbls) {
     return(NULL)
   }
   sex_long <- if (sex == "M") "male" else "female"
-  coeff_tbl <- data.table::setDT(coeff_tbls[[acronym]][[sex_long]])
-  coeff_tbl[, c("sex", "acronym") := list(sex, acronym)]
-  colnames(coeff_tbl)[1] <- "x"
-  coeff_tbl
+  coeff_mat <- as.matrix(coeff_tbls[[acronym]][[sex_long]], ncol = 4)
+  rownames(coeff_mat) <- coeff_rownames[[sex_acronym]]
+  coeff_mat
 }
 
-#' Linearly interpolate between LMS or MSNT coefficients
-#' @param coeff_tbl_long A table of reference LMS/MSNT coefficients, from within
-#' `gigs::who_gs_coeffs` or `gigs:::ig_nbs_coeffs`
-#' @param xvar A value of x which is not found in a coefficient table but is
-#' between two values in that coefficient table.
-#' @param sex A character denoting male (`"M"`) or female (`"F"`).
-#' @return Data frame containing LMS/MSNT values which have been sourced from
-#' interpolated between existing LMS/MSNT values.
-#' @note All inputs should be length one. The function will also fail if
-#' `coeff_tbl_long` does not contain named LMS/MSNT values.
+#' Linearly interpolate in LMS/MSNT coefficient tables
+#' @param x_to_interp X values at which to get interpolated values of the
+#' coefficients named in `coeff_names`.
+#' @param coeff_mat A matrix of coefficients in which to interpolate, with the
+#' names found in `coeff_names`.
+#' @param coeff_names The names of the coefficients to be interpolated.
+#' @return Matrix containing interpolated coefficients, with the values of
+#' `coeff_names` as column names.
 #' @importFrom stats approx
 #' @keywords internal
 #' @noRd
-interpolate_coeffs <- function(needs_interp_dt, coeff_tbl_long, coeff_names) {
-  interpolated <- lapply(
+interpolate_coeffs <- function(x_to_interp, coeff_mat, coeff_names) {
+  interpolated <- vapply(
     X = coeff_names,
+    FUN.VALUE = numeric(length = length(x_to_interp)),
     FUN = \(coeff_name) {
-      stats::approx(x = .subset2(coeff_tbl_long, "x"),
-                    y = .subset2(coeff_tbl_long, coeff_name),
-                    xout = .subset2(needs_interp_dt, "x"))$y
+      stats::approx(x = coeff_mat[, 1],
+                    y = coeff_mat[, coeff_name],
+                    xout = x_to_interp)$y
     })
-  names(interpolated) <- coeff_names
-  needs_interp_dt[, names(interpolated) := interpolated]
+  if (!is.matrix(interpolated)) interpolated <- t(interpolated)
+  interpolated
 }

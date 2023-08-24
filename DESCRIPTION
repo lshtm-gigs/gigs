@@ -24,7 +24,6 @@ BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    data.table,
     gamlss.dist,
     stats,
     vctrs

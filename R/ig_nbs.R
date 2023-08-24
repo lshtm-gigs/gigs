@@ -88,28 +88,27 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
                         sex = max_len_vec_li$sex,
                         acronym = max_len_vec_li$acronym)
-    msnt[, c("p", "n_") := list(max_len_vec_li$p, seq_along(max_len_vec_li$p))]
-    data.table::setcolorder(msnt, neworder = c("n_", "p"))
-
     # Remove NA values for p or mu, or qST3() will fail
-    is_na_p_or_mu <- which(is.na(msnt$p) | is.na(msnt$mu))
-    msnt_no_na <- msnt[!is_na_p_or_mu, ]
-    msnt_no_na$out <- ifelse(
-      test = msnt_no_na$sex == "U",
-      yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                   arg1 = msnt_no_na$p,
-                                   x_arg = msnt_no_na$gest_age,
-                                   acronym = msnt_no_na$acronym),
-      no = gamlss.dist::qST3(msnt_no_na$p,
-                             mu = msnt_no_na$mu,
-                             sigma = msnt_no_na$sigma,
-                             nu = msnt_no_na$nu,
-                             tau = msnt_no_na$tau)
-    )
-    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
-                                             by = colnames(msnt))
-    data.table::setorder(all_vals, "n_")
-    all_vals$out
+    is_na_p_or_mu <- is.na(max_len_vec_li$p) | is.na(msnt[,1])
+    msnt_no_na <- msnt[!is_na_p_or_mu, , drop = FALSE]
+    # Initialise empty vector for p_out to go into
+    y_out <- rep_len(x = NA, length.out = length(max_len_vec_li$p))
+    # Calculate y values...
+    y <- ifelse(
+      test = max_len_vec_li[["sex"]] == "U",
+      yes =  mean_if_sex_undefined(
+        fn = ig_nbs_percentile2value,
+        arg1 = max_len_vec_li[["p"]][!is_na_p_or_mu],
+        x_arg = max_len_vec_li[["gest_age"]][!is_na_p_or_mu],
+        acronym = max_len_vec_li[["acronym"]][!is_na_p_or_mu]),
+      no = gamlss.dist::qST3(max_len_vec_li[["p"]][!is_na_p_or_mu],
+                             mu = msnt_no_na[,1],
+                             sigma = msnt_no_na[,2],
+                             nu = msnt_no_na[,3],
+                             tau = msnt_no_na[,4]))
+    # ... then assign to indices in the vector of NAs
+    suppressWarnings(y_out[as.integer(rownames(msnt_no_na))] <- y)
+    y_out
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
@@ -320,8 +319,6 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' @rdname ig_nbs_value2percentile
 #' @importFrom vctrs vec_recycle_common
 #' @importFrom gamlss.dist pST3
-#' @importFrom data.table merge.data.table setorder
-#' @importFrom data.table setorder
 #' @export
 ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y,
@@ -340,28 +337,35 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
     msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
                         sex = max_len_vec_li$sex,
                         acronym = max_len_vec_li$acronym)
-    msnt[, c("y", "n_") := list(max_len_vec_li$y, seq_along(max_len_vec_li$y))]
-    data.table::setcolorder(msnt, neworder = c("n_", "y"))
-
     # Remove NA values for y or mu, or pST3() will fail
-    is_na_y_or_mu <- which(is.na(msnt$y) | is.na(msnt$mu))
-    msnt_no_na <- msnt[!is_na_y_or_mu, ]
-    msnt_no_na$out <- ifelse(
-      test = msnt_no_na$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
-                                  arg1 = msnt_no_na$y,
-                                  x_arg = msnt_no_na$gest_age,
-                                  acronym = msnt_no_na$acronym),
-      no = gamlss.dist::pST3(msnt_no_na$y,
-                             mu = msnt_no_na$mu,
-                             sigma = msnt_no_na$sigma,
-                             nu = msnt_no_na$nu,
-                             tau = msnt_no_na$tau)
+    is_na_y_or_mu <- which(is.na(max_len_vec_li$y) | is.na(msnt[,1]))
+    if (length(is_na_y_or_mu) != 0) {
+      msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
+    } else {
+      msnt_no_na <- msnt
+      is_na_y_or_mu <- rep(FALSE, length(msnt[,1]))
+    }
+    # Initialise empty vector for p_out to go into
+    p_out <- rep_len(x = NA, length.out = length(max_len_vec_li$y))
+    # Calculate percentile values...
+    p <- ifelse(
+      test = max_len_vec_li[["sex"]] == "U",
+      yes = mean_if_sex_undefined(
+        fn = ig_nbs_value2percentile,
+        arg1 = max_len_vec_li[["p"]][!is_na_y_or_mu],
+        x_arg = max_len_vec_li[["gest_age"]][!is_na_y_or_mu],
+        acronym = max_len_vec_li[["acronym"]][!is_na_y_or_mu]),
+      no = gamlss.dist::pST3(max_len_vec_li[["y"]][!is_na_y_or_mu],
+                             mu = msnt_no_na[,1],
+                             sigma = msnt_no_na[,2],
+                             nu = msnt_no_na[,3],
+                             tau = msnt_no_na[,4])
     )
-    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
-                                             by = colnames(msnt))
-    data.table::setorder(all_vals, "n_")
-    all_vals$out
+    # ... then assign to indices in the vector of NAs
+    if (length(is_na_y_or_mu) != 0) {
+      suppressWarnings(p_out[as.integer(rownames(msnt_no_na))] <- p)
+    }
+    p_out
   }
 
   fromLM_v2p <- function(max_len_vec_li) {
