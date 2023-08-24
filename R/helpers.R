@@ -1,3 +1,20 @@
+#' Convert between z-scores and values using $mu$ and $sigma$
+#'
+#' @param z $z$-scores to convert to $y$ values
+#' @param y $y$ values to convert to z-scores
+#' @param mu Mean value(s).
+#' @param sigma Standard deviation(s).
+#' @returns Y values or z-scores depending on which function is called
+#' @keywords internal
+#' @noRd
+#' @family mu_sigma_conv
+mu_sigma_z2y <- function(z, mu, sigma) mu + z * sigma
+
+#' @keywords internal
+#' @noRd
+#' @family mu_sigma_conv
+mu_sigma_y2z <- function(y, mu, sigma) (y - mu) / sigma
+
 #' Return male/female mean if sex is undefined
 #'
 #' @param fn Conversion function to call

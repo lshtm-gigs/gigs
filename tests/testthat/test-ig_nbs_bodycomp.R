@@ -29,7 +29,8 @@ test_that(desc = "Conversion of percentiles to values works", {
   lower <- rep(266, length(sex))
   upper <- rep(294, length(sex))
   acronyms <- rep(names(gigs::ig_nbs)[5:7], times = rep(2, 3))
-  tolerances <- c(26, 15, 0.5, 0.5, 7, 5)
+  # 23/08/2023: With old linear equations used to be c(26, 15, 0.5, 0.5, 7, 5)
+  tolerances <- c(6, 1, 0.11, 0.11, 2, 0)
   mapply(FUN = test_percentile_tbls, sex, lower, upper, acronyms, tolerances)
 
   # Test that bad input gives NA
@@ -85,7 +86,7 @@ test_that("Conversion of z-scores to values works", {
   lower <- rep(266, length(sex))
   upper <- rep(294, length(sex))
   acronyms <- rep(names(gigs::ig_nbs)[5:7], times = rep(2, 3))
-  tolerances <- c(26, 15, 0.5, 0.5, 7, 5)
+  tolerances <- c(6, 1, 0.11, 0.11, 2, 0)
   invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerances))
 })
 
