@@ -74,20 +74,20 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                                             gest_age = gest_age,
                                             sex = sex,
                                             acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
-                                     gest_age = max_len_vecs$gest_age,
-                                     acronym = max_len_vecs$acronym)
-  checked_p <- max_len_vecs$p
-  checked_p[which(abs(max_len_vecs$p) >= 1)] <- NA
+  checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
+                                     gest_age = max_len_vecs[["gest_age"]],
+                                     acronym = max_len_vecs[["acronym"]])
+  checked_p <- max_len_vecs[["p"]]
+  checked_p[which(abs(max_len_vecs[["p"]]) >= 1)] <- NA
   input <- list(p = checked_p,
-                gest_age = checked_params$age,
-                sex = checked_params$sex,
-                acronym = checked_params$acronym)
+                gest_age = checked_params[["age"]],
+                sex = checked_params[["sex"]],
+                acronym = checked_params[["acronym"]])
 
   fromMSNT_p2v <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
-                        sex = max_len_vec_li$sex,
-                        acronym = max_len_vec_li$acronym)
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+                        sex = max_len_vec_li[["sex"]],
+                        acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for p or mu, or qST3() will fail
     is_na_p_or_mu <- is.na(max_len_vec_li$p) | is.na(msnt[,1])
     msnt_no_na <- msnt[!is_na_p_or_mu, , drop = FALSE]
@@ -325,20 +325,21 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
                                             gest_age = gest_age,
                                             sex = sex,
                                             acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
-                                     gest_age = max_len_vecs$gest_age,
-                                     acronym = max_len_vecs$acronym)
-  input <- list(y = y,
-                gest_age = checked_params$age,
-                sex = checked_params$sex,
-                acronym = checked_params$acronym)
+  checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
+                                     gest_age = max_len_vecs[["gest_age"]],
+                                     acronym = max_len_vecs[["acronym"]])
+  input <- list(y = max_len_vecs[["y"]],
+                gest_age = checked_params[["age"]],
+                sex = checked_params[["sex"]],
+                acronym = checked_params[["acronym"]])
 
   fromMSNT_v2p <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
-                        sex = max_len_vec_li$sex,
-                        acronym = max_len_vec_li$acronym)
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+                        sex = max_len_vec_li[["sex"]],
+                        acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for y or mu, or pST3() will fail
-    is_na_y_or_mu <- which(is.na(max_len_vec_li$y) | is.na(msnt[,1]))
+    is_na_y_or_mu <- which(is.na(max_len_vec_li[["y"]]) | is.na(msnt[,1]))
+    # TODO: why is this protecting the below code? not covered in unit tests
     if (length(is_na_y_or_mu) != 0) {
       msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
     } else {

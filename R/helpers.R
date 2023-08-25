@@ -59,7 +59,6 @@ round2 <- function(x, digits) {
 #' @keywords internal
 #' @noRd
 retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
-  stop("Run devtools::testthat() --> interpolation tests are broken")
   sex_acronym <- paste0(sex, "_", acronym)
   key_x <- seq_along(x)
 
@@ -75,35 +74,53 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
                                 FUN = is.null,
                                 FUN.VALUE = logical(length = 1L)))
   if (no_coeff_tables) {
-    return(matrix(ncol = length(coeff_names), nrow = length(x)))
+    return(matrix(nrow = length(x), ncol = length(coeff_names)))
   }
 
   # For each set of sex/acronym combination, check against the coefficient table
   names(coeffs_li) <- unique_sex_acronym
-  coeffs_interpolated <- lapply(
+  coeffs_out_interp_or_notinrange <- lapply(
     X = unique_sex_acronym,
     FUN = \(sex_acro) {
       coeff_mat <- .subset2(coeffs_li, sex_acro)
       is_curr_sex_acro <- sex_acronym == sex_acro
       current_x <- x[is_curr_sex_acro]
-      not_in_coeff_tbl <- !current_x %in% coeff_mat[,1] &
-                            inrange(current_x, coeff_mat[,1])
-      if (any(not_in_coeff_tbl)) {
-        key_interped_coeffs <- key_x[is_curr_sex_acro][not_in_coeff_tbl]
+      long_x <- coeff_mat[,1]
+      x_in_range <- inrange(current_x, long_x)
+      can_interp <- !current_x %in% long_x & x_in_range
+
+      interp_matrix <- function(matrix_rownames) {
         interpolated <- interpolate_coeffs(
-          x_to_interp = current_x[not_in_coeff_tbl],
+          x_to_interp = current_x[can_interp],
           coeff_mat = coeff_mat,
-          coeff_names = coeff_names)
-          rownames(interpolated) <- key_interped_coeffs
+          coeff_names = coeff_names
+        )
+        rownames(interpolated) <- matrix_rownames
         interpolated
+      }
+      not_in_range_matrix <- function(matrix_rownames) {
+        matrix(
+          nrow = sum(!x_in_range),
+          ncol = length(coeff_names),
+          dimnames = list(matrix_rownames, coeff_names)
+        )
+      }
+
+      any_need_lerping <- any(can_interp)
+      any_not_in_range <- any(!x_in_range)
+      if (any_need_lerping && any_not_in_range) {
+        rbind(interp_matrix(key_x[is_curr_sex_acro][can_interp]),
+              not_in_range_matrix(key_x[is_curr_sex_acro][!x_in_range]))
+      } else if (any_need_lerping) {
+        interp_matrix(key_x[is_curr_sex_acro][can_interp])
+      } else if (any_not_in_range) {
+        not_in_range_matrix(key_x[is_curr_sex_acro][!x_in_range])
       }
     }
   ) |>
     do.call(what = "rbind")
 
-  # 4. Get coeffs for variables not needing interpolation; combine
-  #    non-interpolated with interpolated coeffs if necessary; return
-
+  # 4. Get coeffs for variables than can be retrieved from coeff matrices
   # 4a. Get matrix keys
   #       i. Add an NA matrix to the end of coeffs_li
   coeffs_li[[length(coeffs_li) + 1]] <- matrix(nrow = 1,
@@ -112,35 +129,33 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
   #      ii. Bind list of matrices into one big matrix
   coeffs_long_mat <- do.call(what = "rbind", coeffs_li)
   #     iii. Test which members of X are in this long coefficient matrix
-  # TODO: Broken -> if x is a standard from 91 days this returns TRUE, this causes
-  # TODO: the right behaviour but is NOT clear
-  in_coeff_tbl <- x %in% coeffs_long_mat[,1] & inrange(x, coeffs_long_mat[,1])
-  if (any(in_coeff_tbl)) {
+  coeffs_long_x <- coeffs_long_mat[, 1]
+  needs_retrieval <- x %in% coeffs_long_x & inrange(x, coeffs_long_x)
+  if (any(needs_retrieval)) {
     # 4b. Merge on matrix keys IF all matrix keys are valid
     #       i. Make logical vector based on set inclusion
-    mat_keys <- paste0(sex_acronym[in_coeff_tbl], "_", x)
+    mat_keys <- paste0(sex_acronym[needs_retrieval], "_", x)
     valid_mat_keys_lgl <- mat_keys %in% rownames(coeffs_long_mat)
     # If any matrix keys are invalid, set to NA row accessor
     if (!all(valid_mat_keys_lgl)) mat_keys[!valid_mat_keys_lgl] <- "NA_matkey"
     #    ii. Subset now all mat_keys are valid
-    coeffs_no_lerp <- coeffs_long_mat[mat_keys,
-                                      2:(1 + length(coeff_names)),
-                                      drop = FALSE]
-    rownames(coeffs_no_lerp) <- key_x
+    coeffs_out_retrieved <- coeffs_long_mat[mat_keys,
+                                            2:(1 + length(coeff_names)),
+                                            drop = FALSE]
+    rownames(coeffs_out_retrieved) <- key_x
   }
 
-  notnull_interp <- !is.null(coeffs_interpolated)
-  exists_no_lerp <- exists(x = "coeffs_no_lerp")
-  if (exists_no_lerp && notnull_interp) {
-    out <- rbind(coeffs_no_lerp, coeffs_interpolated)
-  } else if (notnull_interp) {
-    out <- coeffs_interpolated
-  } else if (exists_no_lerp) {
-    out <- coeffs_no_lerp
+  isnull_interp <- is.null(coeffs_out_interp_or_notinrange)
+  exists_retrieved <- exists(x = "coeffs_out_retrieved")
+  if (isnull_interp) {
+    coeffs_out_retrieved[as.character(key_x), , drop = FALSE]
+  } else if (!exists_retrieved) {
+    coeffs_out_interp_or_notinrange[as.character(key_x), , drop = FALSE]
   } else {
-    return(matrix(ncol = length(coeff_names), nrow = length(x)))
+    coeffs_out_retrieved[rownames(coeffs_out_interp_or_notinrange), ] <-
+      coeffs_out_interp_or_notinrange
+    coeffs_out_retrieved[as.character(key_x), , drop = FALSE]
   }
-  out[as.character(key_x), , drop = FALSE]
 }
 
 #' Load coefficient tables for `retrieve_coefficients()`
@@ -181,12 +196,13 @@ load_coeff_matrices <- function(sex_acronym, coeff_tbls) {
 #' @importFrom stats approx
 #' @keywords internal
 #' @noRd
-interpolate_coeffs <- function(x_to_interp, coeff_mat, coeff_names) {
+interpolate_coeffs <- function(coeff_names, coeff_mat, x_to_interp) {
+  coeff_mat_x <- coeff_mat[, 1]
   interpolated <- vapply(
     X = coeff_names,
     FUN.VALUE = numeric(length = length(x_to_interp)),
     FUN = \(coeff_name) {
-      stats::approx(x = coeff_mat[, 1],
+      stats::approx(x = coeff_mat_x,
                     y = coeff_mat[, coeff_name],
                     xout = x_to_interp)$y
     })

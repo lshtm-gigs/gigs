@@ -1,3 +1,5 @@
+# gigs (development version)
+
 # gigs 0.2.2
 
 * Optimised interpolation for coefficient-based `who_gs_...()`/`ig_nbs_...()` 
