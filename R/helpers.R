@@ -77,7 +77,12 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
     return(matrix(nrow = length(x), ncol = length(coeff_names)))
   }
 
-  # For each set of sex/acronym combination, check against the coefficient table
+  # 3. For named unique sex/acronym combination in coeffs_li, get the
+  # coefficients. Check whether there are values which are not in range (i.e.
+  # the coefficients should be NA), or x values which require interpolation
+  # between existing coefficients. Return a list of matrices with interpolation,
+  # NA values, or both - then use the do.call("rbind") call to bind this list of
+  # matrices into one matrix.
   names(coeffs_li) <- unique_sex_acronym
   coeffs_out_interp_or_notinrange <- lapply(
     X = unique_sex_acronym,
@@ -93,7 +98,8 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
         interpolated <- interpolate_coeffs(
           x_to_interp = current_x[can_interp],
           coeff_mat = coeff_mat,
-          coeff_names = coeff_names
+          coeff_names = coeff_names,
+          coeff_mat_x = long_x
         )
         rownames(interpolated) <- matrix_rownames
         interpolated
@@ -191,13 +197,17 @@ load_coeff_matrices <- function(sex_acronym, coeff_tbls) {
 #' @param coeff_mat A matrix of coefficients in which to interpolate, with the
 #' names found in `coeff_names`.
 #' @param coeff_names The names of the coefficients to be interpolated.
+#' @param coeff_mat_x X values from the coefficient matrix. This is
+#' `coeff_mat[, 1]` by default but can be overridden by the user.
 #' @return Matrix containing interpolated coefficients, with the values of
 #' `coeff_names` as column names.
 #' @importFrom stats approx
 #' @keywords internal
 #' @noRd
-interpolate_coeffs <- function(coeff_names, coeff_mat, x_to_interp) {
-  coeff_mat_x <- coeff_mat[, 1]
+interpolate_coeffs <- function(coeff_names,
+                               coeff_mat,
+                               x_to_interp,
+                               coeff_mat_x = coeff_mat[, 1]) {
   interpolated <- vapply(
     X = coeff_names,
     FUN.VALUE = numeric(length = length(x_to_interp)),
