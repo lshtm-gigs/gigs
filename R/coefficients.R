@@ -169,9 +169,6 @@ load_coeff_matrices <- function(sex_acronym, coeff_tbls) {
   split <- unlist(strsplit(sex_acronym, split = "_"))
   sex <- split[1]
   acronym <- split[2]
-  if (sex == "NA" || acronym == "NA") {
-    return(NULL)
-  }
   sex_long <- if (sex == "M") "male" else "female"
   coeff_mat <- as.matrix(coeff_tbls[[acronym]][[sex_long]], ncol = 4)
   rownames(coeff_mat) <- coeff_rownames[[sex_acronym]]
