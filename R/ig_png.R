@@ -63,19 +63,21 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
                                             sex = sex,
                                             acronym = acronym)
 
-  df <- cbind(z, ig_png_equations(x = max_len_vecs$x,
-                                  sex = max_len_vecs$sex,
-                                  acronym = max_len_vecs$acronym))
+  df <- cbind(z, ig_png_equations(x = max_len_vecs[["x"]],
+                                  sex = max_len_vecs[["sex"]],
+                                  acronym = max_len_vecs[["acronym"]]))
 
   ifelse(
-    test = max_len_vecs$sex == "U",
-    yes = mean(c(ig_png_zscore2value(z = df$z, x = df$x,
-                                     sex = "M", acronym = df$acronym),
-                 ig_png_zscore2value(z = df$z, x = df$x,
-                                     sex = "F", acronym = df$acronym))),
-    no = ifelse(test = df$logarithmic,
-                yes = exp(df$median + z * df$stddev),
-                no = df$median + z * df$stddev
+    test = max_len_vecs[["sex"]] == "U",
+    yes = mean(c(ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
+                                     sex = "M", acronym = df[["acronym"]]),
+                 ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
+                                     sex = "F", acronym = df[["acronym"]]))),
+    no = ifelse(test = df[["logarithmic"]],
+                yes = exp(df[["mu"]] + z * df[["sigma"]]),
+                no = mu_sigma_z2y(z = z,
+                                  mu = df[["mu"]],
+                                  sigma = df[["sigma"]])
     ))
 }
 
@@ -201,19 +203,21 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y, x = x,
                                             sex = sex, acronym = acronym)
 
-  df <- cbind(y, ig_png_equations(x = max_len_vecs$x,
-                                  sex = max_len_vecs$sex,
-                                  acronym = max_len_vecs$acronym))
+  df <- cbind(y, ig_png_equations(x = max_len_vecs[["x"]],
+                                  sex = max_len_vecs[["sex"]],
+                                  acronym = max_len_vecs[["acronym"]]))
 
   ifelse(
-    test = max_len_vecs$sex == "U",
-    yes = mean(c(ig_png_value2zscore(y = df$y, x = df$x,
-                                     sex = "M", acronym = df$acronym),
-                 ig_png_value2zscore(y = df$y, x = df$x,
-                                     sex = "F", acronym = df$acronym))),
-    no = ifelse(test = df$logarithmic,
-                yes = (log(df$y) - df$median) / df$stddev,
-                no = (df$y - df$median) /df$stddev
+    test = max_len_vecs[["sex"]] == "U",
+    yes = mean(c(ig_png_value2zscore(y = df[["y"]], x = df[["x"]],
+                                     sex = "M", acronym = df[["acronym"]]),
+                 ig_png_value2zscore(y = df[["y"]], x = df[["x"]],
+                                     sex = "F", acronym = df[["acronym"]]))),
+    no = ifelse(test = df[["logarithmic"]],
+                yes = (log(df[["y"]]) - df[["mu"]]) / df[["sigma"]],
+                no = mu_sigma_y2z(y = df[["y"]],
+                                  mu = df[["mu"]],
+                                  sigma = df[["sigma"]])
     ))
 }
 
@@ -306,18 +310,18 @@ ig_png_equations <- function(x, sex, acronym) {
                                      sex = sex,
                                      acronym = acronym)
 
-  wfa_logmedian <- function(pma_weeks, sex) {
+  wfa_log_mu <- function(pma_weeks, sex) {
     2.591277 - (0.01155 * (pma_weeks ^ 0.5)) -
       (2201.705 * (pma_weeks ^ -2)) + (0.0911639 * sex)
   }
-  lfa_logmedian <- function(pma_weeks, sex) {
+  lfa_log_mu <- function(pma_weeks, sex) {
     4.136244 - (547.0018 * (pma_weeks ^ -2)) +
       0.0026066 * pma_weeks + 0.0314961 * sex
   }
-  hcfa_median <- function(pma_weeks, sex) {
+  hcfa_mu <- function(pma_weeks, sex) {
     55.53617 - (852.0059 * (pma_weeks ^ -1)) + 0.7957903 * sex
   }
-  wfl_median <- function(length_cm, sex) {
+  wfl_mu <- function(length_cm, sex) {
     ifelse(
       sex == "M",
       yes = 13.98383 + 203.5677 * (length_cm / 10) ^ -2 - 291.114 *
@@ -328,18 +332,18 @@ ig_png_equations <- function(x, sex, acronym) {
           (length_cm / 10) ^ -0.5,
         no = NA_real_))
   }
-  wfa_stddev <- function(pma_weeks) {
+  wfa_sigma <- function(pma_weeks) {
     0.1470258 + 505.92394 / pma_weeks ^ 2 -
       140.0576 / (pma_weeks ^ 2) * log(pma_weeks)
   }
-  lfa_stddev <- function(pma_weeks) {
+  lfa_sigma <- function(pma_weeks) {
     0.050489 + (310.44761 * (pma_weeks ^ -2)) -
       (90.0742 * (pma_weeks ^ -2)) * log(pma_weeks)
   }
-  hcfa_stddev <- function(pma_weeks) {
+  hcfa_sigma <- function(pma_weeks) {
     3.0582292 + (3910.05 * (pma_weeks ^ -2)) - 180.5625 * pma_weeks ^ -1
   }
-  wfl_stddev <- function(length_cm, sex) {
+  wfl_sigma <- function(length_cm, sex) {
     ifelse(
       sex == "M",
       yes = exp(-1.830098 + 0.0049708 * (length_cm / 10) ^ 3),
@@ -353,29 +357,29 @@ ig_png_equations <- function(x, sex, acronym) {
                        sex = checked_params$sex,
                        acronym = checked_params$acronym)
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
-  out_df$median <- ifelse(
+  out_df$mu <- ifelse(
     acronym == "wfa",
-    yes = wfa_logmedian(out_df$x, sex_as_numeric),
+    yes = wfa_log_mu(out_df$x, sex_as_numeric),
     no = ifelse(acronym == "lfa",
-                yes = lfa_logmedian(out_df$x, sex_as_numeric),
+                yes = lfa_log_mu(out_df$x, sex_as_numeric),
                 no = ifelse(acronym == "hcfa",
-                            hcfa_median(out_df$x, sex_as_numeric),
-                            wfl_median(out_df$x, sex))))
-  out_df$stddev <- ifelse(
+                            hcfa_mu(out_df$x, sex_as_numeric),
+                            wfl_mu(out_df$x, sex))))
+  out_df$sigma <- ifelse(
     acronym == "wfa",
-    yes = wfa_stddev(out_df$x),
+    yes = wfa_sigma(out_df$x),
     no = ifelse(acronym == "lfa",
-                yes = lfa_stddev(out_df$x),
+                yes = lfa_sigma(out_df$x),
                 no = ifelse(acronym == "hcfa",
-                            yes = hcfa_stddev(out_df$x),
-                            no = wfl_stddev(out_df$x, sex)))
+                            yes = hcfa_sigma(out_df$x),
+                            no = wfl_sigma(out_df$x, sex)))
   )
   out_df$logarithmic <- acronym %in% c("wfa", "lfa")
   invalid_params <- is.na(checked_params$x) |
                       is.na(checked_params$sex) |
                       is.na(checked_params$acronym)
-  out_df$median <- ifelse(invalid_params,
+  out_df$mu <- ifelse(invalid_params,
                           yes = NA,
-                          no = out_df$median)
+                          no = out_df$mu)
   out_df
 }
