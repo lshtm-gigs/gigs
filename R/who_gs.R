@@ -75,9 +75,9 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                                             x = x,
                                             sex = sex,
                                             acronym = acronym)
-  lms <- who_gs_lms(x = max_len_vecs$x,
-                    sex = max_len_vecs$sex,
-                    acronym = max_len_vecs$acronym)
+  lms <- who_gs_lms(x = max_len_vecs[["x"]],
+                    sex = max_len_vecs[["sex"]],
+                    acronym = max_len_vecs[["acronym"]])
 
   # from https://stackoverflow.com/questions/29920302/raising-vector-with-negative-numbers-to-a-fractional-exponent-in-r
   exponent <- function(a, pow) (abs(a) ^ pow) * sign(a)
@@ -107,14 +107,17 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
         no = z_under_minus_three(l, m, s, z))
     )
   }
-
-  ifelse(max_len_vecs$sex == "U",
+  L <- lms[,1]
+  M <- lms[,2]
+  S <- lms[,3]
+  ifelse(max_len_vecs[["sex"]] == "U",
          yes = mean_if_sex_undefined(who_gs_zscore2value,
                                      arg1 = z,
-                                     x_arg = max_len_vecs$x,
-                                     acronym = max_len_vecs$acronym),
-         no = y_from_LMS(lms[,1], lms[,2], lms[,3], max_len_vecs$z,
-                         max_len_vecs$acronym))
+                                     x_arg = max_len_vecs[["x"]],
+                                     acronym = max_len_vecs[["acronym"]]),
+         no = y_from_LMS(l = L, m = M, s = S,
+                         max_len_vecs[["z"]],
+                         max_len_vecs[["acronym"]]))
 }
 
 #' @rdname who_gs_zscore2value
@@ -315,9 +318,9 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                                             x = x,
                                             sex = sex,
                                             acronym = acronym)
-  lms <- who_gs_lms(x = max_len_vecs$x,
-                    sex = max_len_vecs$sex,
-                    acronym = max_len_vecs$acronym)
+  lms <- who_gs_lms(x = max_len_vecs[["x"]],
+                    sex = max_len_vecs[["sex"]],
+                    acronym = max_len_vecs[["acronym"]])
 
   z_over_three <- function(l, m, s, y) {
     sd3pos <-  who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
@@ -342,17 +345,21 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                   no =  z_under_minus_three(l, m, s, y))
     )
   }
-
-  ifelse(max_len_vecs$sex == "U",
+  L <- lms[,1]
+  M <- lms[,2]
+  S <- lms[,3]
+  ifelse(max_len_vecs[["sex"]] == "U",
          yes = mean(c(
-           who_gs_value2zscore(y = max_len_vecs$y, x = lms$x,
-                               sex = "M", acronym = max_len_vecs$acronym),
-           who_gs_value2zscore(y = max_len_vecs$y, x = lms$x,
-                               sex = "F", acronym = max_len_vecs$acronym)
+           who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
+                               sex = "M", acronym = max_len_vecs[["acronym"]]),
+           who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
+                               sex = "F", acronym = max_len_vecs[["acronym"]])
          )),
-         no = z_from_LMS(l = lms[,1], m = lms[,2], s = lms[,3],
-                         y = max_len_vecs$y,
-                         acronym = max_len_vecs$acronym))
+         no = z_from_LMS(l = L,
+                         m = M,
+                         s = S,
+                         y = max_len_vecs[["y"]],
+                         acronym = max_len_vecs[["acronym"]]))
 }
 
 #' @rdname who_gs_value2zscore

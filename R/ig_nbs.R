@@ -89,10 +89,10 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for p or mu, or qST3() will fail
-    is_na_p_or_mu <- is.na(max_len_vec_li$p) | is.na(msnt[,1])
+    is_na_p_or_mu <- is.na(max_len_vec_li[["p"]]) | is.na(msnt[,1])
     msnt_no_na <- msnt[!is_na_p_or_mu, , drop = FALSE]
     # Initialise empty vector for p_out to go into
-    y_out <- rep_len(x = NA, length.out = length(max_len_vec_li$p))
+    y_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["p"]]))
     # Calculate y values...
     y <- ifelse(
       test = max_len_vec_li[["sex"]] == "U",
@@ -112,46 +112,52 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li$gest_age,
-                                 sex = max_len_vec_li$sex,
-                                 acronym = max_len_vec_li$acronym)
-    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
-    max_len_vec_li$p[not_in_LM_bounds] <- NA
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+                                 sex = max_len_vec_li[["sex"]],
+                                 acronym = max_len_vec_li[["acronym"]])
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
     lm_out <- ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = mu_sigma_z2y(z = qnorm(max_len_vec_li$p),
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
                         mu = body_comp[,1],
                         sigma = body_comp[, 2]))
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
   
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
-                      sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+                      sex = max_len_vec_li[["sex"]])
     wlr_out <- ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = mu_sigma_z2y(qnorm(max_len_vec_li$p), mu = wlr$mu, sigma = wlr$sigma)
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
+                        mu = wlr[["mu"]],
+                        sigma = wlr[["sigma"]])
     )
   }
 
   vpns_lim <- 231 # start of INTERGROWTH-21st Newborn Size Standards (not VP)
   out <- ifelse(
-    test = input$gest_age >= vpns_lim,
-    yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
+    test = input[["gest_age"]] >= vpns_lim,
+    yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_p2v(input),
                  no = fromLM_p2v(input)),
-    no = ig_vpns_zscore2value(z = qnorm(input$p), gest_age = input$gest_age,
-                              sex = input$sex, acronym = input$acronym
+    no = ig_vpns_zscore2value(z = qnorm(input[["p"]]),
+                              gest_age = input[["gest_age"]],
+                              sex = input[["sex"]],
+                              acronym = input[["acronym"]]
     ))
-  ifelse(test = input$acronym == "wlrfga", yes = fromWLR_p2v(input), no = out)
+  ifelse(test = input[["acronym"]] == "wlrfga",
+         yes = fromWLR_p2v(input),
+         no = out)
 }
 
 #' @rdname ig_nbs_percentile2value
@@ -338,16 +344,10 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for y or mu, or pST3() will fail
-    is_na_y_or_mu <- which(is.na(max_len_vec_li[["y"]]) | is.na(msnt[,1]))
-    # TODO: why is this protecting the below code? not covered in unit tests
-    if (length(is_na_y_or_mu) != 0) {
-      msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
-    } else {
-      msnt_no_na <- msnt
-      is_na_y_or_mu <- rep(FALSE, length(msnt[,1]))
-    }
+    is_na_y_or_mu <- is.na(max_len_vec_li[["y"]]) | is.na(msnt[,1])
+    msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
     # Initialise empty vector for p_out to go into
-    p_out <- rep_len(x = NA, length.out = length(max_len_vec_li$y))
+    p_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["y"]]))
     # Calculate percentile values...
     p <- ifelse(
       test = max_len_vec_li[["sex"]] == "U",
@@ -370,49 +370,53 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   }
 
   fromLM_v2p <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li$gest_age,
-                                 sex = max_len_vec_li$sex,
-                                 acronym = max_len_vec_li$acronym)
-    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
-    max_len_vec_li$p[not_in_LM_bounds] <- NA
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+                                 sex = max_len_vec_li[["sex"]],
+                                 acronym = max_len_vec_li[["acronym"]])
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
 
     ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
-                                  arg1 = max_len_vec_li$y,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = pnorm(mu_sigma_y2z(y = max_len_vec_li$y,
+                                  arg1 = max_len_vec_li[["y"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
                               mu = body_comp[,1],
                               sigma = body_comp[, 2]))
     )
   }
 
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
-                      sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+                      sex = max_len_vec_li[["sex"]])
     wlr_out <- ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = pnorm(mu_sigma_y2z(max_len_vec_li$y, mu = wlr$mu, sigma = wlr$sigma))
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
+                              mu = wlr[["mu"]],
+                              sigma = wlr[["sigma"]]))
     )
   }
 
   vpns_lim <- 231
   out <- ifelse(
-    test = input$gest_age >= vpns_lim,
-    yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
+    test = input[["gest_age"]] >= vpns_lim,
+    yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_v2p(input),
                  no = fromLM_v2p(input)),
-    no = pnorm(ig_vpns_value2zscore(y = input$y,
-                                    gest_age = input$gest_age,
-                                    sex = input$sex,
-                                    acronym = input$acronym))
+    no = pnorm(ig_vpns_value2zscore(y = input[["y"]],
+                                    gest_age = input[["gest_age"]],
+                                    sex = input[["sex"]],
+                                    acronym = input[["acronym"]]))
   )
-  ifelse(test = input$acronym == "wlrfga", yes = fromWLR_v2p(input), no = out)
+  ifelse(test = input[["acronym"]] == "wlrfga",
+         yes = fromWLR_v2p(input),
+         no = out)
 }
 
 #' @rdname ig_nbs_value2percentile
