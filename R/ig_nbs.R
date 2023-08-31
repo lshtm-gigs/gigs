@@ -64,9 +64,7 @@
 #'                           sex = "F") |>
 #'   round(digits = 2)
 #' @importFrom vctrs vec_recycle_common
-#' @importFrom data.table setcolorder
 #' @importFrom gamlss.dist qST3
-#' @importFrom data.table merge.data.table
 #' @rdname ig_nbs_percentile2value
 #' @export
 ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {

@@ -1,4 +1,11 @@
-# gigs (development version)
+# gigs 0.2.3
+* The coefficient-based `ig_nbs`/`who_gs` functions are now 30 to 10x quicker 
+  depending on the length of the function inputs (more inputs = slower).
+  * This comes from removal of the `data.table` dependency - all coefficient 
+    retrieval/interpolation now occurs using matrices. The move from using 
+    `data.table.merge()` to subsetting operators has sped up the code 
+    significantly.
+* More consistent subsetting operators and terminology in package code
 
 # gigs 0.2.2
 
