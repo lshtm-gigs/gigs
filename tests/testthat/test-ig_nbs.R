@@ -183,11 +183,15 @@ test_that("Conversion of values to percentiles works", {
 test_that(desc = "Interpolation of MSNT values can be performed",
           code = {
             testthat::expect_false(
-              anyNA(ig_nbs_value2zscore(y = 4.5,
+              anyNA(ig_nbs_value2zscore(y = 48.5,
                                         # All gest_ages interpolated
                                         gest_age = 260:268 + 0.5,
                                         sex = "M",
                                         acronym = "lfga")))
+          })
+
+test_that(desc = "Coefficient nterpolation and retrieval possible in same call",
+          code = {
             testthat::expect_false(
               anyNA(ig_nbs_value2zscore(y = 3.4,
                                         # Half interpolated, half not
@@ -200,5 +204,84 @@ test_that(desc = "Interpolation of MSNT values can be performed",
 test_that(desc = "Interpolation of MSNT values with multiple standards/sexes",
           code = {
             testthat::expect_false(
-              anyNA(who_gs_value2zscore(y = 20.3, x = c(900, 905.5), sex = c("M", "F"), acronym = c("acfa", "tsfa"))))
+              anyNA(ig_nbs_value2zscore(y = 3,
+                                        gest_age = c(250, 250.5),
+                                        sex = c("M", "F"),
+                                        acronym = c("wfga", "lfga"))))
           })
+
+test_that(desc = "NA values returned with out of range gestage",
+          code = {
+            ga_range <- 130:310
+            out_len <- length(ga_range)
+            full_nbs_range <- 168:300
+            testthat::expect_equal(
+              sum(
+                !is.na(
+                  ig_nbs_percentile2value(
+                    p = 0.5,
+                    gest_age = ga_range,
+                    sex = rep_len(c("M", "F"), out_len),
+                    acronym = rep_len(names(gigs::ig_nbs)[1:4], out_len))
+                )
+              ),
+              length(full_nbs_range)
+            )
+            bodycomp_range <- 266:294
+            testthat::expect_equal(
+              sum(
+                !is.na(
+                  ig_nbs_percentile2value(
+                    p = 0.5,
+                    gest_age = ga_range,
+                    sex = rep_len(c("M", "F"), out_len),
+                    acronym = rep_len(names(gigs::ig_nbs[5:7]), out_len))
+                )
+              ),
+              length(bodycomp_range)
+            )
+          })
+
+test_that(desc = "GAMLSS conversions work when `msnt_no_na` has length zero",
+          code = {
+            testthat::expect_false(
+              anyNA(
+                ig_nbs_value2percentile(
+                  y = rnorm(n = 100, mean =  2.3, sd = 0.25),
+                  gest_age = rep_len(232:300, length.out = 100),
+                  sex = rep_len(c("M", "F"), length.out = 100),
+                  acronym = rep_len(names(gigs::ig_nbs_coeffs)[1:3], length.out = 100)
+                )))
+            testthat::expect_false(
+              anyNA(
+                ig_nbs_percentile2value(
+                  p = rnorm(n = 100, mean = 0.5, sd = 0.05),
+                  gest_age = rep_len(232:300, length.out = 100),
+                  sex = rep_len(c("M", "F"), length.out = 100),
+                  acronym = rep_len(names(gigs::ig_nbs_coeffs)[1:3], length.out = 100)
+                )))
+          }
+)
+
+test_that(desc = "Coefficient retrieval works when not all acronyms are valid",
+          code = {
+            testthat::expect_true(
+              anyNA(
+                ig_nbs_value2percentile(
+                  y = rnorm(n = 100, mean =  2.3, sd = 0.25),
+                  gest_age = rep_len(232:300, length.out = 100),
+                  sex = rep_len(c("M", "F"), length.out = 100),
+                  acronym = rep_len(c(names(gigs::ig_nbs_coeffs)[1:2], "xfga"),
+                                    length.out = 100)
+                )))
+            testthat::expect_true(
+              anyNA(
+                ig_nbs_percentile2value(
+                  p = rnorm(n = 100, mean = 0.5, sd = 0.05),
+                  gest_age = rep_len(232:300, length.out = 100),
+                  sex = rep_len(c("M", "F"), length.out = 100),
+                  acronym = rep_len(c(names(gigs::ig_nbs_coeffs)[1:2], "xfga"),
+                                    length.out = 100)
+                )))
+          }
+)

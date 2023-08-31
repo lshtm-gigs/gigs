@@ -46,13 +46,15 @@ test_that("Conversion of z-scores to WHO values works", {
   invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
 })
 
-test_that("Inputs with only incorrect acronyms return NA values", {
-  expect_equal(object = who_gs_zscore2value(z = -3:3, x = 50, sex = rep_len(c("M", "F"), 7),
+test_that(desc = "Inputs with only incorrect acronyms return NA values", {
+  expect_equal(object = who_gs_zscore2value(z = -3:3,
+                                            x = 50,
+                                            sex = rep_len(c("M", "F"), 7),
                                             acronym = "wrong"),
                expected = rep(NA, length(-3:3)))
   expect_equal(object = who_gs_zscore2value(z = 0, x = 50, sex = "M",
                                             acronym = "also_wrong"),
-               expected = rep(NA, length(0)))
+               expected = rep(NA, length(x = 0)))
 })
 
 test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
