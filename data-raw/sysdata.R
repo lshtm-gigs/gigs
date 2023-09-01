@@ -79,3 +79,19 @@ ig_nbs_bc_li <- lapply(bodycomp_tables, extract_eqn_params)
 # Save data to sysdata.rda with usethis ----------------------------------------
 usethis::use_data(ig_nbs_bc_li, coeff_rownames,
                   internal = TRUE, overwrite = TRUE)
+
+# Save body composition data as .dta file for use in stata-gigs ----------------
+dta_dir <- file.path("data-raw", "tables", "ig_nbs", "stata")
+if (!dir.exists(dta_dir)) dir.create(dta_dir)
+ig_nbs_bc_df <- as.data.frame(ig_nbs_bc_li) |>
+  t() |>
+  as.data.frame() |>
+  tibble::rownames_to_column( var = "nbsBC_sexacronym") |>
+  dplyr::rename(nbsBC_intercept = intercept,
+                nbsBC_x = `x`,
+                nbsBC_x2 = `x^2`,
+                nbsBC_x3 = `x^3`,
+                nbsBC_sigma = sigma) |>
+  `rownames<-`(value = NULL)
+ig_nbs_bc_df |>
+  haven::write_dta(path = file.path(dta_dir, "ig_nbsNORMBODYCOMP.dta"))

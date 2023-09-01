@@ -74,8 +74,10 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
                  ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
                                      sex = "F", acronym = df[["acronym"]]))),
     no = ifelse(test = df[["logarithmic"]],
-                yes = exp(df[["mu"]] + z * df[["sigma"]]),
-                no = mu_sigma_z2y(z = z,
+                yes = exp(mu_sigma_z2y(z = df[["z"]],
+                                       mu = df[["mu"]],
+                                       sigma = df[["sigma"]])),
+                no = mu_sigma_z2y(z = df[["z"]],
                                   mu = df[["mu"]],
                                   sigma = df[["sigma"]])
     ))
@@ -202,23 +204,25 @@ ig_png_wfl_percentile2value <- function(p, length_cm, sex) {
 ig_png_value2zscore <- function(y, x, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y, x = x,
                                             sex = sex, acronym = acronym)
-
-  df <- cbind(y, ig_png_equations(x = max_len_vecs[["x"]],
-                                  sex = max_len_vecs[["sex"]],
-                                  acronym = max_len_vecs[["acronym"]]))
-
+  df <- cbind(y = max_len_vecs[["y"]],
+              ig_png_equations(x = max_len_vecs[["x"]],
+                               sex = max_len_vecs[["sex"]],
+                               acronym = max_len_vecs[["acronym"]]))
   ifelse(
     test = max_len_vecs[["sex"]] == "U",
-    yes = mean(c(ig_png_value2zscore(y = df[["y"]], x = df[["x"]],
-                                     sex = "M", acronym = df[["acronym"]]),
-                 ig_png_value2zscore(y = df[["y"]], x = df[["x"]],
-                                     sex = "F", acronym = df[["acronym"]]))),
-    no = ifelse(test = df[["logarithmic"]],
-                yes = (log(df[["y"]]) - df[["mu"]]) / df[["sigma"]],
-                no = mu_sigma_y2z(y = df[["y"]],
-                                  mu = df[["mu"]],
-                                  sigma = df[["sigma"]])
-    ))
+    yes = mean(c(ig_png_value2zscore(y = df[["y"]],
+                                     x = df[["x"]],
+                                     sex = "M",
+                                     acronym = df[["acronym"]]),
+                 ig_png_value2zscore(y = df[["y"]],
+                                     x = df[["x"]],
+                                     sex = "F",
+                                     acronym = df[["acronym"]]))),
+    no = mu_sigma_y2z(y = ifelse(test = df[["logarithmic"]],
+                                 yes = log(df[["y"]]), no = df[["y"]]),
+                      mu = df[["mu"]],
+                      sigma = df[["sigma"]])
+    )
 }
 
 #' @rdname ig_png_value2zscore
@@ -353,33 +357,31 @@ ig_png_equations <- function(x, sex, acronym) {
         (length_cm / 10) ^ 3 * log(length_cm / 10),
         no = NA_real_))
   }
-  out_df <- data.frame(x = checked_params$x,
-                       sex = checked_params$sex,
-                       acronym = checked_params$acronym)
+  out_df <- data.frame(x = checked_params[["x"]],
+                       sex = checked_params[["sex"]],
+                       acronym = checked_params[["acronym"]])
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
-  out_df$mu <- ifelse(
+  out_df[["mu"]] <- ifelse(
     acronym == "wfa",
-    yes = wfa_log_mu(out_df$x, sex_as_numeric),
+    yes = wfa_log_mu(out_df[["x"]], sex_as_numeric),
     no = ifelse(acronym == "lfa",
-                yes = lfa_log_mu(out_df$x, sex_as_numeric),
+                yes = lfa_log_mu(out_df[["x"]], sex_as_numeric),
                 no = ifelse(acronym == "hcfa",
-                            hcfa_mu(out_df$x, sex_as_numeric),
-                            wfl_mu(out_df$x, sex))))
-  out_df$sigma <- ifelse(
+                            hcfa_mu(out_df[["x"]], sex_as_numeric),
+                            wfl_mu(out_df[["x"]], sex))))
+  out_df[["sigma"]] <- ifelse(
     acronym == "wfa",
-    yes = wfa_sigma(out_df$x),
+    yes = wfa_sigma(out_df[["x"]]),
     no = ifelse(acronym == "lfa",
-                yes = lfa_sigma(out_df$x),
+                yes = lfa_sigma(out_df[["x"]]),
                 no = ifelse(acronym == "hcfa",
-                            yes = hcfa_sigma(out_df$x),
-                            no = wfl_sigma(out_df$x, sex)))
+                            yes = hcfa_sigma(out_df[["x"]]),
+                            no = wfl_sigma(out_df[["x"]], sex)))
   )
-  out_df$logarithmic <- acronym %in% c("wfa", "lfa")
-  invalid_params <- is.na(checked_params$x) |
-                      is.na(checked_params$sex) |
-                      is.na(checked_params$acronym)
-  out_df$mu <- ifelse(invalid_params,
-                          yes = NA,
-                          no = out_df$mu)
+  out_df[["logarithmic"]] <- acronym %in% c("wfa", "lfa")
+  invalid_params <- is.na(checked_params[["x"]]) |
+                      is.na(checked_params[["sex"]]) |
+                      is.na(checked_params[["acronym"]])
+  out_df[["mu"]][invalid_params] <- NA
   out_df
 }

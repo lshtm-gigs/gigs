@@ -75,47 +75,6 @@ test_that("Conversion of percentiles to values works", {
   acronyms <- rep(names(gigs::ig_nbs)[1:4], times = rep(2, length(names(gigs::ig_nbs)) - 3))
   tolerance <- 0.01
   mapply(FUN = test_percentile_tbls, sex, lower, upper, acronyms, tolerance)
-
-  # Test that bad input gives NA
-  with(
-    data.frame(sex = c("M", "F", "U", "X", "M"),
-         percentiles = c(0.25, -1, 0.13, 0.84, 0.10),
-         age = c(32, 33, 34, 35, 36)),
-    expr = {
-      sapply(X = c("wfga", "lfga", "hcfga"), FUN = function(x) {
-        fn <- switch(x,
-                     "wfga" = ig_nbs_wfga_percentile2value,
-                     "lfga" = ig_nbs_lfga_percentile2value,
-                     "hcfga" = ig_nbs_hcfga_percentile2value)
-        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
-        expect_length(object = vals, n = length(sex))
-        expect_true(all(is.na(c(
-          vals[2], # Because percentile is out of bounds
-          vals[4]  # Because sex is not one of "M", "F" or "U"
-        ))))
-      })
-    })
-
-  # Test that bad input gives NA --> VPNS
-  with(
-    list(sex = c("M", "F", "U", "X", "M"),
-         percentiles = c(0.5, -1, 0.5, 0.5, 0.5),
-         age = c(161, 168, 175, 182, 210)),
-    expr = {
-      sapply(X = c("wfga", "lfga", "hcfga"), FUN = function(x) {
-        fn <- switch(x,
-                     "wfga" = ig_nbs_wfga_percentile2value,
-                     "lfga" = ig_nbs_lfga_percentile2value,
-                     "hcfga" = ig_nbs_hcfga_percentile2value)
-        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
-        expect_length(object = vals, n = length(sex))
-        expect_true(all(is.na(c(
-          vals[1], # Because age is out of bounds
-          vals[2], # Because percentile is out of bounds
-          vals[4]  # Because sex is not one of "M", "F" or "U"
-        ))))
-      })
-    })
 })
 
 testthat_v2x <- function(y, gest_age, sex, acronym, z_or_p = "zscores") {
@@ -178,6 +137,49 @@ test_that("Conversion of values to percentiles works", {
   # Weight-length ratio for gestational age
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 36, sex = "M", acronym = "wlrfga", z_or_p = "percentiles")
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_age = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "percentiles")
+})
+
+test_that(desc = "Bad input gives NA", code = {
+  with(
+    data.frame(sex = c("M", "F", "U", "X", "M"),
+         percentiles = c(0.25, -1, 0.13, 0.84, 0.10),
+         age = c(32, 33, 34, 35, 36)),
+    expr = {
+      sapply(X = c("wfga", "lfga", "hcfga", "wlrfga"), FUN = function(x) {
+        fn <- switch(x,
+                     "wfga" = ig_nbs_wfga_percentile2value,
+                     "lfga" = ig_nbs_lfga_percentile2value,
+                     "wlrfga" = ig_nbs_wlrfga_percentile2value,
+                     "hcfga" = ig_nbs_hcfga_percentile2value)
+        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
+        expect_length(object = vals, n = length(sex))
+        expect_true(all(is.na(c(
+          vals[2], # Because percentile is out of bounds
+          vals[4]  # Because sex is not one of "M", "F" or "U"
+        ))))
+      })
+    })
+
+  # Test that bad input gives NA in VPNS
+  with(
+    list(sex = c("M", "F", "U", "X", "M"),
+         percentiles = c(0.5, -1, 0.5, 0.5, 0.5),
+         age = c(161, 168, 175, 182, 210)),
+    expr = {
+      sapply(X = c("wfga", "lfga", "hcfga"), FUN = function(x) {
+        fn <- switch(x,
+                     "wfga" = ig_nbs_wfga_percentile2value,
+                     "lfga" = ig_nbs_lfga_percentile2value,
+                     "hcfga" = ig_nbs_hcfga_percentile2value)
+        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
+        expect_length(object = vals, n = length(sex))
+        expect_true(all(is.na(c(
+          vals[1], # Because age is out of bounds
+          vals[2], # Because percentile is out of bounds
+          vals[4]  # Because sex is not one of "M", "F" or "U"
+        ))))
+      })
+    })
 })
 
 test_that(desc = "Interpolation of MSNT values can be performed",

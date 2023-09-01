@@ -183,8 +183,8 @@ load_coeff_matrices <- function(sex_acronym, coeff_tbls) {
 #' @param coeff_names The names of the coefficients to be interpolated.
 #' @param coeff_mat_x X values from the coefficient matrix. This is
 #' `coeff_mat[, 1]` by default but can be overridden by the user.
-#' @return Matrix containing interpolated coefficients, with the values of
-#' `coeff_names` as column names.
+#' @return Matrix containing interpolated coefficients, with column names from
+#' `coeff_names`.
 #' @importFrom stats approx
 #' @keywords internal
 #' @noRd
@@ -198,8 +198,7 @@ interpolate_coeffs <- function(coeff_names,
     FUN = \(coeff_name) {
       stats::approx(x = coeff_mat_x,
                     y = coeff_mat[, coeff_name],
-                    xout = x_to_interp)$y
+                    xout = x_to_interp)[["y"]]
     })
-  if (!is.matrix(interpolated)) interpolated <- t(interpolated)
-  interpolated
+  if (!is.matrix(interpolated)) t(interpolated) else interpolated
 }

@@ -130,7 +130,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   fromWLR_p2v <- function(max_len_vec_li) {
     wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
                       sex = max_len_vec_li[["sex"]])
-    wlr_out <- ifelse(
+    ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
                                   arg1 = max_len_vec_li[["p"]],
@@ -142,7 +142,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     )
   }
 
-  vpns_lim <- 231 # start of INTERGROWTH-21st Newborn Size Standards (not VP)
+  vpns_lim <- 231
   out <- ifelse(
     test = input[["gest_age"]] >= vpns_lim,
     yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
