@@ -46,13 +46,15 @@ test_that("Conversion of z-scores to WHO values works", {
   invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
 })
 
-test_that("Inputs with only incorrect acronyms return NA values", {
-  expect_equal(object = who_gs_zscore2value(z = -3:3, x = 50, sex = rep_len(c("M", "F"), 7),
+test_that(desc = "Inputs with only incorrect acronyms return NA values", {
+  expect_equal(object = who_gs_zscore2value(z = -3:3,
+                                            x = 50,
+                                            sex = rep_len(c("M", "F"), 7),
                                             acronym = "wrong"),
                expected = rep(NA, length(-3:3)))
   expect_equal(object = who_gs_zscore2value(z = 0, x = 50, sex = "M",
                                             acronym = "also_wrong"),
-               expected = rep(NA, length(0)))
+               expected = rep(NA, length(x = 0)))
 })
 
 test_percentile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
@@ -224,11 +226,40 @@ test_that("Conversion of values to percentiles works", {
 test_that(desc = "Interpolation of LMS values can be performed",
           code = {
             testthat::expect_false(
-              anyNA(who_gs_value2zscore(y = 20.3, x = seq(900, 910, by = 0.5), sex = "M", acronym = "acfa")))
+              anyNA(
+                who_gs_value2zscore(y = 20.3,
+                                    # All xvars interpolated
+                                    x = 900:920 + 0.5,
+                sex = "M",
+                acronym = "acfa")
+              ))
+            testthat::expect_false(
+              anyNA(who_gs_value2zscore(y = 20.3,
+                                        # Half interpolated, half not
+                                        x = seq(900, 910, by = 0.5),
+                                        sex = "M",
+                                        acronym = "acfa")
+              ))
           })
 
-test_that(desc = "Interpolation of LMS values can be performed when multiple standards are in use",
+test_that(desc = "Interpolation of LMS values with multiple standards/sexes",
           code = {
             testthat::expect_false(
-              anyNA(who_gs_value2zscore(y = 20.3, x = c(900, 905.5), sex = "M", acronym = c("acfa", "tsfa"))))
+              anyNA(
+                who_gs_value2percentile(y = 20.3,
+                                        x = c(900, 905.5),
+                                        sex = c("M", "F"),
+                                        acronym = c("acfa", "tsfa")
+              )))
+          })
+
+test_that(desc = "NA values returned with out of range xvars",
+          code = {
+            testthat::expect_true(
+              anyNA(
+                who_gs_zscore2value(z = rep_len(-3:3, 200),
+                                    x = seq(0, 99.5, by = 0.5),
+                                    sex = rep_len(c("M", "F"), 200),
+                                    acronym = rep_len(names(gigs::who_gs), 200))
+              ))
           })

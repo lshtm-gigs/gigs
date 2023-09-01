@@ -64,9 +64,7 @@
 #'                           sex = "F") |>
 #'   round(digits = 2)
 #' @importFrom vctrs vec_recycle_common
-#' @importFrom data.table setcolorder
 #' @importFrom gamlss.dist qST3
-#' @importFrom data.table merge.data.table
 #' @rdname ig_nbs_percentile2value
 #' @export
 ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
@@ -74,84 +72,90 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                                             gest_age = gest_age,
                                             sex = sex,
                                             acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
-                                     gest_age = max_len_vecs$gest_age,
-                                     acronym = max_len_vecs$acronym)
-  checked_p <- max_len_vecs$p
-  checked_p[which(abs(max_len_vecs$p) >= 1)] <- NA
+  checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
+                                     gest_age = max_len_vecs[["gest_age"]],
+                                     acronym = max_len_vecs[["acronym"]])
+  checked_p <- max_len_vecs[["p"]]
+  checked_p[which(abs(max_len_vecs[["p"]]) >= 1)] <- NA
   input <- list(p = checked_p,
-                gest_age = checked_params$age,
-                sex = checked_params$sex,
-                acronym = checked_params$acronym)
+                gest_age = checked_params[["age"]],
+                sex = checked_params[["sex"]],
+                acronym = checked_params[["acronym"]])
 
   fromMSNT_p2v <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
-                        sex = max_len_vec_li$sex,
-                        acronym = max_len_vec_li$acronym)
-    msnt[, c("p", "n_") := list(max_len_vec_li$p, seq_along(max_len_vec_li$p))]
-    data.table::setcolorder(msnt, neworder = c("n_", "p"))
-
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+                        sex = max_len_vec_li[["sex"]],
+                        acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for p or mu, or qST3() will fail
-    is_na_p_or_mu <- which(is.na(msnt$p) | is.na(msnt$mu))
-    msnt_no_na <- msnt[!is_na_p_or_mu, ]
-    msnt_no_na$out <- ifelse(
-      test = msnt_no_na$sex == "U",
-      yes =  mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                   arg1 = msnt_no_na$p,
-                                   x_arg = msnt_no_na$gest_age,
-                                   acronym = msnt_no_na$acronym),
-      no = gamlss.dist::qST3(msnt_no_na$p,
-                             mu = msnt_no_na$mu,
-                             sigma = msnt_no_na$sigma,
-                             nu = msnt_no_na$nu,
-                             tau = msnt_no_na$tau)
-    )
-    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
-                                             by = colnames(msnt))
-    data.table::setorder(all_vals, "n_")
-    all_vals$out
+    is_na_p_or_mu <- is.na(max_len_vec_li[["p"]]) | is.na(msnt[,1])
+    msnt_no_na <- msnt[!is_na_p_or_mu, , drop = FALSE]
+    # Initialise empty vector for p_out to go into
+    y_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["p"]]))
+    # Calculate y values...
+    y <- ifelse(
+      test = max_len_vec_li[["sex"]] == "U",
+      yes =  mean_if_sex_undefined(
+        fn = ig_nbs_percentile2value,
+        arg1 = max_len_vec_li[["p"]][!is_na_p_or_mu],
+        x_arg = max_len_vec_li[["gest_age"]][!is_na_p_or_mu],
+        acronym = max_len_vec_li[["acronym"]][!is_na_p_or_mu]),
+      no = gamlss.dist::qST3(max_len_vec_li[["p"]][!is_na_p_or_mu],
+                             mu = msnt_no_na[,1],
+                             sigma = msnt_no_na[,2],
+                             nu = msnt_no_na[,3],
+                             tau = msnt_no_na[,4]))
+    # ... then assign to indices in the vector of NAs
+    suppressWarnings(y_out[as.integer(rownames(msnt_no_na))] <- y)
+    y_out
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex,
-                                 acronym = max_len_vec_li$acronym)
-    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
-    max_len_vec_li$p[not_in_LM_bounds] <- NA
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+                                 sex = max_len_vec_li[["sex"]],
+                                 acronym = max_len_vec_li[["acronym"]])
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
     lm_out <- ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = body_comp$y_intercept +
-             body_comp$ga_coeff * (max_len_vec_li$gest_age / 7) +
-             qnorm(max_len_vec_li$p) * body_comp$std_dev)
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
+                        mu = body_comp[,1],
+                        sigma = body_comp[, 2]))
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
   
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
-                      sex = max_len_vec_li$sex)
-    wlr_out <- ifelse(
-      max_len_vec_li$sex == "U",
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+                      sex = max_len_vec_li[["sex"]])
+    ifelse(
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = qnorm(max_len_vec_li$p) * wlr$sigma + wlr$mu
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
+                        mu = wlr[["mu"]],
+                        sigma = wlr[["sigma"]])
     )
   }
 
-  vpns_lim <- 231 # start of INTERGROWTH-21st Newborn Size Standards (not VP)
+  vpns_lim <- 231
   out <- ifelse(
-    test = input$gest_age >= vpns_lim,
-    yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
+    test = input[["gest_age"]] >= vpns_lim,
+    yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_p2v(input),
                  no = fromLM_p2v(input)),
-    no = ig_vpns_zscore2value(z = qnorm(input$p), gest_age = input$gest_age,
-                              sex = input$sex, acronym = input$acronym
+    no = ig_vpns_zscore2value(z = qnorm(input[["p"]]),
+                              gest_age = input[["gest_age"]],
+                              sex = input[["sex"]],
+                              acronym = input[["acronym"]]
     ))
-  ifelse(test = input$acronym == "wlrfga", yes = fromWLR_p2v(input), no = out)
+  ifelse(test = input[["acronym"]] == "wlrfga",
+         yes = fromWLR_p2v(input),
+         no = out)
 }
 
 #' @rdname ig_nbs_percentile2value
@@ -319,92 +323,98 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' @rdname ig_nbs_value2percentile
 #' @importFrom vctrs vec_recycle_common
 #' @importFrom gamlss.dist pST3
-#' @importFrom data.table merge.data.table setorder
-#' @importFrom data.table setorder
 #' @export
 ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y,
                                             gest_age = gest_age,
                                             sex = sex,
                                             acronym = acronym)
-  checked_params <- check_nbs_params(sex = max_len_vecs$sex,
-                                     gest_age = max_len_vecs$gest_age,
-                                     acronym = max_len_vecs$acronym)
-  input <- list(y = y,
-                gest_age = checked_params$age,
-                sex = checked_params$sex,
-                acronym = checked_params$acronym)
+  checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
+                                     gest_age = max_len_vecs[["gest_age"]],
+                                     acronym = max_len_vecs[["acronym"]])
+  input <- list(y = max_len_vecs[["y"]],
+                gest_age = checked_params[["age"]],
+                sex = checked_params[["sex"]],
+                acronym = checked_params[["acronym"]])
 
   fromMSNT_v2p <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li$gest_age,
-                        sex = max_len_vec_li$sex,
-                        acronym = max_len_vec_li$acronym)
-    msnt[, c("y", "n_") := list(max_len_vec_li$y, seq_along(max_len_vec_li$y))]
-    data.table::setcolorder(msnt, neworder = c("n_", "y"))
-
+    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+                        sex = max_len_vec_li[["sex"]],
+                        acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for y or mu, or pST3() will fail
-    is_na_y_or_mu <- which(is.na(msnt$y) | is.na(msnt$mu))
-    msnt_no_na <- msnt[!is_na_y_or_mu, ]
-    msnt_no_na$out <- ifelse(
-      test = msnt_no_na$sex == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
-                                  arg1 = msnt_no_na$y,
-                                  x_arg = msnt_no_na$gest_age,
-                                  acronym = msnt_no_na$acronym),
-      no = gamlss.dist::pST3(msnt_no_na$y,
-                             mu = msnt_no_na$mu,
-                             sigma = msnt_no_na$sigma,
-                             nu = msnt_no_na$nu,
-                             tau = msnt_no_na$tau)
+    is_na_y_or_mu <- is.na(max_len_vec_li[["y"]]) | is.na(msnt[,1])
+    msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
+    # Initialise empty vector for p_out to go into
+    p_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["y"]]))
+    # Calculate percentile values...
+    p <- ifelse(
+      test = max_len_vec_li[["sex"]] == "U",
+      yes = mean_if_sex_undefined(
+        fn = ig_nbs_value2percentile,
+        arg1 = max_len_vec_li[["p"]][!is_na_y_or_mu],
+        x_arg = max_len_vec_li[["gest_age"]][!is_na_y_or_mu],
+        acronym = max_len_vec_li[["acronym"]][!is_na_y_or_mu]),
+      no = gamlss.dist::pST3(max_len_vec_li[["y"]][!is_na_y_or_mu],
+                             mu = msnt_no_na[,1],
+                             sigma = msnt_no_na[,2],
+                             nu = msnt_no_na[,3],
+                             tau = msnt_no_na[,4])
     )
-    all_vals <- data.table::merge.data.table(msnt, msnt_no_na, all.x = TRUE,
-                                             by = colnames(msnt))
-    data.table::setorder(all_vals, "n_")
-    all_vals$out
+    # ... then assign to indices in the vector of NAs
+    if (length(is_na_y_or_mu) != 0) {
+      suppressWarnings(p_out[as.integer(rownames(msnt_no_na))] <- p)
+    }
+    p_out
   }
 
   fromLM_v2p <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(sex = max_len_vec_li$sex,
-                                 acronym = max_len_vec_li$acronym)
-    not_in_LM_bounds <- !inrange(max_len_vec_li$gest_age, c(266, 294))
-    max_len_vec_li$p[not_in_LM_bounds] <- NA
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+                                 sex = max_len_vec_li[["sex"]],
+                                 acronym = max_len_vec_li[["acronym"]])
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
+
     ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
-                                  arg1 = max_len_vec_li$y,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = pnorm((max_len_vec_li$y - body_comp$y_intercept -
-                    body_comp$ga_coeff * (max_len_vec_li$gest_age / 7)) /
-                      body_comp$std_dev)
+                                  arg1 = max_len_vec_li[["y"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
+                              mu = body_comp[,1],
+                              sigma = body_comp[, 2]))
     )
   }
-  
+
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li$gest_age / 7,
-                      sex = max_len_vec_li$sex)
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+                      sex = max_len_vec_li[["sex"]])
     wlr_out <- ifelse(
-      max_len_vec_li$sex == "U",
+      max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
-                                  arg1 = max_len_vec_li$p,
-                                  x_arg = max_len_vec_li$gest_age,
-                                  acronym = max_len_vec_li$acronym),
-      no = pnorm((max_len_vec_li$y - wlr$mu) / wlr$sigma)
+                                  arg1 = max_len_vec_li[["p"]],
+                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  acronym = max_len_vec_li[["acronym"]]),
+      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
+                              mu = wlr[["mu"]],
+                              sigma = wlr[["sigma"]]))
     )
   }
 
   vpns_lim <- 231
   out <- ifelse(
-    test = input$gest_age >= vpns_lim,
-    yes = ifelse(test = input$acronym %in% c("wfga", "lfga", "hcfga"),
+    test = input[["gest_age"]] >= vpns_lim,
+    yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_v2p(input),
                  no = fromLM_v2p(input)),
-    no = pnorm(ig_vpns_value2zscore(y = input$y,
-                                    gest_age = input$gest_age,
-                                    sex = input$sex,
-                                    acronym = input$acronym))
+    no = pnorm(ig_vpns_value2zscore(y = input[["y"]],
+                                    gest_age = input[["gest_age"]],
+                                    sex = input[["sex"]],
+                                    acronym = input[["acronym"]]))
   )
-  ifelse(test = input$acronym == "wlrfga", yes = fromWLR_v2p(input), no = out)
+  ifelse(test = input[["acronym"]] == "wlrfga",
+         yes = fromWLR_v2p(input),
+         no = out)
 }
 
 #' @rdname ig_nbs_value2percentile
@@ -534,7 +544,7 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
                         c("mu", "sigma", "nu", "tau"))
 }
 
-#' INTERGROWTH-21<sup>st</sup> weight-to-length ratio medians/standard
+#' INTERGROWTH-21<sup>st</sup> weight-to-length ratio means/standard
 #' deviations
 #'
 #' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 +
@@ -581,19 +591,23 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
   data.frame(gest_age = ga_weeks * 7, sex, mu = mu, sigma = sigma)
 }
 
-#' INTERGROWTH-21<sup>st</sup> body composition equation parameters
+#' INTERGROWTH-21<sup>st</sup> normative body composition means/standard
+#' deviations
 #'
+#' @param x Gestation age in days at which to calculate mu (mean) and sigma
+#' (SD). Should be between `266` and `294`.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS body
-#' composition standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or
-#' `"ffmfga"`.
-#' @return Body composition equation parameters for each provided
+#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
+#' normative body composition standard to use. Must be one of `"fmfga"`,
+#' `"bfpfga"`, or `"ffmfga"`.
+#' @return A matrix with means and standard deviations for each gestational
 #' age/sex/acronym combination.
 #' @note These parameters are not included in the referenced publication, but
 #' the associated supplementary materials. We used tables S1, S2 and S3 and
-#' linear models to derive the equations. As a result, z-scores/percentiles
-#' derived from these parameters differ slightly from the Villar *et al.*'s
-#' published values.
+#' `lm()` to derive the equations. This process can be seen in the
+#' INTERGROWTH-21st body composition vignette or the source code of
+#' `data-raw/ig_nbs_bc.R`. As a result, z-scores/percentiles derived from these
+#' models differ slightly from Villar *et al.*'s published values.
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
@@ -603,18 +617,19 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
 #' @rdname ig_nbs_bodycomp
 #' @keywords internal
 #' @noRd
-ig_nbs_bodycomp <- function(sex, acronym) {
-  new_df <- data.frame(sex = sex, acronym = acronym,
-                       sort = seq(from = 1, to = length(sex)))
-  bodycomp_params <- data.frame(
-      sex = c(rep("M", 3), rep("F", 3)),
-      acronym = c("fmfga", "bfpfga", "ffmfga"),
-      y_intercept = c(-1134.2, -17.68, -2487.6, -840.2, -9.02, -1279),
-      ga_coeff = c(37.2, 0.69, 139.9, 30.7, 0.51, 105.3),
-      std_dev = c(152.1593, 3.6674, 276.2276, 156.8411, 3.9405, 260.621)
-  )
-  out <- merge(new_df, bodycomp_params, all.x = TRUE, sort = FALSE)
-  out <- out[order(out$sort), ]
-  out <- out[, -which(names(out) == "sort")]
-  return(out)
+ig_nbs_bodycomp <- function(x, sex, acronym) {
+  acronym_sex <- paste0(acronym, "_", sex)
+  # `ig_nbs_bc_li` is an internal list with regression equation parameters for
+  # the normative body composition standards, which you can check out in
+  # `data-raw/ig_nbs_bc.R` or the INTERGROWTH-21st body composition vignette
+  params_li <- ig_nbs_bc_li[acronym_sex]
+  params_null <- vapply(params_li, is.null, FUN.VALUE = logical(length = 1L))
+  params_li[params_null] <- rep(list(rep(NA, 5)), sum(params_null))
+
+  # Unlist is a relative bottleneck here, could refactor later *if* too slow
+  params <- matrix(unlist(params_li, recursive = FALSE, use.names = FALSE),
+                   ncol = length(params_li), nrow = 5)
+  mu <- params[1,] + params[2,] * x + params[3,] * x^2 + params[4,] * x^3
+  matrix(c(mu, params[5,]), nrow = length(mu), ncol = 2,
+         dimnames = list(NULL, c("mu", "sigma")))
 }

@@ -26,39 +26,45 @@
 #' @keywords internal
 #' @noRd
 ig_vpns_equations <- function(gest_age, sex, acronym) {
-  checked_params <- check_nbs_params(gest_age = gest_age, sex = sex, acronym = acronym)
-  checked_params$age[checked_params$age >= 231] <- NA
-  wfga_logmedian <- function(ga_weeks, sex) {
+  checked_params <- check_nbs_params(gest_age = gest_age,
+                                     sex = sex,
+                                     acronym = acronym)
+  checked_params[["age"]][checked_params[["age"]] >= 231] <- NA
+  wfga_logmu <- function(ga_weeks, sex) {
     -7.00303 + 1.325911 * ga_weeks ^ 0.5 + 0.0571937 * sex
   }
-  lfga_median <- function(ga_weeks, sex) {
+  lfga_mu <- function(ga_weeks, sex) {
     1.307633 + 1.270022 * ga_weeks +  0.4263885 * sex
   }
-  hcfga_median <- function(ga_weeks, sex) {
+  hcfga_mu <- function(ga_weeks, sex) {
     0.7866522 + 0.887638 * ga_weeks + 0.2513385 * sex
   }
-  wfga_stddev <- sqrt(x = 0.0373218)
-  lfga_stddev <- sqrt(x = 6.757543)
-  hcfga_stddev <- sqrt(x = 2.433481)
+  wfga_sigma <- sqrt(x = 0.0373218)
+  lfga_sigma <- sqrt(x = 6.757543)
+  hcfga_sigma <- sqrt(x = 2.433481)
 
-  out_df <- data.frame(gest_age = checked_params$age,
-                       sex = checked_params$sex,
-                       acronym = checked_params$acronym)
+  out_df <- data.frame(gest_age = checked_params[["age"]],
+                       sex = checked_params[["sex"]],
+                       acronym = checked_params[["acronym"]])
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   gest_age_weeks <- gest_age / 7
-  out_df$median <- ifelse(acronym == "wfga",
-                          yes = wfga_logmedian(gest_age_weeks, sex_as_numeric),
-                          no = ifelse(acronym == "lfga",
-                                      yes = lfga_median(gest_age_weeks, sex_as_numeric),
-                                      no = hcfga_median(gest_age_weeks, sex_as_numeric)))
-  out_df$stddev <- ifelse(acronym == "wfga",
-                          yes = wfga_stddev,
-                          no = ifelse(acronym == "lfga", yes = lfga_stddev, no = hcfga_stddev))
-  out_df$logarithmic <- ifelse(acronym == "wfga", yes = T, no = ifelse(acronym == "lfga", yes = F, no = F))
-  out_df$median <- ifelse(is.na(checked_params$age) | is.na( checked_params$sex) | is.na(checked_params$acronym),
-                          yes = NA,
-                          no = out_df$median)
-  return(out_df)
+  out_df[["mu"]] <- ifelse(acronym == "wfga",
+               yes = wfga_logmu(gest_age_weeks, sex_as_numeric),
+               no = ifelse(acronym == "lfga",
+                           yes = lfga_mu(gest_age_weeks,
+                                         sex_as_numeric),
+                           no = hcfga_mu(gest_age_weeks,
+                                         sex_as_numeric)))
+  out_df[["sigma"]] <- ifelse(acronym == "wfga", yes = wfga_sigma,
+                  no = ifelse(acronym == "lfga",
+                              yes = lfga_sigma,
+                              no = hcfga_sigma))
+  out_df[["logarithmic"]] <- acronym == "wfga"
+  na_params <- with(out_df, is.na(gest_age) | is.na(sex) | is.na(acronym))
+  out_df[["mu"]][na_params] <- NA
+  out_df[["sigma"]][na_params] <- NA
+  out_df[["logarithmic"]][na_params] <- NA
+  out_df
 }
 
 #' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Newborn Size
@@ -82,22 +88,26 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' @noRd
 ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(z = z,
-                                      gest_age = gest_age,
-                                      sex = sex,
-                                      acronym = acronym)
-  df <- cbind(z, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
-                                   sex = max_len_vecs$sex,
-                                   acronym = max_len_vecs$acronym))
+                                            gest_age = gest_age,
+                                            sex = sex,
+                                            acronym = acronym)
+  df <- cbind(z = max_len_vecs[["z"]],
+              ig_vpns_equations(gest_age = max_len_vecs[["gest_age"]],
+                                sex = max_len_vecs[["sex"]],
+                                acronym = max_len_vecs[["acronym"]]))
   ifelse(
-    test = max_len_vecs$sex == "U",
+    test = max_len_vecs[["sex"]] == "U",
     yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value,
-                                arg1 = df$z,
-                                x_arg = df$gest_age,
-                                acronym = df$acronym),
-    no = ifelse(
-      test = df$acronym == "wfga",
-      yes = exp(df$median + z * df$stddev),
-      no = df$median + z * df$stddev
+                                arg1 = df[["z"]],
+                                x_arg = df[["gest_age"]],
+                                acronym = df[["acronym"]]),
+    no = ifelse(test = df[["acronym"]] == "wfga",
+                yes = exp(mu_sigma_z2y(z = df[["z"]],
+                                       mu = df[["mu"]],
+                                       sigma = df[["sigma"]])),
+                no = mu_sigma_z2y(z = df[["z"]],
+                                  mu = df[["mu"]],
+                                  sigma = df[["sigma"]])
     )
   )
 }
@@ -122,23 +132,23 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' @keywords internal
 #' @noRd
 ig_vpns_value2zscore <- function(y, gest_age, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(y = y,
-                                      gest_age = gest_age,
-                                      sex = sex,
-                                      acronym = acronym)
-  df <- cbind(y, ig_vpns_equations(gest_age = max_len_vecs$gest_age,
-                                   sex = max_len_vecs$sex,
-                                   acronym = max_len_vecs$acronym))
+  df <- cbind(y = y, ig_vpns_equations(gest_age = gest_age,
+                                       sex = sex,
+                                       acronym = acronym))
   ifelse(
-    test = max_len_vecs$sex == "U",
+    test = sex == "U",
     yes = mean_if_sex_undefined(fn = ig_vpns_value2zscore,
-                                arg1 = df$y,
-                                x_arg = df$gest_age,
-                                acronym = df$acronym),
+                                arg1 = df[["y"]],
+                                x_arg = df[["gest_age"]],
+                                acronym = df[["acronym"]]),
     no = ifelse(
-      test = df$acronym == "wfga",
-      yes = (log(y) - df$median) / df$stddev,
-      no = (y - df$median) / df$stddev
+      test = df[["acronym"]] == "wfga",
+      yes = mu_sigma_y2z(y = log(df[["y"]]),
+                         mu = df[["mu"]],
+                         sigma = df[["sigma"]]),
+      no = mu_sigma_y2z(y = df[["y"]],
+                        mu = df[["mu"]],
+                        sigma = df[["sigma"]])
     )
   )
 }
