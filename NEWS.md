@@ -1,11 +1,17 @@
 # gigs 0.2.3
+* Updated regression equations for the normative body composition standards in 
+  `ig_nbs`, namely `fmfga`, `ffmfga`, and `bfpfga`. These functions give outputs
+  much closer to the published centiles, though a degree of error is still
+  present.
+* Updated and improved body composition vignette to include the new derivation 
+  process.
 * The coefficient-based `ig_nbs`/`who_gs` functions are now 30 to 10x quicker 
   depending on the length of the function inputs (more inputs = slower).
   * This comes from removal of the `data.table` dependency - all coefficient 
     retrieval/interpolation now occurs using matrices. The move from using 
     `data.table.merge()` to subsetting operators has sped up the code 
     significantly.
-* More consistent subsetting operators and terminology in package code
+* More consistent subsetting operators and terminology in package source code.
 
 # gigs 0.2.2
 
