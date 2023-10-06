@@ -28,14 +28,16 @@ cut-offs.
 
 ## Installation
 
-``` r
-# Install directly from the CRAN:
-install.packages("gigs")
+Whilst the gigs package is not fully public, the `devtools` package 
+cannot be used to install it from GitHub. Instead, clone the repository
+to a directory on your computer, or download the source code from the 
+[Releases page](https://github.com/lshtm-gigs/gigs/releases/tag/v0.2.3)
+on GitHub and unzip it in a location of your choice.
 
-# Or install the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("lshtm-gigs/gigs")
-```
+Once you have the gigs package files on your system, open an R session 
+in their directory. You can then run `devtools::install()` to install
+the R package onto your system, after which point you can use it like
+any package installed using `install.packages()`.
 
 ## Available standards
 
