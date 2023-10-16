@@ -29,17 +29,14 @@ cut-offs.
 ## Installation
 
 ``` r
-# Install directly from the CRAN:
-install.packages("gigs")
-
-# Or install the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("lshtm-gigs/gigs")
+# You can install the development version from GitHub with `remotes`:
+# install.packages("remotes")
+remotes::install_github(repo = "lshtm-gigs/gigs")
 ```
 
 ## Available standards
 
-- `ig_nbs` - INTERGROWTH-21<sup>st</sup> standards for newborn size
+- `ig_nbs` - INTERGROWTH-21<sup>st</sup> Newborn Size standards
   (including very preterm)
   <details>
   <summary>
@@ -57,8 +54,8 @@ devtools::install_github("lshtm-gigs/gigs")
   | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days  |
 
   </details>
-- `ig_png` - INTERGROWTH-21<sup>st</sup> standards for postnatal growth
-  in preterm infants
+- `ig_png` - INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
+  Infants standards
   <details>
   <summary>
   Component standards
