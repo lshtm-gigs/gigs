@@ -10,9 +10,6 @@
     <loc>https://simpar1471.github.io/gigs/articles/gigs.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/articles/ig-nbs-body-composition-improved.html</loc>
-  </url>
-  <url>
     <loc>https://simpar1471.github.io/gigs/articles/ig-nbs-body-composition.html</loc>
   </url>
   <url>
@@ -46,13 +43,7 @@
     <loc>https://simpar1471.github.io/gigs/reference/ig_nbs.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_bodycomp.html</loc>
-  </url>
-  <url>
     <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_coeffs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_msnt.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_percentile2value.html</loc>
@@ -61,13 +52,7 @@
     <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_value2percentile.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_wlr.html</loc>
-  </url>
-  <url>
     <loc>https://simpar1471.github.io/gigs/reference/ig_png.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_png_equations.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/ig_png_value2zscore.html</loc>
@@ -76,43 +61,16 @@
     <loc>https://simpar1471.github.io/gigs/reference/ig_png_zscore2value.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_vpns_equations.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_vpns_value2zscore.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_vpns_zscore2value.html</loc>
-  </url>
-  <url>
     <loc>https://simpar1471.github.io/gigs/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/reference/inrange.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/interpolate_coeffs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/mean_if_sex_undefined.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/rep_to_longest.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/round2.html</loc>
+    <loc>https://simpar1471.github.io/gigs/reference/life6mo.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/who_gs.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/who_gs_coeffs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs_lms.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs_lms2sd.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/who_gs_value2zscore.html</loc>

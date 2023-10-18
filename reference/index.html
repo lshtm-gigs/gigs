@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/simpar1471/gigs/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -52,7 +52,7 @@
     <div class="section level2">
       <h2 id="growth-classification">Growth classification<a class="anchor" aria-label="anchor" href="#growth-classification"></a></h2>
       
-      <p class="section-desc"></p><p>Classify size for gestational age, stunting, wasting and under/overweight</p>
+      <p class="section-desc"></p><p>Classify size for gestational age, stunting, wasting and under/overweight.</p>
 
       
     </div><div id="" class="section level2">
@@ -64,29 +64,27 @@
           
           <code><a href="classify_sga.html">classify_sga()</a></code> 
         </dt>
-        <dd>Classify size for gestational age using INTERGROWTH-21st Newborn Size
-Standards (including very preterm)</dd>
+        <dd>Classify size for gestational age using the INTERGROWTH-21<sup>st</sup>
+weight-for-gestational age standard</dd>
       </dl><dl><dt>
           
           <code><a href="classify_stunting.html">classify_stunting()</a></code> 
         </dt>
-        <dd>Classify stunting according to WHO or INTERGROWTH-21st length/height-for-age
-standards</dd>
+        <dd>Classify stunting using WHO or INTERGROWTH-21<sup>st</sup> length/height-for-age standards</dd>
       </dl><dl><dt>
           
           <code><a href="classify_wasting.html">classify_wasting()</a></code> 
         </dt>
-        <dd>Classify wasting according to WHO weight-for-length/height standards</dd>
+        <dd>Classify wasting using WHO weight-for-length/height standards</dd>
       </dl><dl><dt>
           
           <code><a href="classify_wfa.html">classify_wfa()</a></code> 
         </dt>
-        <dd>Classify weight-for-age according to INTERGROWTH-21st and WHO post-natal
-growth standards</dd>
+        <dd>Classify weight-for-age using WHO or INTERGROWTH-21<sup>st</sup> standards</dd>
       </dl></div><div class="section level2">
-      <h2 id="intergrowth-st-newborn-size-standards-including-very-preterm-">INTERGROWTH-21st newborn size standards (including very preterm)<a class="anchor" aria-label="anchor" href="#intergrowth-st-newborn-size-standards-including-very-preterm-"></a></h2>
+      <h2 id="intergrowth-st-newborn-size-standards">INTERGROWTH-21<sup>st</sup> Newborn Size Standards<a class="anchor" aria-label="anchor" href="#intergrowth-st-newborn-size-standards"></a></h2>
       
-      <p class="section-desc"></p><p>Conversion functions the INTERGROWTH-21st newborn size standards (including very preterm)</p>
+      <p class="section-desc"></p><p>Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size Standards.</p>
 
       
     </div><div id="" class="section level2">
@@ -98,17 +96,18 @@ growth standards</dd>
           
           <code><a href="ig_nbs_value2percentile.html">ig_nbs_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_wfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_lfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_hcfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_wlrfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_fmfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_bfpfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_ffmfga_value2percentile()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_wfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_lfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_hcfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_wlrfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_fmfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_bfpfga_value2zscore()</a></code> <code><a href="ig_nbs_value2percentile.html">ig_nbs_ffmfga_value2zscore()</a></code> 
         </dt>
-        <dd>Convert anthropometric values to INTERGROWTH-21st newborn size
-z-score/percentiles</dd>
+        <dd>Convert values to z-scores/percentiles in the INTERGROWTH-21<sup>st</sup>
+Newborn Size Standards</dd>
       </dl><dl><dt>
           
           <code><a href="ig_nbs_percentile2value.html">ig_nbs_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_wfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_lfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_hcfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_wlrfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_fmfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_bfpfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_ffmfga_percentile2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_wfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_lfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_hcfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_wlrfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_fmfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_bfpfga_zscore2value()</a></code> <code><a href="ig_nbs_percentile2value.html">ig_nbs_ffmfga_zscore2value()</a></code> 
         </dt>
-        <dd>Convert z-scores/percentiles to INTERGROWTH-21st newborn size values</dd>
+        <dd>Convert z-scores/percentiles to values in the INTERGROWTH-21<sup>st</sup>
+Newborn Size Standards</dd>
       </dl></div><div class="section level2">
-      <h2 id="intergrowth-st-post-natal-growth-in-preterm-infants">INTERGROWTH-21st post-natal growth in preterm infants<a class="anchor" aria-label="anchor" href="#intergrowth-st-post-natal-growth-in-preterm-infants"></a></h2>
+      <h2 id="intergrowth-st-postnatal-growth-standards-for-preterm-infants-">INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants<a class="anchor" aria-label="anchor" href="#intergrowth-st-postnatal-growth-standards-for-preterm-infants-"></a></h2>
       
-      <p class="section-desc"></p><p>Conversion functions for the INTERGROWTH-21st post-natal growth standards for preterm infants</p>
+      <p class="section-desc"></p><p>Conversion functions for the INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants.</p>
 
       
     </div><div id="" class="section level2">
@@ -118,18 +117,20 @@ z-score/percentiles</dd>
 
       <dl><dt>
           
-          <code><a href="ig_png_value2zscore.html">ig_png_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_lfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_hcfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfa_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_lfa_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_hcfa_value2percentile()</a></code> 
+          <code><a href="ig_png_value2zscore.html">ig_png_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_lfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_hcfa_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfl_value2zscore()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfa_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_lfa_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_hcfa_value2percentile()</a></code> <code><a href="ig_png_value2zscore.html">ig_png_wfl_value2percentile()</a></code> 
         </dt>
-        <dd>Convert postnatal growth measures to INTERGROWTH-21st postnatal growth standards</dd>
+        <dd>Convert values to z-scores/percentiles in the INTERGROWTH-21<sup>st</sup>
+Postnatal Growth Standards for preterm infants</dd>
       </dl><dl><dt>
           
-          <code><a href="ig_png_zscore2value.html">ig_png_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_lfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_hcfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfa_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_lfa_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_hcfa_percentile2value()</a></code> 
+          <code><a href="ig_png_zscore2value.html">ig_png_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_lfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_hcfa_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfl_zscore2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfa_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_lfa_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_hcfa_percentile2value()</a></code> <code><a href="ig_png_zscore2value.html">ig_png_wfl_percentile2value()</a></code> 
         </dt>
-        <dd>Convert z-score/percentiles to INTERGROWTH-21st postnatal growth standards for preterm infants values</dd>
+        <dd>Convert z-scores/percentiles to values in the INTERGROWTH-21<sup>st</sup>
+Postnatal Growth Standards for preterm infants</dd>
       </dl></div><div class="section level2">
-      <h2 id="who-growth-standards">WHO Growth Standards<a class="anchor" aria-label="anchor" href="#who-growth-standards"></a></h2>
+      <h2 id="who-child-growth-standards">WHO Child Growth Standards<a class="anchor" aria-label="anchor" href="#who-child-growth-standards"></a></h2>
       
-      <p class="section-desc"></p><p>Conversion functions for the WHO Growth Standards</p>
+      <p class="section-desc"></p><p>Conversion functions for the WHO Child Growth Standards.</p>
 
       
     </div><div id="" class="section level2">
@@ -141,16 +142,16 @@ z-score/percentiles</dd>
           
           <code><a href="who_gs_value2zscore.html">who_gs_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_bfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_lhfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfl_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfh_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_hcfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_acfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_ssfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_tsfa_value2zscore()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_bfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_lhfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfl_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_wfh_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_hcfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_acfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_ssfa_value2percentile()</a></code> <code><a href="who_gs_value2zscore.html">who_gs_tsfa_value2percentile()</a></code> 
         </dt>
-        <dd>Convert anthropometric measures to WHO Growth Standards z-scores</dd>
+        <dd>Convert values to z-scores/percentiles in the WHO Child Growth Standards</dd>
       </dl><dl><dt>
           
           <code><a href="who_gs_zscore2value.html">who_gs_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_bfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_lhfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfl_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfh_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_hcfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_acfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_ssfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_tsfa_zscore2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_bfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_lhfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfl_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_wfh_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_hcfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_acfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_ssfa_percentile2value()</a></code> <code><a href="who_gs_zscore2value.html">who_gs_tsfa_percentile2value()</a></code> 
         </dt>
-        <dd>Convert z-score/percentiles to WHO growth standards values</dd>
+        <dd>Convert z-scores/percentiles to values in the WHO Child Growth Standards</dd>
       </dl></div><div class="section level2">
-      <h2 id="reference-data-and-coefficients-tables">Reference data and coefficients tables<a class="anchor" aria-label="anchor" href="#reference-data-and-coefficients-tables"></a></h2>
+      <h2 id="reference-data-and-coefficient-tables">Reference data and coefficient tables<a class="anchor" aria-label="anchor" href="#reference-data-and-coefficient-tables"></a></h2>
       
-      <p class="section-desc"></p><p>Lists containing tables of reference values/model parameters for INTERGROWTH-21st and WHO standards.</p>
+      <p class="section-desc"></p><p>Lists containing growth curve data, model parameters for WHO and some INTERGROWTH-21<sup>st</sup> standards, and data from the LIFE study.</p>
 
       
     </div><div id="" class="section level2">
@@ -162,27 +163,33 @@ z-score/percentiles</dd>
           
           <code><a href="ig_nbs.html">ig_nbs</a></code> 
         </dt>
-        <dd>INTERGROWTH-21st Newborn Standards (including very preterm) tables</dd>
+        <dd>INTERGROWTH-21<sup>st</sup> Newborn Size Standards (including very preterm)
+growth curve data</dd>
       </dl><dl><dt>
           
           <code><a href="ig_nbs_coeffs.html">ig_nbs_coeffs</a></code> 
         </dt>
-        <dd>INTERGROWTH-21st Newborn Size Standards GAMLSS coefficients</dd>
+        <dd>INTERGROWTH-21<sup>st</sup> Newborn Size Standards GAMLSS coefficients</dd>
       </dl><dl><dt>
           
           <code><a href="ig_png.html">ig_png</a></code> 
         </dt>
-        <dd>INTERGROWTH-21st Post-natal Growth Standards tables</dd>
+        <dd>INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards growth curve data</dd>
       </dl><dl><dt>
           
           <code><a href="who_gs.html">who_gs</a></code> 
         </dt>
-        <dd>WHO Growth Standards tables</dd>
+        <dd>WHO Child Growth Standards growth curve data</dd>
       </dl><dl><dt>
           
           <code><a href="who_gs_coeffs.html">who_gs_coeffs</a></code> 
         </dt>
-        <dd>WHO Growth Standards LMS coefficients</dd>
+        <dd>WHO Child Growth Standards LMS coefficients</dd>
+      </dl><dl><dt>
+          
+          <code><a href="life6mo.html">life6mo</a></code> 
+        </dt>
+        <dd>Data from the Low birthweight Infant Feeding Exploration (LIFE) study</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

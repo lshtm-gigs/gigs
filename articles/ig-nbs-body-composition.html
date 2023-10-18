@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Our process for deriving the INTERGROWTH-21&lt;sup&gt;st&lt;/sup&gt; body composition equations.
+<meta name="description" content="Deriving the INTERGROWTH-21&lt;sup&gt;st&lt;/sup&gt; body composition equations.
 ">
 <title>INTERGROWTH-21st Body Composition Equations • gigs</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -19,7 +19,7 @@
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="INTERGROWTH-21st Body Composition Equations">
-<meta property="og:description" content="Our process for deriving the INTERGROWTH-21&lt;sup&gt;st&lt;/sup&gt; body composition equations.
+<meta property="og:description" content="Deriving the INTERGROWTH-21&lt;sup&gt;st&lt;/sup&gt; body composition equations.
 ">
 <meta property="og:image" content="https://simpar1471.github.io/gigs/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/simpar1471/gigs/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -83,7 +83,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>INTERGROWTH-21st Body Composition Equations</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/simpar1471/gigs/blob/HEAD/vignettes/articles/ig-nbs-body-composition.Rmd" class="external-link"><code>vignettes/articles/ig-nbs-body-composition.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lshtm-gigs/gigs/blob/HEAD/vignettes/articles/ig-nbs-body-composition.Rmd" class="external-link"><code>vignettes/articles/ig-nbs-body-composition.Rmd</code></a></small>
       <div class="d-none name"><code>ig-nbs-body-composition.Rmd</code></div>
     </div>
 
@@ -93,40 +93,172 @@
 composition (fat mass, body fat percentage, and fat-free mass) in
 newborns from the INTERGROWTH-21<sup>st</sup> project, they did not
 publish the parameters of the models used to generate their centiles. To
-implement these standards in our package we re-derives these values, in
-this case using the published data to work back to linear equations.</p>
+implement these standards in <code>gigs</code>, we re-derived these
+values, in this case using the published data to work back to linear
+equations.</p>
+<div class="section level3">
+<h3 id="contextual-clues">Contextual clues<a class="anchor" aria-label="anchor" href="#contextual-clues"></a>
+</h3>
+<p>To identify the way in which these body composition standards were
+modelled, we need to look into how the published percentile tables are
+formatted. Consider the standard for fat mass for gestational age
+(<code>"fmfga"</code>) in females:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fmfga_female</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
+<span><span class="co">##   gest_age   P03   P10   P50   P90   P97</span></span>
+<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>      266    29   123   324   525   619</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>      273    62   156   357   558   652</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>      280    96   190   391   592   686</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>      287   127   221   422   623   717</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span>      294   150   244   445   646   740</span></span></code></pre>
+<div class="section level4">
+<h4 id="differences-between-each-ga-in-fmfga">Differences between each GA in <code>fmfga</code><a class="anchor" aria-label="anchor" href="#differences-between-each-ga-in-fmfga"></a>
+</h4>
+<p>Let’s first compare the differences over time in fat-mass for GA. In
+each column, we’ll subtract the value of the previous row from the
+current row to produce a table of differences (see
+<code>check_differences()</code> below). Then we’ll check that the
+differences in each row are equal for all percentiles, and store this in
+the <code>all_equal</code> column.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">check_differences</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">percentile_tbl</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">percentile_tbl</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span>.cols <span class="op">=</span> <span class="fu">tidyselect</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span>match <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span>,</span>
+<span>                                .fns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>diff <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                  .keep <span class="op">=</span> <span class="st">"unused"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">if_any</a></span><span class="op">(</span></span>
+<span>            <span class="fu">tidyselect</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span>match <span class="op">=</span> <span class="st">"P"</span><span class="op">)</span>, <span class="op">~</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>      all_equal <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">P03_diff</span>, <span class="va">P10_diff</span>, <span class="va">P50_diff</span>, <span class="va">P90_diff</span>, <span class="va">P97_diff</span>,</span>
+<span>                                    na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>      all_equal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">all_equal</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Let’s check this the results for <code>fmfga_female</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">check_differences</span><span class="op">(</span><span class="va">fmfga_female</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
+<span><span class="co">##   gest_age P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
+<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>      273       33       33       33       33       33 TRUE     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>      280       34       34       34       34       34 TRUE     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>      287       31       31       31       31       31 TRUE     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>      294       23       23       23       23       23 TRUE</span></span></code></pre>
+<p>The differences in fat mass are equal across percentiles at all
+gestational ages, according to the <code>all_equal</code> column. If the
+standard deviation (<span class="math inline">\(\sigma\)</span>) changed
+with gestational age (GA), then <code>all_equal</code> would not be at
+each age. This hints that for these percentile curves, the mean value
+(<span class="math inline">\(\mu\)</span>) for fat mass was calculated
+first, then summed with the product of the desired <span class="math inline">\(z\)</span>-score/percentile with a standard
+deviation (<span class="math inline">\(\sigma\)</span>) which is
+constant across the different GAs: <span class="math display">\[\begin{align*}
+y = \mu + z\times\sigma
+\end{align*}\]</span></p>
+<div class="section level5">
+<h5 id="in-the-other-standards">In the other standards<a class="anchor" aria-label="anchor" href="#in-the-other-standards"></a>
+</h5>
+<p>Does this equality hold for the other percentile tables?</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">other_standards</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fmfga_male</span>, <span class="va">bfpfga_male</span>, <span class="va">bfpfga_female</span>, <span class="va">ffmfga_male</span>,</span>
+<span>                        <span class="va">ffmfga_female</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">other_standards</span>, FUN <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu">check_differences</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">all_equal</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] FALSE  TRUE  TRUE  TRUE  TRUE</span></span></code></pre>
+<p><strong>No.</strong> The first value, corresponding to
+<code>fmfga_male</code>, is <code>FALSE</code>. Let’s see what the
+differences look like for this table:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">check_differences</span><span class="op">(</span><span class="va">fmfga_male</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
+<span><span class="co">##   gest_age P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
+<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>      273       <span style="color: #BB0000;">NA</span>       38       39       39       39 FALSE    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>      280       40       40       40       40       40 TRUE     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>      287       42       42       42       42       42 TRUE     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>      294       24       24       24       24       24 TRUE</span></span></code></pre>
+<p>The issue here is a value of <code>38</code> rather than the
+<code>39</code>s in the <code>P10_diff</code> column - but this
+difference is small enough to be a consequence of rounding, as opposed
+to a real difference in <span class="math inline">\(\sigma\)</span> for
+this GA compared to the other GAs.</p>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h3>
+<p><strong>To reconstruct these standards, we need to determine the
+equations for <span class="math inline">\(\mu\)</span> in each standard.
+We also need to calculate <span class="math inline">\(\sigma\)</span>,
+which does not change with GA.</strong></p>
+</div>
 <div class="section level2">
-<h2 id="extracting-models-from-published-data">Extracting models from published data<a class="anchor" aria-label="anchor" href="#extracting-models-from-published-data"></a>
+<h2 id="extracting-models-from-published-tables">Extracting models from published tables<a class="anchor" aria-label="anchor" href="#extracting-models-from-published-tables"></a>
 </h2>
 <div class="section level3">
 <h3 id="custom-functions">Custom functions<a class="anchor" aria-label="anchor" href="#custom-functions"></a>
 </h3>
-<p>The following custom functions fit linear models to each
-INTERGROWTH-21<sup>st</sup> body composition standard, then print the
-results:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#' Extract standard deviation from percentiles</span></span>
+<p>The following custom functions perform several tasks: *
+<code>run_LMs()</code> fits models to each INTERGROWTH-21<sup>st</sup>
+normative body composition standard using <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>, then
+returns the fitted models in a list. * <code>std_deviation()</code>
+determines <span class="math inline">\(\sigma\)</span> for a given
+percentile. * <code>extract_SDs()</code> gets the standard deviations
+for each percentile at each GA. * <code>extract_eqn()</code> uses the
+above functions to extract a ‘best possible’ equation for the standard
+in use, then prints this to the console.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">run_LMs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">model_linear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">P50</span> <span class="op">~</span> <span class="va">gest_age</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>  <span class="va">model_poly1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">P50</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">gest_age</span>, degree <span class="op">=</span> <span class="fl">1</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>  <span class="va">model_poly2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">P50</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">gest_age</span>, degree <span class="op">=</span> <span class="fl">2</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>  <span class="va">model_poly3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">P50</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">gest_age</span>, degree <span class="op">=</span> <span class="fl">3</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">model_linear</span>, <span class="va">model_poly1</span>, <span class="va">model_poly2</span>, <span class="va">model_poly3</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' Extract standard deviation from percentiles</span></span>
 <span><span class="co">#' @param P50 Value of y at mean</span></span>
 <span><span class="co">#' @param PX Value of y at percentile specified by p</span></span>
 <span><span class="co">#' @param p Percentile at which y = PX</span></span>
 <span><span class="va">std_deviation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">P50</span>, <span class="va">PX</span>, <span class="va">p</span><span class="op">)</span> <span class="op">(</span><span class="va">PX</span> <span class="op">-</span> <span class="va">P50</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#' Get modal values of vector x</span></span>
-<span><span class="va">modes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span>  <span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tabulate.html" class="external-link">tabulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">ux</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">ux</span><span class="op">[</span><span class="va">tab</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">extract_SDs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">stddev_03</span> <span class="op">&lt;-</span> <span class="fu">std_deviation</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">P50</span>, <span class="va">df</span><span class="op">$</span><span class="va">P03</span>, p <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span>
+<span>  <span class="va">stddev_10</span> <span class="op">&lt;-</span> <span class="fu">std_deviation</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">P50</span>, <span class="va">df</span><span class="op">$</span><span class="va">P10</span>, p <span class="op">=</span> <span class="fl">0.10</span><span class="op">)</span></span>
+<span>  <span class="va">stddev_90</span> <span class="op">&lt;-</span> <span class="fu">std_deviation</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">P50</span>, <span class="va">df</span><span class="op">$</span><span class="va">P90</span>, p <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span>  <span class="va">stddev_97</span> <span class="op">&lt;-</span> <span class="fu">std_deviation</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">P50</span>, <span class="va">df</span><span class="op">$</span><span class="va">P97</span>, p <span class="op">=</span> <span class="fl">0.97</span><span class="op">)</span></span>
+<span>  <span class="va">stddevs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">stddev_03</span>, <span class="va">stddev_10</span>, <span class="va">stddev_90</span>, <span class="va">stddev_97</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">stddevs</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co">#' Extract equation and standard deviation; print to console</span></span>
-<span><span class="co">#' @param df A dataframe with columns gest_age, P50 and P90. Used to fit LM and</span></span>
-<span><span class="co">#' get standard deviation.</span></span>
-<span><span class="va">run_LM_extract_eqn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">P50</span> <span class="op">~</span> <span class="va">gest_age</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
-<span>  <span class="va">str_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"y ="</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"+"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">"* x"</span><span class="op">)</span></span>
-<span>  <span class="va">stddev_90</span> <span class="op">&lt;-</span> <span class="fu">std_deviation</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">P50</span>, <span class="va">df</span><span class="op">$</span><span class="va">P90</span>, p <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span>
-<span>  <span class="va">str_stddev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"sigma at P90 ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu">modes</span><span class="op">(</span><span class="va">stddev_90</span><span class="op">)</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">str_model</span>, <span class="va">str_stddev</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#' @param df A percentile table for `fmfga`, `bfpfga` or `ffmfga`.</span></span>
+<span><span class="va">extract_eqn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">verbose</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">li_models</span> <span class="op">&lt;-</span> <span class="fu">run_LMs</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span>  <span class="va">r_sq_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">li_models</span>, FUN <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">adj.r.squared</span><span class="op">)</span></span>
+<span>  <span class="va">chosen_model</span> <span class="op">&lt;-</span> <span class="va">li_models</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">r_sq_adj</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">r_sq_adj</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">verbose</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">chosen_model</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">model_coeffs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">chosen_model</span><span class="op">)</span></span>
+<span>  <span class="va">coef_str</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>    X <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">)</span>,</span>
+<span>    FUN <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">start_str</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sign.html" class="external-link">sign</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">[</span><span class="va">x</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="st">""</span> <span class="kw">else</span> <span class="st">"+"</span></span>
+<span>      <span class="va">end_str</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="st">"* x"</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"* x^"</span>, <span class="va">x</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">start_str</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">[</span><span class="va">x</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span>, <span class="va">end_str</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span>collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span>
+<span>  <span class="va">sign_</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sign.html" class="external-link">sign</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="st">""</span> <span class="kw">else</span> <span class="st">"+"</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"y ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span>, <span class="va">sign_</span>, <span class="va">coef_str</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">SDs</span> <span class="op">&lt;-</span> <span class="fu">extract_SDs</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"sigma ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">SDs</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="va">chosen_model</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -136,20 +268,20 @@ results:</p>
 <div class="section level4">
 <h4 id="males">Males<a class="anchor" aria-label="anchor" href="#males"></a>
 </h4>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fmfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">fmfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">fmfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -1134.2 + 5.31428571428571 * x</span></span>
-<span><span class="co">## sigma at P90 = 152.1593</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">fmfga_male</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = 96787.8   -1056.77381 * x + 3.83673 * x^2  -0.00462 * x^3</span></span>
+<span><span class="co">## sigma = 152.0728</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females">Females<a class="anchor" aria-label="anchor" href="#females"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fmfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">fmfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">fmfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -840.2 + 4.38571428571429 * x</span></span>
-<span><span class="co">## sigma at P90 = 156.8411</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">fmfga_female</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = 44432.51429   -490.7602 * x + 1.80321 * x^2  -0.00219 * x^3</span></span>
+<span><span class="co">## sigma = 156.8449</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -159,20 +291,20 @@ results:</p>
 <div class="section level4">
 <h4 id="males-1">Males<a class="anchor" aria-label="anchor" href="#males-1"></a>
 </h4>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bfpfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">bfpfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">bfpfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -17.68 + 0.0985714285714286 * x</span></span>
-<span><span class="co">## sigma at P90 = 3.6674</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">bfpfga_male</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = 1521.84857   -16.62398 * x + 0.0605 * x^2  -7e-05 * x^3</span></span>
+<span><span class="co">## sigma = 3.6562</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females-1">Females<a class="anchor" aria-label="anchor" href="#females-1"></a>
 </h4>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bfpfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">bfpfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">bfpfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -9.02000000000002 + 0.0728571428571429 * x</span></span>
-<span><span class="co">## sigma at P90 = 3.9405</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">bfpfga_female</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = -66.09143 + + 0.48102 * x  -0.00073 * x^2</span></span>
+<span><span class="co">## sigma = 3.9547</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -182,75 +314,124 @@ results:</p>
 <div class="section level4">
 <h4 id="males-2">Males<a class="anchor" aria-label="anchor" href="#males-2"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ffmfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">ffmfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">ffmfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -2487.6 + 19.9857142857143 * x</span></span>
-<span><span class="co">## sigma at P90 = 276.2277</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">ffmfga_male</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = 347879.97143   -3780.52721 * x + 13.73032 * x^2  -0.01652 * x^3</span></span>
+<span><span class="co">## sigma = 276.5094</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females-2">Females<a class="anchor" aria-label="anchor" href="#females-2"></a>
 </h4>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ffmfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">ffmfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">percentiles</span></span>
-<span><span class="fu">run_LM_extract_eqn</span><span class="op">(</span><span class="va">ffmfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -1279 + 15.0428571428572 * x</span></span>
-<span><span class="co">## sigma at P90 = 260.6216</span></span></code></pre>
+<span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">ffmfga_female</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## y = 154457.42857   -1689.0085 * x + 6.20845 * x^2  -0.00753 * x^3</span></span>
+<span><span class="co">## sigma = 261.0625</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h3>
 <div class="section level4">
-<h4 id="fat-mass-1">Fat mass:<a class="anchor" aria-label="anchor" href="#fat-mass-1"></a>
+<h4 id="equations-for-the-mean">Equations for the mean:<a class="anchor" aria-label="anchor" href="#equations-for-the-mean"></a>
 </h4>
 <table class="table">
 <colgroup>
-<col width="13%">
-<col width="6%">
-<col width="80%">
+<col width="9%">
+<col width="5%">
+<col width="84%">
 </colgroup>
 <thead><tr class="header">
 <th>Standard</th>
 <th>Sex</th>
-<th>Equation</th>
+<th>Equation for the mean (<span class="math inline">\(\mu\)</span>)</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>Fat mass</td>
 <td>Male</td>
-<td><span class="math inline">\(\operatorname{fat\_mass} = -1134.2 +
-37.2 (\operatorname{GA}) + z \times 152.1593\)</span></td>
+<td><span class="math inline">\(\mu = 96787.8 -
+1056.77381\times\operatorname{GA} + 3.83673\times\operatorname{GA}^2 -
+0.00462\times\operatorname{GA}^3\)</span></td>
 </tr>
 <tr class="even">
 <td>Fat mass</td>
 <td>Female</td>
-<td><span class="math inline">\(\operatorname{fat\_mass} = -840.2 + 30.7
-(\operatorname{GA}) + z \times 156.8411\)</span></td>
+<td><span class="math inline">\(\mu = 44432.51429 -
+490.7602\times\operatorname{GA} + 1.80321\times\operatorname{GA}^2 -
+0.00219\times\operatorname{GA}^3\)</span></td>
 </tr>
 <tr class="odd">
 <td>Body fat %</td>
 <td>Male</td>
-<td><span class="math inline">\(\operatorname{body\_fat\_\%} = -17.68 +
-0.69 (\operatorname{GA}) + z \times 3.6674\)</span></td>
+<td><span class="math inline">\(\mu = 1521.84857 -
+16.62398\times\operatorname{GA} + 0.0605\times\operatorname{GA}^2 -
+0.00007\times\operatorname{GA}^3\)</span></td>
 </tr>
 <tr class="even">
 <td>Body fat %</td>
 <td>Female</td>
-<td><span class="math inline">\(\operatorname{body\_fat\_\%} = -9.02 +
-0.51 (\operatorname{GA}) + z \times 3.9405\)</span></td>
+<td><span class="math inline">\(\mu = -66.09143 +
+0.48102\times\operatorname{GA} -
+0.00073\times\operatorname{GA}^2\)</span></td>
 </tr>
 <tr class="odd">
 <td>Fat-free mass</td>
 <td>Male</td>
-<td><span class="math inline">\(\operatorname{fat\_free\_mass} = -2487.6
-+ 139.9 (\operatorname{GA}) + z \times 276.2276\)</span></td>
+<td><span class="math inline">\(\mu = 347879.97143 -
+3780.52721\times\operatorname{GA} + 13.73032\times\operatorname{GA}^2 -
+0.01652\times\operatorname{GA}^3\)</span></td>
 </tr>
 <tr class="even">
 <td>Fat-free mass</td>
 <td>Female</td>
-<td><span class="math inline">\(\operatorname{fat\_free\_mass} = -1279 +
-105.3 (\operatorname{GA}) + z \times 260.621\)</span></td>
+<td><span class="math inline">\(\mu = 154457.42857 -
+1689.0085\times\operatorname{GA} + 6.20845\times\operatorname{GA}^2 -
+0.00753\times\operatorname{GA}^3\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="standard-deviations">Standard deviations:<a class="anchor" aria-label="anchor" href="#standard-deviations"></a>
+</h4>
+<table class="table">
+<thead><tr class="header">
+<th>Standard</th>
+<th>Sex</th>
+<th>Standard deviation (<span class="math inline">\(\sigma\)</span>)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Fat mass</td>
+<td>Male</td>
+<td><span class="math inline">\(152.0728\)</span></td>
+</tr>
+<tr class="even">
+<td>Fat mass</td>
+<td>Female</td>
+<td><span class="math inline">\(156.8449\)</span></td>
+</tr>
+<tr class="odd">
+<td>Body fat %</td>
+<td>Male</td>
+<td><span class="math inline">\(3.6562\)</span></td>
+</tr>
+<tr class="even">
+<td>Body fat %</td>
+<td>Female</td>
+<td><span class="math inline">\(3.9547\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fat-free mass</td>
+<td>Male</td>
+<td><span class="math inline">\(276.5094\)</span></td>
+</tr>
+<tr class="even">
+<td>Fat-free mass</td>
+<td>Female</td>
+<td><span class="math inline">\(261.0625\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -262,12 +443,105 @@ results:</p>
 </h2>
 <p>All plotting code for this section can be found in the source code
 for this vignette.</p>
-<pre><code><span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span>
-<span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span></code></pre>
-<pre><code><span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span>
-<span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span></code></pre>
-<pre><code><span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span>
-<span><span class="co">## Joining with `by = join_by(gest_age, name)`</span></span></code></pre>
+<div class="section level3">
+<h3 id="reconstructing-the-equations-in-r">Reconstructing the equations in R<a class="anchor" aria-label="anchor" href="#reconstructing-the-equations-in-r"></a>
+</h3>
+<p>First, we will bind the coefficients from each model into a table.
+This table can then be used to look up the coefficients for each body
+composition standard.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">all_standards</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fmfga_male</span>, <span class="va">fmfga_female</span>, <span class="va">bfpfga_male</span>, <span class="va">bfpfga_female</span>,</span>
+<span>                      <span class="va">ffmfga_male</span>, <span class="va">ffmfga_female</span><span class="op">)</span></span>
+<span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">all_standards</span>, FUN <span class="op">=</span> \<span class="op">(</span><span class="va">standard</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">model_coeffs</span> <span class="op">&lt;-</span> <span class="va">standard</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">extract_eqn</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="va">model_coeffs</span><span class="op">$</span><span class="va">extra</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_coeffs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intercept"</span>, <span class="st">"x"</span>, <span class="st">"x^2"</span>, <span class="st">"x^3"</span><span class="op">)</span></span>
+<span>  <span class="va">model_coeffs</span><span class="op">$</span><span class="va">SD</span> <span class="op">&lt;-</span> <span class="fu">extract_SDs</span><span class="op">(</span><span class="va">standard</span><span class="op">)</span></span>
+<span>  <span class="va">model_coeffs</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"rbind"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fmfga_M"</span> , <span class="st">"fmfga_F"</span> , <span class="st">"bfpfga_M"</span>, <span class="st">"bfpfga_F"</span>,</span>
+<span>                      <span class="st">"ffmfga_M"</span>, <span class="st">"ffmfga_F"</span><span class="op">)</span></span>
+<span><span class="va">models</span></span></code></pre></div>
+<pre><code><span><span class="co">##             intercept             x          x^2           x^3         SD</span></span>
+<span><span class="co">## fmfga_M   96787.80000 -1056.7738095  3.836734694 -0.0046161322 152.072842</span></span>
+<span><span class="co">## fmfga_F   44432.51429  -490.7602041  1.803206997 -0.0021865889 156.844908</span></span>
+<span><span class="co">## bfpfga_M   1521.84857   -16.6239796  0.060495627 -0.0000728863   3.656170</span></span>
+<span><span class="co">## bfpfga_F    -66.09143     0.4810204 -0.000728863  0.0000000000   3.954716</span></span>
+<span><span class="co">## ffmfga_M 347879.97143 -3780.5272109 13.730320700 -0.0165208941 276.509412</span></span>
+<span><span class="co">## ffmfga_F 154457.42857 -1689.0085034  6.208454811 -0.0075315841 261.062458</span></span></code></pre>
+<p>The <code>body_comp_percentile2value()</code> will estimate
+<code>y</code> for a given gestational age in days (<code>x</code>),
+<code>sex</code> and <code>acronym</code>. The
+<code>body_comp_percentile2value_old()</code> function does the same,
+but uses parameters from our older linear models for each standard.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ig_nbs_bc_percentile2value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span>, <span class="va">x</span>, <span class="va">sex</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">acronym</span>, <span class="st">"_"</span>, <span class="va">sex</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="va">SD</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="va">mu</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">params</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="va">params</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">params</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span></span>
+<span>  <span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">*</span> <span class="va">SD</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">ig_nbs_bc_percentile2value_old</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span>, <span class="va">x</span>, <span class="va">sex</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">acronym</span>,</span>
+<span>           <span class="st">"fmfga"</span>  <span class="op">=</span> <span class="op">-</span><span class="fl">1134.2</span> <span class="op">+</span> <span class="fl">37.2</span>  <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">152.1593</span>,</span>
+<span>           <span class="st">"bfpfga"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">17.68</span>  <span class="op">+</span> <span class="fl">0.69</span>  <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">3.6674</span>,</span>
+<span>           <span class="st">"ffmfga"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2487.6</span> <span class="op">+</span> <span class="fl">139.9</span> <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">276.2276</span>,</span>
+<span>           <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Bad acronym"</span>, .call <span class="op">=</span> <span class="cn">F</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">acronym</span>,</span>
+<span>           <span class="st">"fmfga"</span>  <span class="op">=</span> <span class="op">-</span><span class="fl">840.2</span> <span class="op">+</span> <span class="fl">30.7</span>  <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">156.8411</span>,</span>
+<span>           <span class="st">"bfpfga"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">9.02</span>  <span class="op">+</span> <span class="fl">0.51</span>  <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">3.9405</span>,</span>
+<span>           <span class="st">"ffmfga"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1279</span>  <span class="op">+</span> <span class="fl">105.3</span> <span class="op">*</span> <span class="va">x</span><span class="op">/</span><span class="fl">7</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="fl">260.621</span>,</span>
+<span>           <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Bad acronym"</span>, .call <span class="op">=</span> <span class="cn">F</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="comparing-fitted-values-with-published-values-1">Comparing fitted values with published values<a class="anchor" aria-label="anchor" href="#comparing-fitted-values-with-published-values-1"></a>
+</h2>
+<div class="section level3">
+<h3 id="making-percentile-tables">Making percentile tables<a class="anchor" aria-label="anchor" href="#making-percentile-tables"></a>
+</h3>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Replicate centile tables as presented by Villar et al.</span></span>
+<span><span class="va">repl_centile_tbls</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sex</span>, <span class="va">acronym</span>, <span class="va">bodycomp_fn</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">centiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.03</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.97</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P03"</span>, <span class="st">"P10"</span>, <span class="st">"P50"</span>, <span class="st">"P90"</span>, <span class="st">"P97"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>.x <span class="op">=</span> <span class="va">centiles</span>, .f <span class="op">=</span> <span class="op">~</span> <span class="op">{</span></span>
+<span>      <span class="va">p</span> <span class="op">&lt;-</span> <span class="va">.x</span></span>
+<span>      <span class="va">column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">266</span>, <span class="fl">294</span>, by <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">map_dfc</a></span><span class="op">(</span>.f  <span class="op">=</span> <span class="op">~</span> <span class="op">{</span></span>
+<span>          <span class="fu">bodycomp_fn</span><span class="op">(</span><span class="va">p</span>, <span class="va">.x</span>, <span class="va">sex</span>, <span class="va">acronym</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">column</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">column</span> <span class="op">&lt;=</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA_real_</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">column</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">centiles</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">tbl</span>, gest_age <span class="op">=</span> <span class="op">(</span><span class="fl">38</span><span class="op">:</span><span class="fl">42</span> <span class="op">*</span> <span class="fl">7</span><span class="op">)</span>, .before <span class="op">=</span> <span class="va">P03</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' Make percentile tables based on parameters from new polynomial models</span></span>
+<span><span class="va">repl_centile_tbls_new</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sex</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">repl_centile_tbls</span><span class="op">(</span><span class="va">sex</span>, <span class="va">acronym</span>, <span class="va">ig_nbs_bc_percentile2value</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#' Make percentile tables based on parameters from linear models</span></span>
+<span><span class="va">repl_centile_tbls_old</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sex</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">repl_centile_tbls</span><span class="op">(</span><span class="va">sex</span>, <span class="va">acronym</span>, <span class="va">ig_nbs_bc_percentile2value_old</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="observed-vs-fitted-values">Observed vs fitted values<a class="anchor" aria-label="anchor" href="#observed-vs-fitted-values"></a>
 </h3>
@@ -286,24 +560,11 @@ observed values.
 </div>
 </div>
 <div class="section level3">
-<h3 id="difference-between-observed-and-fitted-values">Difference between observed and fitted values<a class="anchor" aria-label="anchor" href="#difference-between-observed-and-fitted-values"></a>
+<h3 id="bland-altman-plots">Bland-Altman plots<a class="anchor" aria-label="anchor" href="#bland-altman-plots"></a>
 </h3>
-<div class="figure">
-<img src="ig-nbs-body-composition_files/figure-html/altman_esque_plots-1.png" alt="Difference between observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age, coloured by centiles (3rd, 10th, 50th, 90th and 97th)." width="768"><p class="caption">
-Difference between observed and estimated centile values for body
-composition measures according to gestational age and sex. Circles show
-differences between observed and estimated values for fat mass
-(<strong>a</strong> males; <strong>b</strong> females); body fat
-percentage (<strong>c</strong> males; <strong>d</strong> females); and
-fat-free mass (<strong>e</strong> males; <strong>f</strong> females)
-according to gestational age, coloured by centiles (3rd, 10th, 50th,
-90th and 97th).
-</p>
-</div>
-</div>
-<div class="section level3">
-<h3 id="bland-altman-plots-for-reference-and-predicted-values">Bland-Altman plots for reference and predicted values<a class="anchor" aria-label="anchor" href="#bland-altman-plots-for-reference-and-predicted-values"></a>
-</h3>
+<div class="section level4">
+<h4 id="reference-vs--predicted-values">Reference vs. predicted values<a class="anchor" aria-label="anchor" href="#reference-vs--predicted-values"></a>
+</h4>
 <div class="figure">
 <img src="ig-nbs-body-composition_files/figure-html/bland_altman_plots-1.png" alt="Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements." width="768"><p class="caption">
 Bland-Altman plots for observed and estimated centile values for body
@@ -314,6 +575,7 @@ percentage (<strong>c</strong> males; <strong>d</strong> females); and
 fat-free mass (<strong>e</strong> males; <strong>f</strong> females)
 according to the average of the two measurements.
 </p>
+</div>
 </div>
 </div>
 </div>
