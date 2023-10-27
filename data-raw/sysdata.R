@@ -1,30 +1,3 @@
-# LMS/GAMLSS coefficient rownames, see load_coefficient_matrix() ---------------
-who_gs_coeff_rownames <- purrr::map2(
-  .x = rep_len(c("M", "F"), length.out = 18),
-  .y = rep_len(names(gigs::who_gs_coeffs), length.out = 18),
-  .f = \(sex, acronym) {
-    sex_acronym <- paste0(sex, "_",  acronym)
-    sex_long <- if (sex == "M") "male" else "female"
-    x_indices <- unlist(gigs::who_gs_coeffs[[acronym]][[sex_long]][,1])
-    paste0(sex_acronym, "_", x_indices)
-  }) |>
-  purrr::set_names(paste0(rep_len(c("M", "F"), length.out = 18), "_",
-                          rep_len(names(gigs::who_gs_coeffs), length.out = 18)))
-
-ig_nbs_coeff_rownames <- purrr::map2(
-  .x = rep_len(c("M", "F"), length.out = 6),
-  .y = rep_len(names(gigs::ig_nbs_coeffs), length.out = 6),
-  .f = \(sex, acronym) {
-    sex_acronym <- paste0(sex, "_",  acronym)
-    sex_long <- if (sex == "M") "male" else "female"
-    x_indices <- unlist(gigs::ig_nbs_coeffs[[acronym]][[sex_long]][,1])
-    paste0(sex_acronym, "_", x_indices)
-  }) |>
-  purrr::set_names(paste0(rep_len(c("M", "F"), length.out = 6), "_",
-                          rep_len(names(gigs::ig_nbs_coeffs), length.out = 6)))
-
-coeff_rownames <- c(who_gs_coeff_rownames, ig_nbs_coeff_rownames)
-
 # Normative body composition standards -----------------------------------------
 
 #' Extract standard deviation from percentiles

@@ -86,26 +86,26 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
     msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
-    # Remove NA values for p or mu, or qST3() will fail
-    is_na_p_or_mu <- is.na(max_len_vec_li[["p"]]) | is.na(msnt[,1])
-    msnt_no_na <- msnt[!is_na_p_or_mu, , drop = FALSE]
-    # Initialise empty vector for p_out to go into
+    # Remove incomplete cases or qST3() will fail
+    lgl_complete <- stats::complete.cases(as.data.frame(msnt))
+    msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete])
+    # Initialise empty vector for y_out to go into
     y_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["p"]]))
     # Calculate y values...
     y <- ifelse(
       test = max_len_vec_li[["sex"]] == "U",
       yes =  mean_if_sex_undefined(
         fn = ig_nbs_percentile2value,
-        arg1 = max_len_vec_li[["p"]][!is_na_p_or_mu],
-        x_arg = max_len_vec_li[["gest_age"]][!is_na_p_or_mu],
-        acronym = max_len_vec_li[["acronym"]][!is_na_p_or_mu]),
-      no = gamlss.dist::qST3(max_len_vec_li[["p"]][!is_na_p_or_mu],
-                             mu = msnt_no_na[,1],
-                             sigma = msnt_no_na[,2],
-                             nu = msnt_no_na[,3],
-                             tau = msnt_no_na[,4]))
+        arg1 = max_len_vec_li[["p"]][lgl_complete],
+        x_arg = max_len_vec_li[["gest_age"]][lgl_complete],
+        acronym = max_len_vec_li[["acronym"]][lgl_complete]),
+      no = gamlss.dist::qST3(max_len_vec_li[["p"]][lgl_complete],
+                             mu = msnt_no_na[[1]],
+                             sigma = msnt_no_na[[2]],
+                             nu = msnt_no_na[[3]],
+                             tau = msnt_no_na[[4]]))
     # ... then assign to indices in the vector of NAs
-    suppressWarnings(y_out[as.integer(rownames(msnt_no_na))] <- y)
+    suppressWarnings(y_out[lgl_complete] <- y)
     y_out
   }
 
@@ -342,8 +342,8 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
     # Remove NA values for y or mu, or pST3() will fail
-    is_na_y_or_mu <- is.na(max_len_vec_li[["y"]]) | is.na(msnt[,1])
-    msnt_no_na <- msnt[!is_na_y_or_mu, , drop = FALSE]
+    lgl_complete <- stats::complete.cases(as.data.frame(msnt))
+    msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete])
     # Initialise empty vector for p_out to go into
     p_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["y"]]))
     # Calculate percentile values...
@@ -351,19 +351,17 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
       test = max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(
         fn = ig_nbs_value2percentile,
-        arg1 = max_len_vec_li[["p"]][!is_na_y_or_mu],
-        x_arg = max_len_vec_li[["gest_age"]][!is_na_y_or_mu],
-        acronym = max_len_vec_li[["acronym"]][!is_na_y_or_mu]),
-      no = gamlss.dist::pST3(max_len_vec_li[["y"]][!is_na_y_or_mu],
-                             mu = msnt_no_na[,1],
-                             sigma = msnt_no_na[,2],
-                             nu = msnt_no_na[,3],
-                             tau = msnt_no_na[,4])
+        arg1 = max_len_vec_li[["p"]][lgl_complete],
+        x_arg = max_len_vec_li[["gest_age"]][lgl_complete],
+        acronym = max_len_vec_li[["acronym"]][lgl_complete]),
+      no = gamlss.dist::pST3(max_len_vec_li[["y"]][lgl_complete],
+                             mu = msnt_no_na[[1]],
+                             sigma = msnt_no_na[[2]],
+                             nu = msnt_no_na[[3]],
+                             tau = msnt_no_na[[4]])
     )
-    # ... then assign to indices in the vector of NAs
-    if (length(is_na_y_or_mu) != 0) {
-      suppressWarnings(p_out[as.integer(rownames(msnt_no_na))] <- p)
-    }
+    # ... then assign to indices in the preallocated vector
+    suppressWarnings(p_out[lgl_complete] <- p)
     p_out
   }
 

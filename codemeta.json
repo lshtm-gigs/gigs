@@ -1,0 +1,124 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "gigs",
+  "description": "Convert between anthropometric measures and z-scores/percentiles in multiple growth standards, and classify infant growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
+  "name": "gigs: Assess Growth in Infants and Newborns",
+  "relatedLink": "https://lshtm-gigs.github.io/gigs/",
+  "codeRepository": "https://github.com/lshtm-gigs/gigs/",
+  "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
+  "license": "https://spdx.org/licenses/GPL-3.0",
+  "version": "0.2.3.9000",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.3.1 (2023-06-16 ucrt)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Simon",
+      "familyName": "Parker",
+      "email": "simon.parker@lshtm.ac.uk",
+      "@id": "https://orcid.org/0009-0003-8214-4496"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Eric",
+      "familyName": "Ohuma",
+      "@id": "https://orcid.org/0000-0002-3116-2593"
+    }
+  ],
+  "copyrightHolder": [
+    {
+      "@type": "Organization",
+      "name": "Bill & Melinda Gates Foundation"
+    }
+  ],
+  "funder": [
+    {
+      "@type": "Organization",
+      "name": "Bill & Melinda Gates Foundation"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Simon",
+      "familyName": "Parker",
+      "email": "simon.parker@lshtm.ac.uk",
+      "@id": "https://orcid.org/0009-0003-8214-4496"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 4.1.0"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "gamlss.dist",
+      "name": "gamlss.dist"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "vctrs",
+      "name": "vctrs"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "1549.567KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "datePublished": "2023",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Simon",
+          "familyName": "Parker"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Eric",
+          "familyName": "Ohuma"
+        }
+      ],
+      "name": "{gigs}: Assess Growth in Infants and Newborns",
+      "url": "https://github.com/lshtm-gigs/gigs/"
+    }
+  ],
+  "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
+  "readme": "https://github.com/lshtm-gigs/gigs/blob/master/README.md",
+  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://app.codecov.io/github/lshtm-gigs/gigs"],
+  "developmentStatus": "https://www.repostatus.org/#active",
+  "keywords": ["growth-standards", "anthropometry", "intergrowth", "r", "who", "r-package", "rstats"]
+}

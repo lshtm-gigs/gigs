@@ -107,15 +107,15 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
         no = z_under_minus_three(l, m, s, z))
     )
   }
-  L <- lms[,1]
-  M <- lms[,2]
-  S <- lms[,3]
+
   ifelse(max_len_vecs[["sex"]] == "U",
          yes = mean_if_sex_undefined(who_gs_zscore2value,
                                      arg1 = z,
                                      x_arg = max_len_vecs[["x"]],
                                      acronym = max_len_vecs[["acronym"]]),
-         no = y_from_LMS(l = L, m = M, s = S,
+         no = y_from_LMS(l = lms[[1]],
+                         m = lms[[2]],
+                         s = lms[[3]],
                          max_len_vecs[["z"]],
                          max_len_vecs[["acronym"]]))
 }
@@ -345,9 +345,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                   no =  z_under_minus_three(l, m, s, y))
     )
   }
-  L <- lms[,1]
-  M <- lms[,2]
-  S <- lms[,3]
+
   ifelse(max_len_vecs[["sex"]] == "U",
          yes = mean(c(
            who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
@@ -355,9 +353,9 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
            who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
                                sex = "F", acronym = max_len_vecs[["acronym"]])
          )),
-         no = z_from_LMS(l = L,
-                         m = M,
-                         s = S,
+         no = z_from_LMS(l = lms[[1]],
+                         m = lms[[2]],
+                         s = lms[[3]],
                          y = max_len_vecs[["y"]],
                          acronym = max_len_vecs[["acronym"]]))
 }

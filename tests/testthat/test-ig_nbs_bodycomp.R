@@ -39,19 +39,22 @@ test_that(desc = "Conversion of percentiles to values works", {
          percentiles = c(0.25, -1, 0.13, 0.84, 0.10),
          age = c(37, 38, 39, 40, 41)),
     expr = {
-      sapply(X = c("fmfga", "bfpfga", "ffmfga"), FUN = function(x) {
-        fn <- switch(x,
-                     "fmfga" = ig_nbs_fmfga_percentile2value,
-                     "bfpfga" = ig_nbs_bfpfga_percentile2value,
-                     "ffmfga" = ig_nbs_ffmfga_percentile2value)
-        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
-        expect_length(object = vals, n = length(sex))
-        expect_true(all(is.na(c(
-          vals[1], # Because age is out of bounds
-          vals[2], # Because percentile is out of bounds
-          vals[4]  # Because sex is not one of "M", "F" or "U"
-        ))))
-      })
+      vapply(
+        X = c("fmfga", "bfpfga", "ffmfga"),
+        FUN = function(x) {
+          fn <- switch(x,
+                       "fmfga" = ig_nbs_fmfga_percentile2value,
+                       "bfpfga" = ig_nbs_bfpfga_percentile2value,
+                       "ffmfga" = ig_nbs_ffmfga_percentile2value)
+          vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
+          expect_length(object = vals, n = length(sex))
+          expect_true(all(is.na(c(
+            vals[1], # Because age is out of bounds
+            vals[2], # Because percentile is out of bounds
+            vals[4]  # Because sex is not one of "M", "F" or "U"
+          ))))
+        },
+        FUN.VALUE = logical(length = 1L))
     })
 })
 

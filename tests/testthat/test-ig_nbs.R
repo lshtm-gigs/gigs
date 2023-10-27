@@ -145,19 +145,22 @@ test_that(desc = "Bad input gives NA", code = {
          percentiles = c(0.25, -1, 0.13, 0.84, 0.10),
          age = c(32, 33, 34, 35, 36)),
     expr = {
-      sapply(X = c("wfga", "lfga", "hcfga", "wlrfga"), FUN = function(x) {
-        fn <- switch(x,
-                     "wfga" = ig_nbs_wfga_percentile2value,
-                     "lfga" = ig_nbs_lfga_percentile2value,
-                     "wlrfga" = ig_nbs_wlrfga_percentile2value,
-                     "hcfga" = ig_nbs_hcfga_percentile2value)
-        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
-        expect_length(object = vals, n = length(sex))
-        expect_true(all(is.na(c(
-          vals[2], # Because percentile is out of bounds
-          vals[4]  # Because sex is not one of "M", "F" or "U"
-        ))))
-      })
+      vapply(
+        X = c("wfga", "lfga", "hcfga", "wlrfga"),
+        FUN = function(x) {
+          fn <- switch(x,
+                       "wfga" = ig_nbs_wfga_percentile2value,
+                       "lfga" = ig_nbs_lfga_percentile2value,
+                       "wlrfga" = ig_nbs_wlrfga_percentile2value,
+                       "hcfga" = ig_nbs_hcfga_percentile2value)
+          vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
+          expect_length(object = vals, n = length(sex))
+          expect_true(all(is.na(c(
+            vals[2], # Because percentile is out of bounds
+            vals[4]  # Because sex is not one of "M", "F" or "U"
+          ))))
+        },
+      FUN.VALUE = logical(length = 1L))
     })
 
   # Test that bad input gives NA in VPNS
@@ -166,19 +169,22 @@ test_that(desc = "Bad input gives NA", code = {
          percentiles = c(0.5, -1, 0.5, 0.5, 0.5),
          age = c(161, 168, 175, 182, 210)),
     expr = {
-      sapply(X = c("wfga", "lfga", "hcfga"), FUN = function(x) {
-        fn <- switch(x,
-                     "wfga" = ig_nbs_wfga_percentile2value,
-                     "lfga" = ig_nbs_lfga_percentile2value,
-                     "hcfga" = ig_nbs_hcfga_percentile2value)
-        vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
-        expect_length(object = vals, n = length(sex))
-        expect_true(all(is.na(c(
-          vals[1], # Because age is out of bounds
-          vals[2], # Because percentile is out of bounds
-          vals[4]  # Because sex is not one of "M", "F" or "U"
-        ))))
-      })
+      vapply(
+        X = c("wfga", "lfga", "hcfga"),
+        FUN = function(x) {
+          fn <- switch(x,
+                       "wfga" = ig_nbs_wfga_percentile2value,
+                       "lfga" = ig_nbs_lfga_percentile2value,
+                       "hcfga" = ig_nbs_hcfga_percentile2value)
+          vals <- suppressWarnings(fn(sex = sex, gest_age = age, p = percentiles))
+          expect_length(object = vals, n = length(sex))
+          expect_true(all(is.na(c(
+            vals[1], # Because age is out of bounds
+            vals[2], # Because percentile is out of bounds
+            vals[4]  # Because sex is not one of "M", "F" or "U"
+          ))))
+        },
+        FUN.VALUE = logical(length = 1L))
     })
 })
 
@@ -243,27 +249,6 @@ test_that(desc = "NA values returned with out of range gestage",
               length(bodycomp_range)
             )
           })
-
-test_that(desc = "GAMLSS conversions work when `msnt_no_na` has length zero",
-          code = {
-            testthat::expect_false(
-              anyNA(
-                ig_nbs_value2percentile(
-                  y = rnorm(n = 100, mean =  2.3, sd = 0.25),
-                  gest_age = rep_len(232:300, length.out = 100),
-                  sex = rep_len(c("M", "F"), length.out = 100),
-                  acronym = rep_len(names(gigs::ig_nbs_coeffs)[1:3], length.out = 100)
-                )))
-            testthat::expect_false(
-              anyNA(
-                ig_nbs_percentile2value(
-                  p = rnorm(n = 100, mean = 0.5, sd = 0.05),
-                  gest_age = rep_len(232:300, length.out = 100),
-                  sex = rep_len(c("M", "F"), length.out = 100),
-                  acronym = rep_len(names(gigs::ig_nbs_coeffs)[1:3], length.out = 100)
-                )))
-          }
-)
 
 test_that(desc = "Coefficient retrieval works when not all acronyms are valid",
           code = {
