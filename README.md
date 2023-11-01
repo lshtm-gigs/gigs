@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gigs: Assess growth in infants and newborns <img src="man/figures/logo.png" align="right" height="138" />
+# gigs <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
 
@@ -21,7 +21,7 @@ Produced as part of the Guidance for International Growth Standards
 project, gigs provides a single, simple interface for working with the
 WHO Child Growth Standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
-converting between anthropometric measures (e.g. weight or length) to
+converting from anthropometric measures (e.g. weight or length) to
 z-scores and percentiles, and the inverse. Also included are functions
 for classifying newborn and infant growth according to literature-based
 cut-offs.
@@ -209,12 +209,21 @@ documentation to see these sources.
 ``` r
 # Size for gestational age
 classify_sga(
-        weight_kg = c(2.5, 3.2, 4.0),
-        gest_age = 277,
+        weight_kg = c(2.1, 3.2, 4.5),
+        gest_age = c(252, 259, 290),
         sex = "M"
 )
 #> [1] SGA AGA LGA
 #> Levels: SGA AGA LGA
+
+# Small vulnerable newborns
+classify_svn(
+        weight_kg = c(2.1, 3.2, 4.5),
+        gest_age = c(252, 259, 290),
+        sex = "M"
+)
+#> [1] Preterm SGA  Term non-SGA Term non-SGA
+#> Levels: Term non-SGA Term SGA Preterm non-SGA Preterm SGA
 
 # Stunting, i.e. low length increase relative to age
 classify_stunting(
