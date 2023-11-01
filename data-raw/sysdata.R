@@ -26,7 +26,9 @@ extract_SDs <- function(df) {
 extract_eqn_params <- function(df) {
   li_models <- run_LMs(df)
   # Select 'best' model based on largest adjusted R squared value
-  r_sq_adj <- sapply(X = li_models, FUN = \(x) summary(x)$adj.r.squared)
+  r_sq_adj <- vapply(X = li_models,
+                     FUN = \(x) summary(x)$adj.r.squared,
+                     FUN.VALUE = numeric(length = 1L))
   chosen_model <- li_models[[which(r_sq_adj == max(r_sq_adj))]]
   model_coeffs <- coef(chosen_model) |> unname()
   SD <- extract_SDs(df)

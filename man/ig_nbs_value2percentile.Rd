@@ -53,14 +53,16 @@ ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_age, sex)
 ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
 }
 \arguments{
-\item{y}{Value(s) to convert to either a z-score/z-scores or a
-percentile/percentiles.}
+\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+Units depend on which \code{acronym}(s) are in use.}
 
-\item{gest_age}{Gestational age(s) in days. Must be between \code{266} to \code{294}
-for body composition equations (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}), or
-between \code{168} and \code{300} for the other standards.}
+\item{gest_age}{Numeric vector of gestational age(s) in days. Elements should
+be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
+\code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
+standards. If not inside these bounds, will return NA.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
 \item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
 standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
@@ -68,31 +70,30 @@ standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
 (weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
 (body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
 
-\item{weight_kg}{Birth weight(s) in kg}
+\item{weight_kg}{Birth weight(s) in kg.}
 
-\item{length_cm}{Birth length(s) in cm}
+\item{length_cm}{Birth length(s) in cm.}
 
-\item{headcirc_cm}{Birth head circumference(s) in cm}
+\item{headcirc_cm}{Birth head circumference(s) in cm.}
 
 \item{wei_len_ratio}{Weight-length ratio(s) in kg per m.}
 
-\item{fat_mass_g}{Fat mass(es) in g}
+\item{fat_mass_g}{Fat mass(es) in g.}
 
-\item{body_fat_perc}{Body fat percentage(s)}
+\item{body_fat_perc}{Body fat percentage(s).}
 
-\item{fatfree_mass_g}{Fat-free mass(es) in g}
+\item{fatfree_mass_g}{Fat-free mass(es) in g.}
 }
 \value{
-Z-scores/percentiles for each combination of measurement,
-gestational age, sex, and acronym provided to the function.
+Numeric vector of z-scores/percentiles with length equal to the
+outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
 Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards
 }
 \note{
-Input vectors will be recycled to the length of the longest vector
-according to the rules of \code{vctrs::vec_recycle_common()}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Convert values to percentiles

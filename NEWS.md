@@ -3,6 +3,10 @@
   0.2.3.
 * Added `classify_svn()` function, which classifies newborns into the categories
   used in the Lancet's 2023 Small Vulnerable Newborn (SVN) Series. 
+* Added type checking functions to conversion functions, along with additional
+  unit tests to make sure they work.
+* Extensive changes to documentation. These should mostly appear internally, 
+  where the roxygen documentation uses more `@inherit`/`@inheritParams` tags. 
 
 # gigs 0.2.3
 * Updated regression equations for the normative body composition standards in 

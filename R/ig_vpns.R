@@ -22,8 +22,6 @@
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
-#' @rdname ig_vpns_equations
-#' @keywords internal
 #' @noRd
 ig_vpns_equations <- function(gest_age, sex, acronym) {
   checked_params <- check_nbs_params(gest_age = gest_age,
@@ -82,9 +80,6 @@ ig_vpns_equations <- function(gest_age, sex, acronym) {
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
-#' @importFrom vctrs vec_recycle_common
-#' @rdname ig_vpns_zscore2value
-#' @keywords internal
 #' @noRd
 ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(z = z,
@@ -127,9 +122,6 @@ ig_vpns_zscore2value <- function(z, gest_age, sex, acronym) {
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
-#' @importFrom vctrs vec_recycle_common
-#' @rdname ig_vpns_value2zscore
-#' @keywords internal
 #' @noRd
 ig_vpns_value2zscore <- function(y, gest_age, sex, acronym) {
   df <- cbind(y = y, ig_vpns_equations(gest_age = gest_age,

@@ -1,22 +1,18 @@
 #' Convert z-scores/percentiles to values in the INTERGROWTH-21<sup>st</sup>
 #' Postnatal Growth Standards for preterm infants
 #'
-#' @param z,p Z-score(s)/percentiles to convert to a value/values.
 #' @param x,pma_weeks,length_cm The `x` value at which to convert a
 #' value to a z-score/percentile. Must be within bounds of available `x` values
 #' for given acronym. The standard-specific versions of each function specify
 #' `x`, either as `pma_weeks` (post-menstrual age in exact weeks; between `27`
 #' and `64` weeks), or `length_cm` (recumbent length measurement(s) in cm;
 #' between `35` and `65` cm).
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
 #' for postnatal growth in preterm infants. Should be one of `"wfa"`
 #' (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
 #' (head circumference-for-age), or `"wfl"` (weight-for-length).
-#' @note Input vectors will be recycled to the length of the longest vector
-#' according to the rules of `vctrs::vec_recycle_common()`.
-#' @return Expected measurements for each combination of z-score/percentile,
-#' x variable, sex, and acronym provided to the function.
+#' @inherit shared_roxygen_params params note
+#' @inherit shared_zscore2value_returns return
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
@@ -54,7 +50,6 @@
 #'                          pma_weeks = c(25, 27, 46, 64),
 #'                          sex = "M") |>
 #'   round(digits = 2)
-#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_zscore2value <- function(z, x, sex, acronym) {
@@ -141,15 +136,12 @@ ig_png_wfl_percentile2value <- function(p, length_cm, sex) {
 #' Convert values to z-scores/percentiles in the INTERGROWTH-21<sup>st</sup>
 #' Postnatal Growth Standards for preterm infants
 #'
-#' @param y Value(s) to convert to either a z-score/z-scores or a
-#' percentile/percentiles.
 #' @param x,pma_weeks The `x` value at which to convert a
 #' value to a z-score/percentile. Must be within bounds of available `x` values
 #' for given acronym. The standard-specific versions of each function specify
 #' `x`, either as `pma_weeks` (post-menstrual age in exact weeks; between `27`
 #' and `64` weeks), or `length_cm` (recumbent length measurement(s) in cm;
 #' between `35` and `65` cm).
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> Postnatal
 #' Growth standard for preterm infants. Should be one of `"wfa"`
 #' (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
@@ -159,15 +151,9 @@ ig_png_wfl_percentile2value <- function(p, length_cm, sex) {
 #' variable when using the length-for-age standard (`"lfa"`), or a `y` variable
 #' when using the weight-for-length (`"wfl"`) standard.
 #' @param headcirc_cm Head circumference measurement(s) in cm.
-#' @note Input vectors will be recycled to the length of the longest vector
-#' according to the rules of `vctrs::vec_recycle_common()`.
-#' @return Z-scores/percentiles for each combination of measurement, x
-#' variable, sex, and acronym provided to the function.
-#' @references
-#' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
-#' **Postnatal growth standards for preterm infants: the Preterm Postnatal
-#' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
-#' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
+#' @inherit ig_png_zscore2value params references
+#' @inherit shared_roxygen_params params note
+#' @inherit shared_value2zscore_returns return
 #' @examples
 #' # Convert values to percentiles
 #' ig_png_value2percentile(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
@@ -198,7 +184,6 @@ ig_png_wfl_percentile2value <- function(p, length_cm, sex) {
 #'                              pma_weeks = c(25, 27, 46, 64),
 #'                              sex = "M") |>
 #'   round(digits = 2)
-#' @importFrom vctrs vec_recycle_common
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_value2zscore <- function(y, x, sex, acronym) {
@@ -288,26 +273,25 @@ ig_png_wfl_value2percentile <- function(weight_kg, length_cm, sex) {
 #'
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27`
-#' and `64`.
+#'   and `64`.
 #' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
-#' for postnatal growth in preterm infants. Should be one of `"wfa"`
-#' (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
-#' (head circumference-for-age), or `"wfl"` (weight-for-length).
+#'   for postnatal growth in preterm infants. Should be one of `"wfa"`
+#'   (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
+#'   (head circumference-for-age), or `"wfl"` (weight-for-length).
 #' @return A table with median(s) and standard deviation(s) for each
-#' `age`/`sex`/`acronym` combination provided to the function.
+#'   `age`/`sex`/`acronym` combination provided to the function.
 #' @note The weight-for-age and length-for-age standards are logarithmic, so
-#' require slightly different treatment to use in z-score conversions. In
-#' contrast, head circumference for gestational age returns the median and
-#' standard deviation with no logarithm applied. The weight-for-length standard
-#' is not within the provided reference, but was instead supplied directly by
-#' Dr Eric Ohuma.
+#'   require slightly different treatment to use in z-score conversions. In
+#'   contrast, head circumference for gestational age returns the median and
+#'   standard deviation with no logarithm applied. The weight-for-length
+#'   standard is not within the provided reference, but was instead supplied
+#'   directly by Dr Eric Ohuma.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
 #' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
 #' @rdname ig_png_equations
-#' @keywords internal
 #' @noRd
 ig_png_equations <- function(x, sex, acronym) {
   checked_params <- check_png_params(x = x,
