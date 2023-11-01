@@ -7,14 +7,17 @@
 classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
 }
 \arguments{
-\item{weight_kg}{Weight measurement(s) in kg.}
+\item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{lenht_cm}{Length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
-\item{lenht_method}{\code{"L"} or \code{"H"} value(s) describing whether \code{lenht_cm} was
-recorded as recumbent length or standing height, respectively.}
+\item{lenht_method}{Character vector containig \code{"H"} or \code{"L"} value(s)
+describing whether \code{lenht_cm} was recorded as recumbent length or standing
+height. Missing (\code{NA}) values will be set to \code{"L"} for children <731 days
+old and to \code{"H"} for children 731 days old or more. Default = \code{NA}.}
 }
 \value{
 Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
@@ -27,8 +30,9 @@ to the median expected weight, whereas moderate wasting is -2SD from the
 median.
 }
 \note{
-Implausible z-score bounds are sourced from the referenced WHO report,
-and classification criteria from the DHS manual. Observations with invalid or
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Implausible z-score bounds are sourced from the referenced WHO report, and
+classification cut-offs from the DHS manual. Observations with invalid or
 missing \code{lenht_method} values will be returned as \code{NA}.
 }
 \examples{
@@ -44,7 +48,7 @@ classify_wasting(
 \strong{'Implausible z-score values'} \emph{in} World Health Organization (ed.)
 \emph{Recommendations for data collection, analysis and reporting on
 anthropometric indicators in children under 5 years old}. Geneva: World
-Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+Health Organization and the United Nations Children's Fund UNICEF, (2019).
 pp. 64-65.
 
 \strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores

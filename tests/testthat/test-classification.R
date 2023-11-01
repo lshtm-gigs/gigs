@@ -35,6 +35,41 @@ test_that(
   }
 )
 
+test_that(
+  desc = "Small vulnerable newborn classification works",
+  code = {
+    params <- list(
+      p = rep(c(0.07, 0.15, 0.03, 0.25, 0.75), 4),
+      gest_age = c(rep(36 * 7, 10), rep(39 * 7, 10)),
+      sex = rep(c(rep("M", 5), rep("F", 5)), 2)
+    )
+    params$weight_kg <- do.call(what = "ig_nbs_wfga_percentile2value", params)
+    params$p <- NULL
+    svn <- do.call(what = "classify_svn", params)
+
+    expect_equal(svn,
+                 factor(c("Preterm SGA", "Preterm non-SGA", "Preterm SGA",
+                          "Preterm non-SGA", "Preterm non-SGA",
+                          "Preterm SGA", "Preterm non-SGA", "Preterm SGA",
+                          "Preterm non-SGA", "Preterm non-SGA", "Term SGA",
+                          "Term non-SGA", "Term SGA", "Term non-SGA",
+                          "Term non-SGA", "Term SGA", "Term non-SGA",
+                          "Term SGA", "Term non-SGA", "Term non-SGA"),
+                 levels = levels(svn)))
+
+    na_indices <- sample(x = seq_along(params$weight_kg),
+                         size = 6,
+                         replace = FALSE)
+    params$weight_kg[na_indices] <- NA_real_
+    svn_NAs <- do.call(what = "classify_svn", params)
+
+    # All NA weight_kg lead to NA SVN classifications
+    expect_true(all(is.na(svn_NAs[na_indices])))
+
+    # All non-NA weight_kg lead to non-NA SVN classifications
+    expect_false(any(is.na(svn_NAs[-na_indices])))
+  }
+)
 
 test_that(desc = "Stunting classification works", {
   expect_equal(object =

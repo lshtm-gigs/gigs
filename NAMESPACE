@@ -2,6 +2,7 @@
 
 export(classify_sga)
 export(classify_stunting)
+export(classify_svn)
 export(classify_wasting)
 export(classify_wfa)
 export(ig_nbs_bfpfga_percentile2value)

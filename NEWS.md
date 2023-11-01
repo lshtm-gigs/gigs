@@ -1,3 +1,9 @@
+# gigs 0.2.3.9000
+* Updated coefficient retrieval functions to run ~ 2 times as fast as in version
+  0.2.3.
+* Added `classify_svn()` function, which classifies newborns into the categories
+  used in the Lancet's 2023 Small Vulnerable Newborn (SVN) Series. 
+
 # gigs 0.2.3
 * Updated regression equations for the normative body composition standards in 
   `ig_nbs`, namely `fmfga`, `ffmfga`, and `bfpfga`. These functions give outputs

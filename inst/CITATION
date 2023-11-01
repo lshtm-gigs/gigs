@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "{gigs}: Assess Growth in Infants and Newborns",
+  author   = c(person("Simon", "Parker"), person("Eric", "Ohuma")),
+  year     = 2023,
+  url      = "https://github.com/lshtm-gigs/gigs/"
+)
+

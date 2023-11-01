@@ -2,24 +2,26 @@
 % Please edit documentation in R/classification.R
 \name{classify_stunting}
 \alias{classify_stunting}
-\title{Classify stunting using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards}
+\title{Classify stunting using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+length/height-for-age standards}
 \usage{
 classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 }
 \arguments{
-\item{lenht_cm}{Length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
 
-\item{age_days}{Age(s) in days for each child. Should be between \code{0} to
-\code{1856} days.}
+\item{age_days}{Numeric vector with age(s) in days for each child. Should be
+between \code{0} to \code{1856} days.}
 
-\item{ga_at_birth}{Gestational age(s) at birth in days.}
+\item{ga_at_birth}{Numeric vector with gestational age(s) at birth in days.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
-\item{lenht_method}{\code{"H"} or \code{"L"} value(s) describing whether lenht_cm was
-recorded as recumbent length or standing height. Missing (\code{NA}) values will
-be set to \code{"L"} for children <731 days old and to \code{"H"} for children 731 days
-old or more. Default = \code{NA}.}
+\item{lenht_method}{Character vector containig \code{"H"} or \code{"L"} value(s)
+describing whether \code{lenht_cm} was recorded as recumbent length or standing
+height. Missing (\code{NA}) values will be set to \code{"L"} for children <731 days
+old and to \code{"H"} for children 731 days old or more. Default = \code{NA}.}
 }
 \value{
 Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
@@ -32,14 +34,15 @@ relative to median length/height at a given age, whereas moderate stunting is
 -2SD from the median.
 }
 \note{
-WHO guidelines stipulate that recumbent length should not be measured
-after 730 days. Therefore recumbent length values for children over 730
-days old have 0.7 cm taken away, and height values for children less than 731
-days old have 0.7 cm added on. Implausible z-scores are sourced from the
-referenced WHO report, and classification criteria from the DHS manual.
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}. WHO
+guidelines stipulate that recumbent length should not be measured after 730
+days. Therefore recumbent length values for children over 730 days old have
+0.7 cm taken away, and height values for children less than 731 days old
+have 0.7 cm added on. Implausible z-score bounds are sourced from the
+referenced WHO report, and classification cut-offs from the DHS manual.
 }
 \examples{
-# The first observation uses the INTERGROWTH-21st postnatal growth standards;
+# The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
 # the next two use the WHO Child Growth Standards.
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),

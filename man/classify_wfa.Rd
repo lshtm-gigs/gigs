@@ -7,14 +7,15 @@
 classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 }
 \arguments{
-\item{weight_kg}{Weight measurement(s) in kg.}
+\item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{age_days}{Age(s) at recording of each infant in days. Should be between
-\code{0} and \code{1856}.}
+\item{age_days}{Numeric vector with age(s) in days for each child. Should be
+between \code{0} to \code{1856} days.}
 
-\item{ga_at_birth}{Gestational age(s) at birth in days.}
+\item{ga_at_birth}{Numeric vector with gestational age(s) at birth in days.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 }
 \value{
 Factor of weight classification(s) with levels \code{c("implausible", "underweight_severe", "underweight", "normal", "overweight")}.
@@ -27,8 +28,9 @@ SD below the median, underweight is less than 2 SD below the median, and
 overweight is > 2 SDs above the median.
 }
 \note{
-Implausible z-score bounds are sourced from the referenced WHO report,
-and classification criteria from the DHS manual.
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Implausible z-score bounds are sourced from the referenced WHO report, and
+classification cut-offs from the DHS manual.
 }
 \examples{
 classify_wfa(
@@ -42,7 +44,7 @@ classify_wfa(
 \strong{'Implausible z-score values'} \emph{in} World Health Organization (ed.)
 \emph{Recommendations for data collection, analysis and reporting on
 anthropometric indicators in children under 5 years old}. Geneva: World
-Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+Health Organization and the United Nations Children's Fund UNICEF, (2019).
 pp. 64-65.
 
 \strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores

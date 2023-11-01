@@ -8,12 +8,13 @@ weight-for-gestational age standard}
 classify_sga(weight_kg, gest_age, sex, severe = FALSE)
 }
 \arguments{
-\item{weight_kg}{Weight value(s) in kg.}
+\item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168}
-and \code{300}.}
+\item{gest_age}{Numeric vector with gestational age(s) at birth in days.
+Values not between \code{168} and \code{300} will be set to \code{NA}.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
 \item{severe}{If \code{TRUE}, specify which SGA values are below the third
 percentile. Default = \code{FALSE}.}
@@ -23,11 +24,14 @@ Factor with gestational age classification(s). If \code{severe = FALSE},
 levels are \code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are \code{ c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
-Size for gestational age categories are split by percentile: small-for-GA (SGA;
-10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} to
-90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile) and large-for-GA (LGA; >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile).
-This function also supports classification of severe SGA (<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}}
-percentile) using the \code{severe} parameter.
+Size for gestational age categories are split by percentile: small-for-GA
+(SGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}}
+to 90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile) and large-for-GA (LGA; >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}}
+percentile). This function also supports classification of severe SGA
+(<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}} percentile) using the \code{severe} parameter.
+}
+\note{
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Without severe flag, does not differentiate between

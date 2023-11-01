@@ -7,12 +7,15 @@ articles:
   contents:
   - gigs
   - articles/ig-nbs-body-composition
+  - articles/comparing-with-stata
+  - articles/benchmarking
 reference:
   - title: Growth classification
     desc: >
-      Classify size for gestational age, stunting, wasting and under/overweight.
+      Classify growth data into commonly used growth indicators.
     contents:
       - classify_sga
+      - classify_svn
       - classify_stunting
       - classify_wasting
       - classify_wfa
