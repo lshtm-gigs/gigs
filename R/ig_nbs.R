@@ -1,20 +1,18 @@
 #' Convert z-scores/percentiles to values in the INTERGROWTH-21<sup>st</sup>
 #' Newborn Size Standards
 #'
-#' @param p,z Percentile(s)/z-score(s) to convert to a value/values.
-#' @param gest_age Gestational age(s) in days. Must be between `266` to `294`
-#' for body composition equations (`"fmfga"`, `"bfpfga"`, or `"ffmfga"`), or
-#' between `168` and `300` for the other standards.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param p,z Numeric vector of percentiles/z-scores to convert to values.
+#' @param gest_age Numeric vector of gestational age(s) in days. Elements should
+#'   be between `266` to `294` for body composition equations (`"fmfga"`,
+#'   `"bfpfga"`, or `"ffmfga"`), or between `168` and `300` for the other
+#'   standards. If not inside these bounds, will return NA.
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
 #' standard to use. Must be one of `"wfga"` (weight-for-GA), `"lfga"`
 #' (length-for-GA), `"hcfga"` (head circumference-for-GA), `"wlrfga"`
 #' (weight/length ratio-for-GA), `"fmfga"` (fat mass-for-GA), `"bfpfga"`
 #' (body fat %-for-GA), or `"ffmfga"` (fat-free mass-for-GA).
-#' @return Expected measurements for each combination of z-score/percentile,
-#' gestational age, sex, and acronym provided to the function.
-#' @note Input vectors will be recycled to the length of the longest vector
-#' according to the rules of `vctrs::vec_recycle_common()`.
+#' @inherit shared_roxygen_params params note
+#' @inherit shared_value2zscore_returns return
 #' @references
 #' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 #' **International standards for newborn weight, length, and head circumference
@@ -63,8 +61,6 @@
 #'                           gest_age = c(140, 182, 224, 266),
 #'                           sex = "F") |>
 #'   round(digits = 2)
-#' @importFrom vctrs vec_recycle_common
-#' @importFrom gamlss.dist qST3
 #' @rdname ig_nbs_percentile2value
 #' @export
 ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
@@ -75,7 +71,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
                                      gest_age = max_len_vecs[["gest_age"]],
                                      acronym = max_len_vecs[["acronym"]])
-  checked_p <- max_len_vecs[["p"]]
+  checked_p <- stop_if_wrong_type(max_len_vecs[["p"]], type = "numeric")
   checked_p[which(abs(max_len_vecs[["p"]]) >= 1)] <- NA
   input <- list(p = checked_p,
                 gest_age = checked_params[["age"]],
@@ -126,7 +122,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
                         sigma = body_comp[, 2]))
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
-  
+
   fromWLR_p2v <- function(max_len_vec_li) {
     wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
                       sex = max_len_vec_li[["sex"]])
@@ -252,44 +248,16 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' Convert values to z-scores/percentiles in the INTERGROWTH-21<sup>st</sup>
 #' Newborn Size Standards
 #'
-#' @param y Value(s) to convert to either a z-score/z-scores or a
-#' percentile/percentiles.
-#' @param gest_age Gestational age(s) in days. Must be between `266` to `294`
-#' for body composition equations (`"fmfga"`, `"bfpfga"`, or `"ffmfga"`), or
-#' between `168` and `300` for the other standards.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
-#' standard to use. Must be one of `"wfga"` (weight-for-GA), `"lfga"`
-#' (length-for-GA), `"hcfga"` (head circumference-for-GA), `"wlrfga"`
-#' (weight/length ratio-for-GA), `"fmfga"` (fat mass-for-GA), `"bfpfga"`
-#' (body fat %-for-GA), or `"ffmfga"` (fat-free mass-for-GA).
-#' @param weight_kg Birth weight(s) in kg
-#' @param length_cm Birth length(s) in cm
-#' @param headcirc_cm Birth head circumference(s) in cm
+#' @param weight_kg Birth weight(s) in kg.
+#' @param length_cm Birth length(s) in cm.
+#' @param headcirc_cm Birth head circumference(s) in cm.
 #' @param wei_len_ratio Weight-length ratio(s) in kg per m.
-#' @param fat_mass_g Fat mass(es) in g
-#' @param body_fat_perc Body fat percentage(s)
-#' @param fatfree_mass_g Fat-free mass(es) in g
-#' @note Input vectors will be recycled to the length of the longest vector
-#' according to the rules of `vctrs::vec_recycle_common()`.
-#' @return Z-scores/percentiles for each combination of measurement,
-#' gestational age, sex, and acronym provided to the function.
-#' @references
-#' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
-#' **International standards for newborn weight, length, and head circumference
-#' by gestational age and sex: the Newborn Cross-Sectional Study of the
-#' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
-#' \doi{10.1016/S0140-6736(14)60932-6}
-#'
-#' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
-#' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
-#' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
-#'
-#' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
-#' **Body composition at birth and its relationship with neonatal anthropometric
-#' ratios: the newborn body composition study of the INTERGROWTH-21st
-#' project.** *Pediatric Research* 2017, **82:305-316.**
-#' \doi{10.1038/pr.2017.52}
+#' @param fat_mass_g Fat mass(es) in g.
+#' @param body_fat_perc Body fat percentage(s).
+#' @param fatfree_mass_g Fat-free mass(es) in g.
+#' @inherit shared_roxygen_params params note
+#' @inherit shared_zscore2value_returns return
+#' @inherit ig_nbs_percentile2value params references
 #' @examples
 #' # Convert values to percentiles
 #' ig_nbs_value2percentile(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
@@ -321,8 +289,6 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #'                               sex = "F") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2percentile
-#' @importFrom vctrs vec_recycle_common
-#' @importFrom gamlss.dist pST3
 #' @export
 ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y,
@@ -332,7 +298,7 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
                                      gest_age = max_len_vecs[["gest_age"]],
                                      acronym = max_len_vecs[["acronym"]])
-  input <- list(y = max_len_vecs[["y"]],
+  input <- list(y = stop_if_wrong_type(max_len_vecs[["y"]], type = "numeric"),
                 gest_age = checked_params[["age"]],
                 sex = checked_params[["sex"]],
                 acronym = checked_params[["acronym"]])
@@ -509,21 +475,26 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #' Retrieve GAMLSS coefficients for INTERGROWTH-21<sup>st</sup> Newborn Size
 #' standards
 #'
-#' @description Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
+#' Retrieves mu/sigma/nu/tau values for GAMLSS-based calculation of
 #' z-scores/percentiles in the INTERGROWTH-21<sup>st</sup> Newborn Size
 #' standards.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param gest_age Gestational age(s) in days. Must be between `231` and `300`.
-#' @param acronym Acronym(s) denoting which GAMLSS-based
-#' INTERGROWTH-21<sup>st</sup> standard to use. Must be one of `"wfga"`,
-#' `"lfga"`, or `"hcfga"`.
-#' @return A dataframe containing mu, sigma, nu, and tau values for each
-#' provided combination of sex, gestational age, and acronym.
+#'
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
+#' @param gest_age Numeric vector of gestational age(s) in days. Entries not
+#'   between `231` and `300` will be returned with NA values.
+#' @param acronym Character vector of acronym(s) denoting which
+#'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Entries
+#'   which are not one of `"wfga"`,`"lfga"`, or `"hcfga"` will be returned with
+#'   `NA` values.
+#' @return A list with names `"mu"`, `"sigma"`, `"nu"`, and `"tau"`, where each
+#'   is a numeric vector with mu/sigma/nu/tau values for the inputted
+#'   combinations of `sex`, `gest_age`, and `acronym`.
 #' @note These coefficients are not included in the referenced publication, and
-#' were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
-#' these coefficients to construct the growth curves they described, and in
-#' testing we found these coefficients output the INTERGROWTH-21<sup>st</sup>
-#' standards exactly once rounded to the correct number of decimal places.
+#'   were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
+#'   these coefficients to construct the growth curves they described, and in
+#'   testing we found these coefficients output the INTERGROWTH-21<sup>st</sup>
+#'   standards exactly once rounded to the correct number of decimal places.
 #' @references
 #' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 #' **International standards for newborn weight, length, and head circumference
@@ -534,8 +505,6 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #' # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks'
 #' # gestational age
 #' gigs:::ig_nbs_msnt(gest_age = 40 * 7, sex = "M", acronym = "wfga")
-#' @rdname ig_nbs_msnt
-#' @keywords internal
 #' @noRd
 ig_nbs_msnt <- function(gest_age, sex, acronym) {
   retrieve_coefficients(gest_age, sex, acronym, gigs::ig_nbs_coeffs,
@@ -545,23 +514,22 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 #' INTERGROWTH-21<sup>st</sup> weight-to-length ratio means/standard
 #' deviations
 #'
-#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and `42 +
-#' 6/7`.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and
+#'   `42 + 6/7`.
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
 #' @return Weight-to-length ratio medians and standard deviations for the given
-#' `sex`/`gest_age` combinations.
+#'   `sex`/`gest_age` combinations.
 #' @note These equations are not included in the referenced publication. Rather,
-#' they were taken from weight-to-length ratio calculating Excel files available
-#' on the
-#' [INTERGROWTH-21<sup>st</sup> website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
+#'   they were taken from weight-to-length ratio calculating Excel files available
+#'   on the
+#'   [INTERGROWTH-21<sup>st</sup> website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
 #' ratios: the newborn body composition study of the INTERGROWTH-21st project.**
 #' *Pediatric Research* 2017, **82:305-316.**
 #' \doi{10.1038/pr.2017.52}
-#' @rdname ig_nbs_wlr
-#' @keywords internal
 #' @noRd
 ig_nbs_wlr <- function(ga_weeks, sex) {
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
@@ -592,28 +560,27 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
 #' INTERGROWTH-21<sup>st</sup> normative body composition means/standard
 #' deviations
 #'
-#' @param x Gestation age in days at which to calculate mu (mean) and sigma
-#' (SD). Should be between `266` and `294`.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
-#' normative body composition standard to use. Must be one of `"fmfga"`,
-#' `"bfpfga"`, or `"ffmfga"`.
+#' @param x Numeric vector of gestational age(s) in days at which to calculate
+#'   mu (mean) and sigma (SD). Should be between `266` and `294`.
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
+#' @param acronym Character vector of acronym(s) denoting the
+#'   INTERGROWTH-21<sup>st</sup> NBS normative body composition standard to use.
+#'   Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
 #' @return A matrix with means and standard deviations for each gestational
-#' age/sex/acronym combination.
+#'   age/sex/acronym combination.
 #' @note These parameters are not included in the referenced publication, but
-#' the associated supplementary materials. We used tables S1, S2 and S3 and
-#' `lm()` to derive the equations. This process can be seen in the
-#' INTERGROWTH-21st body composition vignette or the source code of
-#' `data-raw/ig_nbs_bc.R`. As a result, z-scores/percentiles derived from these
-#' models differ slightly from Villar *et al.*'s published values.
+#'   the associated supplementary materials. We used tables S1, S2 and S3 and
+#'   `lm()` to derive the equations. This process can be seen in the
+#'   INTERGROWTH-21st body composition vignette or the source code of
+#'   `data-raw/ig_nbs_bc.R`. As a result, z-scores/percentiles derived from
+#'   these models differ slightly from Villar *et al.*'s published values.
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
 #' ratios: the newborn body composition study of the INTERGROWTH-21st
 #' project.** *Pediatric Research* 2017, **82:305-316.**
 #' \doi{10.1038/pr.2017.52}
-#' @rdname ig_nbs_bodycomp
-#' @keywords internal
 #' @noRd
 ig_nbs_bodycomp <- function(x, sex, acronym) {
   acronym_sex <- paste0(acronym, "_", sex)

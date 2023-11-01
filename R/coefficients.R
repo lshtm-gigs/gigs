@@ -4,7 +4,8 @@
 #'  the WHO Child Growth and INTERGROWTH-21<sup>st</sup> Newborn Size standards.
 #' @param x X variable in whatever range and units are appropriate for the
 #'  standard(s) in use.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
 #' @param acronym Acronym(s) denoting which LMS/GAMLSS-based growth standards
 #'  are in use.
 #' @param coeff_tbls A set of coefficient tables from `gigs`, either

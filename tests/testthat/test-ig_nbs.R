@@ -272,3 +272,32 @@ test_that(desc = "Coefficient retrieval works when not all acronyms are valid",
                 )))
           }
 )
+
+test_that(desc = "Bad input types cause errors.",
+          code = {
+            x <- 250:260
+            x_len <- length(x)
+            z <- rep_len(-3:3, x_len)
+            sex <- rep_len(c("M", "F"), x_len)
+            acronym <- rep_len(names(gigs::ig_nbs[1:4]), x_len)
+            # Test failures for each arg when converting zscores to values
+            testthat::expect_error(
+              ig_nbs_zscore2value(as.character(z), x, sex, acronym)
+            )
+            testthat::expect_error(
+              ig_nbs_zscore2value(z, as.character(x), sex, acronym)
+            )
+            testthat::expect_error(ig_nbs_zscore2value(z, x, 1, acronym))
+            testthat::expect_error(ig_nbs_zscore2value(z, x, sex, 1))
+
+            # And for conversion of values to zscores
+            y <- ig_nbs_zscore2value(z, x, sex, acronym)
+            testthat::expect_error(
+              ig_nbs_value2zscore(as.character(y), x, sex, acronym)
+            )
+            testthat::expect_error(
+              ig_nbs_value2zscore(y, as.character(x), sex, acronym)
+            )
+            testthat::expect_error(ig_nbs_value2zscore(y, x, 1, acronym))
+            testthat::expect_error(ig_nbs_value2zscore(y, x, sex, 1))
+})

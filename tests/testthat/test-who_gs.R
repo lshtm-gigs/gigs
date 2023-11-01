@@ -263,3 +263,32 @@ test_that(desc = "NA values returned with out of range xvars",
                                     acronym = rep_len(names(gigs::who_gs), 200))
               ))
           })
+
+test_that(desc = "Bad input types cause errors.",
+          code = {
+            x <- seq(65, 95, by = 0.5)
+            len_x <- length(x)
+            z <- rep_len(-3:3, len_x)
+            sex <- rep_len(c("M", "F"), len_x)
+            acronym <- rep_len(names(gigs::who_gs), len_x)
+            # Test failures for each arg when converting zscores to values
+            testthat::expect_error(
+              who_gs_zscore2value(as.character(z), x, sex, acronym)
+            )
+            testthat::expect_error(
+              who_gs_zscore2value(z, as.character(x), sex, acronym)
+            )
+            testthat::expect_error(who_gs_zscore2value(z, x, 1, acronym))
+            testthat::expect_error(who_gs_zscore2value(z, x, sex, 1))
+
+            # And for conversion of values to zscores
+            y <- who_gs_zscore2value(z, x, sex, acronym)
+            testthat::expect_error(
+              who_gs_value2zscore(as.character(y), x, sex, acronym)
+            )
+            testthat::expect_error(
+              who_gs_value2zscore(y, as.character(x), sex, acronym)
+            )
+            testthat::expect_error(who_gs_value2zscore(y, x, 1, acronym))
+            testthat::expect_error(who_gs_value2zscore(y, x, sex, 1))
+})

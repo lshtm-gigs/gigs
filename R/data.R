@@ -217,3 +217,43 @@ NULL
 #' @docType data
 #' @keywords data
 NULL
+
+#' Shared roxygen parameters
+#'
+#' Many of the functions in `[gigs]` are shared between different functions.
+#' This roxygen block is designed to make inheriting these parameters as simple
+#' as possible.
+#'
+#' @name shared_roxygen_params
+#' @param y Numeric vector of measurement(s) to convert to percentiles/z-scores.
+#'   Units depend on which `acronym`(s) are in use.
+#' @param z,p Numeric vector of percentiles/z-scores to convert to values.
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()].
+#' @keywords internal
+NULL
+
+#' Shared zscore/percentile roxygen parameters
+#'
+#' Much of the roxygen content in `[gigs]` is shared between different
+#' functions. This roxygen block is designed to make inheriting these parameters
+#' more simple.
+#'
+#' @name shared_zscore2value_returns
+#' @returns Numeric vector of z-scores/percentiles with length equal to the
+#'   outputs from [vctrs::vec_recycle_common()].
+#' @keywords internal
+NULL
+
+#' Shared zscore/percentile to value roxygen parameters
+#'
+#' Much of the roxygen content in `[gigs]` is shared between different
+#' functions. This roxygen block is designed to make inheriting these parameters
+#' more simple.
+#'
+#' @name shared_value2zscore_returns
+#' @returns Numeric vector of expected measurements with length equal to the
+#'   outputs from [vctrs::vec_recycle_common()].
+#' @keywords internal
+NULL

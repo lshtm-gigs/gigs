@@ -64,45 +64,51 @@ who_gs_ssfa_value2percentile(subscap_sf_mm, age_days, sex)
 who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
 }
 \arguments{
-\item{y}{Value(s) to convert to either a z-score/z-scores or a
-percentile/percentiles.}
+\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+Units depend on which \code{acronym}(s) are in use.}
 
-\item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
-value to a z-score/percentile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify
-\code{x}, either \code{age_days} (age since birth in days), \code{length_cm} (recumbent
-length measurement(s) in cm) or \code{height_cm} (standing height measurement(s)
-in cm).}
+\item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
+to convert inputs. Must be within bounds of available \code{x} values for given
+acronym. The standard-specific versions of each function specify \code{x}:
+either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
+measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in
+cm).}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
-\item{acronym}{Valid acronym(s) for the WHO Child Growth Standards: either
+\item{acronym}{Valid acronym(s) for the WHO Child Growth standards: either
 \code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
 \code{"tsfa"} (triceps skinfold-for-age).}
 
-\item{weight_kg}{Weight measurement(s) in kg.}
+\item{weight_kg}{Numeric vector of weight measurement(s) in kg.}
 
-\item{bmi}{Body mass index measurement(s) in kg/m\if{html}{\out{<sup>}}2\if{html}{\out{</sup>}}.}
+\item{bmi}{Numeric vector of body mass index measurement(s) in
+kg/m\if{html}{\out{<sup>}}2\if{html}{\out{</sup>}}.}
 
-\item{lenht_cm}{Length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector of length/height measurement(s) in cm.}
 
-\item{headcirc_cm}{Head circumference measurement(s) in cm.}
+\item{headcirc_cm}{Numeric vector of head circumference measurement(s) in cm.}
 
-\item{armcirc_cm}{Arm circumference measurement(s) in cm.}
+\item{armcirc_cm}{Numeric vector of arm circumference measurement(s) in cm.}
 
-\item{subscap_sf_mm}{Subscapular skinfold measurement(s) in mm.}
+\item{subscap_sf_mm}{Numeric vector of subscapular skinfold measurement(s) in
+mm.}
 
-\item{triceps_sf_mm}{Triceps skinfold measurement(s) in mm.}
+\item{triceps_sf_mm}{Numeric vector of triceps skinfold measurement(s) in mm.}
 }
 \value{
-Z-scores/percentiles for each combination of measurement, x
-variable, sex, and acronym provided to the function.
+Numeric vector of expected measurements with length equal to the
+outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
 Convert values to z-scores/percentiles in the WHO Child Growth Standards
+}
+\note{
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Convert values to percentiles

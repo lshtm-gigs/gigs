@@ -64,18 +64,19 @@ who_gs_ssfa_percentile2value(p, age_days, sex)
 who_gs_tsfa_percentile2value(p, age_days, sex)
 }
 \arguments{
-\item{z, p}{Z-score(s)/percentiles to convert to a value/values.}
+\item{z, p}{Numeric vector of percentiles/z-scores to convert to values.}
 
-\item{x, age_days, length_cm, height_cm}{The \code{x} value at which to convert a
-value to a z-score/percentile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify
-\code{x}, either \code{age_days} (age since birth in days), \code{length_cm} (recumbent
-length measurement(s) in cm) or \code{height_cm} (standing height measurement(s)
-in cm).}
+\item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
+to convert inputs. Must be within bounds of available \code{x} values for given
+acronym. The standard-specific versions of each function specify \code{x}:
+either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
+measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in
+cm).}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
-\item{acronym}{Valid acronym(s) for the WHO Child Growth Standards: either
+\item{acronym}{Valid acronym(s) for the WHO Child Growth standards: either
 \code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
 (length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
@@ -83,11 +84,14 @@ in cm).}
 \code{"tsfa"} (triceps skinfold-for-age).}
 }
 \value{
-Expected measurements for each combination of z-score/percentile, x
-variable, sex, and acronym provided to the function.
+Numeric vector of expected measurements with length equal to the
+outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
 Convert z-scores/percentiles to values in the WHO Child Growth Standards
+}
+\note{
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Convert percentiles to values

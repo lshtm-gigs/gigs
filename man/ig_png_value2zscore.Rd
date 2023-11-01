@@ -35,8 +35,8 @@ ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
 ig_png_wfl_value2percentile(weight_kg, length_cm, sex)
 }
 \arguments{
-\item{y}{Value(s) to convert to either a z-score/z-scores or a
-percentile/percentiles.}
+\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+Units depend on which \code{acronym}(s) are in use.}
 
 \item{x, pma_weeks}{The \code{x} value at which to convert a
 value to a z-score/percentile. Must be within bounds of available \code{x} values
@@ -45,7 +45,8 @@ for given acronym. The standard-specific versions of each function specify
 and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
 between \code{35} and \code{65} cm).}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
 \item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal
 Growth standard for preterm infants. Should be one of \code{"wfa"}
@@ -61,16 +62,15 @@ when using the weight-for-length (\code{"wfl"}) standard.}
 \item{headcirc_cm}{Head circumference measurement(s) in cm.}
 }
 \value{
-Z-scores/percentiles for each combination of measurement, x
-variable, sex, and acronym provided to the function.
+Numeric vector of expected measurements with length equal to the
+outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
 Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants
 }
 \note{
-Input vectors will be recycled to the length of the longest vector
-according to the rules of \code{vctrs::vec_recycle_common()}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Convert values to percentiles

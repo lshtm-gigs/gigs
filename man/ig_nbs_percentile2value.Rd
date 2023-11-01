@@ -53,13 +53,15 @@ ig_nbs_bfpfga_zscore2value(z, gest_age, sex)
 ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
 }
 \arguments{
-\item{p, z}{Percentile(s)/z-score(s) to convert to a value/values.}
+\item{p, z}{Numeric vector of percentiles/z-scores to convert to values.}
 
-\item{gest_age}{Gestational age(s) in days. Must be between \code{266} to \code{294}
-for body composition equations (\code{"fmfga"}, \code{"bfpfga"}, or \code{"ffmfga"}), or
-between \code{168} and \code{300} for the other standards.}
+\item{gest_age}{Numeric vector of gestational age(s) in days. Elements should
+be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
+\code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
+standards. If not inside these bounds, will return NA.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
 \item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
 standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
@@ -68,16 +70,15 @@ standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
 (body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
 }
 \value{
-Expected measurements for each combination of z-score/percentile,
-gestational age, sex, and acronym provided to the function.
+Numeric vector of expected measurements with length equal to the
+outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
 Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards
 }
 \note{
-Input vectors will be recycled to the length of the longest vector
-according to the rules of \code{vctrs::vec_recycle_common()}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Convert percentiles to values
