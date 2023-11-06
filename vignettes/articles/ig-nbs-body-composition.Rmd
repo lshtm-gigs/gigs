@@ -78,7 +78,9 @@ Does this equality hold for the other percentile tables?
 ```{r looking_into_data_4}
 other_standards <- list(fmfga_male, bfpfga_male, bfpfga_female, ffmfga_male,
                         ffmfga_female)
-sapply(X = other_standards, FUN = \(x) all(check_differences(x)$all_equal))
+vapply(X = other_standards,
+       FUN = \(x) all(check_differences(x)$all_equal),
+       FUN.VALUE = logical(length = 1L))
 ```
 **No.** The first value, corresponding to `fmfga_male`, is `FALSE`. Let's see
 what the differences look like for this table:
@@ -131,7 +133,9 @@ extract_SDs <- function(df) {
 #' @param df A percentile table for `fmfga`, `bfpfga` or `ffmfga`.
 extract_eqn <- function(df, verbose = TRUE) {
   li_models <- run_LMs(df)
-  r_sq_adj <- sapply(X = li_models, FUN = \(x) summary(x)$adj.r.squared)
+  r_sq_adj <- vapply(X = li_models,
+                     FUN = \(x) summary(x)$adj.r.squared,
+                     FUN.VALUE = numeric(length = 1L))
   chosen_model <- li_models[[which(r_sq_adj == max(r_sq_adj))]]
   if (!verbose) {
     return(chosen_model)
