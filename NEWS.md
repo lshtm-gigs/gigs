@@ -7,6 +7,8 @@
   unit tests to make sure they work.
 * Extensive changes to documentation. These should mostly appear internally, 
   where the roxygen documentation uses more `@inherit`/`@inheritParams` tags. 
+* Added vignette displaying performance differences between gigs and other,
+  similar R packages, as well as Stata implementations.
 
 # gigs 0.2.3
 * Updated regression equations for the normative body composition standards in 

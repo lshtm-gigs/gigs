@@ -1,0 +1,261 @@
+---
+title: "Benchmarking gigs against other software packages"
+description: >
+  A comparison of gigs' performance against other growth analysis packages.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+        dpi = 120, message = FALSE, warning = FALSE,
+        dev.args = list(png = list(type = "cairo"))
+)
+
+# Set ggplot theming for consistent plots
+ggplot2::theme_set(ggplot2::theme_bw())
+ggplot2::theme_update(
+  legend.text = ggtext::element_markdown(),
+  legend.title = ggtext::element_markdown()
+)
+```
+
+```{r load_timings_rda, echo = FALSE}
+load(file = file.path("timings.rda"))
+```
+
+# Rationale
+This short article describes the performance of gigs relative to a
+non-exhaustive group of R and non-R packages designed to implement child growth
+standards.
+
+| Package name                                                                 | Language | On CRAN? |
+|:-----------------------------------------------------------------------------|:---------|:---------|
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)          | R        | Yes      |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | R        | Yes      |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | R        | No       |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R        | No       |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | Stata    | No       |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211)  | Stata    | No       |
+
+Thus far, there is no comprehensive benchmark for these different packages. This
+short article will compare the speed of each package from 1 to 100000 inputs,
+checking how fast each package can convert weight values to z-scores in the WHO
+Child Growth standards.
+
+We have performed these benchmarks on a Windows 10 system with a Ryzen 7 3700X,
+and 16GB of DDR4 RAM. The Stata benchmarks have been run on the same system with
+Stata 18.0, using the [benchmark](https://github.com/mcaceresb/stata-benchmark)
+package.
+
+## Set up benchmark dataset
+The benchmarking and package comparisons will all use the same 100,000-row
+dataset comprised of data which can be used to convert between z-scores
+and percentiles in the WHO weight-for-age standard. The z-scores, `x` variable
+and sexes for each row are generated randomly with a pre-specified seed. As gigs
+is validated against the published growth curve data from the WHO, we use it to
+generate weight values in kg for each observation. This dataset can then be used
+to compare speed and accuracy in conversion between values and
+z-scores/percentiles for the packages mentioned above.
+
+```{r who_gs_dataset, echo = TRUE}
+who_gs_dataset <- function(n, acronym = "wfa") {
+  seed <- 154237890
+  withr::with_seed(
+    seed,
+    code = {
+      # Random z-scores around 0
+      z <- rnorm(n = n)
+      # X variables are non-discrete but within bounds of the desired acronym
+      xvars <- gigs::who_gs_coeffs[[acronym]][[1]][, 1]
+      x <-  sample(xvars, size = n, replace = TRUE)
+      x_jitter <- c(runif(n = 5, min = -1, max = 1), 0)
+      x <- x + sample(x_jitter, size = n, replace = TRUE)
+      x <- pmax(pmin(x, max(xvars)), min(xvars))
+      # Sexes randomly sampled from male and female
+      sex <- sample(c("M", "F"), size = n, replace = TRUE)
+    })
+  acronym <- rep_len(acronym, n)
+  out <- data.frame(z = z, x = x, sex = sex, acronym = acronym) |>
+    dplyr::mutate(
+      y = gigs::who_gs_zscore2value(z = z, x = x, sex = sex, acronym = acronym)
+    )
+  purrr::set_names(out, c("z", "x", "sex", "acronym", "y"))
+}
+bench_dataset <- who_gs_dataset(n = 100000)
+```
+
+The first 10 rows of this dataset look like this:
+```{r show_bench_dataset}
+bench_dataset[1:10, ]
+```
+
+## Performance comparison - timing
+First, we will determine how fast each package is relative to each other. These
+benchmarks
+
+### Benchmark code
+The `mbench_pkg()` function is used to benchmark each package over a range of
+input sizes.  Each call to it produces a tabular output containing the lower
+quartile, median and upper quartile timings for `pkg_expr` to operate on the
+data, ranging from 1 to 100,000 inputs.
+
+```{r iteration}
+mbench_pkg <- function(pkg_expr, pkg_name) {
+  n_inputs <- c(1, 10, 100, 500, 1000, 5000, 10000, 25000, 50000, 75000, 100000)
+  purrr::map_dfr(.x = n_inputs,
+                 .f = \(no_of_inputs) {
+                   dataset <- bench_dataset[seq_len(no_of_inputs), ]
+                   # expr <- str2expression(fn_call_as_str)
+                   mbench <- microbenchmark::microbenchmark(
+                     dplyr::mutate(dataset, test = eval(pkg_expr)),
+                     times = 25
+                   )
+                   c(n_inputs = no_of_inputs,
+                     lq_time = summary(mbench)$lq,
+                     median_time = summary(mbench)$median,
+                     uq_time = summary(mbench)$uq,
+                     time_units = attr(summary(mbench), which = "unit"))
+                 }) |>
+    dplyr::mutate(n_inputs = as.integer(n_inputs),
+                  lq_time = as.numeric(lq_time),
+                  median_time = as.numeric(median_time),
+                  uq_time = as.numeric(uq_time),
+                  package = pkg_name)
+}
+```
+
+###
+```{r bench_anthro, eval = FALSE}
+anthro_timings <- mbench_pkg(
+  pkg_expr = quote(anthro::anthro_zscores(sex = sex,
+                                          age = x,
+                                          weight = y)$zwei),
+  pkg_name = paste("R: anthro", packageVersion(pkg = "anthro")))
+```
+
+### `childsds`
+```{r bench_childsds, eval = FALSE}
+
+childsds_timings <- mbench_pkg(
+  pkg_expr = quote(childsds::sds(value = y,
+                                 age = x/365.25,
+                                 sex = sex,
+                                 male = 'M',
+                                 female = 'F',
+                                 item = 'weight',
+                                 ref = childsds::who.ref)),
+  pkg_name = paste("R: childsds", packageVersion(pkg = "childsds")))
+```
+
+### `growthstandards`
+```{r bench_growthstandards, eval = FALSE}
+growthstandards_timings <- mbench_pkg(
+  pkg_expr = quote(
+    growthstandards::who_value2zscore(y = y, x = x,
+                                      sex = ifelse(sex == 'M', 'Male', 'Female'),
+                                      y_var = 'wtkg')
+  ),
+  pkg_name = paste("R: growthstandards", packageVersion(pkg = "growthstandards")))
+```
+
+### `gigs`
+```{r bench_gigs, eval = FALSE}
+gigs_timings <- mbench_pkg(
+  pkg_expr = quote(gigs::who_gs_value2zscore(y = y, x = x, sex = sex,
+                                             acronym = acronym)),
+  pkg_name = paste("R: gigs", packageVersion(pkg = "gigs")))
+```
+
+### Stata
+```{r, eval = FALSE}
+# Save .dta file equivalent of benchmarking table. This can be used to benchmark
+# Stata packages.
+haven::write_dta(data = bench_dataset,
+                 path = file.path("exclude", "statabench", "bench_dataset.dta"))
+```
+
+In Stata, the commands are run inside a do-file which utilises the
+[benchmark](https://www.github.com/mcaceresb/stata-benchmark) package for Stata.
+This script essentially does the same as `mbench_pkg()`, but for the Stata
+package for gigs and the zbmicat package.
+```Stata
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "benchmarking/bench_dataset.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen double z_gigs = who_gs(y, "wfa", "v2z"), ///
+		xvar(x) sex(sex) sexcode(m=M, f=F)
+}
+
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "benchmarking/bench_dataset.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen z_anthro = zanthro(y, wa, WHO), xvar(x) gender(sex) ///
+                gencode(male=M, female=F)  ageunit(day)
+}
+```
+
+```{r bench_stata, echo = FALSE, eval = FALSE}
+possible_n <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
+gigs_0_3_0 <- c(0.039, 0.039, 0.040, 0.041, 0.042, 0.057, 0.076, 0.134, 0.230,
+                0.332, 0.440)
+zbmicat_1_0_2 <- c(0.007, 0.008, 0.009, 0.017, 0.027, 0.105, 0.203, 0.479,
+                   0.951, 1.4450, 2.046)
+lens <- lengths(list(gigs_0_3_0, zbmicat_1_0_2))
+n_inputs <- unlist(lapply(X = lens, FUN = \(x) possible_n[seq_len(x)]))
+stata_timings <-  data.frame(n_inputs = n_inputs,
+                             median_time = c(gigs_0_3_0, zbmicat_1_0_2),
+                             time_units = "seconds",
+                             package = c(rep("Stata: gigs 0.3.0", lens[1]),
+                                         rep("Stata: zbmicat 1.0.2", lens[2])))
+rm(gigs_0_3_0, zbmicat_1_0_2, lens, n_inputs, possible_n)
+```
+
+The outputs from this script give a table of timings that look like this:
+```{r show_stata}
+stata_timings
+```
+
+[//]: # (Code to save/load all timings tables in a separate .rda file)
+```{r save_timings_rda, eval = FALSE, echo = FALSE}
+save(file = file.path("vignettes/articles/timings.rda"),
+     anthro_timings, childsds_timings, growthstandards_timings, gigs_timings,
+     stata_timings)
+```
+
+## Plotting
+Only by plotting the various timings tables can we see the trends for each
+package:
+
+```{r plot_timings, echo = FALSE}
+dplyr::bind_rows(anthro_timings,
+                 childsds_timings,
+                 growthstandards_timings,
+                 gigs_timings,
+                 stata_timings) |>
+  dplyr::mutate(median_ms = dplyr::case_when(
+    time_units == "nanoseconds" ~ median_time / 1000000,
+    time_units == "microseconds" ~ median_time / 1000,
+    time_units == "milliseconds" ~ median_time,
+    time_units == "seconds" ~ median_time  * 1000.,
+  )) |>
+  ggplot2::ggplot(ggplot2::aes(x = n_inputs,
+                               y = median_ms,
+                               colour = package)) +
+  ggplot2::geom_line() +
+  ggplot2::geom_point(colour = "black") +
+  ggplot2::labs(x = "Number of inputs",
+                y = "Median time taken (milliseconds)",
+                colour = "Package") +
+  ggsci::scale_colour_lancet()
+```
+
+
+# Comparing package outputs
+
+# Session information
+```{r session_info}
+sessionInfo()
+```
