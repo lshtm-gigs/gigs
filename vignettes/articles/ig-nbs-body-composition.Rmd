@@ -10,7 +10,8 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, size = "tiny", dev.args = list(png = list(type = "cairo")))
+knitr::opts_chunk$set(echo = TRUE, size = "tiny", 
+                      dev.args = list(png = list(type = "cairo")))
 library(gigs)
 fmfga_male <- tibble::as_tibble(gigs::ig_nbs$fmfga$male$percentiles)
 fmfga_female <- tibble::as_tibble(gigs::ig_nbs$fmfga$female$percentiles)
@@ -51,8 +52,8 @@ check_differences <- function(percentile_tbl) {
             tidyselect::starts_with(match = "P"), ~ !is.na(.))) |>
     dplyr::rowwise() |>
     dplyr::mutate(
-      all_equal = dplyr::n_distinct(P03_diff, P10_diff, P50_diff, P90_diff, P97_diff,
-                                    na.rm = TRUE),
+      all_equal = dplyr::n_distinct(P03_diff, P10_diff, P50_diff, P90_diff,
+                                    P97_diff, na.rm = TRUE),
       all_equal = as.logical(all_equal)) |>
     dplyr::ungroup()
 }
@@ -107,10 +108,10 @@ The following custom functions perform several tasks:
   for the standard in use, then prints this to the console.
 ```{r custom_functions, echo = TRUE}
 run_LMs <- function(df) {
-  model_linear <- lm(P50 ~ gest_age, data = df)
-  model_poly1 <- lm(P50 ~ poly(gest_age, degree = 1, raw = TRUE), data = df)
-  model_poly2 <- lm(P50 ~ poly(gest_age, degree = 2, raw = TRUE), data = df)
-  model_poly3 <- lm(P50 ~ poly(gest_age, degree = 3, raw = TRUE), data = df)
+  model_linear <- lm(P50 ~ gest_days, data = df)
+  model_poly1 <- lm(P50 ~ poly(gest_days, degree = 1, raw = TRUE), data = df)
+  model_poly2 <- lm(P50 ~ poly(gest_days, degree = 2, raw = TRUE), data = df)
+  model_poly3 <- lm(P50 ~ poly(gest_days, degree = 3, raw = TRUE), data = df)
   list(model_linear, model_poly1, model_poly2, model_poly3)
 }
 
@@ -304,7 +305,7 @@ repl_centile_tbls <- function(sex, acronym, bodycomp_fn) {
     })
   tbl <- suppressMessages(suppressWarnings(dplyr::bind_cols(tbl)))
   colnames(tbl) <- names(centiles)
-  dplyr::mutate(tbl, gest_age = (38:42 * 7), .before = P03)
+  dplyr::mutate(tbl, gest_days = (38:42 * 7), .before = P03)
 }
 
 #' Make percentile tables based on parameters from new polynomial models
@@ -326,7 +327,7 @@ comparison_plot <- function(obs_tbl, pred_tbl, title, xlab, ylab, legend.pos = "
                         names_to = "Fitted", values_to = "yval") |>
     dplyr::filter(!is.na(yval))
   suppressWarnings(suppressMessages(
-    plot <- ggplot2::ggplot(data = tbl, ggplot2::aes(x = gest_age, y = yval)) +
+    plot <- ggplot2::ggplot(data = tbl, ggplot2::aes(x = gest_days, y = yval)) +
       ggplot2::geom_point(data = subset(tbl, predicted == "Observed"),
                           ggplot2::aes(shape = as.factor(1)),
                           colour = "red", fill = NA,
@@ -355,21 +356,22 @@ comparison_plot <- function(obs_tbl, pred_tbl, title, xlab, ylab, legend.pos = "
 
 altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") {
   diff_tbl_long <- diff_tbl |>
-    dplyr::mutate(gest_age = (38:42 * 7)) |>
+    dplyr::mutate(gest_days = (38:42 * 7)) |>
     tidyr::pivot_longer(cols = tidyselect::contains("P", ignore.case = F),
                         names_to = "Percentile", values_to = "yval") |>
-    dplyr::mutate(gest_age = purrr::map2_vec(.x = gest_age,
-                                         .y = Percentile,
-                                         .f = ~ .x + switch(.y,
-                                               "P03" = 2,
-                                               "P10" = 1,
-                                               "P50" = 0,
-                                               "P90" = 1,
-                                               "P97" = 2))) |>
+    dplyr::mutate(gest_days = purrr::map2_vec(
+      .x = gest_days,
+      .y = Percentile,
+      .f = ~ .x + switch(.y,
+                         "P03" = 2,
+                         "P10" = 1,
+                         "P50" = 0,
+                         "P90" = 1,
+                         "P97" = 2))) |>
     dplyr::filter(!is.na(yval))
   suppressWarnings(suppressMessages(
     plot <- ggplot2::ggplot(data = diff_tbl_long,
-                            ggplot2::aes(x = gest_age, y = yval)) +
+                            ggplot2::aes(x = gest_days, y = yval)) +
       ggplot2::geom_point(ggplot2::aes(colour = Percentile),
                           shape = as.factor(x = 1),
                           fill = NA,

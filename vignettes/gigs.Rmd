@@ -132,7 +132,7 @@ factor with levels corresponding to different degrees of wasting:
 classify_wasting(
   weight_kg = c(5.75, 2.18, 3.00, 6.75),
   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
-  gest_days = c(268, 247, 250, 278), # c(38 + 2/7, 35 + 2/7, 35 + 5/7, 39 + 5/7) * 7,
+  gest_days = c(268, 247, 250, 278),
   age_days = c(45, 33, 230, 278),
   sex =  c("F", "M", "F", "M")
 )
@@ -144,10 +144,10 @@ cut-offs from the research literature. The output is a factor with levels
 corresponding to different degrees of underweight and overweight:
 ```{r example_weight_for_age}
 classify_wfa(
-        weight_kg = c(7.2, 4.5, 9.1, 24),
-        age_days = c(401, 185, 101, 607),
-        gest_days = 7 * c(27, 36, 40, 41),
-        sex = c("F", "M", "F", "M")
+  weight_kg = c(7.2, 4.5, 9.1, 24),
+  age_days = c(401, 185, 101, 607),devt
+  gest_days = 7 * c(27, 36, 40, 41),
+  sex = c("F", "M", "F", "M")
 )
 ```
 

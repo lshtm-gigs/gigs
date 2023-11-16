@@ -6,8 +6,8 @@ description: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-        dpi = 120, message = FALSE, warning = FALSE,
-        dev.args = list(png = list(type = "cairo"))
+  dpi = 120, message = FALSE, warning = FALSE,
+  dev.args = list(png = list(type = "cairo"))
 )
 
 # Set ggplot theming for consistent plots
@@ -41,10 +41,10 @@ short article will compare the speed of each package from 1 to 100000 inputs,
 checking how fast each package can convert weight values to z-scores in the WHO
 Child Growth standards.
 
-We have performed these benchmarks on a Windows 10 system with a Ryzen 7 3700X,
-and 16GB of DDR4 RAM. The Stata benchmarks have been run on the same system with
-Stata 18.0, using the [benchmark](https://github.com/mcaceresb/stata-benchmark)
-package.
+We have performed these benchmarks on a Windows 10 system running a Ryzen 7 3700X
+processor and 16GB of DDR4 RAM. The Stata benchmarks have been run on the same 
+system in Stata 18.0, using the 
+[benchmark](https://github.com/mcaceresb/stata-benchmark) package for Stata.
 
 ## Set up benchmark dataset
 The benchmarking and package comparisons will all use the same 100,000-row
@@ -57,8 +57,7 @@ to compare speed and accuracy in conversion between values and
 z-scores/percentiles for the packages mentioned above.
 
 ```{r who_gs_dataset, echo = TRUE}
-who_gs_dataset <- function(n, acronym = "wfa") {
-  seed <- 154237890
+who_gs_dataset <- function(n, acronym = "wfa", seed = 154237890) {
   withr::with_seed(
     seed,
     code = {
@@ -72,7 +71,8 @@ who_gs_dataset <- function(n, acronym = "wfa") {
       x <- pmax(pmin(x, max(xvars)), min(xvars))
       # Sexes randomly sampled from male and female
       sex <- sample(c("M", "F"), size = n, replace = TRUE)
-    })
+    }
+  )
   acronym <- rep_len(acronym, n)
   out <- data.frame(z = z, x = x, sex = sex, acronym = acronym) |>
     dplyr::mutate(
@@ -80,13 +80,20 @@ who_gs_dataset <- function(n, acronym = "wfa") {
     )
   purrr::set_names(out, c("z", "x", "sex", "acronym", "y"))
 }
+
+# Generate 100,000-row dataset
 bench_dataset <- who_gs_dataset(n = 100000)
 ```
 
 The first 10 rows of this dataset look like this:
-```{r show_bench_dataset}
+```{r show_bench_dataset1, eval = FALSE}
 bench_dataset[1:10, ]
 ```
+
+```{r show_bench_dataset2, echo = FALSE}
+knitr::kable(bench_dataset[1:10, ], align = "ccccc")
+```
+
 
 ## Performance comparison - timing
 First, we will determine how fast each package is relative to each other. These
@@ -104,32 +111,28 @@ mbench_pkg <- function(pkg_expr, pkg_name) {
   purrr::map_dfr(.x = n_inputs,
                  .f = \(no_of_inputs) {
                    dataset <- bench_dataset[seq_len(no_of_inputs), ]
-                   # expr <- str2expression(fn_call_as_str)
                    mbench <- microbenchmark::microbenchmark(
                      dplyr::mutate(dataset, test = eval(pkg_expr)),
                      times = 25
                    )
                    c(n_inputs = no_of_inputs,
-                     lq_time = summary(mbench)$lq,
                      median_time = summary(mbench)$median,
-                     uq_time = summary(mbench)$uq,
                      time_units = attr(summary(mbench), which = "unit"))
                  }) |>
     dplyr::mutate(n_inputs = as.integer(n_inputs),
-                  lq_time = as.numeric(lq_time),
                   median_time = as.numeric(median_time),
-                  uq_time = as.numeric(uq_time),
                   package = pkg_name)
 }
 ```
 
-###
+### `anthro`
 ```{r bench_anthro, eval = FALSE}
 anthro_timings <- mbench_pkg(
   pkg_expr = quote(anthro::anthro_zscores(sex = sex,
                                           age = x,
                                           weight = y)$zwei),
-  pkg_name = paste("R: anthro", packageVersion(pkg = "anthro")))
+  pkg_name = paste("R: anthro", packageVersion(pkg = "anthro"))
+)
 ```
 
 ### `childsds`
@@ -137,13 +140,14 @@ anthro_timings <- mbench_pkg(
 
 childsds_timings <- mbench_pkg(
   pkg_expr = quote(childsds::sds(value = y,
-                                 age = x/365.25,
+                                 age = x / 365.25,
                                  sex = sex,
-                                 male = 'M',
-                                 female = 'F',
-                                 item = 'weight',
+                                 male = "M",
+                                 female = "F",
+                                 item = "weight",
                                  ref = childsds::who.ref)),
-  pkg_name = paste("R: childsds", packageVersion(pkg = "childsds")))
+  pkg_name = paste("R: childsds", packageVersion(pkg = "childsds"))
+)
 ```
 
 ### `growthstandards`
@@ -151,10 +155,13 @@ childsds_timings <- mbench_pkg(
 growthstandards_timings <- mbench_pkg(
   pkg_expr = quote(
     growthstandards::who_value2zscore(y = y, x = x,
-                                      sex = ifelse(sex == 'M', 'Male', 'Female'),
-                                      y_var = 'wtkg')
+                                      sex = ifelse(sex == "M", "Male",
+                                                   "Female"),
+                                      y_var = "wtkg")
   ),
-  pkg_name = paste("R: growthstandards", packageVersion(pkg = "growthstandards")))
+  pkg_name = paste("R: growthstandards",
+                   packageVersion(pkg = "growthstandards"))
+)
 ```
 
 ### `gigs`
@@ -162,7 +169,8 @@ growthstandards_timings <- mbench_pkg(
 gigs_timings <- mbench_pkg(
   pkg_expr = quote(gigs::who_gs_value2zscore(y = y, x = x, sex = sex,
                                              acronym = acronym)),
-  pkg_name = paste("R: gigs", packageVersion(pkg = "gigs")))
+  pkg_name = paste("R: gigs", packageVersion(pkg = "gigs"))
+)
 ```
 
 ### Stata
@@ -175,9 +183,9 @@ haven::write_dta(data = bench_dataset,
 
 In Stata, the commands are run inside a do-file which utilises the
 [benchmark](https://www.github.com/mcaceresb/stata-benchmark) package for Stata.
-This script essentially does the same as `mbench_pkg()`, but for the Stata
-package for gigs and the zbmicat package.
-```Stata
+This script essentially does the same as `mbench_pkg()`, but for the [Stata gigs package](https://www.github.com/lshtm-gigs/gigs-stata/) and the zanthro package.
+```{stata stata_bench_code, eval = FALSE}
+// This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
 	use "benchmarking/bench_dataset.dta", clear
 	qui drop if _n > `i'
@@ -197,7 +205,7 @@ foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
 }
 ```
 
-```{r bench_stata, echo = FALSE, eval = FALSE}
+```{r bind_stata_timings, echo = FALSE, eval = FALSE}
 possible_n <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
 gigs_0_3_0 <- c(0.039, 0.039, 0.040, 0.041, 0.042, 0.057, 0.076, 0.134, 0.230,
                 0.332, 0.440)
@@ -252,8 +260,40 @@ dplyr::bind_rows(anthro_timings,
   ggsci::scale_colour_lancet()
 ```
 
+On the whole, `{anthro}` is by far the slowest R package, taking around 2.56 seconds to run over 100,000 inputs. This is in part because `{anthro}` computes results in every WHO Child Growth standard each time anthro is called, but also due to a slower implementation than the other packages. 
 
-# Comparing package outputs
+Next slowest is the Stata package `zanthro`, which takes 2.05 seconds to compute results in just one WHO standard. About 4 times faster than `zanthro` is `gigs` for Stata, which scales more efficiently than `zanthro` and so takes 0.44 seconds to convert 100,000 measurements to z-scores.
+
+Leading the pack are three R implementations: `growthstandards`, `gigs`, and `{childsds}`. The `{childsds}` is fastest at ~ 145 ms for 100,000 inputs, followed by `growthstandards` (166 ms) and `gigs` (168 ms).
+
+# Package output similarity
+The packages also differ slightly in how they convert between different values, which can affect the z-scores computed by each package, even if inputs are the same. In our testing, we found that the tested packages mostly agreed with each other, but that `{childsds}` did not correctly perform z-scoring the WHO standards.
+
+This is because the WHO Child Growth standards constrain z-scores in the outer tails to within the z-scores where more data was available, i.e. between -3 and +3 SD. More information on this can be found in the reports referenced in the `gigs::who_gs_value2zscore()` documenation.
+
+```{r discrepancies}
+discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
+                            age_days = 0,
+                            sex = "M") |>
+  dplyr::mutate(
+    weight_kg = gigs::who_gs_wfa_zscore2value(z, age_days, sex),
+    # GIGS z-score
+    z_gigs = gigs::who_gs_wfa_value2zscore(weight_kg, age_days, sex),
+    z_growthstandards = growthstandards::who_wtkg2zscore(
+      age_days, weight_kg, "Male"
+    ),
+    z_childsds = childsds::sds(
+      value = weight_kg, age = age_days / 365.25,
+      sex = sex, male = "M", female = "F",
+      item = "weight", ref = childsds::who.ref
+    )
+  )
+```
+
+When we look at these z-scores, you can see that both `growthstandards` and `gigs` correctly apply the constraining procedure; `{childsds}` does not.
+```{r discrepancies_kable, echo = FALSE}
+knitr::kable(discrepancies, align = "ccccc")
+```
 
 # Session information
 ```{r session_info}
