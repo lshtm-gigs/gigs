@@ -206,8 +206,9 @@ classify_stunting(
 classify_wasting(
         weight_kg = c(5.75, 2.18, 5.30, 6.75),
         lenht_cm = c(67.7, 46.6, 55.8, 80.1),
+        gest_days = c(268, 247, 250, 278),
+        age_days = c(45, 33, 230, 278),
         sex = c("F", "M", "F", "M"),
-        lenht_method = c("H", "L", "L", "H")
 )
 
 # Weight-for-age, i.e. low weight increase relative to age

@@ -229,7 +229,6 @@ classify_svn(
 
 # Stunting, i.e. low length increase relative to age
 classify_stunting(
-        lenht_method = "H"
   lenht_cm = c(42.3, 75.4, 72.83),
   age_days = c(252, 525, 245),
   gest_days = c(238, 259, 266),
@@ -245,7 +244,6 @@ classify_wasting(
         gest_days = c(268, 247, 250, 278),
         age_days = c(45, 33, 230, 278),
         sex = c("F", "M", "F", "M"),
-        lenht_method = c("H", "L", "L", "H")
 )
 #> [1] wasting_severe wasting        normal         wasting_severe
 #> Levels: wasting_severe wasting normal overweight
