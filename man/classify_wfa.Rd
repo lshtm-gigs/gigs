@@ -4,7 +4,7 @@
 \alias{classify_wfa}
 \title{Classify weight-for-age using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standards}
 \usage{
-classify_wfa(weight_kg, age_days, ga_at_birth, sex)
+classify_wfa(weight_kg, age_days, gest_days, sex, outliers = FALSE)
 }
 \arguments{
 \item{weight_kg}{Numeric vector with weight value(s) in kg.}
@@ -12,13 +12,19 @@ classify_wfa(weight_kg, age_days, ga_at_birth, sex)
 \item{age_days}{Numeric vector with age(s) in days for each child. Should be
 between \code{0} to \code{1856} days.}
 
-\item{ga_at_birth}{Numeric vector with gestational age(s) at birth in days.}
+\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
+Values not between \code{168} and \code{300} will be set to \code{NA}.}
 
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
 (female).}
+
+\item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
+implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of weight classification(s) with levels \code{c("implausible", "underweight_severe", "underweight", "normal", "overweight")}.
+Factor of weight-for-age classifications with same length as longest
+input. If \code{outliers = FALSE}, levels are \code{c("underweight_severe", "underweight", "normal", "overweight")}. If \code{outliers = TRUE}, levels are
+\code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
 }
 \description{
 Classify weight-for-age z-scores using the WHO Child Growth Standards or
@@ -36,8 +42,16 @@ classification cut-offs from the DHS manual.
 classify_wfa(
   weight_kg = c(7.2, 4.5, 9.1, 24),
   age_days = c(401, 185, 101, 607),
-  ga_at_birth = 7 * c(27, 36, 40, 41),
+  gest_days = 7 * c(27, 36, 40, 41),
   sex = c("F", "M", "F", "M")
+)
+
+classify_wfa(
+  weight_kg = c(7.2, 4.5, 9.1, 24),
+  age_days = c(401, 185, 101, 607),
+  gest_days = 7 * c(27, 36, 40, 41),
+  sex = c("F", "M", "F", "M"),
+  outliers = TRUE
 )
 }
 \references{

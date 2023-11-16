@@ -5,12 +5,12 @@
 \title{Classify small vulnerable newborns according to the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard}
 \usage{
-classify_svn(weight_kg, gest_age, sex)
+classify_svn(weight_kg, gest_days, sex)
 }
 \arguments{
 \item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{gest_age}{Numeric vector with gestational age(s) at birth in days.
+\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
 Values not between \code{168} and \code{300} will be set to \code{NA}.}
 
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
@@ -18,7 +18,7 @@ Values not between \code{168} and \code{300} will be set to \code{NA}.}
 }
 \value{
 Factor with small vulnerable newborn classification(s), with levels
-\code{c("Term non-SGA", "Term SGA", "Preterm non-SGA", "Preterm SGA")}.
+\code{c("Preterm SGA", "Preterm AGA", "Preterm SGA", "Term SGA", "Term AGA", "Term SGA")}.
 }
 \description{
 A small vulnerable newborn (SVN) can be preterm (born too soon),
@@ -32,7 +32,7 @@ Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recy
 \examples{
 classify_svn(
   weight_kg = c(1.5, 2.6, 2.6, 3.5),
-  gest_age = c(235, 257, 275, 295),
+  gest_days = c(235, 257, 275, 295),
   sex = c("F", "M", "F", "M")
 )
 }

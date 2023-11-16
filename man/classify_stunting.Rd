@@ -5,7 +5,7 @@
 \title{Classify stunting using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 length/height-for-age standards}
 \usage{
-classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
+classify_stunting(lenht_cm, age_days, gest_days, sex, outliers = FALSE)
 }
 \arguments{
 \item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
@@ -13,18 +13,18 @@ classify_stunting(lenht_cm, age_days, ga_at_birth, sex, lenht_method = NA)
 \item{age_days}{Numeric vector with age(s) in days for each child. Should be
 between \code{0} to \code{1856} days.}
 
-\item{ga_at_birth}{Numeric vector with gestational age(s) at birth in days.}
+\item{gest_days}{Numeric vector with gestational age(s) at birth in days.}
 
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
 (female).}
 
-\item{lenht_method}{Character vector containig \code{"H"} or \code{"L"} value(s)
-describing whether \code{lenht_cm} was recorded as recumbent length or standing
-height. Missing (\code{NA}) values will be set to \code{"L"} for children <731 days
-old and to \code{"H"} for children 731 days old or more. Default = \code{NA}.}
+\item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
+implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of stunting classification(s) with levels \code{c("implausible", "stunting_severe", "stunting", "normal")}.
+Factor of stunting classification(s) with levels
+\code{c("stunting_severe", "stunting", "normal")} or \code{c("stunting_severe", "stunting", "normal", "outlier")}, depending on whether the \code{outliers}
+argument is set to \code{TRUE}.
 }
 \description{
 Classify stunting (low length/height-for-age) using WHO or
@@ -34,12 +34,11 @@ relative to median length/height at a given age, whereas moderate stunting is
 -2SD from the median.
 }
 \note{
-Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}. WHO
-guidelines stipulate that recumbent length should not be measured after 730
-days. Therefore recumbent length values for children over 730 days old have
-0.7 cm taken away, and height values for children less than 731 days old
-have 0.7 cm added on. Implausible z-score bounds are sourced from the
-referenced WHO report, and classification cut-offs from the DHS manual.
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}. The
+function assumes that your measurements were taken according to the WHO
+guidelines, which stipulate that recumbent length should not be measured
+after 730 days. Implausible z-score bounds are sourced from the referenced
+WHO report, and classification cut-offs from the DHS manual.
 }
 \examples{
 # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
@@ -47,9 +46,17 @@ referenced WHO report, and classification cut-offs from the DHS manual.
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),
-  ga_at_birth = c(196, 287, 266),
+  gest_days = c(196, 287, 266),
+  sex = c("M", "M", "F")
+)
+
+# And with outlier flagging:
+classify_stunting(
+  lenht_cm = c(52.2, 75.4, 63.1),
+  age_days = c(357, 375, 250),
+  gest_days = c(196, 287, 266),
   sex = c("M", "M", "F"),
-  lenht_method = c("H", "H", "H")
+  outliers = TRUE
 )
 }
 \references{
