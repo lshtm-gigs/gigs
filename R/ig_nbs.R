@@ -2,7 +2,7 @@
 #' Newborn Size Standards
 #'
 #' @param p,z Numeric vector of percentiles/z-scores to convert to values.
-#' @param gest_age Numeric vector of gestational age(s) in days. Elements should
+#' @param gest_days Numeric vector of gestational age(s) in days. Elements should
 #'   be between `266` to `294` for body composition equations (`"fmfga"`,
 #'   `"bfpfga"`, or `"ffmfga"`), or between `168` and `300` for the other
 #'   standards. If not inside these bounds, will return NA.
@@ -32,56 +32,57 @@
 #' @examples
 #' # Convert percentiles to values
 #' p <- 0.25 # 25th percentile
-#' ig_nbs_percentile2value(p = p, gest_age = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_percentile2value(p = p, gest_days = 280, sex = "M", acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Or z-scores to values
 #' z <- qnorm(p)
-#' ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "lfga") |>
+#' ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "lfga") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' ig_nbs_lfga_zscore2value(z = z, gest_age = 280, sex = "M") |>
+#' ig_nbs_lfga_zscore2value(z = z, gest_days = 280, sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
 #' ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
-#'                          gest_age = 280,
+#'                          gest_days = 280,
 #'                          sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Bad inputs will not stop the function but will instead return NA - here 140
-#' # days for gest_age is outside the bounds of the INTERGROWTH-21st newborn
+#' # days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
 #' # size standards
 #' ig_nbs_hcfga_zscore2value(z = z,
-#'                           gest_age = c(140, 182, 224, 266),
+#'                           gest_days = c(140, 182, 224, 266),
 #'                           sex = "F") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
+ig_nbs_percentile2value <- function(p, gest_days, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(p = p,
-                                            gest_age = gest_age,
+                                            gest_days = gest_days,
                                             sex = sex,
                                             acronym = acronym)
   checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
-                                     gest_age = max_len_vecs[["gest_age"]],
+                                     gest_days = max_len_vecs[["gest_days"]],
                                      acronym = max_len_vecs[["acronym"]])
   checked_p <- stop_if_wrong_type(max_len_vecs[["p"]], type = "numeric")
   checked_p[which(abs(max_len_vecs[["p"]]) >= 1)] <- NA
   input <- list(p = checked_p,
-                gest_age = checked_params[["age"]],
+                gest_days = checked_params[["age"]],
                 sex = checked_params[["sex"]],
                 acronym = checked_params[["acronym"]])
 
   fromMSNT_p2v <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+    msnt <- ig_nbs_msnt(gest_days = max_len_vec_li[["gest_days"]],
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
+    msnt$p <- max_len_vec_li[["p"]]
     # Remove incomplete cases or qST3() will fail
     lgl_complete <- stats::complete.cases(as.data.frame(msnt))
     msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete])
@@ -93,7 +94,7 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
       yes =  mean_if_sex_undefined(
         fn = ig_nbs_percentile2value,
         arg1 = max_len_vec_li[["p"]][lgl_complete],
-        x_arg = max_len_vec_li[["gest_age"]][lgl_complete],
+        x_arg = max_len_vec_li[["gest_days"]][lgl_complete],
         acronym = max_len_vec_li[["acronym"]][lgl_complete]),
       no = gamlss.dist::qST3(max_len_vec_li[["p"]][lgl_complete],
                              mu = msnt_no_na[[1]],
@@ -106,16 +107,16 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
 
   fromLM_p2v <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_days"]],
                                  sex = max_len_vec_li[["sex"]],
                                  acronym = max_len_vec_li[["acronym"]])
-    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_days"]], c(266, 294))
     max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
     lm_out <- ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
                                   arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  x_arg = max_len_vec_li[["gest_days"]],
                                   acronym = max_len_vec_li[["acronym"]]),
       no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
                         mu = body_comp[,1],
@@ -124,13 +125,13 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
   }
 
   fromWLR_p2v <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_days"]] / 7,
                       sex = max_len_vec_li[["sex"]])
     ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
                                   arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  x_arg = max_len_vec_li[["gest_days"]],
                                   acronym = max_len_vec_li[["acronym"]]),
       no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
                         mu = wlr[["mu"]],
@@ -140,12 +141,12 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
 
   vpns_lim <- 231
   out <- ifelse(
-    test = input[["gest_age"]] >= vpns_lim,
+    test = input[["gest_days"]] >= vpns_lim,
     yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_p2v(input),
                  no = fromLM_p2v(input)),
     no = ig_vpns_zscore2value(z = qnorm(input[["p"]]),
-                              gest_age = input[["gest_age"]],
+                              gest_days = input[["gest_days"]],
                               sex = input[["sex"]],
                               acronym = input[["acronym"]]
     ))
@@ -156,93 +157,93 @@ ig_nbs_percentile2value <- function(p, gest_age, sex, acronym) {
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_wfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "wfga")
+ig_nbs_wfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "wfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_lfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "lfga")
+ig_nbs_lfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "lfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_hcfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "hcfga")
+ig_nbs_hcfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "hcfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_wlrfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "wlrfga")
+ig_nbs_wlrfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "wlrfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_fmfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "fmfga")
+ig_nbs_fmfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "fmfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_bfpfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "bfpfga")
+ig_nbs_bfpfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "bfpfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_ffmfga_percentile2value <- function(p, gest_age, sex) {
-  ig_nbs_percentile2value(p = p, gest_age = gest_age, sex = sex, acronym = "ffmfga")
+ig_nbs_ffmfga_percentile2value <- function(p, gest_days, sex) {
+  ig_nbs_percentile2value(p = p, gest_days = gest_days, sex = sex, acronym = "ffmfga")
 }
 
 #' @importFrom stats pnorm
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_zscore2value <- function(z, gest_age, sex, acronym) {
-  ig_nbs_percentile2value(p = pnorm(z), gest_age = gest_age, sex = sex, acronym = acronym)
+ig_nbs_zscore2value <- function(z, gest_days, sex, acronym) {
+  ig_nbs_percentile2value(p = pnorm(z), gest_days = gest_days, sex = sex, acronym = acronym)
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_wfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "wfga")
+ig_nbs_wfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "wfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_lfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "lfga")
+ig_nbs_lfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "lfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_hcfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "hcfga")
+ig_nbs_hcfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "hcfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_wlrfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "wlrfga")
+ig_nbs_wlrfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "wlrfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_fmfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "fmfga")
+ig_nbs_fmfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "fmfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_bfpfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "bfpfga")
+ig_nbs_bfpfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "bfpfga")
 }
 
 #' @rdname ig_nbs_percentile2value
 #' @export
-ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
-  ig_nbs_zscore2value(z = z, gest_age = gest_age, sex = sex, acronym = "ffmfga")
+ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
+  ig_nbs_zscore2value(z = z, gest_days = gest_days, sex = sex, acronym = "ffmfga")
 }
 
 #' Convert values to z-scores/percentiles in the INTERGROWTH-21<sup>st</sup>
@@ -260,54 +261,55 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_age, sex) {
 #' @inherit ig_nbs_percentile2value params references
 #' @examples
 #' # Convert values to percentiles
-#' ig_nbs_value2percentile(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_value2percentile(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Or values to z-scores
-#' ig_nbs_value2zscore(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' ig_nbs_value2zscore(y = 48.84, gest_age = 280, sex = "F", acronym = "lfga") |>
+#' ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "F", acronym = "lfga") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_age = 280, sex = "F") |>
+#' ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "F") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
 #' ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
-#'                            gest_age = 280,
+#'                            gest_days = 280,
 #'                            sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Bad inputs will not stop the function but will instead return NA - here 301
-#' # days gest_age is outside the bounds of the INTERGROWTH-21st newborn size
+#' # days gest_days is outside the bounds of the INTERGROWTH-21st newborn size
 #' # standards
 #' ig_nbs_hcfga_value2percentile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
-#'                               gest_age = c(168, 217, 266, 301),
+#'                               gest_days = c(168, 217, 266, 301),
 #'                               sex = "F") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
+ig_nbs_value2percentile <- function(y, gest_days, sex, acronym) {
   max_len_vecs <- vctrs::vec_recycle_common(y = y,
-                                            gest_age = gest_age,
+                                            gest_days = gest_days,
                                             sex = sex,
                                             acronym = acronym)
   checked_params <- check_nbs_params(sex = max_len_vecs[["sex"]],
-                                     gest_age = max_len_vecs[["gest_age"]],
+                                     gest_days = max_len_vecs[["gest_days"]],
                                      acronym = max_len_vecs[["acronym"]])
   input <- list(y = stop_if_wrong_type(max_len_vecs[["y"]], type = "numeric"),
-                gest_age = checked_params[["age"]],
+                gest_days = checked_params[["age"]],
                 sex = checked_params[["sex"]],
                 acronym = checked_params[["acronym"]])
 
   fromMSNT_v2p <- function(max_len_vec_li) {
-    msnt <- ig_nbs_msnt(gest_age = max_len_vec_li[["gest_age"]],
+    msnt <- ig_nbs_msnt(gest_days = max_len_vec_li[["gest_days"]],
                         sex = max_len_vec_li[["sex"]],
                         acronym = max_len_vec_li[["acronym"]])
-    # Remove NA values for y or mu, or pST3() will fail
+    msnt$p <- max_len_vec_li[["p"]]
+    # Remove NA values for y/p/mu, or pST3() will fail
     lgl_complete <- stats::complete.cases(as.data.frame(msnt))
     msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete])
     # Initialise empty vector for p_out to go into
@@ -318,7 +320,7 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
       yes = mean_if_sex_undefined(
         fn = ig_nbs_value2percentile,
         arg1 = max_len_vec_li[["p"]][lgl_complete],
-        x_arg = max_len_vec_li[["gest_age"]][lgl_complete],
+        x_arg = max_len_vec_li[["gest_days"]][lgl_complete],
         acronym = max_len_vec_li[["acronym"]][lgl_complete]),
       no = gamlss.dist::pST3(max_len_vec_li[["y"]][lgl_complete],
                              mu = msnt_no_na[[1]],
@@ -332,17 +334,17 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   }
 
   fromLM_v2p <- function(max_len_vec_li) {
-    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_age"]],
+    body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_days"]],
                                  sex = max_len_vec_li[["sex"]],
                                  acronym = max_len_vec_li[["acronym"]])
-    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_age"]], c(266, 294))
+    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_days"]], c(266, 294))
     max_len_vec_li[["p"]][not_in_LM_bounds] <- NA
 
     ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_value2percentile,
                                   arg1 = max_len_vec_li[["y"]],
-                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  x_arg = max_len_vec_li[["gest_days"]],
                                   acronym = max_len_vec_li[["acronym"]]),
       no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
                               mu = body_comp[,1],
@@ -351,13 +353,13 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
   }
 
   fromWLR_v2p <- function(max_len_vec_li) {
-    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_age"]] / 7,
+    wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_days"]] / 7,
                       sex = max_len_vec_li[["sex"]])
     wlr_out <- ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_percentile2value,
                                   arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_age"]],
+                                  x_arg = max_len_vec_li[["gest_days"]],
                                   acronym = max_len_vec_li[["acronym"]]),
       no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
                               mu = wlr[["mu"]],
@@ -367,12 +369,12 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
 
   vpns_lim <- 231
   out <- ifelse(
-    test = input[["gest_age"]] >= vpns_lim,
+    test = input[["gest_days"]] >= vpns_lim,
     yes = ifelse(test = input[["acronym"]] %in% c("wfga", "lfga", "hcfga"),
                  yes = fromMSNT_v2p(input),
                  no = fromLM_v2p(input)),
     no = pnorm(ig_vpns_value2zscore(y = input[["y"]],
-                                    gest_age = input[["gest_age"]],
+                                    gest_days = input[["gest_days"]],
                                     sex = input[["sex"]],
                                     acronym = input[["acronym"]]))
   )
@@ -383,93 +385,93 @@ ig_nbs_value2percentile <- function(y, gest_age, sex, acronym) {
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wfga_value2percentile <- function(weight_kg, gest_age, sex) {
-  ig_nbs_value2percentile(y = weight_kg, gest_age = gest_age, sex = sex, acronym = "wfga")
+ig_nbs_wfga_value2percentile <- function(weight_kg, gest_days, sex) {
+  ig_nbs_value2percentile(y = weight_kg, gest_days = gest_days, sex = sex, acronym = "wfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_lfga_value2percentile <- function(length_cm, gest_age, sex) {
-  ig_nbs_value2percentile(y = length_cm, gest_age = gest_age, sex = sex, acronym = "lfga")
+ig_nbs_lfga_value2percentile <- function(length_cm, gest_days, sex) {
+  ig_nbs_value2percentile(y = length_cm, gest_days = gest_days, sex = sex, acronym = "lfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_hcfga_value2percentile <- function(headcirc_cm, gest_age, sex) {
-  ig_nbs_value2percentile(y = headcirc_cm, gest_age = gest_age, sex = sex, acronym = "hcfga")
+ig_nbs_hcfga_value2percentile <- function(headcirc_cm, gest_days, sex) {
+  ig_nbs_value2percentile(y = headcirc_cm, gest_days = gest_days, sex = sex, acronym = "hcfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wlrfga_value2percentile <- function(wei_len_ratio, gest_age, sex) {
-  ig_nbs_value2percentile(y = wei_len_ratio, gest_age = gest_age, sex = sex, acronym = "wlrfga")
+ig_nbs_wlrfga_value2percentile <- function(wei_len_ratio, gest_days, sex) {
+  ig_nbs_value2percentile(y = wei_len_ratio, gest_days = gest_days, sex = sex, acronym = "wlrfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_fmfga_value2percentile <- function(fat_mass_g, gest_age, sex) {
-  ig_nbs_value2percentile(y = fat_mass_g, gest_age = gest_age, sex = sex, acronym = "fmfga")
+ig_nbs_fmfga_value2percentile <- function(fat_mass_g, gest_days, sex) {
+  ig_nbs_value2percentile(y = fat_mass_g, gest_days = gest_days, sex = sex, acronym = "fmfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_bfpfga_value2percentile <- function(body_fat_perc, gest_age, sex) {
-  ig_nbs_value2percentile(y = body_fat_perc, gest_age = gest_age, sex = sex, acronym = "bfpfga")
+ig_nbs_bfpfga_value2percentile <- function(body_fat_perc, gest_days, sex) {
+  ig_nbs_value2percentile(y = body_fat_perc, gest_days = gest_days, sex = sex, acronym = "bfpfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_ffmfga_value2percentile <- function(fatfree_mass_g, gest_age, sex) {
-  ig_nbs_value2percentile(y = fatfree_mass_g, gest_age = gest_age, sex = sex, acronym = "ffmfga")
+ig_nbs_ffmfga_value2percentile <- function(fatfree_mass_g, gest_days, sex) {
+  ig_nbs_value2percentile(y = fatfree_mass_g, gest_days = gest_days, sex = sex, acronym = "ffmfga")
 }
 
 #' @importFrom stats qnorm
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_value2zscore <- function(y, gest_age, sex, acronym) {
-  qnorm(ig_nbs_value2percentile(y = y, gest_age = gest_age, sex = sex, acronym = acronym))
+ig_nbs_value2zscore <- function(y, gest_days, sex, acronym) {
+  qnorm(ig_nbs_value2percentile(y = y, gest_days = gest_days, sex = sex, acronym = acronym))
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wfga_value2zscore <- function(weight_kg, gest_age, sex) {
-  ig_nbs_value2zscore(y = weight_kg, gest_age = gest_age, sex = sex, acronym = "wfga")
+ig_nbs_wfga_value2zscore <- function(weight_kg, gest_days, sex) {
+  ig_nbs_value2zscore(y = weight_kg, gest_days = gest_days, sex = sex, acronym = "wfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_lfga_value2zscore <- function(length_cm, gest_age, sex) {
-  ig_nbs_value2zscore(y = length_cm, gest_age = gest_age, sex = sex, acronym = "lfga")
+ig_nbs_lfga_value2zscore <- function(length_cm, gest_days, sex) {
+  ig_nbs_value2zscore(y = length_cm, gest_days = gest_days, sex = sex, acronym = "lfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_hcfga_value2zscore <- function(headcirc_cm, gest_age, sex) {
-  ig_nbs_value2zscore(y = headcirc_cm, gest_age = gest_age, sex = sex, acronym = "hcfga")
+ig_nbs_hcfga_value2zscore <- function(headcirc_cm, gest_days, sex) {
+  ig_nbs_value2zscore(y = headcirc_cm, gest_days = gest_days, sex = sex, acronym = "hcfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, gest_age, sex) {
-  ig_nbs_value2zscore(y = wei_len_ratio, gest_age = gest_age, sex = sex, acronym = "wlrfga")
+ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, gest_days, sex) {
+  ig_nbs_value2zscore(y = wei_len_ratio, gest_days = gest_days, sex = sex, acronym = "wlrfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_fmfga_value2zscore <- function(fat_mass_g, gest_age, sex) {
-  ig_nbs_value2zscore(y = fat_mass_g, gest_age = gest_age, sex = sex, acronym = "fmfga")
+ig_nbs_fmfga_value2zscore <- function(fat_mass_g, gest_days, sex) {
+  ig_nbs_value2zscore(y = fat_mass_g, gest_days = gest_days, sex = sex, acronym = "fmfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_bfpfga_value2zscore <- function(body_fat_perc, gest_age, sex) {
-  ig_nbs_value2zscore(y = body_fat_perc, gest_age = gest_age, sex = sex, acronym = "bfpfga")
+ig_nbs_bfpfga_value2zscore <- function(body_fat_perc, gest_days, sex) {
+  ig_nbs_value2zscore(y = body_fat_perc, gest_days = gest_days, sex = sex, acronym = "bfpfga")
 }
 
 #' @rdname ig_nbs_value2percentile
 #' @export
-ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
-  ig_nbs_value2zscore(y = fatfree_mass_g, gest_age = gest_age, sex = sex, acronym = "ffmfga")
+ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
+  ig_nbs_value2zscore(y = fatfree_mass_g, gest_days = gest_days, sex = sex, acronym = "ffmfga")
 }
 
 #' Retrieve GAMLSS coefficients for INTERGROWTH-21<sup>st</sup> Newborn Size
@@ -481,7 +483,7 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #'
 #' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
 #'   (female).
-#' @param gest_age Numeric vector of gestational age(s) in days. Entries not
+#' @param gest_days Numeric vector of gestational age(s) in days. Entries not
 #'   between `231` and `300` will be returned with NA values.
 #' @param acronym Character vector of acronym(s) denoting which
 #'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Entries
@@ -489,7 +491,7 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #'   `NA` values.
 #' @return A list with names `"mu"`, `"sigma"`, `"nu"`, and `"tau"`, where each
 #'   is a numeric vector with mu/sigma/nu/tau values for the inputted
-#'   combinations of `sex`, `gest_age`, and `acronym`.
+#'   combinations of `sex`, `gest_days`, and `acronym`.
 #' @note These coefficients are not included in the referenced publication, and
 #'   were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
 #'   these coefficients to construct the growth curves they described, and in
@@ -504,10 +506,10 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_age, sex) {
 #' @examples
 #' # Get mu/sigma/nu/tau coefficients for weight in a male of 40 weeks'
 #' # gestational age
-#' gigs:::ig_nbs_msnt(gest_age = 40 * 7, sex = "M", acronym = "wfga")
+#' gigs:::ig_nbs_msnt(gest_days = 40 * 7, sex = "M", acronym = "wfga")
 #' @noRd
-ig_nbs_msnt <- function(gest_age, sex, acronym) {
-  retrieve_coefficients(gest_age, sex, acronym, gigs::ig_nbs_coeffs,
+ig_nbs_msnt <- function(gest_days, sex, acronym) {
+  retrieve_coefficients(gest_days, sex, acronym, gigs::ig_nbs_coeffs,
                         c("mu", "sigma", "nu", "tau"))
 }
 
@@ -519,7 +521,7 @@ ig_nbs_msnt <- function(gest_age, sex, acronym) {
 #' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
 #'   (female).
 #' @return Weight-to-length ratio medians and standard deviations for the given
-#'   `sex`/`gest_age` combinations.
+#'   `sex`/`gest_days` combinations.
 #' @note These equations are not included in the referenced publication. Rather,
 #'   they were taken from weight-to-length ratio calculating Excel files available
 #'   on the
@@ -554,7 +556,7 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
       no = 0.6806229
     )
   )
-  data.frame(gest_age = ga_weeks * 7, sex, mu = mu, sigma = sigma)
+  data.frame(gest_days = ga_weeks * 7, sex, mu = mu, sigma = sigma)
 }
 
 #' INTERGROWTH-21<sup>st</sup> normative body composition means/standard

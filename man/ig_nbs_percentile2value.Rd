@@ -20,42 +20,42 @@
 \title{Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards}
 \usage{
-ig_nbs_percentile2value(p, gest_age, sex, acronym)
+ig_nbs_percentile2value(p, gest_days, sex, acronym)
 
-ig_nbs_wfga_percentile2value(p, gest_age, sex)
+ig_nbs_wfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_lfga_percentile2value(p, gest_age, sex)
+ig_nbs_lfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_hcfga_percentile2value(p, gest_age, sex)
+ig_nbs_hcfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_wlrfga_percentile2value(p, gest_age, sex)
+ig_nbs_wlrfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_fmfga_percentile2value(p, gest_age, sex)
+ig_nbs_fmfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_bfpfga_percentile2value(p, gest_age, sex)
+ig_nbs_bfpfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_ffmfga_percentile2value(p, gest_age, sex)
+ig_nbs_ffmfga_percentile2value(p, gest_days, sex)
 
-ig_nbs_zscore2value(z, gest_age, sex, acronym)
+ig_nbs_zscore2value(z, gest_days, sex, acronym)
 
-ig_nbs_wfga_zscore2value(z, gest_age, sex)
+ig_nbs_wfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_lfga_zscore2value(z, gest_age, sex)
+ig_nbs_lfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_hcfga_zscore2value(z, gest_age, sex)
+ig_nbs_hcfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_wlrfga_zscore2value(z, gest_age, sex)
+ig_nbs_wlrfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_fmfga_zscore2value(z, gest_age, sex)
+ig_nbs_fmfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_bfpfga_zscore2value(z, gest_age, sex)
+ig_nbs_bfpfga_zscore2value(z, gest_days, sex)
 
-ig_nbs_ffmfga_zscore2value(z, gest_age, sex)
+ig_nbs_ffmfga_zscore2value(z, gest_days, sex)
 }
 \arguments{
 \item{p, z}{Numeric vector of percentiles/z-scores to convert to values.}
 
-\item{gest_age}{Numeric vector of gestational age(s) in days. Elements should
+\item{gest_days}{Numeric vector of gestational age(s) in days. Elements should
 be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
 \code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
 standards. If not inside these bounds, will return NA.}
@@ -83,33 +83,33 @@ Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_
 \examples{
 # Convert percentiles to values
 p <- 0.25 # 25th percentile
-ig_nbs_percentile2value(p = p, gest_age = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_percentile2value(p = p, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Or z-scores to values
 z <- qnorm(p)
-ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_zscore2value(z = z, gest_age = 280, sex = "M", acronym = "lfga") |>
+ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_zscore2value(z = z, gest_age = 280, sex = "M") |>
+ig_nbs_lfga_zscore2value(z = z, gest_days = 280, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
-                         gest_age = 280,
+                         gest_days = 280,
                          sex = "M") |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead return NA - here 140
-# days for gest_age is outside the bounds of the INTERGROWTH-21st newborn
+# days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
 # size standards
 ig_nbs_hcfga_zscore2value(z = z,
-                          gest_age = c(140, 182, 224, 266),
+                          gest_days = c(140, 182, 224, 266),
                           sex = "F") |>
   round(digits = 2)
 }

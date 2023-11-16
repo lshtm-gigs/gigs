@@ -37,7 +37,7 @@ check_who_params <- function(x, sex, acronym) {
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_nbs`
 #' functions
 #'
-#' @param gest_age Numeric vector with user-inputted gestational age values.
+#' @param gest_days Numeric vector with user-inputted gestational age values.
 #' @param sex Character vector with user-inputted sex values.
 #' @param acronym Character vector with user-inputted acronym values.
 #' @returns List with names `"age"`, `"sex"`, and `"acronym"`, containing
@@ -45,22 +45,22 @@ check_who_params <- function(x, sex, acronym) {
 #'   any of `x`, `sex`, or `acronym` are the wrong type, `check_nbs_params()`
 #'   will throw an error.
 #' @noRd
-check_nbs_params <- function(gest_age, sex, acronym) {
+check_nbs_params <- function(gest_days, sex, acronym) {
   sex_acro <- check_sex_acronym(sex = sex,
                                 acronym = acronym,
                                 allowed_acronyms = names(gigs::ig_nbs))
   # The bfpfga, fmfga, and ffmfga standards have a smaller range of gestational
   # ages than the other INTERGROWTH-21st standards --> this code specifies which
   # range of GAs to compare with 'gest_age'
-  has_lower_xrange <- acronym %in% names(gigs::ig_nbs)[5:7]
-  small_xrange <- gigs::ig_nbs$bfpfga$male$percentiles$gest_age
-  full_xrange <- gigs::ig_nbs$wfga$male$zscores$gest_age
-  stop_if_wrong_type(gest_age, "numeric")
-  valid_x <- ifelse(has_lower_xrange,
-                    yes = inrange(gest_age, small_xrange),
-                    no = inrange(gest_age, full_xrange))
-  gest_age[!valid_x] <- NA_real_
-  list(age = gest_age, sex = sex_acro$sex, acronym = sex_acro$acronym)
+  is_bodycomp <- acronym %in% names(gigs::ig_nbs)[5:7]
+  bodycomp_xrange <- gigs::ig_nbs$bfpfga$male$percentiles$gest_days
+  full_xrange <- gigs::ig_nbs$wfga$male$zscores$gest_days
+  stop_if_wrong_type(gest_days, "numeric")
+  valid_x <- ifelse(is_bodycomp,
+                    yes = inrange(gest_days, bodycomp_xrange),
+                    no = inrange(gest_days, full_xrange))
+  gest_days[!valid_x] <- NA_real_
+  list(age = gest_days, sex = sex_acro$sex, acronym = sex_acro$acronym)
 }
 
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_png`

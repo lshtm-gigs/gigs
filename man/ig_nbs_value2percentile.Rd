@@ -20,43 +20,43 @@
 \title{Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards}
 \usage{
-ig_nbs_value2percentile(y, gest_age, sex, acronym)
+ig_nbs_value2percentile(y, gest_days, sex, acronym)
 
-ig_nbs_wfga_value2percentile(weight_kg, gest_age, sex)
+ig_nbs_wfga_value2percentile(weight_kg, gest_days, sex)
 
-ig_nbs_lfga_value2percentile(length_cm, gest_age, sex)
+ig_nbs_lfga_value2percentile(length_cm, gest_days, sex)
 
-ig_nbs_hcfga_value2percentile(headcirc_cm, gest_age, sex)
+ig_nbs_hcfga_value2percentile(headcirc_cm, gest_days, sex)
 
-ig_nbs_wlrfga_value2percentile(wei_len_ratio, gest_age, sex)
+ig_nbs_wlrfga_value2percentile(wei_len_ratio, gest_days, sex)
 
-ig_nbs_fmfga_value2percentile(fat_mass_g, gest_age, sex)
+ig_nbs_fmfga_value2percentile(fat_mass_g, gest_days, sex)
 
-ig_nbs_bfpfga_value2percentile(body_fat_perc, gest_age, sex)
+ig_nbs_bfpfga_value2percentile(body_fat_perc, gest_days, sex)
 
-ig_nbs_ffmfga_value2percentile(fatfree_mass_g, gest_age, sex)
+ig_nbs_ffmfga_value2percentile(fatfree_mass_g, gest_days, sex)
 
-ig_nbs_value2zscore(y, gest_age, sex, acronym)
+ig_nbs_value2zscore(y, gest_days, sex, acronym)
 
-ig_nbs_wfga_value2zscore(weight_kg, gest_age, sex)
+ig_nbs_wfga_value2zscore(weight_kg, gest_days, sex)
 
-ig_nbs_lfga_value2zscore(length_cm, gest_age, sex)
+ig_nbs_lfga_value2zscore(length_cm, gest_days, sex)
 
-ig_nbs_hcfga_value2zscore(headcirc_cm, gest_age, sex)
+ig_nbs_hcfga_value2zscore(headcirc_cm, gest_days, sex)
 
-ig_nbs_wlrfga_value2zscore(wei_len_ratio, gest_age, sex)
+ig_nbs_wlrfga_value2zscore(wei_len_ratio, gest_days, sex)
 
-ig_nbs_fmfga_value2zscore(fat_mass_g, gest_age, sex)
+ig_nbs_fmfga_value2zscore(fat_mass_g, gest_days, sex)
 
-ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_age, sex)
+ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_days, sex)
 
-ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_age, sex)
+ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_days, sex)
 }
 \arguments{
 \item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
 Units depend on which \code{acronym}(s) are in use.}
 
-\item{gest_age}{Numeric vector of gestational age(s) in days. Elements should
+\item{gest_days}{Numeric vector of gestational age(s) in days. Elements should
 be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
 \code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
 standards. If not inside these bounds, will return NA.}
@@ -97,32 +97,32 @@ Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_
 }
 \examples{
 # Convert values to percentiles
-ig_nbs_value2percentile(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_value2percentile(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_nbs_value2zscore(y = 3.12, gest_age = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_value2zscore(y = 48.84, gest_age = 280, sex = "F", acronym = "lfga") |>
+ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "F", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_age = 280, sex = "F") |>
+ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "F") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
-                           gest_age = 280,
+                           gest_days = 280,
                            sex = "M") |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead return NA - here 301
-# days gest_age is outside the bounds of the INTERGROWTH-21st newborn size
+# days gest_days is outside the bounds of the INTERGROWTH-21st newborn size
 # standards
 ig_nbs_hcfga_value2percentile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
-                              gest_age = c(168, 217, 266, 301),
+                              gest_days = c(168, 217, 266, 301),
                               sex = "F") |>
   round(digits = 2)
 }

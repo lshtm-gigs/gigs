@@ -111,11 +111,11 @@ call. For example, these two function calls would behave in the same
 way:
 
 ``` r
-ig_nbs_value2zscore(y = 25.7, gest_age = 182, sex = "F", acronym = "hcfga") |>
+ig_nbs_value2zscore(y = 25.7, gest_days = 182, sex = "F", acronym = "hcfga") |>
         round(digits = 2)
 #> [1] 1.18
 
-ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_age = 182, sex = "F") |>
+ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_days = 182, sex = "F") |>
         round(digits = 2)
 #> [1] 1.18
 ```
@@ -130,12 +130,14 @@ or percentiles for the standard used.
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_value2zscore(y = 0.785, gest_age = 182, sex = "F", acronym = "wfga") |>
+ig_nbs_value2zscore(y = 0.785, gest_days = 182, sex = "F", acronym = "wfga") |>
         round(digits = 2)
 #> [1] 0
 
 # .. or for multiple inputs
-ig_nbs_wfga_value2percentile(weight_kg = 0.785, gest_age = seq(175, 196, by = 7), sex = "F") |>
+ig_nbs_wfga_value2percentile(weight_kg = 0.785,
+                             gest_days = seq(175, 196, by = 7),
+                             sex = "F") |>
         round(digits = 2)
 #> [1] 0.75 0.50 0.25 0.09
 
@@ -155,12 +157,12 @@ curves (see below).
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_zscore2value(z = 0, gest_age = 182, sex = "F", acronym = "wfga") |>
+ig_nbs_zscore2value(z = 0, gest_days = 182, sex = "F", acronym = "wfga") |>
         round(digits = 3)
 #> [1] 0.785
 
 # .. or for multiple inputs
-ig_nbs_wfga_zscore2value(z = 0, gest_age = seq(182, 204, by = 7), sex = "F") |>
+ig_nbs_wfga_zscore2value(z = 0, gest_days = seq(182, 204, by = 7), sex = "F") |>
         round(digits = 3)
 #> [1] 0.785 0.893 1.013 1.147
 
@@ -186,7 +188,7 @@ gestage_range <- 168:230
 ref <- mapply(z_score_range,
                FUN = function(z) {
                  gigs::ig_nbs_wfga_zscore2value(z = z,
-                                                gest_age = gestage_range,
+                                                gest_days = gestage_range,
                                                 sex = "F")
                })
 matplot(ref, x = gestage_range, col = 1:5, type = "l", lty = 2:6,
@@ -210,7 +212,7 @@ documentation to see these sources.
 # Size for gestational age
 classify_sga(
         weight_kg = c(2.1, 3.2, 4.5),
-        gest_age = c(252, 259, 290),
+        gest_days = c(252, 259, 290),
         sex = "M"
 )
 #> [1] SGA AGA LGA
@@ -219,41 +221,43 @@ classify_sga(
 # Small vulnerable newborns
 classify_svn(
         weight_kg = c(2.1, 3.2, 4.5),
-        gest_age = c(252, 259, 290),
+        gest_days = c(252, 259, 290),
         sex = "M"
 )
-#> [1] Preterm SGA  Term non-SGA Term non-SGA
-#> Levels: Term non-SGA Term SGA Preterm non-SGA Preterm SGA
+#> [1] Preterm SGA Term AGA    Term LGA   
+#> Levels: Preterm SGA Preterm AGA Preterm LGA Term SGA Term AGA Term LGA
 
 # Stunting, i.e. low length increase relative to age
 classify_stunting(
-        lenht_cm = c(42.3, 75.4, 72.83),
-        age_days = c(252, 525, 245),
-        ga_at_birth = c(238, 259, 266),
-        sex = "M",
         lenht_method = "H"
+  lenht_cm = c(42.3, 75.4, 72.83),
+  age_days = c(252, 525, 245),
+  gest_days = c(238, 259, 266),
+  sex = "M"
 )
-#> [1] implausible stunting    normal     
-#> Levels: implausible stunting_severe stunting normal
+#> [1] stunting_severe stunting        normal         
+#> Levels: stunting_severe stunting normal
 
 # Wasting, i.e. low weight increase relative to length/height
 classify_wasting(
         weight_kg = c(5.75, 2.18, 5.30, 6.75),
         lenht_cm = c(67.7, 46.6, 55.8, 80.1),
+        gest_days = c(268, 247, 250, 278),
+        age_days = c(45, 33, 230, 278),
         sex = c("F", "M", "F", "M"),
         lenht_method = c("H", "L", "L", "H")
 )
-#> [1] wasting_severe wasting        normal         implausible   
-#> Levels: implausible wasting_severe wasting normal overweight
+#> [1] wasting_severe wasting        normal         wasting_severe
+#> Levels: wasting_severe wasting normal overweight
 
 # Weight-for-age, i.e. low weight increase relative to age
 classify_wfa(
         weight_kg = c(2.1, 7.2, 6.1, 9.1, 9.4),
         age_days = c(435, 501, 323, 201, 154),
-        ga_at_birth = c(36, 27, 37, 40, 28),
+        gest_days = c(36, 27, 37, 40, 28),
         sex = c("M", "M", "F", "F", "F")
 )
-#> [1] implausible        underweight_severe underweight        normal            
+#> [1] underweight_severe underweight_severe <NA>               <NA>              
 #> [5] overweight        
-#> Levels: implausible underweight_severe underweight normal overweight
+#> Levels: underweight_severe underweight normal overweight
 ```
