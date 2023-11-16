@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.3.9000",
+  "version": "0.3.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -57,18 +57,39 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
-      "name": "knitr"
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
-      "name": "rmarkdown"
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
-      "version": ">= 3.0.0"
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
     }
   ],
   "softwareRequirements": {
@@ -81,7 +102,14 @@
     "2": {
       "@type": "SoftwareApplication",
       "identifier": "gamlss.dist",
-      "name": "gamlss.dist"
+      "name": "gamlss.dist",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gamlss.dist"
     },
     "3": {
       "@type": "SoftwareApplication",
@@ -91,11 +119,18 @@
     "4": {
       "@type": "SoftwareApplication",
       "identifier": "vctrs",
-      "name": "vctrs"
+      "name": "vctrs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vctrs"
     },
     "SystemRequirements": null
   },
-  "fileSize": "1549.567KB",
+  "fileSize": "1563.167KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -117,8 +152,6 @@
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
-  "readme": "https://github.com/lshtm-gigs/gigs/blob/master/README.md",
-  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://app.codecov.io/github/lshtm-gigs/gigs"],
-  "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": ["growth-standards", "anthropometry", "intergrowth", "r", "who", "r-package", "rstats"]
+  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/lshtm-gigs/gigs"],
+  "developmentStatus": "https://www.repostatus.org/#active"
 }
