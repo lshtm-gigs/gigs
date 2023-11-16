@@ -1,14 +1,27 @@
-# gigs 0.2.3.9000
-* Updated coefficient retrieval functions to run ~ 2 times as fast as in version
-  0.2.3.
-* Added `classify_svn()` function, which classifies newborns into the categories
-  used in the Lancet's 2023 Small Vulnerable Newborn (SVN) Series. 
-* Added type checking functions to conversion functions, along with additional
-  unit tests to make sure they work.
-* Extensive changes to documentation. These should mostly appear internally, 
-  where the roxygen documentation uses more `@inherit`/`@inheritParams` tags. 
-* Added vignette displaying performance differences between gigs and other,
-  similar R packages, as well as Stata implementations.
+# gigs 0.3.0
+* This update includes several large changes to the GIGS interface, including
+  changed argument names for some classification and conversion functions. We
+  have only not used a major release as the package may still change with the 
+  release of the GIGS guidance document.
+* **BREAKING CHANGES:**
+  * Replaced `gest_age` parameter with `gest_days` in all circumstances, 
+    including `ig_nbs` growth curve/coefficient tables.
+  * `classify_wasting()` now takes in gestational age/age data, and uses this to
+    apply the INTERGROWTH-21<sup>st</sup> Postnatal Growth standard for 
+    weight-for-length where appropriate.
+* **NEW FEATURES:**
+  * Added `classify_svn()` function, which classifies newborns into the 
+    categories used in the Lancet's 2023 Small Vulnerable Newborn (SVN) Series.
+* **INTERNAL/DOCS CHANGES:**
+  * Updated coefficient retrieval functions to run ~ 2 times as fast as in 
+    version 0.2.3. 
+  * Added type checking functions to conversion functions, along with additional
+    unit tests to make sure they work. 
+  * Extensive changes to documentation structure. These changes appear 
+    internally, where the roxygen documentation uses more 
+    `@inherit`/`@inheritParams` tags. 
+  * Added vignette displaying performance differences between gigs and other,
+    similar R packages, as well as Stata implementations.
 
 # gigs 0.2.3
 * Updated regression equations for the normative body composition standards in 
