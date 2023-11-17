@@ -7,11 +7,10 @@ test_centile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
   digits <- if (acronym %in% "bfpfga") 1 else 0
   tbl <- lapply(X = c(0.03, 0.1, 0.5, 0.9, 0.97),
                 FUN = function(x) {
-                  fn <- switch(acronym,
-                     "fmfga" =  ig_nbs_fmfga_centile2value,
-                     "bfpfga" =  ig_nbs_bfpfga_centile2value,
-                     "ffmfga" = ig_nbs_ffmfga_centile2value)
-                  round2(fn(p = x, gest_days = get_gest_days(age_lower, age_upper), sex = sex),
+                  fn <- get(paste0("ig_nbs_", acronym, "_centile2value"))
+                  round2(fn(p = x,
+                            gest_days = get_gest_days(age_lower, age_upper),
+                            sex = sex),
                         digits = digits)
                 }) |>
     do.call(what = cbind) |>
@@ -42,10 +41,7 @@ test_that(desc = "Conversion of centiles to values works", {
       vapply(
         X = c("fmfga", "bfpfga", "ffmfga"),
         FUN = function(x) {
-          fn <- switch(x,
-                       "fmfga" = ig_nbs_fmfga_centile2value,
-                       "bfpfga" = ig_nbs_bfpfga_centile2value,
-                       "ffmfga" = ig_nbs_ffmfga_centile2value)
+          fn <- get(paste0("ig_nbs_", x, "_centile2value"))
           vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
           expect_length(object = vals, n = length(sex))
           expect_true(all(is.na(c(
@@ -67,11 +63,10 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
   digits <- if (acronym %in% "bfpfga") 1 else 0
   tbl <- lapply(X = qnorm(c(0.03, 0.1, 0.5, 0.9, 0.97)),
                 FUN = function(x) {
-                  fn <- switch(acronym,
-                     "fmfga" =   ig_nbs_fmfga_zscore2value,
-                     "bfpfga" =  ig_nbs_bfpfga_zscore2value,
-                     "ffmfga" =  ig_nbs_ffmfga_zscore2value)
-                   round2(fn(sex = sex, gest_days = get_gest_days(age_lower, age_upper), z = x),
+                  fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
+                  round2(fn(sex = sex,
+                            gest_days = get_gest_days(age_lower, age_upper),
+                            z = x),
                          digits = digits)
                 }) |>
     do.call(what = cbind) |>
@@ -95,15 +90,12 @@ test_that("Conversion of z-scores to values works", {
 
 
 testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscore") {
-  params_val2zp <- list(y = y, gest_days = gest_days, sex = sex,
-                        acronym = acronym)
-  fn_val2zp <- paste0("ig_nbs_value2", z_or_p)
-  out_z_or_p <- do.call(fn_val2zp, params_val2zp)
+  fn_stem <- paste0("ig_nbs_", acronym)
+  fn_val2zp <- get(paste0(fn_stem, "_value2", z_or_p))
+  out_z_or_p <- fn_val2zp(y, gest_days, sex)
 
-  params_zp2val <- list(gest_days = gest_days, sex = sex, acronym = acronym)
-  params_zp2val[[switch(z_or_p, "zscore" = "z", "centile" = "p")]] <- out_z_or_p
-  fn_zp2val <- paste0("ig_nbs_", z_or_p, "2value")
-  out_value <- do.call(fn_zp2val, params_zp2val)
+  fn_zp2val <- get(paste0(fn_stem, "_", z_or_p, "2value"))
+  out_value <- fn_zp2val(out_z_or_p, gest_days, sex)
 
   if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
     stop("All values were NA.")

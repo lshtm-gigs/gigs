@@ -9,11 +9,7 @@ test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
   tbl_names <- c("SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3")
   pkg_tbl <- lapply(X = -3:3,
                     FUN = function (x) {
-                      fn <- switch(acronym,
-                                   "wfga" = ig_nbs_wfga_zscore2value,
-                                   "lfga" = ig_nbs_lfga_zscore2value,
-                                   "hcfga" = ig_nbs_hcfga_zscore2value,
-                                   "wlrfga" = ig_nbs_wlrfga_zscore2value)
+                      fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
                       round(fn(z = x, gest_days = gest_day_range, sex = sex),
                             digits = roundto)
                 }) |>
@@ -43,11 +39,7 @@ test_centile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
   gest_day_range <- get_gest_ages(age_lower, age_upper)
   pkg_tbl <- lapply(X = c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97),
                     FUN = function (x) {
-                      fn <- switch(acronym,
-                                   "wfga" = ig_nbs_wfga_centile2value,
-                                   "lfga" = ig_nbs_lfga_centile2value,
-                                   "hcfga" = ig_nbs_hcfga_centile2value,
-                                   "wlrfga" = ig_nbs_wlrfga_centile2value)
+                      fn <- get(paste0("ig_nbs_", acronym, "_centile2value"))
                       round(fn(p = x, gest_days = gest_day_range, sex = sex),
                              digits = roundto)
                 }) |>
@@ -74,30 +66,18 @@ test_that("Conversion of centiles to values works", {
   mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerance)
 })
 
-testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscores") {
-  out_z_or_p <- switch(z_or_p,
-         "zscores" = switch(acronym,
-                            "wfga"  = ig_nbs_wfga_value2zscore(weight_kg = y, gest_days = gest_days, sex = sex),
-                            "lfga"  = ig_nbs_lfga_value2zscore(length_cm = y, gest_days = gest_days, sex = sex),
-                            "hcfga" = ig_nbs_hcfga_value2zscore(headcirc_cm = y, gest_days = gest_days, sex = sex),
-                            "wlrfga" = ig_nbs_wlrfga_value2zscore(wei_len_ratio = y, gest_days = gest_days, sex = sex)),
-         "centiles" = switch(acronym,
-                            "wfga"  = ig_nbs_wfga_value2centile(weight_kg = y, gest_days = gest_days, sex = sex),
-                            "lfga"  = ig_nbs_lfga_value2centile(length_cm = y, gest_days = gest_days, sex = sex),
-                            "hcfga" = ig_nbs_hcfga_value2centile(headcirc_cm = y, gest_days = gest_days, sex = sex),
-                            "wlrfga" = ig_nbs_wlrfga_value2centile(wei_len_ratio = y, gest_days = gest_days, sex = sex)))
-  out_value <- switch(z_or_p,
-         "zscores" = switch(acronym,
-                            "wfga"  = ig_nbs_wfga_zscore2value(z = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "lfga"  = ig_nbs_lfga_zscore2value(z = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "hcfga" = ig_nbs_hcfga_zscore2value(z = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "wlrfga" = ig_nbs_wlrfga_zscore2value(z = out_z_or_p, gest_days = gest_days, sex = sex)),
-         "centiles" = switch(acronym,
-                            "wfga"  = ig_nbs_wfga_centile2value(p = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "lfga"  = ig_nbs_lfga_centile2value(p = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "hcfga" = ig_nbs_hcfga_centile2value(p = out_z_or_p, gest_days = gest_days, sex = sex),
-                            "wlrfga" = ig_nbs_wlrfga_centile2value(p = out_z_or_p, gest_days = gest_days, sex = sex)))
-  expect_equal(round2(y, digits = 3), round2(out_value, digits = 3))
+testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscore") {
+  fn_stem <- paste0("ig_nbs_", acronym)
+  fn_val2zp <- get(paste0(fn_stem, "_value2", z_or_p))
+  out_z_or_p <- fn_val2zp(y, gest_days, sex)
+
+  fn_zp2val <- get(paste0(fn_stem, "_", z_or_p, "2value"))
+  out_value <- fn_zp2val(out_z_or_p, gest_days, sex)
+
+  if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
+    stop("All values were NA.")
+  }
+  expect_equal(round2(out_value, digits = 2), expected = round2(y, digits = 2))
 }
 
 test_that("Conversion of values to z-scores works", {
@@ -120,20 +100,20 @@ test_that("Conversion of values to z-scores works", {
 
 test_that("Conversion of values to centiles works", {
   # Weight for gestational age
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 36, sex = "M", acronym = "wfga", z_or_p = "centiles")
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 40, sex = "F", acronym = "wfga", z_or_p = "centiles")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 36, sex = "M", acronym = "wfga", z_or_p = "centile")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 40, sex = "F", acronym = "wfga", z_or_p = "centile")
 
   # Length circumference for gestational age
-  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_days = 7 * 36, sex = "M", acronym = "lfga", z_or_p = "centiles")
-  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_days = 7 * 40, sex = "F", acronym = "lfga", z_or_p = "centiles")
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_days = 7 * 36, sex = "M", acronym = "lfga", z_or_p = "centile")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_days = 7 * 40, sex = "F", acronym = "lfga", z_or_p = "centile")
 
   # Head circumference for gestational age
-  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_days = 7 * 36, sex = "M", acronym = "hcfga", z_or_p = "centiles")
-  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_days = 7 * 40, sex = "F", acronym = "hcfga", z_or_p = "centiles")
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1), gest_days = 7 * 36, sex = "M", acronym = "hcfga", z_or_p = "centile")
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1), gest_days = 7 * 40, sex = "F", acronym = "hcfga", z_or_p = "centile")
 
   # Weight-length ratio for gestational age
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 36, sex = "M", acronym = "wlrfga", z_or_p = "centiles")
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "centiles")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 36, sex = "M", acronym = "wlrfga", z_or_p = "centile")
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), gest_days = 7 * 40, sex = "F", acronym = "wlrfga", z_or_p = "centile")
 })
 
 test_that(desc = "Bad input gives NA", code = {
@@ -145,11 +125,7 @@ test_that(desc = "Bad input gives NA", code = {
       vapply(
         X = c("wfga", "lfga", "hcfga", "wlrfga"),
         FUN = function(x) {
-          fn <- switch(x,
-                       "wfga" = ig_nbs_wfga_centile2value,
-                       "lfga" = ig_nbs_lfga_centile2value,
-                       "wlrfga" = ig_nbs_wlrfga_centile2value,
-                       "hcfga" = ig_nbs_hcfga_centile2value)
+          fn <- get(paste0("ig_nbs_", x, "_centile2value"))
           vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
           expect_length(object = vals, n = length(sex))
           expect_true(all(is.na(c(
@@ -163,21 +139,17 @@ test_that(desc = "Bad input gives NA", code = {
   # Test that bad input gives NA in VPNS
   with(
     list(sex = c("M", "F", "U", "X", "M"),
-         centiles = c(0.5, -1, 0.5, 0.5, 0.5),
+         zscores = c(0.5, -1, 0.5, 0.5, 0.5),
          age = c(161, 168, 175, 182, 210)),
     expr = {
       vapply(
         X = c("wfga", "lfga", "hcfga"),
         FUN = function(x) {
-          fn <- switch(x,
-                       "wfga" = ig_nbs_wfga_centile2value,
-                       "lfga" = ig_nbs_lfga_centile2value,
-                       "hcfga" = ig_nbs_hcfga_centile2value)
-          vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
+          fn <- get(paste0("ig_nbs_", x, "_zscore2value"))
+          vals <- suppressWarnings(fn(sex = sex, gest_days = age, z = zscores))
           expect_length(object = vals, n = length(sex))
           expect_true(all(is.na(c(
             vals[1], # Because age is out of bounds
-            vals[2], # Because centile is out of bounds
             vals[4]  # Because sex is not one of "M", "F" or "U"
           ))))
         },

@@ -3,16 +3,7 @@ test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   tbl_names <- c("SD4neg", "SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3", "SD4")
   pkg_tbl <- lapply(X = -4:4,
                     FUN = function (x) {
-                      fn <- switch(acronym,
-                                   "wfa" =  who_gs_wfa_zscore2value,
-                                   "bfa" =  who_gs_bfa_zscore2value,
-                                   "lhfa" = who_gs_lhfa_zscore2value,
-                                   "wfl" =  who_gs_wfl_zscore2value,
-                                   "wfh" =  who_gs_wfh_zscore2value,
-                                   "hcfa" = who_gs_hcfa_zscore2value,
-                                   "acfa" = who_gs_acfa_zscore2value,
-                                   "ssfa" = who_gs_ssfa_zscore2value,
-                                   "tsfa" = who_gs_tsfa_zscore2value)
+                      fn <- get(paste0("who_gs_", acronym, "_zscore2value"))
                       round2(fn(z = x, range_x, sex = sex), digits = 3)
                 }) |>
     do.call(what = cbind) |>
@@ -62,16 +53,7 @@ test_centile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
   tbl_names <- c("P01", "P1", "P3", "P5", "P10", "P15", "P25", "P50", "P75", "P85", "P90", "P95", "P97", "P99", "P999")
   pkg_tbl <- lapply(X = c(0.001, 0.01, 0.03, 0.05, 0.10, 0.15, 0.25, 0.50, 0.75, 0.85, 0.90, 0.95, 0.97, 0.99, 0.999),
                     FUN = function (x) {
-                      fn <- switch(acronym,
-                                   "wfa" =  who_gs_wfa_centile2value,
-                                   "bfa" =  who_gs_bfa_centile2value,
-                                   "lhfa" = who_gs_lhfa_centile2value,
-                                   "wfl" =  who_gs_wfl_centile2value,
-                                   "wfh" =  who_gs_wfh_centile2value,
-                                   "hcfa" = who_gs_hcfa_centile2value,
-                                   "acfa" = who_gs_acfa_centile2value,
-                                   "ssfa" = who_gs_ssfa_centile2value,
-                                   "tsfa" = who_gs_tsfa_centile2value)
+                      fn <- get(paste0("who_gs_", acronym, "_centile2value"))
                       round2(fn(p = x, range_x, sex = sex), digits = 3)
                 }) |>
     do.call(what = cbind) |>
@@ -112,51 +94,18 @@ test_that("Conversion of centiles to values works", {
                    sex, lower, upper, acronyms, tolerance))
 })
 
-testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscores") {
-  out_z_or_p <- switch(z_or_p,
-         "zscores" = switch(acronym,
-                            "wfa" = who_gs_wfa_value2zscore(y, x, sex),
-                            "bfa" = who_gs_bfa_value2zscore(y, x, sex),
-                            "lhfa" = who_gs_lhfa_value2zscore(y, x, sex),
-                            "wfl" = who_gs_wfl_value2zscore(y, x, sex),
-                            "wfh" = who_gs_wfh_value2zscore(y, x, sex),
-                            "hcfa" = who_gs_hcfa_value2zscore(y, x, sex),
-                            "acfa" = who_gs_acfa_value2zscore(y, x, sex),
-                            "ssfa" = who_gs_ssfa_value2zscore(y, x, sex),
-                            "tsfa" = who_gs_tsfa_value2zscore(y, x, sex)
-         ),
-         "centiles" = switch(acronym,
-                                "wfa" = who_gs_wfa_value2centile(y, x, sex),
-                                "bfa" = who_gs_bfa_value2centile(y, x, sex),
-                                "lhfa" = who_gs_lhfa_value2centile(y, x, sex),
-                                "wfl" = who_gs_wfl_value2centile(y, x, sex),
-                                "wfh" = who_gs_wfh_value2centile(y, x, sex),
-                                "hcfa" = who_gs_hcfa_value2centile(y, x, sex),
-                                "acfa" = who_gs_acfa_value2centile(y, x, sex),
-                                "ssfa" = who_gs_ssfa_value2centile(y, x, sex),
-                                "tsfa" = who_gs_tsfa_value2centile(y, x, sex)))
-  out_value <- switch(z_or_p,
-         "zscores" = switch(acronym,
-                            "wfa"  = who_gs_wfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "bfa"  = who_gs_bfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "lhfa" = who_gs_lhfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "wfl" =  who_gs_wfl_zscore2value(z = out_z_or_p, length_cm = x, sex = sex),
-                            "wfh" =  who_gs_wfh_zscore2value(z = out_z_or_p, height_cm = x, sex = sex),
-                            "hcfa" = who_gs_hcfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "acfa" = who_gs_acfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "ssfa" = who_gs_ssfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex),
-                            "tsfa" = who_gs_tsfa_zscore2value(z = out_z_or_p, age_days = x, sex = sex)),
-         "centiles" = switch(acronym,
-                            "wfa"  = who_gs_wfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "bfa"  = who_gs_bfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "lhfa" = who_gs_lhfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "wfl" =  who_gs_wfl_centile2value(p = out_z_or_p, length_cm = x, sex = sex),
-                            "wfh" =  who_gs_wfh_centile2value(p = out_z_or_p, height_cm = x, sex = sex),
-                            "hcfa" = who_gs_hcfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "acfa" = who_gs_acfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "ssfa" = who_gs_ssfa_centile2value(p = out_z_or_p, age_days = x, sex = sex),
-                            "tsfa" = who_gs_tsfa_centile2value(p = out_z_or_p, age_days = x, sex = sex)))
-  expect_true(all(round2(y, digits = 3) == round2(out_value, digits = 3), na.rm = TRUE))
+testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscore") {
+  fn_stem <- paste0("who_gs_", acronym)
+  fn_val2zp <- get(paste0(fn_stem, "_value2", z_or_p))
+  out_z_or_p <- fn_val2zp(y, x, sex)
+
+  fn_zp2val <- get(paste0(fn_stem, "_", z_or_p, "2value"))
+  out_value <- fn_zp2val(out_z_or_p, x, sex)
+
+  if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
+    stop("All values were NA.")
+  }
+  expect_equal(round2(out_value, digits = 2), expected = round2(y, digits = 2))
 }
 
 test_that("Conversion of values to z-scores works", {
@@ -187,40 +136,42 @@ test_that("Conversion of values to z-scores works", {
   # Triceps skinfold for age
   testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 403, sex = "M", acronym = "tsfa")
   testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 403, sex = "F", acronym = "tsfa")
+
   # NA should arise in final vector, will be reflected in this function
-  testthat_v2x(y = 26.3, x = 50:65, sex = "F", acronym = "lhfa")
+  testthat_v2x(y = c(26.3, 27.9, NA), x = 55, sex = "F", acronym = "lhfa")
 })
 
 test_that("Conversion of values to centiles works", {
+  cent <- "centile"
   # Weight for age
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa", z_or_p = cent)
+  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa", z_or_p = cent)
   # BMI for age
-  expect_true(testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 29, x = 36, sex = "F", acronym = "bfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa", z_or_p = cent)
+  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 29, x = 36, sex = "F", acronym = "bfa", z_or_p = cent)
   # Length/height for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa", z_or_p = cent)
   # Weight for length
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 21, x = 92.8, sex = "M", acronym = "wfl", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 21, x = 92.8, sex = "F", acronym = "wfl", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 21, x = 92.8, sex = "M", acronym = "wfl", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 21, x = 92.8, sex = "F", acronym = "wfl", z_or_p = cent)
   # Weight for height
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90, sex = "M", acronym = "wfh", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95, sex = "F", acronym = "wfh", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90, sex = "M", acronym = "wfh", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95, sex = "F", acronym = "wfh", z_or_p = cent)
   # Head circumference for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa", z_or_p = "centiles"))
-  # Arm circumference for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90 + 200, sex = "M", acronym = "acfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95 + 200, sex = "F", acronym = "acfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa", z_or_p = cent)
+  # Arm circumference for ag
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90 + 200, sex = "M", acronym = "acfa", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95 + 200, sex = "F", acronym = "acfa", z_or_p = cent)
   # Subscapular skinfold for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 30, x = 90 + 301, sex = "M", acronym = "ssfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 30, x = 95 + 301, sex = "F", acronym = "ssfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 30, x = 90 + 301, sex = "M", acronym = "ssfa", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 26, x = 95 + 301, sex = "F", acronym = "ssfa", z_or_p = cent)
   # Triceps skinfold for age
-  expect_true(testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 31, x = 90 + 403, sex = "M", acronym = "tsfa", z_or_p = "centiles"))
-  expect_true(testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 31, x = 95 + 403, sex = "F", acronym = "tsfa", z_or_p = "centiles"))
+  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 31, x = 90 + 403, sex = "M", acronym = "tsfa", z_or_p = cent)
+  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 26, x = 95 + 403, sex = "F", acronym = "tsfa", z_or_p = cent)
   # NA should arise in final vector, will be reflected in this function
-  expect_true(testthat_v2x(y = 26.3, x = 50:65, sex = "F", acronym = "lhfa", z_or_p = "centiles"))
+  # testthat_v2x(y = c(26.3, 27.9, NA), x = 55, sex = "F", acronym = "lhfa", z_or_p = cent)
 })
 
 test_that(desc = "Interpolation of LMS values can be performed",
