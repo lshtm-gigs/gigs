@@ -5,43 +5,48 @@
 \title{Classify size for gestational age using the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 weight-for-gestational age standard}
 \usage{
-classify_sga(weight_kg, gest_age, sex, severe = FALSE)
+classify_sga(weight_kg, gest_days, sex, severe = FALSE)
 }
 \arguments{
-\item{weight_kg}{Weight value(s) in kg.}
+\item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{gest_age}{Gestational age(s) at birth in days. Must be between \code{168}
-and \code{300}.}
+\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
+Values not between \code{168} and \code{300} will be set to \code{NA}.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
 
 \item{severe}{If \code{TRUE}, specify which SGA values are below the third
-percentile. Default = \code{FALSE}.}
+centile. Default = \code{FALSE}.}
 }
 \value{
 Factor with gestational age classification(s). If \code{severe = FALSE},
-levels are \code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are \code{ c("SGA(<3)", "SGA", "AGA",  "LGA")}.
+levels are \code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are
+\code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
-Size for gestational age categories are split by percentile: small-for-GA (SGA;
-10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} to
-90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile) and large-for-GA (LGA; >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} percentile).
-This function also supports classification of severe SGA (<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}}
-percentile) using the \code{severe} parameter.
+Size for gestational age categories are split by centile: small-for-GA
+(SGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile), appropriate-for-GA (AGA; 10\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}}
+to 90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}} centile) and large-for-GA (LGA; >90\if{html}{\out{<sup>}}th\if{html}{\out{</sup>}}
+centile). This function also supports classification of severe SGA
+(<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}} centile) using the \code{severe} parameter.
+}
+\note{
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
 # Without severe flag, does not differentiate between
 # p < 0.03 and p < 0.10
 classify_sga(
   weight_kg = c(2.2, 3.4, 4.2),
-  gest_age = 267,
+  gest_days = 267,
   sex = "F"
 )
 
 # With severe = TRUE, highlights p < 0.03
 classify_sga(
   weight_kg = c(2.2, 3.4, 4.2),
-  gest_age = 267,
+  gest_days = 267,
   sex = "F",
   severe = TRUE
 )

@@ -9,10 +9,10 @@
 }
 \description{
 A set of nested lists containing tables with reference values at different
-z-scores/percentiles for valid x values (usually age in days, also
+z-scores/centiles for valid x values (usually age in days, also
 length or height in cm for weight-for-length (\code{wfl}) and weight-for-height
 (\code{wfh}) standards, respectively). The list is ordered by acronym first, then
-by sex and finally z-score/percentile.
+by sex and finally z-score/centile.
 }
 \examples{
 names(gigs::who_gs)

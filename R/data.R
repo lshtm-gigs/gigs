@@ -1,6 +1,6 @@
 #' gigs: Assess Growth in Infants and Newborns
 #'
-#' Convert between anthropometric measures and z-scores/percentiles using WHO
+#' Convert between anthropometric measures and z-scores/centiles using WHO
 #' and INTERGROWTH-21<sup>st</sup> growth standards. This includes functions for
 #' classification of newborn and infant growth, including size for gestational
 #' age, stunting, wasting, and weight-for-age.
@@ -23,8 +23,8 @@ NULL
 #' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
-#' z-scores/percentiles for valid gestational ages in days. The list is ordered
-#' by acronym first, then by sex and finally by z-score/percentile.
+#' z-scores/centiles for valid gestational ages in days. The list is ordered
+#' by acronym first, then by sex and finally by z-score/centile.
 #' @source
 #' [INTERGROWTH-21<sup>st</sup> Newborn Size in Very Preterm
 #' Infants](https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1)\cr
@@ -88,8 +88,8 @@ NULL
 #' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
-#' z-scores/percentiles for valid post-menstrual ages. The list is ordered by
-#' acronym first, then by sex, and finally by z-score/percentile.
+#' z-scores/centiles for valid post-menstrual ages. The list is ordered by
+#' acronym first, then by sex, and finally by z-score/centile.
 #' @references
 #' Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al.
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
@@ -110,10 +110,10 @@ NULL
 #' @name who_gs
 #' @description
 #' A set of nested lists containing tables with reference values at different
-#' z-scores/percentiles for valid x values (usually age in days, also
+#' z-scores/centiles for valid x values (usually age in days, also
 #' length or height in cm for weight-for-length (`wfl`) and weight-for-height
 #' (`wfh`) standards, respectively). The list is ordered by acronym first, then
-#' by sex and finally z-score/percentile.
+#' by sex and finally z-score/centile.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
@@ -216,4 +216,44 @@ NULL
 #' head(gigs::life6mo)
 #' @docType data
 #' @keywords data
+NULL
+
+#' Shared roxygen parameters
+#'
+#' Many of the functions in `[gigs]` are shared between different functions.
+#' This roxygen block is designed to make inheriting these parameters as simple
+#' as possible.
+#'
+#' @name shared_roxygen_params
+#' @param y Numeric vector of measurement(s) to convert to centiles/z-scores.
+#'   Units depend on which `acronym`(s) are in use.
+#' @param z,p Numeric vector of centiles/z-scores to convert to values.
+#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
+#'   (female).
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()].
+#' @keywords internal
+NULL
+
+#' Shared zscore/centile roxygen parameters
+#'
+#' Much of the roxygen content in `[gigs]` is shared between different
+#' functions. This roxygen block is designed to make inheriting these parameters
+#' more simple.
+#'
+#' @name shared_zscore2value_returns
+#' @returns Numeric vector of z-scores/centiles with length equal to the
+#'   outputs from [vctrs::vec_recycle_common()].
+#' @keywords internal
+NULL
+
+#' Shared zscore/centile to value roxygen parameters
+#'
+#' Much of the roxygen content in `[gigs]` is shared between different
+#' functions. This roxygen block is designed to make inheriting these parameters
+#' more simple.
+#'
+#' @name shared_value2zscore_returns
+#' @returns Numeric vector of expected measurements with length equal to the
+#'   outputs from [vctrs::vec_recycle_common()].
+#' @keywords internal
 NULL

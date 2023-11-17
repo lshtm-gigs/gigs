@@ -17,3 +17,4 @@
 ^cran-comments\.md$
 ^R/gigs_zscoring-dev\.R$
 ^R/devtests-dev\.R$
+^codemeta\.json$

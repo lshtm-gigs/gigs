@@ -2,49 +2,76 @@
 % Please edit documentation in R/classification.R
 \name{classify_wasting}
 \alias{classify_wasting}
-\title{Classify wasting using WHO weight-for-length/height standards}
+\title{Classify wasting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} weight-for-length or WHO
+weight-for-length/height standards}
 \usage{
-classify_wasting(weight_kg, lenht_cm, sex, lenht_method)
+classify_wasting(
+  weight_kg,
+  lenht_cm,
+  gest_days,
+  age_days,
+  sex,
+  outliers = FALSE
+)
 }
 \arguments{
-\item{weight_kg}{Weight measurement(s) in kg.}
+\item{weight_kg}{Numeric vector with weight value(s) in kg.}
 
-\item{lenht_cm}{Length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
 
-\item{sex}{Sex(es), either \code{"M"} (male) or \code{"F"} (female).}
+\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
+Values not between \code{168} and \code{300} will be set to \code{NA}.}
 
-\item{lenht_method}{\code{"L"} or \code{"H"} value(s) describing whether \code{lenht_cm} was
-recorded as recumbent length or standing height, respectively.}
+\item{age_days}{Numeric vector with age(s) in days for each child. Should be
+between \code{0} to \code{1856} days.}
+
+\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
+(female).}
+
+\item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
+implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of wasting classification(s) with levels \code{c("implausible", "wasting_severe", "wasting", "normal", "overweight")}.
+Factor of wasting classifications with same length as longest input.
+If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "normal", "overweight")}. If \code{outliers = TRUE}, levels are \code{c("wasting_severe", "wasting", "normal", "overweight", "outlier")}.
 }
 \description{
-Classify wasting (low weight-for-length/height) using the WHO Child Growth
-Standards, specifically either the weight-for-length or weight-for-height
-standard depending on the age of the child. Severe wasting is <-3SD relative
-to the median expected weight, whereas moderate wasting is -2SD from the
-median.
+Classify wasting (low weight-for-length/height) using the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} weight-for-length or WHO Child Growth standards,
+specifically either the weight-for-length or weight-for-height standard
+depending on the age of the child. Severe wasting is <-3SD relative to the
+median expected weight, whereas moderate wasting is -2SD from the median.
 }
 \note{
-Implausible z-score bounds are sourced from the referenced WHO report,
-and classification criteria from the DHS manual. Observations with invalid or
-missing \code{lenht_method} values will be returned as \code{NA}.
+Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Implausible z-score bounds are sourced from the referenced WHO report, and
+classification cut-offs from the DHS manual.
 }
 \examples{
-# Where no lenht_method is given, classify_wasting() returns NA.
+# Returns factor with stunting classifications
 classify_wasting(
   weight_kg = c(5.75, 2.18, 3.00, 6.75),
   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
+  gest_days = c(251, 197, 225, 243),
+  age_days = c(251, 197, 225, 243),
+  sex =  c("F", "M", "F", "M")
+)
+
+# Outliers  can be flagged if `outliers` set to TRUE
+classify_wasting(
+  weight_kg = c(5.75, 2.18, 3.00, 6.75),
+  lenht_cm = c(67.7, 46.6, 50.0, 80.1),
+  gest_days = c(251, 197, 225, 243),
+  age_days = c(251, 197, 225, 243),
   sex =  c("F", "M", "F", "M"),
-  lenht_method = c("H", "L", NA_character_, "H")
+  outliers = TRUE
 )
 }
 \references{
 \strong{'Implausible z-score values'} \emph{in} World Health Organization (ed.)
 \emph{Recommendations for data collection, analysis and reporting on
 anthropometric indicators in children under 5 years old}. Geneva: World
-Health Organization and the United Nations Children’s Fund UNICEF, (2019).
+Health Organization and the United Nations Children's Fund UNICEF, (2019).
 pp. 64-65.
 
 \strong{'Percentage of children stunted, wasted, and underweight, and mean z-scores

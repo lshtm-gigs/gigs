@@ -19,31 +19,31 @@ Standards as easy as possible. It also provides functions for easy and
 reproducible classification of newborn and infant growth.
 
 Which functions you want to use depend on whether you're **converting between
-values and z-scores/percentiles**, or **classifying observations**. Let's start
+values and z-scores/centiles**, or **classifying observations**. Let's start
 by loading the package.
 
 ```{r setup}
 library(gigs)
 ```
 
-## Converting between z-scores/percentiles and values
+## Converting between z-scores/centiles and values
 
-### From values to z-scores/percentiles
+### From values to z-scores/centiles
 Much of the time, you'll want to know where a measurement for a given
 observation lies relative to 'expected' values for that observation. This is
-where the `value2zscore` and `value2percentile` functions are useful:
+where the `value2zscore` and `value2centile` functions are useful:
 
 #### Example 1a: Converting newborn weights
 ```{r example_1a}
 df_newborn_weights <- data.frame(
         weight_kg = c(0.91, 3.33, 2.75, 3.35, 3.47, 1.90),
-        gest_age = c(183, 280, 293, 259, 277, 231),
+        gest_days = c(183, 280, 293, 259, 277, 231),
         sex = c(rep("M", 3), rep("F", 3))
 )
 df_newborn_weights$weight_p <-
   with(df_newborn_weights,
-       ig_nbs_value2percentile(y = weight_kg,
-                               gest_age = gest_age,
+       ig_nbs_value2centile(y = weight_kg,
+                               gest_days = gest_days,
                                sex = sex,
                                acronym = "wfga")) |>
         round(digits = 2)
@@ -51,9 +51,9 @@ df_newborn_weights$weight_p <-
 df_newborn_weights$weight_z <-
     with(df_newborn_weights,
        ig_nbs_value2zscore(y = weight_kg,
-                               gest_age = gest_age,
-                               sex = sex,
-                               acronym = "wfga")) |>
+                           gest_days = gest_days,
+                           sex = sex,
+                           acronym = "wfga")) |>
         round(digits = 2)
 df_newborn_weights
 ```
@@ -62,19 +62,19 @@ Given that the outputs of these functions are vectors, gigs functions integrate
 easily with [dplyr](https://dplyr.tidyverse.org/) verbs. We only avoid using
 them here to reduce the package dependencies for gigs.
 
-### From z-scores/percentiles to values
+### From z-scores/centiles to values
 Alternatively, you may wish to calculate reference values for median head
 circumference in female newborns across a range of gestational ages. You can do
-this with the relevant `percentile2value` function:
+this with the relevant `centile2value` function:
 ```{r conversion_hcfga}
-ig_nbs_hcfga_percentile2value(p = 0.5,
-                              gest_age = 266:272,
+ig_nbs_hcfga_centile2value(p = 0.5,
+                              gest_days = 266:272,
                               sex = "M") |>
         round(digits = 1)
 ```
 
 ## Classifying observations
-Sometimes it is more valuable to classify observed z-scores/percentiles than to
+Sometimes it is more valuable to classify observed z-scores/centiles than to
 work with the raw values, for example when evaluating size for gestational age
 in newborns. The classification functions offered by this package allow the user
 to easily classify growth status:
@@ -82,20 +82,32 @@ to easily classify growth status:
 ### Size for gestational age
 The `classify_sga()` function offers size for GA classifications based on
 cut-offs from the research literature. Typically, the 10<sup>th</sup> and
-90<sup>th</sup> percentiles are used as the size for GA cut-offs, but some
+90<sup>th</sup> centiles are used as the size for GA cut-offs, but some
 publications also specify severely small-for-GA newborns as those below the
-third weight-for-GA percentile. Whether you do this depends on the `severe`
-parameter in `classify_sga()`:
-```{r example_2}
+third weight-for-GA centile. Whether you do this depends on whether you set the
+`severe` parameter in `classify_sga()` to `TRUE`:
+```{r example_sga}
 df_newborn_weights$sga <- with(
         df_newborn_weights,
-        classify_sga(weight_kg = weight_kg, gest_age = gest_age, sex = sex))
+        classify_sga(weight_kg = weight_kg, gest_days = gest_days, sex = sex))
 df_newborn_weights$sga_severe <- with(
         df_newborn_weights,
         classify_sga(weight_kg = weight_kg,
-                     gest_age = gest_age,
+                     gest_days = gest_days,
                      sex = sex,
-                     severe = FALSE))
+                     severe = TRUE))
+df_newborn_weights
+```
+
+### Small vulnerable newborns
+The `classify_svn()` function offers small, vulnerable newborn classifications,
+based on the framework set out in the Lancet's 2023 Small Vulnerable Newborn
+Series. Essentially, this stratifies results from `classify_sga()` by whether
+newborns are term or preterm:
+```{r example_svn}
+df_newborn_weights$svn <- with(
+        df_newborn_weights,
+        classify_svn(weight_kg = weight_kg, gest_days = gest_days, sex = sex))
 df_newborn_weights
 ```
 
@@ -107,9 +119,20 @@ factor with levels corresponding to different degrees of stunting:
 classify_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),
-  ga_at_birth = c(196, 287, 266),
+  gest_days = c(196, 287, 266),
+  sex = c("M", "M", "F")
+)
+```
+
+You can also specify for `classify_stunting()` to classify likely
+outlier/implausible values by setting the `outlier` parameter to `TRUE`:
+```{r example_stunting_outliers}
+classify_stunting(
+  lenht_cm = c(52.2, 75.4, 63.1),
+  age_days = c(357, 375, 250),
+  gest_days = c(196, 287, 266),
   sex = c("M", "M", "F"),
-  lenht_method = c("H", "H", "H")
+  outliers = TRUE
 )
 ```
 
@@ -121,8 +144,22 @@ factor with levels corresponding to different degrees of wasting:
 classify_wasting(
   weight_kg = c(5.75, 2.18, 3.00, 6.75),
   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
+  gest_days = c(268, 247, 250, 278),
+  age_days = c(45, 33, 230, 278),
+  sex =  c("F", "M", "F", "M")
+)
+```
+
+You can also specify for `classify_wasting()` to classify likely
+outlier/implausible values by setting the `outlier` parameter to `TRUE`:
+```{r example_wasting_outliers}
+classify_wasting(
+  weight_kg = c(5.75, 2.18, 3.00, 6.75),
+  lenht_cm = c(67.7, 46.6, 50.0, 80.1),
+  gest_days = c(268, 247, 250, 278),
+  age_days = c(45, 33, 230, 278),
   sex =  c("F", "M", "F", "M"),
-  lenht_method = c("H", "L", NA_character_, "H")
+  outliers = TRUE
 )
 ```
 
@@ -134,11 +171,19 @@ corresponding to different degrees of underweight and overweight:
 classify_wfa(
   weight_kg = c(7.2, 4.5, 9.1, 24),
   age_days = c(401, 185, 101, 607),
-  ga_at_birth = 7 * c(27, 36, 40, 41),
+  gest_days = 7 * c(27, 36, 40, 41),
   sex = c("F", "M", "F", "M")
 )
 ```
 
-
-
-
+You can also specify for `classify_wasting()` to classify likely
+outlier/implausible values by setting the `outlier` parameter to `TRUE`:
+```{r example_weight_for_age_outliers}
+classify_wfa(
+  weight_kg = c(7.2, 4.5, 9.1, 24),
+  age_days = c(401, 185, 101, 607),
+  gest_days = 7 * c(27, 36, 40, 41),
+  sex = c("F", "M", "F", "M"),
+  outliers = TRUE
+)
+```

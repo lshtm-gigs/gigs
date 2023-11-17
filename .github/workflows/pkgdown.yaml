@@ -34,10 +34,12 @@ jobs:
         with:
           extra-packages: | 
             any::pkgdown
-            any::dplyr
             any::tidyr
             any::viridis
+            any::withr
+            any::purrr
             any::cowplot
+            any::ggsci
             local::.
           needs: website
 

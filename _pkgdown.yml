@@ -7,12 +7,14 @@ articles:
   contents:
   - gigs
   - articles/ig-nbs-body-composition
+  - articles/benchmarking
 reference:
   - title: Growth classification
     desc: >
-      Classify size for gestational age, stunting, wasting and under/overweight.
+      Classify growth data into commonly used growth indicators.
     contents:
       - classify_sga
+      - classify_svn
       - classify_stunting
       - classify_wasting
       - classify_wfa
@@ -21,8 +23,8 @@ reference:
       Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
       Standards.
     contents:
-      - ig_nbs_value2percentile
-      - ig_nbs_percentile2value
+      - ig_nbs_value2centile
+      - ig_nbs_centile2value
   - title: >
       INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants
     desc: > 
