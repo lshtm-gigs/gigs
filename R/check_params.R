@@ -53,7 +53,7 @@ check_nbs_params <- function(gest_days, sex, acronym) {
   # ages than the other INTERGROWTH-21st standards --> this code specifies which
   # range of GAs to compare with 'gest_age'
   is_bodycomp <- acronym %in% names(gigs::ig_nbs)[5:7]
-  bodycomp_xrange <- gigs::ig_nbs$bfpfga$male$percentiles$gest_days
+  bodycomp_xrange <- gigs::ig_nbs$bfpfga$male$centiles$gest_days
   full_xrange <- gigs::ig_nbs$wfga$male$zscores$gest_days
   stop_if_wrong_type(gest_days, "numeric")
   valid_x <- ifelse(is_bodycomp,

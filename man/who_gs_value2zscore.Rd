@@ -11,17 +11,17 @@
 \alias{who_gs_acfa_value2zscore}
 \alias{who_gs_ssfa_value2zscore}
 \alias{who_gs_tsfa_value2zscore}
-\alias{who_gs_value2percentile}
-\alias{who_gs_wfa_value2percentile}
-\alias{who_gs_bfa_value2percentile}
-\alias{who_gs_lhfa_value2percentile}
-\alias{who_gs_wfl_value2percentile}
-\alias{who_gs_wfh_value2percentile}
-\alias{who_gs_hcfa_value2percentile}
-\alias{who_gs_acfa_value2percentile}
-\alias{who_gs_ssfa_value2percentile}
-\alias{who_gs_tsfa_value2percentile}
-\title{Convert values to z-scores/percentiles in the WHO Child Growth Standards}
+\alias{who_gs_value2centile}
+\alias{who_gs_wfa_value2centile}
+\alias{who_gs_bfa_value2centile}
+\alias{who_gs_lhfa_value2centile}
+\alias{who_gs_wfl_value2centile}
+\alias{who_gs_wfh_value2centile}
+\alias{who_gs_hcfa_value2centile}
+\alias{who_gs_acfa_value2centile}
+\alias{who_gs_ssfa_value2centile}
+\alias{who_gs_tsfa_value2centile}
+\title{Convert values to z-scores/centiles in the WHO Child Growth Standards}
 \usage{
 who_gs_value2zscore(y, x, sex, acronym)
 
@@ -43,28 +43,28 @@ who_gs_ssfa_value2zscore(subscap_sf_mm, age_days, sex)
 
 who_gs_tsfa_value2zscore(triceps_sf_mm, age_days, sex)
 
-who_gs_value2percentile(y, x, sex, acronym)
+who_gs_value2centile(y, x, sex, acronym)
 
-who_gs_wfa_value2percentile(weight_kg, age_days, sex)
+who_gs_wfa_value2centile(weight_kg, age_days, sex)
 
-who_gs_bfa_value2percentile(bmi, age_days, sex)
+who_gs_bfa_value2centile(bmi, age_days, sex)
 
-who_gs_lhfa_value2percentile(lenht_cm, age_days, sex)
+who_gs_lhfa_value2centile(lenht_cm, age_days, sex)
 
-who_gs_wfl_value2percentile(weight_kg, length_cm, sex)
+who_gs_wfl_value2centile(weight_kg, length_cm, sex)
 
-who_gs_wfh_value2percentile(weight_kg, height_cm, sex)
+who_gs_wfh_value2centile(weight_kg, height_cm, sex)
 
-who_gs_hcfa_value2percentile(headcirc_cm, age_days, sex)
+who_gs_hcfa_value2centile(headcirc_cm, age_days, sex)
 
-who_gs_acfa_value2percentile(armcirc_cm, age_days, sex)
+who_gs_acfa_value2centile(armcirc_cm, age_days, sex)
 
-who_gs_ssfa_value2percentile(subscap_sf_mm, age_days, sex)
+who_gs_ssfa_value2centile(subscap_sf_mm, age_days, sex)
 
-who_gs_tsfa_value2percentile(triceps_sf_mm, age_days, sex)
+who_gs_tsfa_value2centile(triceps_sf_mm, age_days, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
 Units depend on which \code{acronym}(s) are in use.}
 
 \item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
@@ -105,14 +105,14 @@ Numeric vector of expected measurements with length equal to the
 outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
-Convert values to z-scores/percentiles in the WHO Child Growth Standards
+Convert values to z-scores/centiles in the WHO Child Growth Standards
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
-# Convert values to percentiles
-who_gs_value2percentile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
+# Convert values to centiles
+who_gs_value2centile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or values to z-scores
@@ -120,17 +120,17 @@ who_gs_value2zscore(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-who_gs_value2percentile(y = 75.2, x = 300, sex = "M", acronym = "lhfa") |>
+who_gs_value2centile(y = 75.2, x = 300, sex = "M", acronym = "lhfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-who_gs_lhfa_value2percentile(lenht_cm = 75.2, age_days = 300, sex = "M") |>
+who_gs_lhfa_value2centile(lenht_cm = 75.2, age_days = 300, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
-who_gs_ssfa_value2percentile(subscap_sf_mm = 6.1,
-                             age_days = seq(450, 650, by = 50),
-                             sex = "M") |>
+who_gs_ssfa_value2centile(subscap_sf_mm = 6.1,
+                          age_days = seq(450, 650, by = 50),
+                          sex = "M") |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead return NA - here

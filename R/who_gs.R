@@ -1,4 +1,4 @@
-#' Convert z-scores/percentiles to values in the WHO Child Growth Standards
+#' Convert z-scores/centiles to values in the WHO Child Growth Standards
 #'
 #' @param x,age_days,length_cm,height_cm Numeric vector with `x` values at which
 #'   to convert inputs. Must be within bounds of available `x` values for given
@@ -34,13 +34,13 @@
 #' J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @examples
-#' # Convert percentiles to values
-#' p <- 0.25 # 25th percentile
-#' who_gs_percentile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
+#' # Convert centiles to values
+#' p <- 0.25 # 25th centile
+#' who_gs_centile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
 #'   round(digits = 2)
 #'
 #' # Or z-scores to values
-#' z <- qnorm(p) # Z-score equivalent of 25th percentile
+#' z <- qnorm(p) # Z-score equivalent of 25th centile
 #' who_gs_zscore2value(z = z, x = 501, sex = "M", acronym = "wfa") |>
 #'   round(digits = 2)
 #'
@@ -53,9 +53,9 @@
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
-#' who_gs_ssfa_percentile2value(p = seq(0.1, 0.9, by = 0.2),
-#'                              age_days = 670,
-#'                              sex = "M") |>
+#' who_gs_ssfa_centile2value(p = seq(0.1, 0.9, by = 0.2),
+#'                           age_days = 670,
+#'                           sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Bad inputs will not stop the function but will instead return NA - here 60
@@ -174,65 +174,65 @@ who_gs_tsfa_zscore2value <- function(z, age_days, sex) {
 #' @rdname who_gs_zscore2value
 #' @importFrom stats qnorm
 #' @export
-who_gs_percentile2value <- function(p, x, sex, acronym) {
+who_gs_centile2value <- function(p, x, sex, acronym) {
   who_gs_zscore2value(z = qnorm(p), x = x, sex = sex, acronym = acronym)
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_wfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "wfa")
+who_gs_wfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_bfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "bfa")
+who_gs_bfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_lhfa_percentile2value <- function(p, age_days, sex)  {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "lhfa")
+who_gs_lhfa_centile2value <- function(p, age_days, sex)  {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_wfl_percentile2value <- function(p, length_cm, sex) {
-  who_gs_percentile2value(p = p, x = length_cm, sex = sex, acronym = "wfl")
+who_gs_wfl_centile2value <- function(p, length_cm, sex) {
+  who_gs_centile2value(p = p, x = length_cm, sex = sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_wfh_percentile2value <- function(p, height_cm, sex) {
-  who_gs_percentile2value(p = p, x = height_cm, sex = sex, acronym = "wfh")
+who_gs_wfh_centile2value <- function(p, height_cm, sex) {
+  who_gs_centile2value(p = p, x = height_cm, sex = sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_hcfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "hcfa")
+who_gs_hcfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_acfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "acfa")
+who_gs_acfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_ssfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "ssfa")
+who_gs_ssfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
-who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
-  who_gs_percentile2value(p = p, x = age_days, sex = sex, acronym = "tsfa")
+who_gs_tsfa_centile2value <- function(p, age_days, sex) {
+  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "tsfa")
 }
 
-#' Convert values to z-scores/percentiles in the WHO Child Growth Standards
+#' Convert values to z-scores/centiles in the WHO Child Growth Standards
 #'
 #' @param weight_kg Numeric vector of weight measurement(s) in kg.
 #' @param bmi Numeric vector of body mass index measurement(s) in
@@ -247,8 +247,8 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #' @inherit shared_value2zscore_returns return
 #' @inherit who_gs_zscore2value params references
 #' @examples
-#' # Convert values to percentiles
-#' who_gs_value2percentile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
+#' # Convert values to centiles
+#' who_gs_value2centile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
 #'   round(digits = 2)
 #'
 #' # Or values to z-scores
@@ -256,17 +256,17 @@ who_gs_tsfa_percentile2value <- function(p, age_days, sex) {
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' who_gs_value2percentile(y = 75.2, x = 300, sex = "M", acronym = "lhfa") |>
+#' who_gs_value2centile(y = 75.2, x = 300, sex = "M", acronym = "lhfa") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' who_gs_lhfa_value2percentile(lenht_cm = 75.2, age_days = 300, sex = "M") |>
+#' who_gs_lhfa_value2centile(lenht_cm = 75.2, age_days = 300, sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
-#' who_gs_ssfa_value2percentile(subscap_sf_mm = 6.1,
-#'                              age_days = seq(450, 650, by = 50),
-#'                              sex = "M") |>
+#' who_gs_ssfa_value2centile(subscap_sf_mm = 6.1,
+#'                           age_days = seq(450, 650, by = 50),
+#'                           sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Bad inputs will not stop the function but will instead return NA - here
@@ -382,62 +382,62 @@ who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
 #' @rdname who_gs_value2zscore
 #' @importFrom stats pnorm
 #' @export
-who_gs_value2percentile <- function(y, x, sex, acronym) {
+who_gs_value2centile <- function(y, x, sex, acronym) {
   pnorm(who_gs_value2zscore(y = y, x = x, sex = sex, acronym = acronym))
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_wfa_value2percentile <- function(weight_kg, age_days, sex) {
-  who_gs_value2percentile(y = weight_kg, x = age_days, sex = sex, acronym = "wfa")
+who_gs_wfa_value2centile <- function(weight_kg, age_days, sex) {
+  who_gs_value2centile(y = weight_kg, x = age_days, sex = sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_bfa_value2percentile <- function(bmi, age_days, sex) {
-  who_gs_value2percentile(y = bmi, x = age_days, sex = sex, acronym = "bfa")
+who_gs_bfa_value2centile <- function(bmi, age_days, sex) {
+  who_gs_value2centile(y = bmi, x = age_days, sex = sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_lhfa_value2percentile <- function(lenht_cm, age_days, sex) {
-  who_gs_value2percentile(y = lenht_cm, x = age_days, sex = sex, acronym = "lhfa")
+who_gs_lhfa_value2centile <- function(lenht_cm, age_days, sex) {
+  who_gs_value2centile(y = lenht_cm, x = age_days, sex = sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_wfl_value2percentile <- function(weight_kg, length_cm, sex) {
-  who_gs_value2percentile(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+who_gs_wfl_value2centile <- function(weight_kg, length_cm, sex) {
+  who_gs_value2centile(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_wfh_value2percentile <- function(weight_kg, height_cm, sex) {
-  who_gs_value2percentile(y = weight_kg, x = height_cm, sex = sex, acronym = "wfh")
+who_gs_wfh_value2centile <- function(weight_kg, height_cm, sex) {
+  who_gs_value2centile(y = weight_kg, x = height_cm, sex = sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_hcfa_value2percentile <- function(headcirc_cm, age_days, sex) {
-  who_gs_value2percentile(y = headcirc_cm, x = age_days, sex = sex, acronym = "hcfa")
+who_gs_hcfa_value2centile <- function(headcirc_cm, age_days, sex) {
+  who_gs_value2centile(y = headcirc_cm, x = age_days, sex = sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_acfa_value2percentile <- function(armcirc_cm, age_days, sex) {
-  who_gs_value2percentile(y = armcirc_cm, x = age_days, sex = sex, acronym = "acfa")
+who_gs_acfa_value2centile <- function(armcirc_cm, age_days, sex) {
+  who_gs_value2centile(y = armcirc_cm, x = age_days, sex = sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_ssfa_value2percentile <- function(subscap_sf_mm, age_days, sex) {
-  who_gs_value2percentile(y = subscap_sf_mm, x = age_days, sex = sex, acronym = "ssfa")
+who_gs_ssfa_value2centile <- function(subscap_sf_mm, age_days, sex) {
+  who_gs_value2centile(y = subscap_sf_mm, x = age_days, sex = sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
-who_gs_tsfa_value2percentile <- function(triceps_sf_mm, age_days, sex) {
-  who_gs_value2percentile(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
+who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
+  who_gs_value2centile(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
 }
 
 #' Retrieve LMS values for WHO Child Growth Standards

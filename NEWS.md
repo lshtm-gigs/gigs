@@ -9,6 +9,9 @@
   * `classify_wasting()` now takes in gestational age/age data, and uses this to
     apply the INTERGROWTH-21<sup>st</sup> Postnatal Growth standard for 
     weight-for-length where appropriate.
+  * Changed out `percentile` for `centile` in function names and documentation.
+    Argument names left unchanged, so centiles are still passed into functions 
+    as `p`.
 * **NEW FEATURES:**
   * Added `classify_svn()` function, which classifies newborns into the 
     categories used in the Lancet's 2023 Small Vulnerable Newborn (SVN) Series.

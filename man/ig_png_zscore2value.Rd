@@ -6,12 +6,12 @@
 \alias{ig_png_lfa_zscore2value}
 \alias{ig_png_hcfa_zscore2value}
 \alias{ig_png_wfl_zscore2value}
-\alias{ig_png_percentile2value}
-\alias{ig_png_wfa_percentile2value}
-\alias{ig_png_lfa_percentile2value}
-\alias{ig_png_hcfa_percentile2value}
-\alias{ig_png_wfl_percentile2value}
-\title{Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+\alias{ig_png_centile2value}
+\alias{ig_png_wfa_centile2value}
+\alias{ig_png_lfa_centile2value}
+\alias{ig_png_hcfa_centile2value}
+\alias{ig_png_wfl_centile2value}
+\title{Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants}
 \usage{
 ig_png_zscore2value(z, x, sex, acronym)
@@ -24,21 +24,21 @@ ig_png_hcfa_zscore2value(z, pma_weeks, sex)
 
 ig_png_wfl_zscore2value(z, length_cm, sex)
 
-ig_png_percentile2value(p, x, sex, acronym)
+ig_png_centile2value(p, x, sex, acronym)
 
-ig_png_wfa_percentile2value(p, pma_weeks, sex)
+ig_png_wfa_centile2value(p, pma_weeks, sex)
 
-ig_png_lfa_percentile2value(p, pma_weeks, sex)
+ig_png_lfa_centile2value(p, pma_weeks, sex)
 
-ig_png_hcfa_percentile2value(p, pma_weeks, sex)
+ig_png_hcfa_centile2value(p, pma_weeks, sex)
 
-ig_png_wfl_percentile2value(p, length_cm, sex)
+ig_png_wfl_centile2value(p, length_cm, sex)
 }
 \arguments{
-\item{z, p}{Numeric vector of percentiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
 
 \item{x, pma_weeks, length_cm}{The \code{x} value at which to convert a
-value to a z-score/percentile. Must be within bounds of available \code{x} values
+value to a z-score/centile. Must be within bounds of available \code{x} values
 for given acronym. The standard-specific versions of each function specify
 \code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
 and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
@@ -53,20 +53,20 @@ for postnatal growth in preterm infants. Should be one of \code{"wfa"}
 (head circumference-for-age), or \code{"wfl"} (weight-for-length).}
 }
 \value{
-Numeric vector of z-scores/percentiles with length equal to the
+Numeric vector of z-scores/centiles with length equal to the
 outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
-Convert z-scores/percentiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
-# Convert percentiles to values
-p <- 0.25 # 25th percentile
-ig_png_percentile2value(p = p, x = 55, sex = "M", acronym = "wfa") |>
+# Convert centiles to values
+p <- 0.25 # 25th centile
+ig_png_centile2value(p = p, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values

@@ -9,8 +9,8 @@
 }
 \description{
 A set of nested lists containing tables with reference values at different
-z-scores/percentiles for valid post-menstrual ages. The list is ordered by
-acronym first, then by sex, and finally by z-score/percentile.
+z-scores/centiles for valid post-menstrual ages. The list is ordered by
+acronym first, then by sex, and finally by z-score/centile.
 }
 \examples{
 names(gigs::ig_png)

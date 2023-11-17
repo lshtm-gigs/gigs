@@ -12,7 +12,7 @@ make_ig_nbs_list <- function(raw_stem, x, y) {
     return(tbl)
   }
 
-  make_percentile_tbl <- function(sex) {
+  make_centile_tbl <- function(sex) {
     tbl <- read.csv(file = file.path(data_dir,
                                      paste0(raw_stem, sex, "_percentiles.csv")),
                     fileEncoding = "UTF-8-BOM",
@@ -25,9 +25,9 @@ make_ig_nbs_list <- function(raw_stem, x, y) {
     return(tbl)
   }
   return(list(male = list(zscores = make_zscore_tbl(sex = "male"),
-                          percentiles = make_percentile_tbl(sex = "male")),
+                          centiles = make_centile_tbl(sex = "male")),
               female = list(zscores = make_zscore_tbl(sex = "female"),
-                            percentiles = make_percentile_tbl(sex = "female")),
+                            centiles = make_centile_tbl(sex = "female")),
               x = x,
               y = y))
 }
@@ -49,7 +49,7 @@ ig_nbs_wlrfga <- make_ig_nbs_list(raw_stem = "ig_nbs_weightlenratio_",
 
 make_ig_nbs_bodycomp_list <- function(raw_stem, x, y) {
   data_dir <- file.path("data-raw", "tables", "ig_nbs")
-  make_percentile_tbl <- function(sex) {
+  make_centile_tbl <- function(sex) {
     tbl <- read.csv(file = file.path(data_dir,
                                      paste0(raw_stem, sex, "_percentiles.csv")),
                     fileEncoding = "UTF-8-BOM",
@@ -60,8 +60,8 @@ make_ig_nbs_bodycomp_list <- function(raw_stem, x, y) {
                     P97 = V6)
    return(tbl)
   }
-  return(list(male = list(percentiles = make_percentile_tbl(sex = "male")),
-              female = list(percentiles = make_percentile_tbl(sex = "female")),
+  return(list(male = list(centiles = make_centile_tbl(sex = "male")),
+              female = list(centiles = make_centile_tbl(sex = "female")),
               x = x,
               y = y))
 }

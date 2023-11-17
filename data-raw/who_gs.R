@@ -71,13 +71,13 @@ get_who_data <- memoise::memoise(
                                  sex = .x,
                                  tbl_type = "zscore",
                                  tbls_var = tables[1])
-        percentiles <- read_who_data(indicator = indicator,
-                                     expand_var = expand_var,
-                                     acronym = acronym,
-                                     sex = .x,
-                                     tbl_type = "percentiles",
-                                     tbls_var = tables[2])
-        list(zscores = zscores, percentiles = percentiles)
+        centiles <- read_who_data(indicator = indicator,
+                                  expand_var = expand_var,
+                                  acronym = acronym,
+                                  sex = .x,
+                                  tbl_type = "percentiles",
+                                  tbls_var = tables[2])
+        list(zscores = zscores, centiles = centiles)
       }
     })
 })
@@ -126,10 +126,8 @@ who_gs <- who_gs |>
   purrr::map(.f = ~ {
     .x[['male']]$zscores <- dplyr::select(.x[['male']]$zscores, !(L|M|S))
     .x[['female']]$zscores <- dplyr::select(.x[['female']]$zscores, !(L|M|S))
-    .x[['male']]$percentiles <- dplyr::select(.x[['male']]$percentiles,
-                                              !(L|M|S))
-    .x[['female']]$percentiles <- dplyr::select(.x[['female']]$percentiles,
-                                                !(L|M|S))
+    .x[['male']]$centiles <- dplyr::select(.x[['male']]$centiles, !(L|M|S))
+    .x[['female']]$centiles <- dplyr::select(.x[['female']]$centiles, !(L|M|S))
     return(.x)
   })
 usethis::use_data(who_gs, overwrite = TRUE)

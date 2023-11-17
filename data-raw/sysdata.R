@@ -1,16 +1,16 @@
 # Normative body composition standards -----------------------------------------
 
-#' Extract standard deviation from percentiles
+#' Extract standard deviation from centiles
 #' @param P50 Value of y at mean
-#' @param PX Value of y at percentile specified by p
-#' @param p Percentile at which y = PX
+#' @param PX Value of y at centile specified by `p`
+#' @param p Centile at which y = PX
 std_deviation <- function(P50, PX, p) (PX - P50) / qnorm(p = p)
 
 run_LMs <- function(df) {
-  model_linear <- lm(P50 ~ gest_age, data = df)
-  model_poly1 <- lm(P50 ~ poly(gest_age, degree = 1, raw = TRUE), data = df)
-  model_poly2 <- lm(P50 ~ poly(gest_age, degree = 2, raw = TRUE), data = df)
-  model_poly3 <- lm(P50 ~ poly(gest_age, degree = 3, raw = TRUE), data = df)
+  model_linear <- lm(P50 ~ gest_days, data = df)
+  model_poly1 <- lm(P50 ~ poly(gest_days, degree = 1, raw = TRUE), data = df)
+  model_poly2 <- lm(P50 ~ poly(gest_days, degree = 2, raw = TRUE), data = df)
+  model_poly3 <- lm(P50 ~ poly(gest_days, degree = 3, raw = TRUE), data = df)
   list(model_linear, model_poly1, model_poly2, model_poly3)
 }
 
@@ -35,18 +35,18 @@ extract_eqn_params <- function(df) {
   c(intercept = model_coeffs[1],
     x = model_coeffs[2],
     "x^2" = model_coeffs[3],
-    "x^3" = if (length(model_coeffs) == 4) model_coeffs[4]  else 0,
+    "x^3" = if (length(model_coeffs) == 4) model_coeffs[4] else 0,
     sigma = SD)
 }
 
 ## Model extraction
 ### Cache data in list
-bodycomp_tables <- list(fmfga_M = gigs::ig_nbs$fmfga$male$percentiles,
-                        fmfga_F = gigs::ig_nbs$fmfga$female$percentiles,
-                        bfpfga_M = gigs::ig_nbs$bfpfga$male$percentiles,
-                        bfpfga_F = gigs::ig_nbs$bfpfga$female$percentiles,
-                        ffmfga_M = gigs::ig_nbs$ffmfga$male$percentiles,
-                        ffmfga_F = gigs::ig_nbs$ffmfga$female$percentiles)
+bodycomp_tables <- list(fmfga_M = gigs::ig_nbs$fmfga$male$centiles,
+                        fmfga_F = gigs::ig_nbs$fmfga$female$centiles,
+                        bfpfga_M = gigs::ig_nbs$bfpfga$male$centiles,
+                        bfpfga_F = gigs::ig_nbs$bfpfga$female$centiles,
+                        ffmfga_M = gigs::ig_nbs$ffmfga$male$centiles,
+                        ffmfga_F = gigs::ig_nbs$ffmfga$female$centiles)
 
 ## Save as list of coefficients
 ig_nbs_bc_li <- lapply(bodycomp_tables, extract_eqn_params)

@@ -13,12 +13,12 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE, size = "tiny", 
                       dev.args = list(png = list(type = "cairo")))
 library(gigs)
-fmfga_male <- tibble::as_tibble(gigs::ig_nbs$fmfga$male$percentiles)
-fmfga_female <- tibble::as_tibble(gigs::ig_nbs$fmfga$female$percentiles)
-bfpfga_male <- tibble::as_tibble(gigs::ig_nbs$bfpfga$male$percentiles)
-bfpfga_female <- tibble::as_tibble(gigs::ig_nbs$bfpfga$female$percentiles)
-ffmfga_male <- tibble::as_tibble(gigs::ig_nbs$ffmfga$male$percentiles)
-ffmfga_female <- tibble::as_tibble(gigs::ig_nbs$ffmfga$female$percentiles)
+fmfga_male <- tibble::as_tibble(gigs::ig_nbs$fmfga$male$centiles)
+fmfga_female <- tibble::as_tibble(gigs::ig_nbs$fmfga$female$centiles)
+bfpfga_male <- tibble::as_tibble(gigs::ig_nbs$bfpfga$male$centiles)
+bfpfga_female <- tibble::as_tibble(gigs::ig_nbs$bfpfga$female$centiles)
+ffmfga_male <- tibble::as_tibble(gigs::ig_nbs$ffmfga$male$centiles)
+ffmfga_female <- tibble::as_tibble(gigs::ig_nbs$ffmfga$female$centiles)
 ```
 
 Though Villar *et al.* (2017) published centiles for body composition (fat mass,
@@ -30,7 +30,7 @@ to linear equations.
 
 ## Contextual clues
 To identify the way in which these body composition standards were modelled,
-we need to look into how the published percentile tables are formatted. Consider
+we need to look into how the published centile tables are formatted. Consider
 the standard for fat mass for gestational age (`"fmfga"`) in females:
 ```{r looking_into_data_1}
 fmfga_female
@@ -40,11 +40,11 @@ fmfga_female
 Let's first compare the differences over time in fat-mass for GA. In each
 column, we'll subtract the value of the previous row from the current row to
 produce a table of differences (see `check_differences()` below). Then we'll
-check that the differences in each row are equal for all percentiles, and
+check that the differences in each row are equal for all centiles, and
 store this in the `all_equal` column.
 ```{r looking_into_data_2}
-check_differences <- function(percentile_tbl) {
-  percentile_tbl |>
+check_differences <- function(centile_tbl) {
+  centile_tbl |>
     dplyr::mutate(dplyr::across(.cols = tidyselect::starts_with(match = "P"),
                                 .fns = list(diff = \(x) x - dplyr::lag(x))),
                   .keep = "unused") |>
@@ -66,16 +66,16 @@ check_differences(fmfga_female)
 The differences in fat mass are equal across percentiles at all gestational
 ages, according to the `all_equal` column. If the standard deviation ($\sigma$)
 changed with gestational age (GA), then `all_equal` would not be at each age.
-This hints that for these percentile curves, the mean value ($\mu$) for fat mass
+This hints that for these centile curves, the mean value ($\mu$) for fat mass
 was calculated first, then summed with the product of the desired
-$z$-score/percentile with a standard deviation ($\sigma$) which is constant
+$z$-score/centile with a standard deviation ($\sigma$) which is constant
 across the different GAs:
 \begin{align*}
 y = \mu + z\times\sigma
 \end{align*}
 
 #### In the other standards
-Does this equality hold for the other percentile tables?
+Does this equality hold for the other centile tables?
 ```{r looking_into_data_4}
 other_standards <- list(fmfga_male, bfpfga_male, bfpfga_female, ffmfga_male,
                         ffmfga_female)
@@ -100,10 +100,11 @@ with GA.**
 # Extracting models from published tables
 ## Custom functions
 The following custom functions perform several tasks:
+
 * `run_LMs()` fits models to each INTERGROWTH-21<sup>st</sup> normative body
   composition standard using `lm()`, then returns the fitted models in a list.
-* `std_deviation()` determines $\sigma$ for a given percentile.
-* `extract_SDs()` gets the standard deviations for each percentile at each GA.
+* `std_deviation()` determines $\sigma$ for a given centile.
+* `extract_SDs()` gets the standard deviations for each centile at each GA.
 * `extract_eqn()` uses the above functions to extract a 'best possible' equation
   for the standard in use, then prints this to the console.
 ```{r custom_functions, echo = TRUE}
@@ -115,10 +116,10 @@ run_LMs <- function(df) {
   list(model_linear, model_poly1, model_poly2, model_poly3)
 }
 
-#' Extract standard deviation from percentiles
+#' Extract standard deviation from centiles
 #' @param P50 Value of y at mean
-#' @param PX Value of y at percentile specified by p
-#' @param p Percentile at which y = PX
+#' @param PX Value of y at centile specified by `p`
+#' @param p Centile at which y = PX
 std_deviation <- function(P50, PX, p) (PX - P50) / qnorm(p = p)
 
 extract_SDs <- function(df) {
@@ -131,7 +132,7 @@ extract_SDs <- function(df) {
 }
 
 #' Extract equation and standard deviation; print to console
-#' @param df A percentile table for `fmfga`, `bfpfga` or `ffmfga`.
+#' @param df A centile table for `fmfga`, `bfpfga` or `ffmfga`.
 extract_eqn <- function(df, verbose = TRUE) {
   li_models <- run_LMs(df)
   r_sq_adj <- vapply(X = li_models,
@@ -164,13 +165,13 @@ extract_eqn <- function(df, verbose = TRUE) {
 ## **Fat mass**
 ### Males
 ```{r fmfga_male_equation}
-fmfga_male <- gigs::ig_nbs$fmfga$male$percentiles
+fmfga_male <- gigs::ig_nbs$fmfga$male$centiles
 extract_eqn(fmfga_male)
 ```
 
 ### Females
 ```{r fmfga_female_equation}
-fmfga_female <- gigs::ig_nbs$fmfga$female$percentiles
+fmfga_female <- gigs::ig_nbs$fmfga$female$centiles
 extract_eqn(fmfga_female)
 ```
 
@@ -178,14 +179,14 @@ extract_eqn(fmfga_female)
 
 ### Males
 ```{r bfpfga_male_equation}
-bfpfga_male <- gigs::ig_nbs$bfpfga$male$percentiles
+bfpfga_male <- gigs::ig_nbs$bfpfga$male$centiles
 extract_eqn(bfpfga_male)
 ```
 
 ### Females
 
 ```{r bfpfga_female_equation}
-bfpfga_female <- gigs::ig_nbs$bfpfga$female$percentiles
+bfpfga_female <- gigs::ig_nbs$bfpfga$female$centiles
 extract_eqn(bfpfga_female)
 ```
 
@@ -193,14 +194,14 @@ extract_eqn(bfpfga_female)
 ### Males
 
 ```{r ffmfga_male_equation}
-ffmfga_male <- gigs::ig_nbs$ffmfga$male$percentiles
+ffmfga_male <- gigs::ig_nbs$ffmfga$male$centiles
 extract_eqn(ffmfga_male)
 ```
 
 ### Females
 
 ```{r ffmfga_female_equation}
-ffmfga_female <- gigs::ig_nbs$ffmfga$female$percentiles
+ffmfga_female <- gigs::ig_nbs$ffmfga$female$centiles
 extract_eqn(ffmfga_female)
 ```
 
@@ -255,19 +256,19 @@ rownames(models) <- c("fmfga_M" , "fmfga_F" , "bfpfga_M", "bfpfga_F",
 models
 ```
 
-The `body_comp_percentile2value()` will estimate `y` for a given gestational age
-in days (`x`), `sex` and `acronym`. The `body_comp_percentile2value_old()`
+The `body_comp_centile2value()` will estimate `y` for a given gestational age
+in days (`x`), `sex` and `acronym`. The `body_comp_centile2value_old()`
 function does the same, but uses parameters from our older linear models for
 each standard.
 ```{r body_comp_function}
-ig_nbs_bc_percentile2value <- function(p, x, sex, acronym) {
+ig_nbs_bc_centile2value <- function(p, x, sex, acronym) {
   params <- t(models)[, paste0(acronym, "_", sex)]
   SD <- params[[5]]
   mu <- params[[1]] + params[[2]] * x + params[[3]] * x^2 + params[[4]] * x^3
   mu + qnorm(p) * SD
 }
 
-ig_nbs_bc_percentile2value_old <- function(p, x, sex, acronym) {
+ig_nbs_bc_centile2value_old <- function(p, x, sex, acronym) {
   z <- qnorm(p)
   if (sex == "M") {
     switch(acronym,
@@ -308,14 +309,14 @@ repl_centile_tbls <- function(sex, acronym, bodycomp_fn) {
   dplyr::mutate(tbl, gest_days = (38:42 * 7), .before = P03)
 }
 
-#' Make percentile tables based on parameters from new polynomial models
+#' Make centile tables based on parameters from new polynomial models
 repl_centile_tbls_new <- function(sex, acronym) {
-  repl_centile_tbls(sex, acronym, ig_nbs_bc_percentile2value)
+  repl_centile_tbls(sex, acronym, ig_nbs_bc_centile2value)
 }
 
-#' Make percentile tables based on parameters from linear models
+#' Make centile tables based on parameters from linear models
 repl_centile_tbls_old <- function(sex, acronym) {
-  repl_centile_tbls(sex, acronym, ig_nbs_bc_percentile2value_old)
+  repl_centile_tbls(sex, acronym, ig_nbs_bc_centile2value_old)
 }
 ```
 
@@ -361,18 +362,15 @@ altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") 
                         names_to = "Percentile", values_to = "yval") |>
     dplyr::mutate(gest_days = purrr::map2_vec(
       .x = gest_days,
-      .y = Percentile,
-      .f = ~ .x + switch(.y,
-                         "P03" = 2,
-                         "P10" = 1,
-                         "P50" = 0,
-                         "P90" = 1,
-                         "P97" = 2))) |>
+      .y = Centile,
+      .f = \(x,y) {
+        x + switch(y, "P03" = 2, "P10" = 1, "P50" = 0, "P90" = 1, "P97" = 2)
+      })) |>
     dplyr::filter(!is.na(yval))
   suppressWarnings(suppressMessages(
     plot <- ggplot2::ggplot(data = diff_tbl_long,
                             ggplot2::aes(x = gest_days, y = yval)) +
-      ggplot2::geom_point(ggplot2::aes(colour = Percentile),
+      ggplot2::geom_point(ggplot2::aes(colour = Centile),
                           shape = as.factor(x = 1),
                           fill = NA,
                           stroke = 1.3,
@@ -381,7 +379,7 @@ altman_esque_plot <- function(diff_tbl, title, xlab, ylab, legend.pos = "none") 
       ggplot2::labs(title = ggplot2::element_text(title),
                     x = ggplot2::element_text(xlab),
                     y = ggplot2::element_text(ylab)) +
-      viridis::scale_color_viridis(name = "Percentile",
+      viridis::scale_color_viridis(name = "Centile",
                                    labels = c("Fitted - P03", "Fitted - P10",
                                               "Fitted - P50", "Fitted - P90",
                                               "Fitted - P97"),

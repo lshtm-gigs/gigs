@@ -4,10 +4,10 @@
 \alias{shared_roxygen_params}
 \title{Shared roxygen parameters}
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
 Units depend on which \code{acronym}(s) are in use.}
 
-\item{z, p}{Numeric vector of percentiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
 
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
 (female).}

@@ -10,7 +10,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-3116-2593")),
     person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
     )
-Description: Convert between anthropometric measures and z-scores/percentiles in
+Description: Convert between anthropometric measures and z-scores/centiles in
     multiple growth standards, and classify infant growth accordingly. With a
     simple interface to growth standards from the World Health Organisation and
     International Fetal and Newborn Growth Consortium for the 21st Century, gigs

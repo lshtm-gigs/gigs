@@ -11,17 +11,17 @@
 \alias{who_gs_acfa_zscore2value}
 \alias{who_gs_ssfa_zscore2value}
 \alias{who_gs_tsfa_zscore2value}
-\alias{who_gs_percentile2value}
-\alias{who_gs_wfa_percentile2value}
-\alias{who_gs_bfa_percentile2value}
-\alias{who_gs_lhfa_percentile2value}
-\alias{who_gs_wfl_percentile2value}
-\alias{who_gs_wfh_percentile2value}
-\alias{who_gs_hcfa_percentile2value}
-\alias{who_gs_acfa_percentile2value}
-\alias{who_gs_ssfa_percentile2value}
-\alias{who_gs_tsfa_percentile2value}
-\title{Convert z-scores/percentiles to values in the WHO Child Growth Standards}
+\alias{who_gs_centile2value}
+\alias{who_gs_wfa_centile2value}
+\alias{who_gs_bfa_centile2value}
+\alias{who_gs_lhfa_centile2value}
+\alias{who_gs_wfl_centile2value}
+\alias{who_gs_wfh_centile2value}
+\alias{who_gs_hcfa_centile2value}
+\alias{who_gs_acfa_centile2value}
+\alias{who_gs_ssfa_centile2value}
+\alias{who_gs_tsfa_centile2value}
+\title{Convert z-scores/centiles to values in the WHO Child Growth Standards}
 \usage{
 who_gs_zscore2value(z, x, sex, acronym)
 
@@ -43,28 +43,28 @@ who_gs_ssfa_zscore2value(z, age_days, sex)
 
 who_gs_tsfa_zscore2value(z, age_days, sex)
 
-who_gs_percentile2value(p, x, sex, acronym)
+who_gs_centile2value(p, x, sex, acronym)
 
-who_gs_wfa_percentile2value(p, age_days, sex)
+who_gs_wfa_centile2value(p, age_days, sex)
 
-who_gs_bfa_percentile2value(p, age_days, sex)
+who_gs_bfa_centile2value(p, age_days, sex)
 
-who_gs_lhfa_percentile2value(p, age_days, sex)
+who_gs_lhfa_centile2value(p, age_days, sex)
 
-who_gs_wfl_percentile2value(p, length_cm, sex)
+who_gs_wfl_centile2value(p, length_cm, sex)
 
-who_gs_wfh_percentile2value(p, height_cm, sex)
+who_gs_wfh_centile2value(p, height_cm, sex)
 
-who_gs_hcfa_percentile2value(p, age_days, sex)
+who_gs_hcfa_centile2value(p, age_days, sex)
 
-who_gs_acfa_percentile2value(p, age_days, sex)
+who_gs_acfa_centile2value(p, age_days, sex)
 
-who_gs_ssfa_percentile2value(p, age_days, sex)
+who_gs_ssfa_centile2value(p, age_days, sex)
 
-who_gs_tsfa_percentile2value(p, age_days, sex)
+who_gs_tsfa_centile2value(p, age_days, sex)
 }
 \arguments{
-\item{z, p}{Numeric vector of percentiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
 
 \item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
 to convert inputs. Must be within bounds of available \code{x} values for given
@@ -88,19 +88,19 @@ Numeric vector of expected measurements with length equal to the
 outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
-Convert z-scores/percentiles to values in the WHO Child Growth Standards
+Convert z-scores/centiles to values in the WHO Child Growth Standards
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
-# Convert percentiles to values
-p <- 0.25 # 25th percentile
-who_gs_percentile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
+# Convert centiles to values
+p <- 0.25 # 25th centile
+who_gs_centile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p) # Z-score equivalent of 25th percentile
+z <- qnorm(p) # Z-score equivalent of 25th centile
 who_gs_zscore2value(z = z, x = 501, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
@@ -113,9 +113,9 @@ who_gs_lhfa_zscore2value(z = z, age_days = 300, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
-who_gs_ssfa_percentile2value(p = seq(0.1, 0.9, by = 0.2),
-                             age_days = 670,
-                             sex = "M") |>
+who_gs_ssfa_centile2value(p = seq(0.1, 0.9, by = 0.2),
+                          age_days = 670,
+                          sex = "M") |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead return NA - here 60

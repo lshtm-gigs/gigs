@@ -1,18 +1,18 @@
 #' Classify size for gestational age using the INTERGROWTH-21<sup>st</sup>
 #' weight-for-gestational age standard
 #'
-#' Size for gestational age categories are split by percentile: small-for-GA
-#' (SGA; 10<sup>th</sup> percentile), appropriate-for-GA (AGA; 10<sup>th</sup>
-#' to 90<sup>th</sup> percentile) and large-for-GA (LGA; >90<sup>th</sup>
-#' percentile). This function also supports classification of severe SGA
-#' (<3<sup>rd</sup> percentile) using the `severe` parameter.
+#' Size for gestational age categories are split by centile: small-for-GA
+#' (SGA; 10<sup>th</sup> centile), appropriate-for-GA (AGA; 10<sup>th</sup>
+#' to 90<sup>th</sup> centile) and large-for-GA (LGA; >90<sup>th</sup>
+#' centile). This function also supports classification of severe SGA
+#' (<3<sup>rd</sup> centile) using the `severe` parameter.
 #'
 #' @inheritParams shared_roxygen_params
 #' @param weight_kg Numeric vector with weight value(s) in kg.
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #'   Values not between `168` and `300` will be set to `NA`.
 #' @param severe If `TRUE`, specify which SGA values are below the third
-#'   percentile. Default = `FALSE`.
+#'   centile. Default = `FALSE`.
 #' @return Factor with gestational age classification(s). If `severe = FALSE`,
 #'   levels are `c("SGA", "AGA",  "LGA")`. If `severe = TRUE`, levels are
 #'   `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
@@ -44,9 +44,9 @@
 #' London, 2013.*
 #' @export
 classify_sga <- function(weight_kg, gest_days, sex, severe = FALSE) {
-  centiles <- ig_nbs_wfga_value2percentile(weight_kg = weight_kg,
-                                           sex = sex,
-                                           gest_days = gest_days)
+  centiles <- ig_nbs_wfga_value2centile(weight_kg = weight_kg,
+                                        sex = sex,
+                                        gest_days = gest_days)
   sga <- rep(NA_character_, length(centiles))
   sga[centiles < 0.1] <- "SGA"
   sga[centiles >= 0.1 & centiles <= 0.9] <- "AGA"

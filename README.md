@@ -19,11 +19,11 @@ version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/g
 
 Produced as part of the Guidance for International Growth Standards
 project, gigs provides a single, simple interface for working with the
-WHO Child Growth Standards and outputs from the
+WHO Child Growth standards and outputs from the
 INTERGROWTH-21<sup>st</sup> project. You will find functions for
 converting from anthropometric measures (e.g. weight or length) to
-z-scores and percentiles, and the inverse. Also included are functions
-for classifying newborn and infant growth according to literature-based
+z-scores and centiles, and the inverse. Also included are functions for
+classifying newborn and infant growth according to literature-based
 cut-offs.
 
 ## Installation
@@ -43,15 +43,15 @@ remotes::install_github(repo = "lshtm-gigs/gigs")
   Component standards
   </summary>
 
-  | Acronym  | Description                                | Unit  | `gest_age` range |
-  |----------|--------------------------------------------|-------|------------------|
-  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days  |
-  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days  |
-  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days  |
-  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days  |
-  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days  |
-  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days  |
-  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days  |
+  | Acronym  | Description                                | Unit  | `gest_days` range |
+  |----------|--------------------------------------------|-------|-------------------|
+  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days   |
+  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days   |
+  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days   |
+  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days   |
+  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days   |
+  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days   |
+  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days   |
 
   </details>
 - `ig_png` - INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
@@ -97,13 +97,13 @@ example, to convert *values to z-scores* in the *weight-for-GA* standard
 from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
 `ig_nbs`/`_wfga`/`_value2zscore()`
 
-Similarly, the conversion of length-for-age values to percentiles in
-term and preterm infants could be performed with the WHO Child Growth
-Standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
-Infants Standards, respectively:
+Similarly, the conversion of length-for-age values to centiles in term
+and preterm infants could be performed with the WHO Child Growth
+standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
+Infants standards, respectively:
 
 - Term infants: `who_gs`/`_lhfa`/`_value2zscore()`
-- Preterm infants: `ig_png`/`_lfa`/`_value2percentile()`
+- Preterm infants: `ig_png`/`_lfa`/`_value2centile()`
 
 If the component standard is not included in the function call, it
 should be passed to the `acronym` parameter of the general function
@@ -123,10 +123,10 @@ ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_days = 182, sex = "F") |>
 A vector of `acronym` values can be used if you want to convert with
 different standards for each input.
 
-### Values to z-scores/percentiles
+### Values to z-scores/centiles
 
 These functions allow easy conversion from measured values to z-scores
-or percentiles for the standard used.
+or centiles for the standard used.
 
 ``` r
 # Convert from z-scores for individual values...
@@ -135,21 +135,21 @@ ig_nbs_value2zscore(y = 0.785, gest_days = 182, sex = "F", acronym = "wfga") |>
 #> [1] 0
 
 # .. or for multiple inputs
-ig_nbs_wfga_value2percentile(weight_kg = 0.785,
-                             gest_days = seq(175, 196, by = 7),
-                             sex = "F") |>
+ig_nbs_wfga_value2centile(weight_kg = 0.785,
+                          gest_days = seq(175, 196, by = 7),
+                          sex = "F") |>
   round(digits = 2)
 #> [1] 0.75 0.50 0.25 0.09
 
-# You can do the same for percentiles
-ig_png_wfa_value2percentile(weight_kg = c(2.86, 3.12, 3.12, 3.43, 3.77, 4.10),
-                            pma_weeks = 40,
-                            sex = "M") |>
+# You can do the same for centiles
+ig_png_wfa_value2centile(weight_kg = c(2.86, 3.12, 3.12, 3.43, 3.77, 4.10),
+                         pma_weeks = 40,
+                         sex = "M") |>
   round(digits = 2)
 #> [1] 0.10 0.25 0.25 0.50 0.75 0.90
 ```
 
-### Z-scores/percentiles to values
+### Z-scores/centiles to values
 
 These functions convert z-scores to expected anthropometric
 measurements. They are mostly useful for the creation of reference
@@ -166,8 +166,8 @@ ig_nbs_wfga_zscore2value(z = 0, gest_days = seq(182, 204, by = 7), sex = "F") |>
   round(digits = 3)
 #> [1] 0.785 0.893 1.013 1.147
 
-# You can do the same for percentiles
-ig_png_wfa_percentile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
+# You can do the same for centiles
+ig_png_wfa_centile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
                             pma_weeks = 40,
                             sex = "M") |>
   round(digits = 2)

@@ -6,12 +6,12 @@
 \alias{ig_png_lfa_value2zscore}
 \alias{ig_png_hcfa_value2zscore}
 \alias{ig_png_wfl_value2zscore}
-\alias{ig_png_value2percentile}
-\alias{ig_png_wfa_value2percentile}
-\alias{ig_png_lfa_value2percentile}
-\alias{ig_png_hcfa_value2percentile}
-\alias{ig_png_wfl_value2percentile}
-\title{Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+\alias{ig_png_value2centile}
+\alias{ig_png_wfa_value2centile}
+\alias{ig_png_lfa_value2centile}
+\alias{ig_png_hcfa_value2centile}
+\alias{ig_png_wfl_value2centile}
+\title{Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants}
 \usage{
 ig_png_value2zscore(y, x, sex, acronym)
@@ -24,22 +24,22 @@ ig_png_hcfa_value2zscore(headcirc_cm, pma_weeks, sex)
 
 ig_png_wfl_value2zscore(weight_kg, length_cm, sex)
 
-ig_png_value2percentile(y, x, sex, acronym)
+ig_png_value2centile(y, x, sex, acronym)
 
-ig_png_wfa_value2percentile(weight_kg, pma_weeks, sex)
+ig_png_wfa_value2centile(weight_kg, pma_weeks, sex)
 
-ig_png_lfa_value2percentile(length_cm, pma_weeks, sex)
+ig_png_lfa_value2centile(length_cm, pma_weeks, sex)
 
-ig_png_hcfa_value2percentile(headcirc_cm, pma_weeks, sex)
+ig_png_hcfa_value2centile(headcirc_cm, pma_weeks, sex)
 
-ig_png_wfl_value2percentile(weight_kg, length_cm, sex)
+ig_png_wfl_value2centile(weight_kg, length_cm, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to percentiles/z-scores.
+\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
 Units depend on which \code{acronym}(s) are in use.}
 
 \item{x, pma_weeks}{The \code{x} value at which to convert a
-value to a z-score/percentile. Must be within bounds of available \code{x} values
+value to a z-score/centile. Must be within bounds of available \code{x} values
 for given acronym. The standard-specific versions of each function specify
 \code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
 and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
@@ -66,15 +66,15 @@ Numeric vector of expected measurements with length equal to the
 outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \description{
-Convert values to z-scores/percentiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
 }
 \examples{
-# Convert values to percentiles
-ig_png_value2percentile(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
+# Convert values to centiles
+ig_png_value2centile(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Or values to z-scores
@@ -98,7 +98,7 @@ ig_png_lfa_value2zscore(length_cm = c(51.10, 51.48, 51.86, 52.24, 52.63),
 # Bad inputs will not stop the function but will instead return NA - here 25
 # weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
 # postnatal growth standards for preterm infants
-ig_png_hcfa_value2percentile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
+ig_png_hcfa_value2centile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
                              pma_weeks = c(25, 27, 46, 64),
                              sex = "M") |>
   round(digits = 2)

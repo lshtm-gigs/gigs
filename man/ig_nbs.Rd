@@ -12,8 +12,8 @@ growth curve data}
 }
 \description{
 A set of nested lists containing tables with reference values at different
-z-scores/percentiles for valid gestational ages in days. The list is ordered
-by acronym first, then by sex and finally by z-score/percentile.
+z-scores/centiles for valid gestational ages in days. The list is ordered
+by acronym first, then by sex and finally by z-score/centile.
 }
 \note{
 The tables in this package are combined versions of the tables published by
