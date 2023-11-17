@@ -3,7 +3,9 @@
 INTERGROWTH-21st length/height-for-age standards depending on the
 gestational age at birth of the child. Severe stunting is below &amp;lt;-3 SD
 relative to median length/height at a given age, whereas moderate stunting is
--2SD from the median."><title>Classify stunting using WHO or INTERGROWTH-21st length/height-for-age standards — classify_stunting • gigs</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Classify stunting using WHO or INTERGROWTH-21st length/height-for-age standards — classify_stunting"><meta property="og:description" content="Classify stunting (low length/height-for-age) using WHO or
+-2SD from the median."><title>Classify stunting using WHO or INTERGROWTH-21st
+length/height-for-age standards — classify_stunting • gigs</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Classify stunting using WHO or INTERGROWTH-21st
+length/height-for-age standards — classify_stunting"><meta property="og:description" content="Classify stunting (low length/height-for-age) using WHO or
 INTERGROWTH-21st length/height-for-age standards depending on the
 gestational age at birth of the child. Severe stunting is below &amp;lt;-3 SD
 relative to median length/height at a given age, whereas moderate stunting is
@@ -18,7 +20,7 @@ relative to median length/height at a given age, whereas moderate stunting is
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +56,8 @@ relative to median length/height at a given age, whereas moderate stunting is
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Classify stunting using WHO or INTERGROWTH-21<sup>st</sup> length/height-for-age standards</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Classify stunting using WHO or INTERGROWTH-21<sup>st</sup>
+length/height-for-age standards</h1>
       <small class="dont-index">Source: <a href="https://github.com/lshtm-gigs/gigs/blob/HEAD/R/classification.R" class="external-link"><code>R/classification.R</code></a></small>
       <div class="d-none name"><code>classify_stunting.Rd</code></div>
     </div>
@@ -69,48 +72,51 @@ relative to median length/height at a given age, whereas moderate stunting is
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">classify_stunting</span><span class="op">(</span><span class="va">lenht_cm</span>, <span class="va">age_days</span>, <span class="va">ga_at_birth</span>, <span class="va">sex</span>, lenht_method <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">classify_stunting</span><span class="op">(</span><span class="va">lenht_cm</span>, <span class="va">age_days</span>, <span class="va">gest_days</span>, <span class="va">sex</span>, outliers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>lenht_cm</dt>
-<dd><p>Length/height measurement(s) in cm.</p></dd>
+<dd><p>Numeric vector with length/height measurement(s) in cm.</p></dd>
 
 
 <dt>age_days</dt>
-<dd><p>Age(s) in days for each child. Should be between <code>0</code> to
-<code>1856</code> days.</p></dd>
+<dd><p>Numeric vector with age(s) in days for each child. Should be
+between <code>0</code> to <code>1856</code> days.</p></dd>
 
 
-<dt>ga_at_birth</dt>
-<dd><p>Gestational age(s) at birth in days.</p></dd>
+<dt>gest_days</dt>
+<dd><p>Numeric vector with gestational age(s) at birth in days.</p></dd>
 
 
 <dt>sex</dt>
-<dd><p>Sex(es), either <code>"M"</code> (male) or <code>"F"</code> (female).</p></dd>
+<dd><p>Character vector of sex(es), either <code>"M"</code> (male) or <code>"F"</code>
+(female).</p></dd>
 
 
-<dt>lenht_method</dt>
-<dd><p><code>"H"</code> or <code>"L"</code> value(s) describing whether lenht_cm was
-recorded as recumbent length or standing height. Missing (<code>NA</code>) values will
-be set to <code>"L"</code> for children &lt;731 days old and to <code>"H"</code> for children 731 days
-old or more. Default = <code>NA</code>.</p></dd>
+<dt>outliers</dt>
+<dd><p>A single <code>TRUE</code> or <code>FALSE</code> value specifying whether
+implausible z-score value thresholds should be applied. Default = <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Factor of stunting classification(s) with levels <code>c("implausible", "stunting_severe", "stunting", "normal")</code>.</p>
+<p>Factor of stunting classification(s) with levels
+<code>c("stunting_severe", "stunting", "normal")</code> or <code>c("stunting_severe", "stunting", "normal", "outlier")</code>, depending on whether the <code>outliers</code></p>
+
+
+<p>argument is set to <code>TRUE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>WHO guidelines stipulate that recumbent length should not be measured
-after 730 days. Therefore recumbent length values for children over 730
-days old have 0.7 cm taken away, and height values for children less than 731
-days old have 0.7 cm added on. Implausible z-scores are sourced from the
-referenced WHO report, and classification criteria from the DHS manual.</p>
+    <p>Input vectors will be recycled by <code><a href="https://vctrs.r-lib.org/reference/vec_recycle.html" class="external-link">vctrs::vec_recycle_common()</a></code>. The
+function assumes that your measurements were taken according to the WHO
+guidelines, which stipulate that recumbent length should not be measured
+after 730 days. Implausible z-score bounds are sourced from the referenced
+WHO report, and classification cut-offs from the DHS manual.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -127,17 +133,27 @@ Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The first observation uses the INTERGROWTH-21st postnatal growth standards;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The first observation uses the INTERGROWTH-21st Postnatal Growth standards;</span></span></span>
 <span class="r-in"><span><span class="co"># the next two use the WHO Child Growth Standards.</span></span></span>
 <span class="r-in"><span><span class="fu">classify_stunting</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lenht_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">52.2</span>, <span class="fl">75.4</span>, <span class="fl">63.1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">357</span>, <span class="fl">375</span>, <span class="fl">250</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  ga_at_birth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">196</span>, <span class="fl">287</span>, <span class="fl">266</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lenht_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H"</span>, <span class="st">"H"</span>, <span class="st">"H"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">196</span>, <span class="fl">287</span>, <span class="fl">266</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] implausible normal      stunting   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: implausible stunting_severe stunting normal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] stunting_severe normal          stunting       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: stunting_severe stunting normal</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># And with outlier flagging:</span></span></span>
+<span class="r-in"><span><span class="fu">classify_stunting</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  lenht_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">52.2</span>, <span class="fl">75.4</span>, <span class="fl">63.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">357</span>, <span class="fl">375</span>, <span class="fl">250</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">196</span>, <span class="fl">287</span>, <span class="fl">266</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  outliers <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] outlier  normal   stunting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: stunting_severe stunting normal outlier</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

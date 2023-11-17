@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,28 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="gigs-030">gigs 0.3.0<a class="anchor" aria-label="anchor" href="#gigs-030"></a></h2>
+<ul><li>This update includes several large changes to the GIGS interface, including changed argument names for some classification and conversion functions. We have only not used a major release as the package may still change with the release of the GIGS guidance document.</li>
+<li>
+<strong>BREAKING CHANGES:</strong>
+<ul><li>Replaced <code>gest_age</code> parameter with <code>gest_days</code> in all circumstances, including <code>ig_nbs</code> growth curve/coefficient tables.</li>
+<li>
+<code><a href="../reference/classify_wasting.html">classify_wasting()</a></code> now takes in gestational age/age data, and uses this to apply the INTERGROWTH-21<sup>st</sup> Postnatal Growth standard for weight-for-length where appropriate.</li>
+<li>Changed out <code>percentile</code> for <code>centile</code> in function names and documentation. Argument names left unchanged, so centiles are still passed into functions as <code>p</code>.</li>
+</ul></li>
+<li>
+<strong>NEW FEATURES:</strong>
+<ul><li>Added <code><a href="../reference/classify_svn.html">classify_svn()</a></code> function, which classifies newborns into the categories used in the Lancet’s 2023 Small Vulnerable Newborn (SVN) Series.</li>
+</ul></li>
+<li>
+<strong>INTERNAL/DOCS CHANGES:</strong>
+<ul><li>Updated coefficient retrieval functions to run ~ 2 times as fast as in version 0.2.3.</li>
+<li>Added type checking functions to conversion functions, along with additional unit tests to make sure they work.</li>
+<li>Extensive changes to documentation structure. These changes appear internally, where the roxygen documentation uses more <code>@inherit</code>/<code>@inheritParams</code> tags.</li>
+<li>Added vignette displaying performance differences between gigs and other, similar R packages, as well as Stata implementations.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.3" id="gigs-023">gigs 0.2.3<a class="anchor" aria-label="anchor" href="#gigs-023"></a></h2>
 <ul><li>Updated regression equations for the normative body composition standards in <code>ig_nbs</code>, namely <code>fmfga</code>, <code>ffmfga</code>, and <code>bfpfga</code>. These functions give outputs much closer to the published centiles, though a degree of error is still present.</li>
 <li>Updated and improved body composition vignette to include the new derivation process.</li>
@@ -77,7 +99,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="gigs-020">gigs 0.2.0<a class="anchor" aria-label="anchor" href="#gigs-020"></a></h2>
-<ul><li>Added INTERGROWTH-21st Postnatal Growth tables + functions for a new weight-for-length standard. These include <code><a href="../reference/ig_png_value2zscore.html">ig_png_wfl_value2zscore()</a></code> and <code><a href="../reference/ig_png_zscore2value.html">ig_png_wfl_percentile2value()</a></code>.</li>
+<ul><li>Added INTERGROWTH-21st Postnatal Growth tables + functions for a new weight-for-length standard. These include <code><a href="../reference/ig_png_value2zscore.html">ig_png_wfl_value2zscore()</a></code> and <code>ig_png_wfl_percentile2value()</code>.</li>
 <li>Refactored <code>check_params.R</code> to be more standard-specific. Added some comments as the purpose of this code was unclear. May refactor later to make more self-evidently important.</li>
 </ul></div>
     <div class="section level2">
@@ -95,7 +117,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0" id="gigs-010">gigs 0.1.0<a class="anchor" aria-label="anchor" href="#gigs-010"></a></h2>
 <ul><li>Created package</li>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-<li>Added conversion functions (e.g. <code><a href="../reference/who_gs_value2zscore.html">who_gs_value2zscore()</a></code>/<code><a href="../reference/ig_png_value2zscore.html">ig_png_value2percentile()</a></code>)</li>
+<li>Added conversion functions (e.g. <code><a href="../reference/who_gs_value2zscore.html">who_gs_value2zscore()</a></code>/<code>ig_png_value2percentile()</code>)</li>
 <li>Added classification functions (e.g. <code><a href="../reference/classify_sga.html">classify_sga()</a></code>)</li>
 <li>Added reference datasets (e.g. <code>ig_nbs</code>, <code>who_gs</code>, <code>who_gs_coeffs</code>)</li>
 </ul></div>
