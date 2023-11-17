@@ -15,7 +15,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
 ```{r load_timings_rda, echo = FALSE}
-load(file = file.path("timings.rda"))
+load(file = file.path("benchmarking.rda"))
 ```
 
 # Rationale
@@ -220,13 +220,6 @@ The outputs from this script give a table of timings that look like this:
 stata_timings
 ```
 
-[//]: # (Code to save/load all timings tables in a separate .rda file)
-```{r save_timings_rda, eval = FALSE, echo = FALSE}
-save(file = file.path("vignettes/articles/timings.rda"),
-     anthro_timings, childsds_timings, growthstandards_timings, gigs_timings,
-     stata_timings)
-```
-
 ## Plotting
 Only by plotting the various timings tables can we see the trends for each
 package:
@@ -280,7 +273,7 @@ tails to within the z-scores where more data was available, i.e. between -3 and
 +3 SD. More information on this can be found in the reports referenced in the
 `gigs::who_gs_value2zscore()` documentation.
 
-```{r discrepancies}
+```{r discrepancies, eval = FALSE}
 discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
                             sex = "M") |>
@@ -308,6 +301,23 @@ knitr::kable(discrepancies, align = "ccccc") |>
 ```
 
 # Session information
-```{r session_info}
+```{r session_info1, echo = TRUE, eval = FALSE}
 sessionInfo()
+```
+
+```{r session_info2, echo = FALSE, eval = FALSE}
+session_info <- sessionInfo()
+```
+
+```{r session_info3, echo = FALSE, eval = TRUE}
+session_info
+```
+
+
+
+[//]: # (Code to save/load all timings tables in a separate .rda file)
+```{r save_benchmarking_rda, eval = FALSE, echo = FALSE}
+save(file = file.path("vignettes/articles/benchmarking.rda"),
+     anthro_timings, childsds_timings, growthstandards_timings, gigs_timings,
+     stata_timings, discrepancies, session_info)
 ```
