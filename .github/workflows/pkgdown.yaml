@@ -39,6 +39,7 @@ jobs:
             any::withr
             any::purrr
             any::cowplot
+            any::ggsci
             local::.
           needs: website
 
