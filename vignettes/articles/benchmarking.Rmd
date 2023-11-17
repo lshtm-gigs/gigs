@@ -296,8 +296,7 @@ When we look at these z-scores, you can see that both `growthstandards` and
 `gigs` correctly apply the constraining procedure; `childsds` does not.
 
 ```{r discrepancies_kable, echo = FALSE}
-knitr::kable(discrepancies, align = "ccccc") |>
-  kableExtra::kable_styling(position = "center")
+knitr::kable(discrepancies, align = "ccccc")
 ```
 
 # Session information
