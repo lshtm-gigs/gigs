@@ -181,11 +181,11 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
   factor(stunting, levels = stunting_lvls)
 }
 
-#' Classify wasting using INTERGROWTH-21<sup>st<sup> weight-for-length or WHO
+#' Classify wasting using INTERGROWTH-21<sup>st</sup> weight-for-length or WHO
 #' weight-for-length/height standards
 #'
 #' Classify wasting (low weight-for-length/height) using the
-#' INTERGROWTH-21<sup>st<sup> weight-for-length or WHO Child Growth standards,
+#' INTERGROWTH-21<sup>st</sup> weight-for-length or WHO Child Growth standards,
 #' specifically either the weight-for-length or weight-for-height standard
 #' depending on the age of the child. Severe wasting is <-3SD relative to the
 #' median expected weight, whereas moderate wasting is -2SD from the median.

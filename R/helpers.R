@@ -1,9 +1,9 @@
 #' Convert between z-scores and values using $mu$ and $sigma$
 #'
-#' @param z z-scores to convert to y values
-#' @param y y values to convert to z-scores
-#' @param mu Mean value(s).
-#' @param sigma Standard deviation(s).
+#' @param z Nuumeric vector of z-scores to convert to y values.
+#' @param y Numeric vector of y values to convert to z-scores.
+#' @param mu Numeric vector of mean value(s).
+#' @param sigma Numeric vector of standard deviation(s).
 #' @returns Y values or z-scores depending on which function is called
 #' @noRd
 #' @family mu_sigma_conv

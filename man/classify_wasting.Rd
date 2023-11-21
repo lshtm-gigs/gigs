@@ -2,7 +2,7 @@
 % Please edit documentation in R/classification.R
 \name{classify_wasting}
 \alias{classify_wasting}
-\title{Classify wasting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} weight-for-length or WHO
+\title{Classify wasting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO
 weight-for-length/height standards}
 \usage{
 classify_wasting(
@@ -37,7 +37,7 @@ If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "nor
 }
 \description{
 Classify wasting (low weight-for-length/height) using the
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} weight-for-length or WHO Child Growth standards,
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO Child Growth standards,
 specifically either the weight-for-length or weight-for-height standard
 depending on the age of the child. Severe wasting is <-3SD relative to the
 median expected weight, whereas moderate wasting is -2SD from the median.
