@@ -59,3 +59,17 @@ stop_if_wrong_type <- function(vec, type) {
   }
   invisible(vec)
 }
+
+#' Check if values in `x` are within upper and lower bounds of another numeric
+#' vector.
+#'
+#' @param x Numeric vector to compare against min/max values of `vec`.
+#' @param vec Numeric vector from which min/max bounds are defined.
+#' @note The `min()` and `max()` calls in this function have `na.rm = TRUE`.
+#' @return Logical vector with `TRUE` if `x` is within the minimum and maximum
+#'   values of `vec`, else `FALSE`. Where `x` is `NA`, `inrange()` will return
+#'   `NA`.
+#' @noRd
+inrange <- function(x, vec) {
+  x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
+}
