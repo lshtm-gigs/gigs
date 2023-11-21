@@ -160,15 +160,8 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' @export
 classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
                               outliers = FALSE) {
-  pma_weeks <- (age_days + gest_days) / 7
-  is_term <- gest_days >= 37 * 7
-  z_scores <- ifelse(
-    !is_term & inrange(pma_weeks, c(27, 64)),
-    yes = ig_png_lfa_value2zscore(length_cm = lenht_cm,
-                                  pma_weeks = floor(pma_weeks), sex = sex),
-    no = who_gs_lhfa_value2zscore(lenht_cm = lenht_cm, age_days = age_days,
-                                  sex = sex)
-  )
+  z_scores <- gigs_laz(lenht_cm = lenht_cm, age_days = age_days,
+                       gest_days = gest_days, sex = sex)
   stunting <- rep(NA_character_, length(z_scores))
   stunting[z_scores <= -2] <- "stunting"
   stunting[z_scores <= -3] <- "stunting_severe"
@@ -222,28 +215,9 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #' @export
 classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
                              outliers = FALSE) {
-  z_WHO_wfl <- who_gs_wfl_value2zscore(weight_kg = weight_kg,
-                                       length_cm = lenht_cm, sex = sex)
-  z_WHO_wfh <- who_gs_wfh_value2zscore(weight_kg = weight_kg,
-                                       height_cm = lenht_cm, sex = sex)
-  z_PNG_wfl <- ig_png_wfl_value2zscore(weight_kg = weight_kg,
-                                       length_cm = lenht_cm, sex = sex)
-  out_len <- length(z_WHO_wfh)
-  z_scores <- numeric(length = out_len)
-
-  pma_weeks <- (gest_days + age_days) / 7
-  is_term <- gest_days >= 37 * 7
-  use_PNG_wfl <- !is_term & inrange(pma_weeks, c(27, 64))
-  is_complete <- stats::complete.cases(use_PNG_wfl, is_term, age_days)
-
-  use_WHO_wfl <- !use_PNG_wfl & age_days < 731
-  use_WHO_wfh <- !use_PNG_wfl & age_days >= 731
-
-  z_scores[is_complete & use_PNG_wfl] <- z_PNG_wfl[is_complete & use_PNG_wfl]
-  z_scores[is_complete & use_WHO_wfl] <- z_WHO_wfl[is_complete & use_WHO_wfl]
-  z_scores[is_complete & use_WHO_wfh] <- z_WHO_wfh[is_complete & use_WHO_wfh]
-
-  wasting <- character(length = out_len)
+  z_scores <- gigs_wlz(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                       age_days = age_days, gest_days = gest_days, sex = sex)
+  wasting <- character(length = length(z_scores))
   wasting[z_scores <= -2] <- "wasting"
   wasting[z_scores <= -3] <- "wasting_severe"
   wasting[abs(z_scores) < 2] <- "normal"
@@ -289,17 +263,8 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #' )
 #' @export
 classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
-  pma_weeks <- (age_days + gest_days) / 7
-  pma_in_ig_png_range <- inrange(pma_weeks, c(27, 64))
-  is_preterm <- gest_days <= 37 * 7
-  z_scores <- ifelse(
-    test = is_preterm & pma_in_ig_png_range,
-    yes = ig_png_wfa_value2zscore(weight_kg = weight_kg, pma_weeks = pma_weeks,
-                                  sex = sex),
-    no = who_gs_wfa_value2zscore(weight_kg = weight_kg, age_days = age_days,
-                                 sex = sex)
-  )
-  wfa <- numeric(length(z_scores))
+  z_scores <- gigs_waz(weight_kg, gest_days, age_days, sex)
+  wfa <- character(length(z_scores))
   wfa[z_scores <= -2] <- "underweight"
   wfa[z_scores <= -3] <- "underweight_severe"
   wfa[abs(z_scores) < 2] <- "normal"

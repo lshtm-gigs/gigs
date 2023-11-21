@@ -24,22 +24,6 @@ mean_if_sex_undefined <- function(fn, arg1, x_arg, acronym) {
   rowMeans(cbind(fn(arg1, x_arg, "M", acronym), fn(arg1, x_arg, "F", acronym)))
 }
 
-#' Round, but round 0.5 up in all cases
-#'
-#' @param x Value(s) to round
-#' @param digits Number of digits to round to
-#' @note Taken from https://stackoverflow.com/questions/12688717/round-up-from-5
-#' @return Values of `x` rounded to `digits` number of digits.
-#' @noRd
-round2 <- function(x, digits) {
-  posneg <- sign(x)
-  z <- abs(x) * 10 ^ digits
-  z <- z + 0.5 + sqrt(.Machine[["double.eps"]])
-  z <- trunc(z)
-  z <- z / 10 ^ digits
-  z * posneg
-}
-
 #' Stop with helpful information with a vector of the wrong type.
 #'
 #' @param vec Vector to test the type of.
@@ -60,6 +44,23 @@ stop_if_wrong_type <- function(vec, type) {
   invisible(vec)
 }
 
+#' Throw an error if object lengths are unequal
+#' @param ... An arbitrary number of arguments which will be checked for
+#'   equality of length.
+#' @return Invisibly returns inputs in list. Throws an error if the lengths of
+#'   passed-in objects are not equal.
+#' @noRd
+stop_if_lengths_unequal <- function(...) {
+  lengths <- vapply(X = list(...),
+                    FUN = length,
+                    FUN.VALUE = numeric(length = 1L))
+  if (length(unique(lengths)) > 1) {
+    stop(paste("Your inputs had different lengths. Please give the function",
+               "input vectors of the same length."), call. = FALSE)
+  }
+  invisible(list(...))
+}
+
 #' Check if values in `x` are within upper and lower bounds of another numeric
 #' vector.
 #'
@@ -73,3 +74,12 @@ stop_if_wrong_type <- function(vec, type) {
 inrange <- function(x, vec) {
   x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
 }
+
+#' Check if `pma_weeks` values are within INTERGROWTH-21<sup>st</sup> Postnatal
+#' Growth Standards range.
+#'
+#' @param pma_weeks Post-menstrual age in weeks.
+#' @returns Logical vector with `TRUE` where `pma_weeks` is between 27 to 64
+#'   weeks, else `FALSE`.
+#' @noRd
+is_valid_pma_weeks <- function(pma_weeks) inrange(pma_weeks, c(27, 64))
