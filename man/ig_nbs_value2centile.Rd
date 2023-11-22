@@ -59,7 +59,7 @@ Units depend on which \code{acronym}(s) are in use.}
 \item{gest_days}{Numeric vector of gestational age(s) in days. Elements
 should be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
 \code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
-standards. If not inside these bounds, will return NA.}
+standards. If not inside these bounds, will return \code{NA}.}
 
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
 (female).}

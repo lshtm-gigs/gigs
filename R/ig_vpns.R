@@ -68,12 +68,12 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
 #'
 #' @param z Z-score(s) to convert to a value/values.
 #' @param gest_days Gestational age in days. Must be between `168` and `230`.
-#' weeks.
+#'   weeks.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
-#' standard to use. Must be one of `"wfga"`, "lfga"`, or `"hcfga"`.
+#'   standard to use. Must be one of `"wfga"`, "lfga"`, or `"hcfga"`.
 #' @return Expected measurements for each combination of z-score, gestational
-#' age, sex, and acronym provided to the function.
+#'   age, sex, and acronym provided to the function.
 #' @references
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
@@ -109,8 +109,8 @@ ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
 #' Standards for Very Preterm Infants
 #'
 #' @param y Value(s) to convert to z-scores.
-#' @param gest_days Gestational age in days. Must be between `24` and
-#' `32 + 6/7` weeks.
+#' @param gest_days Gestational age in days. Must be between `168` and `230`.
+#'   weeks.
 #' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> VPNS
 #' standard to use. Must be one of `"wfga"`, `"lfga"`, or `"hcfga"`.
