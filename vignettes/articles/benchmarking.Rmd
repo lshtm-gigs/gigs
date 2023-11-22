@@ -38,8 +38,8 @@ packages. This short article will compare the speed of each package from 1 to
 z-scores in the WHO Child Growth standards.
 
 We have performed these benchmarks on a Windows 10 system running a Ryzen 7
-3700X processor and 16GB of DDR4 RAM. The Stata benchmarks have been run on the
-same  system in Stata 18.0, using the
+3700X processor and 16GB of DDR4 RAM, using R version 4.3.2. The Stata
+benchmarks have been run on the same system in Stata 18.0, using the
 [benchmark](https://github.com/mcaceresb/stata-benchmark) package for Stata.
 
 ## Set up benchmark dataset
@@ -93,8 +93,8 @@ knitr::kable(bench_dataset[1:10, ], align = "ccccc")
 
 # Benchmark code
 The `mbench_pkg()` function is used to benchmark each package over a range of
-input sizes.  Each call to it produces a tabular output containing the lower
-quartile, median and upper quartile timings for `pkg_expr` to operate on the
+input sizes.  Each call to it produces a tabular output containing the
+median time required for `pkg_expr` to operate on the
 data, ranging from 1 to 100,000 inputs.
 
 ```{r iteration}
@@ -129,7 +129,6 @@ anthro_timings <- mbench_pkg(
 
 ## `childsds`
 ```{r bench_childsds, eval = FALSE}
-
 childsds_timings <- mbench_pkg(
   pkg_expr = quote(childsds::sds(value = y,
                                  age = x / 365.25,
@@ -195,24 +194,24 @@ foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
 	di "Number of inputs: `i'"
 	bench, reps(25) restore last: ///
 		qui egen z_anthro = zanthro(y, wa, WHO), xvar(x) gender(sex) ///
-                gencode(male=M, female=F)  ageunit(day)
+                gencode(male=M, female=F) ageunit(day)
 }
 ```
 
 ```{r bind_stata_timings, echo = FALSE, eval = FALSE}
 possible_n <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_3_0 <- c(0.039, 0.039, 0.040, 0.041, 0.042, 0.057, 0.076, 0.134, 0.230,
-                0.332, 0.440)
+gigs_0_3_1 <- c(0.008, 0.009, 0.009, 0.010, 0.012, 0.028, 0.047, 0.106, 0.204,
+                0.310, 0.410)
 zbmicat_1_0_2 <- c(0.007, 0.008, 0.009, 0.017, 0.027, 0.105, 0.203, 0.479,
                    0.951, 1.4450, 2.046)
-lens <- lengths(list(gigs_0_3_0, zbmicat_1_0_2))
+lens <- lengths(list(gigs_0_3_1, zbmicat_1_0_2))
 n_inputs <- unlist(lapply(X = lens, FUN = \(x) possible_n[seq_len(x)]))
 stata_timings <-  data.frame(n_inputs = n_inputs,
-                             median_time = c(gigs_0_3_0, zbmicat_1_0_2),
+                             median_time = c(gigs_0_3_1, zbmicat_1_0_2),
                              time_units = "seconds",
-                             package = c(rep("Stata: gigs 0.3.0", lens[1]),
+                             package = c(rep("Stata: gigs 0.3.1", lens[1]),
                                          rep("Stata: zbmicat 1.0.2", lens[2])))
-rm(gigs_0_3_0, zbmicat_1_0_2, lens, n_inputs, possible_n)
+rm(gigs_0_3_1, zbmicat_1_0_2, lens, n_inputs, possible_n)
 ```
 
 The outputs from this script give a table of timings that look like this:
@@ -247,19 +246,21 @@ dplyr::bind_rows(anthro_timings,
   ggsci::scale_colour_lancet()
 ```
 
-On the whole, `anthro` is by far the slowest R package, taking around 2.56
+On the whole, `anthro` is by far the slowest R package, taking around 2.22
 seconds to run over 100,000 inputs. This is in part because `anthro` computes
-results in every WHO Child Growth standard each time anthro is called, but also
-due to a slower implementation than the other packages.
+results in every WHO Child Growth standard each time `anthro::anthro_zscores()`
+is called, but also due to a slower implementation of the LMS-to-z-score
+conversion than the other packages.
 
-Next slowest is the Stata package `zanthro`, which takes 2.05 seconds to compute
-results in just one WHO standard. About 4 times faster than `zanthro` is `gigs`
-for Stata, which scales more efficiently than `zanthro` and so takes 0.44
-seconds to convert 100,000 measurements to z-scores.
+Next slowest is the Stata package `zanthro`, which takes around 2.05 seconds to
+compute results in just one WHO standard. About 4 times faster than `zanthro` is
+`gigs` for Stata 0.3.1, which scales more efficiently than `zanthro` and takes
+0.4 seconds to convert 100,000 measurements to z-scores.
 
 Leading the pack are three R implementations: `growthstandards`, `gigs`, and
-`childsds`. The `childsds` package is fastest at ~ 145 ms for 100,000 inputs,
-followed by `growthstandards` (166 ms) and `gigs` (168 ms).
+`childsds`. The `growthstandards` package was the fastest at ~ 121 ms for
+100,000 inputs, followed by `gigs` (~ 123 ms) and the `childsds` package
+(~ 126 ms).
 
 # Package output similarity
 The packages also differ slightly in how they convert between different values,
@@ -270,9 +271,8 @@ standards.
 
 This is because the WHO Child Growth standards constrain z-scores in the outer
 tails to within the z-scores where more data was available, i.e. between -3 and
-+3 SD. More information on this can be found in the reports referenced in the
-`gigs::who_gs_value2zscore()` documentation.
-
++3 SD. More information on this constraining procedure can be found in the
+reports referenced in the `gigs::who_gs_value2zscore()` documentation.
 ```{r discrepancies, eval = FALSE}
 discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
@@ -293,8 +293,8 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
 ```
 
 When we look at these z-scores, you can see that both `growthstandards` and
-`gigs` correctly apply the constraining procedure; `childsds` does not.
-
+`gigs` correctly apply the constraining procedure; `childsds` does not. From
+looking at the `anthro` source code, they also apply the constraining procedure.
 ```{r discrepancies_kable, echo = FALSE}
 knitr::kable(discrepancies, align = "ccccc")
 ```
