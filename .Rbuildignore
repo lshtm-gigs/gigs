@@ -15,5 +15,4 @@
 ^doc$
 ^Meta$
 ^cran-comments\.md$
-^R/gigs_zscoring\.R$
 ^codemeta\.json$
