@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -295,7 +295,7 @@ underweight and overweight:</p>
 <span>  gest_days <span class="op">=</span> <span class="fl">7</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">27</span>, <span class="fl">36</span>, <span class="fl">40</span>, <span class="fl">41</span><span class="op">)</span>,</span>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] underweight &lt;NA&gt;        overweight  overweight </span></span>
+<span><span class="co">#&gt; [1] underweight        underweight_severe overweight         overweight        </span></span>
 <span><span class="co">#&gt; Levels: underweight_severe underweight normal overweight</span></span></code></pre></div>
 <p>You can also specify for <code><a href="../reference/classify_wasting.html">classify_wasting()</a></code> to classify
 likely outlier/implausible values by setting the <code>outlier</code>
@@ -308,7 +308,7 @@ parameter to <code>TRUE</code>:</p>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span>
 <span>  outliers <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] underweight &lt;NA&gt;        overweight  outlier    </span></span>
+<span><span class="co">#&gt; [1] underweight        underweight_severe overweight         outlier           </span></span>
 <span><span class="co">#&gt; Levels: underweight_severe underweight normal overweight outlier</span></span></code></pre></div>
 </div>
 </div>
