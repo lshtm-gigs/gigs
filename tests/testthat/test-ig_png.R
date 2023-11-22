@@ -1,75 +1,64 @@
-test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
-  get_xvars <- function(lower, upper) {
+png_xrange <- function(x_lower, x_upper, acronym) {
     x <- gigs::ig_png[[acronym]]$male$zscores[, 1]
-    x[which(x >= lower & x <= upper)]
-  }
-  roundto <- ifelse(acronym %in% c("wfa", "wfl"), yes = 2, no = 1)
-  tbl_names <- c("SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3")
-  pkg_tbl <- lapply(X = -3:3,
-                    FUN = function (x) {
-                      fn <- get(paste0("ig_png_", acronym, "_zscore2value"))
-                      round2(fn(z = x, get_xvars(x_lower, x_upper), sex = sex), digits = roundto)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame()
-  names(pkg_tbl) <- tbl_names
-  col1_name <- ifelse(acronym == "wfl", yes = "length_cm", no = "pma_weeks")
-  pkg_tbl[[col1_name]] <- get_xvars(x_lower, x_upper)
-  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
-  ref_tbl <- gigs::ig_png[[acronym]][[sex_]]$zscores
-  ref_tbl <- ref_tbl[ref_tbl[,1] >= x_lower & ref_tbl[,1] <= x_upper, ]
-  rownames(pkg_tbl) <- NULL
-  rownames(ref_tbl) <- NULL
-  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
+    x[inrange(x, c(x_lower, x_upper))]
 }
 
-test_that("Conversion of z-scores to values works", {
-  png_names <- names(gigs::ig_png)
-  sex <- rep(c("M", "F"), length(png_names))
-  lower <-  rep.int(c(27, 35), c(6, 2))
-  upper <- rep.int(c(64, 65), c(6, 2))
-  acronyms <- rep(png_names, times = rep(2, length(png_names)))
-  tolerance <- 10e-3
-  invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
-})
+test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
+  range_x <- png_xrange(x_lower, x_upper, acronym)
+  roundto <- if (acronym %in% c("wfa", "wfl")) 2 else 1
+  sex_ <- if (sex == "M") "male" else "female"
+  ref_tbl <- gigs::ig_png[[acronym]][[sex_]]$zscores
+  pkg_tbl <- lapply(X = -3:3,
+                    FUN = \(z) {
+                      fn <- get(paste0("ig_png_", acronym, "_zscore2value"))
+                      round(fn(z, range_x, sex), digits = roundto)
+                    }) |>
+    do.call(what = cbind) |>
+    as.data.frame() |>
+    setNames(names(ref_tbl)[-1])
+  col1_name <- names(ref_tbl)[1]
+  pkg_tbl[[col1_name]] <- range_x
+  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
+  ref_tbl <- ref_tbl[inrange(ref_tbl[,1], range_x), ]
+  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
+}
 
 test_centile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
-  get_xvars <- function(lower, upper) {
-    x <- gigs::ig_png[[acronym]]$male$zscores[, 1]
-    x[which(x >= lower & x <= upper)]
-  }
-  roundto <- ifelse(acronym %in% c("wfa", "wfl"), yes = 2, no = 1)
+  range_x <- png_xrange(x_lower, x_upper, acronym)
+  roundto <- if (acronym %in% c("wfa", "wfl")) 2 else 1
+  sex_ <- if (sex == "M") "male" else "female"
+  ref_tbl <- gigs::ig_png[[acronym]][[sex_]]$centiles
+
   tbl_names <- c("P03", "P05", "P10", "P50", "P90", "P95", "P97")
   pkg_tbl <- lapply(X = c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97),
-                    FUN = function (x) {
+                    FUN = \(p) {
                       fn <- get(paste0("ig_png_", acronym, "_centile2value"))
-                      round2(fn(p = x, get_xvars(x_lower, x_upper), sex = sex), digits = roundto)
+                      round(fn(p, range_x, sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
-    as.data.frame()
-  names(pkg_tbl) <- tbl_names
-  col1_name <- ifelse(acronym == "wfl", yes = "length_cm", no = "pma_weeks")
-  pkg_tbl[[col1_name]] <- get_xvars(x_lower, x_upper)
+    as.data.frame() |>
+    setNames(tbl_names)
+  col1_name <- if (acronym != "wfl") "pma_weeks" else "length_cm"
+  pkg_tbl[[col1_name]] <- range_x
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
-  ref_tbl <- gigs::ig_png[[acronym]][[sex_]]$centiles
-  ref_tbl <- ref_tbl[ref_tbl[,1] >= x_lower & ref_tbl[,1] <= x_upper, ]
-  rownames(pkg_tbl) <- NULL
-  rownames(ref_tbl) <- NULL
+  ref_tbl <- ref_tbl[inrange(ref_tbl[,1], range_x), ]
   expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
-test_that("Conversion of centiles to values works", {
-  png_names <- names(gigs::ig_png)
-  sex <- rep(c("M", "F"), length(png_names))
-  lower <-  rep.int(c(27, 35), c(6, 2))
-  upper <- rep.int(c(64, 65), c(6, 2))
-  acronyms <- rep(png_names, times = rep(2, length(png_names)))
-  tolerance <- 10e-3
-  invisible(mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerance))
+png_names <- names(gigs::ig_png)
+sex <- rep(c("M", "F"), length(png_names))
+lower <-  rep.int(c(27, 35), c(6, 2))
+upper <- rep.int(c(64, 65), c(6, 2))
+acronyms <- rep(png_names, times = rep(2, length(png_names)))
+tolerance <- 0.01
+
+test_that("Conversion of z-scores to values works", {
+  mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance)
 })
 
+test_that("Conversion of centiles to values works", {
+  mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerance)
+})
 
 testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscore") {
   fn_stem <- paste0("ig_png_", acronym)

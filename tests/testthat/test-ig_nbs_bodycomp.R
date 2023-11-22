@@ -1,93 +1,62 @@
-test_centile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
-  get_gest_days <- function(lower, upper) {
-    ga <- gigs::ig_nbs$fmfga$male$centiles$gest_days
-    ga[which(ga >= lower & ga <= upper)]
-  }
-  tbl_names <- c("P03", "P10", "P50", "P90", "P97")
-  digits <- if (acronym %in% "bfpfga") 1 else 0
-  tbl <- lapply(X = c(0.03, 0.1, 0.5, 0.9, 0.97),
-                FUN = function(x) {
-                  fn <- get(paste0("ig_nbs_", acronym, "_centile2value"))
-                  round2(fn(p = x,
-                            gest_days = get_gest_days(age_lower, age_upper),
-                            sex = sex),
-                        digits = digits)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame()
-  names(tbl) <- tbl_names
-  tbl$gest_days <- as.integer(get_gest_days(age_lower, age_upper))
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
-  pkg_tbl <- tbl[, c(ncol(tbl), 1:(ncol(tbl) - 1))]
-  ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$centiles
-  expect_true(all(abs(ref_tbl - pkg_tbl) <= tolerance, na.rm = T))
+get_gest_days <- function(lower, upper) {
+  ga <- gigs::ig_nbs$fmfga$male$centiles$gest_days
+  ga[inrange(ga, c(lower, upper))]
 }
 
-test_that(desc = "Conversion of centiles to values works", {
-  sex <- rep(c("M", "F"), 3)
-  lower <- rep(266, length(sex))
-  upper <- rep(294, length(sex))
-  acronyms <- rep(names(gigs::ig_nbs)[5:7], times = rep(2, 3))
-  # 23/08/2023: With old linear equations used to be c(26, 15, 0.5, 0.5, 7, 5)
-  tolerances <- c(6, 1, 0.11, 0.11, 2, 0)
-  mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerances)
-
-  # Test that bad input gives NA
-  with(
-    data.frame(sex = c("M", "F", "U", "X", "M"),
-         centiles = c(0.25, -1, 0.13, 0.84, 0.10),
-         age = c(37, 38, 39, 40, 41)),
-    expr = {
-      vapply(
-        X = c("fmfga", "bfpfga", "ffmfga"),
-        FUN = function(x) {
-          fn <- get(paste0("ig_nbs_", x, "_centile2value"))
-          vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
-          expect_length(object = vals, n = length(sex))
-          expect_true(all(is.na(c(
-            vals[1], # Because age is out of bounds
-            vals[2], # Because centile is out of bounds
-            vals[4]  # Because sex is not one of "M", "F" or "U"
-          ))))
-        },
-        FUN.VALUE = logical(length = 1L))
-    })
-})
+test_centile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
+  gest_day_range <- get_gest_days(age_lower, age_upper)
+  roundto <- if (acronym %in% "bfpfga") 1 else 0
+  sex_ <- if (sex == "M") "male" else "female"
+  ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$centiles
+  pkg_tbl <- lapply(X = c(0.03, 0.1, 0.5, 0.9, 0.97),
+                    FUN = \(p) {
+                      fn <- get(paste0("ig_nbs_", acronym, "_centile2value"))
+                      round(fn(p, gest_day_range, sex), digits = roundto)
+                    }) |>
+    do.call(what = cbind) |>
+    as.data.frame() |>
+    setNames(names(ref_tbl)[-1])
+  col1_name <- names(ref_tbl)[1]
+  pkg_tbl[[col1_name]] <- gest_day_range
+  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
+  ref_tbl <- ref_tbl[inrange(ref_tbl$gest_days, c(age_lower, age_upper)), ]
+  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
+}
 
 test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
-  get_gest_days <- function(lower, upper) {
-    ga <- gigs::ig_nbs$fmfga$male$centiles$gest_days
-    ga[which(ga >= lower & ga <= upper)]
-  }
-  tbl_names <- c("P03", "P10", "P50", "P90", "P97")
-  digits <- if (acronym %in% "bfpfga") 1 else 0
-  tbl <- lapply(X = qnorm(c(0.03, 0.1, 0.5, 0.9, 0.97)),
-                FUN = function(x) {
-                  fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
-                  round2(fn(sex = sex,
-                            gest_days = get_gest_days(age_lower, age_upper),
-                            z = x),
-                         digits = digits)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame()
-  names(tbl) <- tbl_names
-  tbl$gest_days <- get_gest_days(age_lower, age_upper)
-  pkg_tbl <- tbl[, c(ncol(tbl), 1:(ncol(tbl) - 1))]
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
+  gest_day_range <- get_gest_days(age_lower, age_upper)
+  roundto <- if (acronym %in% "bfpfga") 1 else 0
+  sex_ <- if (sex == "M") "male" else "female"
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$centiles
-  expect_true(all(abs(ref_tbl - pkg_tbl) <= tolerance, na.rm = T))
+  pkg_tbl <- lapply(X = qnorm(c(0.03, 0.1, 0.5, 0.9, 0.97)),
+                    FUN = \(z) {
+                      fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
+                      round(fn(z, gest_day_range, sex), digits = roundto)
+                    }) |>
+    do.call(what = cbind) |>
+    as.data.frame() |>
+    setNames(names(ref_tbl)[-1])
+  col1_name <- names(ref_tbl)[1]
+  pkg_tbl[[col1_name]] <- gest_day_range
+  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
+  ref_tbl <- ref_tbl[inrange(ref_tbl$gest_days, c(age_lower, age_upper)), ]
+  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
-test_that("Conversion of z-scores to values works", {
-  sex <- rep(c("M", "F"), 3)
-  lower <- rep(266, length(sex))
-  upper <- rep(294, length(sex))
-  acronyms <- rep(names(gigs::ig_nbs)[5:7], times = rep(2, 3))
-  tolerances <- c(6, 1, 0.11, 0.11, 2, 0)
-  invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerances))
+sex <- rep(c("M", "F"), 3)
+lower <- rep(266, length(sex))
+upper <- rep(294, length(sex))
+acronyms <- rep(names(gigs::ig_nbs)[5:7], times = rep(2, 3))
+# 23/08/2023: With old linear equations used to be c(26, 15, 0.5, 0.5, 7, 5)
+tolerances <- c(6, 1, 0.11, 0.11, 2, 0)
+
+test_that(desc = "Conversion of centiles to values works", {
+  mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerances)
 })
 
+test_that("Conversion of z-scores to values works", {
+  mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerances)
+})
 
 testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscore") {
   fn_stem <- paste0("ig_nbs_", acronym)
@@ -100,7 +69,7 @@ testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscore") {
   if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
     stop("All values were NA.")
   }
-  expect_equal(round2(out_value, digits = 2), expected = round2(y, digits = 2))
+  expect_equal(round(out_value, digits = 2), expected = round(y, digits = 2))
 }
 
 
@@ -131,4 +100,27 @@ test_that("Conversion of values to centiles works", {
   # Body fat percentage for gestational age
   testthat_v2x(y = c(16.4, 16.5, 17.15, 17.85, 18.0), gest_days = 7 * 42, sex = "M", acronym = "bfpfga", z_or_p = cent)
   testthat_v2x(y = c(11.6, 12.4, 10.5, 11.8, 13.2), gest_days = 7 * 38, sex = "F", acronym = "bfpfga", z_or_p = cent)
+})
+
+test_that(desc = "Bad inputs return as NAs", code = {
+  # Test that bad input gives NA
+  with(
+    data.frame(sex = c("M", "F", "U", "X", "M"),
+         centiles = c(0.25, -1, 0.13, 0.84, 0.10),
+         age = c(37, 38, 39, 40, 41)),
+    expr = {
+      vapply(
+        X = c("fmfga", "bfpfga", "ffmfga"),
+        FUN = function(x) {
+          fn <- get(paste0("ig_nbs_", x, "_centile2value"))
+          vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
+          expect_length(object = vals, n = length(sex))
+          expect_true(all(is.na(c(
+            vals[1], # Because age is out of bounds
+            vals[2], # Because centile is out of bounds
+            vals[4]  # Because sex is not one of "M", "F" or "U"
+          ))))
+        },
+        FUN.VALUE = logical(length = 1L))
+    })
 })
