@@ -2,10 +2,10 @@
 #' Newborn Size Standards
 #'
 #' @param p,z Numeric vector of centiles/z-scores to convert to values.
-#' @param gest_days Numeric vector of gestational age(s) in days. Elements should
-#'   be between `266` to `294` for body composition equations (`"fmfga"`,
+#' @param gest_days Numeric vector of gestational age(s) in days. Elements
+#'   should be between `266` to `294` for body composition equations (`"fmfga"`,
 #'   `"bfpfga"`, or `"ffmfga"`), or between `168` and `300` for the other
-#'   standards. If not inside these bounds, will return NA.
+#'   standards. If not inside these bounds, will return `NA`.
 #' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
 #' standard to use. Must be one of `"wfga"` (weight-for-GA), `"lfga"`
 #' (length-for-GA), `"hcfga"` (head circumference-for-GA), `"wlrfga"`
@@ -355,7 +355,7 @@ ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
   fromWLR_v2p <- function(max_len_vec_li) {
     wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_days"]] / 7,
                       sex = max_len_vec_li[["sex"]])
-    wlr_out <- ifelse(
+    ifelse(
       max_len_vec_li[["sex"]] == "U",
       yes = mean_if_sex_undefined(fn = ig_nbs_centile2value,
                                   arg1 = max_len_vec_li[["p"]],
@@ -484,7 +484,7 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
 #' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
 #'   (female).
 #' @param gest_days Numeric vector of gestational age(s) in days. Entries not
-#'   between `231` and `300` will be returned with NA values.
+#'   between `231` and `300` will return `NA` .
 #' @param acronym Character vector of acronym(s) denoting which
 #'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Entries
 #'   which are not one of `"wfga"`,`"lfga"`, or `"hcfga"` will be returned with

@@ -1,68 +1,59 @@
-get_gest_ages <- function(lower, upper) {
+get_gest_days <- function(lower, upper) {
     ga <- gigs::ig_nbs$wfga$male$zscores$gest_days
     ga[inrange(ga, c(lower, upper))]
 }
 
 test_zscore_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
-  gest_day_range <- get_gest_ages(age_lower, age_upper)
-  roundto <- ifelse(acronym %in% c("wfga", "wlrfga"), yes = 2, no = 1)
-  tbl_names <- c("SD3neg", "SD2neg", "SD1neg", "SD0", "SD1", "SD2", "SD3")
-  pkg_tbl <- lapply(X = -3:3,
-                    FUN = function (x) {
-                      fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
-                      round(fn(z = x, gest_days = gest_day_range, sex = sex),
-                            digits = roundto)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame()
-  names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_days <- gest_day_range
-  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
+  gest_day_range <- get_gest_days(age_lower, age_upper)
+  roundto <- if (acronym %in% c("wfga", "wlrfga")) 2 else 1
+  sex_ <- if (sex == "M") "male" else "female"
   ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$zscores
+  pkg_tbl <- lapply(X = -3:3,
+                    FUN = \(z) {
+                      fn <- get(paste0("ig_nbs_", acronym, "_zscore2value"))
+                      round(fn(z, gest_day_range, sex), digits = roundto)
+                    }) |>
+    do.call(what = cbind) |>
+    as.data.frame() |>
+    setNames(names(ref_tbl)[-1])
+  col1_name <- names(ref_tbl)[1]
+  pkg_tbl[[col1_name]] <- gest_day_range
+  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
   ref_tbl <- ref_tbl[inrange(ref_tbl$gest_days, c(age_lower, age_upper)), ]
   expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
-test_that(desc = "Conversion of z-scores to values works", {
-  sex <- rep(c("M", "F"), length(names(gigs::ig_nbs)) - 3)
-  lower <- rep(168, length(sex))
-  upper <- rep(300, length(sex))
-  acronyms <- rep(names(gigs::ig_nbs)[1:4], times = rep(2, length(names(gigs::ig_nbs)) - 3))
-  tolerance <- 0.01
-  invisible(mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance))
-})
-
 test_centile_tbls <- function(sex, age_lower, age_upper, acronym, tolerance) {
-  roundto <- ifelse(acronym == "wfga", yes = 2, no = 1)
-  tbl_names <- c("P03", "P05", "P10", "P50", "P90", "P95", "P97")
-  gest_day_range <- get_gest_ages(age_lower, age_upper)
+  gest_day_range <- get_gest_days(age_lower, age_upper)
+  roundto <- if (acronym %in% c("wfga", "wlrfga")) 2 else 1
+  sex_ <- if (sex == "M") "male" else "female"
+  ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$centiles
   pkg_tbl <- lapply(X = c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97),
-                    FUN = function (x) {
+                    FUN = function (p) {
                       fn <- get(paste0("ig_nbs_", acronym, "_centile2value"))
-                      round(fn(p = x, gest_days = gest_day_range, sex = sex),
-                             digits = roundto)
+                      round(fn(p, gest_day_range, sex), digits = roundto)
                 }) |>
     do.call(what = cbind) |>
-    as.data.frame()
-  names(pkg_tbl) <- tbl_names
-  pkg_tbl$gest_days <- gest_day_range
+    as.data.frame() |>
+    setNames(names(ref_tbl)[-1])
+  col1_name <- names(ref_tbl)[1]
+  pkg_tbl[[col1_name]] <- gest_day_range
   pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  sex_ <- ifelse(sex == "M", yes = "male", no = "female" )
-  ref_tbl <- gigs::ig_nbs[[acronym]][[sex_]]$centiles
-  ref_tbl <- ref_tbl[ref_tbl$gest_days >= age_lower & ref_tbl$gest_days <= age_upper, ]
-  rownames(pkg_tbl) <- NULL
-  rownames(ref_tbl) <- NULL
-  list(package = pkg_tbl, reference = ref_tbl)
+  ref_tbl <- ref_tbl[inrange(ref_tbl$gest_days, c(age_lower, age_upper)), ]
   expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance)
 }
 
+sex <- rep(c("M", "F"), length(names(gigs::ig_nbs)) - 3)
+lower <- rep(168, length(sex))
+upper <- rep(300, length(sex))
+acronyms <- rep(names(gigs::ig_nbs)[1:4],
+                times = rep(2, length(names(gigs::ig_nbs)) - 3))
+tolerance <- 0.01
+test_that(desc = "Conversion of z-scores to values works", {
+  mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance)
+})
+
 test_that("Conversion of centiles to values works", {
-  sex <- rep(c("M", "F"), length(names(gigs::ig_nbs)) - 3)
-  lower <- rep(168, length(sex))
-  upper <- rep(300, length(sex))
-  acronyms <- rep(names(gigs::ig_nbs)[1:4], times = rep(2, length(names(gigs::ig_nbs)) - 3))
-  tolerance <- 0.01
   mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerance)
 })
 
@@ -77,7 +68,7 @@ testthat_v2x <- function(y, gest_days, sex, acronym, z_or_p = "zscore") {
   if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
     stop("All values were NA.")
   }
-  expect_equal(round2(out_value, digits = 2), expected = round2(y, digits = 2))
+  expect_equal(round(out_value, digits = 2), expected = round(y, digits = 2))
 }
 
 test_that("Conversion of values to z-scores works", {

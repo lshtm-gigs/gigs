@@ -1,3 +1,7 @@
+# gigs 0.3.1
+* Internal, non-breaking changes to test suite and documentation.
+* Classification functions now use `gigs_**z()` functions internally for z-scoring. These z-scoring functions, found in `gigs-zscoring.R`, will be made user-facing once the GIGS guidance documentation is made public.
+
 # gigs 0.3.0
 * This update includes several large changes to the GIGS interface, including
   changed argument names for some classification and conversion functions. We

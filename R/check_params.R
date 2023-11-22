@@ -91,17 +91,3 @@ check_png_params <- function(x, sex, acronym) {
   x[!valid_x] <- NA_real_
   list(x = x, sex = sex_acro$sex, acronym = sex_acro$acronym)
 }
-
-
-#' Check if values in x are within upper and lower bounds of another numeric
-#' vector
-#'
-#' @param x Numeric vector to compare against min/max values of `vec`
-#' @param vec Numeric vector from which min/max bounds are defined
-#' @note The `min()` and `max()` calls in this function have `na.rm = TRUE`.
-#' @return Logical vector with `TRUE` if `x` is within the minimum and maximum
-#'   values of `vec`, else `FALSE`.
-#' @noRd
-inrange <- function(x, vec) {
-  x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
-}

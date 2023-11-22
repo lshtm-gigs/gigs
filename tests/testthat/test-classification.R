@@ -117,14 +117,14 @@ test_that("Wasting classification works", code = {
   expect_equal(
     object = wasting,
     expected = factor(c("wasting_severe", NA, "normal", "wasting", "normal", NA,
-                        "normal", "normal", "normal", "wasting_severe",
+                        "normal", NA, "normal", "wasting_severe",
                         "overweight"),
                       levels =  c("wasting_severe", "wasting", "normal",
                                   "overweight")))
   expect_equal(
     object = wasting_outliers,
     expected = factor(c("outlier", NA, "normal", "wasting", "normal", NA,
-                        "normal", "normal", "normal", "outlier", "outlier"),
+                        "normal", NA, "normal", "outlier", "outlier"),
                       levels =  c("wasting_severe", "wasting", "normal",
                                   "overweight", "outlier")))
 })
