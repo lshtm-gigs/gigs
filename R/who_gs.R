@@ -77,7 +77,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                     acronym = max_len_vecs[["acronym"]])
 
   # from https://stackoverflow.com/questions/29920302/raising-vector-with-negative-numbers-to-a-fractional-exponent-in-r
-  exponent <- function(a, pow) (abs(a) ^ pow) * sign(a)
+  exponent <- function(a, pow) (abs(a)^pow) * sign(a)
 
   z_over_three <- function(l, m, s, z) {
     sd3pos <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
@@ -300,7 +300,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
 
   z_from_LMS <- function(l, m, s, y, acronym) {
     z <- ifelse(test = l != 0,
-                yes = (abs((y / m) ^ l) - 1) / (s * l),
+                yes = (abs((y / m)^l) - 1) / (s * l),
                 no = log(y / m) / s)
     ifelse(
       test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
@@ -489,5 +489,5 @@ who_gs_lms <- function(x, sex, acronym) {
 #'   for each inputted `l`/`m`/`s` combination.
 #' @noRd
 who_gs_lms2sd <- function(l, m, s, n_sd) {
-  m * (1 + l * s * n_sd) ^ (1 / l)
+  m * (1 + l * s * n_sd)^(1 / l)
 }

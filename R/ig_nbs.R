@@ -537,14 +537,14 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   mu <- ifelse(
     test = ga_weeks < 33,
-    yes = 3.400617 + (-0.0103163 * ga_weeks ^ 2) + (0.0003407 * ga_weeks ^ 3) +
+    yes = 3.400617 + (-0.0103163 * ga_weeks^2) + (0.0003407 * ga_weeks^3) +
       (0.1382809 * sex_as_numeric),
     no = ifelse(
       test = sex == "M",
-      yes = -17.84615 + (-3778.768 * (ga_weeks ^ -1)) +
-        (1291.477 * ((ga_weeks ^ -1) * log(ga_weeks))),
-      no = -5.542927 + (0.0018926 * (ga_weeks ^ 3)) +
-        (-0.0004614 * ((ga_weeks ^ 3)* log(ga_weeks)))
+      yes = -17.84615 + (-3778.768 * (ga_weeks^-1)) +
+        (1291.477 * ((ga_weeks^-1) * log(ga_weeks))),
+      no = -5.542927 + (0.0018926 * (ga_weeks^3)) +
+        (-0.0004614 * ((ga_weeks^3)* log(ga_weeks)))
     )
   )
   sigma <- ifelse(

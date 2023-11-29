@@ -29,7 +29,7 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
                                      acronym = acronym)
   checked_params[["age"]][checked_params[["age"]] >= 231] <- NA
   wfga_logmu <- function(ga_weeks, sex) {
-    -7.00303 + 1.325911 * ga_weeks ^ 0.5 + 0.0571937 * sex
+    -7.00303 + 1.325911 * ga_weeks^0.5 + 0.0571937 * sex
   }
   lfga_mu <- function(ga_weeks, sex) {
     1.307633 + 1.270022 * ga_weeks +  0.4263885 * sex

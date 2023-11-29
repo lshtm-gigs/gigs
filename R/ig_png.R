@@ -299,46 +299,46 @@ ig_png_equations <- function(x, sex, acronym) {
                                      acronym = acronym)
 
   wfa_log_mu <- function(pma_weeks, sex) {
-    2.591277 - (0.01155 * (pma_weeks ^ 0.5)) -
-      (2201.705 * (pma_weeks ^ -2)) + (0.0911639 * sex)
+    2.591277 - (0.01155 * (pma_weeks^0.5)) - (2201.705 * (pma_weeks^-2)) +
+      (0.0911639 * sex)
   }
   lfa_log_mu <- function(pma_weeks, sex) {
-    4.136244 - (547.0018 * (pma_weeks ^ -2)) +
-      0.0026066 * pma_weeks + 0.0314961 * sex
+    4.136244 - (547.0018 * (pma_weeks^-2)) + 0.0026066 * pma_weeks +
+      0.0314961 * sex
   }
   hcfa_mu <- function(pma_weeks, sex) {
-    55.53617 - (852.0059 * (pma_weeks ^ -1)) + 0.7957903 * sex
+    55.53617 - (852.0059 * (pma_weeks^-1)) + 0.7957903 * sex
   }
   wfl_mu <- function(length_cm, sex) {
     ifelse(
       sex == "M",
-      yes = 13.98383 + 203.5677 * (length_cm / 10) ^ -2 - 291.114 *
+      yes = 13.98383 + 203.5677 * (length_cm / 10)^-2 - 291.114 *
         ((length_cm / 10)^ -2 * log(length_cm/10)),
       no = ifelse(
         sex == "F",
-        yes = 50.32492 + 140.8019 * (length_cm / 10) ^ -1 - 167.906 *
-          (length_cm / 10) ^ -0.5,
+        yes = 50.32492 + 140.8019 * (length_cm / 10)^-1 - 167.906 *
+          (length_cm / 10)^-0.5,
         no = NA_real_))
   }
   wfa_sigma <- function(pma_weeks) {
-    0.1470258 + 505.92394 / pma_weeks ^ 2 -
-      140.0576 / (pma_weeks ^ 2) * log(pma_weeks)
+    0.1470258 + 505.92394 / pma_weeks^2 -
+      140.0576 / (pma_weeks^2) * log(pma_weeks)
   }
   lfa_sigma <- function(pma_weeks) {
-    0.050489 + (310.44761 * (pma_weeks ^ -2)) -
-      (90.0742 * (pma_weeks ^ -2)) * log(pma_weeks)
+    0.050489 + (310.44761 * (pma_weeks^-2)) -
+      (90.0742 * (pma_weeks^-2)) * log(pma_weeks)
   }
   hcfa_sigma <- function(pma_weeks) {
-    3.0582292 + (3910.05 * (pma_weeks ^ -2)) - 180.5625 * pma_weeks ^ -1
+    3.0582292 + (3910.05 * (pma_weeks^-2)) - 180.5625 * pma_weeks^-1
   }
   wfl_sigma <- function(length_cm, sex) {
     ifelse(
       sex == "M",
-      yes = exp(-1.830098 + 0.0049708 * (length_cm / 10) ^ 3),
+      yes = exp(-1.830098 + 0.0049708 * (length_cm / 10)^3),
       no = ifelse(
         sex == "F",
-        yes = 0.2195888 - 0.0046046 * (length_cm / 10) ^ 3 + 0.0033017 *
-        (length_cm / 10) ^ 3 * log(length_cm / 10),
+        yes = 0.2195888 - 0.0046046 * (length_cm / 10)^3 + 0.0033017 *
+        (length_cm / 10)^3 * log(length_cm / 10),
         no = NA_real_))
   }
   out_df <- data.frame(x = checked_params[["x"]],
