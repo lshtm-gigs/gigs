@@ -80,8 +80,8 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
 #' @noRd
 ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
   mu_sigma <- ig_vpns_equations(gest_days = gest_days,
-                          sex = sex,
-                          acronym = acronym)
+                                sex = sex,
+                                acronym = acronym)
   ifelse(
     test = sex == "U",
     yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value,
@@ -115,23 +115,23 @@ ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @noRd
 ig_vpns_value2zscore <- function(y, gest_days, sex, acronym) {
-  df <- cbind(y = y, ig_vpns_equations(gest_days = gest_days,
-                                       sex = sex,
-                                       acronym = acronym))
+  mu_sigma <- ig_vpns_equations(gest_days = gest_days,
+                                sex = sex,
+                                acronym = acronym)
   ifelse(
     test = sex == "U",
-    yes = mean_if_sex_undefined(fn = ig_vpns_value2zscore,
-                                arg1 = df[["y"]],
-                                x_arg = df[["gest_days"]],
-                                acronym = df[["acronym"]]),
+    yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value,
+                                arg1 = y,
+                                x_arg = gest_days,
+                                acronym = acronym),
     no = ifelse(
-      test = df[["acronym"]] == "wfga",
-      yes = mu_sigma_y2z(y = log(df[["y"]]),
-                         mu = df[["mu"]],
-                         sigma = df[["sigma"]]),
-      no = mu_sigma_y2z(y = df[["y"]],
-                        mu = df[["mu"]],
-                        sigma = df[["sigma"]])
+      test = mu_sigma[["logarithmic"]],
+      yes = mu_sigma_y2z(y = log(y),
+                         mu = mu_sigma[["mu"]],
+                         sigma = mu_sigma[["sigma"]]),
+      no = mu_sigma_y2z(y = y,
+                        mu = mu_sigma[["mu"]],
+                        sigma = mu_sigma[["sigma"]])
     )
   )
 }
