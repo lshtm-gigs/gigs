@@ -105,31 +105,75 @@ test_that("Conversion of values to centiles works", {
   testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 60, sex = "F", acronym = "wfl", z_or_p = cent)
 })
 
-test_that(desc = "Bad input types cause errors.",
-          code = {
-            x <- 30:35
-            x_len <- length(x)
-            z <- rep_len(-3:3, x_len)
-            sex <- rep_len(c("M", "F"), x_len)
-            acronym <- rep_len(names(gigs::ig_png), x_len)
-            # Test failures for each arg when converting zscores to values
-            testthat::expect_error(
-              ig_png_zscore2value(as.character(z), x, sex, acronym)
-            )
-            testthat::expect_error(
-              ig_png_zscore2value(z, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(ig_png_zscore2value(z, x, 1, acronym))
-            testthat::expect_error(ig_png_zscore2value(z, x, sex, 1))
+test_that(
+  desc = "Bad input types cause errors.",
+  code = {
+    x <- 30:35
+    x_len <- length(x)
+    z <- rep_len(-3:3, x_len)
+    sex <- rep_len(c("M", "F"), x_len)
+    acronym <- rep_len(names(gigs::ig_png), x_len)
 
-            # And for conversion of values to zscores
-            y <- ig_png_zscore2value(z, x, sex, acronym)
-            testthat::expect_error(
-              ig_png_value2zscore(as.character(y), x, sex, acronym)
-            )
-            testthat::expect_error(
-              ig_png_value2zscore(y, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(ig_png_value2zscore(y, x, 1, acronym))
-            testthat::expect_error(ig_png_value2zscore(y, x, sex, 1))
+    error_msg <- function(name, wanted, got) {
+      paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
+             "', not '", got, "'.")
+    }
+
+    # Test failures for each arg when converting zscores to values
+    testthat::expect_error(
+      ig_png_zscore2value(as.character(z), x, sex, acronym),
+      regexp = error_msg(name = "z", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_png_zscore2value(z, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_png_zscore2value(z, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      ig_png_zscore2value(z, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+    # And for conversion of values to zscores
+    y <- ig_png_zscore2value(z, x, sex, acronym)
+    testthat::expect_error(
+      ig_png_value2zscore(as.character(y), x, sex, acronym),
+      regexp = error_msg(name = "y", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_png_value2zscore(y, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_png_value2zscore(y, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      ig_png_value2zscore(y, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+    error_msg_bad_value <- function(name) {
+      paste0("No value in `", name, "` was valid.")
+    }
+    # All bad sex values cause function to error
+    expect_error(
+      object = ig_png_zscore2value(z = 0,
+                                   x = 50,
+                                   sex = "wrong_sex",
+                                   acronym = "wfa"),
+      regexp = error_msg_bad_value(name = "sex")
+    )
+
+    # All bad acronyms cause function to error
+    expect_error(
+      object = ig_png_zscore2value(z = 0,
+                                   x = 50,
+                                   sex = "M",
+                                   acronym = "wrong_acronym"),
+      regexp = error_msg_bad_value(name = "acronym")
+    )
 })

@@ -6,7 +6,9 @@ Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker@lshtm.ac.uk",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
-    person(given = "Eric", family = "Ohuma", role = c("dtc", "rev"),
+    person(given = "Linda", family = "Vesel", role = c("dtc"),
+           comment = c(ORCID = "0000-0003-3753-4172")),
+    person(given = "Eric", family = "Ohuma", role = c("dtc"),
            comment = c(ORCID = "0000-0002-3116-2593")),
     person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
     )
@@ -23,8 +25,9 @@ BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    gamlss.dist,
     stats,
+    gamlss.dist,
+    checkmate,
     vctrs
 Suggests:
     knitr,

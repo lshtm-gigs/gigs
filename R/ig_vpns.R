@@ -24,10 +24,7 @@
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @noRd
 ig_vpns_equations <- function(gest_days, sex, acronym) {
-  checked_params <- check_nbs_params(gest_days = gest_days,
-                                     sex = sex,
-                                     acronym = acronym)
-  checked_params[["age"]][checked_params[["age"]] >= 231] <- NA
+  gest_days[gest_days >= 231] <- NA
   wfga_logmu <- function(ga_weeks, sex) {
     -7.00303 + 1.325911 * ga_weeks^0.5 + 0.0571937 * sex
   }
@@ -41,26 +38,28 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
   lfga_sigma <- sqrt(x = 6.757543)
   hcfga_sigma <- sqrt(x = 2.433481)
 
-  out_df <- data.frame(gest_days = checked_params[["age"]],
-                       sex = checked_params[["sex"]],
-                       acronym = checked_params[["acronym"]])
+  incomplete <- !complete.cases(gest_days, sex, acronym)
+  gest_days[incomplete] <- NA
+  sex[incomplete] <- NA
+  acronym[incomplete] <- NA
+
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   gest_weeks <- gest_days / 7
-  out_df[["mu"]] <- ifelse(acronym == "wfga",
-               yes = wfga_logmu(gest_weeks, sex_as_numeric),
-               no = ifelse(acronym == "lfga",
-                           yes = lfga_mu(gest_weeks, sex_as_numeric),
-                           no = hcfga_mu(gest_weeks, sex_as_numeric)))
-  out_df[["sigma"]] <- ifelse(acronym == "wfga", yes = wfga_sigma,
-                  no = ifelse(acronym == "lfga",
-                              yes = lfga_sigma,
-                              no = hcfga_sigma))
-  out_df[["logarithmic"]] <- acronym == "wfga"
-  na_params <- with(out_df, is.na(gest_days) | is.na(sex) | is.na(acronym))
-  out_df[["mu"]][na_params] <- NA
-  out_df[["sigma"]][na_params] <- NA
-  out_df[["logarithmic"]][na_params] <- NA
-  out_df
+  out_len <- length(gest_weeks)
+  out <- list(mu = numeric(length = out_len),
+              sigma = numeric(length = out_len))
+  out[["mu"]] <- ifelse(acronym == "wfga",
+                        yes = wfga_logmu(gest_weeks, sex_as_numeric),
+                        no = ifelse(acronym == "lfga",
+                                    yes = lfga_mu(gest_weeks, sex_as_numeric),
+                                    no = hcfga_mu(gest_weeks, sex_as_numeric)))
+  out[["sigma"]] <- ifelse(acronym == "wfga",
+                           yes = wfga_sigma,
+                           no = ifelse(acronym == "lfga",
+                                       yes = lfga_sigma,
+                                       no = hcfga_sigma))
+  out[["logarithmic"]] <- acronym == "wfga"
+  out
 }
 
 #' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Newborn Size
@@ -80,28 +79,22 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @noRd
 ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(z = z,
-                                            gest_days = gest_days,
-                                            sex = sex,
-                                            acronym = acronym)
-  df <- cbind(z = max_len_vecs[["z"]],
-              ig_vpns_equations(gest_days = max_len_vecs[["gest_days"]],
-                                sex = max_len_vecs[["sex"]],
-                                acronym = max_len_vecs[["acronym"]]))
+  mu_sigma <- ig_vpns_equations(gest_days = gest_days,
+                          sex = sex,
+                          acronym = acronym)
   ifelse(
-    test = max_len_vecs[["sex"]] == "U",
+    test = sex == "U",
     yes = mean_if_sex_undefined(fn = ig_vpns_zscore2value,
-                                arg1 = df[["z"]],
-                                x_arg = df[["gest_days"]],
-                                acronym = df[["acronym"]]),
-    no = ifelse(test = df[["acronym"]] == "wfga",
-                yes = exp(mu_sigma_z2y(z = df[["z"]],
-                                       mu = df[["mu"]],
-                                       sigma = df[["sigma"]])),
-                no = mu_sigma_z2y(z = df[["z"]],
-                                  mu = df[["mu"]],
-                                  sigma = df[["sigma"]])
-    )
+                                arg1 = z,
+                                x_arg = gest_days,
+                                acronym = acronym),
+    no = ifelse(test = mu_sigma[["logarithmic"]],
+                yes = exp(mu_sigma_z2y(z = z,
+                                       mu = mu_sigma[["mu"]],
+                                       sigma = mu_sigma[["sigma"]])),
+                no = mu_sigma_z2y(z = z,
+                                  mu = mu_sigma[["mu"]],
+                                  sigma = mu_sigma[["sigma"]]))
   )
 }
 

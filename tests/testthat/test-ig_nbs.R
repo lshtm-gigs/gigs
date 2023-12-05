@@ -108,44 +108,39 @@ test_that("Conversion of values to centiles works", {
 })
 
 test_that(desc = "Bad input gives NA", code = {
-  with(
-    data.frame(sex = c("M", "F", "U", "X", "M"),
-         centiles = c(0.25, -1, 0.13, 0.84, 0.10),
-         age = c(32, 33, 34, 35, 36)),
-    expr = {
-      vapply(
-        X = c("wfga", "lfga", "hcfga", "wlrfga"),
-        FUN = function(x) {
-          fn <- get(paste0("ig_nbs_", x, "_centile2value"))
-          vals <- suppressWarnings(fn(sex = sex, gest_days = age, p = centiles))
-          expect_length(object = vals, n = length(sex))
-          expect_true(all(is.na(c(
-            vals[2], # Because centile is out of bounds
-            vals[4]  # Because sex is not one of "M", "F" or "U"
-          ))))
-        },
-      FUN.VALUE = logical(length = 1L))
-    })
+  df_inputs <- data.frame(sex = c("M", "F", "U", "X", "M"),
+                          centiles = c(0.25, -1, 0.13, 0.84, 0.10),
+                          age = 32:36 * 7)
+  for (x in c("wfga", "lfga", "hcfga", "wlrfga")) {
+    fn <- get(paste0("ig_nbs_", x, "_centile2value"))
+    vals <- with(df_inputs, fn(p = centiles, sex = sex, gest_days = age))
+
+    # Should return 5 values
+    expect_vector(object = vals, double(), size = nrow(df_inputs))
+    # Elements 1,3,5 shouldn't return NA, as valid inputs
+    expect_false(any(is.na(vals[c(1, 3, 5)])))
+    # Should return NA:
+    # Element 2 has an out-of-bounds centile (-1)
+    # Element 4 has an invalid sex option ("X")
+    expect_true(all(is.na(vals[c(2, 4)])))
+  }
 
   # Test that bad input gives NA in VPNS
-  with(
-    list(sex = c("M", "F", "U", "X", "M"),
-         zscores = c(0.5, -1, 0.5, 0.5, 0.5),
-         age = c(161, 168, 175, 182, 210)),
-    expr = {
-      vapply(
-        X = c("wfga", "lfga", "hcfga"),
-        FUN = function(x) {
-          fn <- get(paste0("ig_nbs_", x, "_zscore2value"))
-          vals <- suppressWarnings(fn(sex = sex, gest_days = age, z = zscores))
-          expect_length(object = vals, n = length(sex))
-          expect_true(all(is.na(c(
-            vals[1], # Because age is out of bounds
-            vals[4]  # Because sex is not one of "M", "F" or "U"
-          ))))
-        },
-        FUN.VALUE = logical(length = 1L))
-    })
+  df_inputs <- data.frame(sex = c("M", "F", "U", "X", "M"),
+                          zscores = c(0.5, -1, 0.5, 0.5, 0.5),
+                          age = 24:28 * 7)
+
+  for (x in c("wfga", "lfga", "hcfga", "wlrfga")) {
+    fn <- get(paste0("ig_nbs_", x, "_zscore2value"))
+    vals <- with(df_inputs, fn(z = zscores, sex = sex, gest_days = age))
+    # Should return 5 values
+    expect_vector(object = vals, double(), size = nrow(df_inputs))
+    # Elements 1,2,3,5 shouldn't return NA, as valid inputs
+    expect_false(any(is.na(vals[c(1, 2, 3, 5)])))
+    # Should return NA:
+    # Element 4 has an invalid sex option ("X")
+    expect_true(all(is.na(vals[4])))
+  }
 })
 
 test_that(desc = "Interpolation of MSNT values can be performed",
@@ -234,31 +229,76 @@ test_that(desc = "Coefficient retrieval works when not all acronyms are valid",
           }
 )
 
-test_that(desc = "Bad input types cause errors.",
-          code = {
-            x <- 250:260
-            x_len <- length(x)
-            z <- rep_len(-3:3, x_len)
-            sex <- rep_len(c("M", "F"), x_len)
-            acronym <- rep_len(names(gigs::ig_nbs[1:4]), x_len)
-            # Test failures for each arg when converting zscores to values
-            testthat::expect_error(
-              ig_nbs_zscore2value(as.character(z), x, sex, acronym)
-            )
-            testthat::expect_error(
-              ig_nbs_zscore2value(z, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(ig_nbs_zscore2value(z, x, 1, acronym))
-            testthat::expect_error(ig_nbs_zscore2value(z, x, sex, 1))
+test_that(
+  desc = "Bad input types cause errors.",
+  code = {
+    x <- seq(168, 300, by = 0.5)
+    len_x <- length(x)
+    p <- pnorm(rep_len(-3:3, len_x))
+    sex <- rep_len(c("M", "F"), len_x)
+    acronym <- rep_len(names(gigs::ig_nbs), len_x)
 
-            # And for conversion of values to zscores
-            y <- ig_nbs_zscore2value(z, x, sex, acronym)
-            testthat::expect_error(
-              ig_nbs_value2zscore(as.character(y), x, sex, acronym)
-            )
-            testthat::expect_error(
-              ig_nbs_value2zscore(y, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(ig_nbs_value2zscore(y, x, 1, acronym))
-            testthat::expect_error(ig_nbs_value2zscore(y, x, sex, 1))
+    error_msg <- function(name, wanted, got) {
+      paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
+             "', not '", got, "'.")
+    }
+
+    # Test failures for each arg when converting centiles to values
+    testthat::expect_error(
+      ig_nbs_centile2value(as.character(p), x, sex, acronym),
+      regexp = error_msg(name = "p", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_nbs_centile2value(p, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_nbs_centile2value(p, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      ig_nbs_centile2value(p, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+    # And for conversion of values to centiles
+    y <- ig_nbs_centile2value(p, x, sex, acronym)
+    testthat::expect_error(
+      ig_nbs_value2centile(as.character(y), x, sex, acronym),
+      regexp = error_msg(name = "y", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_nbs_value2centile(y, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      ig_nbs_value2centile(y, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      ig_nbs_value2centile(y, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+
+    error_msg_bad_value <- function(name) {
+      paste0("No value in `", name, "` was valid.")
+    }
+    # All bad sex values cause function to error
+    expect_error(
+      object = ig_nbs_centile2value(p = 0.6,
+                                    gest_days = 50,
+                                    sex = "wrong_sex",
+                                    acronym = "wfa"),
+      regexp = error_msg_bad_value(name = "sex")
+    )
+
+    # All bad acronyms cause function to error
+    expect_error(
+      object = ig_nbs_centile2value(p = 0.6,
+                                    gest_days = 50,
+                                    sex = "M",
+                                    acronym = "wrong_acronym"),
+      regexp = error_msg_bad_value(name = "acronym")
+    )
 })

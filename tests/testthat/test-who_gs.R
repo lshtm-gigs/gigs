@@ -142,17 +142,6 @@ test_that("Conversion of values to centiles works", {
   testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 26, x = 95 + 403, sex = "F", acronym = "tsfa", z_or_p = cent)
 })
 
-test_that(desc = "Inputs with only incorrect acronyms return NA values", {
-  expect_equal(object = who_gs_zscore2value(z = -3:3,
-                                            x = 50,
-                                            sex = rep_len(c("M", "F"), 7),
-                                            acronym = "wrong"),
-               expected = rep(NA, length(-3:3)))
-  expect_equal(object = who_gs_zscore2value(z = 0, x = 50, sex = "M",
-                                            acronym = "also_wrong"),
-               expected = rep(NA, length(x = 0)))
-})
-
 test_that(desc = "Interpolation of LMS values can be performed",
           code = {
             testthat::expect_false(
@@ -194,31 +183,76 @@ test_that(desc = "NA values returned with out of range xvars",
               ))
           })
 
-test_that(desc = "Bad input types cause errors.",
-          code = {
-            x <- seq(65, 95, by = 0.5)
-            len_x <- length(x)
-            z <- rep_len(-3:3, len_x)
-            sex <- rep_len(c("M", "F"), len_x)
-            acronym <- rep_len(names(gigs::who_gs), len_x)
-            # Test failures for each arg when converting zscores to values
-            testthat::expect_error(
-              who_gs_zscore2value(as.character(z), x, sex, acronym)
-            )
-            testthat::expect_error(
-              who_gs_zscore2value(z, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(who_gs_zscore2value(z, x, 1, acronym))
-            testthat::expect_error(who_gs_zscore2value(z, x, sex, 1))
+test_that(
+  desc = "Bad input types cause errors.",
+  code = {
+    x <- seq(65, 95, by = 0.5)
+    len_x <- length(x)
+    z <- rep_len(-3:3, len_x)
+    sex <- rep_len(c("M", "F"), len_x)
+    acronym <- rep_len(names(gigs::who_gs), len_x)
 
-            # And for conversion of values to zscores
-            y <- who_gs_zscore2value(z, x, sex, acronym)
-            testthat::expect_error(
-              who_gs_value2zscore(as.character(y), x, sex, acronym)
-            )
-            testthat::expect_error(
-              who_gs_value2zscore(y, as.character(x), sex, acronym)
-            )
-            testthat::expect_error(who_gs_value2zscore(y, x, 1, acronym))
-            testthat::expect_error(who_gs_value2zscore(y, x, sex, 1))
+        error_msg <- function(name, wanted, got) {
+      paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
+             "', not '", got, "'.")
+    }
+
+    # Test failures for each arg when converting zscores to values
+    testthat::expect_error(
+      who_gs_zscore2value(as.character(z), x, sex, acronym),
+      regexp = error_msg(name = "z", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      who_gs_zscore2value(z, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      who_gs_zscore2value(z, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      who_gs_zscore2value(z, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+    # And for conversion of values to zscores
+    y <- who_gs_zscore2value(z, x, sex, acronym)
+    testthat::expect_error(
+      who_gs_value2zscore(as.character(y), x, sex, acronym),
+      regexp = error_msg(name = "y", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      who_gs_value2zscore(y, as.character(x), sex, acronym),
+      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+    )
+    testthat::expect_error(
+      who_gs_value2zscore(y, x, 1, acronym),
+      regexp = error_msg(name = "sex", wanted = "character", got = "double")
+    )
+    testthat::expect_error(
+      who_gs_value2zscore(y, x, sex, 1),
+      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+    )
+
+
+    error_msg_bad_value <- function(name) {
+      paste0("No value in `", name, "` was valid.")
+    }
+    # All bad sex values cause function to error
+    expect_error(
+      object = who_gs_zscore2value(z = 0,
+                                   x = 50,
+                                   sex = "wrong_sex",
+                                   acronym = "wfa"),
+      regexp = error_msg_bad_value(name = "sex")
+    )
+
+    # All bad acronyms cause function to error
+    expect_error(
+      object = who_gs_zscore2value(z = 0,
+                                   x = 50,
+                                   sex = "M",
+                                   acronym = "wrong_acronym"),
+      regexp = error_msg_bad_value(name = "acronym")
+    )
 })

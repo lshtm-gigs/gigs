@@ -1,12 +1,3 @@
-#  - title: GIGS z-scoring procedures
-#    desc: >
-#      Z-scoring functions in which growth standards are applied according to
-#      GIGS guidance.
-#    contents:
-#      - gigs_waz
-#      - gigs_laz
-#      - gigs_hcaz
-
 #' Calculate z-scores for anthropometric measures according to GIGS guidance
 #'
 #' @description These functions calculate z-scores for either weight-for-age

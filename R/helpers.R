@@ -16,50 +16,17 @@ mu_sigma_y2z <- function(y, mu, sigma) (y - mu) / sigma
 #' Return male/female mean if sex is undefined
 #'
 #' @param fn Conversion function to call
-#' @param arg1 z, p or y values to pass to `fn`
-#' @param x_arg X values (usually age values) to pass to `fn`
-#' @param acronym Acronym values to pass to `fn`
+#' @param arg1 `z`, `p` or `y` values to pass to `fn`
+#' @param x_arg `x` values (usually age/gestational age values) to pass to `fn`
+#' @param acronym Acronyms to pass to `fn`
 #' @noRd
 mean_if_sex_undefined <- function(fn, arg1, x_arg, acronym) {
-  rowMeans(cbind(fn(arg1, x_arg, "M", acronym), fn(arg1, x_arg, "F", acronym)))
+  len_sex <- length(arg1)
+  rowMeans(cbind(fn(arg1, x_arg, rep("M", len_sex), acronym),
+                 fn(arg1, x_arg, rep("F", len_sex), acronym)))
 }
 
-#' Stop with helpful information with a vector of the wrong type.
-#'
-#' @param vec Vector to test the type of.
-#' @param type One-length character vector describing the second part of some
-#'   `is.*()`-type function, usually `"logical"`, `"numeric"`, or `"character"`
-#'   (which will call `is.logical()`, `is.numeric()`, `is.character()`,
-#'   respectively.
-#' @return Returns `vec` invisibly. Will stop with error if the type of `vec` is
-#'   not the same as `expected`.
-#' @noRd
-stop_if_wrong_type <- function(vec, type) {
-  vec_outer_name <- deparse(substitute(vec))
-  is_expected_type <- get(paste0("is.", type), asNamespace("base"))
-  if (!is_expected_type(vec)) {
-    stop("`", vec_outer_name, "` has the wrong type. Should be `", type,
-         "` but was actually `", typeof(vec), "`.", call. = FALSE)
-  }
-  invisible(vec)
-}
-
-#' Throw an error if object lengths are unequal
-#' @param ... An arbitrary number of arguments which will be checked for
-#'   equality of length.
-#' @return Invisibly returns inputs in list. Throws an error if the lengths of
-#'   passed-in objects are not equal.
-#' @noRd
-stop_if_lengths_unequal <- function(...) {
-  lengths <- vapply(X = list(...),
-                    FUN = length,
-                    FUN.VALUE = numeric(length = 1L))
-  if (length(unique(lengths)) > 1) {
-    stop(paste("Your inputs had different lengths. Please give the function",
-               "input vectors of the same length."), call. = FALSE)
-  }
-  invisible(list(...))
-}
+# Parameter checking -----------------------------------------------------------
 
 #' Check if values in `x` are within upper and lower bounds of another numeric
 #' vector.
@@ -83,3 +50,34 @@ inrange <- function(x, vec) {
 #'   weeks, else `FALSE`.
 #' @noRd
 is_valid_pma_weeks <- function(pma_weeks) inrange(pma_weeks, c(27, 64))
+
+# Custom error messages --------------------------------------------------------
+
+#' Throw an error if object lengths are unequal
+#' @param ... An arbitrary number of arguments which will be checked for
+#'   equality of length.
+#' @return Invisibly returns inputs in list. Throws an error if the lengths of
+#'   passed-in objects are not equal.
+#' @noRd
+stop_if_lengths_unequal <- function(...) {
+  lengths <- vapply(X = list(...),
+                    FUN = length,
+                    FUN.VALUE = numeric(length = 1L))
+  if (length(unique(lengths)) > 1) {
+    stop(paste("Your inputs had different lengths. Please give the function",
+               "input vectors of the same length."), call. = FALSE)
+  }
+  invisible(list(...))
+}
+
+# Extra ------------------------------------------------------------------------
+
+#' Drop null elements from a list
+#'
+#' @param list List which may or may not contain `NULL` elements.
+#' @returns The list supplied as `list`, but with `NULL` elements removed.
+#' @noRd
+drop_null_elements <- function(list) {
+  null_elems <- vapply(list, is.null, FUN.VALUE = logical(1))
+  list[!null_elems]
+}

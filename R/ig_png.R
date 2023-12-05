@@ -53,17 +53,20 @@
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_zscore2value <- function(z, x, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(z = z,
-                                            x = x,
-                                            sex = sex,
-                                            acronym = acronym)
+  validated <- vctrs::vec_recycle_common(z = z,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = "validate_ig_png") |>
+    drop_null_elements()
 
-  df <- cbind(z, ig_png_equations(x = max_len_vecs[["x"]],
-                                  sex = max_len_vecs[["sex"]],
-                                  acronym = max_len_vecs[["acronym"]]))
+  df <- cbind(z = validated[["z"]],
+              ig_png_equations(x = validated[["x"]],
+                               sex = validated[["sex"]],
+                               acronym = validated[["acronym"]]))
 
   ifelse(
-    test = max_len_vecs[["sex"]] == "U",
+    test = validated[["sex"]] == "U",
     yes = mean(c(ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
                                      sex = "M", acronym = df[["acronym"]]),
                  ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
@@ -81,25 +84,25 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z = z, x = pma_weeks, sex = sex, acronym = "wfa")
+  ig_png_zscore2value(z, pma_weeks, sex, acronym = "wfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_lfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z = z, x = pma_weeks, sex = sex, acronym = "lfa")
+  ig_png_zscore2value(z, pma_weeks, sex, acronym = "lfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_hcfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z = z, x = pma_weeks, sex = sex, acronym = "hcfa")
+  ig_png_zscore2value(z, pma_weeks, sex, acronym = "hcfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfl_zscore2value <- function(z, length_cm, sex) {
-  ig_png_zscore2value(z = z, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_zscore2value(z, x = length_cm, sex = sex, acronym = "wfl")
 }
 
 #' @rdname ig_png_zscore2value
@@ -112,19 +115,19 @@ ig_png_centile2value <- function(p, x, sex, acronym) {
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, x = pma_weeks, sex = sex, acronym = "wfa")
+  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "wfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_lfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, x = pma_weeks, sex = sex, acronym = "lfa")
+  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "lfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_hcfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, x = pma_weeks, sex = sex, acronym = "hcfa")
+  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "hcfa")
 }
 
 #' @rdname ig_png_zscore2value
@@ -187,14 +190,19 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_value2zscore <- function(y, x, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(y = y, x = x,
-                                            sex = sex, acronym = acronym)
-  df <- cbind(y = max_len_vecs[["y"]],
-              ig_png_equations(x = max_len_vecs[["x"]],
-                               sex = max_len_vecs[["sex"]],
-                               acronym = max_len_vecs[["acronym"]]))
+  validated <- vctrs::vec_recycle_common(y = y,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = "validate_ig_png") |>
+    drop_null_elements()
+
+  df <- cbind(y = validated[["y"]],
+              ig_png_equations(x = validated[["x"]],
+                               sex = validated[["sex"]],
+                               acronym = validated[["acronym"]]))
   ifelse(
-    test = max_len_vecs[["sex"]] == "U",
+    test = validated[["sex"]] == "U",
     yes = mean(c(ig_png_value2zscore(y = df[["y"]],
                                      x = df[["x"]],
                                      sex = "M",
@@ -213,56 +221,56 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfa_value2zscore <- function(weight_kg, pma_weeks, sex) {
-  ig_png_value2zscore(y = weight_kg, x = pma_weeks, sex = sex, acronym = "wfa")
+  ig_png_value2zscore(weight_kg, pma_weeks, sex, acronym = "wfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_lfa_value2zscore <- function(length_cm, pma_weeks, sex) {
-  ig_png_value2zscore(y = length_cm, x = pma_weeks, sex = sex, acronym = "lfa")
+  ig_png_value2zscore(length_cm, pma_weeks, sex, acronym = "lfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_hcfa_value2zscore <- function(headcirc_cm, pma_weeks, sex) {
-  ig_png_value2zscore(y = headcirc_cm, x = pma_weeks, sex = sex, acronym = "hcfa")
+  ig_png_value2zscore(headcirc_cm, pma_weeks, sex, acronym = "hcfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
-  ig_png_value2zscore(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_value2zscore(weight_kg, length_cm, sex, acronym = "wfl")
 }
 
 #' @rdname ig_png_value2zscore
 #' @importFrom stats pnorm
 #' @export
 ig_png_value2centile <- function(y, x, sex, acronym) {
-  pnorm(ig_png_value2zscore(y = y, x = x, sex = sex, acronym = acronym))
+  pnorm(ig_png_value2zscore(y, x, sex, acronym))
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfa_value2centile <- function(weight_kg, pma_weeks, sex) {
-  ig_png_value2centile(y = weight_kg, x = pma_weeks, sex = sex, acronym = "wfa")
+  ig_png_value2centile(weight_kg, pma_weeks, sex, acronym = "wfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_lfa_value2centile <- function(length_cm, pma_weeks, sex) {
-  ig_png_value2centile(y = length_cm, x = pma_weeks, sex = sex, acronym = "lfa")
+  ig_png_value2centile(length_cm, pma_weeks, sex, acronym = "lfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_hcfa_value2centile <- function(headcirc_cm, pma_weeks, sex) {
-  ig_png_value2centile(y = headcirc_cm, x = pma_weeks, sex = sex, acronym = "hcfa")
+  ig_png_value2centile(headcirc_cm, pma_weeks, sex, acronym = "hcfa")
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
-  ig_png_value2centile(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_value2centile(weight_kg, x = length_cm, sex = sex, acronym = "wfl")
 }
 
 #' INTERGROWTH-21<sup>st</sup> equations for postnatal size for age in preterm
@@ -294,10 +302,6 @@ ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
 #' @rdname ig_png_equations
 #' @noRd
 ig_png_equations <- function(x, sex, acronym) {
-  checked_params <- check_png_params(x = x,
-                                     sex = sex,
-                                     acronym = acronym)
-
   wfa_log_mu <- function(pma_weeks, sex) {
     2.591277 - (0.01155 * (pma_weeks^0.5)) - (2201.705 * (pma_weeks^-2)) +
       (0.0911639 * sex)
@@ -341,9 +345,7 @@ ig_png_equations <- function(x, sex, acronym) {
         (length_cm / 10)^3 * log(length_cm / 10),
         no = NA_real_))
   }
-  out_df <- data.frame(x = checked_params[["x"]],
-                       sex = checked_params[["sex"]],
-                       acronym = checked_params[["acronym"]])
+  out_df <- data.frame(x = x, sex = sex, acronym = acronym)
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
   out_df[["mu"]] <- ifelse(
     acronym == "wfa",
@@ -363,9 +365,7 @@ ig_png_equations <- function(x, sex, acronym) {
                             no = wfl_sigma(out_df[["x"]], sex)))
   )
   out_df[["logarithmic"]] <- acronym %in% c("wfa", "lfa")
-  invalid_params <- is.na(checked_params[["x"]]) |
-                      is.na(checked_params[["sex"]]) |
-                      is.na(checked_params[["acronym"]])
+  invalid_params <- !stats::complete.cases(out_df)
   out_df[["mu"]][invalid_params] <- NA
   out_df
 }

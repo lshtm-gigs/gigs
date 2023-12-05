@@ -29,13 +29,13 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
 
   # 2. Load coeff tables as needed
   li_coeffs <- lapply(X = acronyms, FUN = \(acronym) coeff_tbls[[acronym]]) |>
-    `names<-`(acronyms)
+    setNames(acronyms)
 
   # Initialise empty list which will contain vectors with each coeff
   len_x <- nrow(temp_df)
   empty_vec <- rep(NA, len_x)
   out_li <- vector(mode = "list", length = length(coeff_names)) |>
-        `names<-`(coeff_names)
+        setNames(coeff_names)
   for (i in seq_along(coeff_names)) out_li[[i]] <- empty_vec
 
   # Iterate through acronym-sex combinations, and reassign values in out_li

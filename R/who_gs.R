@@ -68,26 +68,29 @@
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(z = z,
-                                            x = x,
-                                            sex = sex,
-                                            acronym = acronym)
-  lms <- who_gs_lms(x = max_len_vecs[["x"]],
-                    sex = max_len_vecs[["sex"]],
-                    acronym = max_len_vecs[["acronym"]])
+  validated <- vctrs::vec_recycle_common(z = z,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = "validate_who_gs") |>
+    drop_null_elements()
+
+  lms <- who_gs_lms(x = validated[["x"]],
+                    sex = validated[["sex"]],
+                    acronym = validated[["acronym"]])
 
   # from https://stackoverflow.com/questions/29920302/raising-vector-with-negative-numbers-to-a-fractional-exponent-in-r
   exponent <- function(a, pow) (abs(a)^pow) * sign(a)
 
   z_over_three <- function(l, m, s, z) {
-    sd3pos <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
-    sd23pos <- sd3pos - who_gs_lms2sd(l = l, m = m, s = s, n_sd = 2)
+    sd3pos <- who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
+    sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
     (z - 3) * sd23pos + sd3pos
   }
 
   z_under_minus_three <- function(l, m, s, z) {
-    sd3neg <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = -3)
-    sd23neg <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = -2) - sd3neg
+    sd3neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
+    sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
     (z + 3) * sd23neg + sd3neg
   }
 
@@ -104,17 +107,17 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
         no = z_under_minus_three(l, m, s, z))
     )
   }
-  stop_if_wrong_type(z, "numeric")
-  ifelse(max_len_vecs[["sex"]] == "U",
+  checkmate::assert_numeric(z)
+  ifelse(validated[["sex"]] == "U",
          yes = mean_if_sex_undefined(who_gs_zscore2value,
                                      arg1 = z,
-                                     x_arg = max_len_vecs[["x"]],
-                                     acronym = max_len_vecs[["acronym"]]),
+                                     x_arg = validated[["x"]],
+                                     acronym = validated[["acronym"]]),
          no = y_from_LMS(l = lms[[1]],
                          m = lms[[2]],
                          s = lms[[3]],
-                         max_len_vecs[["z"]],
-                         max_len_vecs[["acronym"]]))
+                         validated[["z"]],
+                         validated[["acronym"]]))
 }
 
 #' @rdname who_gs_zscore2value
@@ -279,22 +282,25 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_value2zscore <- function(y, x, sex, acronym) {
-  max_len_vecs <- vctrs::vec_recycle_common(y = y,
-                                            x = x,
-                                            sex = sex,
-                                            acronym = acronym)
-  lms <- who_gs_lms(x = max_len_vecs[["x"]],
-                    sex = max_len_vecs[["sex"]],
-                    acronym = max_len_vecs[["acronym"]])
+  validated <- vctrs::vec_recycle_common(y = y,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = "validate_who_gs") |>
+    drop_null_elements()
+
+  lms <- who_gs_lms(x = validated[["x"]],
+                    sex = validated[["sex"]],
+                    acronym = validated[["acronym"]])
 
   z_over_three <- function(l, m, s, y) {
-    sd3pos <-  who_gs_lms2sd(l = l, m = m, s = s, n_sd = 3)
-    sd23pos <- sd3pos - who_gs_lms2sd(l = l, m = m, s = s, n_sd = 2)
+    sd3pos <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
+    sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
     3 + (y - sd3pos) / sd23pos
   }
   z_under_minus_three <- function(l, m, s, y) {
-    sd3neg <-  who_gs_lms2sd(l = l, m = m, s = s, n_sd = -3)
-    sd23neg <- who_gs_lms2sd(l = l, m = m, s = s, n_sd = -2) - sd3neg
+    sd3neg <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
+    sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
     -3 + (y - sd3neg) / sd23neg
   }
 
@@ -310,19 +316,19 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                   no =  z_under_minus_three(l, m, s, y))
     )
   }
-  stop_if_wrong_type(y, "numeric")
-  ifelse(max_len_vecs[["sex"]] == "U",
+
+  ifelse(validated[["sex"]] == "U",
          yes = mean(c(
-           who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
-                               sex = "M", acronym = max_len_vecs[["acronym"]]),
-           who_gs_value2zscore(y = max_len_vecs[["y"]], x = lms[["x"]],
-                               sex = "F", acronym = max_len_vecs[["acronym"]])
+           who_gs_value2zscore(y = validated[["y"]], x = lms[["x"]],
+                               sex = "M", acronym = validated[["acronym"]]),
+           who_gs_value2zscore(y = validated[["y"]], x = lms[["x"]],
+                               sex = "F", acronym = validated[["acronym"]])
          )),
          no = z_from_LMS(l = lms[[1]],
                          m = lms[[2]],
                          s = lms[[3]],
-                         y = max_len_vecs[["y"]],
-                         acronym = max_len_vecs[["acronym"]]))
+                         y = validated[["y"]],
+                         acronym = validated[["acronym"]]))
 }
 
 #' @rdname who_gs_value2zscore
@@ -470,8 +476,7 @@ who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
 #' @rdname who_gs_lms
 #' @noRd
 who_gs_lms <- function(x, sex, acronym) {
-  checked <- check_who_params(x, sex, acronym)
-  retrieve_coefficients(x = x, sex = checked$sex, acronym = checked$acronym,
+  retrieve_coefficients(x = x, sex = sex, acronym = acronym,
                         coeff_tbls = gigs::who_gs_coeffs,
                         coeff_names = c("L", "M", "S"))
 }
@@ -488,6 +493,6 @@ who_gs_lms <- function(x, sex, acronym) {
 #' @return Numeric vector containing value(s) which are `n_sd` from the median
 #'   for each inputted `l`/`m`/`s` combination.
 #' @noRd
-who_gs_lms2sd <- function(l, m, s, n_sd) {
+who_gs_lms2value <- function(l, m, s, n_sd) {
   m * (1 + l * s * n_sd)^(1 / l)
 }

@@ -139,7 +139,6 @@ Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric
-ratios: the newborn body composition study of the INTERGROWTH-21st
-project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
-\doi{10.1038/pr.2017.52}
+ratios: the newborn body composition study of the INTERGROWTH-21st project.}
+\emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
 }
