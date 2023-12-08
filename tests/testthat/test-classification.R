@@ -42,9 +42,9 @@ test_that(
       sex = rep(c(rep("M", 5), rep("F", 5)), 2)
     )
     params$p[na_indices] <- NA
-    params$weight_kg <- do.call(what = "ig_nbs_wfga_centile2value", params)
+    params$weight_kg <- do.call(what = ig_nbs_wfga_centile2value, params)
     params$p <- NULL
-    svn <- do.call(what = "classify_svn", params)
+    svn <- do.call(what = classify_svn, params)
 
     expected_svn <- c(paste("Preterm", rep(expected_sga, 2)),
                       paste("Term", rep(expected_sga, 2)))

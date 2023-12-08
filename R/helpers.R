@@ -44,15 +44,6 @@ inrange <- function(x, vec) {
   x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
 }
 
-#' Check if `pma_weeks` values are within INTERGROWTH-21<sup>st</sup> Postnatal
-#' Growth Standards range.
-#'
-#' @param pma_weeks Post-menstrual age in weeks.
-#' @returns Logical vector with `TRUE` where `pma_weeks` is between 27 to 64
-#'   weeks, else `FALSE`.
-#' @noRd
-is_valid_pma_weeks <- function(pma_weeks) inrange(pma_weeks, c(27, 64))
-
 # Custom error messages --------------------------------------------------------
 
 #' Throw an error if object lengths are unequal

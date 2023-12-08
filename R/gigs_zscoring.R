@@ -157,7 +157,7 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
   pma_weeks <- pma_days / 7
 
   use_ig_nbs <- age_days == 0
-  use_ig_png <- age_days > 0 & !is_term & is_valid_pma_weeks(pma_weeks)
+  use_ig_png <- age_days > 0 & !is_term & inrange(pma_weeks, c(27, 64))
   use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
 
   # Prevents `NAs are not allowed in subscripted assignments` error
@@ -176,5 +176,5 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
 #' @return Returns a vector the same length as `sum(lgl)`.
 #' @noRd
 fn_on_subset <- function(fn, lgl, in1, in2, in3) {
-  fn(in1[lgl], in2[lgl], in3[lgl])
+  if (any(lgl)) fn(in1[lgl], in2[lgl], in3[lgl]) else double(length = 0L)
 }
