@@ -191,3 +191,32 @@ validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
   list(y = y, z = z, p = p, x = x, sex = sex, acronym = acronym) |>
     drop_null_elements()
 }
+
+#' Check whether user-inputted `z`, `y`, `gest_days` and `acronym` values are
+#' valid in `ig_fet` functions
+#'
+#' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
+#'   one of these arguments are provided; see [validate_yzp()] documentation.
+#' @param gest_days Numeric vector with user-inputted gestational age values in
+#'   days.
+#' @param acronym Character vector with user-inputted acronym values.
+#' @note If any values are found to be invalid (e.g. incorrect type or length),
+#'   the function will fail. Values in `gest_days` and `acronym` which not
+#'   acceptable will be replaced with `NA`.
+#' @returns List with names `"gest_days"`, and `"acronym"`, containing vectors
+#'   where invalid `gest_days` and `acronym` values have been replaced with
+#'   `NA`. Will also contain one of `"y"`, `"z"`, or `"p"`, depending on which
+#'   was provided to the function.
+#' @noRd
+validate_ig_fet <- function(y = NULL, z = NULL, p = NULL, gest_days, acronym) {
+  validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
+  gest_days <- ifelse(
+    acronym != "efwfga",
+    yes = validate_xvar(gest_days, gigs::ig_fet$flfga$zscores$gest_days),
+    no = validate_xvar(gest_days, gigs::ig_fet$efwfga$zscores$gest_days)
+  )
+  acronym <- validate_acronym(acronym = acronym,
+                              allowed_acronyms = names(gigs::ig_fet))
+  list(y = y, z = z, p = p, gest_days = gest_days, acronym = acronym) |>
+    drop_null_elements()
+}

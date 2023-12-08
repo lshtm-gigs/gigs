@@ -134,7 +134,31 @@ NULL
 #' @examples
 #' names(gigs::who_gs)
 #' head(gigs::who_gs$wfa$male$zscores)
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @docType data
+#' @keywords data
+NULL
+
+#' INTERGROWTH-21<sup>st</sup> Fetal Growth Standards growth curve data
+#'
+#' @name ig_fet
+#' @docType data
+#' @description
+#' A set of nested lists containing tables with reference values at different
+#' z-scores/centiles for valid gestational ages in days. The list is ordered
+#' by acronym first, then by z-score/centile.
+#' @source
+#' [INTERGROWTH-21<sup>st</sup> Fetal Growth standards]()
+#' @references
+#' Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
+#' et al. **International standards for fetal growth based on serial ultrasound
+#' measurements: the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
+#' Project.** *Lancet* 2014, **384(9946):869-79.**
+#' \doi{0.1016/S0140-6736(14)61490-2}
+#' @examples
+#' names(gigs::ig_fet)
+#' head(gigs::ig_fet$hcfga$zscores)
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @keywords data
 NULL
 
