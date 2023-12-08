@@ -72,7 +72,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = "validate_who_gs") |>
+    do.call(what = validate_who_gs) |>
     drop_null_elements()
 
   lms <- who_gs_lms(x = validated[["x"]],
@@ -286,7 +286,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = "validate_who_gs") |>
+    do.call(what = validate_who_gs) |>
     drop_null_elements()
 
   lms <- who_gs_lms(x = validated[["x"]],

@@ -13,7 +13,7 @@ Units depend on which \code{acronym}(s) are in use.}
 (female).}
 }
 \description{
-Many of the functions in \verb{[gigs]} are shared between different functions.
+Many of the parameters in \verb{[gigs]} are shared between different functions.
 This roxygen block is designed to make inheriting these parameters as simple
 as possible.
 }

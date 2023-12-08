@@ -13,13 +13,11 @@
 validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   args <- list(y = y, z = z, p = p)
   arg_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
-  if (sum(arg_nulls) != 2) {
-    # Should never be seen by the user
-    stop("One argument to `validate_yzp()` must not be `NULL`.", call. = FALSE)
-  }
+  stopifnot(sum(arg_nulls) == 2) # Error should never be seen by user
   vec <- args[!arg_nulls][[1]]
   varname <- names(arg_nulls)[!arg_nulls]
-  assert_numeric(vec, min.len = 1, all.missing = FALSE, .var.name = varname)
+  checkmate::assert_numeric(vec, min.len = 1, all.missing = FALSE,
+                            .var.name = varname)
   if (!arg_nulls[["p"]]) {
     vec <- replace(vec, !inrange(vec, c(0,1)), NA)
   }
@@ -113,7 +111,7 @@ validate_who_gs <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
   # For WHO GS standards, the use of `approx()` use in coefficients.R will
   # make out-of-bounds `x` values output as `NA`
-  x <- validate_xvar(x, range(who_gs$wfa$male$zscores$age_days))
+  x <- validate_xvar(x, range(gigs::who_gs$wfa$male$zscores$age_days))
   sex <- validate_sex(sex)
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::who_gs))
@@ -131,8 +129,6 @@ validate_who_gs <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
 #' @param acronym Character vector with user-inputted acronym values.
 #' @returns List with names `"age"`, `"sex"`, and `"acronym"`, containing
 #'   vectors where invalid sex or acronym values have been replaced with NA. If
-#'   any of `x`, `sex`, or `acronym` are the wrong type, `check_nbs_params()`
-#'   will throw an error.
 #'   any of `x`, `sex`, or `acronym` are the wrong type, `validate_ig_nbs()`
 #'   will throw an error. Will also contain one of `"y"`, `"z"`, or `"p"`,
 #'   depending on which was provided to the function.

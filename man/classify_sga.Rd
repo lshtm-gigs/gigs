@@ -16,8 +16,8 @@ Values not between \code{168} and \code{300} will be set to \code{NA}.}
 \item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
 (female).}
 
-\item{severe}{If \code{TRUE}, specify which SGA values are below the third
-centile. Default = \code{FALSE}.}
+\item{severe}{A single logical value specifying whether to categorise SGA
+values are below the third centile as \code{"SGA(<3)"}. Default = \code{FALSE}.}
 }
 \value{
 Factor with gestational age classification(s). If \code{severe = FALSE},

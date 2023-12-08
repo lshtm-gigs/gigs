@@ -220,7 +220,7 @@ NULL
 
 #' Shared roxygen parameters
 #'
-#' Many of the functions in `[gigs]` are shared between different functions.
+#' Many of the parameters in `[gigs]` are shared between different functions.
 #' This roxygen block is designed to make inheriting these parameters as simple
 #' as possible.
 #'
@@ -234,7 +234,7 @@ NULL
 #' @keywords internal
 NULL
 
-#' Shared zscore/centile roxygen parameters
+#' Shared z-score/centile roxygen parameters
 #'
 #' Much of the roxygen content in `[gigs]` is shared between different
 #' functions. This roxygen block is designed to make inheriting these parameters
@@ -246,7 +246,7 @@ NULL
 #' @keywords internal
 NULL
 
-#' Shared zscore/centile to value roxygen parameters
+#' Shared z-score/centile to value roxygen parameters
 #'
 #' Much of the roxygen content in `[gigs]` is shared between different
 #' functions. This roxygen block is designed to make inheriting these parameters

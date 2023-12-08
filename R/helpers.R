@@ -1,3 +1,5 @@
+# Conversion function helpers --------------------------------------------------
+
 #' Convert between z-scores and values using $mu$ and $sigma$
 #'
 #' @param z Nuumeric vector of z-scores to convert to y values.

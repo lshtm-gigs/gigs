@@ -67,7 +67,7 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
                                          gest_days = gest_days,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = "validate_ig_nbs") |>
+    do.call(what = validate_ig_nbs) |>
     drop_null_elements()
 
   fromMSNT_p2v <- function(max_len_vec_li) {
@@ -294,7 +294,7 @@ ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
                                          gest_days = gest_days,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = "validate_ig_nbs")
+    do.call(what = validate_ig_nbs)
 
   fromMSNT_v2p <- function(max_len_vec_li) {
     msnt <- ig_nbs_msnt(gest_days = max_len_vec_li[["gest_days"]],
@@ -522,8 +522,6 @@ ig_nbs_msnt <- function(gest_days, sex, acronym) {
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
 #' ratios: the newborn body composition study of the INTERGROWTH-21st project.**
-#' *Pediatric Research* 2017, **82:305-316.**
-#' \doi{10.1038/pr.2017.52}
 #' *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
 #' @noRd
 ig_nbs_wlr <- function(ga_weeks, sex) {
@@ -573,9 +571,6 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
-#' ratios: the newborn body composition study of the INTERGROWTH-21st
-#' project.** *Pediatric Research* 2017, **82:305-316.**
-#' \doi{10.1038/pr.2017.52}
 #' ratios: the newborn body composition study of the INTERGROWTH-21st project.**
 #' *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
 #' @noRd

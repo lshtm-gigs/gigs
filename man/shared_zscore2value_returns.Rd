@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{shared_zscore2value_returns}
 \alias{shared_zscore2value_returns}
-\title{Shared zscore/centile roxygen parameters}
+\title{Shared z-score/centile roxygen parameters}
 \value{
 Numeric vector of z-scores/centiles with length equal to the
 outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.

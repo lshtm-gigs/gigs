@@ -32,7 +32,10 @@ test_that(
 test_that(
   desc = "GIGS z-scoring functions fail if inputs have different length",
   code = {
-    expect_error(object = gigs_hcaz(50, 232, 150, c("M", "F")),
+    expect_error(object = gigs_hcaz(headcirc_cm = 50,
+                                    gest_days = 232,
+                                    age_days = 150,
+                                    sex = c("M", "F")),
                  regexp = "Your inputs had different lengths.")
   }
 )
