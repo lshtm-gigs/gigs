@@ -27,9 +27,11 @@ NULL
 #' by acronym first, then by sex and finally by z-score/centile.
 #' @source
 #' [INTERGROWTH-21<sup>st</sup> Newborn Size in Very Preterm
-#' Infants](https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1)\cr
-#' [INTERGROWTH-21<sup>st</sup> Newborn Size Standards](https://intergrowth21.tghn.org/newborn-size-birth/#ns1)\cr
-#' [INTERGROWTH-21<sup>st</sup> Newborn Size Standards - Body Composition](https://www.nature.com/articles/pr201752)
+#'   Infants](https://intergrowth21.tghn.org/very-preterm-size-birth/#vp1)\cr
+#' [INTERGROWTH-21<sup>st</sup> Newborn Size
+#'   Standards](https://intergrowth21.tghn.org/newborn-size-birth/#ns1)\cr
+#' [INTERGROWTH-21<sup>st</sup> Newborn Size Standards - Body
+#'   Composition](https://www.nature.com/articles/pr201752)
 #' @note
 #' The tables in this package are combined versions of the tables published by
 #' Villar *et al.* (2014) and Villar *et al.* (2016), so they cover `168` to
@@ -74,7 +76,7 @@ NULL
 #' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #' @source
-#' MSNT values were provided by Dr Eric Ohuma.
+#' Mu/sigma/nu/tau values were provided by Dr Eric Ohuma.
 #' @examples
 #' names(gigs::ig_nbs_coeffs)
 #' head(gigs::ig_nbs_coeffs$wfga$male)
@@ -97,7 +99,7 @@ NULL
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
 #' @source
 #' [INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
-#' Infants](https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1)
+#'   Infants](https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/)
 #' @examples
 #' names(gigs::ig_png)
 #' head(gigs::ig_png$wfa$male$zscores)
@@ -117,8 +119,8 @@ NULL
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
-#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.** doi:
-#' [10.1177/15648265040251s104](https://journals.sagepub.com/doi/10.1177/15648265040251S104)
+#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.**
+#' \doi{10.1177/15648265040251s104}
 #'
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -139,22 +141,75 @@ NULL
 #' @keywords data
 NULL
 
-#' INTERGROWTH-21<sup>st</sup> Fetal Growth Standards growth curve data
+#' INTERGROWTH-21<sup>st</sup> Fetal Standards growth curve data
 #'
 #' @name ig_fet
 #' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
 #' z-scores/centiles for valid gestational ages in days. The list is ordered
-#' by acronym first, then by z-score/centile.
+#' by acronym first, then by z-score/centile (as available - some Fetal
+#' standards only have centile tables).
 #' @source
-#' [INTERGROWTH-21<sup>st</sup> Fetal Growth standards]()
+#' [INTERGROWTH-21<sup>st</sup> Pregnancy Dating
+#'   (CRL)](https://intergrowth21.tghn.org/pregnancy-dating/)
+#'
+#' [INTERGROWTH-21<sup>st</sup> Symphysis-Fundal Height
+#'   standard](https://intergrowth21.tghn.org/symphysis-fundal-height/)
+#'
+#' [INTERGROWTH-21<sup>st</sup> Fetal Growth
+#'   standards](https://intergrowth21.tghn.org/fetal-growth/)
+#'
+#' [INTERGROWTH-21<sup>st</sup> Fetal Doppler
+#'   standards](https://intergrowth21.tghn.org/fetal-doppler/)
+#'
+#' [INTERGROWTH-21<sup>st</sup> Gestational Weight Gain
+#'   standard](https://intergrowth21.tghn.org/gestational-weight-gain/)
 #' @references
 #' Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
 #' et al. **International standards for fetal growth based on serial ultrasound
 #' measurements: the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
 #' Project.** *Lancet* 2014, **384(9946):869-79.**
-#' \doi{0.1016/S0140-6736(14)61490-2}
+#' \doi{10.1016/S0140-6736(14)61490-2}
+#'
+#' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
+#' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
+#' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
+#' \doi{10.1002/uog.17347}
+#'
+#' Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
+#' **International standards for symphysis-fundal height based on serial
+#' measurements from the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
+#' Project: prospective cohort study in eight countries.** *BMJ* 2016,
+#' **355:i5662** \doi{10.1136/bmj.i5662}
+#'
+#' Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L, Barros
+#' FC et al. **International standards for early fetal size and pregnancy dating
+#' based on ultrasound measurement of crown-rump length in the first trimester
+#' of pregnancy.** *Ultrasound Obstet Gynecol* 2014, **44(6):641-48**
+#' \doi{10.1002/uog.13448}
+#'
+#' Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
+#' **Gestational weight gain standards based on women enrolled in the Fetal
+#' Growth Longitudinal Study of the INTERGROWTH-21st Project: a prospective
+#' longitudinal cohort study.** *BMJ* 2016, **352:i555** \doi{10.1136/bmj.i555}
+#'
+#' Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S et al.
+#' **International gestational age-specific centiles for umbilical artery
+#' Doppler indices: a longitudinal prospective cohort study of the
+#' INTERGROWTH-21st Project.** *Am J Obstet Gynecol* 2021,
+#' **222(6):602.e1-602.e15** \doi{10.1016/j.ajog.2020.01.012}
+#'
+#' Rodriguez-Sibaja MJ, Villar J, Ohuma EO, Napolitano R, Heyl S, Carvalho M et
+#' al. **Fetal cerebellar growth and Sylvian fissure maturation: international
+#' standards from Fetal Growth Longitudinal Study of INTERGROWTH-21st Project**
+#' *Ultrasound Obstet Gynecol* 2021, **57(4):614-623** \doi{10.1002/uog.22017}
+#'
+#' Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp B et al.
+#' **International standards for fetal brain structures based on serial
+#' ultrasound measurements from Fetal Growth Longitudinal Study of
+#' INTERGROWTH-21st Project** *Ultrasound Obstet Gynecol* 2020,
+#' **56(3):359-370** \doi{10.1002/uog.21990}
 #' @examples
 #' names(gigs::ig_fet)
 #' head(gigs::ig_fet$hcfga$zscores)
@@ -172,8 +227,8 @@ NULL
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
-#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.** doi:
-#' [10.1177/15648265040251s104](https://journals.sagepub.com/doi/10.1177/15648265040251S104)
+#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.**
+#' \doi{10.1177/15648265040251s104}
 #'
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -189,7 +244,8 @@ NULL
 #' *Eur J Clin Nutr.* 1990, **44(1):45-60.** PMID:
 #' [2354692](https://pubmed.ncbi.nlm.nih.gov/2354692/)
 #' @source
-#' [WHO Child Growth Standards](https://www.who.int/tools/child-growth-standards/standards)
+#' [WHO Child Growth
+#'   Standards](https://www.who.int/tools/child-growth-standards/standards)
 #' @examples
 #' names(gigs::who_gs_coeffs)
 #' head(gigs::who_gs_coeffs$lhfa$male)

@@ -67,8 +67,7 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
                                          gest_days = gest_days,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_ig_nbs) |>
-    drop_null_elements()
+    do.call(what = validate_ig_nbs)
 
   fromMSNT_p2v <- function(max_len_vec_li) {
     msnt <- ig_nbs_msnt(gest_days = max_len_vec_li[["gest_days"]],

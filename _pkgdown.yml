@@ -40,7 +40,6 @@ reference:
     contents:
       - ig_fet_value2zscore
       - ig_fet_zscore2value
-      - ig_fet_estimate_fetal_weight
   - title: WHO Child Growth Standards
     desc: Conversion functions for the WHO Child Growth Standards.
     contents:

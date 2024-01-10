@@ -57,8 +57,7 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_ig_png) |>
-    drop_null_elements()
+    do.call(what = validate_ig_png)
 
   df <- cbind(z = validated[["z"]],
               ig_png_equations(x = validated[["x"]],
@@ -194,8 +193,7 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_ig_png) |>
-    drop_null_elements()
+    do.call(what = validate_ig_png)
 
   df <- cbind(y = validated[["y"]],
               ig_png_equations(x = validated[["x"]],

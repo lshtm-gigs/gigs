@@ -5,7 +5,7 @@
 \alias{ig_nbs_coeffs}
 \title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards GAMLSS coefficients}
 \source{
-MSNT values were provided by Dr Eric Ohuma.
+Mu/sigma/nu/tau values were provided by Dr Eric Ohuma.
 }
 \description{
 A set of nested lists containing mu, sigma, nu and tau values across

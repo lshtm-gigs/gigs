@@ -156,7 +156,7 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
 
-  use_ig_nbs <- age_days == 0
+  use_ig_nbs <- abs(age_days) < .Machine$double.eps
   use_ig_png <- age_days > 0 & !is_term & inrange(pma_weeks, c(27, 64))
   use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
 

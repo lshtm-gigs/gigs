@@ -16,6 +16,7 @@
 #'  This list will have the same number of elements as `coeff_names`, and will
 #'  be named according to the values in `coeff_names`.
 #' @rdname retrieve_coefficients
+#' @importFrom stats setNames
 #' @noRd
 retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
   # Acronym/sex naming integrity checks

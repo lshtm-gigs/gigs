@@ -3,14 +3,23 @@
 \docType{data}
 \name{ig_fet}
 \alias{ig_fet}
-\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth Standards growth curve data}
+\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Standards growth curve data}
 \source{
-\url{INTERGROWTH-21<sup>st</sup> Fetal Growth standards}
+\href{https://intergrowth21.tghn.org/pregnancy-dating/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Pregnancy Dating (CRL)}
+
+\href{https://intergrowth21.tghn.org/symphysis-fundal-height/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Symphysis-Fundal Height standard}
+
+\href{https://intergrowth21.tghn.org/fetal-growth/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standards}
+
+\href{https://intergrowth21.tghn.org/fetal-doppler/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards}
+
+\href{https://intergrowth21.tghn.org/gestational-weight-gain/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Gestational Weight Gain standard}
 }
 \description{
 A set of nested lists containing tables with reference values at different
 z-scores/centiles for valid gestational ages in days. The list is ordered
-by acronym first, then by z-score/centile.
+by acronym first, then by z-score/centile (as available - some Fetal
+standards only have centile tables).
 }
 \examples{
 names(gigs::ig_fet)
@@ -21,6 +30,45 @@ Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
 et al. \strong{International standards for fetal growth based on serial ultrasound
 measurements: the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
 Project.} \emph{Lancet} 2014, \strong{384(9946):869-79.}
-\doi{0.1016/S0140-6736(14)61490-2}
+\doi{10.1016/S0140-6736(14)61490-2}
+
+Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
+\strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
+Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
+\doi{10.1002/uog.17347}
+
+Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
+\strong{International standards for symphysis-fundal height based on serial
+measurements from the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
+Project: prospective cohort study in eight countries.} \emph{BMJ} 2016,
+\strong{355:i5662} \doi{10.1136/bmj.i5662}
+
+Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L, Barros
+FC et al. \strong{International standards for early fetal size and pregnancy dating
+based on ultrasound measurement of crown-rump length in the first trimester
+of pregnancy.} \emph{Ultrasound Obstet Gynecol} 2014, \strong{44(6):641-48}
+\doi{10.1002/uog.13448}
+
+Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
+\strong{Gestational weight gain standards based on women enrolled in the Fetal
+Growth Longitudinal Study of the INTERGROWTH-21st Project: a prospective
+longitudinal cohort study.} \emph{BMJ} 2016, \strong{352:i555} \doi{10.1136/bmj.i555}
+
+Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S et al.
+\strong{International gestational age-specific centiles for umbilical artery
+Doppler indices: a longitudinal prospective cohort study of the
+INTERGROWTH-21st Project.} \emph{Am J Obstet Gynecol} 2021,
+\strong{222(6):602.e1-602.e15} \doi{10.1016/j.ajog.2020.01.012}
+
+Rodriguez-Sibaja MJ, Villar J, Ohuma EO, Napolitano R, Heyl S, Carvalho M et
+al. \strong{Fetal cerebellar growth and Sylvian fissure maturation: international
+standards from Fetal Growth Longitudinal Study of INTERGROWTH-21st Project}
+\emph{Ultrasound Obstet Gynecol} 2021, \strong{57(4):614-623} \doi{10.1002/uog.22017}
+
+Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp B et al.
+\strong{International standards for fetal brain structures based on serial
+ultrasound measurements from Fetal Growth Longitudinal Study of
+INTERGROWTH-21st Project} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(3):359-370} \doi{10.1002/uog.21990}
 }
 \keyword{data}

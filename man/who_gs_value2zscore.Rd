@@ -79,7 +79,7 @@ cm).}
 
 \item{acronym}{Valid acronym(s) for the WHO Child Growth standards: either
 \code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
-(length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
+(length/height-for-age), \code{"wfl"} (weight-for-length), \code{"wfh"}
 (weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
 (arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
 \code{"tsfa"} (triceps skinfold-for-age).}
@@ -144,8 +144,8 @@ who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
 \references{
 de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
 WHO Multicentre Growth Reference Study: planning, study design, and
-methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
-\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
+\doi{10.1177/15648265040251s104}
 
 World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height

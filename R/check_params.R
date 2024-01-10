@@ -6,18 +6,19 @@
 #' @param y,z,p Either `NULL` or a numeric vector with length equal to or
 #'   greater than one.
 #' @note The function will `stop()` if more than one of `y`, `z`, or `p` are not
-#'   `NULL`.
+#'   `NULL`. All checks on type/length are performed by `{checkmate}`.
 #' @returns Returns `vec`. Throws an error if `vec` is not numeric, is not at
 #'   least length 1, or if all values in `vec` are missing.
 #' @noRd
 validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   args <- list(y = y, z = z, p = p)
   arg_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
-  stopifnot(sum(arg_nulls) == 2) # Error should never be seen by user
-  vec <- args[!arg_nulls][[1]]
+  stopifnot(sum(arg_nulls) == 2L) # Error should never be seen by user
   varname <- names(arg_nulls)[!arg_nulls]
-  checkmate::assert_numeric(vec, min.len = 1, all.missing = FALSE,
-                            .var.name = varname)
+  vec <- args[!arg_nulls][[1]] |>
+    checkmate::assert_numeric(min.len = 1, .var.name = varname) |>
+    checkmate::assert_atomic_vector() |>
+    remove_attributes()
   if (!arg_nulls[["p"]]) {
     vec <- replace(vec, !inrange(vec, c(0,1)), NA)
   }
@@ -30,18 +31,15 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
 #'   growth standard.
 #' @param range Range within which `x` values are expected to be. Values outside
 #'   this range will be set to `NA` with `replace()`.
-#' @param rounded A single logical value. If `TRUE`, `x` values will be set to
-#'   `NA` if they are not divisible by zero. This is important for the
-#'   INTERGROWTH-21st PNG standards which use post-menstrual age in whole weeks.
 #' @returns A numeric vector identical to `x`, except values outside `lower` and
 #'   `upper` are replaced with NAs. Throws an error if `x` is not numeric.
 #' @noRd
-validate_xvar <- function(x, range, rounded = FALSE) {
-  checkmate::qassert(rounded, rules = "B1")
-  checkmate::assert_numeric(x, min.len = 1, all.missing = FALSE)
+validate_xvar <- function(x, range) {
+  x <- checkmate::assert_numeric(x, min.len = 1) |>
+    checkmate::assert_atomic_vector() |>
+    remove_attributes()
   out_of_range <- !inrange(x, range)
-  lgl_replace <- if (!rounded) out_of_range else out_of_range & x %% 1 != 0
-  replace(x = x, list = lgl_replace, values = NA_real_)
+  replace(x = x, list = out_of_range, values = NA_real_)
 }
 
 #' Validate user-inputted character vectors
@@ -55,7 +53,8 @@ validate_xvar <- function(x, range, rounded = FALSE) {
 validate_chr <- function(chr, options) {
   varname <- deparse(substitute(chr))
   checkmate::assert_character(chr, min.len = 1, all.missing = FALSE,
-                              .var.name = varname)
+                              .var.name = varname) |>
+    checkmate::assert_atomic_vector()
   invalid <- !chr %in% options
   if (all(invalid)) {
     len <- length(options)
@@ -177,13 +176,11 @@ validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
   # The wfa, lfa and hcfa standards use post-menstrual age, whereas the wfl
   # standard uses length in cm --> this code specifies whether to compare x to
   # PMA or length in cm
-  uses_pma <- acronym != names(gigs::ig_png)[4]
+  uses_pma <- acronym != "wfl"
   x <- ifelse(
     uses_pma,
-    yes = validate_xvar(x, range(gigs::ig_png$wfa$male$zscores$pma_weeks),
-                        rounded = TRUE),
-    no = validate_xvar(x, range(gigs::ig_png$wfl$male$zscores$length_cm),
-                       rounded = FALSE)
+    yes = validate_xvar(x, range(gigs::ig_png$wfa$male$zscores$pma_weeks)),
+    no = validate_xvar(x, range(gigs::ig_png$wfl$male$zscores$length_cm))
   )
   sex <- validate_sex(sex)
   acronym <- validate_acronym(acronym = acronym,
@@ -197,26 +194,48 @@ validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
 #'
 #' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
 #'   one of these arguments are provided; see [validate_yzp()] documentation.
-#' @param gest_days Numeric vector with user-inputted gestational age values in
+#' @param x Numeric vector with user-inputted gestational age values in
 #'   days.
 #' @param acronym Character vector with user-inputted acronym values.
-#' @note If any values are found to be invalid (e.g. incorrect type or length),
-#'   the function will fail. Values in `gest_days` and `acronym` which not
+#' @note If any arguments are found to be the wrong type or have length < 1, an
+#'   error will be thrown. Values in `gest_days` and `acronym` which are not
 #'   acceptable will be replaced with `NA`.
 #' @returns List with names `"gest_days"`, and `"acronym"`, containing vectors
 #'   where invalid `gest_days` and `acronym` values have been replaced with
 #'   `NA`. Will also contain one of `"y"`, `"z"`, or `"p"`, depending on which
 #'   was provided to the function.
 #' @noRd
-validate_ig_fet <- function(y = NULL, z = NULL, p = NULL, gest_days, acronym) {
+validate_ig_fet <- function(y = NULL, z = NULL, p = NULL, x, acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
-  gest_days <- ifelse(
-    acronym != "efwfga",
-    yes = validate_xvar(gest_days, gigs::ig_fet$flfga$zscores$gest_days),
-    no = validate_xvar(gest_days, gigs::ig_fet$efwfga$zscores$gest_days)
-  )
+  fet_growth_acros <- c("hcfga", "bpdfga", "acfga", "flfga", "ofdfga", "tcdfga")
+  brain_dev_acros <- c("poffga", "sffga", "avfga", "pvfga", "cmfga")
+  doppler_acros <- c("pifga", "rifga", "sdrfga")
+
+  #' Validate that some subset of `x` using a given range
+  #' @param lgl_subset Logical statement used to subset `x`
+  #' @param range Two-length vector giving acceptable lower + upper bounds for
+  #'   values in `x`
+  #' @return Invisibly returns NULL, but overwrites `x[lgl_subset]` with
+  #'   validated values (i.e. outside bounds of `range` changed to NA).
+  #' @noRd
+  validate_subset <- function(lgl_subset, range) {
+    if (length(x[lgl_subset]) != 0) {
+      x[lgl_subset] <- validate_xvar(x[lgl_subset], range)
+    }
+  }
+  validate_subset(acronym %in% fet_growth_acros, c(98, 280)) # days
+  validate_subset(acronym %in% brain_dev_acros, c(105, 252)) # days
+  validate_subset(acronym %in% doppler_acros, c(168, 280)) # days
+  validate_subset(acronym == "efwfga", c(154, 280)) # days
+  validate_subset(acronym == "sfhfga", c(112, 294)) # days
+  validate_subset(acronym == "crlfga", c(58, 105)) # days
+  validate_subset(acronym == "gafcrl", c(15, 95)) # days
+  validate_subset(acronym == "gwgfga", c(98, 280)) # days
+  # validate_subset(acronym == "gaftcd", c(12, 55)) # mm
+  x <- remove_attributes(x)
+
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::ig_fet))
-  list(y = y, z = z, p = p, gest_days = gest_days, acronym = acronym) |>
+  list(y = y, z = z, p = p, x = x, acronym = acronym) |>
     drop_null_elements()
 }

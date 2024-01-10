@@ -71,6 +71,21 @@ stop_if_lengths_unequal <- function(...) {
 #' @returns The list supplied as `list`, but with `NULL` elements removed.
 #' @noRd
 drop_null_elements <- function(list) {
-  null_elems <- vapply(list, is.null, FUN.VALUE = logical(1))
+  null_elems <- vapply(list, is.null, FUN.VALUE = logical(length = 1))
   list[!null_elems]
+}
+
+#' Remove attributes from a vector
+#'
+#' @param x Object from which to remove attributes.
+#' @note This function is used within the package to ensure that atomic vector
+#'   inputs can be used irrespective of their class. Internally, it is only used
+#'   following calls to assert atomic vector input.
+#' @srrstats {G2.6, EA2.6} Infrastructure to ensure atomic vector inputs with
+#'   odd classes do not cause errors.
+#' @returns `x`, without any attributes.
+#' @noRd
+remove_attributes <- function(x) {
+  attributes(x) <- NULL
+  x
 }

@@ -5,7 +5,7 @@
 \alias{ig_png}
 \title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth Standards growth curve data}
 \source{
-\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/#pg1}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth of Preterm Infants}
+\href{https://intergrowth21.tghn.org/postnatal-growth-preterm-infants/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth of Preterm Infants}
 }
 \description{
 A set of nested lists containing tables with reference values at different

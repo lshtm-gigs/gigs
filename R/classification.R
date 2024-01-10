@@ -170,7 +170,7 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
   stunting[z_scores <= -3] <- "stunting_severe"
   stunting[z_scores > -2] <- "normal"
   stunting_lvls <- c("stunting_severe", "stunting", "normal")
-  if (outliers == TRUE) {
+  if (outliers) {
     stunting[abs(z_scores) > 6] <- "outlier"
     stunting_lvls <- c(stunting_lvls, "outlier")
   }
@@ -230,7 +230,7 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
   wasting[abs(z_scores) < 2] <- "normal"
   wasting[z_scores >= 2] <- "overweight"
   wasting_lvls <- c("wasting_severe", "wasting", "normal", "overweight")
-  if (outliers == TRUE) {
+  if (outliers) {
     wasting[abs(z_scores) > 5] <- "outlier"
     wasting_lvls <- c(wasting_lvls, "outlier")
   }
@@ -280,7 +280,7 @@ classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) 
   wfa[abs(z_scores) < 2] <- "normal"
   wfa[z_scores >= 2] <- "overweight"
   wfa_lvls <- c("underweight_severe", "underweight", "normal", "overweight")
-  if (outliers == TRUE) {
+  if (outliers) {
     wfa[z_scores < -6 | z_scores > 5] <- "outlier"
     wfa_lvls <- c(wfa_lvls, "outlier")
   }

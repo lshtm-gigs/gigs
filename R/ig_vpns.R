@@ -22,6 +22,7 @@
 #' Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 #' **INTERGROWTH-21st very preterm size at birth reference charts.** *Lancet*
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
+#' @importFrom stats complete.cases
 #' @noRd
 ig_vpns_equations <- function(gest_days, sex, acronym) {
   gest_days[gest_days >= 231] <- NA

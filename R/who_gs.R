@@ -8,7 +8,7 @@
 #'   cm).
 #' @param acronym Valid acronym(s) for the WHO Child Growth standards: either
 #'   `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
-#'   (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
+#'   (length/height-for-age), `"wfl"` (weight-for-length), `"wfh"`
 #'   (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
 #'   (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
 #'   `"tsfa"` (triceps skinfold-for-age).
@@ -17,8 +17,8 @@
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
-#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.** doi:
-#' [10.1177/15648265040251s104](https://journals.sagepub.com/doi/10.1177/15648265040251S104)
+#' methodology** *Food Nutr Bull.* 2004, **25(1 Suppl):S15-26.**
+#' \doi{10.1177/15648265040251s104}
 #'
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -72,8 +72,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_who_gs) |>
-    drop_null_elements()
+    do.call(what = validate_who_gs)
 
   lms <- who_gs_lms(x = validated[["x"]],
                     sex = validated[["sex"]],
@@ -98,7 +97,7 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
     ifelse(
       test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
       yes = ifelse(
-        test = l != 0,
+        test = abs(l) > .Machine$double.eps,
         yes = exponent(z * s * l + 1, (1 / l)) * m,
         no = m * exp(s * z)),
       no = ifelse(
@@ -286,8 +285,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_who_gs) |>
-    drop_null_elements()
+    do.call(what = validate_who_gs)
 
   lms <- who_gs_lms(x = validated[["x"]],
                     sex = validated[["sex"]],
@@ -305,7 +303,7 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
   }
 
   z_from_LMS <- function(l, m, s, y, acronym) {
-    z <- ifelse(test = l != 0,
+    z <- ifelse(test = abs(l) > .Machine$double.eps,
                 yes = (abs((y / m)^l) - 1) / (s * l),
                 no = log(y / m) / s)
     ifelse(
