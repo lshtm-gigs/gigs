@@ -13,7 +13,7 @@ reference:
     desc: >
       Classify growth data into commonly used growth indicators.
     contents:
-      - classify_sga
+      - classify_sfga
       - classify_svn
       - classify_stunting
       - classify_wasting

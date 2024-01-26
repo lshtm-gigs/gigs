@@ -8,30 +8,34 @@ length/height-for-age standards}
 classify_stunting(lenht_cm, age_days, gest_days, sex, outliers = FALSE)
 }
 \arguments{
-\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector of length one or greater  with length/height
+measurement(s) in cm.}
 
-\item{age_days}{Numeric vector with age(s) in days for each child. Should be
-between \code{0} to \code{1856} days.}
+\item{age_days}{Numeric vector of length one or greater  with age(s) in days
+for each child. Should be between \code{0} to \code{1856} days.}
 
 \item{gest_days}{Numeric vector with gestational age(s) at birth in days.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
+an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
 Factor of stunting classification(s) with levels
-\code{c("stunting_severe", "stunting", "normal")} or \code{c("stunting_severe", "stunting", "normal", "outlier")}, depending on whether the \code{outliers}
-argument is set to \code{TRUE}.
+\code{c("stunting_severe", "stunting", "not stunting")} or \code{c("stunting_severe", "stunting", "not stunting", "outlier")}, depending on whether the
+\code{outliers} argument is set to \code{TRUE}.
 }
 \description{
 Classify stunting (low length/height-for-age) using WHO or
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards depending on the
 gestational age at birth of the child. Severe stunting is below <-3 SD
-relative to median length/height at a given age, whereas moderate stunting is
--2SD from the median.
+relative to mean length/height at a given age, whereas moderate stunting is
+-2SD from the mean.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}. The

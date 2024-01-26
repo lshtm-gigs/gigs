@@ -15,32 +15,39 @@ classify_wasting(
 )
 }
 \arguments{
-\item{weight_kg}{Numeric vector with weight value(s) in kg.}
+\item{weight_kg}{Numeric vector of length one or greater with weight
+value(s) in kg.}
 
-\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector of length one or greater  with length/height
+measurement(s) in cm.}
 
-\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
-Values not between \code{168} and \code{300} will be set to \code{NA}.}
+\item{gest_days}{Numeric vector of length one or greater with gestational
+age(s) at birth in days. Elements not between \code{168} and \code{300} will return
+be \code{NA} in the returned vector.}
 
-\item{age_days}{Numeric vector with age(s) in days for each child. Should be
-between \code{0} to \code{1856} days.}
+\item{age_days}{Numeric vector of length one or greater  with age(s) in days
+for each child. Should be between \code{0} to \code{1856} days.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
+an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
 Factor of wasting classifications with same length as longest input.
-If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "normal", "overweight")}. If \code{outliers = TRUE}, levels are \code{c("wasting_severe", "wasting", "normal", "overweight", "outlier")}.
+If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "not wasting", "overweight")}. If \code{outliers = TRUE}, levels are
+\code{c("wasting_severe", "wasting", "not wasting", "overweight", "outlier")}.
 }
 \description{
 Classify wasting (low weight-for-length/height) using the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO Child Growth standards,
 specifically either the weight-for-length or weight-for-height standard
 depending on the age of the child. Severe wasting is <-3SD relative to the
-median expected weight, whereas moderate wasting is -2SD from the median.
+mean expected weight, whereas moderate wasting is -2SD from the mean.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.

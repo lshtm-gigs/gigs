@@ -8,13 +8,18 @@ INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestati
 classify_svn(weight_kg, gest_days, sex)
 }
 \arguments{
-\item{weight_kg}{Numeric vector with weight value(s) in kg.}
+\item{weight_kg}{Numeric vector of length one or greater with weight
+value(s) in kg.}
 
-\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
-Values not between \code{168} and \code{300} will be set to \code{NA}.}
+\item{gest_days}{Numeric vector of length one or greater with gestational
+age(s) at birth in days. Elements not between \code{168} and \code{300} will return
+be \code{NA} in the returned vector.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
+an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 }
 \value{
 Factor with small vulnerable newborn classification(s), with levels
@@ -23,8 +28,8 @@ Factor with small vulnerable newborn classification(s), with levels
 \description{
 A small vulnerable newborn (SVN) can be preterm (born too soon),
 small-for-gestational age (born too small), or within both of these
-categories. This function categorises newborn weights into SVN categories for
-use in downstream analyses.
+categories. This function uses weight and gestational age to categorise
+newborns according to their SVN  type, for use in downstream analyses.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
@@ -43,6 +48,6 @@ vulnerable newborns to accelerate change and improve counting.} \emph{The Lancet
 2023, \emph{401(10389):1707-1719.} \doi{10.1016/S0140-6736(23)00522-6}
 }
 \seealso{
-\code{\link[=classify_sga]{classify_sga()}}, which this function uses to classify newborns as
+\code{\link[=classify_sfga]{classify_sfga()}}, which this function uses to classify newborns as
 small-for-gestational age.
 }

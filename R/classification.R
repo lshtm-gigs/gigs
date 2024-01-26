@@ -20,14 +20,14 @@
 #' @examples
 #' # Without severe flag, does not differentiate between
 #' # p < 0.03 and p < 0.10
-#' classify_sga(
+#' classify_sfga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_days = 267,
 #'   sex = "F"
 #' )
 #'
 #' # With severe = TRUE, highlights p < 0.03
-#' classify_sga(
+#' classify_sfga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_days = 267,
 #'   sex = "F",
@@ -43,21 +43,21 @@
 #' 31.** *Technical report, Royal College of Obstetricians and Gynaecologists,
 #' London, 2013.*
 #' @export
-classify_sga <- function(weight_kg, gest_days, sex, severe = FALSE) {
+classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
   checkmate::qassert(severe, rules = "B1")
   centiles <- ig_nbs_wfga_value2centile(weight_kg = weight_kg,
                                         sex = sex,
                                         gest_days = gest_days)
-  sga <- rep(NA_character_, length(centiles))
-  sga[centiles < 0.1] <- "SGA"
-  sga[centiles >= 0.1 & centiles <= 0.9] <- "AGA"
-  sga[centiles > 0.9] <- "LGA"
-  sga_lvls <- c("SGA", "AGA", "LGA")
+  sfga <- rep(NA_character_, length(centiles))
+  sfga[centiles < 0.1] <- "SGA"
+  sfga[centiles >= 0.1 & centiles <= 0.9] <- "AGA"
+  sfga[centiles > 0.9] <- "LGA"
+  sfga_lvls <- c("SGA", "AGA", "LGA")
   if (severe) {
-    sga[centiles < 0.03] <- "SGA(<3)"
-    sga_lvls <- c("SGA(<3)", sga_lvls)
+    sfga[centiles < 0.03] <- "SGA(<3)"
+    sfga_lvls <- c("SGA(<3)", sfga_lvls)
   }
-  factor(sga, levels = sga_lvls)
+  factor(sfga, levels = sfga_lvls)
 }
 
 #' Classify small vulnerable newborns according to the
@@ -68,7 +68,7 @@ classify_sga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' categories. This function categorises newborn weights into SVN categories for
 #' use in downstream analyses.
 #'
-#' @inherit classify_sga params note
+#' @inherit classify_sfga params note
 #' @return Factor with small vulnerable newborn classification(s), with levels
 #'   `c("Preterm SGA", "Preterm AGA", "Preterm SGA", "Term SGA", "Term AGA",
 #'   "Term SGA")`.
@@ -83,24 +83,24 @@ classify_sga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' **Small babies, big risks: global estimates of prevalence and mortality for
 #' vulnerable newborns to accelerate change and improve counting.** *The Lancet*
 #' 2023, *401(10389):1707-1719.* \doi{10.1016/S0140-6736(23)00522-6}
-#' @seealso [classify_sga()], which this function uses to classify newborns as
+#' @seealso [classify_sfga()], which this function uses to classify newborns as
 #'   small-for-gestational age.
 #' @export
 classify_svn <- function(weight_kg, gest_days, sex) {
   is_term <- gest_days >= 37 * 7
-  sga <- classify_sga(weight_kg = weight_kg,
-                      sex = sex,
-                      gest_days = gest_days,
-                      severe = FALSE)
-  sga_cats <- levels(sga)
-  levels <- c(paste("Preterm", sga_cats), paste("Term", sga_cats))
-  svn <- character(length = length(sga))
-  svn[!is_term & sga == sga_cats[1]] <- levels[1]
-  svn[!is_term & sga == sga_cats[2]] <- levels[2]
-  svn[!is_term & sga == sga_cats[3]] <- levels[3]
-  svn[is_term & sga == sga_cats[1]] <- levels[4]
-  svn[is_term & sga == sga_cats[2]] <- levels[5]
-  svn[is_term & sga == sga_cats[3]] <- levels[6]
+  sfga <- classify_sfga(weight_kg = weight_kg,
+                        sex = sex,
+                        gest_days = gest_days,
+                        severe = FALSE)
+  sfga_cats <- levels(sfga)
+  levels <- c(paste("Preterm", sfga_cats), paste("Term", sfga_cats))
+  svn <- character(length = length(sfga))
+  svn[!is_term & sfga == sfga_cats[1]] <- levels[1]
+  svn[!is_term & sfga == sfga_cats[2]] <- levels[2]
+  svn[!is_term & sfga == sfga_cats[3]] <- levels[3]
+  svn[is_term & sfga == sfga_cats[1]] <- levels[4]
+  svn[is_term & sfga == sfga_cats[2]] <- levels[5]
+  svn[is_term & sfga == sfga_cats[3]] <- levels[6]
   factor(x = svn, levels = levels)
 }
 
@@ -121,9 +121,9 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' @param outliers A single `TRUE` or `FALSE` value specifying whether
 #'   implausible z-score value thresholds should be applied. Default = `FALSE`.
 #' @return Factor of stunting classification(s) with levels
-#'   `c("stunting_severe", "stunting", "normal")` or `c("stunting_severe",
-#'   "stunting", "normal", "outlier")`, depending on whether the `outliers`
-#'   argument is set to `TRUE`.
+#'   `c("stunting_severe", "stunting", "not_stunting")` or `c("stunting_severe",
+#'   "stunting", "not_stunting", "outlier")`, depending on whether the
+#'   `outliers` argument is set to `TRUE`.
 #' @note Input vectors will be recycled by [vctrs::vec_recycle_common()]. The
 #'   function assumes that your measurements were taken according to the WHO
 #'   guidelines, which stipulate that recumbent length should not be measured
@@ -168,8 +168,8 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
   stunting <- rep(NA_character_, length(z_scores))
   stunting[z_scores <= -2] <- "stunting"
   stunting[z_scores <= -3] <- "stunting_severe"
-  stunting[z_scores > -2] <- "normal"
-  stunting_lvls <- c("stunting_severe", "stunting", "normal")
+  stunting[z_scores > -2] <- "not_stunting"
+  stunting_lvls <- c("stunting_severe", "stunting", "not_stunting")
   if (outliers) {
     stunting[abs(z_scores) > 6] <- "outlier"
     stunting_lvls <- c(stunting_lvls, "outlier")
@@ -186,12 +186,12 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #' depending on the age of the child. Severe wasting is <-3SD relative to the
 #' median expected weight, whereas moderate wasting is -2SD from the median.
 #'
-#' @inheritParams classify_sga
+#' @inheritParams classify_sfga
 #' @inheritParams classify_stunting
 #' @return Factor of wasting classifications with same length as longest input.
-#'   If `outliers = FALSE`, levels are `c("wasting_severe", "wasting", "normal",
-#'   "overweight")`. If `outliers = TRUE`, levels are `c("wasting_severe",
-#'   "wasting", "normal", "overweight", "outlier")`.
+#'   If `outliers = FALSE`, levels are `c("wasting_severe", "wasting",
+#'   "not_wasting", "overweight")`. If `outliers = TRUE`, levels are
+#'   `c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")`.
 #' @note Input vectors will be recycled by [vctrs::vec_recycle_common()].
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
@@ -227,9 +227,9 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
   wasting <- character(length = length(z_scores))
   wasting[z_scores <= -2] <- "wasting"
   wasting[z_scores <= -3] <- "wasting_severe"
-  wasting[abs(z_scores) < 2] <- "normal"
+  wasting[abs(z_scores) < 2] <- "not_wasting"
   wasting[z_scores >= 2] <- "overweight"
-  wasting_lvls <- c("wasting_severe", "wasting", "normal", "overweight")
+  wasting_lvls <- c("wasting_severe", "wasting", "not_wasting", "overweight")
   if (outliers) {
     wasting[abs(z_scores) > 5] <- "outlier"
     wasting_lvls <- c(wasting_lvls, "outlier")
@@ -245,7 +245,7 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #' SD below the median, underweight is less than 2 SD below the median, and
 #' overweight is > 2 SDs above the median.
 #'
-#' @inheritParams classify_sga
+#' @inheritParams classify_sfga
 #' @inherit classify_stunting params references
 #' @return Factor of weight-for-age classifications with same length as longest
 #'   input. If `outliers = FALSE`, levels are `c("underweight_severe",
@@ -277,9 +277,10 @@ classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) 
   wfa <- character(length(z_scores))
   wfa[z_scores <= -2] <- "underweight"
   wfa[z_scores <= -3] <- "underweight_severe"
-  wfa[abs(z_scores) < 2] <- "normal"
+  wfa[abs(z_scores) < 2] <- "normal_weight"
   wfa[z_scores >= 2] <- "overweight"
-  wfa_lvls <- c("underweight_severe", "underweight", "normal", "overweight")
+  wfa_lvls <- c("underweight_severe", "underweight", "normal_weight",
+                "overweight")
   if (outliers) {
     wfa[z_scores < -6 | z_scores > 5] <- "outlier"
     wfa_lvls <- c(wfa_lvls, "outlier")
