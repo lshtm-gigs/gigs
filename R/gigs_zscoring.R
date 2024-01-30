@@ -24,7 +24,7 @@
 #'   * `gest_days` ≥ 43 weeks:
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
-#' @note This function expects vectors of the same length, and will fail if
+#' @note These functions expect vectors of the same length, and will fail if
 #'   these are not provided.
 #' @rdname gigs_waz
 #' @noRd
@@ -148,6 +148,8 @@ gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
 #'   `who_gs`. Where these logical vectors are `TRUE`, then the growth standard
 #'   from that named list should be used.
 #' @rdname gigs_xaz
+#' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
+#'   equality.
 #' @noRd
 gigs_xaz_lgls <- function(gest_days, age_days) {
   # Set up vars for use later
@@ -156,7 +158,7 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
 
-  use_ig_nbs <- abs(age_days) < .Machine$double.eps
+  use_ig_nbs <- abs(age_days) < sqrt(.Machine$double.eps)
   use_ig_png <- age_days > 0 & !is_term & inrange(pma_weeks, c(27, 64))
   use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
 
@@ -169,12 +171,16 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
 
 #' Run a function over a subset of inputs
 #' @param fn Function to run over `in1`, `in2`, `in3`.
-#' @param lgl Logical vector indicating which indices of `in1` `in2` and `in3`
-#'   to operate on.
+#' @param lgl Logical vector of length one or more indicating which indices of
+#'   `in1` `in2` and `in3` should be operated on `by `fn`.
 #' @param in1,in2,in3 Three vectors of the same length as `lgl` which are
-#'   used as inputs to the function specified by `fn`.
-#' @return Returns a vector the same length as `sum(lgl)`.
+#'   used as inputs to `fn`.
+#' @return Returns a vector of the type outputted by `fn`, with length dependent
+#'   on what `fn` outputs.
 #' @noRd
 fn_on_subset <- function(fn, lgl, in1, in2, in3) {
   if (any(lgl)) fn(in1[lgl], in2[lgl], in3[lgl]) else double(length = 0L)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
