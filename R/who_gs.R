@@ -1,17 +1,34 @@
 #' Convert z-scores/centiles to values in the WHO Child Growth Standards
 #'
-#' @param x,age_days,length_cm,height_cm Numeric vector with `x` values at which
-#'   to convert inputs. Must be within bounds of available `x` values for given
-#'   acronym. The standard-specific versions of each function specify `x`:
-#'   either `age_days` (age since birth in days), `length_cm` (recumbent length
-#'   measurement(s) in cm) or `height_cm` (standing height measurement(s) in
-#'   cm).
-#' @param acronym Valid acronym(s) for the WHO Child Growth standards: either
-#'   `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
-#'   (length/height-for-age), `"wfl"` (weight-for-length), `"wfh"`
-#'   (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
-#'   (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
-#'   `"tsfa"` (triceps skinfold-for-age).
+#' @param x,age_days,length_cm,height_cm Numeric vector of length one or more
+#'   with x values. Elements in `x` or its standard-specific equivalents
+#'   (`age_days`, `length_cm`, and `height_cm`) should have specific units and
+#'   be between certain values depending on the standard in use (defined by
+#'   `acronym`). These are:
+#'   * Between 0 and 1856 days for `"wfa"`, `"bfa"`, `"lhfa"`, and `"hcfa"`.
+#'   * Between 45 and 110 days for `"wfl"`.
+#'   * Between 65 and 120 days for `"wfh"`.
+#'   * Between 91 and 1856 days for `"acfa"`, `"ssfa"`, `"tsfa"`.
+#'
+#'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
+#'   warn you. This behaviour can be customised using the functions in
+#'   [gigs_options].
+#' @param acronym Character vector of length one or more denoting the WHO Child
+#'   Growth standard(s) in use. Each element should be one of:
+#'   * `"wfa"` (weight-for-age)
+#'   * `"bfa"` (BMI-for-age)
+#'   * `"lhfa"` (length/height-for-age)
+#'   * `"wfl"` (weight-for-length)
+#'   * `"wfh"` (weight-for-height)
+#'   * `"hcfa"` (head circumference-for-age)
+#'   * `"acfa"` (arm circumference-for-age)
+#'   * `"ssfa"` (subscapular skinfold-for-age)
+#'   * `"tsfa"` (triceps skinfold-for-age)
+#'
+#'   This argument is case-sensitive. By default, gigs will replace elements in
+#'   `acronym` which are not one of the above values with `NA` and warn you.
+#'   This behaviour can be customised using the functions in [gigs_options].
+#' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_value2zscore_returns return
 #' @references
@@ -97,7 +114,8 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
     ifelse(
       test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
       yes = ifelse(
-        test = abs(l) > .Machine$double.eps,
+        #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
+        test = abs(l) > sqrt(.Machine$double.eps),
         yes = exponent(z * s * l + 1, (1 / l)) * m,
         no = m * exp(s * z)),
       no = ifelse(
@@ -106,17 +124,8 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
         no = z_under_minus_three(l, m, s, z))
     )
   }
-  checkmate::assert_numeric(z)
-  ifelse(validated[["sex"]] == "U",
-         yes = mean_if_sex_undefined(who_gs_zscore2value,
-                                     arg1 = z,
-                                     x_arg = validated[["x"]],
-                                     acronym = validated[["acronym"]]),
-         no = y_from_LMS(l = lms[[1]],
-                         m = lms[[2]],
-                         s = lms[[3]],
-                         validated[["z"]],
-                         validated[["acronym"]]))
+  y_from_LMS(l = lms[[1]], m = lms[[2]], s = lms[[3]], z = validated[["z"]],
+             acronym = validated[["acronym"]])
 }
 
 #' @rdname who_gs_zscore2value
@@ -236,15 +245,20 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 
 #' Convert values to z-scores/centiles in the WHO Child Growth Standards
 #'
-#' @param weight_kg Numeric vector of weight measurement(s) in kg.
-#' @param bmi Numeric vector of body mass index measurement(s) in
-#'   kg/m<sup>2</sup>.
-#' @param lenht_cm Numeric vector of length/height measurement(s) in cm.
-#' @param headcirc_cm Numeric vector of head circumference measurement(s) in cm.
-#' @param armcirc_cm Numeric vector of arm circumference measurement(s) in cm.
-#' @param subscap_sf_mm Numeric vector of subscapular skinfold measurement(s) in
-#'   mm.
-#' @param triceps_sf_mm Numeric vector of triceps skinfold measurement(s) in mm.
+#' @param weight_kg Numeric vector of length one or more with weight
+#'   measurement(s) in kg.
+#' @param bmi Numeric vector of length one or more with body mass index
+#'   measurement(s) in kg/m<sup>2</sup>.
+#' @param lenht_cm Numeric vector of length one or more with length/height
+#'   measurement(s) in cm.
+#' @param headcirc_cm Numeric vector of length one or more with head
+#'   circumference measurement(s) in cm.
+#' @param armcirc_cm Numeric vector of length one or more with arm circumference
+#'   measurement(s) in cm.
+#' @param subscap_sf_mm Numeric vector of length one or more with subscapular
+#'   skinfold measurement(s) in mm.
+#' @param triceps_sf_mm Numeric vector of length one or more with triceps
+#'   skinfold measurement(s) in mm.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_value2zscore_returns return
 #' @inherit who_gs_zscore2value params references
@@ -303,7 +317,8 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
   }
 
   z_from_LMS <- function(l, m, s, y, acronym) {
-    z <- ifelse(test = abs(l) > .Machine$double.eps,
+    #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
+    z <- ifelse(test = abs(l) > sqrt(.Machine$double.eps),
                 yes = (abs((y / m)^l) - 1) / (s * l),
                 no = log(y / m) / s)
     ifelse(
@@ -315,18 +330,11 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
     )
   }
 
-  ifelse(validated[["sex"]] == "U",
-         yes = mean(c(
-           who_gs_value2zscore(y = validated[["y"]], x = lms[["x"]],
-                               sex = "M", acronym = validated[["acronym"]]),
-           who_gs_value2zscore(y = validated[["y"]], x = lms[["x"]],
-                               sex = "F", acronym = validated[["acronym"]])
-         )),
-         no = z_from_LMS(l = lms[[1]],
-                         m = lms[[2]],
-                         s = lms[[3]],
-                         y = validated[["y"]],
-                         acronym = validated[["acronym"]]))
+  z_from_LMS(l = lms[[1]],
+             m = lms[[2]],
+             s = lms[[3]],
+             y = validated[["y"]],
+             acronym = validated[["acronym"]])
 }
 
 #' @rdname who_gs_value2zscore
@@ -446,17 +454,22 @@ who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
 
 #' Retrieve LMS values for WHO Child Growth Standards
 #'
-#' @param x X value(s) at which to retrieve LMS values. Must be within bounds of
-#' available x values for given acronym.
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param acronym Valid acronym for WHO Growth Standards datasets: one of
-#' `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
-#' (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
-#' (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
-#' (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
-#' `"tsfa"` (triceps skinfold-for-age).
-#' @return A dataframe with lambda, mu and sigma values for the WHO standard(s)
-#' specified by the `acronym` parameter, for the supplied `x` and `sex` values.
+#' @param x Numeric vector of length one or more with x value(s) at which to
+#'   retrieve LMS values. Elements which lie outside the bounds of valid `x`
+#'   values for their respective `acronym` will return `NA` for `L`, `M`, and
+#'   `S`.
+#' @param sex Character vector of same length as `x` with sex(es), either `"M"`
+#'   (male) or `"F"` (female).
+#' @param acronym Character vector of same length as `x` with acronyms for the
+#'   WHO Child Growth standards. Each element should be one of
+#'  `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
+#'  (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
+#'  (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
+#'  (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
+#'  `"tsfa"` (triceps skinfold-for-age).
+#' @returns A dataframe with lambda (`"L"`), mu (`"M"`) and sigma (`"S"`) values
+#'   for the WHO standard(s) specified by the `acronym` parameter, for the
+#'   supplied `x` and `sex` values.
 #' @references
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -485,12 +498,27 @@ who_gs_lms <- function(x, sex, acronym) {
 #' @param l Lambda value as provided by [who_gs_lms()]
 #' @param m Mu value as provided by [who_gs_lms()]
 #' @param s Sigma value as provided by [who_gs_lms()]
-#' @param n_sd Number of standard deviations from the median at which to compute
+#' @param n_sd Number of standard deviations from the mean at which to compute
 #'   a value.
 #' @inherit who_gs_lms references
-#' @return Numeric vector containing value(s) which are `n_sd` from the median
+#' @returns Numeric vector containing value(s) which are `n_sd` from the mean
 #'   for each inputted `l`/`m`/`s` combination.
 #' @noRd
 who_gs_lms2value <- function(l, m, s, n_sd) {
   m * (1 + l * s * n_sd)^(1 / l)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.0} Primary literature referenced for each exported function,
+#'   and for internal functions.
+#' @srrstats {G1.4, G1.4a} All functions in file documented using `{roxygen2}`.
+#' @srrstats {G2.0a, G2.1a} Exported functions in this file document
+#'   expectations on the length of inputs and their data types.
+#' @srrstats {G2.0, G2.1, G2.2, G2.3, 2.3a, G2.6} These standards
+#'   are met in all exported functions by passing inputs to [validate_ig_nbs()].
+#'   All internal functions in this script are provided with vectors that have
+#'   already been validated.
+#' @srrstatsTODO {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
+#'   in all exported functions by passing inputs to [validate_ig_nbs()]. All
+#'   internal functions in this script are provided with vectors that have
+#'   already checked for missing/undefined/out-of-bounds data.
