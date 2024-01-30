@@ -17,8 +17,8 @@ for each child. Should be between \code{0} to \code{1856} days.}
 \item{gest_days}{Numeric vector with gestational age(s) at birth in days.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
-(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
-an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
 and warn you. This behaviour can be customised using the functions in
 \link{gigs_options}.}
 
@@ -27,7 +27,7 @@ implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
 Factor of stunting classification(s) with levels
-\code{c("stunting_severe", "stunting", "not stunting")} or \code{c("stunting_severe", "stunting", "not stunting", "outlier")}, depending on whether the
+\code{c("stunting_severe", "stunting", "not_stunting")} or \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}, depending on whether the
 \code{outliers} argument is set to \code{TRUE}.
 }
 \description{

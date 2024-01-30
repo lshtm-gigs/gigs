@@ -1,3 +1,5 @@
+# TODO: Add notes on `.gigs_options`
+
 #' Classify size for gestational age using the INTERGROWTH-21<sup>st</sup>
 #' weight-for-gestational age standard
 #'
@@ -8,9 +10,10 @@
 #' (<3<sup>rd</sup> centile) using the `severe` parameter.
 #'
 #' @inheritParams shared_roxygen_params
-#' @param weight_kg Numeric vector with weight value(s) in kg.
-#' @param gest_days Numeric vector with gestational age(s) at birth in days.
-#'   Values not between `168` and `300` will be set to `NA`.
+#' @param weight_kg Numeric vector of length one or greater with weight
+#'   value(s) in kg.
+#' @param gest_days Numeric vector of length one or greater with gestational
+#'   age(s) at birth in days.
 #' @param severe A single logical value specifying whether to categorise SGA
 #'   values are below the third centile as `"SGA(<3)"`. Default = `FALSE`.
 #' @return Factor with gestational age classification(s). If `severe = FALSE`,
@@ -65,8 +68,8 @@ classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #'
 #' A small vulnerable newborn (SVN) can be preterm (born too soon),
 #' small-for-gestational age (born too small), or within both of these
-#' categories. This function categorises newborn weights into SVN categories for
-#' use in downstream analyses.
+#' categories. This function uses weight and gestational age to categorise
+#' newborns according to their SVN  type, for use in downstream analyses.
 #'
 #' @inherit classify_sfga params note
 #' @return Factor with small vulnerable newborn classification(s), with levels
@@ -110,13 +113,14 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' Classify stunting (low length/height-for-age) using WHO or
 #' INTERGROWTH-21<sup>st</sup> length/height-for-age standards depending on the
 #' gestational age at birth of the child. Severe stunting is below <-3 SD
-#' relative to median length/height at a given age, whereas moderate stunting is
-#' -2SD from the median.
+#' relative to mean length/height at a given age, whereas moderate stunting is
+#' -2SD from the mean.
 #'
-#' @inheritParams classify_sga
-#' @param lenht_cm Numeric vector with length/height measurement(s) in cm.
-#' @param age_days Numeric vector with age(s) in days for each child. Should be
-#'   between `0` to `1856` days.
+#' @inheritParams classify_sfga
+#' @param lenht_cm Numeric vector of length one or greater  with length/height
+#'   measurement(s) in cm.
+#' @param age_days Numeric vector of length one or greater  with age(s) in days
+#'   for each child. Should be between `0` to `1856` days.
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #' @param outliers A single `TRUE` or `FALSE` value specifying whether
 #'   implausible z-score value thresholds should be applied. Default = `FALSE`.
@@ -184,7 +188,7 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #' INTERGROWTH-21<sup>st</sup> weight-for-length or WHO Child Growth standards,
 #' specifically either the weight-for-length or weight-for-height standard
 #' depending on the age of the child. Severe wasting is <-3SD relative to the
-#' median expected weight, whereas moderate wasting is -2SD from the median.
+#' mean expected weight, whereas moderate wasting is -2SD from the mean.
 #'
 #' @inheritParams classify_sfga
 #' @inheritParams classify_stunting
@@ -242,8 +246,8 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #' Classify weight-for-age z-scores using the WHO Child Growth Standards or
 #' INTERGROWTH-21<sup>st</sup> Postnatal Growth standards depending on the
 #' gestational age at birth for the infant. Severely underweight is less than 3
-#' SD below the median, underweight is less than 2 SD below the median, and
-#' overweight is > 2 SDs above the median.
+#' SD below the mean, underweight is less than 2 SD below the mean, and
+#' overweight is > 2 SDs above the mean.
 #'
 #' @inheritParams classify_sfga
 #' @inherit classify_stunting params references
@@ -287,3 +291,20 @@ classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) 
   }
   factor(wfa, levels = wfa_lvls)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.0} Primary literature referenced where relevant for each
+#'   function in this script.
+#' @srrstats {G1.4} This file's functions are all documented with `{roxygen2}`.
+#' @srrstats {G2.0} Each classification function eventually passes its inputs to
+#'   a `*_value2zscore()`/`*_value2centile()` function, which enforces specific
+#'   conditions on input lengths.
+#' @srrstats {G2.0a} Documentation in this script explicitly references
+#'   length of inputs and recycling with [vctrs::vec_recycle_common()].
+#'   Single-length inputs are explicitly referenced in the documentation and
+#'   checked in their respective functions.
+#' @srrstats {G2.1, G2.1a, G2.2} Documentation explicitly notes expected data
+#'   types, lengths, and expected values for univariate input.
+#' @srrstats {G2.3, G2.3a, G2.3b} Univariate character inputs are restricted to
+#'   specific inputs by `{checkmate}` calls; these are case-sensitive and
+#'   documented as such.

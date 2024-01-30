@@ -12,12 +12,11 @@ classify_svn(weight_kg, gest_days, sex)
 value(s) in kg.}
 
 \item{gest_days}{Numeric vector of length one or greater with gestational
-age(s) at birth in days. Elements not between \code{168} and \code{300} will return
-be \code{NA} in the returned vector.}
+age(s) at birth in days.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
-(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
-an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
 and warn you. This behaviour can be customised using the functions in
 \link{gigs_options}.}
 }

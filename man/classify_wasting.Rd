@@ -22,15 +22,14 @@ value(s) in kg.}
 measurement(s) in cm.}
 
 \item{gest_days}{Numeric vector of length one or greater with gestational
-age(s) at birth in days. Elements not between \code{168} and \code{300} will return
-be \code{NA} in the returned vector.}
+age(s) at birth in days.}
 
 \item{age_days}{Numeric vector of length one or greater  with age(s) in days
 for each child. Should be between \code{0} to \code{1856} days.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
-(male) or \code{"F"} (female). This argument is case-sensitive. By default, if
-an element of \code{sex} is not \code{"M"} or \code{"F"}, gigs will replace it with \code{NA}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
 and warn you. This behaviour can be customised using the functions in
 \link{gigs_options}.}
 
@@ -39,8 +38,8 @@ implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
 Factor of wasting classifications with same length as longest input.
-If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "not wasting", "overweight")}. If \code{outliers = TRUE}, levels are
-\code{c("wasting_severe", "wasting", "not wasting", "overweight", "outlier")}.
+If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "not_wasting", "overweight")}. If \code{outliers = TRUE}, levels are
+\code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
 }
 \description{
 Classify wasting (low weight-for-length/height) using the
