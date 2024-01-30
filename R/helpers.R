@@ -2,46 +2,38 @@
 
 #' Convert between z-scores and values using $mu$ and $sigma$
 #'
-#' @param z Nuumeric vector of z-scores to convert to y values.
-#' @param y Numeric vector of y values to convert to z-scores.
-#' @param mu Numeric vector of mean value(s).
-#' @param sigma Numeric vector of standard deviation(s).
-#' @returns Y values or z-scores depending on which function is called
+#' @param z Numeric vector of length one or more with z-scores to convert to
+#'   y values.
+#' @param y Numeric vector of length one or more with y values to convert to
+#'   z-scores.
+#' @param mu Numeric vector of same length as `z`/`y` mean value(s).
+#' @param mu Numeric vector of same length as `z`/`y` standard deviation(s).
+#' @returns Numeric vector the same length of `z`/`y`, `mu`, and `sigma` with
+#'   either expected anthropometric values or z-scores depending on which
+#'   function is called.
+#' @rdname mu_sigma_conv
 #' @noRd
-#' @family mu_sigma_conv
 mu_sigma_z2y <- function(z, mu, sigma) mu + z * sigma
 
 #' @noRd
-#' @family mu_sigma_conv
+#' @rdname mu_sigma_conv
 mu_sigma_y2z <- function(y, mu, sigma) (y - mu) / sigma
-
-#' Return male/female mean if sex is undefined
-#'
-#' @param fn Conversion function to call
-#' @param arg1 `z`, `p` or `y` values to pass to `fn`
-#' @param x_arg `x` values (usually age/gestational age values) to pass to `fn`
-#' @param acronym Acronyms to pass to `fn`
-#' @noRd
-mean_if_sex_undefined <- function(fn, arg1, x_arg, acronym) {
-  len_sex <- length(arg1)
-  rowMeans(cbind(fn(arg1, x_arg, rep("M", len_sex), acronym),
-                 fn(arg1, x_arg, rep("F", len_sex), acronym)))
-}
 
 # Parameter checking -----------------------------------------------------------
 
-#' Check if values in `x` are within upper and lower bounds of another numeric
-#' vector.
+#' Check if values in `x` are within `min()` and `max()` of another numeric
+#'   vector
 #'
 #' @param x Numeric vector to compare against min/max values of `vec`.
-#' @param vec Numeric vector from which min/max bounds are defined.
-#' @note The `min()` and `max()` calls in this function have `na.rm = TRUE`.
-#' @return Logical vector with `TRUE` if `x` is within the minimum and maximum
-#'   values of `vec`, else `FALSE`. Where `x` is `NA`, `inrange()` will return
-#'   `NA`.
+#' @param vec Numeric vector with one or more elements from which min/max bounds
+#'   are defined. Should contain no missing (`NA`) or undefined (`NaN`, `Inf`,
+#'   or `-Inf`) values.
+#' @returns Logical vector with `TRUE` if `x` is within the minimum and maximum
+#'   values of `vec`, else `FALSE`.
 #' @noRd
 inrange <- function(x, vec) {
-  x >= min(vec, na.rm = TRUE) & x <= max(vec, na.rm = TRUE)
+  checkmate::qassert(vec, rules = "N+()")
+  x >= min(vec) & x <= max(vec)
 }
 
 # Custom error messages --------------------------------------------------------
@@ -49,7 +41,7 @@ inrange <- function(x, vec) {
 #' Throw an error if object lengths are unequal
 #' @param ... An arbitrary number of arguments which will be checked for
 #'   equality of length.
-#' @return Invisibly returns inputs in list. Throws an error if the lengths of
+#' @returns Invisibly returns inputs in list. Throws an error if the lengths of
 #'   passed-in objects are not equal.
 #' @noRd
 stop_if_lengths_unequal <- function(...) {
@@ -89,3 +81,6 @@ remove_attributes <- function(x) {
   attributes(x) <- NULL
   x
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
