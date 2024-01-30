@@ -1,54 +1,63 @@
 test_that(
   desc = "Size for GA classification works - with and without `severe` flag",
   code = {
-    weight_df <- data.frame(weight = c(0.811730, 0.191618, NA, 1.14117, 1.21483,
-                                       0.841630, 1.05958, 1.10986, 0.570546,
-                                       0.606674, 0.453822, 0.974013, 0.993918,
-                                       0.987215, 0.736120, 1.21361, 0.555279,
-                                       0.951882, 0.284086, 0.609805, 0.803476,
-                                       0.696198),
-                            psex = "M", gestage = seq(24, 27, by = 1/7) * 7)
-    sga <- with(weight_df, classify_sga(weight_kg = weight, sex = psex,
-                                        gest_days = gestage, severe = FALSE))
-    sga_severe <- with(weight_df, classify_sga(weight_kg = weight, sex = psex,
+    sfga_df <- life6mo[life6mo$age_days == 0, ]
+    sfga <- with(sfga_df, classify_sfga(weight_kg = weight_g / 1000,
+                                        sex = as.character(sex),
+                                        gest_days = gestage,
+                                        severe = FALSE))
+    sfga_severe <- with(sfga_df, classify_sfga(weight_kg = weight_g / 1000,
+                                               sex = as.character(sex),
                                                gest_days = gestage,
                                                severe = TRUE))
     expect_equal(
-      object = sga,
-      expected = factor(c("AGA", "SGA", NA, "LGA", "LGA", "AGA", "LGA", "LGA",
-                          "SGA", "AGA", "SGA", "AGA", "AGA", "AGA", "AGA",
-                          "LGA", "SGA", "AGA", "SGA", "SGA", "AGA", "SGA"),
+      object = sfga,
+      expected = factor(c("SGA", "SGA", "SGA", "LGA", "AGA", "SGA", "AGA",
+                          "AGA", "AGA", "SGA", "SGA", "SGA", "AGA", "LGA",
+                          "SGA", "AGA", "SGA", "SGA", "SGA", "SGA", "AGA",
+                          "AGA", "AGA", "SGA", "SGA", "SGA", "AGA", "AGA",
+                          "SGA", "SGA", "SGA", "SGA", "SGA", "SGA", "SGA",
+                          "SGA", "SGA", "SGA", "AGA", "SGA", "AGA", "SGA",
+                          "SGA", "SGA", "SGA", "SGA", "SGA", "SGA", "AGA",
+                          "SGA", "AGA", "SGA", "AGA", "SGA", "SGA", "SGA",
+                          "SGA"),
                         levels = c("SGA", "AGA",  "LGA")))
 
     expect_equal(
-      object = sga_severe,
-      expected = factor(c("AGA", "SGA(<3)", NA, "LGA", "LGA", "AGA", "LGA",
-                          "LGA", "SGA", "AGA", "SGA(<3)", "AGA", "AGA", "AGA",
-                          "AGA", "LGA", "SGA(<3)", "AGA", "SGA(<3)", "SGA(<3)",
-                          "AGA", "SGA"),
-                        levels = c("SGA(<3)", "SGA", "AGA",  "LGA")))
+      object = sfga_severe,
+      expected = factor(c("SGA(<3)", "SGA", "SGA(<3)", "LGA", "AGA", "SGA",
+                          "AGA", "AGA", "AGA", "SGA", "SGA(<3)", "SGA(<3)",
+                          "AGA", "LGA", "SGA(<3)", "AGA", "SGA", "SGA", "SGA",
+                          "SGA", "AGA", "AGA", "AGA", "SGA", "SGA", "SGA(<3)",
+                          "AGA", "AGA", "SGA(<3)", "SGA", "SGA", "SGA",
+                          "SGA(<3)", "SGA(<3)", "SGA(<3)", "SGA", "SGA", "SGA",
+                          "AGA", "SGA(<3)", "AGA", "SGA", "SGA", "SGA(<3)",
+                          "SGA(<3)", "SGA", "SGA(<3)", "SGA", "AGA", "SGA(<3)",
+                          "AGA", "SGA(<3)", "AGA", "SGA(<3)", "SGA(<3)",
+                          "SGA(<3)", "SGA(<3)"),
+                        levels = c("SGA(<3)", "SGA", "AGA", "LGA")))
   }
 )
 
 test_that(
   desc = "Small vulnerable newborn classification works",
   code = {
-    centiles <- c(0.07, 0.15, 0.02, 0.91, 0.75)
-    expected_sga <- c("SGA", "AGA", "SGA", "LGA", "AGA")
-    na_indices <- c(4, 17)
-    params <- list(
-      p = rep(centiles, 4),
-      gest_days = c(rep(36 * 7, 10), rep(39 * 7, 10)),
-      sex = rep(c(rep("M", 5), rep("F", 5)), 2)
-    )
-    params$p[na_indices] <- NA
-    params$weight_kg <- do.call(what = ig_nbs_wfga_centile2value, params)
-    params$p <- NULL
-    svn <- do.call(what = classify_svn, params)
+    svn_df <- life6mo[life6mo$age_days == 0, ]
+    svn <- with(svn_df, classify_svn(weight_kg = weight_g / 1000,
+                                     gest_days = gestage,
+                                     sex = as.character(sex)))
 
-    expected_svn <- c(paste("Preterm", rep(expected_sga, 2)),
-                      paste("Term", rep(expected_sga, 2)))
-    expected_svn[na_indices] <- NA
+    # Get SGA categories --> already tested above so should be accurate
+    sfga <- with(svn_df, classify_sfga(weight_kg = weight_g / 1000,
+                                       sex = as.character(sex),
+                                       gest_days = gestage,
+                                       severe = FALSE))
+
+    expected_svn <- factor(ifelse(svn_df$gestage < 259,
+                                  paste0("Preterm ", sfga),
+                                  paste0("Term ", sfga)),
+                           levels = levels(svn))
+
     expect_equal(object = svn,
                  expected = factor(expected_svn, levels = levels(svn)))
   }
@@ -77,21 +86,22 @@ test_that(
                         gest_days = ga_at_birth, sex = psex, outliers = TRUE)
     )
 
-    stunting_exp <- c("stunting_severe", "normal", "stunting_severe",
-                      "stunting", "normal", NA_character_)
-    stunting_outliers_exp <- c("stunting_severe", "normal", "outlier",
-                               "stunting", "normal", NA_character_)
+    stunting_exp <- c("stunting_severe", "not_stunting", "stunting_severe",
+                      "stunting", "not_stunting", NA_character_)
+    stunting_outliers_exp <- c("stunting_severe", "not_stunting", "outlier",
+                               "stunting", "not_stunting", NA_character_)
     expect_equal(
       object = stunting,
       expected = factor(stunting_exp,
-                        levels = c("stunting_severe", "stunting", "normal")
+                        levels = c("stunting_severe", "stunting",
+                                   "not_stunting")
       ))
 
     expect_equal(
       object = stunting_outliers,
       expected = factor(stunting_outliers_exp,
-                        levels = c("stunting_severe", "stunting", "normal",
-                                   "outlier")
+                        levels = c("stunting_severe", "stunting",
+                                   "not_stunting", "outlier")
     ))
 })
 
@@ -116,16 +126,16 @@ test_that("Wasting classification works", code = {
                      gest_days = ga_days, age_days = age, outliers = TRUE))
   expect_equal(
     object = wasting,
-    expected = factor(c("wasting_severe", NA, "normal", "wasting", "normal", NA,
-                        "normal", NA, "normal", "wasting_severe",
+    expected = factor(c("wasting_severe", NA, "not_wasting", "wasting", "not_wasting", NA,
+                        "not_wasting", NA, "not_wasting", "wasting_severe",
                         "overweight"),
-                      levels =  c("wasting_severe", "wasting", "normal",
+                      levels =  c("wasting_severe", "wasting", "not_wasting",
                                   "overweight")))
   expect_equal(
     object = wasting_outliers,
-    expected = factor(c("outlier", NA, "normal", "wasting", "normal", NA,
-                        "normal", NA, "normal", "outlier", "outlier"),
-                      levels =  c("wasting_severe", "wasting", "normal",
+    expected = factor(c("outlier", NA, "not_wasting", "wasting", "not_wasting", NA,
+                        "not_wasting", NA, "not_wasting", "outlier", "outlier"),
+                      levels =  c("wasting_severe", "wasting", "not_wasting",
                                   "overweight", "outlier")))
 })
 
@@ -156,15 +166,15 @@ test_that("Weight-for-age classification works", {
   expect_equal(
     object = wfa,
     expected = factor(c("underweight", "underweight_severe",
-                        "underweight_severe", "normal", "overweight",
+                        "underweight_severe", "normal_weight", "overweight",
                         "overweight", NA),
-                      levels =  c("underweight_severe", "underweight", "normal",
-                                  "overweight")))
+                      levels =  c("underweight_severe", "underweight",
+                                  "normal_weight", "overweight")))
   expect_equal(
     object = wfa_outliers,
     expected = factor(c("underweight", "underweight_severe",
-                        "outlier", "normal", "outlier",
+                        "outlier", "normal_weight", "outlier",
                         "overweight", NA),
-                      levels =  c("underweight_severe", "underweight", "normal",
-                                  "overweight", "outlier")))
+                      levels =  c("underweight_severe", "underweight",
+                                  "normal_weight", "overweight", "outlier")))
 })
