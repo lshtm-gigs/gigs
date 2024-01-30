@@ -53,21 +53,46 @@ ig_nbs_bfpfga_zscore2value(z, gest_days, sex)
 ig_nbs_ffmfga_zscore2value(z, gest_days, sex)
 }
 \arguments{
-\item{p, z}{Numeric vector of centiles/z-scores to convert to values.}
+\item{p, z}{Numeric vector of length one or more with centiles/z-scores to
+convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
+\code{1}, gigs will replace it with \code{NA} and warn you informatively. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{gest_days}{Numeric vector of gestational age(s) in days. Elements
-should be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
-\code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
-standards. If not inside these bounds, will return \code{NA}.}
+\item{gest_days}{Numeric vector of length one or more with gestational ages
+in days. Elements should be between certain values depending on the Newborn
+Size standard in use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 168 and 300 days for \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, and
+\code{"wlrfga"}.
+\item Between 154 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace elements in \code{gest_days} that are out of
+bounds for the growth standard in use with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
-standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
-(length-for-GA), \code{"hcfga"} (head circumference-for-GA), \code{"wlrfga"}
-(weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
-(body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
+
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standard to use for each
+observation. Each element should be one of:
+\itemize{
+\item \code{"wfga"} (weight-for-GA)
+\item \code{"lfga"} (length-for-GA)
+\item \code{"hcfga"} (head circumference-for-GA)
+\item \code{"wlrfga"} (weight/length ratio-for-GA)
+\item \code{"fmfga"} (fat mass-for-GA)
+\item \code{"bfpfga"} (body fat \%-for-GA)
+\item \code{"ffmfga"} (fat-free mass-for-GA)
+}
+
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the

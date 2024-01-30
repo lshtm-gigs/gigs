@@ -1,16 +1,35 @@
 #' Convert z-scores/centiles to values in the INTERGROWTH-21<sup>st</sup>
 #' Newborn Size Standards
 #'
-#' @param p,z Numeric vector of centiles/z-scores to convert to values.
-#' @param gest_days Numeric vector of gestational age(s) in days. Elements
-#'   should be between `266` to `294` for body composition equations (`"fmfga"`,
-#'   `"bfpfga"`, or `"ffmfga"`), or between `168` and `300` for the other
-#'   standards. If not inside these bounds, will return `NA`.
-#' @param acronym Acronym(s) denoting the INTERGROWTH-21<sup>st</sup> NBS
-#' standard to use. Must be one of `"wfga"` (weight-for-GA), `"lfga"`
-#' (length-for-GA), `"hcfga"` (head circumference-for-GA), `"wlrfga"`
-#' (weight/length ratio-for-GA), `"fmfga"` (fat mass-for-GA), `"bfpfga"`
-#' (body fat %-for-GA), or `"ffmfga"` (fat-free mass-for-GA).
+#' @param p,z Numeric vector of length one or more with centiles/z-scores to
+#'   convert to values. For `p`, if an element of `p` is not between `0` and
+#'   `1`, gigs will replace it with `NA` and warn you informatively. This
+#'   behaviour can be customised using the functions in [gigs_options].
+#' @param gest_days Numeric vector of length one or more with gestational ages
+#'   in days. Elements should be between certain values depending on the Newborn
+#'   Size standard in use (defined by `acronym`). These are:
+#'   * Between 168 and 300 days for `"wfga"`, `"lfga"`, `"hcfga"`, and
+#'     `"wlrfga"`.
+#'   * Between 154 and 280 days for `"fmfga"`, `"bfpfga"`, and `"ffmfga"`.
+#'
+#'   By default, gigs will replace elements in `gest_days` that are out of
+#'   bounds for the growth standard in use with `NA` and warn you. This
+#'   behaviour can be customised using the functions in [gigs_options].
+#' @param acronym Character vector of length one or more denoting the
+#'   INTERGROWTH-21<sup>st</sup> Newborn Size standard to use for each
+#'   observation. Each element should be one of:
+#'   * `"wfga"` (weight-for-GA)
+#'   * `"lfga"` (length-for-GA)
+#'   * `"hcfga"` (head circumference-for-GA)
+#'   * `"wlrfga"` (weight/length ratio-for-GA)
+#'   * `"fmfga"` (fat mass-for-GA)
+#'   * `"bfpfga"` (body fat %-for-GA)
+#'   * `"ffmfga"` (fat-free mass-for-GA)
+#'
+#'   This argument is case-sensitive. By default, gigs will replace elements in
+#'   `acronym` which are not one of the above values with `NA` and warn you.
+#'   This behaviour can be customised using the functions in [gigs_options].
+#' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_value2zscore_returns return
 #' @references
@@ -82,21 +101,10 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
     msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
     if (any(lgl_complete_msnt)) {
       y_out[lgl_complete_msnt] <- gamlss.dist::qST3C(p = msnt_no_na[["p"]],
-                                                   mu = msnt_no_na[[1]],
-                                                   sigma = msnt_no_na[[2]],
-                                                   nu = msnt_no_na[[3]],
-                                                   tau = msnt_no_na[[4]])
-    }
-
-    complete_inputs <- stats::complete.cases(as.data.frame(max_len_vec_li))
-    lgl_sex_undefined <- max_len_vec_li[["sex"]] == "U" & complete_inputs
-    if (any(lgl_sex_undefined)) {
-      y_out[lgl_sex_undefined] <- mean_if_sex_undefined(
-        fn = ig_nbs_centile2value,
-        arg1 = max_len_vec_li[["p"]][lgl_sex_undefined],
-        x_arg = max_len_vec_li[["gest_days"]][lgl_sex_undefined],
-        acronym = max_len_vec_li[["acronym"]][lgl_sex_undefined]
-      )
+                                                     mu = msnt_no_na[[1]],
+                                                     sigma = msnt_no_na[[2]],
+                                                     nu = msnt_no_na[[3]],
+                                                     tau = msnt_no_na[[4]])
     }
     y_out
   }
@@ -107,33 +115,20 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
                                  acronym = max_len_vec_li[["acronym"]])
     not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_days"]], c(266, 294))
     max_len_vec_li[["p"]][not_in_LM_bounds] <- -1
-    lm_out <- ifelse(
-      max_len_vec_li[["sex"]] == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_centile2value,
-                                  arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_days"]],
-                                  acronym = max_len_vec_li[["acronym"]]),
-      no = mu_sigma_z2y(z = qnorm(replace(max_len_vec_li[["p"]],
-                                          !inrange(max_len_vec_li[["p"]], vec = c(0,1)),
-                                          values = NA_real_)),
-                        mu = body_comp[,1],
-                        sigma = body_comp[, 2]))
+    z <- replace(max_len_vec_li[["p"]],
+                 !inrange(max_len_vec_li[["p"]], vec = c(0,1)),
+                 values = NA_real_) |>
+      qnorm()
+    lm_out <- mu_sigma_z2y(z = z, mu = body_comp[,1], sigma = body_comp[, 2])
     ifelse(lm_out <= 0, yes = NA, no = lm_out)
   }
 
   fromWLR_p2v <- function(max_len_vec_li) {
     wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_days"]] / 7,
                       sex = max_len_vec_li[["sex"]])
-    ifelse(
-      max_len_vec_li[["sex"]] == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_centile2value,
-                                  arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_days"]],
-                                  acronym = max_len_vec_li[["acronym"]]),
-      no = mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
-                        mu = wlr[["mu"]],
-                        sigma = wlr[["sigma"]])
-    )
+    mu_sigma_z2y(z = qnorm(max_len_vec_li[["p"]]),
+                 mu = wlr[["mu"]],
+                 sigma = wlr[["sigma"]])
   }
 
   vpns_lim <- 231
@@ -246,13 +241,20 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup>
 #' Newborn Size Standards
 #'
-#' @param weight_kg Birth weight(s) in kg.
-#' @param length_cm Birth length(s) in cm.
-#' @param headcirc_cm Birth head circumference(s) in cm.
-#' @param wei_len_ratio Weight-length ratio(s) in kg per m.
-#' @param fat_mass_g Fat mass(es) in g.
-#' @param body_fat_perc Body fat percentage(s).
-#' @param fatfree_mass_g Fat-free mass(es) in g.
+#' @param weight_kg Numeric vector of length one or more with birth weight(s) in
+#'   kg.
+#' @param length_cm Numeric vector of length one or more with birth length(s) in
+#'    cm.
+#' @param headcirc_cm Numeric vector of length one or more with birth head
+#'   circumference(s) in cm.
+#' @param wei_len_ratio Numeric vector of length one or more with weight-length
+#'   ratio(s) in kg per m.
+#' @param fat_mass_g Numeric vector of length one or more with fat mass(es) in
+#'   g.
+#' @param body_fat_perc Numeric vector of length one or more with body fat
+#'   percentage(s).
+#' @param fatfree_mass_g Numeric vector of length one or more with fat-free
+#'   mass(es) in g.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
 #' @inherit ig_nbs_centile2value params references
@@ -306,19 +308,11 @@ ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
     # Initialise empty vector for p_out to go into
     p_out <- rep_len(x = NA, length.out = length(max_len_vec_li[["y"]]))
     # Calculate centile values...
-    p <- ifelse(
-      test = max_len_vec_li[["sex"]] == "U",
-      yes = mean_if_sex_undefined(
-        fn = ig_nbs_value2centile,
-        arg1 = max_len_vec_li[["p"]][lgl_complete],
-        x_arg = max_len_vec_li[["gest_days"]][lgl_complete],
-        acronym = max_len_vec_li[["acronym"]][lgl_complete]),
-      no = gamlss.dist::pST3(max_len_vec_li[["y"]][lgl_complete],
-                             mu = msnt_no_na[[1]],
-                             sigma = msnt_no_na[[2]],
-                             nu = msnt_no_na[[3]],
-                             tau = msnt_no_na[[4]])
-    )
+    p <- gamlss.dist::pST3(max_len_vec_li[["y"]][lgl_complete],
+                           mu = msnt_no_na[[1]],
+                           sigma = msnt_no_na[[2]],
+                           nu = msnt_no_na[[3]],
+                           tau = msnt_no_na[[4]])
     # ... then assign to indices in the preallocated vector
     suppressWarnings(p_out[lgl_complete] <- p)
     p_out
@@ -328,34 +322,17 @@ ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
     body_comp <- ig_nbs_bodycomp(x = max_len_vec_li[["gest_days"]],
                                  sex = max_len_vec_li[["sex"]],
                                  acronym = max_len_vec_li[["acronym"]])
-    not_in_LM_bounds <- !inrange(max_len_vec_li[["gest_days"]], c(266, 294))
-    max_len_vec_li[["p"]][not_in_LM_bounds] <- -1
-
-    ifelse(
-      max_len_vec_li[["sex"]] == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_value2centile,
-                                  arg1 = max_len_vec_li[["y"]],
-                                  x_arg = max_len_vec_li[["gest_days"]],
-                                  acronym = max_len_vec_li[["acronym"]]),
-      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
-                              mu = body_comp[,1],
-                              sigma = body_comp[, 2]))
-    )
+    pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
+                       mu = body_comp[,1],
+                       sigma = body_comp[, 2]))
   }
 
   fromWLR_v2p <- function(max_len_vec_li) {
     wlr <- ig_nbs_wlr(ga_weeks = max_len_vec_li[["gest_days"]] / 7,
                       sex = max_len_vec_li[["sex"]])
-    ifelse(
-      max_len_vec_li[["sex"]] == "U",
-      yes = mean_if_sex_undefined(fn = ig_nbs_centile2value,
-                                  arg1 = max_len_vec_li[["p"]],
-                                  x_arg = max_len_vec_li[["gest_days"]],
-                                  acronym = max_len_vec_li[["acronym"]]),
-      no = pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
-                              mu = wlr[["mu"]],
-                              sigma = wlr[["sigma"]]))
-    )
+    pnorm(mu_sigma_y2z(y = max_len_vec_li[["y"]],
+                       mu = wlr[["mu"]],
+                       sigma = wlr[["sigma"]]))
   }
 
   vpns_lim <- 231
@@ -472,16 +449,15 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
 #' z-scores/centiles in the INTERGROWTH-21<sup>st</sup> Newborn Size
 #' standards.
 #'
-#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
-#'   (female).
-#' @param gest_days Numeric vector of gestational age(s) in days. Entries not
-#'   between `231` and `300` will return `NA` .
+#' @param sex Character vector of length one or more with sex(es), either `"M"`
+#'   (male) or `"F"` (female).
+#' @param gest_days Numeric vector of length one or more with gestational age(s)
+#'   in days. Elements not between `231` and `300` will return `NA`.
 #' @param acronym Character vector of acronym(s) denoting which
-#'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Entries
-#'   which are not one of `"wfga"`,`"lfga"`, or `"hcfga"` will be returned with
-#'   `NA` values.
+#'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Elements
+#'   which are not one of `"wfga"`,`"lfga"`, or `"hcfga"` will be return `NA`.
 #' @return A list with names `"mu"`, `"sigma"`, `"nu"`, and `"tau"`, where each
-#'   is a numeric vector with mu/sigma/nu/tau values for the inputted
+#'   is a numeric vector with mu, sigma, nu and tau values for the inputted
 #'   combinations of `sex`, `gest_days`, and `acronym`.
 #' @note These coefficients are not included in the referenced publication, and
 #'   were instead supplied directly by Eric Ohuma. However, Villar *et al.* used
@@ -507,12 +483,13 @@ ig_nbs_msnt <- function(gest_days, sex, acronym) {
 #' INTERGROWTH-21<sup>st</sup> weight-to-length ratio means/standard
 #' deviations
 #'
-#' @param ga_weeks Gestational age(s) in weeks. Must be between `24` and
-#'   `42 + 6/7`.
-#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
-#'   (female).
-#' @return Weight-to-length ratio medians and standard deviations for the given
-#'   `sex`/`gest_days` combinations.
+#' @param ga_weeks Numeric vector of length one or more with gestational age(s)
+#'   in weeks. Each element should be between `24` and `42.85714`
+#'   (42 weeks and 6 days).
+#' @param sex Character vector of the same length as `ga_weeks` with sex(es),
+#'   either `"M"` (male) or `"F"` (female).
+#' @return A named list with two vectors, named `mu` and `sigma`, each of which
+#'   has the same length as `ga_weeks`.
 #' @note These equations are not included in the referenced publication. Rather,
 #'   they were taken from weight-to-length ratio calculating Excel files
 #'   available on the [INTERGROWTH-21<sup>st</sup>
@@ -525,8 +502,9 @@ ig_nbs_msnt <- function(gest_days, sex, acronym) {
 #' @noRd
 ig_nbs_wlr <- function(ga_weeks, sex) {
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
+  lgl_very_preterm <- ga_weeks < 33
   mu <- ifelse(
-    test = ga_weeks < 33,
+    test = lgl_very_preterm,
     yes = 3.400617 + (-0.0103163 * ga_weeks^2) + (0.0003407 * ga_weeks^3) +
       (0.1382809 * sex_as_numeric),
     no = ifelse(
@@ -538,7 +516,7 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
     )
   )
   sigma <- ifelse(
-    test = ga_weeks < 33,
+    test = lgl_very_preterm,
     yes = sqrt(x = 0.3570057),
     no = ifelse(
       test = sex == "M",
@@ -546,19 +524,20 @@ ig_nbs_wlr <- function(ga_weeks, sex) {
       no = 0.6806229
     )
   )
-  data.frame(gest_days = ga_weeks * 7, sex, mu = mu, sigma = sigma)
+  list(mu = mu, sigma = sigma)
 }
 
 #' INTERGROWTH-21<sup>st</sup> normative body composition means/standard
 #' deviations
 #'
-#' @param x Numeric vector of gestational age(s) in days at which to calculate
-#'   mu (mean) and sigma (SD). Should be between `266` and `294`.
-#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
-#'   (female).
-#' @param acronym Character vector of acronym(s) denoting the
-#'   INTERGROWTH-21<sup>st</sup> NBS normative body composition standard to use.
-#'   Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @param x Numeric vector of length one or more with gestational age(s) in days
+#'   at which to calculate mu (mean) and sigma (SD). Should be between `266` and
+#'   `294`.
+#' @param sex Character vector of same length as `x` with sex(es), either `"M"`
+#'   (male) or `"F"` (female).
+#' @param acronym Character vector of same length as `x` with acronym(s)
+#'   denoting the INTERGROWTH-21<sup>st</sup> NBS normative body composition
+#'   standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
 #' @return A matrix with means and standard deviations for each gestational
 #'   age/sex/acronym combination.
 #' @note These parameters are not included in the referenced publication, but
@@ -589,3 +568,18 @@ ig_nbs_bodycomp <- function(x, sex, acronym) {
   matrix(c(mu, params[5,]), nrow = length(mu), ncol = 2,
          dimnames = list(NULL, c("mu", "sigma")))
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.0} Primary literature referenced for each exported function,
+#'   and for internal functions.
+#' @srrstats {G1.4, G1.4a} All functions in file documented using `{roxygen2}`.
+#' @srrstats {G2.0a, G2.1a} Exported functions in this file document
+#'   expectations on the length of inputs and their data types.
+#' @srrstats {G2.0, G2.1, G2.2, G2.3, 2.3a, G2.6} These standards
+#'   are met in all exported functions by passing inputs to [validate_ig_nbs()].
+#'   All internal functions in this script are provided with vectors that have
+#'   already been validated.
+#' @srrstatsTODO {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
+#'   in all exported functions by passing inputs to [validate_ig_nbs()]. All
+#'   internal functions in this script are provided with vectors that have
+#'   already checked for missing/undefined/out-of-bounds data.

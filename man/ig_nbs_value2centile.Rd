@@ -53,36 +53,66 @@ ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_days, sex)
 ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_days, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
-Units depend on which \code{acronym}(s) are in use.}
+\item{y}{Numeric vector of length one or more with anthropometric
+measurement(s) to convert to centiles/z-scores. Units depend on which
+\code{acronym}(s) are in use.}
 
-\item{gest_days}{Numeric vector of gestational age(s) in days. Elements
-should be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
-\code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
-standards. If not inside these bounds, will return \code{NA}.}
+\item{gest_days}{Numeric vector of length one or more with gestational ages
+in days. Elements should be between certain values depending on the Newborn
+Size standard in use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 168 and 300 days for \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, and
+\code{"wlrfga"}.
+\item Between 154 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace elements in \code{gest_days} that are out of
+bounds for the growth standard in use with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
-standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
-(length-for-GA), \code{"hcfga"} (head circumference-for-GA), \code{"wlrfga"}
-(weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
-(body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{weight_kg}{Birth weight(s) in kg.}
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standard to use for each
+observation. Each element should be one of:
+\itemize{
+\item \code{"wfga"} (weight-for-GA)
+\item \code{"lfga"} (length-for-GA)
+\item \code{"hcfga"} (head circumference-for-GA)
+\item \code{"wlrfga"} (weight/length ratio-for-GA)
+\item \code{"fmfga"} (fat mass-for-GA)
+\item \code{"bfpfga"} (body fat \%-for-GA)
+\item \code{"ffmfga"} (fat-free mass-for-GA)
+}
 
-\item{length_cm}{Birth length(s) in cm.}
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{headcirc_cm}{Birth head circumference(s) in cm.}
+\item{weight_kg}{Numeric vector of length one or more with birth weight(s) in
+kg.}
 
-\item{wei_len_ratio}{Weight-length ratio(s) in kg per m.}
+\item{length_cm}{Numeric vector of length one or more with birth length(s) in
+cm.}
 
-\item{fat_mass_g}{Fat mass(es) in g.}
+\item{headcirc_cm}{Numeric vector of length one or more with birth head
+circumference(s) in cm.}
 
-\item{body_fat_perc}{Body fat percentage(s).}
+\item{wei_len_ratio}{Numeric vector of length one or more with weight-length
+ratio(s) in kg per m.}
 
-\item{fatfree_mass_g}{Fat-free mass(es) in g.}
+\item{fat_mass_g}{Numeric vector of length one or more with fat mass(es) in
+g.}
+
+\item{body_fat_perc}{Numeric vector of length one or more with body fat
+percentage(s).}
+
+\item{fatfree_mass_g}{Numeric vector of length one or more with fat-free
+mass(es) in g.}
 }
 \value{
 Numeric vector of z-scores/centiles with length equal to the
