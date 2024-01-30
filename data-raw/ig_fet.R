@@ -186,25 +186,16 @@ ig_fet[["tcdfga"]] <- list(
   x = "gest_days",
   y = "tcd_mm")
 
-## GA for TCD --> from suppl. table 2 of https://dx.doi.org/10.1002/uog.22017
-
-### TODO: Add GA for TCD once errors are resolved --> equation does not align with table!
-### It has incorrect mean values from 39 to 55 mm inclusive, needs replacing!
-# mean_ga_for_tcd <- \(TCD) 3.957113 + 8.154074 * (TCD/10) - 0.076187 * (TCD/10)^3
-#
-# gaftcd_table <- read.table(
-#     file = "data-raw/tables/ig_fet/ig_fet_gaftcd_centiles.txt",
-#     header = TRUE
-#   ) |>
-#     dplyr::mutate(P50 = ifelse(dplyr::between(tcd_mm, 39, 55),
-#                                yes = mean_ga_for_tcd(tcd_mm),
-#                                no = P50))
-#     dplyr::mutate(dplyr::across(.cols = tidyselect::starts_with(match = "P"),
-#                                 .f = \(x) round(x * 7, digits = 2)))
-# ig_fet[["gaftcd"]] <- list(
-#   centiles = gaftcd_table,
-#   x = "tcd_mm",
-#   y = "gest_days")
+## GA for TCD --> suppl. table 2 of https://dx.doi.org/10.1002/uog.22017 has
+##     incorrect values, needs correction - using tabulated outputs from
+#      equation for now
+ig_fet[["gaftcd"]] <- list(
+  centiles = read.table(
+    skip = 2,
+    file = "data-raw/tables/ig_fet/ig_fet_gaftcd_centiles.txt",
+    header = TRUE),
+  x = "tcd_mm",
+  y = "gest_days")
 
 
 # IG-21st Fetal Brain Development standards ------------------------------------

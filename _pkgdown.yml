@@ -33,10 +33,9 @@ reference:
     contents:
       - ig_png_value2zscore
       - ig_png_zscore2value
-  - title: INTERGROWTH-21<sup>st</sup> Fetal Growth Standards
+  - title: INTERGROWTH-21<sup>st</sup> Fetal Standards
     desc: >
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Fetal Growth 
-      Standards.
+      Conversion functions for the INTERGROWTH-21<sup>st</sup> Fetal Standards.
     contents:
       - ig_fet_value2zscore
       - ig_fet_zscore2value
@@ -45,6 +44,11 @@ reference:
     contents:
       - who_gs_value2zscore
       - who_gs_zscore2value
+  - title: INTERGROWTH-21<sup>st</sup> Estimation Functions
+    desc: Estimation functions from the INTERGROWTH-21<sup>st</sup> Project.
+    contents:
+      - ig_fet_estimate_fetal_weight
+      - ig_fet_estimate_ga
   - title: Reference data and coefficient tables
     desc: >
       Lists containing data frames with growth curve data, model parameters for 

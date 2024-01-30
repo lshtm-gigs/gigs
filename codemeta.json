@@ -160,7 +160,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1686.325KB",
+  "fileSize": "1619.551KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -174,7 +174,7 @@
       ],
       "name": "{gigs}: Assess Growth in Infants and Newborns",
       "url": "https://github.com/lshtm-gigs/gigs/",
-      "description": "0.4.0"
+      "description": "0.3.1.9001"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",

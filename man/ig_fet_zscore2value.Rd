@@ -8,6 +8,20 @@
 \alias{ig_fet_flfga_zscore2value}
 \alias{ig_fet_ofdfga_zscore2value}
 \alias{ig_fet_efwfga_zscore2value}
+\alias{ig_fet_sfhfga_zscore2value}
+\alias{ig_fet_crlfga_zscore2value}
+\alias{ig_fet_gafcrl_zscore2value}
+\alias{ig_fet_gwgfga_zscore2value}
+\alias{ig_fet_pifga_zscore2value}
+\alias{ig_fet_rifga_zscore2value}
+\alias{ig_fet_sdrfga_zscore2value}
+\alias{ig_fet_tcdfga_zscore2value}
+\alias{ig_fet_gaftcd_zscore2value}
+\alias{ig_fet_poffga_zscore2value}
+\alias{ig_fet_sffga_zscore2value}
+\alias{ig_fet_avfga_zscore2value}
+\alias{ig_fet_pvfga_zscore2value}
+\alias{ig_fet_cmfga_zscore2value}
 \alias{ig_fet_centile2value}
 \alias{ig_fet_hcfga_centile2value}
 \alias{ig_fet_bpdfga_centile2value}
@@ -15,10 +29,24 @@
 \alias{ig_fet_flfga_centile2value}
 \alias{ig_fet_ofdfga_centile2value}
 \alias{ig_fet_efwfga_centile2value}
+\alias{ig_fet_sfhfga_centile2value}
+\alias{ig_fet_crlfga_centile2value}
+\alias{ig_fet_gafcrl_centile2value}
+\alias{ig_fet_gwgfga_centile2value}
+\alias{ig_fet_pifga_centile2value}
+\alias{ig_fet_rifga_centile2value}
+\alias{ig_fet_sdrfga_centile2value}
+\alias{ig_fet_tcdfga_centile2value}
+\alias{ig_fet_gaftcd_centile2value}
+\alias{ig_fet_poffga_centile2value}
+\alias{ig_fet_sffga_centile2value}
+\alias{ig_fet_avfga_centile2value}
+\alias{ig_fet_pvfga_centile2value}
+\alias{ig_fet_cmfga_centile2value}
 \title{Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
 Growth standards}
 \usage{
-ig_fet_zscore2value(z, gest_days, acronym)
+ig_fet_zscore2value(z, x, acronym)
 
 ig_fet_hcfga_zscore2value(z, gest_days)
 
@@ -32,7 +60,35 @@ ig_fet_ofdfga_zscore2value(z, gest_days)
 
 ig_fet_efwfga_zscore2value(z, gest_days)
 
-ig_fet_centile2value(p, gest_days, acronym)
+ig_fet_sfhfga_zscore2value(z, gest_days)
+
+ig_fet_crlfga_zscore2value(z, gest_days)
+
+ig_fet_gafcrl_zscore2value(z, crl_mm)
+
+ig_fet_gwgfga_zscore2value(z, gest_days)
+
+ig_fet_pifga_zscore2value(z, gest_days)
+
+ig_fet_rifga_zscore2value(z, gest_days)
+
+ig_fet_sdrfga_zscore2value(z, gest_days)
+
+ig_fet_tcdfga_zscore2value(z, gest_days)
+
+ig_fet_gaftcd_zscore2value(z, tcd_mm)
+
+ig_fet_poffga_zscore2value(z, gest_days)
+
+ig_fet_sffga_zscore2value(z, gest_days)
+
+ig_fet_avfga_zscore2value(z, gest_days)
+
+ig_fet_pvfga_zscore2value(z, gest_days)
+
+ig_fet_cmfga_zscore2value(z, gest_days)
+
+ig_fet_centile2value(p, x, acronym)
 
 ig_fet_hcfga_centile2value(p, gest_days)
 
@@ -45,39 +101,116 @@ ig_fet_flfga_centile2value(p, gest_days)
 ig_fet_ofdfga_centile2value(p, gest_days)
 
 ig_fet_efwfga_centile2value(p, gest_days)
+
+ig_fet_sfhfga_centile2value(p, gest_days)
+
+ig_fet_crlfga_centile2value(p, gest_days)
+
+ig_fet_gafcrl_centile2value(p, crl_mm)
+
+ig_fet_gwgfga_centile2value(p, gest_days)
+
+ig_fet_pifga_centile2value(p, gest_days)
+
+ig_fet_rifga_centile2value(p, gest_days)
+
+ig_fet_sdrfga_centile2value(p, gest_days)
+
+ig_fet_tcdfga_centile2value(p, gest_days)
+
+ig_fet_gaftcd_centile2value(p, tcd_mm)
+
+ig_fet_poffga_centile2value(p, gest_days)
+
+ig_fet_sffga_centile2value(p, gest_days)
+
+ig_fet_avfga_centile2value(p, gest_days)
+
+ig_fet_pvfga_centile2value(p, gest_days)
+
+ig_fet_cmfga_centile2value(p, gest_days)
 }
 \arguments{
-\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of length one or more with centiles/z-scores to
+convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
+\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
+customised using the functions in \link{gigs_options}.}
 
-\item{gest_days}{Numeric vector of gestational age(s) in days. Elements
-should be between \code{98} to \code{280} for all standards other than estimated
-fetal weight-for-GA (\code{"efwfga"}), which takes values betweem \code{154} and
-\code{280}. Will return NA for each observation where GA is not within bounds.}
+\item{x}{Numeric vector of length one or more with x values. Elements should
+have specific units and be between certain values depending on the standard
+in use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 98 and 280 days for \code{"hcfga"}, \code{"bpdfga"}, \code{"acfga"}, \code{"flfga"},
+\code{"ofdfga"}, and \code{"tcdfga"}.
+\item Between 154 and 280 days for \code{"efwfga"}.
+\item Between 112 and 294 days for \code{"sfhfga"}.
+\item Between 58 and 105 days for \code{"crlfga"}.
+\item Between 19 and 95 mm for \code{"gafcrl"}.
+\item Between 105 and 280 days for \code{"gwgfga"}.
+\item Between 168 and 280 days for \code{"pifga"}, \code{"rifga"}, and \code{"sdrfga"} (the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
+\item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
+\code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
+standards).
+}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
-Growth standard. Each value should be one of \code{"hcfga"} (head
-circumference-for-GA), \code{"bpdfga"} (biparietal diameter-for-age), \code{"acfga"}
-(abdominal circumference-for-GA), \code{"flfga"} (femur length-for-GA),
-\code{"ofdfga"} (occipito-frontal diameter-for-GA), or \code{"efwfga"} (estimated
-fetal length-for-GA). If none of these, the function will return NA.}
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
+
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standard(s) in use. Each value
+should be one of:
+\itemize{
+\item \code{"hcfga"} (head circumference-for-GA)
+\item \code{"bpdfga"} (biparietal diameter-for-GA)
+\item \code{"acfga"} (abdominal circumference-for-GA)
+\item \code{"flfga"} (femur length-for-GA)
+\item \code{"ofdfga"} (occipito-frontal diameter-for-GA)
+\item \code{"efwfga"} (estimated fetal weight-for-GA)
+\item \code{"sfhfga"} (symphisis-fundal height-for-GA)
+\item \code{"crlfga"} (crown-rump length-for-GA)
+\item \code{"gafcrl"} (GA-for-crown-rump length)
+\item \code{"gwgfga"} (gestational weight gain-for-GA)
+\item \code{"pifga"} (pulsatility index-for-GA)
+\item \code{"rifga"} (resistance index-for-GA)
+\item \code{"sdrfga"} (systolic/diastolic ratio-for-GA)
+\item \code{"tcdfga"} (transcerebellar diameter-for-GA)
+\item \code{"poffga"} (parieto-occipital fissure-for-GA)
+\item \code{"sffga"} (Sylvian fissure-for-GA)
+\item \code{"avfga"} (anterior horn of lateral ventricle-for-GA)
+\item \code{"pvfga"} (atrium of posterior horn of lateral ventricle-for-GA)
+\item \code{"cmfga"} (cisterna magna-for-GA)
+}
+
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}.}
+
+\item{gest_days, crl_mm}{Numeric vector of length one or more with
+standard-specific x variables. See the documentation for \code{x} for
+information on how out-of-bounds elements will be handled.}
 }
 \description{
 Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
 Growth standards
 }
+\note{
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+}
 \examples{
 # Convert centiles to values
 p <- 0.25 # 25th centile
-ig_fet_centile2value(p = p, gest_days = 280, acronym = "hcfga") |>
+ig_fet_centile2value(p = p, x = 280, acronym = "hcfga") |>
   round(digits = 2)
 
 # Or z-scores to values
 z <- qnorm(p)
-ig_fet_zscore2value(z = z, gest_days = 280, acronym = "hcfga") |>
+ig_fet_zscore2value(z = z, x = 280, acronym = "hcfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_fet_zscore2value(z = z, gest_days = 280, acronym = "acfga") |>
+ig_fet_zscore2value(z = z, x = 280, acronym = "acfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
@@ -91,7 +224,7 @@ ig_fet_efwfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
 
 # Bad inputs will not stop the function but will instead return NA - here 91
 # days for gest_days is outside the bounds of the INTERGROWTH-21st Fetal
-# Growth standards
+# Growth standard for head circumference-for-GA
 ig_fet_hcfga_zscore2value(z = z, gest_days = c(91, 98, 224, 266)) |>
   round(digits = 2)
 }
@@ -100,10 +233,44 @@ Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
 et al. \strong{International standards for fetal growth based on serial ultrasound
 measurements: the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
 Project.} \emph{Lancet} 2014, \strong{384(9946):869-79.}
-\doi{0.1016/S0140-6736(14)61490-2}
+\doi{10.1016/S0140-6736(14)61490-2}
 
 Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 \strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
+
+Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
+\strong{International standards for symphysis-fundal height based on serial
+measurements from the Fetal Growth Longitudinal Study of the INTERGROWTH-21st
+Project: prospective cohort study in eight countries.} \emph{BMJ} 2016,
+\strong{355:i5662} \doi{10.1136/bmj.i5662}
+
+Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L, Barros
+FC et al. \strong{International standards for early fetal size and pregnancy dating
+based on ultrasound measurement of crown-rump length in the first trimester
+of pregnancy.} \emph{Ultrasound Obstet Gynecol} 2014, \strong{44(6):641-48}
+\doi{10.1002/uog.13448}
+
+Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
+\strong{Gestational weight gain standards based on women enrolled in the Fetal
+Growth Longitudinal Study of the INTERGROWTH-21st Project: a prospective
+longitudinal cohort study.} \emph{BMJ} 2016, \strong{352:i555} \doi{10.1136/bmj.i555}
+
+Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S et al.
+\strong{International gestational age-specific centiles for umbilical artery
+Doppler indices: a longitudinal prospective cohort study of the
+INTERGROWTH-21st Project.} \emph{Am J Obstet Gynecol} 2021,
+\strong{222(6):602.e1-602.e15} \doi{10.1016/j.ajog.2020.01.012}
+
+Rodriguez-Sibaja MJ, Villar J, Ohuma EO, Napolitano R, Heyl S, Carvalho M et
+al. \strong{Fetal cerebellar growth and Sylvian fissure maturation: international
+standards from Fetal Growth Longitudinal Study of INTERGROWTH-21st Project}
+\emph{Ultrasound Obstet Gynecol} 2021, \strong{57(4):614-623} \doi{10.1002/uog.22017}
+
+Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp B et al.
+\strong{International standards for fetal brain structures based on serial
+ultrasound measurements from Fetal Growth Longitudinal Study of
+INTERGROWTH-21st Project} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(3):359-370} \doi{10.1002/uog.21990}
 }

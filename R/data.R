@@ -5,7 +5,6 @@
 #' classification of newborn and infant growth, including size for gestational
 #' age, stunting, wasting, and weight-for-age.
 #'
-#' @docType package
 #' @name gigs-package
 #' @aliases gigs
 #' @examples
@@ -14,13 +13,12 @@
 #' browseURL("https://www.github.com/lshtm-gigs/gigs")
 #' }
 #' @keywords internal
-NULL
+"_PACKAGE"
 
 #' INTERGROWTH-21<sup>st</sup> Newborn Size Standards (including very preterm)
 #' growth curve data
 #'
 #' @name ig_nbs
-#' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
 #' z-scores/centiles for valid gestational ages in days. The list is ordered
@@ -54,16 +52,17 @@ NULL
 #' ratios: the newborn body composition study of the INTERGROWTH-21st
 #' project.** *Pediatric Research* 2017, **82:305-316.**
 #' \doi{10.1038/pr.2017.52}
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @examples
 #' names(gigs::ig_nbs)
 #' head(gigs::ig_nbs$wfga$male$zscores)
+#' @docType data
 #' @keywords data
 NULL
 
 #' INTERGROWTH-21<sup>st</sup> Newborn Size Standards GAMLSS coefficients
 #'
 #' @name ig_nbs_coeffs
-#' @docType data
 #' @description
 #' A set of nested lists containing mu, sigma, nu and tau values across
 #' gestational ages for either sex, for the INTERGROWTH-21<sup>st</sup>
@@ -75,6 +74,7 @@ NULL
 #' by gestational age and sex: the Newborn Cross-Sectional Study of the
 #' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @source
 #' Mu/sigma/nu/tau values were provided by Dr Eric Ohuma.
 #' @examples
@@ -87,7 +87,6 @@ NULL
 #' INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards growth curve data
 #'
 #' @name ig_png
-#' @docType data
 #' @description
 #' A set of nested lists containing tables with reference values at different
 #' z-scores/centiles for valid post-menstrual ages. The list is ordered by
@@ -115,7 +114,7 @@ NULL
 #' z-scores/centiles for valid x values (usually age in days, also
 #' length or height in cm for weight-for-length (`wfl`) and weight-for-height
 #' (`wfh`) standards, respectively). The list is ordered by acronym first, then
-#' by sex and finally z-score/centile.
+#' by sex and finally by z-score/centile.
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
@@ -131,12 +130,13 @@ NULL
 #' circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 #' and subscapular skinfold-for-age: methods and development.** *Technical
 #' report, WHO, Geneva*, 2007.
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @source
-#' [WHO Child Growth Standards](https://www.who.int/tools/child-growth-standards/standards)
+#' [WHO Child Growth
+#'   Standards](https://www.who.int/tools/child-growth-standards/standards)
 #' @examples
 #' names(gigs::who_gs)
 #' head(gigs::who_gs$wfa$male$zscores)
-#' @srrstats {G1.0} Primary literature referenced here.
 #' @docType data
 #' @keywords data
 NULL
@@ -249,43 +249,40 @@ NULL
 #' @examples
 #' names(gigs::who_gs_coeffs)
 #' head(gigs::who_gs_coeffs$lhfa$male)
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @docType data
 #' @keywords data
 NULL
 
-#' Data from the Low birthweight Infant Feeding Exploration (LIFE) study
+#' Data extract from the Low birthweight Infant Feeding Exploration (LIFE) study
 #'
 #' @name life6mo
-#' @description A dataset with anthropometric data for infants enrolled in the
-#' Low birthweight Infant Feeding Exploration (LIFE) study. The variables are as
-#' follows:
-#' @format A data frame with 10,026 rows and 24 variables:
+#' @description A subset of anthropometric data for 300 singleton infants
+#' enrolled in the Low birthweight Infant Feeding Exploration (LIFE) study. The
+#' variables are as follows:
+#' @format A data frame with 2,511 rows and 10 variables:
 #' \itemize{
-#'   \item{`infantid`:}{  Unique ID for each infant in the dataset. First number is site, second is facility ID (1--5) for that site. The last number denotes whether the infant is a singleton or twin.}
-#'   \item{`motherid`:}{  Unique ID for each mother in the dataset. Same convention as `infantid`, but without sibling status.}
-#'   \item{`site`:}{  Site ID, derived from first number of `infantid` (1 = Tanzania; 2 = Malawi; 3 = India-Karnataka; 4 = India-Odisha).}
-#'   \item{`facility`:}{  Facility ID, derived from third number of `infantid` (1--5).}
-#'   \item{`birthdate`:}{  Date of birth for a given infant.}
-#'   \item{`visitweek`:}{  Chronological age in weeks when study visit occurred (0--26).}
-#'   \item{`visitattend`:}{  Visit attendance status (1 = Attended; 2 = Missed).}
-#'   \item{`visitdate`:}{  Date of visit as double.}
-#'   \item{`visittime`:}{  Time of visit as character.}
-#'   \item{`withdrawalrsn`:}{  Reason for withdrawal, if withdrawn (1 = Baby died; 2 = Mother moved away; 3 = Lost contact with mother; 4 = Mother withdrew consent; 5 = Mother died and new caregiver withdrew consent; 6 = Other; NA = No withdrawal).}
-#'   \item{`deliverymode2`:}{  Mode of delivery for baby (1 = Vaginal delivery; 2 = Caesarean delivery).}
-#'   \item{`birthcount`:}{  Number of babies born in delivery (1 = Singleton; 2 = Twins). Note: not all babies from twin births were enrolled in the study.}
-#'   \item{`sibling`:}{  Siblings enrolled in the study (1--2)}
-#'   \item{`sex`:}{  Sex of the infant (1 = Male; 2 = Female).}
-#'   \item{`gestage`:}{  Best obstetric estimate of gestational age (132--311). Note: missing or implausible (<24 weeks) values excluded from analysis}
-#'   \item{`preterm`:}{  Term status based on `gestage` (0 = Term (>=37 weeks `gestage`); 1 = Preterm (<37 weeks `gestage`).}
-#'   \item{`sizega`:}{  Size for gestational age (1 = Small for GA (SGA); 2 = Appropriate for GA (AGA); 3 = Large for GA (LGA)).}
-#'   \item{`LBWtype4`:}{  Low birthweight type (1 = Preterm + SGA; 2 = Preterm + AGA; 3 = Preterm + LGA; 4 = Term + SGA).}
-#'   \item{`pma`:}{  Post-menstrual age in days (133--545)}
-#'   \item{`age_days`:}{  Chronological age in days derived from `gestage` and `pma` (0--245).}
-#'   \item{`meaninfwgt`:}{  Mean weight in g (1233.33--9905).}
-#'   \item{`meaninflen`:}{  Mean length in cm (35.03--72.93).}
-#'   \item{`meanhead`:}{  Mean head circumference in cm (23.20--45.73).}
-#'   \item{`meanmuac`:}{  Mean mid-upper arm circumference (5.97--17.03).}
+#'   \item{`id`:}{  Unique ID for each infant in the dataset (1--300).}
+#'   \item{`gestage`:}{  Best obstetric estimate of gestational age in days
+#'     (201--311).}
+#'   \item{`sex`:}{  Sex of the infant as a factor (`"M"` = Male; `"F"` =
+#'     Female).}
+#'   \item{`visitweek`:}{  Chronological age in weeks (±1) when study visit
+#'     occurred (0--26).}
+#'   \item{`pma`:}{  Post-menstrual age in days (202--545).}
+#'   \item{`age_days`:}{  Chronological age in days at each visit; equal to
+#'     `pma - gestage` (0--245).}
+#'   \item{`weight_g`:}{  Mean weight in g (1271.67--9050.00).}
+#'   \item{`len_cm`:}{  Mean length in cm (35.03--72.93).}
+#'   \item{`headcirc_cm`:}{  Mean head circumference in cm (23.20--45.17).}
+#'   \item{`muac_cm`:}{  Mean mid-upper arm circumference in cm (6.13--17.03).}
 #' }
+#'
+#' @note We subsetted the full LIFE 6 month dataset for [gigs]. As such, this
+#' extract only includes data from 300 singleton pregnancies where the best
+#' estimate of gestational age was >168 days. We also removed rows corresponding
+#' to visit weeks where no measurement data was taken due to non-attendance of
+#' the visit.
 #' @references
 #' Vesel L, Bellad RM, Manji K, Saidi F, Velasquez E, Sudfeld C, et al.
 #' **Feeding practices and growth patterns of moderately low birthweight infants
@@ -294,6 +291,7 @@ NULL
 #' \doi{10.1136/BMJOPEN-2022-067316}
 #' @examples
 #' head(gigs::life6mo)
+#' @srrstats {G1.0} Primary literature referenced here.
 #' @docType data
 #' @keywords data
 NULL
@@ -305,11 +303,18 @@ NULL
 #' as possible.
 #'
 #' @name shared_roxygen_params
-#' @param y Numeric vector of measurement(s) to convert to centiles/z-scores.
-#'   Units depend on which `acronym`(s) are in use.
-#' @param z,p Numeric vector of centiles/z-scores to convert to values.
-#' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
-#'   (female).
+#' @param y Numeric vector of length one or more with anthropometric
+#'   measurement(s) to convert to centiles/z-scores. Units depend on which
+#'   `acronym`(s) are in use.
+#' @param z,p Numeric vector of length one or more with centiles/z-scores to
+#'   convert to values. For `p`, if an element of `p` is not between `0` and
+#'   `1`, gigs will replace it with `NA` and warn you. This behaviour can be
+#'   customised using the functions in [gigs_options].
+#' @param sex Character vector of length one or more with sex(es), either `"M"`
+#'   (male) or `"F"` (female). This argument is case-sensitive. By default, gigs
+#'   will replace elements of `sex` which are not `"M"` or `"F"` with `NA`
+#'   and warn you. This behaviour can be customised using the functions in
+#'   [gigs_options].
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()].
 #' @keywords internal
 NULL
@@ -337,3 +342,6 @@ NULL
 #'   outputs from [vctrs::vec_recycle_common()].
 #' @keywords internal
 NULL
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.4a} All package data is documented with `{roxygen2}`.

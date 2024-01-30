@@ -9,19 +9,19 @@ ig_fet_estimate_ga(crl_mm = NULL, headcirc_mm = NULL, femurlen_mm = NULL)
 }
 \arguments{
 \item{crl_mm}{Numeric vector with crown-rump length value(s) in mm taken
-from an ultrasound scan obtained within 56 to 97 days since the last
-menstrual period. If not \code{NULL} (the default), should be of length 1 or the
-same length as other inputs. The function will return NA for all elements
-of \code{crl_mm} which are not between 15 and 95 mm and do not have
-\code{headcirc_mm} or \code{abdocirc_mm} values.}
+from an ultrasound scan obtained 56 to 97 days since the last menstrual
+period. If not \code{NULL} (the default), should be of length one or the same
+length as other inputs. The function will return NA for all elements of
+\code{crl_mm} which are not between 15 and 95 mm and have no \code{headcirc_mm}
+or \code{abdocirc_mm} values.}
 
 \item{headcirc_mm}{Numeric vector with head circumference value(s) in cm
-taken from an ultrasound scan obtained within 98 to 181 days since the last
-menstrual period. If not \code{NULL} (the default), should have length 1 or
+taken from an ultrasound scan obtained 98 to 181 days since the last
+menstrual period. If not \code{NULL} (the default), should have length one or
 same length as other inputs.}
 
 \item{femurlen_mm}{Numeric vector with femur length value(s) in cm. If not
-\code{NULL} (the default), should have length 1 or same length as other
+\code{NULL} (the default), should have length one or same length as other
 arguments inputs.}
 }
 \value{

@@ -1,35 +1,26 @@
 #' Convert z-scores/centiles to values in the INTERGROWTH-21<sup>st</sup> Fetal
 #' Growth standards
 #'
-#' @inheritParams shared_roxygen_params
-#' @param gest_days Numeric vector of gestational age(s) in days. Elements
-#'   should be between `98` to `280` for all standards other than estimated
-#'   fetal weight-for-GA (`"efwfga"`), which takes values betweem `154` and
-#'   `280`. Will return NA for each observation where GA is not within bounds.
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> Fetal
-#'   Growth standard. Each value should be one of `"hcfga"` (head
-#'   circumference-for-GA), `"bpdfga"` (biparietal diameter-for-age), `"acfga"`
-#'   (abdominal circumference-for-GA), `"flfga"` (femur length-for-GA),
-#'   `"ofdfga"` (occipito-frontal diameter-for-GA), or `"efwfga"` (estimated
-#'   fetal length-for-GA). If none of these, the function will return NA.
-#' @param x Numeric vector of x values of length 1 or more. Elements should have
-#'   specific units and be between certain values depending on the standard in
-#'   use (defined by `acronym`). These are:
-#'   * Between 98 and 280 days for `"hcfga"`, `"bpdfga"`, `"acfga"`,
-#'     `"flfga"`, `"ofdfga"`, and `"tcdfga"`.
+#' @inherit shared_roxygen_params params note
+#' @param x Numeric vector of length one or more with x values. Elements should
+#'   have specific units and be between certain values depending on the standard
+#'   in use (defined by `acronym`). These are:
+#'   * Between 98 and 280 days for `"hcfga"`, `"bpdfga"`, `"acfga"`, `"flfga"`,
+#'     `"ofdfga"`, and `"tcdfga"`.
 #'   * Between 154 and 280 days for `"efwfga"`.
 #'   * Between 112 and 294 days for `"sfhfga"`.
 #'   * Between 58 and 105 days for `"crlfga"`.
 #'   * Between 19 and 95 mm for `"gafcrl"`.
 #'   * Between 105 and 280 days for `"gwgfga"`.
-#'   * Between 168 and 280 days for `"pifga"`, `"rifga"`, and `"sdrfga"`
-#'     (the INTERGROWTH-21st Fetal Doppler standards).
-#'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`,
-#'     and `"pvfga"` (the INTERGROWTH-21st Fetal Brain Development
+#'   * Between 168 and 280 days for `"pifga"`, `"rifga"`, and `"sdrfga"` (the
+#'     INTERGROWTH-21<sup>st</sup> Fetal Doppler standards).
+#'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`, and
+#'     `"pvfga"` (the INTERGROWTH-21<sup>st</sup> Fetal Brain Development
 #'     standards).
 #'
-#'   The function will return NA for each observation where `x` is not within
-#'   these bounds.
+#'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
+#'   warn you. This behaviour can be customised using the functions in
+#'   [gigs_options].
 #' @param acronym Character vector of length one or more denoting the
 #'   INTERGROWTH-21<sup>st</sup> Fetal Growth standard(s) in use. Each value
 #'   should be one of:
@@ -53,11 +44,13 @@
 #'   * `"pvfga"` (atrium of posterior horn of lateral ventricle-for-GA)
 #'   * `"cmfga"` (cisterna magna-for-GA)
 #'
-#'   This argument is case-sensitive. If `acronym` is not one of these values,
-#'   the function will return NA.
-#' @param gest_days,crl_mm Standard-specific x variables. These should be within
-#'   the bounds given in the documentation for the `acronym` argument.
-#' @inherit shared_roxygen_params params note
+#'   This argument is case-sensitive. By default, gigs will replace elements in
+#'   `acronym` which are not one of the above values with `NA` and warn you.
+#'   This behaviour can be customised using the functions in [gigs_options].
+#' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
+#' @param gest_days,crl_mm Numeric vector of length one or more with
+#'   standard-specific x variables. See the documentation for `x` for
+#'   information on how out-of-bounds elements will be handled.
 #' @references
 #' Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
 #' et al. **International standards for fetal growth based on serial ultrasound
@@ -103,7 +96,6 @@
 #' ultrasound measurements from Fetal Growth Longitudinal Study of
 #' INTERGROWTH-21st Project** *Ultrasound Obstet Gynecol* 2020,
 #' **56(3):359-370** \doi{10.1002/uog.21990}
-#' @srrstats {G1.0} Primary literature referenced here.
 #' @examples
 #' # Convert centiles to values
 #' p <- 0.25 # 25th centile
@@ -248,6 +240,12 @@ ig_fet_tcdfga_zscore2value <- function(z, gest_days) {
 
 #' @rdname ig_fet_zscore2value
 #' @export
+ig_fet_gaftcd_zscore2value <- function(z, tcd_mm) {
+  ig_fet_zscore2value(z, tcd_mm, acronym = "gaftcd")
+}
+
+#' @rdname ig_fet_zscore2value
+#' @export
 ig_fet_poffga_zscore2value <- function(z, gest_days) {
   ig_fet_zscore2value(z, gest_days, acronym = "poffga")
 }
@@ -369,6 +367,12 @@ ig_fet_tcdfga_centile2value <- function(p, gest_days) {
 
 #' @rdname ig_fet_zscore2value
 #' @export
+ig_fet_gaftcd_centile2value <- function(p, tcd_mm) {
+  ig_fet_centile2value(p, tcd_mm, acronym = "gaftcd")
+}
+
+#' @rdname ig_fet_zscore2value
+#' @export
 ig_fet_poffga_centile2value <- function(p, gest_days) {
   ig_fet_centile2value(p, gest_days, acronym = "poffga")
 }
@@ -400,34 +404,47 @@ ig_fet_cmfga_centile2value <- function(p, gest_days) {
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup> Fetal
 #' Growth standards
 #'
-#' @param gest_days Numeric vector of that is usually used as the x variable,
-#'   but can also be the y variable for the `"gafcrl"` standard. When
-#'   `gest_days` is the x variable, each element of `gest_days` should have
-#'   specific units and be within the boulds defined in the description for the
-#'   argument `x`.
-#' @param headcirc_mm Numeric vector of head circumference measurements in mm.
-#' @param bpd_mm Numeric vector of biparietal diameter measurements in mm.
-#' @param abdocirc_mm Numeric vector of abdominal circumference measurements
+#' @param gest_days Numeric vector of length one or more that is usually used
+#'   as the x variable, but can also be a y variable for the `"gafcrl"`
+#'   and `"gaftcd"` standards. When `gest_days` is being used as the x variable,
+#'   out of bounds elements of `gest_days` will be handled according to the
+#'   [gigs_options] for `"handle_invalid_xvar"`.
+#' @param headcirc_mm Numeric vector of length one or more with head
+#'   circumference measurements in mm.
+#' @param bpd_mm Numeric vector of length one or more with biparietal diameter
+#'   measurement(s) in mm.
+#' @param abdocirc_mm Numeric vector of length one or more with abdominal
+#'   circumference measurement(s) in mm.
+#' @param femurlen_mm Numeric vector of length one or more with femur length(s)
 #'   in mm.
-#' @param femurlen_mm Numeric vector of femur length in mm.
-#' @param ofd_mm Numeric vector of in occipito-frontal diameter in mm.
-#' @param efw_g Numeric vector of estimated fetal weight in g.
-#' @param sfh_cm Numeric vector of symphisis-fundal height in mm.
-#' @param crl_mm Numeric vector of crown-rump length in mm.
-#' @param gest_wt_gain_kg Numeric vector of gestational weight gain (or loss)
-#'   in kg.
-#' @param puls_idx Numeric vector of pulsatility index.
-#' @param resist_idx Numeric vector of resistance index.
-#' @param sys_dia_ratio Numeric vector of systolic/diastolic ratio.
-#' @param tcd_mm Numeric vector of transcerebellar diameter in mm.
-#' @param par_occ_fiss_mm Numeric vector of parietal-occipital fissure size in
-#'   mm.
-#' @param sylv_fiss_mm Numeric vector of Sylvian fissure size in mm.
-#' @param ant_hlv_mm Numeric vector of anterior horn of lateral ventricle
-#'   measurements(s) in mm.
-#' @param atr_phlv_mm Numeric vector of atrium of posterior horn of lateral
-#'   ventricle measurement(s) in mm.
-#' @param cist_mag_mm Numeric vector of cisterna magna measurement(s) in mm.
+#' @param ofd_mm Numeric vector of length one or more with in occipito-frontal
+#'   diameter(s) in mm.
+#' @param efw_g Numeric vector of length one or more with estimated fetal
+#'   weight(s) in g.
+#' @param sfh_cm Numeric vector of length one or more with symphisis-fundal
+#'   height(s) in mm.
+#' @param crl_mm Numeric vector of length one or more with crown-rump length(s)
+#'   in mm.
+#' @param gest_wt_gain_kg Numeric vector of length one or more with gestational
+#'   weight gain(s)/loss(es) in kg.
+#' @param puls_idx Numeric vector of length one or more with pulsatility index
+#'   value(s).
+#' @param resist_idx Numeric vector of length one or more with resistance index
+#'   value(s).
+#' @param sys_dia_ratio Numeric vector of length one or more with
+#'   systolic/diastolic ratio value(s).
+#' @param tcd_mm Numeric vector of length one or more with transcerebellar
+#'   diameter(s) in mm.
+#' @param par_occ_fiss_mm Numeric vector of length one or more with
+#'   parietal-occipital fissure measurement(s) in mm.
+#' @param sylv_fiss_mm Numeric vector of length one or more with Sylvian fissure
+#'    measurement(s) in mm.
+#' @param ant_hlv_mm Numeric vector of length one or more with anterior horn of
+#'   lateral ventricle measurements(s) in mm.
+#' @param atr_phlv_mm Numeric vector of length one or more with atrium of
+#'   posterior horn of lateral ventricle measurement(s) in mm.
+#' @param cist_mag_mm Numeric vector of length one or more with cisterna magna
+#'   measurement(s) in mm.
 #' @inheritParams shared_roxygen_params
 #' @inherit ig_fet_zscore2value params references
 #' @examples
@@ -574,6 +591,12 @@ ig_fet_tcdfga_value2zscore <- function(tcd_mm, gest_days) {
 
 #' @rdname ig_fet_value2zscore
 #' @export
+ig_fet_gaftcd_value2zscore <- function(gest_days, tcd_mm) {
+  ig_fet_value2zscore(gest_days, tcd_mm, acronym = "gaftcd")
+}
+
+#' @rdname ig_fet_value2zscore
+#' @export
 ig_fet_poffga_value2zscore <- function(par_occ_fiss_mm, gest_days) {
   ig_fet_value2zscore(par_occ_fiss_mm, gest_days, acronym = "poffga")
 }
@@ -695,6 +718,12 @@ ig_fet_tcdfga_value2centile <- function(tcd_mm, gest_days) {
 
 #' @rdname ig_fet_value2zscore
 #' @export
+ig_fet_gaftcd_value2centile <- function(gest_days, tcd_mm) {
+  ig_fet_value2centile(gest_days, tcd_mm, acronym = "gaftcd")
+}
+
+#' @rdname ig_fet_value2zscore
+#' @export
 ig_fet_poffga_value2centile <- function(par_occ_fiss_mm, gest_days) {
   ig_fet_value2centile(par_occ_fiss_mm, gest_days, acronym = "poffga")
 }
@@ -731,8 +760,9 @@ ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
 #' Estimates median and standard deviation for different measures of fetal
 #' growth.
 #'
-#' @param x Numeric vector of x variable, which should have the units/values
-#'   described in the [ig_fet_value2zscore()] documentation.
+#' @param x Numeric vector of length one or more with x variable, which should
+#'   have the units/values described in the [ig_fet_value2zscore()]
+#'   documentation.
 #' @param acronym Character vector of acronym(s) denoting an
 #'   INTERGROWTH-21<sup>st</sup> fetal standard. Each element should be one of
 #'   the acronyms described in the [ig_fet_value2zscore()] documentation.
@@ -763,7 +793,6 @@ ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
 #' INTERGROWTH-21st Project** *Ultrasound Obstet Gynecol* 2020,
 #' **56(3):359-370** \doi{10.1002/uog.21990}
 #' @rdname ig_fet_equations
-#' @srrstats {G1.0} Primary literature referenced here.
 #' @noRd
 ig_fet_mu_sigma <- function(x, acronym) {
   mu_fns <- list(
@@ -779,12 +808,15 @@ ig_fet_mu_sigma <- function(x, acronym) {
     crlfga = \(GA) -50.6562 + (0.815118 * GA * 7) + (0.00535302 * (GA * 7)^2),
     gafcrl = \(x) {
       CRL <- x * 7
-      40.9041 + 3.21585 * (CRL)^0.5 + 0.348956 * (CRL)
+      40.9041 + 3.21585 * CRL^0.5 + 0.348956 * CRL
     },
     # Cerebellar development
     tcdfga = \(GA) -13.10907 + 20.8941 * (GA/10)^0.5 + 0.5035914 * (GA/10)^3,
-    ## 04/01/2024: `gaftcd` not included whilst equation is dubious
-    ## gaftcd = \(TCD) 3.957113 + 8.154074 * TCD/10 - 0.076187 * (TCD/10)^3
+    gaftcd = \(x) {
+      TCD <- x * 7
+      # Eqn gives GA in weeks, so `7 *`
+      7 * (3.957113 + 8.154074 * TCD/10 - 0.076187 * (TCD/10)^3)
+    },
     # Fetal brain development standards
     poffga = \(GA) 10.29428 - (122.8447 * GA^-1) + (0.00001038 * GA^3),
     sffga = \(GA) {
@@ -825,7 +857,10 @@ ig_fet_mu_sigma <- function(x, acronym) {
     # Fetal Growth standards
     tcdfga = \(GA) 0.4719837 + 0.0500382 * (GA/10)^3,
     ## 04/01/2024: `gaftcd` not included whilst equation is dubious
-    ## gaftcd = \(TCD) 7 * (1.577198 -1.30374 * (TCD/10)^-0.5)
+    gaftcd = \(x) {
+      TCD <- x * 7
+      7 * (1.577198 -1.30374 * (TCD/10)^-0.5) # Eqn gives GA in weeks, so `7 *`
+    },
     # Fetal brain development standards
     poffga = \(GA) 1.596042 - (257.2297 * GA^-2),
     sffga = \(GA) 2.304501 - (353.814 * GA^-2),
@@ -853,24 +888,27 @@ ig_fet_mu_sigma <- function(x, acronym) {
 
 #' Convert values to z-scores for the INTERGROWTH-21st Fetal standards based on
 #' simple mu-sigma models (internal; covers most Fetal standards)
-#' @param y Numeric vector of y values of length 1 or greater.
+#' @param y Numeric vector of y values of length one or more.
 #' @inheritParams ig_fet_mu_sigma
+#' @returns Numeric vector of z-scores, with length equal to `length(y)`.
 #' @noRd
 ig_fet_mu_sigma_y2z <- function(y, x, acronym) {
   mu_sigma <- ig_fet_mu_sigma(x = x, acronym = acronym)
   y[acronym == "cmfga"] <- log(y[acronym == "cmfga"])
-  z <- with(mu_sigma, mu_sigma_y2z(y, mu, sigma))
+  with(mu_sigma, mu_sigma_y2z(y, mu, sigma))
 }
 
 #' Convert z-scores to values for the INTERGROWTH-21st Fetal standards based on
 #' simple mu-sigma models (internal; covers most Fetal standards)
-#' @param z Numeric vector of length 1 or greater with z-scores.
+#' @param z Numeric vector of length one or more with z-scores.
 #' @inheritParams ig_fet_mu_sigma
+#' @returns Numeric vector of expected measurements, with length equal to
+#'   `length(z)`.
 #' @noRd
 ig_fet_mu_sigma_z2y <- function(z, x, acronym) {
   mu_sigma <- ig_fet_mu_sigma(x = x, acronym = acronym)
   y <- with(mu_sigma, mu_sigma_z2y(z, mu, sigma))
-  y <- ifelse(acronym != "cmfga", yes = y, no = exp(y))
+  ifelse(acronym != "cmfga", yes = y, no = exp(y))
 }
 
 # INTERNAL: Estimated fetal weight functions -----------------------------------
@@ -903,16 +941,18 @@ ig_fet_efw_lms <- function(gest_days) {
 #' Convert values to z-scores in the INTERGROWTH-21st estimated fetal weight
 #' standard (internal; part of the INTERGROWTH-21st Fetal Growth standards)
 #'
-#' @param efw_g Numeric vector with estimated fetal weight(s) in grams.
-#' @param gest_days Numeric vector with gestational age(s) in days.
+#' @param efw_g Numeric vector with length one or more of estimated fetal
+#'   weight(s) in grams.
+#' @param gest_days Numeric vector with same length as `efw_g` of gestational
+#'   age(s) in days.
 #' @references
 #' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
-#' @returns Numeric vector with same length as `efw_g` and `gest_days`
-#'   containing z-scores.
-#' @srrstats {G3.0} Using `abs() < .Machine$double.eps` for floating point
+#' @returns Numeric vector with same length as `z` and `gest_days` containing
+#'   z-scores.
+#' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
 ig_fet_efw_y2z <- function(efw_g, gest_days) {
@@ -921,24 +961,25 @@ ig_fet_efw_y2z <- function(efw_g, gest_days) {
   log_efw <- log(efw_g)
   with(lms,
        ifelse(test = abs(l) < sqrt(.Machine$double.eps),
-               yes = s^-1 * log(log_efw / m),
-               no = (s * l)^-1 * ((log_efw / m)^l - 1))
+              yes = s^-1 * log(log_efw / m),
+              no = (s * l)^-1 * ((log_efw / m)^l - 1))
   )
 }
 
 #' Convert z-scores to values in the INTERGROWTH-21st estimated fetal weight
 #' standard (internal; part of the INTERGROWTH-21st Fetal Growth standards)
 #'
-#' @param z Numeric vector with estimated fetal weight(s) in grams.
-#' @param gest_days Numeric vector with gestational age(s) in days.
+#' @param z Numeric vector of length one or more of z-scores.
+#' @param gest_days Numeric vector with same length as `z` of gestational
+#'   age(s) in days.
 #' @references
 #' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
-#' @returns Numeric vector with same length as `z` and `gest_days`
-#'   containing expected estimated fetal weight values in grams.
-#' @srrstats {G3.0} Using `abs() < .Machine$double.eps` for floating point
+#' @returns Numeric vector with same length as `z` and `gest_days` containing
+#'   expected estimated fetal weight values in grams.
+#' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
 ig_fet_efw_z2y <- function(z, gest_days) {
@@ -952,26 +993,29 @@ ig_fet_efw_z2y <- function(z, gest_days) {
 
 # INTERNAL: IG-21st Fetal Doppler standards ------------------------------------
 
-#' INTERGROWTH-21<sup>st</sup> fetal doppler lambda/mu/sigma equations
+#' INTERGROWTH-21<sup>st</sup> fetal doppler gamma/mu/sigma equations
 #'   (internal; used for the INTERGROWTH-21st Fetal Doppler standards)
 #'
-#' @param gest_days Numeric vector with gestational age in days.
-#' @param acronym Character vector with acronyms denoting INTERGROWTH-21st Fetal
-#'   Doppler standard in use. Only `"pifga"`, `"rifga"` and `"sdrfga"` will
-#'   return LMS values.
-#' @note The LMS values produced here are not used in Royston's LMS format (like
-#'   in the WHO Growth Standards), but instead in Royston & Wright's exponential
-#'   normal (EN) model. See [ig_fet_doppler_y2z()] for the reference.
+#' @param gest_days Numeric vector of length one or more with gestational age(s)
+#'   in days.
+#' @param acronym Character vector with same length as `gest_days` containing
+#'   acronyms denoting INTERGROWTH-21st Fetal Doppler standard in use for each
+#'   element of `gest_days`. Only `"pifga"`, `"rifga"` and `"sdrfga"` will
+#'   return gamma/mu/sigma values.
+#' @note The GMS values produced here map onto the coefficients used in
+#'   Royston & Wright's exponential normal (EN) model. See
+#'   [ig_fet_doppler_y2z()] for the reference.
 #' @references
 #' Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S et al.
 #' **International gestational age-specific centiles for umbilical artery
 #' Doppler indices: a longitudinal prospective cohort study of the
 #' INTERGROWTH-21st Project.** *Am J Obstet Gynecol* 2021,
 #' **222(6):602.e1-602.e15** \doi{10.1016/j.ajog.2020.01.012}
-#' @returns List of three numeric vectors equal in length to `gest_days`.
+#' @returns Named list of three numeric vectors (`"gamma"`, `"mu"` and
+#'   `"sigma"`), which are equal in length to `gest_days`.
 #' @noRd
-ig_fet_doppler_lms <- function(gest_days, acronym) {
-  ig_fet_doppler_L <- c(pifga = -0.0768617,
+ig_fet_doppler_gms <- function(gest_days, acronym) {
+  ig_fet_doppler_G <- c(pifga = -0.0768617,
                         rifga = 0.0172944,
                         sdrfga = -0.2752483)
   ig_fet_doppler_M <- list(
@@ -987,37 +1031,38 @@ ig_fet_doppler_lms <- function(gest_days, acronym) {
 
   # Initialise empty vectors
   len_out <- length(gest_days)
-  lambda <- rep(NA_real_, len_out)
+  gamma <- rep(NA_real_, len_out)
   mu <- rep(NA_real_, len_out)
   sigma <- rep(NA_real_, len_out)
   gest_wks <- gest_days / 7
 
   is_na_acronym <- is.na(acronym)
-  has_doppler_acronym <- acronym %in% names(ig_fet_doppler_L) & !is_na_acronym
+  has_doppler_acronym <- acronym %in% names(ig_fet_doppler_G) & !is_na_acronym
   acronyms <- unique(acronym[has_doppler_acronym])
   for (curr_acronym in acronyms) {
     has_curr_acronym <- acronym == curr_acronym & !is_na_acronym
     ga <- gest_wks[has_curr_acronym]
-    lambda[has_curr_acronym] <- ig_fet_doppler_L[[curr_acronym]]
+    gamma[has_curr_acronym] <- ig_fet_doppler_G[[curr_acronym]]
     mu[has_curr_acronym] <- ig_fet_doppler_M[[curr_acronym]](GA = ga)
     sigma[has_curr_acronym] <- ig_fet_doppler_S[[curr_acronym]](GA = ga)
   }
-  list(l = lambda, m = mu, s = sigma)
+  list(g = gamma, m = mu, s = sigma)
 }
 
 #' Convert fetal doppler values to z-scores for specific gestational ages
 #' (internal)
 #'
-#' @param y Numeric vector of length 1 or more with umibilical artery doppler
+#' @param y Numeric vector of length one or more with umibilical artery doppler
 #'   values, specific to the acronym(s) in use.
-#' @param gest_days Numeric vector of length 1 or `length(y)` with
-#'   gestational ages in days.
-#' @param acronym Character vector of length 1 or `length(y)` with
+#' @param gest_days Numeric vector of same length as `y` with gestational age(s)
+#'   in days.
+#' @param acronym Character vector of same length as `y` with
 #'   INTERGROWTH-21<sup>st</sup> umbilical artery doppler standard(s) in use.
 #' @note Uses an inverted form of the exponential normal model equation defined
 #'   in section 3.1.6 of the attached reference. This model adjusts for skewness
 #'   in the distribution of umbilical artery indices at different gestational
 #'   ages.
+#' @returns Numeric vector of z-scores of the same length as `y`.
 #' @references
 #' Royston P, Wright EM. **A Method for Estimating Age-Specific Reference
 #' Intervals (‘Normal Ranges’) Based on Fractional Polynomials and Exponential
@@ -1025,23 +1070,24 @@ ig_fet_doppler_lms <- function(gest_days, acronym) {
 #' \doi{10.1111/1467-985X.00091}
 #' @noRd
 ig_fet_doppler_y2z <- function(y, gest_days, acronym) {
-  lms <- ig_fet_doppler_lms(gest_days, acronym)
+  gms <- ig_fet_doppler_gms(gest_days, acronym)
   # Inversion of EN model equation from section 3.1.6 of referenced paper
-  with(lms, (exp((y - m) * l * s^-1) - 1) / l)
+  with(gms, (exp((y - m) * g * s^-1) - 1) / g)
 }
 
 #' Convert fetal doppler z-scores to values for specific gestational ages
 #' (internal)
 #'
-#' @param y Numeric vector of length 1 or more with umibilical artery doppler
-#'   values, specific to the acronym(s) in use.
-#' @param gest_days Numeric vector of length 1 or more with gestational ages in
-#'   days.
-#' @param acronym Character vector of `length(y)` with
+#' @param z Numeric vector of length one or more with z-scores.
+#' @param gest_days Numeric vector of same length as `y` with gestational age(s)
+#'   in days.
+#' @param acronym Character vector of same length as `y` with
 #'   INTERGROWTH-21<sup>st</sup> umbilical artery doppler standard(s) in use.
 #' @note Uses the exponential normal model equation defined in section 3.1.6 of
 #'   the attached reference. This model adjusts for skewness in the distribution
 #'   of umbilical artery indices at different gestational ages.
+#' @returns Numeric vector of expected measurements, with the same length as
+#'   `z`.
 #' @references
 #' Royston P, Wright EM. **A Method for Estimating Age-Specific Reference
 #' Intervals (‘Normal Ranges’) Based on Fractional Polynomials and Exponential
@@ -1049,17 +1095,15 @@ ig_fet_doppler_y2z <- function(y, gest_days, acronym) {
 #' \doi{10.1111/1467-985X.00091}
 #' @noRd
 ig_fet_doppler_z2y <- function(z, gest_days, acronym) {
-  lms <- ig_fet_doppler_lms(gest_days, acronym)
+  gms <- ig_fet_doppler_gms(gest_days, acronym)
   # EN model equation from section 3.1.6 of referenced paper
-  with(lms, {
-    log_val <- 1 + l * z
+  with(gms, {
+    log_val <- 1 + g * z
     out <- rep.int(x = NA_real_, length(z))
     use <- !is.na(log_val) & log_val > 0
-    out[use] <- m[use] + s[use] * log(log_val[use]) / l[use]
+    out[use] <- m[use] + s[use] * log(log_val[use]) / g[use]
     out
   })
-
-
 }
 
 # INTERNAL; IG-21st Gestational Weight Gain ------------------------------------
@@ -1070,6 +1114,9 @@ ig_fet_doppler_z2y <- function(z, gest_days, acronym) {
 #' @param gest_days Numeric vector with gestational age in days.
 #' @note The mu/sigma values returned by this equation have the units
 #'   log(gestational weight gain).
+#' @returns Named list with two elements:
+#'   * `log_mu` - log(mean of GWG at a given gestational age)
+#'   * `log_sigma` - log(standard deviation of GWG at a given gestational age)
 #' @references
 #' Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
 #' **Gestational weight gain standards based on women enrolled in the Fetal
@@ -1085,13 +1132,14 @@ ig_fet_gwg_mu_sigma <- function(gest_days) {
   list(log_mu = log_mu, log_sigma = log_sigma)
 }
 
-#' Convert gestational weight gain values to z-scores for specific
-#'   gestational ages (internal)
+#' Convert gestational weight gain values to z-scores for specific gestational
+#'   ages (internal)
 #'
-#' @param gwg_kg Numeric vector of length 1 or more with gestational weight gain
-#'   values in kg.
-#' @param gest_days Numeric vector of length 1 or `length(y)` with
-#'   gestational ages in days.
+#' @param gwg_kg Numeric vector of length one or more with gestational weight
+#'   gain value(s) in kg.
+#' @param gest_days Numeric vector of same length as `gwg_kg` with gestational
+#'   age(s) in days.
+#' @returns Numeric vector of expected measurements, of same length as `gwg_kg`.
 #' @note Uses the equations/method in Table 4 of the attached reference to
 #'   calculate z-scores.
 #' @references
@@ -1105,13 +1153,15 @@ ig_fet_gwg_y2z <- function(gwg_kg, gest_days) {
   with(log_mu_sigma, (log(gwg_kg + 8.75) - log_mu) / log_sigma)
 }
 
-#' Convert gestational weight gain z-scores to values for specific
-#'   gestational ages (internal)
+#' Convert gestational weight gain z-scores to values for specific gestational
+#'   ages (internal)
 #'
-#' @param z Numeric vector of length 1 or more containing z-scores.
-#' @param gest_days Numeric vector of `length(y)` with gestational ages in days.
+#' @param z Numeric vector of length one or more with z-score(s).
+#' @param gest_days Numeric vector of same length as `z` with gestational age(s)
+#'   in days.
 #' @note Uses the equations/method in Table 4 of the attached reference to
 #'   calculate z-scores.
+#' @returns Numeric vector of expected measurements, of same length as `z`.
 #' @references
 #' Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
 #' **Gestational weight gain standards based on women enrolled in the Fetal
@@ -1122,3 +1172,18 @@ ig_fet_gwg_z2y <- function(z, gest_days) {
   log_mu_sigma <- ig_fet_gwg_mu_sigma(gest_days)
   with(log_mu_sigma, exp(log_mu + z * log_sigma) - 8.75)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.0} Primary literature referenced for each exported function,
+#'   and for internal functions.
+#' @srrstats {G1.4, G1.4a} All functions in file documented using `{roxygen2}`.
+#' @srrstats {G2.0a, G2.1a} Exported function in this file document expectations
+#'   on the length of inputs and their data types.
+#' @srrstats {G2.0, G2.1, G2.2, G2.3, 2.3a, G2.6} These standards
+#'   are met in all exported functions by passing inputs to [validate_ig_fet()].
+#'   All internal functions in this script are provided with vectors that have
+#'   already been validated.
+#' @srrstatsTODO {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
+#'   in all exported functions by passing inputs to [validate_ig_fet()]. All
+#'   internal functions in this script are provided with vectors that have
+#'   already checked for missing/undefined/out-of-bounds data.
