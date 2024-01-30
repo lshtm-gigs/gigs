@@ -6,9 +6,12 @@
 #' @param y,z,p Either `NULL` or a numeric vector with length equal to or
 #'   greater than one.
 #' @note The function will `stop()` if more than one of `y`, `z`, or `p` are not
-#'   `NULL`. All checks on type/length are performed by `{checkmate}`.
-#' @returns Returns `vec`. Throws an error if `vec` is not numeric, is not at
-#'   least length 1, or if all values in `vec` are missing.
+#'   `NULL`. Whether `y`, `z`, or `p` is provided, an error will be thrown if
+#'   they are not an atomic vector with length 1 or greater. If `p` is provided,
+#'   values of `p` which are not between `0` and `1` will be replaced with `NA`.
+#' @returns This function is called for its side effect, which is to replace
+#'   either `y`, `z`, or `p` in the frame 'above' this function, after asserting
+#'   its properties and removing its attributes.
 #' @noRd
 validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   args <- list(y = y, z = z, p = p)
@@ -18,63 +21,85 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   vec <- args[!arg_nulls][[1]] |>
     checkmate::assert_numeric(min.len = 1, .var.name = varname) |>
     checkmate::assert_atomic_vector() |>
-    remove_attributes()
+    remove_attributes() |>
+    handle_missing_data(varname = varname) |>
+    handle_undefined_data(varname = varname)
+
+  # Flag bad centile values
   if (!arg_nulls[["p"]]) {
-    vec <- replace(vec, !inrange(vec, c(0,1)), NA)
+    vec <- handle_oob_centiles(vec)
   }
   assign(x = varname, value = vec, envir = parent.frame(n = 1))
 }
 
 #' Validate user-inputted x variables prior to growth standard conversion
 #'
-#' @param x A vector of `x` values to check, in the sense of converting in a
-#'   growth standard.
-#' @param range Range within which `x` values are expected to be. Values outside
-#'   this range will be set to `NA` with `replace()`.
-#' @returns A numeric vector identical to `x`, except values outside `lower` and
-#'   `upper` are replaced with NAs. Throws an error if `x` is not numeric.
+#' @param x A numeric vector of `x` values to check.
+#' @param standard A single string containing a code for a set of growth
+#'   standards, either `"ig_fet"`, `"ig_nbs`", `"ig_png"` or `"who_gs"`.
+#' @param acronym An already validated `acronym` variable, the same length as
+#'   `x`. This should always be a character vector, as it will have been passed
+#'   through [validate_acronym()].
+#' @returns A numeric vector identical to `x`, except elements not within the
+#'   permitted bounds of different `acronym`s  are replaced with `NA`. Throws an
+#'   error if `x` is not numeric, is non-atomic, or is zero-length.
 #' @noRd
-validate_xvar <- function(x, range) {
-  x <- checkmate::assert_numeric(x, min.len = 1) |>
+validate_xvar <- function(x, acronym, standard) {
+  checkmate::qassert(standard, rules = "S1")
+
+  unique_acronyms <- unique(acronym[!is.na(acronym)])
+  is_oob_overall <- logical(length = length(x))
+  is_na_x <- is.na(x)
+  for (idx in length(unique_acronyms)) {
+    chr_acronym <- unique_acronyms[idx]
+    is_curr_acronym <- acronym == chr_acronym
+    range <- xvar_ranges[[standard]][[chr_acronym]]
+    is_oob_overall[!is_na_x & is_curr_acronym & !inrange(x, range)] <- TRUE
+  }
+
+  x |>
+    checkmate::assert_numeric(min.len = 1) |>
     checkmate::assert_atomic_vector() |>
-    remove_attributes()
-  out_of_range <- !inrange(x, range)
-  replace(x = x, list = out_of_range, values = NA_real_)
+    remove_attributes() |>
+    handle_oob_xvar(varname = checkmate::vname(x),
+                    is_oob = is_oob_overall)
 }
 
 #' Validate user-inputted character vectors
 #'
-#' @param chr User-inputted character vector. Will be either `sex` or `acronym`.
-#' @param options A range of options. If no values in `chr` are `%in% options`,
-#'   the function will throw an appropriate-formatted error.
-#' @returns The vector `chr`, with all elements where `!chr %in% options`
+#' @param chr User-inputted character vector. Will be either `sex` or `acronym`,
+#'   passed down from an exported growth standard conversion function.
+#' @param options A character vector with permitted values for `chr`. If no
+#'   values in `chr` are `%in% options` the function will throw an
+#'   appropriately-formatted error.
+#' @returns The vector `chr`, with all elements where `!chr %in% options` are
 #'   replaced with `NA`.
+#' @srrstats {G2.3, G2.3a, G2.3b} Univariate character input assertions.
 #' @noRd
 validate_chr <- function(chr, options) {
   varname <- deparse(substitute(chr))
-  checkmate::assert_character(chr, min.len = 1, all.missing = FALSE,
-                              .var.name = varname) |>
-    checkmate::assert_atomic_vector()
-  invalid <- !chr %in% options
-  if (all(invalid)) {
-    len <- length(options)
-    stop(paste0("No value in `", varname, "` was valid. Check your `", varname,
-                "` parameter - it should contain at least one of \"",
-                paste(options[seq_len(len - 1)], collapse = "\", \""),
-                "\", or \"", options[len], "\"."),
-         call. = FALSE)
-  }
-  replace(chr, invalid, NA_character_)
+  gigs_opt <- paste0("handle_invalid_", varname)
+  chr |>
+    checkmate::assert_character(min.len = 1, .var.name = varname) |>
+    checkmate::assert_atomic_vector() |>
+    remove_attributes() |>
+    handle_missing_data(varname = varname) |>
+    handle_undefined_data(varname = varname) |>
+    handle_invalid_chr_options(gigs_opt = gigs_opt,
+                               varname = varname,
+                               options = options)
 }
 
 #' Validate user-inputted sexes prior to growth standard conversion
 #'
-#' @param sex Character vector with user-inputted sex values. Values not in
-#' @returns Returns `sex`, with values not `%in% c("M", "F", "U")` set to `NA`.
+#' @param sex Character vector with length more than or equal to one containing
+#'   user-inputted sex values.
+#' @returns Returns `sex`, with values not `%in% c("M", "F")` set to `NA`.
 #'   Will throw an error if `sex` is not a character vector.
 #' @noRd
 validate_sex <- function(sex) {
-  validate_chr(sex, options = c("M", "F", "U"))
+  # May add "U" back to package later
+  validate_chr(sex, options = c("M", "F"))
 }
 
 #' Validate user-inputted acronyms prior to growth standard conversion
@@ -83,11 +108,12 @@ validate_sex <- function(sex) {
 #' @param allowed_acronyms Character vector with acceptable values for
 #'   `acronym`. Members of `acronym` which are not `%in% allowed_acronyms` will
 #'   be set to `NA`.
-#' @returns Returns `sex`, with values not `%in% allowed_acronyms` set to `NA`.
-#'   Will throw an error if `acronym` is not a character vector.
+#' @returns Returns `acronym`, with values not `%in% allowed_acronyms` set to
+#'   `NA`. Will throw an error if `acronym` is not a character vector.
 #' @noRd
-validate_acronym <- function(acronym, allowed_acronyms) {
-  validate_chr(acronym, options = allowed_acronyms)
+validate_acronym <- function(acronym, allowed_acronyms, standard) {
+  acronym <- validate_chr(acronym, options = allowed_acronyms)
+  acronym
 }
 
 # Standard-specific parameter validation ---------------------------------------
@@ -97,23 +123,27 @@ validate_acronym <- function(acronym, allowed_acronyms) {
 #'
 #' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
 #'   one of these arguments are provided; see [validate_yzp()] documentation.
-#' @param x Numeric vector with user-inputted x values.
-#' @param sex Character vector with user-inputted sex values.
-#' @param acronym Character vector with user-inputted acronym values.
-#' @returns List with names `"sex"` and `"acronym"` contain vectors where
-#'   invalid sex or acronym values have been replaced with NA. If any of `x`,
-#'   `sex`, or `acronym` are the wrong type, `check_who_params()` will throw an
-#'   error. Will also contain one of `"y"`, `"z"`, or `"p"`, depending on which
-#'   was provided to the function.
+#' @param x Numeric vector of length one or more with user-inputted x values.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param acronym Character vector of length one or more with user-inputted
+#'   acronym values. Values which are not in `names(gigs::who_gs)` will be
+#'   replaced with `NA`.
+#' @returns List with names `"x"`, `"sex"`, and `"acronym"`, containing
+#'   vectors where invalid `sex` or `acronym` elements have been replaced with
+#'   NA. If any of `x`, `sex`, or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#'   depending on which was provided to the function.
 #' @noRd
 validate_who_gs <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
-  # For WHO GS standards, the use of `approx()` use in coefficients.R will
-  # make out-of-bounds `x` values output as `NA`
-  x <- validate_xvar(x, range(gigs::who_gs$wfa$male$zscores$age_days))
-  sex <- validate_sex(sex)
+  standard <- "who_gs"
   acronym <- validate_acronym(acronym = acronym,
-                              allowed_acronyms = names(gigs::who_gs))
+                              allowed_acronyms = names(gigs::who_gs),
+                              standard = standard)
+  x <- validate_xvar(x, standard = standard, acronym = acronym)
+  sex <- validate_sex(sex)
+
   list(y = y, z = z, p = p, x = x, sex = sex, acronym = acronym) |>
     drop_null_elements()
 }
@@ -123,13 +153,17 @@ validate_who_gs <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
 #'
 #' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
 #'   one of these arguments are provided; see [validate_yzp()] documentation.
-#' @param gest_days Numeric vector with user-inputted gestational age values.
-#' @param sex Character vector with user-inputted sex values.
-#' @param acronym Character vector with user-inputted acronym values.
-#' @returns List with names `"age"`, `"sex"`, and `"acronym"`, containing
-#'   vectors where invalid sex or acronym values have been replaced with NA. If
-#'   any of `x`, `sex`, or `acronym` are the wrong type, `validate_ig_nbs()`
-#'   will throw an error. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#' @param gest_days Numeric vector of length one or more with user-inputted
+#'   gestational age values in days.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param acronym Character vector of length one or more with user-inputted
+#'   acronym values. Values which are not in `names(gigs::ig_nbs)` will be
+#'   replaced with `NA`.
+#' @returns List with names `"x"`, `"sex"`, and `"acronym"`, containing
+#'   vectors where invalid `sex` or `acronym` elements have been replaced with
+#'   NA. If any of `x`, `sex`, or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
 #'   depending on which was provided to the function.
 #' @noRd
 validate_ig_nbs <- function(y = NULL,
@@ -139,21 +173,14 @@ validate_ig_nbs <- function(y = NULL,
                             sex,
                             acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
-  # The bfpfga, fmfga, and ffmfga standards have a smaller range of gestational
-  # ages than the other INTERGROWTH-21st standards
-  is_bodycomp <- acronym %in% names(gigs::ig_nbs)[5:7]
-  gest_days <- ifelse(
-    is_bodycomp,
-    yes = validate_xvar(gest_days,
-                        range(gigs::ig_nbs$bfpfga$male$centiles$gest_days)),
-    no = validate_xvar(gest_days,
-                       range(gigs::ig_nbs$wfga$male$zscores$gest_days))
-  )
-  sex <- validate_sex(sex)
+  standard <- "ig_nbs"
   acronym <- validate_acronym(acronym = acronym,
-                              allowed_acronyms = names(gigs::ig_nbs))
-  list(y = y, z = z, p = p,
-       gest_days = gest_days, sex = sex, acronym = acronym) |>
+                              allowed_acronyms = names(gigs::ig_nbs),
+                              standard = standard)
+  gest_days <- validate_xvar(gest_days, standard = standard, acronym = acronym)
+  sex <- validate_sex(sex)
+  list(y = y, z = z, p = p, gest_days = gest_days, sex = sex,
+       acronym = acronym) |>
     drop_null_elements()
 }
 
@@ -163,28 +190,25 @@ validate_ig_nbs <- function(y = NULL,
 #' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
 #'   one of these arguments are provided; see [validate_yzp()] documentation.
 #' @param x Numeric vector with user-inputted x values.
-#' @param sex Character vector with user-inputted sex values.
-#' @param acronym Character vector with user-inputted acronym values.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param acronym Character vector of length one or more with user-inputted
+#'   acronym values. Values which are not in `names(gigs::ig_png)` will be
+#'   replaced with `NA`.
 #' @returns List with names `"x"`, `"sex"`, and `"acronym"`, containing
-#'   vectors where invalid sex or acronym values have been replaced with NA. If
-#'   any of `x`, `sex`, or `acronym` are the wrong type, `validate_ig_png()`
-#'   will throw an error. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#'   vectors where invalid `sex` or `acronym` elements have been replaced with
+#'   NA. If any of `x`, `sex`, or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
 #'   depending on which was provided to the function.
 #' @noRd
 validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
-  # The wfa, lfa and hcfa standards use post-menstrual age, whereas the wfl
-  # standard uses length in cm --> this code specifies whether to compare x to
-  # PMA or length in cm
-  uses_pma <- acronym != "wfl"
-  x <- ifelse(
-    uses_pma,
-    yes = validate_xvar(x, range(gigs::ig_png$wfa$male$zscores$pma_weeks)),
-    no = validate_xvar(x, range(gigs::ig_png$wfl$male$zscores$length_cm))
-  )
-  sex <- validate_sex(sex)
+  standard <- "ig_png"
   acronym <- validate_acronym(acronym = acronym,
-                              allowed_acronyms = names(gigs::ig_png))
+                              allowed_acronyms = names(gigs::ig_png),
+                              standard = standard)
+  x <- validate_xvar(x, standard = standard, acronym = acronym)
+  sex <- validate_sex(sex)
   list(y = y, z = z, p = p, x = x, sex = sex, acronym = acronym) |>
     drop_null_elements()
 }
@@ -194,48 +218,210 @@ validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
 #'
 #' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
 #'   one of these arguments are provided; see [validate_yzp()] documentation.
-#' @param x Numeric vector with user-inputted gestational age values in
-#'   days.
-#' @param acronym Character vector with user-inputted acronym values.
-#' @note If any arguments are found to be the wrong type or have length < 1, an
-#'   error will be thrown. Values in `gest_days` and `acronym` which are not
-#'   acceptable will be replaced with `NA`.
+#' @param x Numeric vector of length one or more with user-inputted gestational
+#'   age values in days.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
 #' @returns List with names `"gest_days"`, and `"acronym"`, containing vectors
-#'   where invalid `gest_days` and `acronym` values have been replaced with
-#'   `NA`. Will also contain one of `"y"`, `"z"`, or `"p"`, depending on which
-#'   was provided to the function.
+#'   where invalid `gest_days` and `acronym` elements have been replaced with
+#'   `NA`. If either of `x` or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#'   depending on which was provided to the function.
 #' @noRd
 validate_ig_fet <- function(y = NULL, z = NULL, p = NULL, x, acronym) {
   validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
-  fet_growth_acros <- c("hcfga", "bpdfga", "acfga", "flfga", "ofdfga", "tcdfga")
-  brain_dev_acros <- c("poffga", "sffga", "avfga", "pvfga", "cmfga")
-  doppler_acros <- c("pifga", "rifga", "sdrfga")
-
-  #' Validate that some subset of `x` using a given range
-  #' @param lgl_subset Logical statement used to subset `x`
-  #' @param range Two-length vector giving acceptable lower + upper bounds for
-  #'   values in `x`
-  #' @return Invisibly returns NULL, but overwrites `x[lgl_subset]` with
-  #'   validated values (i.e. outside bounds of `range` changed to NA).
-  #' @noRd
-  validate_subset <- function(lgl_subset, range) {
-    if (length(x[lgl_subset]) != 0) {
-      x[lgl_subset] <- validate_xvar(x[lgl_subset], range)
-    }
-  }
-  validate_subset(acronym %in% fet_growth_acros, c(98, 280)) # days
-  validate_subset(acronym %in% brain_dev_acros, c(105, 252)) # days
-  validate_subset(acronym %in% doppler_acros, c(168, 280)) # days
-  validate_subset(acronym == "efwfga", c(154, 280)) # days
-  validate_subset(acronym == "sfhfga", c(112, 294)) # days
-  validate_subset(acronym == "crlfga", c(58, 105)) # days
-  validate_subset(acronym == "gafcrl", c(15, 95)) # days
-  validate_subset(acronym == "gwgfga", c(98, 280)) # days
-  # validate_subset(acronym == "gaftcd", c(12, 55)) # mm
-  x <- remove_attributes(x)
-
+  standard <- "ig_fet"
   acronym <- validate_acronym(acronym = acronym,
-                              allowed_acronyms = names(gigs::ig_fet))
+                              allowed_acronyms = names(gigs::ig_fet),
+                              standard = standard)
+  x <- validate_xvar(x, standard = standard, acronym = acronym)
   list(y = y, z = z, p = p, x = x, acronym = acronym) |>
     drop_null_elements()
+}
+
+# Parameter validation for IG-21st estimation equations
+
+#' Validate inputs to the INTERGROWTH-21st estimation functions
+#' @param var An input to [ig_fet_estimate_ga()] or
+#'   [ig_fet_estimate_fetal_weight()]. Should either be `NULL` or a numeric
+#'   vector of length one or more.
+#' @return Returns `NULL` if `vec` is `NULL`, else returns `vec` with attributes
+#'   removed.
+#' @noRd
+validate_ig_fet_estimation_param <- function(var) {
+  if (is.null(var)) {
+    return(var)
+  }
+  varname <- deparse(substitute(var))
+  checkmate::assert_numeric(var, min.len = 1, .var.name = varname) |>
+    checkmate::assert_atomic_vector(.var.name = varname) |>
+    remove_attributes() |>
+    handle_missing_data(varname = varname) |>
+    handle_undefined_data(varname = varname)
+}
+
+# Handle missing, undefined, or invalid data inputs ----------------------------
+
+#' @rdname handle_var
+#' @noRd
+handle_missing_data <- function(vec, varname) {
+  handle_var(vec = vec,
+             varname = varname,
+             option = "handle_missing",
+             test_fn = \(x) is.na(x) & !is.nan(x),
+             msg_fn = msg_missing_data)
+}
+
+#' @rdname handle_var
+#' @noRd
+handle_undefined_data <- function(vec, varname) {
+  handle_var(vec = vec,
+             varname = varname,
+             option = "handle_undefined",
+             test_fn = \(x) is.infinite(x) | is.nan(x),
+             msg_fn = msg_undefined_data)
+}
+
+#' @rdname handle_var
+#' @noRd
+handle_oob_centiles <- function(vec) {
+  handle_var(vec = vec,
+             varname = "p",
+             option = "handle_oob_centiles",
+             test_fn = \(x) !is.na(x) & !(x > 0 & x < 1),
+             msg_fn = msg_oob_centiles)
+}
+
+#' @rdname handle_var
+#' @noRd
+handle_invalid_chr_options <- function(vec, gigs_opt, varname, options) {
+  handle_var(vec = vec,
+             varname = varname,
+             option = gigs_opt,
+             test_fn = \(x) !is.na(x) & !x %in% options,
+             msg_fn = msg_invalid_sex_acronym)
+}
+
+#' @rdname handle_var
+#' @param is_oob Denotes whether values in `x` were out of bounds. This checking
+#'   step is performed in [validate_xvar()].
+#' @noRd
+handle_oob_xvar <- function(vec, varname, is_oob) {
+  handle_var(vec = vec,
+             varname = varname,
+             option = "handle_oob_xvar",
+             test_fn = \(x) is_oob,
+             msg_fn = msg_oob_xvar)
+}
+
+#' Handle variables based on gigs options
+#'
+#' @param option A single-length character vector which should be one of
+#'   `names(.gigs_options)`.
+#' @param vec Vector of length one or more which will be checked for invalid
+#'   values by `test_fn`.
+#' @param varname Single-length character vector with the variable name for
+#'   `vec` which should be printed out by `msg_fn`.
+#' @param test_fn A logical vector-producing function (anonymous or otherwise)
+#'   that is used with `vec` as input.
+#' @param msg_fn A string-producing function to produce a helpful message when
+#'   `option` is set to `"warn"` or `"error"`.
+#' @seealso Check out [gigs_options], which can be used to define how this
+#'   function behaves for different sorts of data.
+#' @rdname handle_var
+#' @noRd
+handle_var <- function(vec, varname, option, test_fn, msg_fn) {
+  lgl_is_invalid <- test_fn(vec)
+  if (!any(lgl_is_invalid)) {
+    return(vec)
+  }
+
+  opt_value <- gigs_option_get(option, silent = TRUE)
+  out <- replace(vec, lgl_is_invalid, values = NA)
+  str_msg <- msg_fn(lgl_is_invalid, varname = varname)
+  if (opt_value == "quiet") {
+    return(out)
+  }
+  if (opt_value == "error") {
+    stop(str_msg, call. = FALSE)
+  }
+  warning(str_msg, call. = FALSE)
+  out
+}
+
+# `error()`/`warning()` messages for missing/undefined/invalid inputs ----------
+
+#' String production functions for `error()`/`warning()` messages regarding
+#'   missing, undefined, or invalid data inputs
+#'
+#' @param lgl_oob_centiles Logical vector of length one or more denoting whether
+#'   a centile value provided to a gigs `*_centile2value()` function was between
+#'   0 and 1.
+#' @param varname The variable name, which will be included in the returned
+#'   string.
+#' @returns Single-length character vector with information on the number of
+#'   invalid data points relevant to the inputted `lgl_*` parameter.
+#' @rdname msg_oob_centiles
+#' @noRd
+msg_oob_centiles <- function(lgl_oob_centiles, varname) {
+  paste0("Variable '", varname, "': ", sum(lgl_oob_centiles), " in ",
+         length(lgl_oob_centiles), " elements were not between 0 and 1.")
+}
+
+#' @rdname msg_oob_centiles
+#' @param lgl_invalid_sex Logical vector of length one or more denoting
+#'   whether each element of a vector was `!is.na()`.
+#' @noRd
+msg_missing_data <- function(lgl_missing_data, varname) {
+  paste0("Variable '", varname, "': ", sum(lgl_missing_data), " in ",
+         length(lgl_missing_data), " elements were missing (`NA`).")
+}
+
+#' @rdname msg_oob_centiles
+#' @param lgl_undefined_data Logical vector of length one or more denoting
+#'   whether each element of a vector was either `NaN`, `-Inf`, or `Inf`.
+#' @noRd
+msg_undefined_data <- function(lgl_undefined_data, varname) {
+  paste0("Variable '", varname, "': ", sum(lgl_undefined_data),
+         " in ", length(lgl_undefined_data), " elements were undefined (`NaN`,",
+         " `Inf`, or `-Inf`).")
+}
+
+#' @rdname msg_oob_centiles
+#' @param lgl_oob_xvar Logical vector of length one or more denoting whether
+#'   each element of `x`/an equivalent argument provided to a gigs conversion
+#'   function was within the bounds for its growth standard.
+#' @noRd
+msg_oob_xvar <- function(lgl_oob_xvar, varname) {
+  standard <- get(x = "standard", envir = parent.frame(n = 3))
+  paste0("Variable '", varname, "': ", sum(lgl_oob_xvar), " in ",
+         length(lgl_oob_xvar), " elements were out-of-bounds (see the '",
+         standard, "' conversion functions documentation).")
+}
+
+#' @rdname msg_oob_centiles
+#' @param lgl_invalid_sex_acronym Logical vector of length one or more denoting
+#'   whether elements of `sex` or `acronym` are valid. For `sex`, this means
+#'   being one of `"M"` or `"F"`. For `acronym`, this means being a valid
+#'   growth standard acronym as provided in the documentation for the different
+#'   gigs conversion functions.
+#' @noRd
+msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
+  count <- sum(lgl_invalid_sex_acronym)
+  len <- length(lgl_invalid_sex_acronym)
+
+  if (varname == "sex") {
+    paste0("Variable 'sex': ", count, " in ", len, " elements were neither ",
+           "\"M\" nor \"F\".")
+  } else {
+    standard <- get(x = "standard", envir = parent.frame(n = 4))
+    see_sentence <- paste0("See the '", standard, "' documentation for valid ",
+                           "'acronym' values.")
+    if (count == len) {
+      stop("Variable 'acronym': All elements were invalid. ", see_sentence,
+           call. = FALSE)
+    }
+    paste0("Variable 'acronym': ", count, " in ", len, " elements were ",
+           "invalid. ", see_sentence)
+  }
 }

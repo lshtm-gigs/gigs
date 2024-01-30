@@ -62,3 +62,9 @@ reference:
       - who_gs
       - who_gs_coeffs
       - life6mo
+  - title: GIGS package options
+    desc: >
+      Options for how gigs should handle missing or undefined data, and some
+      out-of bounds values.
+    contents:
+      - gigs_options
