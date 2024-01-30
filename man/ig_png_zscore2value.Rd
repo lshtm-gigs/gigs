@@ -35,22 +35,43 @@ ig_png_hcfa_centile2value(p, pma_weeks, sex)
 ig_png_wfl_centile2value(p, length_cm, sex)
 }
 \arguments{
-\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of length one or more with centiles/z-scores to
+convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
+\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
+customised using the functions in \link{gigs_options}.}
 
-\item{x, pma_weeks, length_cm}{The \code{x} value at which to convert a
-value to a z-score/centile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify
-\code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
-and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
-between \code{35} and \code{65} cm).}
+\item{x}{Numeric vector of length one or more with x values. Elements of \code{x}
+or its standard-specific equivalents (\code{pma_weeks}, \code{length_cm}) should have
+specific units and be between certain values depending on the standard in
+use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 27 and 64 weeks for \code{"wfa"}, \code{"lfa"}, and \code{"hcfa"}.
+\item Between 35 and 65 days for \code{"wfl"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standard
-for postnatal growth in preterm infants. Should be one of \code{"wfa"}
-(weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
-(head circumference-for-age), or \code{"wfl"} (weight-for-length).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
+
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standard(s) in use. Each
+element should be one of:
+\itemize{
+\item \code{"wfa"} (weight-for-age)
+\item \code{"lfa"} (length-for-age)
+\item \code{"hcfa"} (head circumference-for-age)
+\item \code{"wfl"} (weight-for-length)
+}
+
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}.}
 }
 \value{
 Numeric vector of z-scores/centiles with length equal to the

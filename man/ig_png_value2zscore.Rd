@@ -35,31 +35,53 @@ ig_png_hcfa_value2centile(headcirc_cm, pma_weeks, sex)
 ig_png_wfl_value2centile(weight_kg, length_cm, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
-Units depend on which \code{acronym}(s) are in use.}
+\item{y}{Numeric vector of length one or more with anthropometric
+measurement(s) to convert to centiles/z-scores. Units depend on which
+\code{acronym}(s) are in use.}
 
-\item{x, pma_weeks}{The \code{x} value at which to convert a
-value to a z-score/centile. Must be within bounds of available \code{x} values
-for given acronym. The standard-specific versions of each function specify
-\code{x}, either as \code{pma_weeks} (post-menstrual age in exact weeks; between \code{27}
-and \code{64} weeks), or \code{length_cm} (recumbent length measurement(s) in cm;
-between \code{35} and \code{65} cm).}
+\item{x}{Numeric vector of length one or more with x values. Elements of \code{x}
+or its standard-specific equivalents (\code{pma_weeks}, \code{length_cm}) should have
+specific units and be between certain values depending on the standard in
+use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 27 and 64 weeks for \code{"wfa"}, \code{"lfa"}, and \code{"hcfa"}.
+\item Between 35 and 65 days for \code{"wfl"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{acronym}{Acronym(s) denoting an INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal
-Growth standard for preterm infants. Should be one of \code{"wfa"}
-(weight-for-age), \code{"lfa"} (length-for-age), \code{"hcfa"}
-(head circumference-for-age), or \code{"wfl"} (weight-for-length).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{weight_kg}{Weight measurement(s) in kg.}
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standard(s) in use. Each
+element should be one of:
+\itemize{
+\item \code{"wfa"} (weight-for-age)
+\item \code{"lfa"} (length-for-age)
+\item \code{"hcfa"} (head circumference-for-age)
+\item \code{"wfl"} (weight-for-length)
+}
 
-\item{length_cm}{Recumbent length measurement(s) in cm. Can be either an \code{x}
-variable when using the length-for-age standard (\code{"lfa"}), or a \code{y} variable
-when using the weight-for-length (\code{"wfl"}) standard.}
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{headcirc_cm}{Head circumference measurement(s) in cm.}
+\item{weight_kg}{Numeric vector of length one or more with weight
+measurement(s) in kg.}
+
+\item{length_cm}{Numeric vector of length one or more with recumbent length
+measurement(s) in cm. This argument can be either an \code{x} variable when
+using the length-for-age standard (\code{"lfa"}), or a \code{y} variable when using
+the weight-for-length (\code{"wfl"}) standard.}
+
+\item{headcirc_cm}{Numeric vector of length one or more with head
+circumference measurement(s) in cm.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the
@@ -99,8 +121,8 @@ ig_png_lfa_value2zscore(length_cm = c(51.10, 51.48, 51.86, 52.24, 52.63),
 # weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
 # postnatal growth standards for preterm infants
 ig_png_hcfa_value2centile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
-                             pma_weeks = c(25, 27, 46, 64),
-                             sex = "M") |>
+                          pma_weeks = c(25, 27, 46, 64),
+                          sex = "M") |>
   round(digits = 2)
 }
 \references{

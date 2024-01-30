@@ -1,16 +1,28 @@
 #' Convert z-scores/centiles to values in the INTERGROWTH-21<sup>st</sup>
 #' Postnatal Growth Standards for preterm infants
 #'
-#' @param x,pma_weeks,length_cm The `x` value at which to convert a
-#' value to a z-score/centile. Must be within bounds of available `x` values
-#' for given acronym. The standard-specific versions of each function specify
-#' `x`, either as `pma_weeks` (post-menstrual age in exact weeks; between `27`
-#' and `64` weeks), or `length_cm` (recumbent length measurement(s) in cm;
-#' between `35` and `65` cm).
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
-#' for postnatal growth in preterm infants. Should be one of `"wfa"`
-#' (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
-#' (head circumference-for-age), or `"wfl"` (weight-for-length).
+#' @param x Numeric vector of length one or more with x values. Elements of `x`
+#'   or its standard-specific equivalents (`pma_weeks`, `length_cm`) should have
+#'   specific units and be between certain values depending on the standard in
+#'   use (defined by `acronym`). These are:
+#'   * Between 27 and 64 weeks for `"wfa"`, `"lfa"`, and `"hcfa"`.
+#'   * Between 35 and 65 days for `"wfl"`.
+#'
+#'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
+#'   warn you. This behaviour can be customised using the functions in
+#'   [gigs_options].
+#' @param acronym Character vector of length one or more denoting the
+#'   INTERGROWTH-21<sup>st</sup> Postnatal Growth standard(s) in use. Each
+#'   element should be one of:
+#'   * `"wfa"` (weight-for-age)
+#'   * `"lfa"` (length-for-age)
+#'   * `"hcfa"` (head circumference-for-age)
+#'   * `"wfl"` (weight-for-length)
+#'
+#'   This argument is case-sensitive. By default, gigs will replace elements in
+#'   `acronym` which are not one of the above values with `NA` and warn you.
+#'   This behaviour can be customised using the functions in [gigs_options].
+#' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
 #' @references
@@ -64,20 +76,14 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
                                sex = validated[["sex"]],
                                acronym = validated[["acronym"]]))
 
-  ifelse(
-    test = validated[["sex"]] == "U",
-    yes = mean(c(ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
-                                     sex = "M", acronym = df[["acronym"]]),
-                 ig_png_zscore2value(z = df[["z"]], x = df[["x"]],
-                                     sex = "F", acronym = df[["acronym"]]))),
-    no = ifelse(test = df[["logarithmic"]],
-                yes = exp(mu_sigma_z2y(z = df[["z"]],
-                                       mu = df[["mu"]],
-                                       sigma = df[["sigma"]])),
-                no = mu_sigma_z2y(z = df[["z"]],
-                                  mu = df[["mu"]],
-                                  sigma = df[["sigma"]])
-    ))
+  ifelse(test = df[["logarithmic"]],
+         yes = exp(mu_sigma_z2y(z = df[["z"]],
+                                mu = df[["mu"]],
+                                sigma = df[["sigma"]])),
+         no = mu_sigma_z2y(z = df[["z"]],
+                           mu = df[["mu"]],
+                           sigma = df[["sigma"]])
+  )
 }
 
 #' @rdname ig_png_zscore2value
@@ -138,21 +144,14 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup>
 #' Postnatal Growth Standards for preterm infants
 #'
-#' @param x,pma_weeks The `x` value at which to convert a
-#' value to a z-score/centile. Must be within bounds of available `x` values
-#' for given acronym. The standard-specific versions of each function specify
-#' `x`, either as `pma_weeks` (post-menstrual age in exact weeks; between `27`
-#' and `64` weeks), or `length_cm` (recumbent length measurement(s) in cm;
-#' between `35` and `65` cm).
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> Postnatal
-#' Growth standard for preterm infants. Should be one of `"wfa"`
-#' (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
-#' (head circumference-for-age), or `"wfl"` (weight-for-length).
-#' @param weight_kg Weight measurement(s) in kg.
-#' @param length_cm Recumbent length measurement(s) in cm. Can be either an `x`
-#' variable when using the length-for-age standard (`"lfa"`), or a `y` variable
-#' when using the weight-for-length (`"wfl"`) standard.
-#' @param headcirc_cm Head circumference measurement(s) in cm.
+#' @param weight_kg Numeric vector of length one or more with weight
+#'   measurement(s) in kg.
+#' @param length_cm Numeric vector of length one or more with recumbent length
+#'   measurement(s) in cm. This argument can be either an `x` variable when
+#'   using the length-for-age standard (`"lfa"`), or a `y` variable when using
+#'   the weight-for-length (`"wfl"`) standard.
+#' @param headcirc_cm Numeric vector of length one or more with head
+#'   circumference measurement(s) in cm.
 #' @inherit ig_png_zscore2value params references
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_value2zscore_returns return
@@ -183,8 +182,8 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #' # weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
 #' # postnatal growth standards for preterm infants
 #' ig_png_hcfa_value2centile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
-#'                              pma_weeks = c(25, 27, 46, 64),
-#'                              sex = "M") |>
+#'                           pma_weeks = c(25, 27, 46, 64),
+#'                           sex = "M") |>
 #'   round(digits = 2)
 #' @rdname ig_png_value2zscore
 #' @export
@@ -199,21 +198,11 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
               ig_png_equations(x = validated[["x"]],
                                sex = validated[["sex"]],
                                acronym = validated[["acronym"]]))
-  ifelse(
-    test = validated[["sex"]] == "U",
-    yes = mean(c(ig_png_value2zscore(y = df[["y"]],
-                                     x = df[["x"]],
-                                     sex = "M",
-                                     acronym = df[["acronym"]]),
-                 ig_png_value2zscore(y = df[["y"]],
-                                     x = df[["x"]],
-                                     sex = "F",
-                                     acronym = df[["acronym"]]))),
-    no = mu_sigma_y2z(y = ifelse(test = df[["logarithmic"]],
-                                 yes = log(df[["y"]]), no = df[["y"]]),
-                      mu = df[["mu"]],
-                      sigma = df[["sigma"]])
-    )
+  mu_sigma_y2z(y = ifelse(test = df[["logarithmic"]],
+                          yes = log(df[["y"]]), no = df[["y"]]),
+               mu = df[["mu"]],
+               sigma = df[["sigma"]]
+  )
 }
 
 #' @rdname ig_png_value2zscore
@@ -277,14 +266,16 @@ ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
 #' Estimates median and standard deviation for different measures of postnatal
 #' growth in preterm infants.
 #'
-#' @param sex Sex(es), either `"M"` (male) or `"F"` (female).
-#' @param pma_weeks Post-menstrual age(s) in exact weeks. Must be between `27`
-#'   and `64`.
-#' @param acronym Acronym(s) denoting an INTERGROWTH-21<sup>st</sup> standard
-#'   for postnatal growth in preterm infants. Should be one of `"wfa"`
-#'   (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
+#' @param sex Character vector of length one or more with sex(es), either `"M"`
+#'   (male) or `"F"` (female). This argument is case-sensitive.
+#' @param pma_weeks Numeric vector with length equal to `sex`, with
+#'   post-menstrual age(s) in exact weeks. Elements not between `27` and `64`
+#'   will return invalid results.
+#' @param acronym Character vector of length one or more with acronym(s)
+#'   denoting an INTERGROWTH-21<sup>st</sup> Postnatal Growth standard. Should
+#'   be one of `"wfa"` (weight-for-age), `"lfa"` (length-for-age), `"hcfa"`
 #'   (head circumference-for-age), or `"wfl"` (weight-for-length).
-#' @return A table with median(s) and standard deviation(s) for each
+#' @return A data frame with median(s) and standard deviation(s) for each
 #'   `age`/`sex`/`acronym` combination provided to the function.
 #' @note The weight-for-age and length-for-age standards are logarithmic, so
 #'   require slightly different treatment to use in z-score conversions. In
@@ -367,3 +358,18 @@ ig_png_equations <- function(x, sex, acronym) {
   out_df[["mu"]][invalid_params] <- NA
   out_df
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.0} Primary literature referenced for each exported function,
+#'   and for internal functions.
+#' @srrstats {G1.4, G1.4a} All functions in file documented using `{roxygen2}`.
+#' @srrstats {G2.0a, G2.1a} Exported functions in this file document
+#'   expectations on the length of inputs and their data types.
+#' @srrstats {G2.0, G2.1, G2.2, G2.3, 2.3a, G2.6} These standards
+#'   are met in all exported functions by passing inputs to [validate_ig_png()].
+#'   All internal functions in this script are provided with vectors that have
+#'   already been validated.
+#' @srrstatsTODO {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
+#'   in all exported functions by passing inputs to [validate_ig_png()]. All
+#'   internal functions in this script are provided with vectors that have
+#'   already checked for missing/undefined/out-of-bounds data.
