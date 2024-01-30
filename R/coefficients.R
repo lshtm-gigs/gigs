@@ -3,18 +3,19 @@
 #' @description Retrieves growth standard coefficient values where needed for
 #'  the WHO Child Growth and INTERGROWTH-21<sup>st</sup> Newborn Size standards.
 #' @param x X variable in whatever range and units are appropriate for the
-#'  standard(s) in use.
+#'  growth standard(s) in use.
 #' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
 #'   (female).
-#' @param acronym Acronym(s) denoting which LMS/GAMLSS-based growth standards
+#' @param acronym Acronym(s) denoting which coefficient-based growth standards
 #'  are in use.
-#' @param coeff_tbls A set of coefficient tables from `gigs`, either
-#'  `gigs::who_gs_coeffs` or `gigs::ig_nbs_coeffs`.
+#' @param coeff_tbls A list with LMS or MSNT coefficient tables, either
+#'   `gigs::who_gs_coeffs` or `gigs::ig_nbs_coeffs`.
 #' @param coeff_names Character vector denoting the names of coefficients in
 #'  `coeff_tbls`.
 #' @return A list containing coefficients where available for each observation.
 #'  This list will have the same number of elements as `coeff_names`, and will
 #'  be named according to the values in `coeff_names`.
+#' @srrstats {G1.4a} This file's function is documented with `{roxygen2}`.
 #' @rdname retrieve_coefficients
 #' @importFrom stats setNames
 #' @noRd
