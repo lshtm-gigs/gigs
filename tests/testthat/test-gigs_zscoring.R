@@ -17,11 +17,14 @@ test_that(
     gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
     headcirc <- rep(NA_real_, length(z))
     headcirc[gigs_lgls$ig_nbs] <-
-      with(gigs_lgls, fn_on_subset(ig_nbs_hcfga_zscore2value, ig_nbs, z, gest_days, sex))
+      with(gigs_lgls, fn_on_subset(ig_nbs_hcfga_zscore2value, ig_nbs, z,
+                                    gest_days, sex))
     headcirc[gigs_lgls$ig_png] <-
-      with(gigs_lgls, fn_on_subset(ig_png_hcfa_zscore2value, ig_png, z, pma_wks, sex))
+      with(gigs_lgls, fn_on_subset(ig_png_hcfa_zscore2value, ig_png, z,
+                                   pma_wks, sex))
     headcirc[gigs_lgls$who_gs] <-
-      with(gigs_lgls, fn_on_subset(who_gs_hcfa_zscore2value, who_gs, z, age_days, sex))
+      with(gigs_lgls, fn_on_subset(who_gs_hcfa_zscore2value, who_gs, z,
+                                   age_days, sex))
 
     gigs_z <- gigs_hcaz(headcirc_cm = headcirc, gest_days = gest_days,
                         age_days = age_days, sex = sex)
