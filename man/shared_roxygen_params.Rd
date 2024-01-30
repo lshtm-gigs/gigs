@@ -4,13 +4,20 @@
 \alias{shared_roxygen_params}
 \title{Shared roxygen parameters}
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
-Units depend on which \code{acronym}(s) are in use.}
+\item{y}{Numeric vector of length one or more with anthropometric
+measurement(s) to convert to centiles/z-scores. Units depend on which
+\code{acronym}(s) are in use.}
 
-\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of length one or more with centiles/z-scores to
+convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
+\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
+customised using the functions in \link{gigs_options}.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 }
 \description{
 Many of the parameters in \verb{[gigs]} are shared between different functions.

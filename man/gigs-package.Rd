@@ -17,4 +17,24 @@ help(package = "gigs")
 browseURL("https://www.github.com/lshtm-gigs/gigs")
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/lshtm-gigs/gigs/}
+  \item \url{https://lshtm-gigs.github.io/gigs/}
+  \item Report bugs at \url{https://github.com/lshtm-gigs/gigs/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Simon Parker \email{simon.parker@lshtm.ac.uk} (\href{https://orcid.org/0009-0003-8214-4496}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Linda Vesel (\href{https://orcid.org/0000-0003-3753-4172}{ORCID}) [data contributor]
+  \item Eric Ohuma (\href{https://orcid.org/0000-0002-3116-2593}{ORCID}) [data contributor]
+  \item Bill & Melinda Gates Foundation [funder, copyright holder]
+}
+
+}
 \keyword{internal}
