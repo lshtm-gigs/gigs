@@ -54,3 +54,15 @@ their presence and replacing the invalid values with \code{NA}. You can change
 this behaviour with \code{gigs_option_set()} so that gigs does this silently, or
 make gigs throw errors when confronted with bad data.
 }
+\examples{
+# Get the names of all available options
+names(.gigs_options)
+
+# Retrieve the value of a given option --> will invisibly return value and
+# print to console
+gigs_option_get("handle_missing_data")
+
+# Set the value of an option --> will invisibly return the new value and
+# print your change to the console
+gigs_option_set("handle_missing_data", "quiet")
+}

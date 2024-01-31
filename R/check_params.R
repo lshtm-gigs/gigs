@@ -18,7 +18,6 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   arg_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
   stopifnot(sum(arg_nulls) == 2L) # Error should never be seen by user
   varname <- names(arg_nulls)[!arg_nulls]
-  vec <- args[!arg_nulls][[1]] |>
   vec <- args[!arg_nulls][[1]]
   # Leave function if vector already validated
   if (has_attribute(vec, attr_name = "GIGS_VALIDATED_YZP")) {
@@ -302,7 +301,7 @@ validate_ig_fet_estimation_param <- function(var) {
 handle_missing_data <- function(vec, varname) {
   handle_var(vec = vec,
              varname = varname,
-             option = "handle_missing",
+             option = "handle_missing_data",
              test_fn = \(x) is.na(x) & !is.nan(x),
              msg_fn = msg_missing_data)
 }
@@ -312,7 +311,7 @@ handle_missing_data <- function(vec, varname) {
 handle_undefined_data <- function(vec, varname) {
   handle_var(vec = vec,
              varname = varname,
-             option = "handle_undefined",
+             option = "handle_undefined_data",
              test_fn = \(x) is.infinite(x) | is.nan(x),
              msg_fn = msg_undefined_data)
 }

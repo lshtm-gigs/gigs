@@ -21,6 +21,17 @@
 #' @returns For [gigs_option_get()], noisiliy returns the current value of
 #'   `option`. For [gigs_option_set()], invisibly returns the new value of
 #'   `option`.
+#' @examples
+#' # Get the names of all available options
+#' names(.gigs_options)
+#'
+#' # Retrieve the value of a given option --> will invisibly return value and
+#' # print to console
+#' gigs_option_get("handle_missing_data")
+#'
+#' # Set the value of an option --> will invisibly return the new value and
+#' # print your change to the console
+#' gigs_option_set("handle_missing_data", "quiet")
 #' @name gigs_options
 #' @export
 gigs_option_get <- function(option, silent = FALSE) {
@@ -28,7 +39,7 @@ gigs_option_get <- function(option, silent = FALSE) {
     assert_subset(choices = names(.gigs_options))
   value <- get(option, envir = .gigs_options, inherits = FALSE)
   if (!silent) {
-    message("\tgigs option `", option, "` is currently set to \"", value, "\".")
+    message("gigs options: `", option, "` is currently set to \"", value, "\".")
   }
   value
 }
@@ -43,6 +54,7 @@ gigs_option_get <- function(option, silent = FALSE) {
 #'   a `message()` to the console describing either:
 #'   * The current value of `option` for `gigs_option_get()`.
 #'   * The newly-set value of `option` for `gigs_option_set()`.
+#' @export
 gigs_option_set <- function(option, new_value, silent = FALSE) {
   qassert(silent, rules = "B1")
   qassert(option, rules = "S1")
@@ -51,7 +63,7 @@ gigs_option_set <- function(option, new_value, silent = FALSE) {
   assert_subset(new_value, choices = c("quiet", "warn", "error"))
   assign(x = option, value = new_value, envir = .gigs_options, inherits = FALSE)
   if (!silent) {
-    message("\tgigs option `",  option, "` is now set to \"", new_value, "\".")
+    message("gigs options: `",  option, "` is now set to \"", new_value, "\".")
   }
   invisible(new_value)
 }
