@@ -247,7 +247,7 @@ ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
 
 #' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Postnatal
 #' Growth standards
-#' @inherit ig_nbs_zscore2value params return
+#' @inherit ig_png_zscore2value params return
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_png_z2v_internal <- function(z, x, sex, acronym) {
@@ -262,7 +262,7 @@ ig_png_z2v_internal <- function(z, x, sex, acronym) {
 
 #' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Postnatal
 #' Growth standards
-#' @inherit ig_nbs_zscore2value params return
+#' @inherit ig_png_zscore2value params return
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_png_v2z_internal <- function(y, x, sex, acronym) {

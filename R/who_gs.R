@@ -85,162 +85,129 @@
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(z = z,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
-    do.call(what = validate_who_gs)
-
-  lms <- who_gs_lms(x = validated[["x"]],
-                    sex = validated[["sex"]],
-                    acronym = validated[["acronym"]])
-
-  # from https://stackoverflow.com/questions/29920302/raising-vector-with-negative-numbers-to-a-fractional-exponent-in-r
-  exponent <- function(a, pow) (abs(a)^pow) * sign(a)
-
-  z_over_three <- function(l, m, s, z) {
-    sd3pos <- who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
-    sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
-    (z - 3) * sd23pos + sd3pos
-  }
-
-  z_under_minus_three <- function(l, m, s, z) {
-    sd3neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
-    sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
-    (z + 3) * sd23neg + sd3neg
-  }
-
-  y_from_LMS <- function(l, m, s, z, acronym) {
-    ifelse(
-      test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
-      yes = ifelse(
-        #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
-        test = abs(l) > sqrt(.Machine$double.eps),
-        yes = exponent(z * s * l + 1, (1 / l)) * m,
-        no = m * exp(s * z)),
-      no = ifelse(
-        test = z > 3,
-        yes = z_over_three(l, m, s, z),
-        no = z_under_minus_three(l, m, s, z))
-    )
-  }
-  y_from_LMS(l = lms[[1]], m = lms[[2]], s = lms[[3]], z = validated[["z"]],
-             acronym = validated[["acronym"]])
+  vctrs::vec_recycle_common(z = z, x = x, sex = sex, acronym = acronym) |>
+    do.call(what = validate_who_gs) |>
+    do.call(what = who_gs_z2v_internal)
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "wfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_bfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "bfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_lhfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "lhfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfl_zscore2value <- function(z, length_cm, sex) {
-  who_gs_zscore2value(z = z, x = length_cm, sex = sex, acronym = "wfl")
+  who_gs_zscore2value(z, length_cm, sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfh_zscore2value <- function(z, height_cm, sex) {
-  who_gs_zscore2value(z = z, x = height_cm, sex = sex, acronym = "wfh")
+  who_gs_zscore2value(z, height_cm, sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_hcfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "hcfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_acfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "acfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_ssfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "ssfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_tsfa_zscore2value <- function(z, age_days, sex) {
-  who_gs_zscore2value(z = z, x = age_days, sex = sex, acronym = "tsfa")
+  who_gs_zscore2value(z, age_days, sex, acronym = "tsfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @importFrom stats qnorm
 #' @export
 who_gs_centile2value <- function(p, x, sex, acronym) {
-  who_gs_zscore2value(z = qnorm(p), x = x, sex = sex, acronym = acronym)
+  validated <- vctrs::vec_recycle_common(p = p,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = validate_who_gs)
+  with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "wfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_bfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "bfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_lhfa_centile2value <- function(p, age_days, sex)  {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "lhfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfl_centile2value <- function(p, length_cm, sex) {
-  who_gs_centile2value(p = p, x = length_cm, sex = sex, acronym = "wfl")
+  who_gs_centile2value(p, length_cm, sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_wfh_centile2value <- function(p, height_cm, sex) {
-  who_gs_centile2value(p = p, x = height_cm, sex = sex, acronym = "wfh")
+  who_gs_centile2value(p, height_cm, sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_hcfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "hcfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_acfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "acfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_ssfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "ssfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_tsfa_centile2value <- function(p, age_days, sex) {
-  who_gs_centile2value(p = p, x = age_days, sex = sex, acronym = "tsfa")
+  who_gs_centile2value(p, age_days, sex, acronym = "tsfa")
 }
 
 #' Convert values to z-scores/centiles in the WHO Child Growth Standards
@@ -295,162 +262,154 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_value2zscore <- function(y, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
-    do.call(what = validate_who_gs)
-
-  lms <- who_gs_lms(x = validated[["x"]],
-                    sex = validated[["sex"]],
-                    acronym = validated[["acronym"]])
-
-  z_over_three <- function(l, m, s, y) {
-    sd3pos <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
-    sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
-    3 + (y - sd3pos) / sd23pos
-  }
-  z_under_minus_three <- function(l, m, s, y) {
-    sd3neg <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
-    sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
-    -3 + (y - sd3neg) / sd23neg
-  }
-
-  z_from_LMS <- function(l, m, s, y, acronym) {
-    #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
-    z <- ifelse(test = abs(l) > sqrt(.Machine$double.eps),
-                yes = (abs((y / m)^l) - 1) / (s * l),
-                no = log(y / m) / s)
-    ifelse(
-      test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
-      yes = z,
-      no = ifelse(test = z > 3,
-                  yes = z_over_three(l, m, s, y),
-                  no =  z_under_minus_three(l, m, s, y))
-    )
-  }
-
-  z_from_LMS(l = lms[[1]],
-             m = lms[[2]],
-             s = lms[[3]],
-             y = validated[["y"]],
-             acronym = validated[["acronym"]])
+  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+    do.call(what = validate_who_gs) |>
+    do.call(what = who_gs_v2z_internal)
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfa_value2zscore <- function(weight_kg, age_days, sex) {
-  who_gs_value2zscore(y = weight_kg, x = age_days, sex = sex, acronym = "wfa")
+  who_gs_value2zscore(weight_kg, age_days, sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_bfa_value2zscore <- function(bmi, age_days, sex) {
-  who_gs_value2zscore(y = bmi, x = age_days, sex = sex, acronym = "bfa")
+  who_gs_value2zscore(bmi, age_days, sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_lhfa_value2zscore <- function(lenht_cm, age_days, sex) {
-  who_gs_value2zscore(y = lenht_cm, x = age_days, sex = sex, acronym = "lhfa")
+  who_gs_value2zscore(lenht_cm, age_days, sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
-  who_gs_value2zscore(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+  who_gs_value2zscore(weight_kg, length_cm, sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfh_value2zscore <- function(weight_kg, height_cm, sex) {
-  who_gs_value2zscore(y = weight_kg, x = height_cm, sex = sex, acronym = "wfh")
+  who_gs_value2zscore(weight_kg, height_cm, sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_hcfa_value2zscore <- function(headcirc_cm, age_days, sex) {
-  who_gs_value2zscore(y = headcirc_cm, x = age_days, sex = sex, acronym = "hcfa")
+  who_gs_value2zscore(headcirc_cm, age_days, sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_acfa_value2zscore <- function(armcirc_cm, age_days, sex) {
-  who_gs_value2zscore(y = armcirc_cm, x = age_days, sex = sex, acronym = "acfa")
+  who_gs_value2zscore(armcirc_cm, age_days, sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_ssfa_value2zscore <- function(subscap_sf_mm, age_days, sex) {
-  who_gs_value2zscore(y = subscap_sf_mm, x = age_days, sex = sex, acronym = "ssfa")
+  who_gs_value2zscore(subscap_sf_mm, age_days, sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
-  who_gs_value2zscore(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
+  who_gs_value2zscore(triceps_sf_mm, age_days, sex, acronym = "tsfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @importFrom stats pnorm
 #' @export
 who_gs_value2centile <- function(y, x, sex, acronym) {
-  pnorm(who_gs_value2zscore(y = y, x = x, sex = sex, acronym = acronym))
+  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+    do.call(what = validate_who_gs) |>
+    do.call(what = who_gs_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfa_value2centile <- function(weight_kg, age_days, sex) {
-  who_gs_value2centile(y = weight_kg, x = age_days, sex = sex, acronym = "wfa")
+  who_gs_value2centile(weight_kg, age_days, sex, acronym = "wfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_bfa_value2centile <- function(bmi, age_days, sex) {
-  who_gs_value2centile(y = bmi, x = age_days, sex = sex, acronym = "bfa")
+  who_gs_value2centile(bmi, age_days, sex, acronym = "bfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_lhfa_value2centile <- function(lenht_cm, age_days, sex) {
-  who_gs_value2centile(y = lenht_cm, x = age_days, sex = sex, acronym = "lhfa")
+  who_gs_value2centile(lenht_cm, age_days, sex, acronym = "lhfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfl_value2centile <- function(weight_kg, length_cm, sex) {
-  who_gs_value2centile(y = weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+  who_gs_value2centile(weight_kg, length_cm,sex, acronym = "wfl")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_wfh_value2centile <- function(weight_kg, height_cm, sex) {
-  who_gs_value2centile(y = weight_kg, x = height_cm, sex = sex, acronym = "wfh")
+  who_gs_value2centile(weight_kg, height_cm,sex, acronym = "wfh")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_hcfa_value2centile <- function(headcirc_cm, age_days, sex) {
-  who_gs_value2centile(y = headcirc_cm, x = age_days, sex = sex, acronym = "hcfa")
+  who_gs_value2centile(headcirc_cm, age_days, sex, acronym = "hcfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_acfa_value2centile <- function(armcirc_cm, age_days, sex) {
-  who_gs_value2centile(y = armcirc_cm, x = age_days, sex = sex, acronym = "acfa")
+  who_gs_value2centile(armcirc_cm, age_days, sex, acronym = "acfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_ssfa_value2centile <- function(subscap_sf_mm, age_days, sex) {
-  who_gs_value2centile(y = subscap_sf_mm, x = age_days, sex = sex, acronym = "ssfa")
+  who_gs_value2centile(subscap_sf_mm, age_days, sex, acronym = "ssfa")
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
-  who_gs_value2centile(y = triceps_sf_mm, x = age_days, sex = sex, acronym = "tsfa")
+  who_gs_value2centile(triceps_sf_mm, age_days, sex, acronym = "tsfa")
 }
+
+# INTERNAL: WHO Child Growth Standards conversion functions --------------------
+
+#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Postnatal
+#' Growth standards
+#' @inherit who_gs_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+who_gs_z2v_internal <- function(z, x, sex, acronym) {
+  stop_if_lengths_unequal(z, x, sex, acronym)
+  lms <- who_gs_lms(x = x, sex = sex, acronym = acronym)
+  with(lms, who_gs_lms_z2v(z = z, l = L, m = M, s = S, acronym = acronym))
+}
+
+#' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Postnatal
+#' Growth standards
+#' @inherit who_gs_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+who_gs_v2z_internal <- function(y, x, sex, acronym) {
+  stop_if_lengths_unequal(y, x, sex, acronym)
+  lms <- who_gs_lms(x = x, sex = sex, acronym = acronym)
+  with(lms, who_gs_lms_v2z(y, l = L, m = M, s = S, acronym = acronym))
+}
+
+# INTERNAL: Retriving LMS values -----------------------------------------------
 
 #' Retrieve LMS values for WHO Child Growth Standards
 #'
@@ -492,17 +451,143 @@ who_gs_lms <- function(x, sex, acronym) {
                         coeff_names = c("L", "M", "S"))
 }
 
-#' Get values which are a specific z-score from the median using WHO LMS
+# INTERNAL: Manipulate LMS values for the WHO Growth standards -----------------
+
+#' Convert values to z-scores in the WHO Child Growth standards using the
+#' adapted WHO LMS method
+#'
+#' @param y A numeric vector of length one or more with measured values.
+#' @param l,m,s Numeric vectors of the same length as `y` with lambda/mu/sigma
+#'   values to use for conversion.
+#' @note Uses [who_gs_lms_v2z_constrained()] to constrain any calculated
+#'   z-scores which are `> 3` or `< -3`.
+#' @returns Numeric vector of z-scores calculated using the WHO Child Growth
+#'   standards' flavour of Cole (1990)'s LMS method.
+#' @noRd
+who_gs_lms_v2z <- function(y, l, m, s, acronym) {
+  #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
+  z_unconstrained <- ifelse(test = abs(l) > sqrt(.Machine$double.eps),
+                            yes = (abs((y / m)^l) - 1) / (s * l),
+                            no = log(y / m) / s)
+  ifelse(
+    test = abs(z_unconstrained) <= 3 | acronym %in% c("hcfa", "lhfa"),
+    yes = z_unconstrained,
+    no = who_gs_lms_v2z_constrained(z_unconstrained, y, l, m, s)
+  )
+}
+
+#' Convert values to z-scores in the WHO Child Growth standards with
+#' restrainment
+#'
+#' @param z_unconstrained A numeric vector of length one or more with
+#'   unconstrained z-scores calculated using values and Cole's (1990) LMS method.
+#' @param y A numeric vector of the same length as `z` with measured values.
+#' @param l,m,s Numeric vectors of the same length as `z` with lambda/mu/sigma
+#'   values to use in the constraining procedure.
+#' @note See WHO reports in attached references for the rationale for this
+#'   constraining procedure.
+#' @returns Numeric vector of z-scores calculated using WHO Child Growth
+#'   standards constraining procedures.
+#' @noRd
+who_gs_lms_v2z_constrained <- function(z_unconstrained, y, l, m, s) {
+  ifelse(
+    test = z_unconstrained > 3,
+    yes = who_gs_lms_v2z_over_three(y, l, m, s),
+    no = who_gs_lms_v2z_under_minus_three(y, l, m, s)
+  )
+}
+
+#' Get constrained z-scores from values when z-scores were `> 3` for the WHO
+#' Growth Standards
+#' @inheritParams who_gs_lms_v2z_constrained
+#' @noRd
+who_gs_lms_v2z_over_three <- function(y, l, m, s) {
+  sd3pos <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
+  sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
+  3 + (y - sd3pos) / sd23pos
+}
+
+#' Get constrained z-scores from values when z-scores were `< -3` for the WHO
+#' Growth Standards
+#' @inheritParams who_gs_lms_v2z_constrained
+#' @noRd
+who_gs_lms_v2z_under_minus_three <- function(y, l, m, s) {
+  sd3neg <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
+  sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
+  -3 + (y - sd3neg) / sd23neg
+}
+
+#' Convert z-scores to values in the WHO Child Growth standards using the
+#' adapted WHO LMS method
+#'
+#' @param z A numeric vector of length one or more with z-scores.
+#' @param l,m,s Numeric vectors of the same length as `y` with lambda/mu/sigma
+#'   values to use for conversion.
+#' @note Performs constraining procedures described in WHO 2006/2007 reports
+#'   using [who_gs_lms_z2v_over_three()] and
+#'   [who_gs_lms_z2v_under_minus_three()], which compute an expected
+#'   measurement accounting for the WHO constraining procedure..
+#' @returns Numeric vector of expected values calculated using the WHO Child
+#'   Growth standards' flavour of Cole (1990)'s LMS method.
+#' @noRd
+who_gs_lms_z2v <- function(z, l, m, s, acronym) {
+  ifelse(
+    test = abs(z) <= 3 | acronym %in% c("hcfa", "lhfa"),
+    yes = ifelse(
+      #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
+      test = abs(l) > sqrt(.Machine$double.eps),
+      yes = exponent(z * s * l + 1, (1 / l)) * m,
+      no = m * exp(s * z)),
+    no = ifelse(
+      test = z > 3,
+      yes = who_gs_lms_z2v_over_three(z, l, m, s),
+      no = who_gs_lms_z2v_under_minus_three(z, l, m, s))
+  )
+}
+
+#' Get constrained values from z-scores when z-scores were `>3` for the WHO
+#' Growth Standards
+#' @inheritParams who_gs_lms_v2z_constrained
+#' @noRd
+who_gs_lms_z2v_over_three <- function(z, l, m, s) {
+  sd3pos <- who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
+  sd23pos <- sd3pos - who_gs_lms2value(l = l, m = m, s = s, n_sd = 2)
+  (z - 3) * sd23pos + sd3pos
+}
+
+#' Get constrained values from z-scores when z-scores were `< -3` for the WHO
+#' Growth Standards
+#' @inheritParams who_gs_lms_v2z_constrained
+#' @noRd
+who_gs_lms_z2v_under_minus_three <- function(z, l, m, s) {
+  sd3neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
+  sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
+  (z + 3) * sd23neg + sd3neg
+}
+
+#' Robust exponentiation for use internally by [who_gs_lms_z2v()]
+#'
+#' @param a Numeric vector of length one or more. Can be negative.
+#' @param pow Power to raise `a` to. Can be fractional.
+#' @note Starting using this function as I would sometimes get errors in
+#'   `y_from_LMS()` from odd but necessary exponentiations.
+#' @source From StackOverflow: https://stackoverflow.com/questions/29920302/
+#' @noRd
+exponent <- function(a, pow) (abs(a)^pow) * sign(a)
+
+#' Get values which are a specific z-score from the mean using WHO LMS
 #' coefficients
 #'
-#' @param l Lambda value as provided by [who_gs_lms()]
-#' @param m Mu value as provided by [who_gs_lms()]
-#' @param s Sigma value as provided by [who_gs_lms()]
-#' @param n_sd Number of standard deviations from the mean at which to compute
-#'   a value.
+#' @param l,m,s Numeric vectors of lambda/mu/sigma value(s) from [who_gs_lms()].
+#'   Each of these vectors should have the same length.
+#' @param n_sd Single number denoting the number of standard deviations from the
+#'   mean at which to compute expected values. This is equivalent ot z-score,
+#'   but is not called 'z' here to reduce confusion between user-inputted
+#'   z-scores and internally required `n_sd` values.
 #' @inherit who_gs_lms references
-#' @returns Numeric vector containing value(s) which are `n_sd` from the mean
-#'   for each inputted `l`/`m`/`s` combination.
+#' @returns Numeric vector the same length as `l`/`m`/`s`, containing value(s)
+#'   which are `n_sd` standard deviations from the `m` for the distributions
+#'   described by each elementwise combination of `l`, `m`, and `s`.
 #' @noRd
 who_gs_lms2value <- function(l, m, s, n_sd) {
   m * (1 + l * s * n_sd)^(1 / l)
