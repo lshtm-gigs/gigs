@@ -18,12 +18,7 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   arg_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
   stopifnot(sum(arg_nulls) == 2L) # Error should never be seen by user
   varname <- names(arg_nulls)[!arg_nulls]
-  vec <- args[!arg_nulls][[1]]
-  # Leave function if vector already validated
-  if (has_attribute(vec, attr_name = "GIGS_VALIDATED_YZP")) {
-    invisible()
-  }
-  vec <- vec |>
+  vec <- args[!arg_nulls][[1]]  |>
     checkmate::assert_numeric(min.len = 1, .var.name = varname) |>
     checkmate::assert_atomic_vector() |>
     remove_attributes() |>
@@ -34,8 +29,6 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
   if (!arg_nulls[["p"]]) {
     vec <- handle_oob_centiles(vec)
   }
-
-  attr(vec, which = "GIGS_VALIDATED_YZP") <- TRUE
   assign(x = varname, value = vec, envir = parent.frame(n = 1))
 }
 
@@ -54,9 +47,6 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
 validate_xvar <- function(x, acronym, standard) {
   checkmate::qassert(standard, rules = "S1")
   # Leave function if vector already validated
-  if (has_attribute(acronym, attr_name = "GIGS_VALIDATED_XVAR")) {
-    return(x)
-  }
   x <- x |>
     checkmate::assert_numeric(min.len = 1) |>
     checkmate::assert_atomic_vector() |>
@@ -71,10 +61,8 @@ validate_xvar <- function(x, acronym, standard) {
     is_oob_overall[!is_na_x & is_curr_acronym & !inrange(x, range)] <- TRUE
   }
 
-  x <- handle_oob_xvar(vec = x, varname = checkmate::vname(x),
-                       is_oob = is_oob_overall)
-  attr(x, which = "GIGS_VALIDATED_XVAR") <- TRUE
-  x
+  handle_oob_xvar(vec = x, varname = checkmate::vname(x),
+                  is_oob = is_oob_overall)
 }
 
 #' Validate user-inputted character vectors
@@ -110,13 +98,8 @@ validate_chr <- function(chr, options) {
 #'   Will throw an error if `sex` is not a character vector.
 #' @noRd
 validate_sex <- function(sex) {
-  if (has_attribute(sex, attr_name = "GIGS_VALIDATED_ACRONYM")) {
-    return(sex)
-  }
   # May add "U" back to package later
-  sex <- validate_chr(sex, options = c("M", "F"))
-  attr(sex, which = "GIGS_VALIDATED_SEX") <- TRUE
-  sex
+  validate_chr(sex, options = c("M", "F"))
 }
 
 #' Validate user-inputted acronyms prior to growth standard conversion
@@ -129,12 +112,7 @@ validate_sex <- function(sex) {
 #'   `NA`. Will throw an error if `acronym` is not a character vector.
 #' @noRd
 validate_acronym <- function(acronym, allowed_acronyms, standard) {
-  if (has_attribute(acronym, attr_name = "GIGS_VALIDATED_ACRONYM")) {
-    return(acronym)
-  }
-  acronym <- validate_chr(acronym, options = allowed_acronyms)
-  attr(acronym, which = "GIGS_VALIDATED_ACRONYM") <- TRUE
-  acronym
+  validate_chr(acronym, options = allowed_acronyms)
 }
 
 #' Check if an object has a named attribute
