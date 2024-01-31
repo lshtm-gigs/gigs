@@ -12,6 +12,13 @@
 #'   `gigs::who_gs_coeffs` or `gigs::ig_nbs_coeffs`.
 #' @param coeff_names Character vector denoting the names of coefficients in
 #'  `coeff_tbls`.
+#' @note The coefficient tables provided by the WHO and INTERGROWTH-21st project
+#'   have values for discrete values of their respective x variable (e.g.
+#'   gestational age in days for the INTERGROWTH-21st NBS standards, age in days
+#'   for some of the WHO standards, etc.). We therefore retrieve coefficients
+#'   using `approx()`, as linear interpolation between known LMS/MSNT
+#'   coefficients is more accurate than simply rounding to the nearest known
+#'   coefficient (Kiger and Taylor, 2015 - \doi{10.1007/s10916-015-0389-x}).
 #' @return A list containing coefficients where available for each observation.
 #'  This list will have the same number of elements as `coeff_names`, and will
 #'  be named according to the values in `coeff_names`.
@@ -20,12 +27,6 @@
 #' @importFrom stats setNames
 #' @noRd
 retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
-  # Acronym/sex naming integrity checks
-  if (!all(unique(acronym) %in% names(coeff_tbls))) {
-    acronym[!acronym %in% names(coeff_tbls)] <- "INVALID"
-  }
-  sex[!sex %in% c("M", "F")] <- "INVALID"
-  temp_df <- data.frame(x, sex, acronym)
   acronyms <- unique(acronym)
   acronyms <- acronyms[!is.na(acronyms)]
 
@@ -34,7 +35,7 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
     setNames(acronyms)
 
   # Initialise empty list which will contain vectors with each coeff
-  len_x <- nrow(temp_df)
+  len_x <- length(x)
   empty_vec <- rep(NA, len_x)
   out_li <- vector(mode = "list", length = length(coeff_names)) |>
         setNames(coeff_names)
@@ -43,20 +44,20 @@ retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
   # Iterate through acronym-sex combinations, and reassign values in out_li
   # based on outputs from stats::approx(). For loops used to avoid the
   # environment/assignment constraints of nested apply() calls
-  for (acronym in names(li_coeffs)) {
-    li_sexes <- li_coeffs[[acronym]]
-    is_curr_acro <- temp_df[["acronym"]] == acronym
+  for (chr_acronym in names(li_coeffs)) {
+    li_sexes <- li_coeffs[[chr_acronym]]
+    is_curr_acro <- chr_acronym == acronym
     xvars <- li_sexes[[1]][[1]]
-    for (sex in names(li_sexes)) {
-      curr_sex <- if (sex == "male") "M" else "F"
-      is_curr_sex <- temp_df[["sex"]] == curr_sex
-      tbl_coeffs <- li_sexes[[sex]]
+    for (chr_sex in names(li_sexes)) {
+      curr_sex <- if (chr_sex == "male") "M" else "F"
+      is_curr_sex <- curr_sex == sex
+      tbl_coeffs <- li_sexes[[chr_sex]]
       is_curr_sex_acro <- is_curr_acro & is_curr_sex
       is_curr_sex_acro[is.na(is_curr_sex_acro)] <- FALSE
       for (coeff_name in coeff_names) {
         coeff <- stats::approx(x = xvars,
                                y = tbl_coeffs[[coeff_name]],
-                               xout = temp_df[["x"]],
+                               xout = x,
                                rule = 1)[["y"]]
         out_li[[coeff_name]][is_curr_sex_acro] <- coeff[is_curr_sex_acro]
       }
