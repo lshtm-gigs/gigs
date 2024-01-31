@@ -1,5 +1,5 @@
 #' Convert z-scores/centiles to values in the INTERGROWTH-21<sup>st</sup> Fetal
-#' Growth standards
+#' standards
 #'
 #' @inherit shared_roxygen_params params note
 #' @param x Numeric vector of length one or more with x values. Elements should
@@ -128,30 +128,9 @@
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_zscore2value <- function(z, x, acronym) {
-  validated <- vctrs::vec_recycle_common(z = z,
-                                         x = x,
-                                         acronym = acronym) |>
-    do.call(what = validate_ig_fet)
-
-  ifelse(
-    test = validated[["acronym"]] %in% c("pifga", "rifga", "sdrfga"),
-    yes = ig_fet_doppler_z2y(z = validated[["z"]],
-                             gest_days = validated[["x"]],
-                             acronym = validated[["acronym"]]),
-    no = ifelse(
-      test = validated[["acronym"]] == "efwfga",
-      yes = ig_fet_efw_z2y(z = validated[["z"]],
-                           gest_days = validated[["x"]]),
-      no = ifelse(
-        test = validated[["acronym"]] == "gwgfga",
-        yes = ig_fet_gwg_z2y(z = validated[["z"]],
-                             gest_days = validated[["x"]]),
-        no = ig_fet_mu_sigma_z2y(z = validated[["z"]],
-                                 x = validated[["x"]],
-                                 acronym = validated[["acronym"]])
-      )
-    )
-  )
+  vctrs::vec_recycle_common(z = z, x = x, acronym = acronym) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
@@ -278,7 +257,9 @@ ig_fet_cmfga_zscore2value <- function(z, gest_days) {
 #' @importFrom stats qnorm
 #' @export
 ig_fet_centile2value <- function(p, x, acronym) {
-  ig_fet_zscore2value(qnorm(p), x, acronym = acronym)
+  validated <- vctrs::vec_recycle_common(p = p, x = x, acronym = acronym) |>
+    do.call(what = validate_ig_fet)
+  with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
@@ -479,30 +460,9 @@ ig_fet_cmfga_centile2value <- function(p, gest_days) {
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_value2zscore <- function(y, x, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y,
-                                         x = x,
-                                         acronym = acronym) |>
-    do.call(what = validate_ig_fet)
-
-  ifelse(
-    test = validated[["acronym"]] %in% c("pifga", "rifga", "sdrfga"),
-    yes = ig_fet_doppler_y2z(y = validated[["y"]],
-                             gest_days = validated[["x"]],
-                             acronym = validated[["acronym"]]),
-    no = ifelse(
-      test = validated[["acronym"]] == "efwfga",
-      yes = ig_fet_efw_y2z(efw_g = validated[["y"]],
-                           gest_days = validated[["x"]]),
-      no = ifelse(
-        test = validated[["acronym"]] == "gwgfga",
-        yes = ig_fet_gwg_y2z(gwg_kg = validated[["y"]],
-                             gest_days = validated[["x"]]),
-        no = ig_fet_mu_sigma_y2z(y = validated[["y"]],
-                                 x = validated[["x"]],
-                                 acronym = validated[["acronym"]])
-      )
-    )
-  )
+  validated <- vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
@@ -629,7 +589,10 @@ ig_fet_cmfga_value2zscore <- function(cist_mag_mm, gest_days) {
 #' @importFrom stats pnorm
 #' @export
 ig_fet_value2centile <- function(y, x, acronym) {
-  pnorm(ig_fet_value2zscore(y, x, acronym))
+  validated <- vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
@@ -750,6 +713,50 @@ ig_fet_pvfga_value2centile <- function(atr_phlv_mm, gest_days) {
 #' @export
 ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
   ig_fet_value2centile(cist_mag_mm, gest_days, acronym = "cmfga")
+}
+
+# INTERNAL: INTERGROWTH-21st Fetal standards conversion logic ------------------
+
+#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Fetal standards
+#' @inherit ig_fet_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+ig_fet_z2v_internal <- function(z, x, acronym) {
+  stop_if_lengths_unequal(z, x, acronym)
+  ifelse(
+    test = acronym %in% c("pifga", "rifga", "sdrfga"),
+    yes = ig_fet_doppler_z2y(z = z, gest_days = x, acronym = acronym),
+    no = ifelse(
+      test = acronym == "efwfga",
+      yes = ig_fet_efw_z2y(z = z, gest_days = x),
+      no = ifelse(
+        test = acronym == "gwgfga",
+        yes = ig_fet_gwg_z2y(z = z, gest_days = x),
+        no = ig_fet_mu_sigma_z2y(z = z, x = x, acronym = acronym)
+      )
+    )
+  )
+}
+
+#' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Fetal standards
+#' @inherit ig_fet_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+ig_fet_v2z_internal <- function(y, x, acronym) {
+  stop_if_lengths_unequal(y, x, acronym)
+  ifelse(
+    test = acronym %in% c("pifga", "rifga", "sdrfga"),
+    yes = ig_fet_doppler_y2z(y = y, gest_days = x, acronym = acronym),
+    no = ifelse(
+      test = acronym == "efwfga",
+      yes = ig_fet_efw_y2z(efw_g = y, gest_days = x),
+      no = ifelse(
+        test = acronym == "gwgfga",
+        yes = ig_fet_gwg_y2z(gwg_kg = y, gest_days = x),
+        no = ig_fet_mu_sigma_y2z(y = y, x = x, acronym = acronym)
+      )
+    )
+  )
 }
 
 # INTERNAL: IG-21st Fetal standards: normally distributed ----------------------
@@ -888,9 +895,9 @@ ig_fet_mu_sigma <- function(x, acronym) {
 
 #' Convert values to z-scores for the INTERGROWTH-21st Fetal standards based on
 #' simple mu-sigma models (internal; covers most Fetal standards)
-#' @param y Numeric vector of y values of length one or more.
+#' @param y Numeric vector of length one or more with measurements.
 #' @inheritParams ig_fet_mu_sigma
-#' @returns Numeric vector of z-scores, with length equal to `length(y)`.
+#' @return Numeric vector of z-scores, with length equal to `length(y)`.
 #' @noRd
 ig_fet_mu_sigma_y2z <- function(y, x, acronym) {
   mu_sigma <- ig_fet_mu_sigma(x = x, acronym = acronym)
@@ -1106,7 +1113,7 @@ ig_fet_doppler_z2y <- function(z, gest_days, acronym) {
   })
 }
 
-# INTERNAL; IG-21st Gestational Weight Gain ------------------------------------
+# INTERNAL: IG-21st Gestational Weight Gain ------------------------------------
 
 #' INTERGROWTH-21<sup>st</sup> gestational weight gain mu/sigma equations
 #'   (internal; used for the INTERGROWTH-21st gestational weight gain standard)

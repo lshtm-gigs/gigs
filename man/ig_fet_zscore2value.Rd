@@ -44,7 +44,7 @@
 \alias{ig_fet_pvfga_centile2value}
 \alias{ig_fet_cmfga_centile2value}
 \title{Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
-Growth standards}
+standards}
 \usage{
 ig_fet_zscore2value(z, x, acronym)
 
@@ -193,7 +193,7 @@ information on how out-of-bounds elements will be handled.}
 }
 \description{
 Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
-Growth standards
+standards
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
