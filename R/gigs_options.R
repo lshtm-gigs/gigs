@@ -35,8 +35,8 @@
 #' @name gigs_options
 #' @export
 gigs_option_get <- function(option, silent = FALSE) {
-  qassert(option, rules = "S1") |>
-    assert_subset(choices = names(.gigs_options))
+  checkmate::qassert(option, rules = "S1") |>
+    checkmate::assert_subset(choices = names(.gigs_options))
   value <- get(option, envir = .gigs_options, inherits = FALSE)
   if (!silent) {
     message("gigs options: `", option, "` is currently set to \"", value, "\".")
@@ -56,11 +56,11 @@ gigs_option_get <- function(option, silent = FALSE) {
 #'   * The newly-set value of `option` for `gigs_option_set()`.
 #' @export
 gigs_option_set <- function(option, new_value, silent = FALSE) {
-  qassert(silent, rules = "B1")
-  qassert(option, rules = "S1")
-  assert_subset(option, choices = names(.gigs_options))
-  qassert(new_value, rules = "S1")
-  assert_subset(new_value, choices = c("quiet", "warn", "error"))
+  checkmate::qassert(silent, rules = "B1")
+  checkmate::qassert(option, rules = "S1")
+  checkmate::assert_subset(option, choices = names(.gigs_options))
+  checkmate::qassert(new_value, rules = "S1")
+  checkmate::assert_subset(new_value, choices = c("quiet", "warn", "error"))
   assign(x = option, value = new_value, envir = .gigs_options, inherits = FALSE)
   if (!silent) {
     message("gigs options: `",  option, "` is now set to \"", new_value, "\".")
