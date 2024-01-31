@@ -1,3 +1,7 @@
+for (option in names(.gigs_options)) {
+  gigs_option_set(option, new_value = "quiet", silent = TRUE)
+}
+
 test_that(
   desc = "Size for GA classification works - with and without `severe` flag",
   code = {

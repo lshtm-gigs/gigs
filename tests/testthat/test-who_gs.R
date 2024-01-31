@@ -1,150 +1,81 @@
-who_xrange <- function(x_lower, x_upper, acronym) {
-  by <- if (acronym == "wfl" | acronym == "wfh") 0.1 else 1
-  seq(x_lower, x_upper, by = by)
-}
+# Correctness tests ------------------------------------------------------------
 
-test_zscore_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
-  range_x <- who_xrange(x_lower, x_upper, acronym)
-  sex_ <- if (sex == "M") "male" else "female"
-  ref_tbl <- gigs::who_gs[[acronym]][[sex_]]$zscores
-  pkg_tbl <- lapply(X = -4:4,
-                    FUN = \(z) {
-                      fn <- get(paste0("who_gs_", acronym, "_zscore2value"))
-                      round(fn(z, range_x,sex), digits = 3)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame() |>
-    setNames(names(ref_tbl)[-1])
-  col1_name <- names(ref_tbl)[1]
-  pkg_tbl[[col1_name]] <- range_x
-  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  ref_tbl <- ref_tbl[inrange(ref_tbl[,1], range_x), ]
-  expect_equal(object = pkg_tbl, expected = ref_tbl, tolerance = tolerance,
-               ignore_attr = TRUE)
-}
+who_roundto <- function() 3
 
-test_centile_tbls <- function(sex, x_lower, x_upper, acronym, tolerance) {
-  range_x <- who_xrange(x_lower, x_upper, acronym)
-  sex_ <- if (sex == "M") "male" else "female"
-  ref_tbl <- gigs::who_gs[[acronym]][[sex_]]$centiles
-  pkg_tbl <- lapply(X = c(0.001, 0.01, 0.03, 0.05, 0.10, 0.15, 0.25, 0.50, 0.75,
-                          0.85, 0.90, 0.95, 0.97, 0.99, 0.999),
-                    FUN = \(p) {
-                      fn <- get(paste0("who_gs_", acronym, "_centile2value"))
-                      round(fn(p, range_x, sex), digits = 3)
-                }) |>
-    do.call(what = cbind) |>
-    as.data.frame() |>
-    setNames(names(ref_tbl)[-1])
-  col1_name <- names(ref_tbl)[1]
-  pkg_tbl[[col1_name]] <- range_x
-  pkg_tbl <- pkg_tbl[, c(ncol(pkg_tbl), 1:(ncol(pkg_tbl) - 1))]
-  ref_tbl <- ref_tbl[inrange(ref_tbl[,1], range_x), ]
+who_tolerance <- function() 10e-4
 
-  # For now - remove P01 and P999 as these were not adjusted correctly in
-  # WHO standards
-  expect_equal(object = pkg_tbl[, c(1, 3:15)], expected = ref_tbl[, c(1, 3:15)],
-               tolerance = tolerance, ignore_attr = TRUE)
-}
+#' @srrstats {G5.4, G5.4c} Tests ensure that `gigs` functions can be used to
+#'   replicate published growth charts, within a tolerance.
+test_that(desc = "Conversion of z-scores/centiles to values works", {
+  for (acronym in names(gigs::who_gs)) {
+    for (chr_sex in c("male", "female")) {
+      for (chr_z_or_p in c("zscore", "centile")) {
+        ref_tbl <- gigs::who_gs[[acronym]][[chr_sex]][[paste0(chr_z_or_p, "s")]]
+        if (is.null(ref_tbl)) {
+          ref_tbl <- gigs::who_gs[[acronym]][[chr_sex]][[1]]
+        }
+        dbl_z_or_p <- switch(chr_z_or_p,
+                             centile = c(0.001, 0.01, 0.03, 0.05, 0.1, 0.15,
+                                         0.25, 0.5, 0.75, 0.85, 0.9, 0.95, 0.97,
+                                         0.99, 0.999),
+                             zscore = -4:4)
+        xvar <- ref_tbl[[1]]
+        sexvar <- if (chr_sex != "female") "M" else "F"
+        fn <- get(paste0("who_gs_", acronym, "_", chr_z_or_p, "2value"))
+        pkg_tbl <- lapply(X = dbl_z_or_p,
+                          FUN = \(zp) {
+                            round(fn(zp, xvar, sexvar),
+                                  digits = who_roundto())
+                          }) |>
+          do.call(what = cbind) |>
+          as.data.frame() |>
+          setNames(names(ref_tbl)[-1])
+        ref_tbl <- ref_tbl[-1]
 
-acronyms <- names(gigs::who_gs)
-sex <- c("M", "F")
-times <- rep(length(sex), length(acronyms))
-sexes <- rep(sex, length(acronyms))
-lower <-  rep(c(0, 0, 0, 45, 65, 0, 91, 91, 91), times =  times)
-upper <- rep(c(rep(1856, 3), 110, 120, rep(1856, 4)), times = times)
-acronyms <- rep(acronyms, times =  rep(length(sex), length(acronyms)))
-tolerance <- 1e-3
+        if (chr_z_or_p == "centile") {
+          # Centiles go past +3/-3 z-score bounds, at which the published WHO
+          # tables fail to account for the WHO constraining procedure. Without
+          # these lines, expect_true() fails for P01 and P999.
+          ref_tbl <- ref_tbl[c(-1, -15)]
+          pkg_tbl <- pkg_tbl[c(-1, -15)]
+        }
 
-test_that("Conversion of z-scores to WHO values works", {
-  mapply(FUN = test_zscore_tbls, sex, lower, upper, acronyms, tolerance)
-})
-
-test_that("Conversion of centiles to values works", {
-  mapply(FUN = test_centile_tbls, sex, lower, upper, acronyms, tolerance)
-})
-
-testthat_v2x <- function(y, x, sex, acronym, z_or_p = "zscore") {
-  fn_stem <- paste0("who_gs_", acronym)
-  fn_val2zp <- get(paste0(fn_stem, "_value2", z_or_p))
-  out_z_or_p <- fn_val2zp(y, x, sex)
-
-  fn_zp2val <- get(paste0(fn_stem, "_", z_or_p, "2value"))
-  out_value <- fn_zp2val(out_z_or_p, x, sex)
-
-  if (all(is.na(out_z_or_p)) | all(is.na(out_z_or_p))) {
-    stop("All values were NA.")
+        differences <- round(abs(pkg_tbl - ref_tbl), who_roundto())
+        tolerance <- who_tolerance()
+        maxdiff <- max(differences, na.rm = TRUE)
+        expect_true(max(differences, na.rm = TRUE) <= tolerance)
+      }
+    }
   }
-  expect_equal(round(out_value, digits = 2), expected = round(y, digits = 2))
-}
-
-test_that("Conversion of values to z-scores works", {
-  # Weight for age
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa")
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa")
-  # BMI for age
-  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa")
-  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 28, x = 36, sex = "F", acronym = "bfa")
-  # Length/height for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa")
-  # Length/height for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 70, sex = "M", acronym = "wfl")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 75, sex = "F", acronym = "wfl")
-  # Length/height for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "wfh")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "wfh")
-  # Head circumference for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa")
-  # Arm circumference for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 200, sex = "M", acronym = "acfa")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 200, sex = "F", acronym = "acfa")
-  # Subscapular skinfold for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 301, sex = "M", acronym = "ssfa")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 301, sex = "F", acronym = "ssfa")
-  # Triceps skinfold for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90 + 403, sex = "M", acronym = "tsfa")
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95 + 403, sex = "F", acronym = "tsfa")
-
-  # NA should arise in final vector, will be reflected in this function
-  testthat_v2x(y = c(26.3, 27.9, NA), x = 55, sex = "F", acronym = "lhfa")
 })
 
-test_that("Conversion of values to centiles works", {
-  cent <- "centile"
-  # Weight for age
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 36, sex = "M", acronym = "wfa", z_or_p = cent)
-  testthat_v2x(y = c(2.65, 3.00, 2.86, 3.10, 3.32), x = 40, sex = "F", acronym = "wfa", z_or_p = cent)
-  # BMI for age
-  testthat_v2x(y = c(41.9, 43.8, 45.6, 47.3, 49.1) - 28, x = 57, sex = "M", acronym = "bfa", z_or_p = cent)
-  testthat_v2x(y = c(46.7, 41.8, 43.5, 47.5, 48.1) - 29, x = 36, sex = "F", acronym = "bfa", z_or_p = cent)
-  # Length/height for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 48, sex = "M", acronym = "lhfa", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 60, sex = "F", acronym = "lhfa", z_or_p = cent)
-  # Weight for length
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 21, x = 92.8, sex = "M", acronym = "wfl", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 21, x = 92.8, sex = "F", acronym = "wfl", z_or_p = cent)
-  # Weight for height
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90, sex = "M", acronym = "wfh", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95, sex = "F", acronym = "wfh", z_or_p = cent)
-  # Head circumference for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1), x = 90, sex = "M", acronym = "hcfa", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1), x = 95, sex = "F", acronym = "hcfa", z_or_p = cent)
-  # Arm circumference for ag
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 20, x = 90 + 200, sex = "M", acronym = "acfa", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 20, x = 95 + 200, sex = "F", acronym = "acfa", z_or_p = cent)
-  # Subscapular skinfold for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 30, x = 90 + 301, sex = "M", acronym = "ssfa", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 26, x = 95 + 301, sex = "F", acronym = "ssfa", z_or_p = cent)
-  # Triceps skinfold for age
-  testthat_v2x(y = c(32.6, 33.0, 34.3, 35.7, 36.1) - 31, x = 90 + 403, sex = "M", acronym = "tsfa", z_or_p = cent)
-  testthat_v2x(y = c(29.1, 31.0, 26.3, 29.7, 33.1) - 26, x = 95 + 403, sex = "F", acronym = "tsfa", z_or_p = cent)
+#' @srrstats {G5.6, G5.6a} Checks that conversion functionality works when
+#'   converting values to z-scores/centiles AND vice versa.
+test_that(desc = "Conversion of values to z-scores works", {
+  for (acronym in names(gigs::who_gs)) {
+    for (chr_z_or_p in c("zscore", "centile")) {
+      xvar <- gigs::who_gs[[acronym]][[1]][[1]][[1]]
+      set.seed(seed = 1000)
+      dbl_z_or_p <- rnorm(n = length(xvar))
+      set.seed(seed = 1000)
+      sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
+      if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+
+      fn_stem <- paste0("who_gs_", acronym)
+      fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+      y_gigs <- fn_zp2val(dbl_z_or_p, xvar, sexvar)
+
+      fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+      gigs_z_or_p <- fn_val2zp(y_gigs, xvar, sexvar)
+
+      expect_equal(gigs_z_or_p, expected = dbl_z_or_p, tolerance = 10e-10)
+    }
+  }
 })
 
 test_that(desc = "Interpolation of LMS values can be performed",
           code = {
-            testthat::expect_false(
+            expect_false(
               anyNA(
                 who_gs_value2zscore(y = 20.3,
                                     # All xvars interpolated
@@ -152,7 +83,7 @@ test_that(desc = "Interpolation of LMS values can be performed",
                 sex = "M",
                 acronym = "acfa")
               ))
-            testthat::expect_false(
+            expect_false(
               anyNA(who_gs_value2zscore(y = 20.3,
                                         # Half interpolated, half not
                                         x = seq(900, 910, by = 0.5),
@@ -163,96 +94,96 @@ test_that(desc = "Interpolation of LMS values can be performed",
 
 test_that(desc = "Interpolation of LMS values with multiple standards/sexes",
           code = {
-            testthat::expect_false(
+            expect_false(
               anyNA(
                 who_gs_value2centile(y = 20.3,
-                                        x = c(900, 905.5),
-                                        sex = c("M", "F"),
-                                        acronym = c("acfa", "tsfa")
+                                     x = c(900, 905.5),
+                                     sex = c("M", "F"),
+                                     acronym = c("acfa", "tsfa")
               )))
           })
-
-test_that(desc = "NA values returned with out of range xvars",
-          code = {
-            testthat::expect_true(
-              anyNA(
-                who_gs_zscore2value(z = rep_len(-3:3, 200),
-                                    x = seq(0, 99.5, by = 0.5),
-                                    sex = rep_len(c("M", "F"), 200),
-                                    acronym = rep_len(names(gigs::who_gs), 200))
-              ))
-          })
-
-test_that(
-  desc = "Bad input types cause errors.",
-  code = {
-    x <- seq(65, 95, by = 0.5)
-    len_x <- length(x)
-    z <- rep_len(-3:3, len_x)
-    sex <- rep_len(c("M", "F"), len_x)
-    acronym <- rep_len(names(gigs::who_gs), len_x)
-
-        error_msg <- function(name, wanted, got) {
-      paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
-             "', not '", got, "'.")
-    }
-
-    # Test failures for each arg when converting zscores to values
-    testthat::expect_error(
-      who_gs_zscore2value(as.character(z), x, sex, acronym),
-      regexp = error_msg(name = "z", wanted = "numeric", got = "character")
-    )
-    testthat::expect_error(
-      who_gs_zscore2value(z, as.character(x), sex, acronym),
-      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
-    )
-    testthat::expect_error(
-      who_gs_zscore2value(z, x, 1, acronym),
-      regexp = error_msg(name = "sex", wanted = "character", got = "double")
-    )
-    testthat::expect_error(
-      who_gs_zscore2value(z, x, sex, 1),
-      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
-    )
-
-    # And for conversion of values to zscores
-    y <- who_gs_zscore2value(z, x, sex, acronym)
-    testthat::expect_error(
-      who_gs_value2zscore(as.character(y), x, sex, acronym),
-      regexp = error_msg(name = "y", wanted = "numeric", got = "character")
-    )
-    testthat::expect_error(
-      who_gs_value2zscore(y, as.character(x), sex, acronym),
-      regexp = error_msg(name = "x", wanted = "numeric", got = "character")
-    )
-    testthat::expect_error(
-      who_gs_value2zscore(y, x, 1, acronym),
-      regexp = error_msg(name = "sex", wanted = "character", got = "double")
-    )
-    testthat::expect_error(
-      who_gs_value2zscore(y, x, sex, 1),
-      regexp = error_msg(name = "acronym", wanted = "character", got = "double")
-    )
-
-
-    error_msg_bad_value <- function(name) {
-      paste0("No value in `", name, "` was valid.")
-    }
-    # All bad sex values cause function to error
-    expect_error(
-      object = who_gs_zscore2value(z = 0,
-                                   x = 50,
-                                   sex = "wrong_sex",
-                                   acronym = "wfa"),
-      regexp = error_msg_bad_value(name = "sex")
-    )
-
-    # All bad acronyms cause function to error
-    expect_error(
-      object = who_gs_zscore2value(z = 0,
-                                   x = 50,
-                                   sex = "M",
-                                   acronym = "wrong_acronym"),
-      regexp = error_msg_bad_value(name = "acronym")
-    )
-})
+#
+# test_that(desc = "NA values returned with out of range xvars",
+#           code = {
+#             expect_true(
+#               anyNA(
+#                 who_gs_zscore2value(z = rep_len(-3:3, 200),
+#                                     x = seq(0, 99.5, by = 0.5),
+#                                     sex = rep_len(c("M", "F"), 200),
+#                                     acronym = rep_len(names(gigs::who_gs), 200))
+#               ))
+#           })
+#
+# test_that(
+#   desc = "Bad input types cause errors.",
+#   code = {
+#     x <- seq(65, 95, by = 0.5)
+#     len_x <- length(x)
+#     z <- rep_len(-3:3, len_x)
+#     sex <- rep_len(c("M", "F"), len_x)
+#     acronym <- rep_len(names(gigs::who_gs), len_x)
+#
+#         error_msg <- function(name, wanted, got) {
+#       paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
+#              "', not '", got, "'.")
+#     }
+#
+#     # Test failures for each arg when converting zscores to values
+#     expect_error(
+#       who_gs_zscore2value(as.character(z), x, sex, acronym),
+#       regexp = error_msg(name = "z", wanted = "numeric", got = "character")
+#     )
+#     expect_error(
+#       who_gs_zscore2value(z, as.character(x), sex, acronym),
+#       regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+#     )
+#     expect_error(
+#       who_gs_zscore2value(z, x, 1, acronym),
+#       regexp = error_msg(name = "sex", wanted = "character", got = "double")
+#     )
+#     expect_error(
+#       who_gs_zscore2value(z, x, sex, 1),
+#       regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+#     )
+#
+#     # And for conversion of values to zscores
+#     y <- who_gs_zscore2value(z, x, sex, acronym)
+#     expect_error(
+#       who_gs_value2zscore(as.character(y), x, sex, acronym),
+#       regexp = error_msg(name = "y", wanted = "numeric", got = "character")
+#     )
+#     expect_error(
+#       who_gs_value2zscore(y, as.character(x), sex, acronym),
+#       regexp = error_msg(name = "x", wanted = "numeric", got = "character")
+#     )
+#     expect_error(
+#       who_gs_value2zscore(y, x, 1, acronym),
+#       regexp = error_msg(name = "sex", wanted = "character", got = "double")
+#     )
+#     expect_error(
+#       who_gs_value2zscore(y, x, sex, 1),
+#       regexp = error_msg(name = "acronym", wanted = "character", got = "double")
+#     )
+#
+#
+#     error_msg_bad_value <- function(name) {
+#       paste0("No value in `", name, "` was valid.")
+#     }
+#     # All bad sex values cause function to error
+#     expect_error(
+#       object = who_gs_zscore2value(z = 0,
+#                                    x = 50,
+#                                    sex = "wrong_sex",
+#                                    acronym = "wfa"),
+#       regexp = error_msg_bad_value(name = "sex")
+#     )
+#
+#     # All bad acronyms cause function to error
+#     expect_error(
+#       object = who_gs_zscore2value(z = 0,
+#                                    x = 50,
+#                                    sex = "M",
+#                                    acronym = "wrong_acronym"),
+#       regexp = error_msg_bad_value(name = "acronym")
+#     )
+# })

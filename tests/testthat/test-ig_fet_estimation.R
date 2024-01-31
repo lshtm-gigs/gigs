@@ -129,3 +129,39 @@ test_that(
     expect_true(all(gigs_ig_equality))
   }
 )
+
+# Functions still work with odd class structures -------------------------------
+
+#' @srrstats {G2.6, EA2.6} INTERGROWTH-21st Fetal Growth functions still
+#'   operate even when univariate inputs have unusual class structures, and
+#'   output correct results.
+test_that(
+  desc = "Test that univariate inputs with alternate class structures work",
+  code = {
+    skip_on_cran()
+
+    # Estimation of fetal weight
+    headcirc <- units::set_units(x = 29L, cm)
+    abdocirc <- units::set_units(x = 26L, cm)
+    efw <- ig_fet_estimate_fetal_weight(headcirc_mm = headcirc,
+                                        abdocirc_mm = abdocirc)
+    expect_vector(efw, ptype = double(), size = 1)
+    expect_equal(
+      efw, ig_fet_estimate_fetal_weight(headcirc_mm = 29L, abdocirc_mm = 26L)
+    )
+
+    # Estimation of gestational age
+    crl <- units::set_units(x = 30:60, mm)
+    femurlen <- units::set_units(x = 30:60, mm)
+    headcirc <- units::set_units(x = 230:260, mm)
+    ga <- ig_fet_estimate_ga(
+      crl_mm = crl,
+      headcirc_mm = femurlen,
+      femurlen_mm = headcirc
+    )
+    expect_vector(ga, ptype = double(), size = 31)
+    expect_equal(ga,
+                 ig_fet_estimate_ga(crl_mm = 30:60, headcirc_mm = 30:60,
+                                    femurlen_mm = 230:260))
+  }
+)

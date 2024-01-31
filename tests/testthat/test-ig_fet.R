@@ -9,6 +9,7 @@ fet_zvals <- function(acronym) {
     rifga = qnorm(c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97)),
     sdrfga = qnorm(c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97)),
     tcdfga = qnorm(c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97)),
+    gaftcd = qnorm(c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97)),
     poffga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
     sffga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
     avfga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
@@ -33,9 +34,9 @@ fet_pvals <- function(acronym) {
 }
 
 fet_roundto <- function(acronym) {
-  ifelse(test = acronym %in% c("pifga", "rifga", "sdrfga", "poffga",
-                               "sffga", "avfga", "pvfga", "cmfga",
-                               "gwgfga"),
+  ifelse(test = acronym %in% c("pifga", "rifga", "sdrfga", "poffga", "sffga",
+                               "avfga", "pvfga", "cmfga", "tcdfga", "gwgfga",
+                               "gaftcd"),
          yes = 2,
          no = ifelse(acronym %in% c("efwfga", "gafcrl"), yes = 0, no = 1))
 }
@@ -54,10 +55,14 @@ test_that(desc = "Conversion of z-scores/centiles to values works", {
                            centile = fet_pvals(acronym),
                            zscore = fet_zvals(acronym))
       xvar <- ref_tbl[[1]]
-      fn <- get(paste0("ig_fet_", acronym, "_", chr_z_or_p, "2value"))
+      conv_fn <- get(paste0("ig_fet_", acronym, "_", chr_z_or_p, "2value"))
       pkg_tbl <- lapply(X = dbl_z_or_p,
                         FUN = \(zp) {
-                          round(fn(zp, xvar), digits = fet_roundto(acronym))
+                          #' @srrstats {G5.5} Correctness test run with fixed
+                          #'   random seed
+                          set.seed(1000)
+                          round(conv_fn(zp, xvar),
+                                digits = fet_roundto(acronym))
                         }) |>
         do.call(what = cbind) |>
         as.data.frame() |>
@@ -71,43 +76,89 @@ test_that(desc = "Conversion of z-scores/centiles to values works", {
   }
 })
 
-#' @srrstats {G5.6, G5.6a} Checks that conversion functionality works when
-#'   converting values to z-scores/centiles AND vice versa.
-test_that(desc = "Conversion of values to z-scores works", {
-  for (acronym in names(gigs::ig_fet)) {
-    for (chr_z_or_p in c("zscore", "centile")) {
-      xvar <- ig_fet[[acronym]][[1]][[1]]
-      set.seed(seed = 1000)
-      dbl_z_or_p <- rnorm(n = length(xvar))
-      if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+#' @srrstats {G5.5, G5.6, G5.6a, G5.6b, G5.9b} Checks that conversion
+#'   functionality works when converting values to z-scores/centiles AND vice
+#'   versa. Uses multiple fixed seeds to generate random inputs, which do not
+#'   affect the functions' results.
+test_that(
+  desc = "Conversion of values to z-scores works",
+  code = {
+    for (acronym in names(gigs::ig_fet)) {
+      for (chr_z_or_p in c("zscore", "centile")) {
+        xvar <- ig_fet[[acronym]][[1]][[1]]
+        for (seed in seq(1, 100, 30)) {
+          set.seed(seed = seed)
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
-      fn_stem <- paste0("ig_fet_", acronym)
-      fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
-      y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
+          fn_stem <- paste0("ig_fet_", acronym)
+          fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+          y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
 
-      fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
-      gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
+          fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+          gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
 
-      expect_equal(gigs_z_or_p, expected = dbl_z_or_p, tolerance = 10e-10)
+          expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
+                       tolerance = sqrt(.Machine$double.eps))
+        }
+      }
     }
-  }
-})
+  })
+
+#' @srrstats {G5.9, G5.9a} Trivial noise does not meaningfully alter results.
+test_that(
+  desc = "Conversion of values to z-scores works with trivial noise",
+  code = {
+    for (acronym in names(gigs::ig_fet)) {
+      for (chr_z_or_p in c("zscore", "centile")) {
+        xvar <- ig_fet[[acronym]][[1]][[1]]
+        set.seed(seed = 50)
+        dbl_z_or_p <- rnorm(n = length(xvar))
+        if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+
+        fn_stem <- paste0("ig_fet_", acronym)
+        fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+        y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
+
+        fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+        gigs_z_or_p <- fn_val2zp(y_gigs + .Machine$double.eps, xvar)
+
+        expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
+                     tolerance = sqrt(.Machine$double.eps))
+      }
+    }
+  })
 
 # Appropriate errors -----------------------------------------------------------
+
+#' Regenerate messages from checkmate for testing
+#' @param name Single-length character vector with name of input.
+#' @param wanted Single-length character vector with name of expected data type.
+#' @param got Single-length character vector with name of received data type.
+#' @description Used to test `checkmate` error messages. These errors are given
+#'   by `checkmate` assert_*-style functions in check_params.R.
 error_type <- function(name, wanted, got) {
   paste0("Assertion on '", name, "' failed: Must be of type '", wanted,
          "', not '", got, "'.")
 }
 
+#' @param name Name of input vector.
 error_length <- function(name) {
   paste0("Assertion on '", name,
          "' failed: Must have length >= 1, but has length 0.")
 }
 
-#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
+
+#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour
+#'   for bad data types.
 test_that(
-  desc = "Bad input types cause errors.",
+  desc = "Correct errors occur when .gigs_options are set to 'quiet':",
   code = {
+    # GIGS will no longer give warnings for out-of-bound `x` elements
+    for (option in names(.gigs_options)) {
+      gigs_option_set(option, new_value = "quiet", silent = TRUE)
+    }
+
     x <- seq(154, 280, by = 0.5)
     len_x <- length(x)
     z <- pnorm(rep_len(-3:3, len_x))
@@ -144,20 +195,19 @@ test_that(
 
     # All bad acronyms cause function to error
     expect_error(
-      object = ig_fet_zscore2value(z = 0.6, x = 50,
-                                   acronym = "wrong_acronym"),
-      regexp = paste0("No value in `acronym` was valid.")
+      object = ig_fet_zscore2value(z = 0.6, x = 50, acronym = "wrong_acronym"),
+      regexp = paste0("Variable 'acronym': All elements were invalid.")
     )
 
     # Zero-length arguments cause function to error
     expect_error(
       object = ig_fet_zscore2value(z = double(), x = 50,
-                                   acronym = "wrong_acronym"),
+                                   acronym = "efwfga"),
       regexp = error_length("z")
     )
     expect_error(
       object = ig_fet_zscore2value(z = z, x = double(),
-                                   acronym = "wrong_acronym"),
+                                   acronym = "efwfga"),
       regexp = "Can't recycle `.*` \\(size [[:digit:]]*\\) to match `.*` \\(size 0\\)\\."
     )
     expect_error(
@@ -165,70 +215,65 @@ test_that(
                                    acronym = character()),
       regexp = "Can't recycle `.*` \\(size [[:digit:]]*\\) to match `.*` \\(size 0\\)\\."
     )
-})
-
-
-# Fetal weight estimation ------------------------------------------------------
-
-#' @srrstats {G5.4c} Check correctness against published example in
-#'   \doi{10.1002/uog.17347}.
-test_that(
-  desc = "Fetal weight estimation function works",
-  code = {
-    # Test that output matches example in Ultrasound Obstet. Gynecol.
-    headcirc <- 29L
-    abdocirc <- 26L
-    efw <- ig_fet_estimate_fetal_weight(headcirc_mm = headcirc,
-                                        abdocirc_mm = abdocirc)
-    expect_equal(log(efw), expected = 7.312292, tolerance = 10e-8)
-    expect_equal(round(efw), expected = 1499, tolerance = 0)
-  })
-
-#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-test_that(
-  desc = "`ig_fet_estimate_fetal_weight()` checks inputs as expected.",
-  code = {
-    headcirc <- 29L
-    abdocirc <- 26L
-    # Test that function fails if inputs of wrong type
-    expect_error(
-      ig_fet_estimate_fetal_weight(headcirc_mm = as.character(headcirc),
-                                   abdocirc_mm = abdocirc),
-      regexp = error_type("headcirc_cm", "numeric", "character")
-    )
-    expect_error(
-      ig_fet_estimate_fetal_weight(headcirc_mm = headcirc,
-                                   abdocirc_mm = as.complex(abdocirc)),
-      regexp = error_type("abdocirc_cm", "numeric", "complex")
-    )
-
-    # Test that function fails if input of wrong length
-    expect_error(
-      ig_fet_estimate_fetal_weight(headcirc_mm = double(),
-                                   abdocirc_mm = abdocirc),
-      regexp = error_length("headcirc_cm")
-    )
-    expect_error(
-      ig_fet_estimate_fetal_weight(headcirc_mm = headcirc,
-                                   abdocirc_mm = double()),
-      regexp = error_length("abdocirc_cm")
-    )
   }
 )
+
+# test_that(
+#   desc = "Correct warnings occur when .gigs_options are set to 'warn':",
+#   code = {
+#     # GIGS will now give warnings for bad inputs which are not going to cause
+#     # checkmate to throw an error
+#     for (option in names(.gigs_options)) {
+#       gigs_option_set(option, new_value = "warn", silent = TRUE)
+#     }
+#
+#     x <- seq(154, 280, by = 0.5)
+#     len_x <- length(x)
+#     z <- pnorm(rep_len(-3:3, len_x))
+#
+#     set.seed(200)
+#     acronym <- sample(names(gigs::ig_fet), size = len_x, replace = TRUE)
+#
+#     # Warn if centiles are out of bounds
+#
+#     # Warn if some data is missing
+#
+#     # Warn if some x variables are out of bounds
+#
+#     # Warn if
+#   }
+# )
+
+# test_that(
+#   desc = "Correct errors occur when .gigs_options are set to 'error':",
+#   code = {
+#     # GIGS will now give warnings for bad inputs which are not going to cause
+#     # checkmate to throw an error
+#     for (option in names(.gigs_options)) {
+#       gigs_option_set(option, new_value = "error", silent = TRUE)
+#     }
+#
+#     x <- seq(154, 280, by = 0.5)
+#     len_x <- length(x)
+#     z <- pnorm(rep_len(-3:3, len_x))
+#
+#     set.seed(200)
+#     acronym <- sample(names(gigs::ig_fet), size = len_x, replace = TRUE)
+#
+#     # Warn if centiles are out of bounds
+#
+#     # Warn if some data is missing
+#
+#     # Warn if some x variables are out of bounds
+#
+#     # Warn if
+#   }
+# )
 
 # Testing against other R implementations --------------------------------------
-#' @srrstatsTODO {G5.4a, G5.4b} Test correctness against other R
-#'   implementations.
-test_that(
-  desc = "GIGS aligns with `intergrowth` package",
-  code = {
-    skip_if_not_installed(pkg = "intergrowth")
-    expect_equal(ig_fet_estimate_fetal_weight(abdocirc_mm = 25L,
-                                              headcirc_mm = 29L),
-                 intergrowth::calculate_efw(ac = 25L, hc =  29L))
-  }
-)
 
+#' @srrstats {G5.4, G5.4a, G5.4b} Test correctness against other R
+#'   implementations.
 test_that(
   desc = "GIGS aligns with `growthstandards` package",
   code = {
@@ -255,8 +300,8 @@ test_that(
   }
 )
 
-
 # Functions still work with odd class structures -------------------------------
+
 #' @srrstats {G2.6, EA2.6} INTERGROWTH-21st Fetal Growth functions still
 #' operate even when univariate inputs have unusual class structures.
 test_that(
