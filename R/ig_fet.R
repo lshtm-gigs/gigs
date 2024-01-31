@@ -589,7 +589,7 @@ ig_fet_cmfga_value2zscore <- function(cist_mag_mm, gest_days) {
 #' @importFrom stats pnorm
 #' @export
 ig_fet_value2centile <- function(y, x, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
+  vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
     do.call(what = validate_ig_fet) |>
     do.call(what = ig_fet_v2z_internal) |>
     pnorm()
