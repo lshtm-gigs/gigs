@@ -65,25 +65,9 @@
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_zscore2value <- function(z, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(z = z,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
-    do.call(what = validate_ig_png)
-
-  df <- cbind(z = validated[["z"]],
-              ig_png_equations(x = validated[["x"]],
-                               sex = validated[["sex"]],
-                               acronym = validated[["acronym"]]))
-
-  ifelse(test = df[["logarithmic"]],
-         yes = exp(mu_sigma_z2y(z = df[["z"]],
-                                mu = df[["mu"]],
-                                sigma = df[["sigma"]])),
-         no = mu_sigma_z2y(z = df[["z"]],
-                           mu = df[["mu"]],
-                           sigma = df[["sigma"]])
-  )
+  vctrs::vec_recycle_common(z = z, x = x, sex = sex, acronym = acronym) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_z2v_internal)
 }
 
 #' @rdname ig_png_zscore2value
@@ -107,38 +91,43 @@ ig_png_hcfa_zscore2value <- function(z, pma_weeks, sex) {
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfl_zscore2value <- function(z, length_cm, sex) {
-  ig_png_zscore2value(z, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_zscore2value(z, length_cm, sex, acronym = "wfl")
 }
 
 #' @rdname ig_png_zscore2value
 #' @importFrom stats qnorm
 #' @export
 ig_png_centile2value <- function(p, x, sex, acronym) {
-  ig_png_zscore2value(z = qnorm(p), x = x, sex = sex, acronym = acronym)
+  validated <- vctrs::vec_recycle_common(p = p,
+                                         x = x,
+                                         sex = sex,
+                                         acronym = acronym) |>
+    do.call(what = validate_ig_png)
+  with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "wfa")
+  ig_png_centile2value(p, pma_weeks, sex, acronym = "wfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_lfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "lfa")
+  ig_png_centile2value(p, pma_weeks, sex, acronym = "lfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_hcfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p = p, pma_weeks, sex, acronym = "hcfa")
+  ig_png_centile2value(p, pma_weeks, sex, acronym = "hcfa")
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfl_centile2value <- function(p, length_cm, sex) {
-  ig_png_centile2value(p = p, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_centile2value(p, length_cm, sex, acronym = "wfl")
 }
 
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup>
@@ -192,17 +181,8 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
                                          x = x,
                                          sex = sex,
                                          acronym = acronym) |>
-    do.call(what = validate_ig_png)
-
-  df <- cbind(y = validated[["y"]],
-              ig_png_equations(x = validated[["x"]],
-                               sex = validated[["sex"]],
-                               acronym = validated[["acronym"]]))
-  mu_sigma_y2z(y = ifelse(test = df[["logarithmic"]],
-                          yes = log(df[["y"]]), no = df[["y"]]),
-               mu = df[["mu"]],
-               sigma = df[["sigma"]]
-  )
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal)
 }
 
 #' @rdname ig_png_value2zscore
@@ -233,7 +213,10 @@ ig_png_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
 #' @importFrom stats pnorm
 #' @export
 ig_png_value2centile <- function(y, x, sex, acronym) {
-  pnorm(ig_png_value2zscore(y, x, sex, acronym))
+  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_png_value2zscore
@@ -257,7 +240,40 @@ ig_png_hcfa_value2centile <- function(headcirc_cm, pma_weeks, sex) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
-  ig_png_value2centile(weight_kg, x = length_cm, sex = sex, acronym = "wfl")
+  ig_png_value2centile(weight_kg, length_cm, sex, acronym = "wfl")
+}
+
+# INTERNAL: INTERGROWTH-21st Postnatal Growth standards conversion logic -------
+
+#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Postnatal
+#' Growth standards
+#' @inherit ig_nbs_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+ig_png_z2v_internal <- function(z, x, sex, acronym) {
+  stop_if_lengths_unequal(z, x, sex, acronym)
+  png_coeffs <- ig_png_equations(x = x, sex = sex, acronym = acronym)
+  with(png_coeffs,
+       ifelse(test = is_logarithmic,
+              yes = exp(mu_sigma_z2y(z = z, mu = mu, sigma = sigma)),
+              no = mu_sigma_z2y(z = z, mu = mu, sigma = sigma))
+  )
+}
+
+#' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Postnatal
+#' Growth standards
+#' @inherit ig_nbs_zscore2value params return
+#' @note This function will fail if given inputs of different lengths.
+#' @noRd
+ig_png_v2z_internal <- function(y, x, sex, acronym) {
+  stop_if_lengths_unequal(y, x, sex, acronym)
+  png_coeffs <- ig_png_equations(x = x, sex = sex, acronym = acronym)
+  with(png_coeffs,
+       mu_sigma_y2z(
+         y = ifelse(test = is_logarithmic, yes = log(y), no = y),
+         mu = mu, sigma = sigma
+       )
+  )
 }
 
 #' INTERGROWTH-21<sup>st</sup> equations for postnatal size for age in preterm
@@ -353,7 +369,7 @@ ig_png_equations <- function(x, sex, acronym) {
                             yes = hcfa_sigma(out_df[["x"]]),
                             no = wfl_sigma(out_df[["x"]], sex)))
   )
-  out_df[["logarithmic"]] <- acronym %in% c("wfa", "lfa")
+  out_df[["is_logarithmic"]] <- acronym %in% c("wfa", "lfa")
   invalid_params <- !stats::complete.cases(out_df)
   out_df[["mu"]][invalid_params] <- NA
   out_df
