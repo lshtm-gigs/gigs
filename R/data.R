@@ -315,19 +315,8 @@ NULL
 #'   will replace elements of `sex` which are not `"M"` or `"F"` with `NA`
 #'   and warn you. This behaviour can be customised using the functions in
 #'   [gigs_options].
-#' @note Input vectors are recycled by [vctrs::vec_recycle_common()].
-#' @keywords internal
-NULL
-
-#' Shared z-score/centile roxygen parameters
-#'
-#' Much of the roxygen content in `[gigs]` is shared between different
-#' functions. This roxygen block is designed to make inheriting these parameters
-#' more simple.
-#'
-#' @name shared_zscore2value_returns
-#' @returns Numeric vector of z-scores/centiles with length equal to the
-#'   outputs from [vctrs::vec_recycle_common()].
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
+#'   adhere to the [vctrs] recycling rules.
 #' @keywords internal
 NULL
 
@@ -337,9 +326,22 @@ NULL
 #' functions. This roxygen block is designed to make inheriting these parameters
 #' more simple.
 #'
-#' @name shared_value2zscore_returns
+#' @name shared_zscore2value_returns
 #' @returns Numeric vector of expected measurements with length equal to the
-#'   outputs from [vctrs::vec_recycle_common()].
+#'   longest input vector.
+#' @keywords internal
+NULL
+
+
+#' Shared value to z-score/centile roxygen parameters
+#'
+#' Much of the roxygen content in `[gigs]` is shared between different
+#' functions. This roxygen block is designed to make inheriting these parameters
+#' more simple.
+#'
+#' @name shared_value2zscore_returns
+#' @returns Numeric vector of z-scores/centiles with length equal to the longest
+#'   input vector.
 #' @keywords internal
 NULL
 
