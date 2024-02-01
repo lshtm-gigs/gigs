@@ -14,7 +14,9 @@
 #'
 #'   By default, gigs will replace elements in `gest_days` that are out of
 #'   bounds for the growth standard in use with `NA` and warn you. This
-#'   behaviour can be customised using the functions in [gigs_options].
+#'   behaviour can be customised using the functions in [gigs_options]. If all
+#'   elements in `acronym` are not one of the above values, gigs will throw an
+#'   error.
 #' @param acronym Character vector of length one or more denoting the
 #'   INTERGROWTH-21<sup>st</sup> Newborn Size standard to use for each
 #'   observation. Each element should be one of:
@@ -428,7 +430,7 @@ ig_nbs_msnt_p2v <- function(p, gest_days, sex, acronym) {
   msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
   y <- rep_len(x = NA, length.out = length(p))
   # Remove NA p/mu/sigma/nu/tau values, or qST3C() will fail
-  lgl_complete_msnt <- stats::complete.cases(as.data.frame(msnt))
+  lgl_complete_msnt <- !is.na(p) & stats::complete.cases(as.data.frame(msnt))
   msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
   if (any(lgl_complete_msnt)) {
     y[lgl_complete_msnt] <- gamlss.dist::qST3C(p = p[lgl_complete_msnt],
@@ -451,7 +453,7 @@ ig_nbs_msnt_v2p <- function(y, gest_days, sex, acronym) {
   msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
   p <- rep_len(x = NA, length.out = length(y))
   # Remove NA y/mu/sigma/nu/tau values, or pST3() will fail
-  lgl_complete_msnt <- stats::complete.cases(as.data.frame(msnt))
+  lgl_complete_msnt <- !is.na(y) & stats::complete.cases(as.data.frame(msnt))
   msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
   if (any(lgl_complete_msnt)) {
     p[lgl_complete_msnt] <- gamlss.dist::pST3C(q =y[lgl_complete_msnt],

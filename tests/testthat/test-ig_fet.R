@@ -294,7 +294,7 @@ test_that(
 
         for (undefined_val in c(NaN, Inf, -Inf)) {
           ## Replace z/y/p variable with undefined_val
-          out <- gigs_fn(replace(arg_zyp, replace_ints_1, values = undefined_val),
+          out <- gigs_fn(replace(arg_zyp, replace_ints_1, undefined_val),
                          arg_x, arg_acronym)
           checkmate::expect_numeric(out, len = len_x)
           expect_true(all(!is.nan(out[replace_ints_1]) &
@@ -302,15 +302,15 @@ test_that(
 
           ## Replace x variable with undefined_val
           out <- gigs_fn(arg_zyp,
-                         replace(arg_x, replace_ints_2, values = undefined_val),
+                         replace(arg_x, replace_ints_2, undefined_val),
                          arg_acronym)
           checkmate::expect_numeric(out, len = len_x)
           expect_true(all(!is.nan(out[replace_ints_2]) &
                             is.na(out[replace_ints_2])))
 
           ## Replace z/y/p variable and x variable with undefined_val
-          out <- gigs_fn(replace(arg_zyp, replace_ints_1, values = undefined_val),
-                         replace(arg_x, replace_ints_2, values = undefined_val),
+          out <- gigs_fn(replace(arg_zyp, replace_ints_1, undefined_val),
+                         replace(arg_x, replace_ints_2, undefined_val),
                          arg_acronym)
           checkmate::expect_numeric(out, len = len_x)
           expect_true(all(!is.nan(out[replace_ints_3]) &
@@ -575,11 +575,13 @@ test_that(
         # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ------------
         if (fn_suffix == "centile2value") {
           expect_warning(
-            gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5), arg_x, arg_acronym),
+            gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5),
+                    arg_x, arg_acronym),
             msg_centile_oob(len_x, num_to_replace1)
           )
           expect_warning(
-            gigs_fn(replace(arg_zyp, replace_ints_3, values = -.5), arg_x, arg_acronym),
+            gigs_fn(replace(arg_zyp, replace_ints_3, values = -.5),
+                    arg_x, arg_acronym),
             msg_centile_oob(len_x, num_to_replace3)
           )
         }
@@ -692,13 +694,15 @@ test_that(
         # Bad input 2: Missing data (NA) ---------------------------------------
         ## Replace z/y/p variable with NA
         expect_error(
-          gigs_fn(replace(arg_zyp, replace_ints_1, NA), arg_x, arg_acronym),
+          gigs_fn(replace(arg_zyp, replace_ints_1, NA), arg_x,
+                  arg_acronym),
           regexp = msg_missing(arg_zyp_name, len_x, num_to_replace1)
         )
 
         ## Replace x variable with NA
         expect_error(
-          gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, NA), arg_acronym),
+          gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, NA),
+                  arg_acronym),
           regexp = msg_missing("x", len_x, num_to_replace2)
         )
 
@@ -713,11 +717,13 @@ test_that(
         # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ------------
         if (fn_suffix == "centile2value") {
           expect_error(
-            gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5), arg_x, arg_acronym),
+            gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5),
+                    arg_x, arg_acronym),
             msg_centile_oob(len_x, num_to_replace1)
           )
           expect_error(
-            gigs_fn(replace(arg_zyp, replace_ints_3, values = -.5), arg_x, arg_acronym),
+            gigs_fn(replace(arg_zyp, replace_ints_3, values = -.5),
+                    arg_x, arg_acronym),
             msg_centile_oob(len_x, num_to_replace3)
           )
         }

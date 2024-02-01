@@ -46,7 +46,9 @@
 #'
 #'   This argument is case-sensitive. By default, gigs will replace elements in
 #'   `acronym` which are not one of the above values with `NA` and warn you.
-#'   This behaviour can be customised using the functions in [gigs_options].
+#'   This behaviour can be customised using the functions in [gigs_options]. If
+#'   all elements in `acronym` are not one of the above values, gigs will
+#'   throw an error.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @param gest_days,crl_mm,tcd_mm Numeric vector of length one or more with
 #'   standard-specific `x` variables. See the documentation for `x` for

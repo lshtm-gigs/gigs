@@ -431,6 +431,9 @@ msg_oob_centiles <- function(lgl_oob_centiles, varname) {
 #'   whether each element of a vector was `!is.nan() & is.na()`.
 #' @noRd
 msg_missing_data <- function(lgl_missing_data, varname) {
+  if (all(lgl_missing_data) & varname == "acronym") {
+    stop("Variable '", varname, "': All elements were missing (`NA`).")
+  }
   paste0("Variable '", varname, "': ", sum(lgl_missing_data), " in ",
          length(lgl_missing_data), " elements were missing (`NA`).")
 }

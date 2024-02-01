@@ -27,7 +27,9 @@
 #'
 #'   This argument is case-sensitive. By default, gigs will replace elements in
 #'   `acronym` which are not one of the above values with `NA` and warn you.
-#'   This behaviour can be customised using the functions in [gigs_options].
+#'   This behaviour can be customised using the functions in [gigs_options]. If
+#'   all elements in `acronym` are not one of the above values, gigs will throw
+#'   an error.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
@@ -477,7 +479,8 @@ who_gs_lms_v2z <- function(y, l, m, s, acronym) {
 #' restrainment
 #'
 #' @param z_unconstrained A numeric vector of length one or more with
-#'   unconstrained z-scores calculated using values and Cole's (1990) LMS method.
+#'   unconstrained z-scores calculated using values and Cole's (1990) LMS
+#'   method.
 #' @param y A numeric vector of the same length as `z` with measured values.
 #' @param l,m,s Numeric vectors of the same length as `z` with lambda/mu/sigma
 #'   values to use in the constraining procedure.

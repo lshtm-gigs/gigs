@@ -69,7 +69,9 @@ Size standard in use (defined by \code{acronym}). These are:
 
 By default, gigs will replace elements in \code{gest_days} that are out of
 bounds for the growth standard in use with \code{NA} and warn you. This
-behaviour can be customised using the functions in \link{gigs_options}.}
+behaviour can be customised using the functions in \link{gigs_options}. If all
+elements in \code{acronym} are not one of the above values, gigs will throw an
+error.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs

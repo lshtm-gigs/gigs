@@ -185,7 +185,9 @@ should be one of:
 
 This argument is case-sensitive. By default, gigs will replace elements in
 \code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}.}
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will
+throw an error.}
 
 \item{gest_days, crl_mm, tcd_mm}{Numeric vector of length one or more with
 standard-specific \code{x} variables. See the documentation for \code{x} for
