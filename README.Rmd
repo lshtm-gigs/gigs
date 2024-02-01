@@ -16,7 +16,7 @@ intergrowth21st <- knitr::asis_output(x = "INTERGROWTH-21<sup>st</sup>")
 library(gigs)
 ```
 
-```{r srr-tags, eval = FALSE, echo = FALSE}
+```{r srr-tags-1, eval = FALSE, echo = FALSE}
 #' srr-tags-readme
 #'
 #' @srrstats {G1.1} Addressed existence of other packages/implementations in
@@ -133,7 +133,7 @@ remotes::install_github(repo = "lshtm-gigs/gigs")
 
 ## Conversion functions
 ### Terminology
-```{r srr-stats-2, eval = FALSE, echo = FALSE}
+```{r srr-tags-2, eval = FALSE, echo = FALSE}
 #' @srrstats {G1.3} Explained z-scores and centiles prior to discussing
 #'   functions which convert between these and measured values.
 ```
@@ -340,6 +340,12 @@ inputs, each package took:
 | `r zanthro`     | 2.05 seconds                |
 | `r anthro`      | 2.22 seconds                |
 | `r intergrowth` | NA (no WHO functions)       |
+
+```{r srr-tags-3, eval = FALSE, echo = FALSE}
+#' @srrstats {G1.5, G1.6} The linked article contains code for both performance
+#'   and accuracy claims when comparing this package with other software
+#'   packages.
+```
 
 The results can be seen in the online benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).

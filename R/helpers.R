@@ -82,3 +82,4 @@ remove_attributes <- function(x) {
 
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
+NULL

@@ -184,3 +184,4 @@ fn_on_subset <- function(fn, lgl, in1, in2, in3) {
 
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
+NULL

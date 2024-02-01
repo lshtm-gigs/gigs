@@ -1185,13 +1185,14 @@ ig_fet_gwg_z2y <- function(z, gest_days) {
 #' @srrstats {G1.0} Primary literature referenced for each exported function,
 #'   and for internal functions.
 #' @srrstats {G1.4, G1.4a} All functions in file documented using `{roxygen2}`.
-#' @srrstats {G2.0a, G2.1a} Exported function in this file document expectations
-#'   on the length of inputs and their data types.
-#' @srrstats {G2.0, G2.1, G2.2, G2.3, 2.3a, G2.6} These standards
+#' @srrstats {G2.0a, G2.1a, EA1.3} Exported function in this file document
+#'   expectations on the length of inputs and their data types.
+#' @srrstats {G2.0, G2.1, G2.2, G2.3, G2.3a, G2.6} These standards
 #'   are met in all exported functions by passing inputs to [validate_ig_fet()].
 #'   All internal functions in this script are provided with vectors that have
 #'   already been validated.
-#' @srrstatsTODO {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
+#' @srrstats {G2.13, G2.14, G2.14a, G2.14b, G2.16} These standards are met
 #'   in all exported functions by passing inputs to [validate_ig_fet()]. All
 #'   internal functions in this script are provided with vectors that have
 #'   already checked for missing/undefined/out-of-bounds data.
+NULL
