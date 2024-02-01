@@ -65,7 +65,7 @@
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_zscore2value <- function(z, x, sex, acronym) {
-  vctrs::vec_recycle_common(z = z, x = x, sex = sex, acronym = acronym) |>
+  list(z = z, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_png) |>
     do.call(what = ig_png_z2v_internal)
 }
@@ -98,10 +98,7 @@ ig_png_wfl_zscore2value <- function(z, length_cm, sex) {
 #' @importFrom stats qnorm
 #' @export
 ig_png_centile2value <- function(p, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(p = p,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
+  validated <- list(p = p, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_png)
   with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
@@ -177,10 +174,7 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_value2zscore <- function(y, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
+  list(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_png) |>
     do.call(what = ig_png_v2z_internal)
 }
@@ -213,7 +207,7 @@ ig_png_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
 #' @importFrom stats pnorm
 #' @export
 ig_png_value2centile <- function(y, x, sex, acronym) {
-  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+  list(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_png) |>
     do.call(what = ig_png_v2z_internal) |>
     pnorm()

@@ -9,27 +9,31 @@
 #'   `NULL`. Whether `y`, `z`, or `p` is provided, an error will be thrown if
 #'   they are not an atomic vector with length 1 or greater. If `p` is provided,
 #'   values of `p` which are not between `0` and `1` will be replaced with `NA`.
-#' @returns This function invisibly returns `NULL`. It is called for its side
-#'   effect, which is to replace either `y`, `z`, or `p` in the frame 'above'
-#'   this function, after checking the validity for use in gigs.
+#' @returns Returns a list containing `y`, `z`, or `p`, with the
+#'   non-`NULL` of the input arguments having been checked for (1) being
+#'   numeric, (2) having length >= 1, (3) being atomic, and (4) + (5) being
+#'   checked for missing/undefined data.
 #' @noRd
 validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
-  args <- list(y = y, z = z, p = p)
-  arg_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
-  stopifnot(sum(arg_nulls) == 2L) # Error should never be seen by user
-  varname <- names(arg_nulls)[!arg_nulls]
-  vec <- args[!arg_nulls][[1]]  |>
+  yzp <- list(y = y, z = z, p = p)
+  yzp_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
+  stopifnot(sum(yzp_nulls) == 2L) # Error should never be seen by user
+  varname <- names(yzp_nulls)[!yzp_nulls]
+  vec <- yzp[!yzp_nulls][[1]]
+  vec <- vec |>
     checkmate::assert_numeric(min.len = 1, .var.name = varname) |>
-    checkmate::assert_atomic_vector() |>
+    checkmate::assert_atomic_vector()
+  vec <- vec |>
     remove_attributes() |>
     handle_missing_data(varname = varname) |>
     handle_undefined_data(varname = varname)
 
   # Flag bad centile values
-  if (!arg_nulls[["p"]]) {
+  if (!yzp_nulls[["p"]]) {
     vec <- handle_oob_centiles(vec)
   }
-  assign(x = varname, value = vec, envir = parent.frame(n = 1))
+  yzp[!yzp_nulls][[1]] <- vec
+  yzp
 }
 
 #' Validate user-inputted x variables prior to growth standard conversion
@@ -46,11 +50,20 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL) {
 #' @noRd
 validate_xvar <- function(x, acronym, standard) {
   checkmate::qassert(standard, rules = "S1")
-  # Leave function if vector already validated
   x <- x |>
     checkmate::assert_numeric(min.len = 1) |>
-    checkmate::assert_atomic_vector() |>
-    remove_attributes()
+    checkmate::assert_atomic_vector()
+  x <- remove_attributes(x) |>
+    handle_missing_data(varname = "x") |>
+    handle_undefined_data(varname = "x")
+
+  # Recycle to get x/acronym to same length if not already
+  lens <- lengths(list(x = x, acronym = acronym))
+  if (lens[1] != lens[2]) {
+    lengthened <- vctrs::vec_recycle_common(x = x, acronym = acronym)
+    x <- lengthened[["x"]]
+    acronym <- lengthened[["acronym"]]
+  }
   unique_acronyms <- unique(acronym[!is.na(acronym)])
   is_oob_overall <- logical(length = length(x))
   is_na_x <- is.na(x)
@@ -60,9 +73,7 @@ validate_xvar <- function(x, acronym, standard) {
     range <- xvar_ranges[[standard]][[chr_acronym]]
     is_oob_overall[!is_na_x & is_curr_acronym & !inrange(x, range)] <- TRUE
   }
-
-  handle_oob_xvar(vec = x, varname = checkmate::vname(x),
-                  is_oob = is_oob_overall)
+  handle_oob_xvar(vec = x, varname = "x", is_oob = is_oob_overall)
 }
 
 #' Validate user-inputted character vectors
@@ -79,9 +90,10 @@ validate_xvar <- function(x, acronym, standard) {
 validate_chr <- function(chr, options) {
   varname <- deparse(substitute(chr))
   gigs_opt <- paste0("handle_invalid_", varname)
-  chr |>
+  chr <- chr |>
     checkmate::assert_character(min.len = 1, .var.name = varname) |>
-    checkmate::assert_atomic_vector() |>
+    checkmate::assert_atomic_vector()
+  chr |>
     remove_attributes() |>
     handle_missing_data(varname = varname) |>
     handle_undefined_data(varname = varname) |>
@@ -135,16 +147,19 @@ validate_acronym <- function(acronym, allowed_acronyms, standard) {
 #'   depending on which was provided to the function.
 #' @noRd
 validate_who_gs <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
-  validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
+  validate_parameter_lengths(y = y, z = z, p = p, x = x, sex = sex,
+                             acronym = acronym)
+  yzp <- validate_yzp(y = y, z = z, p = p)
   standard <- "who_gs"
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::who_gs),
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym)
   sex <- validate_sex(sex)
-
-  list(y = y, z = z, p = p, x = x, sex = sex, acronym = acronym) |>
-    drop_null_elements()
+  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex,
+       acronym = acronym) |>
+    drop_null_elements() |>
+    do.call(what = vctrs::vec_recycle_common)
 }
 
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_nbs`
@@ -171,16 +186,19 @@ validate_ig_nbs <- function(y = NULL,
                             gest_days,
                             sex,
                             acronym) {
-  validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
+  validate_parameter_lengths(y = y, z = z, p = p, gest_days = gest_days,
+                             sex = sex, acronym = acronym)
+  yzp <- validate_yzp(y = y, z = z, p = p)
   standard <- "ig_nbs"
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::ig_nbs),
                               standard = standard)
   gest_days <- validate_xvar(gest_days, standard = standard, acronym = acronym)
   sex <- validate_sex(sex)
-  list(y = y, z = z, p = p, gest_days = gest_days, sex = sex,
-       acronym = acronym) |>
-    drop_null_elements()
+  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], gest_days = gest_days,
+       sex = sex, acronym = acronym) |>
+    drop_null_elements() |>
+    do.call(what = vctrs::vec_recycle_common)
 }
 
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_png`
@@ -201,15 +219,19 @@ validate_ig_nbs <- function(y = NULL,
 #'   depending on which was provided to the function.
 #' @noRd
 validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
-  validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
+  validate_parameter_lengths(y = y, z = z, p = p, x = x, sex = sex,
+                             acronym = acronym)
+  yzp <- validate_yzp(y = y, z = z, p = p)
   standard <- "ig_png"
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::ig_png),
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym)
   sex <- validate_sex(sex)
-  list(y = y, z = z, p = p, x = x, sex = sex, acronym = acronym) |>
-    drop_null_elements()
+  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex,
+       acronym = acronym) |>
+    drop_null_elements() |>
+    do.call(what = vctrs::vec_recycle_common)
 }
 
 #' Check whether user-inputted `z`, `y`, `gest_days` and `acronym` values are
@@ -221,21 +243,23 @@ validate_ig_png <- function(y = NULL, z = NULL, p = NULL, x, sex, acronym) {
 #'   age values in days.
 #' @param sex Character vector of length one or more with user-inputted sex
 #'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
-#' @returns List with names `"gest_days"`, and `"acronym"`, containing vectors
-#'   where invalid `gest_days` and `acronym` elements have been replaced with
-#'   `NA`. If either of `x` or `acronym` are the wrong type or length, an
-#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
-#'   depending on which was provided to the function.
+#' @returns List with five elements named `"y"`, `"z"`, `"p"`, and
+#'   `"x"`, and `"acronym"`. Each of these values will contain the parameter
+#'   they share a name with, but all invalid values in each vector will have
+#'   been replaced with `NA`. If any parameters are the wrong type or length,
+#'   errors will be thrown.
 #' @noRd
 validate_ig_fet <- function(y = NULL, z = NULL, p = NULL, x, acronym) {
-  validate_yzp(y = y, z = z, p = p) # Uses assign() to replace one of y/z/p
+  validate_parameter_lengths(y = y, z = z, p = p, x = x, acronym = acronym)
+  yzp <- validate_yzp(y = y, z = z, p = p)
   standard <- "ig_fet"
   acronym <- validate_acronym(acronym = acronym,
                               allowed_acronyms = names(gigs::ig_fet),
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym)
-  list(y = y, z = z, p = p, x = x, acronym = acronym) |>
-    drop_null_elements()
+  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, acronym = acronym) |>
+    drop_null_elements() |>
+    do.call(what = vctrs::vec_recycle_common)
 }
 
 # Parameter validation for IG-21st estimation equations
@@ -252,11 +276,49 @@ validate_ig_fet_estimation_param <- function(var) {
     return(var)
   }
   varname <- deparse(substitute(var))
-  checkmate::assert_numeric(var, min.len = 1, .var.name = varname) |>
-    checkmate::assert_atomic_vector(.var.name = varname) |>
+  var <- checkmate::assert_numeric(var, min.len = 1, .var.name = varname) |>
+    checkmate::assert_atomic_vector(.var.name = varname)
+  var |>
     remove_attributes() |>
     handle_missing_data(varname = varname) |>
     handle_undefined_data(varname = varname)
+}
+
+#' Throw an error if inputs cannot be recycled, with a special message if any
+#' input was zero-length
+#' @param ... A set of named arguments.
+#' @returns Invisibly returns `NULL`. Called for its side effect of throwing
+#'   errors if inputs have bad lengths, either because they are zero length or
+#'   because they cannot be recycled.
+validate_parameter_lengths <- function(...) {
+  inputs <- list(...)
+  null_inputs <- vapply(inputs, FUN = is.null, FUN.VALUE = logical(1))
+  input_lengths <- lengths(inputs)[!null_inputs]
+  # Stop with informative error if any inputs have length 0
+  is_zero_length <- input_lengths == 0
+  if (any(is_zero_length)) {
+    zero_len_names <- names(input_lengths)[is_zero_length]
+    count <- sum(is_zero_length)
+    var_str <- if(count > 1) "Variables" else "Variable"
+    input_str <- if(count > 1) "Inputs" else "Input"
+    varname_str <- paste0(zero_len_names, collapse = "', '")
+    stop(var_str, " '", varname_str, "': ", input_str, " had length 0, but ",
+         "must have length 1 or greater.", call. = FALSE)
+  }
+  # Stop with informative error if inputs are not recyclable
+  is_max_input_length <- input_lengths == max(input_lengths)
+  is_not_recyclable <- input_lengths != 1 & !is_max_input_length
+  if (any(is_not_recyclable)) {
+    unrecyclable_names <- names(input_lengths)[is_not_recyclable]
+    count <- sum(is_not_recyclable)
+    var_str <- if(count > 1) "Variables" else "Variable"
+    input_str <- if(count > 1) "These inputs" else "This input"
+    varname_str <- paste0(unrecyclable_names, collapse = "', '")
+    stop(var_str, " '", varname_str, "': ", input_str, " cannot be recycled ",
+         "with `vctrs::vec_recycle_common()`. Check the documentation to ",
+         "ensure your inputs adhere to the vctrs recycling rules ",
+         "(https://vctrs.r-lib.org/reference/vec_recycle.html).", call. = FALSE)
+  }
 }
 
 # Handle missing, undefined, or invalid data inputs ----------------------------
@@ -338,13 +400,9 @@ handle_var <- function(vec, varname, option, test_fn, msg_fn) {
   opt_value <- gigs_option_get(option, silent = TRUE)
   out <- replace(vec, lgl_is_invalid, values = NA)
   str_msg <- msg_fn(lgl_is_invalid, varname = varname)
-  if (opt_value == "quiet") {
-    return(out)
-  }
-  if (opt_value == "error") {
-    stop(str_msg, call. = FALSE)
-  }
-  warning(str_msg, call. = FALSE)
+  switch(opt_value,
+         "warn" = warning(str_msg, call. = FALSE),
+         "error" = stop(str_msg, call. = FALSE))
   out
 }
 
@@ -368,8 +426,8 @@ msg_oob_centiles <- function(lgl_oob_centiles, varname) {
 }
 
 #' @rdname msg_oob_centiles
-#' @param lgl_invalid_sex Logical vector of length one or more denoting
-#'   whether each element of a vector was `!is.na()`.
+#' @param lgl_missing_data Logical vector of length one or more denoting
+#'   whether each element of a vector was `!is.nan() & is.na()`.
 #' @noRd
 msg_missing_data <- function(lgl_missing_data, varname) {
   paste0("Variable '", varname, "': ", sum(lgl_missing_data), " in ",
@@ -408,7 +466,6 @@ msg_oob_xvar <- function(lgl_oob_xvar, varname) {
 msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
   count <- sum(lgl_invalid_sex_acronym)
   len <- length(lgl_invalid_sex_acronym)
-
   if (varname == "sex") {
     paste0("Variable 'sex': ", count, " in ", len, " elements were neither ",
            "\"M\" nor \"F\".")

@@ -128,7 +128,7 @@
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_zscore2value <- function(z, x, acronym) {
-  vctrs::vec_recycle_common(z = z, x = x, acronym = acronym) |>
+  list(z = z, x = x, acronym = acronym) |>
     do.call(what = validate_ig_fet) |>
     do.call(what = ig_fet_z2v_internal)
 }
@@ -257,7 +257,7 @@ ig_fet_cmfga_zscore2value <- function(z, gest_days) {
 #' @importFrom stats qnorm
 #' @export
 ig_fet_centile2value <- function(p, x, acronym) {
-  validated <- vctrs::vec_recycle_common(p = p, x = x, acronym = acronym) |>
+  validated <- list(p = p, x = x, acronym = acronym) |>
     do.call(what = validate_ig_fet)
   with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
@@ -460,7 +460,7 @@ ig_fet_cmfga_centile2value <- function(p, gest_days) {
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_value2zscore <- function(y, x, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
+  list(y = y, x = x, acronym = acronym) |>
     do.call(what = validate_ig_fet) |>
     do.call(what = ig_fet_v2z_internal)
 }
@@ -589,7 +589,7 @@ ig_fet_cmfga_value2zscore <- function(cist_mag_mm, gest_days) {
 #' @importFrom stats pnorm
 #' @export
 ig_fet_value2centile <- function(y, x, acronym) {
-  vctrs::vec_recycle_common(y = y, x = x, acronym = acronym) |>
+  list(y = y, x = x, acronym = acronym) |>
     do.call(what = validate_ig_fet) |>
     do.call(what = ig_fet_v2z_internal) |>
     pnorm()
@@ -901,7 +901,8 @@ ig_fet_mu_sigma <- function(x, acronym) {
 #' @noRd
 ig_fet_mu_sigma_y2z <- function(y, x, acronym) {
   mu_sigma <- ig_fet_mu_sigma(x = x, acronym = acronym)
-  y[acronym == "cmfga"] <- log(y[acronym == "cmfga"])
+  is_cmfga <- !is.na(acronym) & acronym == "cmfga"
+  y[is_cmfga] <- log(y[is_cmfga])
   with(mu_sigma, mu_sigma_y2z(y, mu, sigma))
 }
 

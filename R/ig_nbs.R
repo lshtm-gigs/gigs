@@ -82,10 +82,7 @@
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(p = p,
-                                         gest_days = gest_days,
-                                         sex = sex,
-                                         acronym = acronym) |>
+  list(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_nbs) |>
     do.call(what = ig_nbs_c2v_internal)
 }
@@ -136,8 +133,8 @@ ig_nbs_ffmfga_centile2value <- function(p, gest_days, sex) {
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_zscore2value <- function(z, gest_days, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(z = z, gest_days = gest_days,
-                                         sex = sex, acronym = acronym) |>
+  validated <- list(z = z, gest_days = gest_days, sex = sex,
+                    acronym = acronym) |>
     do.call(what = validate_ig_nbs)
   with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
@@ -237,10 +234,7 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y,
-                                         gest_days = gest_days,
-                                         sex = sex,
-                                         acronym = acronym) |>
+  list(y = y, gest_days = gest_days, sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_nbs) |>
     do.call(what = ig_nbs_v2c_internal)
 }
@@ -291,8 +285,8 @@ ig_nbs_ffmfga_value2centile <- function(fatfree_mass_g, gest_days, sex) {
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_value2zscore <- function(y, gest_days, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(y = y, gest_days = gest_days,
-                                         sex = sex, acronym = acronym) |>
+  validated <- list(y = y, gest_days = gest_days,
+                    sex = sex, acronym = acronym) |>
     do.call(what = validate_ig_nbs)
   with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
     qnorm()
@@ -585,7 +579,9 @@ ig_nbs_bodycomp_mu_sigma <- function(gest_days, sex, acronym) {
   # `data-raw/sysdata.R` or the INTERGROWTH-21st body composition vignette
   params_li <- ig_nbs_bc_li[acronym_sex]
   params_null <- vapply(params_li, is.null, FUN.VALUE = logical(length = 1L))
-  params_li[params_null] <- rep(list(rep(NA, 5)), sum(params_null))
+  if (any(params_null)) {
+    params_li[params_null] <- rep(list(rep(NA, 5)), sum(params_null))
+  }
 
   # Unlist is a relative bottleneck here, could refactor later *if* too slow
   params <- matrix(unlist(params_li, recursive = FALSE, use.names = FALSE),

@@ -85,7 +85,7 @@
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
-  vctrs::vec_recycle_common(z = z, x = x, sex = sex, acronym = acronym) |>
+  list(z = z, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_who_gs) |>
     do.call(what = who_gs_z2v_internal)
 }
@@ -148,10 +148,7 @@ who_gs_tsfa_zscore2value <- function(z, age_days, sex) {
 #' @importFrom stats qnorm
 #' @export
 who_gs_centile2value <- function(p, x, sex, acronym) {
-  validated <- vctrs::vec_recycle_common(p = p,
-                                         x = x,
-                                         sex = sex,
-                                         acronym = acronym) |>
+  validated <- list(p = p, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_who_gs)
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
@@ -262,7 +259,7 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_value2zscore <- function(y, x, sex, acronym) {
-  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+  list(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_who_gs) |>
     do.call(what = who_gs_v2z_internal)
 }
@@ -325,7 +322,7 @@ who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
 #' @importFrom stats pnorm
 #' @export
 who_gs_value2centile <- function(y, x, sex, acronym) {
-  vctrs::vec_recycle_common(y = y, x = x, sex = sex, acronym = acronym) |>
+  list(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = validate_who_gs) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()

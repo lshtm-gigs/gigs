@@ -45,9 +45,7 @@ inrange <- function(x, vec) {
 #'   passed-in objects are not equal.
 #' @noRd
 stop_if_lengths_unequal <- function(...) {
-  lengths <- vapply(X = list(...),
-                    FUN = length,
-                    FUN.VALUE = numeric(length = 1L))
+  lengths <- lengths(x = list(...))
   if (length(unique(lengths)) > 1) {
     stop(paste("Your inputs had different lengths. Please give the function",
                "input vectors of the same length."), call. = FALSE)
