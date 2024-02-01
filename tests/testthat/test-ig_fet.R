@@ -474,7 +474,7 @@ msg_acronym_invalid <- function(length, int_undefined) {
 }
 
 #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-#' @srrstats{G5.8, G5.8c, G5.8d} Show that gigs can handle data outside the
+#' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
 #'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
 #'   warnings.
 test_that(
@@ -752,6 +752,65 @@ test_that(
                   replace(arg_acronym, replace_ints_2,
                           as.character(seq_len(num_to_replace2)))),
           msg_acronym_invalid(len_x, num_to_replace2)
+        )
+      }
+    }
+  }
+)
+
+#' @srrstats {G5.8c} Show how the ig_fet functions handles all-`NA` inputs.
+test_that(
+  desc = "",
+  code = {
+    # Make gigs error if confronted with any bad data
+    for (option in names(.gigs_options)) {
+      gigs_option_set(option, new_value = "warn", silent = TRUE)
+    }
+
+    fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
+                     "zscore2value")
+    z <- 0
+    p <- 0.5
+
+    for (fn_suffix in fn_suffixes) {
+      fn_name <- paste("ig_fet", fn_suffix, sep = "_")
+      gigs_fn <- get(fn_name)
+      for (seed in c(125, 175, 225)) {
+        set.seed(seed)
+        acronym <- sample(names(gigs::ig_fet), size = 1)
+        x <- gigs::ig_fet[[acronym]][[1]][[1]]
+        len_x <- length(x)
+        arg_zyp <- switch(fn_suffix,
+                          centile2value = rep_len(p, len_x),
+                          zscore2value = rep_len(z, len_x),
+                          gigs::ig_fet[[acronym]][[1]][[1]])
+        arg_zyp_name <- switch(fn_suffix, centile2value = "p",
+                               zscore2value = "z", "y")
+        arg_x <- x
+        arg_acronym <- rep_len(acronym, len_x)
+        all_NA <- rep(NA, len_x)
+
+        # Will produce all NAs for `y` argument, with a warning
+        expect_warning(
+          gigs_fn(all_NA, arg_x, arg_acronym),
+          msg_missing(name = arg_zyp_name, len_x, len_x)
+        )
+        # Will produce all NAs for the `x` argument
+        expect_warning(
+          gigs_fn(arg_zyp, all_NA, arg_acronym),
+          msg_missing(name = "x", len_x, len_x)
+        )
+        # Will produce an error with the `acronym` argument
+        expect_error(
+          gigs_fn(arg_zyp, arg_x, all_NA),
+          regexp = "Variable 'acronym': All elements were missing \\(`NA`\\)."
+        )
+        # All invalid `acronym`s will also produce an error
+        expect_error(
+          gigs_fn(arg_zyp, arg_x, rep("not valid acronym!! oh no!", len_x)),
+          regexp = paste0("Variable 'acronym': All elements were invalid. ",
+                          "See the 'ig_fet' documentation for valid 'acronym' ",
+                          "values.")
         )
       }
     }
