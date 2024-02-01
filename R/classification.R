@@ -299,7 +299,7 @@ classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) 
 #' @srrstats {G2.0} Each classification function eventually passes its inputs to
 #'   a `*_value2zscore()`/`*_value2centile()` function, which enforces specific
 #'   conditions on input lengths.
-#' @srrstats {G2.0a} Documentation in this script explicitly references
+#' @srrstats {G2.0a, EA1.3} Documentation in this script explicitly references
 #'   length of inputs and recycling with [vctrs::vec_recycle_common()].
 #'   Single-length inputs are explicitly referenced in the documentation and
 #'   checked in their respective functions.
@@ -308,3 +308,4 @@ classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) 
 #' @srrstats {G2.3, G2.3a, G2.3b} Univariate character inputs are restricted to
 #'   specific inputs by `{checkmate}` calls; these are case-sensitive and
 #'   documented as such.
+NULL
