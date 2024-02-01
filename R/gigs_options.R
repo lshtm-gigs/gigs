@@ -22,16 +22,19 @@
 #'   `option`. For [gigs_option_set()], invisibly returns the new value of
 #'   `option`.
 #' @examples
-#' # Get the names of all available options
-#' names(.gigs_options)
+#' \dontrun{
+#'   library(gigs)
 #'
-#' # Retrieve the value of a given option --> will invisibly return value and
-#' # print to console
-#' gigs_option_get("handle_missing_data")
+#'   # Get the names of all available options
+#'   names(.gigs_options)
 #'
-#' # Set the value of an option --> will invisibly return the new value and
-#' # print your change to the console
-#' gigs_option_set("handle_missing_data", "quiet")
+#'   # Retrieve the value of a given option --> will invisibly return value and
+#'   # print to console
+#'   gigs_option_get("handle_missing_data")
+#'   # Set the value of an option --> will invisibly return the new value and
+#'   # print your change to the console
+#'   gigs_option_set("handle_missing_data", "quiet")
+#' }
 #' @name gigs_options
 #' @export
 gigs_option_get <- function(option, silent = FALSE) {
@@ -67,3 +70,9 @@ gigs_option_set <- function(option, new_value, silent = FALSE) {
   }
   invisible(new_value)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G2.0, G2.0a, G2.1, G2.1a, G2.2, G2.3, EA1.3} Validation of data
+#'   inputs using the `checkmate` package, and clear documentation of what
+#'   types/lengths of input are supported.
+NULL
