@@ -290,6 +290,7 @@ validate_ig_fet_estimation_param <- function(var) {
 #' @returns Invisibly returns `NULL`. Called for its side effect of throwing
 #'   errors if inputs have bad lengths, either because they are zero length or
 #'   because they cannot be recycled.
+#' @noRd
 validate_parameter_lengths <- function(...) {
   inputs <- list(...)
   null_inputs <- vapply(inputs, FUN = is.null, FUN.VALUE = logical(1))
@@ -496,3 +497,4 @@ msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
 #'   vector-type inputs with odd class structures (e.g. as in `units` package)
 #'   can still be used as input to [gigs]. This is done after assertions on
 #'   length etc.
+NULL
