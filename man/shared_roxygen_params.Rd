@@ -25,6 +25,7 @@ This roxygen block is designed to make inheriting these parameters as simple
 as possible.
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \keyword{internal}

@@ -27,10 +27,10 @@ Inputs are recycled using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_comm
 }
 \examples{
 # Estimate fetal weight in grams
-ig_fet_estimate_fetal_weight(abdocirc_cm = 31, headcirc_cm = 26.5)
+ig_fet_estimate_fetal_weight(abdocirc_mm = 31, headcirc_mm = 26.5)
 
 # Input vectors are recycled using vctrs::vec_recycle_common
-ig_fet_estimate_fetal_weight(abdocirc_cm = 25, headcirc_cm = 24:26)
+ig_fet_estimate_fetal_weight(abdocirc_mm = 25, headcirc_mm = 24:26)
 }
 \references{
 Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.

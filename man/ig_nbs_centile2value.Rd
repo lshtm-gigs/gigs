@@ -96,14 +96,15 @@ This behaviour can be customised using the functions in \link{gigs_options}.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+longest input vector.
 }
 \description{
 Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values

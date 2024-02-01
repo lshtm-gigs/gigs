@@ -31,7 +31,7 @@
 #'   This behaviour can be customised using the functions in [gigs_options].
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
-#' @inherit shared_value2zscore_returns return
+#' @inherit shared_zscore2value_returns return
 #' @references
 #' Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 #' **International standards for newborn weight, length, and head circumference
@@ -199,8 +199,8 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #' @param fatfree_mass_g Numeric vector of length one or more with fat-free
 #'   mass(es) in g.
 #' @inherit shared_roxygen_params params note
-#' @inherit shared_zscore2value_returns return
 #' @inherit ig_nbs_centile2value params references
+#' @inherit shared_value2zscore_returns return
 #' @examples
 #' # Convert values to centiles
 #' ig_nbs_value2centile(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>

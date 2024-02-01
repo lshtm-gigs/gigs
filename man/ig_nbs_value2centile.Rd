@@ -115,15 +115,16 @@ percentage(s).}
 mass(es) in g.}
 }
 \value{
-Numeric vector of z-scores/centiles with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Numeric vector of z-scores/centiles with length equal to the longest
+input vector.
 }
 \description{
 Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles

@@ -75,6 +75,10 @@ This behaviour can be customised using the functions in \link{gigs_options}.}
 \item{weight_kg}{Numeric vector of length one or more with weight
 measurement(s) in kg.}
 
+\item{pma_weeks}{Numeric vector of length one or more with post-menstrual
+age(s) in weeks. Values should be within the bounds defined in the
+documentation for \code{x}.}
+
 \item{length_cm}{Numeric vector of length one or more with recumbent length
 measurement(s) in cm. This argument can be either an \code{x} variable when
 using the length-for-age standard (\code{"lfa"}), or a \code{y} variable when using
@@ -84,15 +88,16 @@ the weight-for-length (\code{"wfl"}) standard.}
 circumference measurement(s) in cm.}
 }
 \value{
-Numeric vector of expected measurements with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Numeric vector of z-scores/centiles with length equal to the longest
+input vector.
 }
 \description{
 Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles

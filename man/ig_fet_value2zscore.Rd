@@ -246,6 +246,10 @@ posterior horn of lateral ventricle measurement(s) in mm.}
 \item{cist_mag_mm}{Numeric vector of length one or more with cisterna magna
 measurement(s) in mm.}
 }
+\value{
+Numeric vector of z-scores/centiles with length equal to the longest
+input vector.
+}
 \description{
 Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
 Growth standards

@@ -72,17 +72,23 @@ element should be one of:
 This argument is case-sensitive. By default, gigs will replace elements in
 \code{acronym} which are not one of the above values with \code{NA} and warn you.
 This behaviour can be customised using the functions in \link{gigs_options}.}
+
+\item{pma_weeks, length_cm}{Numeric vector of length one or more with
+standard-specific \code{x} variables. See the documentation for \code{x} for
+information the acceptable bounds of these variables, and on how
+out-of-bounds elements will be handled.}
 }
 \value{
-Numeric vector of z-scores/centiles with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Numeric vector of expected measurements with length equal to the
+longest input vector.
 }
 \description{
 Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Postnatal Growth Standards for preterm infants
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values

@@ -22,6 +22,10 @@
 #'   This argument is case-sensitive. By default, gigs will replace elements in
 #'   `acronym` which are not one of the above values with `NA` and warn you.
 #'   This behaviour can be customised using the functions in [gigs_options].
+#' @param pma_weeks,length_cm Numeric vector of length one or more with
+#'   standard-specific `x` variables. See the documentation for `x` for
+#'   information the acceptable bounds of these variables, and on how
+#'   out-of-bounds elements will be handled.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
@@ -132,6 +136,9 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #'
 #' @param weight_kg Numeric vector of length one or more with weight
 #'   measurement(s) in kg.
+#' @param pma_weeks Numeric vector of length one or more with post-menstrual
+#'   age(s) in weeks. Values should be within the bounds defined in the
+#'   documentation for `x`.
 #' @param length_cm Numeric vector of length one or more with recumbent length
 #'   measurement(s) in cm. This argument can be either an `x` variable when
 #'   using the length-for-age standard (`"lfa"`), or a `y` variable when using

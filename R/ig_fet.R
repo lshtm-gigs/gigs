@@ -48,9 +48,10 @@
 #'   `acronym` which are not one of the above values with `NA` and warn you.
 #'   This behaviour can be customised using the functions in [gigs_options].
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
-#' @param gest_days,crl_mm Numeric vector of length one or more with
-#'   standard-specific x variables. See the documentation for `x` for
+#' @param gest_days,crl_mm,tcd_mm Numeric vector of length one or more with
+#'   standard-specific `x` variables. See the documentation for `x` for
 #'   information on how out-of-bounds elements will be handled.
+#' @inherit shared_zscore2value_returns return
 #' @references
 #' Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A
 #' et al. **International standards for fetal growth based on serial ultrasound
@@ -428,6 +429,7 @@ ig_fet_cmfga_centile2value <- function(p, gest_days) {
 #'   measurement(s) in mm.
 #' @inheritParams shared_roxygen_params
 #' @inherit ig_fet_zscore2value params references
+#' @inherit shared_value2zscore_returns return
 #' @examples
 #' # Convert values to centiles
 #' y <- 335

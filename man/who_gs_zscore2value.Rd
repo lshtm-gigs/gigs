@@ -111,13 +111,14 @@ This behaviour can be customised using the functions in \link{gigs_options}.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+longest input vector.
 }
 \description{
 Convert z-scores/centiles to values in the WHO Child Growth Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values

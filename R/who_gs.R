@@ -30,7 +30,7 @@
 #'   This behaviour can be customised using the functions in [gigs_options].
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
-#' @inherit shared_value2zscore_returns return
+#' @inherit shared_zscore2value_returns return
 #' @references
 #' de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. **The
 #' WHO Multicentre Growth Reference Study: planning, study design, and
@@ -224,8 +224,8 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' @param triceps_sf_mm Numeric vector of length one or more with triceps
 #'   skinfold measurement(s) in mm.
 #' @inherit shared_roxygen_params params note
-#' @inherit shared_value2zscore_returns return
 #' @inherit who_gs_zscore2value params references
+#' @inherit shared_value2zscore_returns return
 #' @examples
 #' # Convert values to centiles
 #' who_gs_value2centile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
