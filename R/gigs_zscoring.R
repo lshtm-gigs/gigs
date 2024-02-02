@@ -40,7 +40,7 @@ gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
   z_ig_nbs <- fn_on_subset(ig_nbs_wfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            weight_kg, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_wfa_value2zscore, gigs_lgls[["ig_png"]],
-                           weight_kg, floor(pma_weeks), sex)
+                           weight_kg, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_wfa_value2zscore, gigs_lgls[["who_gs"]],
                            weight_kg, age_days, sex)
 
@@ -69,7 +69,7 @@ gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
   z_ig_nbs <- fn_on_subset(ig_nbs_lfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            lenht_cm, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_lfa_value2zscore, gigs_lgls[["ig_png"]],
-                           lenht_cm, floor(pma_weeks), sex)
+                           lenht_cm, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_lhfa_value2zscore, gigs_lgls[["who_gs"]],
                            lenht_cm, age_days, sex)
 
@@ -95,7 +95,7 @@ gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
   z_ig_nbs <- fn_on_subset(ig_nbs_hcfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            headcirc_cm, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_hcfa_value2zscore, gigs_lgls[["ig_png"]],
-                           headcirc_cm, floor(pma_weeks), sex)
+                           headcirc_cm, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_hcfa_value2zscore, gigs_lgls[["who_gs"]],
                            headcirc_cm, age_days, sex)
 
