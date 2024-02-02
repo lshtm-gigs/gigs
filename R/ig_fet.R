@@ -139,121 +139,199 @@ ig_fet_zscore2value <- function(z, x, acronym) {
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_hcfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "hcfga")
+  acronym <- "hcfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_bpdfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "bpdfga")
+  acronym <- "bpdfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_acfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "acfga")
+  acronym <- "acfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_flfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "flfga")
+  acronym <- "flfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_ofdfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "ofdfga")
+  acronym <- "ofdfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_efwfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "efwfga")
+  acronym <- "efwfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sfhfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "sfhfga")
+  acronym <- "sfhfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_crlfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "crlfga")
+  acronym <- "crlfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gafcrl_zscore2value <- function(z, crl_mm) {
-  ig_fet_zscore2value(z, crl_mm, acronym = "gafcrl")
+  acronym <- "gafcrl"
+  list(z = z, x = crl_mm, acronym = acronym, x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gwgfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "gwgfga")
+  acronym <- "gwgfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_pifga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "pifga")
+  acronym <- "pifga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_rifga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "rifga")
+  acronym <- "rifga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sdrfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "sdrfga")
+  acronym <- "sdrfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_tcdfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "tcdfga")
+  acronym <- "tcdfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gaftcd_zscore2value <- function(z, tcd_mm) {
-  ig_fet_zscore2value(z, tcd_mm, acronym = "gaftcd")
+  acronym <- "gaftcd"
+  list(z = z, x = tcd_mm, acronym = acronym, x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_poffga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "poffga")
+  acronym <- "poffga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sffga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "sffga")
+  acronym <- "sffga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_avfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "avfga")
+  acronym <- "avfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_pvfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "pvfga")
+  acronym <- "pvfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_cmfga_zscore2value <- function(z, gest_days) {
-  ig_fet_zscore2value(z, gest_days, acronym = "cmfga")
+  acronym <- "cmfga"
+  list(z = z, x = gest_days, acronym = acronym,
+       x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_z2v_internal)
 }
 
 #' @rdname ig_fet_zscore2value
@@ -268,121 +346,201 @@ ig_fet_centile2value <- function(p, x, acronym) {
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_hcfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "hcfga")
+  acronym <- "hcfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_bpdfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "bpdfga")
+  acronym <- "bpdfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_acfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "acfga")
+  acronym <- "acfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_flfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "flfga")
+  acronym <- "flfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_ofdfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "ofdfga")
+  acronym <- "ofdfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_efwfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "efwfga")
+  acronym <- "efwfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sfhfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "sfhfga")
+  acronym <- "sfhfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_crlfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "crlfga")
+  acronym <- "crlfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gafcrl_centile2value <- function(p, crl_mm) {
-  ig_fet_centile2value(p, crl_mm, acronym = "gafcrl")
+  acronym <- "gafcrl"
+  validated <- list(p = p, x = crl_mm, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gwgfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "gwgfga")
+  acronym <- "gwgfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_pifga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "pifga")
+  acronym <- "pifga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_rifga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "rifga")
+  acronym <- "rifga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sdrfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "sdrfga")
+  acronym <- "sdrfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_tcdfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "tcdfga")
+  acronym <- "tcdfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_gaftcd_centile2value <- function(p, tcd_mm) {
-  ig_fet_centile2value(p, tcd_mm, acronym = "gaftcd")
+  acronym <- "gaftcd"
+  validated <- list(p = p, x = tcd_mm, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_poffga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "poffga")
+  acronym <- "poffga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_sffga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "sffga")
+  acronym <- "sffga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_avfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "avfga")
+  acronym <- "avfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_pvfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "pvfga")
+  acronym <- "pvfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' @rdname ig_fet_zscore2value
 #' @export
 ig_fet_cmfga_centile2value <- function(p, gest_days) {
-  ig_fet_centile2value(p, gest_days, acronym = "cmfga")
+  acronym <- "cmfga"
+  validated <- list(p = p, x = gest_days, acronym = acronym,
+                    x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet)
+    with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
 }
 
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup> Fetal
@@ -472,121 +630,201 @@ ig_fet_value2zscore <- function(y, x, acronym) {
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_hcfga_value2zscore <- function(headcirc_mm, gest_days) {
-  ig_fet_value2zscore(headcirc_mm, gest_days, acronym = "hcfga")
+  acronym <- "hcfga"
+  list(y = headcirc_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_bpdfga_value2zscore <- function(bpd_mm, gest_days) {
-  ig_fet_value2zscore(bpd_mm, gest_days, acronym = "bpdfga")
+  acronym <- "bpdfga"
+  list(y = bpd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_acfga_value2zscore <- function(abdocirc_mm, gest_days) {
-  ig_fet_value2zscore(abdocirc_mm, gest_days, acronym = "acfga")
+  acronym <- "acfga"
+  list(y = abdocirc_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_flfga_value2zscore <- function(femurlen_mm, gest_days) {
-  ig_fet_value2zscore(femurlen_mm, gest_days, acronym = "flfga")
+  acronym <- "flfga"
+  list(y = femurlen_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_ofdfga_value2zscore <- function(ofd_mm, gest_days) {
-  ig_fet_value2zscore(ofd_mm, gest_days, acronym = "ofdfga")
+  acronym <- "ofdfga"
+  list(y = ofd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_efwfga_value2zscore <- function(efw_g, gest_days) {
-  ig_fet_value2zscore(efw_g, gest_days, acronym = "efwfga")
+  acronym <- "efwfga"
+  list(y = efw_g, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sfhfga_value2zscore <- function(sfh_cm, gest_days) {
-  ig_fet_value2zscore(sfh_cm, gest_days, acronym = "sfhfga")
+  acronym <- "sfhfga"
+  list(y = sfh_cm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_crlfga_value2zscore <- function(crl_mm, gest_days) {
-  ig_fet_value2zscore(crl_mm, gest_days, acronym = "crlfga")
+  acronym <- "crlfga"
+  list(y = crl_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gafcrl_value2zscore <- function(gest_days, crl_mm) {
-  ig_fet_value2zscore(gest_days, crl_mm, acronym = "gafcrl")
+  acronym <- "gafcrl"
+  list(y = gest_days, x = crl_mm, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gwgfga_value2zscore <- function(gest_wt_gain_kg, gest_days) {
-  ig_fet_value2zscore(gest_wt_gain_kg, gest_days, acronym = "gwgfga")
+  acronym <- "gwgfga"
+  list(y = gest_wt_gain_kg, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_pifga_value2zscore <- function(puls_idx, gest_days) {
-  ig_fet_value2zscore(puls_idx, gest_days, acronym = "pifga")
+  acronym <- "pifga"
+  list(y = puls_idx, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_rifga_value2zscore <- function(resist_idx, gest_days) {
-  ig_fet_value2zscore(resist_idx, gest_days, acronym = "rifga")
+  acronym <- "rifga"
+  list(y = resist_idx, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sdrfga_value2zscore <- function(sys_dia_ratio, gest_days) {
-  ig_fet_value2zscore(sys_dia_ratio, gest_days, acronym = "sdrfga")
+  acronym <- "sdrfga"
+  list(y = sys_dia_ratio, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_tcdfga_value2zscore <- function(tcd_mm, gest_days) {
-  ig_fet_value2zscore(tcd_mm, gest_days, acronym = "tcdfga")
+  acronym <- "tcdfga"
+  list(y = tcd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gaftcd_value2zscore <- function(gest_days, tcd_mm) {
-  ig_fet_value2zscore(gest_days, tcd_mm, acronym = "gaftcd")
+  acronym <- "gaftcd"
+  list(y = gest_days, x = tcd_mm, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_poffga_value2zscore <- function(par_occ_fiss_mm, gest_days) {
-  ig_fet_value2zscore(par_occ_fiss_mm, gest_days, acronym = "poffga")
+  acronym <- "poffga"
+  list(y = par_occ_fiss_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sffga_value2zscore <- function(sylv_fiss_mm, gest_days) {
-  ig_fet_value2zscore(sylv_fiss_mm, gest_days, acronym = "sffga")
+  acronym <- "sffga"
+  list(y = sylv_fiss_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_avfga_value2zscore <- function(ant_hlv_mm, gest_days) {
-  ig_fet_value2zscore(ant_hlv_mm, gest_days, acronym = "avfga")
+  acronym <- "avfga"
+  list(y = ant_hlv_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_pvfga_value2zscore <- function(atr_phlv_mm, gest_days) {
-  ig_fet_value2zscore(atr_phlv_mm, gest_days, acronym = "pvfga")
+  acronym <- "pvfga"
+  list(y = atr_phlv_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_cmfga_value2zscore <- function(cist_mag_mm, gest_days) {
-  ig_fet_value2zscore(cist_mag_mm, gest_days, acronym = "cmfga")
+  acronym <- "cmfga"
+  list(y = cist_mag_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal)
 }
 
 #' @rdname ig_fet_value2zscore
@@ -602,121 +840,221 @@ ig_fet_value2centile <- function(y, x, acronym) {
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_hcfga_value2centile <- function(headcirc_mm, gest_days) {
-  ig_fet_value2centile(headcirc_mm, gest_days, acronym = "hcfga")
+  acronym <- "hcfga"
+  list(y = headcirc_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_bpdfga_value2centile <- function(bpd_mm, gest_days) {
-  ig_fet_value2centile(bpd_mm, gest_days, acronym = "bpdfga")
+  acronym <- "bpdfga"
+  list(y = bpd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_acfga_value2centile <- function(abdocirc_mm, gest_days) {
-  ig_fet_value2centile(abdocirc_mm, gest_days, acronym = "acfga")
+  acronym <- "acfga"
+  list(y = abdocirc_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_flfga_value2centile <- function(femurlen_mm, gest_days) {
-  ig_fet_value2centile(femurlen_mm, gest_days, acronym = "flfga")
+  acronym <- "flfga"
+  list(y = femurlen_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_ofdfga_value2centile <- function(ofd_mm, gest_days) {
-  ig_fet_value2centile(ofd_mm, gest_days, acronym = "ofdfga")
+  acronym <- "ofdfga"
+  list(y = ofd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_efwfga_value2centile <- function(efw_g, gest_days) {
-  ig_fet_value2centile(efw_g, gest_days, acronym = "efwfga")
+  acronym <- "efwfga"
+  list(y = efw_g, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sfhfga_value2centile <- function(sfh_cm, gest_days) {
-  ig_fet_value2centile(sfh_cm, gest_days, acronym = "sfhfga")
+  acronym <- "sfhfga"
+  list(y = sfh_cm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_crlfga_value2centile <- function(crl_mm, gest_days) {
-  ig_fet_value2centile(crl_mm, gest_days, acronym = "crlfga")
+  acronym <- "crlfga"
+  list(y = crl_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gafcrl_value2centile <- function(gest_days, crl_mm) {
-  ig_fet_value2centile(gest_days, crl_mm, acronym = "gafcrl")
+  acronym <- "gafcrl"
+  list(y = gest_days, x = crl_mm, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gwgfga_value2centile <- function(gest_wt_gain_kg, gest_days) {
-  ig_fet_value2centile(gest_wt_gain_kg, gest_days, acronym = "gwgfga")
+  acronym <- "gwgfga"
+  list(y = gest_wt_gain_kg, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_pifga_value2centile <- function(puls_idx, gest_days) {
-  ig_fet_value2centile(puls_idx, gest_days, acronym = "pifga")
+  acronym <- "pifga"
+  list(y = puls_idx, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_rifga_value2centile <- function(resist_idx, gest_days) {
-  ig_fet_value2centile(resist_idx, gest_days, acronym = "rifga")
+  acronym <- "rifga"
+  list(y = resist_idx, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sdrfga_value2centile <- function(sys_dia_ratio, gest_days) {
-  ig_fet_value2centile(sys_dia_ratio, gest_days, acronym = "sdrfga")
+  acronym <- "sdrfga"
+  list(y = sys_dia_ratio, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_tcdfga_value2centile <- function(tcd_mm, gest_days) {
-  ig_fet_value2centile(tcd_mm, gest_days, acronym = "tcdfga")
+  acronym <- "tcdfga"
+  list(y = tcd_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_gaftcd_value2centile <- function(gest_days, tcd_mm) {
-  ig_fet_value2centile(gest_days, tcd_mm, acronym = "gaftcd")
+  acronym <- "gaftcd"
+  list(y = gest_days, x = tcd_mm, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_poffga_value2centile <- function(par_occ_fiss_mm, gest_days) {
-  ig_fet_value2centile(par_occ_fiss_mm, gest_days, acronym = "poffga")
+  acronym <- "poffga"
+  list(y = par_occ_fiss_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_sffga_value2centile <- function(sylv_fiss_mm, gest_days) {
-  ig_fet_value2centile(sylv_fiss_mm, gest_days, acronym = "sffga")
+  acronym <- "sffga"
+  list(y = sylv_fiss_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_avfga_value2centile <- function(ant_hlv_mm, gest_days) {
-  ig_fet_value2centile(ant_hlv_mm, gest_days, acronym = "avfga")
+  acronym <- "avfga"
+  list(y = ant_hlv_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_pvfga_value2centile <- function(atr_phlv_mm, gest_days) {
-  ig_fet_value2centile(atr_phlv_mm, gest_days, acronym = "pvfga")
+  acronym <- "pvfga"
+  list(y = atr_phlv_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_fet_value2zscore
 #' @export
 ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
-  ig_fet_value2centile(cist_mag_mm, gest_days, acronym = "cmfga")
+  acronym <- "cmfga"
+  list(y = cist_mag_mm, x = gest_days, acronym = acronym,
+       y_name = ig_fet[acronym]["y"], x_name = ig_fet[acronym]["x"]) |>
+    do.call(what = validate_ig_fet) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
 }
 
 # INTERNAL: INTERGROWTH-21st Fetal standards conversion logic ------------------

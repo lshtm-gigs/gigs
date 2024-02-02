@@ -154,8 +154,8 @@ ig_fet[["gwgfga"]] <- list(
   ) |>
     dplyr::mutate(gest_days = gest_wks * 7, .keep = "unused",
                   .before = tidyselect::everything()),
-  x = "gest_wt_gain_kg",
-  y = "gest_days")
+  x = "gest_days",
+  y = "gest_wt_gain_kg")
 
 # IG-21st fetal doppler standards ----------------------------------------------
 

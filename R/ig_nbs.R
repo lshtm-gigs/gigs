@@ -14,9 +14,7 @@
 #'
 #'   By default, gigs will replace elements in `gest_days` that are out of
 #'   bounds for the growth standard in use with `NA` and warn you. This
-#'   behaviour can be customised using the functions in [gigs_options]. If all
-#'   elements in `acronym` are not one of the above values, gigs will throw an
-#'   error.
+#'   behaviour can be customised using the functions in [gigs_options].
 #' @param acronym Character vector of length one or more denoting the
 #'   INTERGROWTH-21<sup>st</sup> Newborn Size standard to use for each
 #'   observation. Each element should be one of:
@@ -30,7 +28,9 @@
 #'
 #'   This argument is case-sensitive. By default, gigs will replace elements in
 #'   `acronym` which are not one of the above values with `NA` and warn you.
-#'   This behaviour can be customised using the functions in [gigs_options].
+#'   This behaviour can be customised using the functions in [gigs_options]. If
+#'   all elements in `acronym` are not one of the above values, gigs will throw
+#'   an error.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
@@ -76,7 +76,7 @@
 #'
 #' # Bad inputs will not stop the function but will instead return NA - here 140
 #' # days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
-#' # size standards
+#' # size standards.
 #' ig_nbs_hcfga_zscore2value(z = z,
 #'                           gest_days = c(140, 182, 224, 266),
 #'                           sex = "F") |>
@@ -92,43 +92,71 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_wfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "wfga")
+  acronym <- "wfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_lfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "lfga")
+  acronym <- "lfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_hcfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "hcfga")
+  acronym <- "hcfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_wlrfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "wlrfga")
+  acronym <- "wlrfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_fmfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "fmfga")
+  acronym <- "fmfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_bfpfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "bfpfga")
+  acronym <- "bfpfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_ffmfga_centile2value <- function(p, gest_days, sex) {
-  ig_nbs_centile2value(p, gest_days, sex, acronym = "ffmfga")
+  acronym <- "ffmfga"
+  list(p = p, x = gest_days, sex = sex, acronym = acronym,
+       x_name = ig_nbs[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_nbs) |>
+    do.call(what = ig_png_c2v_internal)
 }
 
 #' @importFrom stats pnorm

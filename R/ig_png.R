@@ -79,25 +79,41 @@ ig_png_zscore2value <- function(z, x, sex, acronym) {
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z, pma_weeks, sex, acronym = "wfa")
+  acronym <- "wfa"
+  list(z = z, x = pma_weeks, sex = sex, acronym = acronym,
+       x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_z2v_internal)
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_lfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z, pma_weeks, sex, acronym = "lfa")
+  acronym <- "lfa"
+  list(z = z, x = pma_weeks, sex = sex, acronym = acronym,
+       x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_z2v_internal)
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_hcfa_zscore2value <- function(z, pma_weeks, sex) {
-  ig_png_zscore2value(z, pma_weeks, sex, acronym = "hcfa")
+  acronym <- "hcfa"
+  list(z = z, x = pma_weeks, sex = sex, acronym = acronym,
+       x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_z2v_internal)
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfl_zscore2value <- function(z, length_cm, sex) {
-  ig_png_zscore2value(z, length_cm, sex, acronym = "wfl")
+  acronym <- "wfl"
+  list(z = z, x = length_cm, sex = sex, acronym = acronym,
+       x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_z2v_internal)
 }
 
 #' @rdname ig_png_zscore2value
@@ -112,25 +128,41 @@ ig_png_centile2value <- function(p, x, sex, acronym) {
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p, pma_weeks, sex, acronym = "wfa")
+  acronym <- "wfa"
+  validated <- list(p = p, x = pma_weeks, sex = sex, acronym = acronym,
+                    x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png)
+  with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_lfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p, pma_weeks, sex, acronym = "lfa")
+  acronym <- "lfa"
+  validated <- list(p = p, x = pma_weeks, sex = sex, acronym = acronym,
+                    x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png)
+  with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_hcfa_centile2value <- function(p, pma_weeks, sex) {
-  ig_png_centile2value(p, pma_weeks, sex, acronym = "hcfa")
+  acronym <- "hcfa"
+  validated <- list(p = p, x = pma_weeks, sex = sex, acronym = acronym,
+                    x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png)
+  with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' @rdname ig_png_zscore2value
 #' @export
 ig_png_wfl_centile2value <- function(p, length_cm, sex) {
-  ig_png_centile2value(p, length_cm, sex, acronym = "wfl")
+  acronym <- "wfl"
+  validated <- list(p = p, x = length_cm, sex = sex, acronym = acronym,
+                    x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png)
+  with(validated, ig_png_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup>
@@ -191,25 +223,41 @@ ig_png_value2zscore <- function(y, x, sex, acronym) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfa_value2zscore <- function(weight_kg, pma_weeks, sex) {
-  ig_png_value2zscore(weight_kg, pma_weeks, sex, acronym = "wfa")
+  acronym <- "wfa"
+  list(y = weight_kg, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal)
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_lfa_value2zscore <- function(length_cm, pma_weeks, sex) {
-  ig_png_value2zscore(length_cm, pma_weeks, sex, acronym = "lfa")
+  acronym <- "lfa"
+  list(y = length_cm, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal)
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_hcfa_value2zscore <- function(headcirc_cm, pma_weeks, sex) {
-  ig_png_value2zscore(headcirc_cm, pma_weeks, sex, acronym = "hcfa")
+  acronym <- "hcfa"
+  list(y = headcirc_cm, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal)
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
-  ig_png_value2zscore(weight_kg, length_cm, sex, acronym = "wfl")
+  acronym <- "wfl"
+  list(y = weight_kg, x = length_cm, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal)
 }
 
 #' @rdname ig_png_value2zscore
@@ -225,25 +273,45 @@ ig_png_value2centile <- function(y, x, sex, acronym) {
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfa_value2centile <- function(weight_kg, pma_weeks, sex) {
-  ig_png_value2centile(weight_kg, pma_weeks, sex, acronym = "wfa")
+  acronym <- "wfa"
+  list(y = weight_kg, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_lfa_value2centile <- function(length_cm, pma_weeks, sex) {
-  ig_png_value2centile(length_cm, pma_weeks, sex, acronym = "lfa")
+  acronym <- "lfa"
+  list(y = length_cm, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_hcfa_value2centile <- function(headcirc_cm, pma_weeks, sex) {
-  ig_png_value2centile(headcirc_cm, pma_weeks, sex, acronym = "hcfa")
+  acronym <- "hcfa"
+  list(y = headcirc_cm, x = pma_weeks, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal) |>
+    pnorm()
 }
 
 #' @rdname ig_png_value2zscore
 #' @export
 ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
-  ig_png_value2centile(weight_kg, length_cm, sex, acronym = "wfl")
+  acronym <- "wfl"
+  list(y = weight_kg, x = length_cm, sex = sex, acronym = acronym,
+       y_name = ig_png[[acronym]][["y"]], x_name = ig_png[[acronym]][["x"]]) |>
+    do.call(what = validate_ig_png) |>
+    do.call(what = ig_png_v2z_internal) |>
+    pnorm()
 }
 
 # INTERNAL: INTERGROWTH-21st Postnatal Growth standards conversion logic -------
