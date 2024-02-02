@@ -224,7 +224,7 @@ test_that(
         )
         expect_error(
           object = gigs_fn(arg_zyp, TRUE, arg_sex, arg_acronym),
-          regexp = error_msg_wrong_type("x", "numeric", "logical")
+          regexp = error_msg_wrong_type("gest_days", "numeric", "logical")
         )
         expect_error(
           object = gigs_fn(arg_zyp, arg_x, 50L, arg_acronym),
@@ -490,9 +490,9 @@ msg_centile_oob <- function(length, int_undefined) {
 #'   function.
 #' @note Used for testing only. Mimics the output of [msg_oob_centiles()].
 msg_xvar_oob <- function(length, int_undefined) {
-  paste0("Variable 'x': ", int_undefined, " in ", length, " elements were ",
-         "out-of-bounds \\(see the 'ig_nbs' conversion functions ",
-         "documentation\\).")
+  paste0("Variable 'gest_days': ", int_undefined, " in ", length,
+         " elements were out-of-bounds \\(see the 'ig_nbs' conversion ",
+         "functions documentation\\).")
 }
 
 #' Replicate error/warning messages from gigs for bad input data (TESTING
@@ -582,7 +582,7 @@ test_that(
             gigs_fn(arg_zyp,
                     replace(arg_x, replace_ints_2, values = undefined_val),
                     arg_sex, arg_acronym),
-            regexp = msg_undefined("x", length = len_x,
+            regexp = msg_undefined("gest_days", length = len_x,
                                    int_undefined = num_to_replace2)
           )
 
@@ -595,7 +595,7 @@ test_that(
           )
           expect_match(warnings[1], msg_undefined(arg_zyp_name, len_x,
                                                   num_to_replace1))
-          expect_match(warnings[2], msg_undefined("x", len_x,
+          expect_match(warnings[2], msg_undefined("gest_days", len_x,
                                                   num_to_replace2))
         }
 
@@ -610,7 +610,7 @@ test_that(
         ## Replace x variable with NA
         expect_warning(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, NA), arg_sex, arg_acronym),
-          regexp = msg_missing("x", len_x, num_to_replace2)
+          regexp = msg_missing("gest_days", len_x, num_to_replace2)
         )
 
         ## Replace z/y/p variable and acronym variable with NA
@@ -742,7 +742,7 @@ test_that(
             gigs_fn(arg_zyp,
                     replace(arg_x, replace_ints_2, values = undefined_val),
                     arg_sex, arg_acronym),
-            regexp = msg_undefined("x", length = len_x,
+            regexp = msg_undefined("gest_days", length = len_x,
                                    int_undefined = num_to_replace2)
           )
 
@@ -767,7 +767,7 @@ test_that(
         ## Replace x variable with NA
         expect_error(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, NA), arg_sex, arg_acronym),
-          regexp = msg_missing("x", len_x, num_to_replace2)
+          regexp = msg_missing("gest_days", len_x, num_to_replace2)
         )
 
         ## Replace z/y/p variable and acronym variable with NA
@@ -874,7 +874,7 @@ test_that(
         # Will produce all NAs for the `x` argument
         expect_warning(
           gigs_fn(arg_zyp, all_NA, arg_sex, arg_acronym),
-          msg_missing(name = "x", len_x, len_x)
+          msg_missing(name = "gest_days", len_x, len_x)
         )
         # Will produce all NAs for the `sex` argument
         expect_warning(

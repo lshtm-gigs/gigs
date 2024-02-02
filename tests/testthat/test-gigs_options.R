@@ -42,6 +42,5 @@ test_that(
       # Should not do that if silent = TRUE, but return a single string value
       checkmate::expect_string(gigs_option_set(option, value, silent = TRUE))
     }
-
   }
 )

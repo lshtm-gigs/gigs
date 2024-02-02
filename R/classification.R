@@ -1,5 +1,3 @@
-# TODO: Add notes on `.gigs_options`
-
 #' Classify size for gestational age using the INTERGROWTH-21<sup>st</sup>
 #' weight-for-gestational age standard
 #'
@@ -10,16 +8,22 @@
 #' (<3<sup>rd</sup> centile) using the `severe` parameter.
 #'
 #' @inheritParams shared_roxygen_params
-#' @param weight_kg Numeric vector of length one or greater with weight
+#' @param weight_kg Numeric vector of length one or more with weight
 #'   value(s) in kg.
-#' @param gest_days Numeric vector of length one or greater with gestational
-#'   age(s) at birth in days.
+#' @param gest_days Numeric vector of length one or more with gestational
+#'   age(s) at birth in days between `168` and `300`. By default, gigs will
+#'   replace out-of-bounds elements in `gest_days` with `NA` and warn you. This
+#'   behaviour can be customised using the functions in [gigs_options].
 #' @param severe A single logical value specifying whether to categorise SGA
 #'   values are below the third centile as `"SGA(<3)"`. Default = `FALSE`.
-#' @return Factor with gestational age classification(s). If `severe = FALSE`,
-#'   levels are `c("SGA", "AGA",  "LGA")`. If `severe = TRUE`, levels are
-#'   `c("SGA(<3)", "SGA", "AGA",  "LGA")`.
-#' @note Input vectors will be recycled by [vctrs::vec_recycle_common()].
+#' @return Factor the same length as the longest input vector, with
+#'   size-for-gestational age classification(s). If `severe = FALSE`, levels are
+#'   `c("SGA", "AGA",  "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)",
+#'   "SGA", "AGA",  "LGA")`.
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
+#'   adhere to the [vctrs] recycling rules.
+#' @seealso [ig_nbs_wfga_value2centile()], which this function calls to get
+#'   centiles for each observation.
 #' @examples
 #' # Without severe flag, does not differentiate between
 #' # p < 0.03 and p < 0.10
@@ -48,9 +52,10 @@
 #' @export
 classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
   checkmate::qassert(severe, rules = "B1")
+  # ig_nbs_wfga_value2centile will do checks on weight_kg/gest_days/sex
   centiles <- ig_nbs_wfga_value2centile(weight_kg = weight_kg,
-                                        sex = sex,
-                                        gest_days = gest_days)
+                                        gest_days = gest_days,
+                                        sex = sex)
   sfga <- rep(NA_character_, length(centiles))
   sfga[centiles < 0.1] <- "SGA"
   sfga[centiles >= 0.1 & centiles <= 0.9] <- "AGA"
@@ -69,12 +74,12 @@ classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' A small vulnerable newborn (SVN) can be preterm (born too soon),
 #' small-for-gestational age (born too small), or within both of these
 #' categories. This function uses weight and gestational age to categorise
-#' newborns according to their SVN  type, for use in downstream analyses.
+#' newborns according to their SVN type, for use in downstream analyses.
 #'
 #' @inherit classify_sfga params note
 #' @return Factor with small vulnerable newborn classification(s), with levels
-#'   `c("Preterm SGA", "Preterm AGA", "Preterm SGA", "Term SGA", "Term AGA",
-#'   "Term SGA")`.
+#'   `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
+#'   "Term LGA")`.
 #' @examples
 #' classify_svn(
 #'   weight_kg = c(1.5, 2.6, 2.6, 3.5),
@@ -86,14 +91,14 @@ classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' **Small babies, big risks: global estimates of prevalence and mortality for
 #' vulnerable newborns to accelerate change and improve counting.** *The Lancet*
 #' 2023, *401(10389):1707-1719.* \doi{10.1016/S0140-6736(23)00522-6}
-#' @seealso [classify_sfga()], which this function uses to classify newborns as
-#'   small-for-gestational age.
+#' @seealso [classify_sfga()], which this function uses to stratify newborns
+#'   into size-for-gestational age categories.
 #' @export
 classify_svn <- function(weight_kg, gest_days, sex) {
   is_term <- gest_days >= 37 * 7
   sfga <- classify_sfga(weight_kg = weight_kg,
-                        sex = sex,
                         gest_days = gest_days,
+                        sex = sex,
                         severe = FALSE)
   sfga_cats <- levels(sfga)
   levels <- c(paste("Preterm", sfga_cats), paste("Term", sfga_cats))
@@ -117,22 +122,25 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' -2SD from the mean.
 #'
 #' @inheritParams classify_sfga
-#' @param lenht_cm Numeric vector of length one or greater  with length/height
+#' @param lenht_cm Numeric vector of length one or more with length/height
 #'   measurement(s) in cm.
-#' @param age_days Numeric vector of length one or greater  with age(s) in days
-#'   for each child. Should be between `0` to `1856` days.
+#' @param age_days Numeric vector of length one or more with age(s) in days
+#'   for each child. Should be between `0` to `1856` days. By default, gigs will
+#'   replace out-of-bounds elements in `age_days` with `NA` and warn you. This
+#'   behaviour can be customised using the functions in [gigs_options].
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #' @param outliers A single `TRUE` or `FALSE` value specifying whether
 #'   implausible z-score value thresholds should be applied. Default = `FALSE`.
-#' @return Factor of stunting classification(s) with levels
-#'   `c("stunting_severe", "stunting", "not_stunting")` or `c("stunting_severe",
-#'   "stunting", "not_stunting", "outlier")`, depending on whether the
-#'   `outliers` argument is set to `TRUE`.
-#' @note Input vectors will be recycled by [vctrs::vec_recycle_common()]. The
-#'   function assumes that your measurements were taken according to the WHO
-#'   guidelines, which stipulate that recumbent length should not be measured
-#'   after 730 days. Implausible z-score bounds are sourced from the referenced
-#'   WHO report, and classification cut-offs from the DHS manual.
+#' @return Factor of stunting classification(s) with same length as longest
+#'   input vector. Levels are `c("stunting_severe", "stunting", "not_stunting")`
+#'   if `outliers = FALSE`, else `c("stunting_severe", "stunting",
+#'   "not_stunting", "outlier")`.
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
+#'   adhere to the [vctrs] recycling rules. This function assumes that your
+#'   measurements were taken according to the WHO guidelines, which stipulate
+#'   that recumbent length should not be measured after 730 days. Implausible
+#'   z-score bounds are sourced from the referenced WHO report, and
+#'   classification cut-offs from the DHS manual.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
 #' *Recommendations for data collection, analysis and reporting on
@@ -165,8 +173,12 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' @export
 classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
                               outliers = FALSE) {
+
   checkmate::qassert(outliers, rules = "B1")
-  params <- vctrs::vec_recycle_common(lenht_cm, age_days, gest_days, sex)
+  params <- list(lenht_cm = lenht_cm, age_days = age_days,
+                 gest_days = gest_days, sex = sex) |>
+    do.call(what = validate_stunting_params)
+
   z_scores <- gigs_laz(lenht_cm = params[[1]], age_days = params[[2]],
                        gest_days = params[[3]], sex = params[[4]])
   stunting <- rep(NA_character_, length(z_scores))
@@ -223,8 +235,11 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
                              outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
-  params <- vctrs::vec_recycle_common(weight_kg, lenht_cm, age_days,
-                                      gest_days, sex)
+  params <- validate_parameter_lengths(weight_kg = weight_kg,
+                                       lenht_cm = lenht_cm,
+                                       age_days = age_days,
+                                       gest_days = gest_days, sex = sex) |>
+    do.call(what = vctrs::vec_recycle_common)
   z_scores <- gigs_wlz(weight_kg = params[[1]], lenht_cm = params[[2]],
                        age_days = params[[3]], gest_days = params[[4]],
                        sex = params[[5]])
@@ -273,9 +288,16 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #'   outliers = TRUE
 #' )
 #' @export
-classify_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
+classify_wfa <- function(weight_kg,
+                         age_days,
+                         gest_days,
+                         sex,
+                         outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
-  params <- vctrs::vec_recycle_common(weight_kg, age_days, gest_days, sex)
+  params <- validate_parameter_lengths(weight_kg = weight_kg,
+                                       age_days = age_days,
+                                       gest_days = gest_days, sex = sex) |>
+    do.call(what = vctrs::vec_recycle_common)
   z_scores <- gigs_waz(weight_kg = params[[1]], age_days = params[[2]],
                        gest_days = params[[3]], sex = params[[4]])
   wfa <- character(length(z_scores))

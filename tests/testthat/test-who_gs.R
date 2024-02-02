@@ -56,18 +56,18 @@ test_that(
     for (acronym in names(gigs::who_gs)) {
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- who_gs[[acronym]][[1]][[1]][[1]]
-        set.seed(seed = 50)
-        dbl_z_or_p <- rnorm(n = length(xvar))
-        set.seed(seed = 50)
-        sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        withr::with_seed(50, code = {
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        })
         if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
         fn_stem <- paste0("who_gs_", acronym)
         fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
-        y_gigs <- fn_zp2val(dbl_z_or_p, xvar, sexvar)
+        gigs_y <- fn_zp2val(dbl_z_or_p, xvar, sexvar)
 
         fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
-        gigs_z_or_p <- fn_val2zp(y_gigs + .Machine$double.eps, xvar, sexvar)
+        gigs_z_or_p <- fn_val2zp(gigs_y + .Machine$double.eps, xvar, sexvar)
 
         expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
                      tolerance = sqrt(.Machine$double.eps))
@@ -627,28 +627,28 @@ test_that(
     for (option in names(.gigs_options)) {
       gigs_option_set(option, new_value = "error", silent = TRUE)
     }
-
     fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
                      "zscore2value")
     z <- 0
     p <- 0.5
-
     # Random set of indices to replace with bad data in each case
-    num_to_replace1 <- 6
-    set.seed(200)
-    replace_ints_1 <- sample(1L:17L, size = num_to_replace1, replace = FALSE)
-    num_to_replace2 <- 5
-    set.seed(300)
-    replace_ints_2 <- sample(1L:17L, size = num_to_replace2, replace = FALSE)
+    withr::with_seed(seed = 200, code = {
+      num_to_replace1 <- 6
+      replace_ints_1 <- sample(1L:17L, size = num_to_replace1, replace = FALSE)
+      num_to_replace2 <- 5
+      replace_ints_2 <- sample(1L:17L, size = num_to_replace2, replace = FALSE)
+    })
     replace_ints_3 <- union(replace_ints_1, replace_ints_2)
     num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
 
     for (fn_suffix in fn_suffixes) {
       fn_name <- paste("who_gs", fn_suffix, sep = "_")
       gigs_fn <- get(fn_name)
-      # Sample three random acronyms --> doing all twenty balloons the runtime
+      # Sample three random acronyms --> doing all balloons the runtime
       for (seed in c(125, 175, 225)) {
-        acronym <- sample(names(gigs::who_gs), size = 1)
+        withr::with_seed(seed, code = {
+          acronym <- sample(names(gigs::who_gs), size = 1)
+        })
         x_range <- range(gigs::who_gs[[acronym]][[1]][[1]][[1]])
         x <- seq(x_range[1], x_range[2], by = (x_range[2] - x_range[1]) / 50)
         len_x <- length(x)
@@ -660,7 +660,9 @@ test_that(
         arg_zyp_name <- switch(fn_suffix, centile2value = "p",
                                zscore2value = "z", "y")
         arg_x <- x
-        arg_sex <- sample(c("M", "F"), size = len_x, replace = TRUE)
+        withr::with_seed(seed, code = {
+          arg_sex <- sample(c("M", "F"), size = len_x, replace = TRUE)
+        })
         arg_acronym <- rep_len(acronym, len_x)
 
         # Bad input 1: Undefined data (NaN, Inf, -Inf) -------------------------
@@ -672,7 +674,6 @@ test_that(
             regexp = msg_undefined(arg_zyp_name, length = len_x,
                                    int_undefined = num_to_replace1)
           )
-
           ## Replace x variable with undefined_val
           expect_error(
             gigs_fn(arg_zyp,
@@ -681,7 +682,6 @@ test_that(
             regexp = msg_undefined("x", length = len_x,
                                    int_undefined = num_to_replace2)
           )
-
           ## Replace z/y/p variable and x variable with undefined_val
           expect_error(
             gigs_fn(replace(arg_zyp, replace_ints_1, values = undefined_val),
@@ -699,20 +699,18 @@ test_that(
                   arg_sex, arg_acronym),
           regexp = msg_missing(arg_zyp_name, len_x, num_to_replace1)
         )
-
         ## Replace x variable with NA
         expect_error(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, NA), arg_sex, arg_acronym),
           regexp = msg_missing("x", len_x, num_to_replace2)
         )
-
         ## Replace z/y/p variable and acronym variable with NA
         warnings <- expect_error(
-            gigs_fn(replace(arg_zyp, replace_ints_1, values = NA),
-                    arg_x,
-                    replace(arg_sex, replace_ints_3, values = NA),
-                    arg_acronym),
-            msg_missing(arg_zyp_name, len_x, num_to_replace1)
+          gigs_fn(replace(arg_zyp, replace_ints_1, values = NA),
+                  arg_x,
+                  replace(arg_sex, replace_ints_3, values = NA),
+                  arg_acronym),
+          msg_missing(arg_zyp_name, len_x, num_to_replace1)
         )
 
         # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ------------
@@ -732,10 +730,10 @@ test_that(
         # Bad input 4: Out of bounds `x` variable ------------------------------
         below_lower_bound <- min(x) - replace_ints_1
         above_upper_bound <- max(x) + replace_ints_2
-        set.seed(500)
-        out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
-                                size = num_to_replace3, replace = FALSE)
-
+        withr::with_seed(seed, code = {
+          out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
+                                  size = num_to_replace3)
+        })
         expect_error(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, above_upper_bound),
                   arg_sex, arg_acronym),
@@ -746,7 +744,6 @@ test_that(
                   arg_sex, arg_acronym),
           msg_xvar_oob(len_x, num_to_replace3)
         )
-
         # Bad input 5: Invalid `acronym` values (!%in% names(gigs::who_gs)) ----
         expect_error(
           gigs_fn(arg_zyp, arg_x, arg_sex,
@@ -754,7 +751,6 @@ test_that(
                           as.character(seq_len(num_to_replace1)))),
           msg_acronym_sex_invalid(var = "acronym", len_x, num_to_replace1)
         )
-
         # Bad input 6: Invalid `sex` values (!%in% c("M", "F"")) ---------------
         expect_error(
           gigs_fn(arg_zyp, arg_x,
@@ -770,7 +766,7 @@ test_that(
 
 #' @srrstats {G5.8c} Show how the who_gs functions handles all-`NA` inputs.
 test_that(
-  desc = "",
+  desc = "Test that who_gs_() conversion functions can handle all-`NA` inputs",
   code = {
     # Make gigs error if confronted with any bad data
     for (option in names(.gigs_options)) {

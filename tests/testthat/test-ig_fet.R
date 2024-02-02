@@ -59,10 +59,11 @@ test_that(desc = "Conversion of z-scores/centiles to values works", {
       pkg_tbl <- lapply(X = dbl_z_or_p,
                         FUN = \(zp) {
                           #' @srrstats {G5.5} Correctness test run with fixed
-                          #'   random seed
-                          set.seed(1000)
-                          round(conv_fn(zp, xvar),
-                                digits = fet_roundto(acronym))
+                          #'   seed
+                          withr::with_seed(seed = 1000, {
+                            round(conv_fn(zp, xvar),
+                                  digits = fet_roundto(acronym))
+                          })
                         }) |>
         do.call(what = cbind) |>
         as.data.frame() |>
@@ -87,21 +88,22 @@ test_that(
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- ig_fet[[acronym]][[1]][[1]]
         for (seed in seq(300, 400, 30)) {
-          set.seed(seed = seed)
-          dbl_z_or_p <- rnorm(n = length(xvar))
-          if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+          # withr::with_seed(
+          #   seed,
+          #   code = {
+              dbl_z_or_p <- rnorm(n = length(xvar))
+              if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
-          fn_stem <- paste0("ig_fet_", acronym)
-          fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
-          set.seed(seed = seed)
-          y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
+              fn_stem <- paste0("ig_fet_", acronym)
+              fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+              y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
 
-          fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
-          set.seed(seed = seed)
-          gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
+              fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+              gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
 
-          expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
-                       tolerance = sqrt(.Machine$double.eps))
+              expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
+                           tolerance = sqrt(.Machine$double.eps))
+            # })
         }
       }
     }
@@ -115,19 +117,23 @@ test_that(
     for (acronym in names(gigs::ig_fet)) {
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- ig_fet[[acronym]][[1]][[1]]
-        set.seed(seed = 50)
-        dbl_z_or_p <- rnorm(n = length(xvar))
-        if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+        withr::with_seed(
+          seed = 50,
+          code = {
+            dbl_z_or_p <- rnorm(n = length(xvar))
+            if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
-        fn_stem <- paste0("ig_fet_", acronym)
-        fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
-        y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
+            fn_stem <- paste0("ig_fet_", acronym)
+            fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+            y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
 
-        fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
-        gigs_z_or_p <- fn_val2zp(y_gigs + .Machine$double.eps, xvar)
+            fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+            gigs_z_or_p <- fn_val2zp(y_gigs + .Machine$double.eps, xvar)
 
-        expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
-                     tolerance = sqrt(.Machine$double.eps))
+            expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
+                         tolerance = sqrt(.Machine$double.eps))
+          }
+        )
       }
     }
   }
@@ -193,7 +199,9 @@ test_that(
 
       # Sample three random acronyms --> doing all twenty balloons the runtime
       for (seed in c(150, 200, 250)) {
-        acronym <- sample(names(gigs::ig_fet), size = 1)
+        withr::with_seed(seed, code = {
+          acronym <- sample(names(gigs::ig_fet), size = 1)
+        })
         x <- gigs::ig_fet[[acronym]][[1]][[1]]
 
         arg_zyp <- switch(fn_suffix, centile2value = p, zscore2value = z, y)
@@ -266,11 +274,13 @@ test_that(
 
     # Random set of indices to replace with bad data in each case
     num_to_replace1 <- 6
-    set.seed(200)
-    replace_ints_1 <- sample(1L:17L, size = num_to_replace1, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_1 <- sample(1L:17L, size = num_to_replace1)
+    })
     num_to_replace2 <- 5
-    set.seed(300)
-    replace_ints_2 <- sample(1L:17L, size = num_to_replace2, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_2 <- sample(1L:17L, size = num_to_replace2)
+    })
     replace_ints_3 <- union(replace_ints_1, replace_ints_2)
     num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
     for (fn_suffix in fn_suffixes) {
@@ -278,7 +288,7 @@ test_that(
       gigs_fn <- get(fn_name)
       # Sample three random acronyms --> doing all twenty explodes the runtime
       for (seed in c(125, 175, 225)) {
-        acronym <- sample(names(gigs::ig_fet), size = 1)
+        acronym <- withr::with_seed(seed, sample(names(gigs::ig_fet), size = 1))
         x <- gigs::ig_fet[[acronym]][[1]][[1]]
         len_x <- length(x)
         arg_zyp <- switch(fn_suffix,
@@ -362,9 +372,10 @@ test_that(
         # Bad input 4: Out of bounds `x` variable ------------------------------
         below_lower_bound <- min(x) - replace_ints_1
         above_upper_bound <- max(x) + replace_ints_2
-        set.seed(500)
-        out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
-                                size = num_to_replace3, replace = FALSE)
+        withr::with_seed(500, code = {
+          out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
+                                  size = num_to_replace3, replace = FALSE)
+        })
 
         out <- gigs_fn(arg_zyp,
                        replace(arg_x, replace_ints_2, above_upper_bound),
@@ -492,20 +503,23 @@ test_that(
 
     # Random set of indices to replace with bad data in each case
     num_to_replace1 <- 6
-    set.seed(200)
-    replace_ints_1 <- sample(1L:17L, size = num_to_replace1, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_1 <- sample(1L:17L, size = num_to_replace1)
+    })
     num_to_replace2 <- 5
-    set.seed(300)
-    replace_ints_2 <- sample(1L:17L, size = num_to_replace2, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_2 <- sample(1L:17L, size = num_to_replace2)
+    })
     replace_ints_3 <- union(replace_ints_1, replace_ints_2)
     num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
-
     for (fn_suffix in fn_suffixes) {
       fn_name <- paste("ig_fet", fn_suffix, sep = "_")
       gigs_fn <- get(fn_name)
       # Sample three random acronyms --> doing all twenty balloons the runtime
       for (seed in c(125, 175, 225)) {
-        acronym <- sample(names(gigs::ig_fet), size = 1)
+        withr::with_seed(seed, code = {
+          acronym <- sample(names(gigs::ig_fet), size = 1)
+        })
         x <- gigs::ig_fet[[acronym]][[1]][[1]]
         len_x <- length(x)
         arg_zyp <- switch(fn_suffix,
@@ -589,10 +603,10 @@ test_that(
         # Bad input 4: Out of bounds `x` variable ------------------------------
         below_lower_bound <- min(x) - replace_ints_1
         above_upper_bound <- max(x) + replace_ints_2
-        set.seed(500)
-        out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
-                                size = num_to_replace3, replace = FALSE)
-
+        withr::with_seed(seed, code = {
+          out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
+                                  size = num_to_replace3)
+        })
         expect_warning(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, above_upper_bound),
                   arg_acronym),
@@ -640,11 +654,13 @@ test_that(
 
     # Random set of indices to replace with bad data in each case
     num_to_replace1 <- 6
-    set.seed(200)
-    replace_ints_1 <- sample(1L:17L, size = num_to_replace1, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_1 <- sample(1L:17L, size = num_to_replace1)
+    })
     num_to_replace2 <- 5
-    set.seed(300)
-    replace_ints_2 <- sample(1L:17L, size = num_to_replace2, replace = FALSE)
+    withr::with_seed(200, code = {
+      replace_ints_2 <- sample(1L:17L, size = num_to_replace2)
+    })
     replace_ints_3 <- union(replace_ints_1, replace_ints_2)
     num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
     for (fn_suffix in fn_suffixes) {
@@ -652,7 +668,9 @@ test_that(
       gigs_fn <- get(fn_name)
       # Sample three random acronyms --> doing all twenty balloons the runtime
       for (seed in c(125, 175, 225)) {
-        acronym <- sample(names(gigs::ig_fet), size = 1)
+        withr::with_seed(seed, code = {
+          acronym <- sample(names(gigs::ig_fet), size = 1)
+        })
         x <- gigs::ig_fet[[acronym]][[1]][[1]]
         len_x <- length(x)
         arg_zyp <- switch(fn_suffix,
@@ -731,9 +749,10 @@ test_that(
         # Bad input 4: Out of bounds `x` variable ------------------------------
         below_lower_bound <- min(x) - replace_ints_1
         above_upper_bound <- max(x) + replace_ints_2
-        set.seed(500)
-        out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
-                                size = num_to_replace3, replace = FALSE)
+        withr::with_seed(seed = seed, code = {
+          out_of_bounds <- sample(c(below_lower_bound, above_upper_bound),
+                                  size = num_to_replace3)
+        })
 
         expect_error(
           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, above_upper_bound),
@@ -782,8 +801,9 @@ test_that(
       fn_name <- paste("ig_fet", fn_suffix, sep = "_")
       gigs_fn <- get(fn_name)
       for (seed in c(125, 175, 225)) {
-        set.seed(seed)
-        acronym <- sample(names(gigs::ig_fet), size = 1)
+        withr::with_seed(seed, code = {
+          acronym <- sample(names(gigs::ig_fet), size = 1)
+        })
         x <- gigs::ig_fet[[acronym]][[1]][[1]]
         len_x <- length(x)
         arg_zyp <- switch(fn_suffix,
