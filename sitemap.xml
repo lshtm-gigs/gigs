@@ -31,7 +31,7 @@
     <loc>https://simpar1471.github.io/gigs/news/index.html</loc>
   </url>
   <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_sga.html</loc>
+    <loc>https://simpar1471.github.io/gigs/reference/classify_sfga.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/classify_stunting.html</loc>
@@ -47,6 +47,24 @@
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/gigs-package.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/gigs_options.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/ig_fet.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_estimate_fetal_weight.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_estimate_ga.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_value2zscore.html</loc>
+  </url>
+  <url>
+    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_zscore2value.html</loc>
   </url>
   <url>
     <loc>https://simpar1471.github.io/gigs/reference/ig_nbs.html</loc>

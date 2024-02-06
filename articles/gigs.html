@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to gigs">
 <meta property="og:description" content="Learn how to get started with the basics of gigs.
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,8 +156,8 @@ ages. You can do this with the relevant <code>centile2value</code>
 function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ig_nbs_centile2value.html">ig_nbs_hcfga_centile2value</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>                              gest_days <span class="op">=</span> <span class="fl">266</span><span class="op">:</span><span class="fl">272</span>,</span>
-<span>                              sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                           gest_days <span class="op">=</span> <span class="fl">266</span><span class="op">:</span><span class="fl">272</span>,</span>
+<span>                           sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 33.5 33.5 33.6 33.7 33.7 33.8 33.8</span></span></code></pre></div>
 </div>
@@ -172,23 +172,23 @@ this package allow the user to easily classify growth status:</p>
 <div class="section level3">
 <h3 id="size-for-gestational-age">Size for gestational age<a class="anchor" aria-label="anchor" href="#size-for-gestational-age"></a>
 </h3>
-<p>The <code><a href="../reference/classify_sga.html">classify_sga()</a></code> function offers size for GA
+<p>The <code>classify_sga()</code> function offers size for GA
 classifications based on cut-offs from the research literature.
 Typically, the 10<sup>th</sup> and 90<sup>th</sup> centiles are used as
 the size for GA cut-offs, but some publications also specify severely
 small-for-GA newborns as those below the third weight-for-GA centile.
 Whether you do this depends on whether you set the <code>severe</code>
-parameter in <code><a href="../reference/classify_sga.html">classify_sga()</a></code> to <code>TRUE</code>:</p>
+parameter in <code>classify_sga()</code> to <code>TRUE</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">sga</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
 <span>        <span class="va">df_newborn_weights</span>,</span>
-<span>        <span class="fu"><a href="../reference/classify_sga.html">classify_sga</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">weight_kg</span>, gest_days <span class="op">=</span> <span class="va">gest_days</span>, sex <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/classify_sfga.html">classify_sfga</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">weight_kg</span>, gest_days <span class="op">=</span> <span class="va">gest_days</span>, sex <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">sga_severe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
 <span>        <span class="va">df_newborn_weights</span>,</span>
-<span>        <span class="fu"><a href="../reference/classify_sga.html">classify_sga</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">weight_kg</span>,</span>
-<span>                     gest_days <span class="op">=</span> <span class="va">gest_days</span>,</span>
-<span>                     sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                     severe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/classify_sfga.html">classify_sfga</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                      gest_days <span class="op">=</span> <span class="va">gest_days</span>,</span>
+<span>                      sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                      severe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">df_newborn_weights</span></span>
 <span><span class="co">#&gt;   weight_kg gest_days sex weight_p weight_z sga sga_severe</span></span>
 <span><span class="co">#&gt; 1      0.91       183   M     0.65     0.37 AGA        AGA</span></span>
@@ -204,7 +204,7 @@ parameter in <code><a href="../reference/classify_sga.html">classify_sga()</a></
 <p>The <code><a href="../reference/classify_svn.html">classify_svn()</a></code> function offers small, vulnerable
 newborn classifications, based on the framework set out in the Lancet’s
 2023 Small Vulnerable Newborn Series. Essentially, this stratifies
-results from <code><a href="../reference/classify_sga.html">classify_sga()</a></code> by whether newborns are term or
+results from <code>classify_sga()</code> by whether newborns are term or
 preterm:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_newborn_weights</span><span class="op">$</span><span class="va">svn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
@@ -233,8 +233,8 @@ different degrees of stunting:</p>
 <span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">196</span>, <span class="fl">287</span>, <span class="fl">266</span><span class="op">)</span>,</span>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] stunting_severe normal          stunting       </span></span>
-<span><span class="co">#&gt; Levels: stunting_severe stunting normal</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] stunting_severe not_stunting    stunting       </span></span>
+<span><span class="co">#&gt; Levels: stunting_severe stunting not_stunting</span></span></code></pre></div>
 <p>You can also specify for <code><a href="../reference/classify_stunting.html">classify_stunting()</a></code> to classify
 likely outlier/implausible values by setting the <code>outlier</code>
 parameter to <code>TRUE</code>:</p>
@@ -246,8 +246,8 @@ parameter to <code>TRUE</code>:</p>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span>
 <span>  outliers <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] outlier  normal   stunting</span></span>
-<span><span class="co">#&gt; Levels: stunting_severe stunting normal outlier</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] outlier      not_stunting stunting    </span></span>
+<span><span class="co">#&gt; Levels: stunting_severe stunting not_stunting outlier</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="wasting">Wasting<a class="anchor" aria-label="anchor" href="#wasting"></a>
@@ -264,8 +264,8 @@ different degrees of wasting:</p>
 <span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">33</span>, <span class="fl">230</span>, <span class="fl">278</span><span class="op">)</span>,</span>
 <span>  sex <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] wasting_severe wasting        normal         wasting_severe</span></span>
-<span><span class="co">#&gt; Levels: wasting_severe wasting normal overweight</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] wasting_severe wasting        not_wasting    wasting_severe</span></span>
+<span><span class="co">#&gt; Levels: wasting_severe wasting not_wasting overweight</span></span></code></pre></div>
 <p>You can also specify for <code><a href="../reference/classify_wasting.html">classify_wasting()</a></code> to classify
 likely outlier/implausible values by setting the <code>outlier</code>
 parameter to <code>TRUE</code>:</p>
@@ -278,8 +278,8 @@ parameter to <code>TRUE</code>:</p>
 <span>  sex <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span>
 <span>  outliers <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] wasting_severe wasting        normal         outlier       </span></span>
-<span><span class="co">#&gt; Levels: wasting_severe wasting normal overweight outlier</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] wasting_severe wasting        not_wasting    outlier       </span></span>
+<span><span class="co">#&gt; Levels: wasting_severe wasting not_wasting overweight outlier</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="weight-for-age">Weight-for-age<a class="anchor" aria-label="anchor" href="#weight-for-age"></a>
@@ -296,7 +296,7 @@ underweight and overweight:</p>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] underweight        underweight_severe overweight         overweight        </span></span>
-<span><span class="co">#&gt; Levels: underweight_severe underweight normal overweight</span></span></code></pre></div>
+<span><span class="co">#&gt; Levels: underweight_severe underweight normal_weight overweight</span></span></code></pre></div>
 <p>You can also specify for <code><a href="../reference/classify_wasting.html">classify_wasting()</a></code> to classify
 likely outlier/implausible values by setting the <code>outlier</code>
 parameter to <code>TRUE</code>:</p>
@@ -309,7 +309,7 @@ parameter to <code>TRUE</code>:</p>
 <span>  outliers <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] underweight        underweight_severe overweight         outlier           </span></span>
-<span><span class="co">#&gt; Levels: underweight_severe underweight normal overweight outlier</span></span></code></pre></div>
+<span><span class="co">#&gt; Levels: underweight_severe underweight normal_weight overweight outlier</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
