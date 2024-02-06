@@ -11,6 +11,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
+[![pkgcheck](https://github.com/lshtm-gigs/gigs/workflows/pkgcheck/badge.svg)](https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/lshtm-gigs/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
@@ -141,10 +142,9 @@ values, such that:
 
 - A *z-score* is the number of standard deviations from the mean for a
   given anthropometric measurement (e.g. height or weight).
-- A *centile* represents the proportion of measurements which we would
-  expect to be lower than a measurement we’ve taken, represented as a
-  value between 0 and
-  1.  
+- A *centile* represents the proportion of measurements in some
+  distribution which we would expect to be lower than a measurement
+  we’ve taken, represented as a value between 0 and 1.
 
 ### Usage
 
@@ -350,8 +350,8 @@ conversion of values to z-scores in the WHO Child Growth standards. At
 | Package                                                                      | Time taken (100,000 inputs) |
 |------------------------------------------------------------------------------|-----------------------------|
 | [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | 121 ms                      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | 123 ms                      |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | 126 ms                      |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | 132 ms                      |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | 132 ms                      |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | 0.4 seconds                 |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211)  | 2.05 seconds                |
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)          | 2.22 seconds                |
@@ -370,7 +370,7 @@ download links for Excel-based calculators in some standards.
 
 ## Citation
 
-Parker S (2023). *gigs: Assess Growth in Infants and Newborns*.
+Parker S (2023). *gigs: Assess Fetal, Newborn, and Child Growth*.
 <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct

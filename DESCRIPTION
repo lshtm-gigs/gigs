@@ -1,7 +1,7 @@
 Type: Package
 Package: gigs
-Title: Assess Growth in Infants and Newborns
-Version: 0.3.1.9001
+Title: Assess Fetal, Newborn, and Child Growth
+Version: 0.4.0
 Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker@lshtm.ac.uk",
@@ -13,11 +13,11 @@ Authors@R: c(
     person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
     )
 Description: Convert between anthropometric measures and z-scores/centiles in
-    multiple growth standards, and classify infant growth accordingly. With a
-    simple interface to growth standards from the World Health Organisation and
-    International Fetal and Newborn Growth Consortium for the 21st Century, gigs
-    makes growth assessment easy and reproducible for clinicians, researchers
-    and policy-makers.
+    multiple growth standards, and classify fetal, newborn, and child growth
+    accordingly. With a simple interface to growth standards from the World
+    Health Organisation and International Fetal and Newborn Growth Consortium
+    for the 21st Century, gigs makes growth assessment easy and reproducible for
+    clinicians, researchers and policy-makers.
 License: GPL (>= 3)
 URL: https://github.com/lshtm-gigs/gigs/,
     https://lshtm-gigs.github.io/gigs/
@@ -33,9 +33,12 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    units
+    units,
+    withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/testthat/parallel: true
+Config/testthat/start-first: who_gs, ig_nbs, ig_fet, ig_png
 Encoding: UTF-8
 Language: en-GB
 LazyData: true

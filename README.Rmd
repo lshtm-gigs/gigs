@@ -31,6 +31,7 @@ library(gigs)
 [![R-CMD-check](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
+[![pkgcheck](https://github.com/lshtm-gigs/gigs/workflows/pkgcheck/badge.svg)](https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/lshtm-gigs/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
@@ -143,9 +144,9 @@ location of a measurement within a normal distribution of values, such that:
 
 * A *z-score* is the number of standard deviations from the mean for a given
   anthropometric measurement (e.g. height or weight).
-* A *centile* represents the proportion of measurements which we would expect to
-  be lower than a measurement we've taken, represented as a value between 0 and
-  1.
+* A *centile* represents the proportion of measurements in some distribution
+  which we would expect to be lower than a measurement we've taken, represented
+  as a value between 0 and 1.
 
 ### Usage
 Conversion functions are named according to the set of standards in use, the
@@ -334,8 +335,8 @@ inputs, each package took:
 | Package         | Time taken (100,000 inputs) |
 |-----------------|-----------------------------|
 | `r growthstans` | 121 ms                      |
-| `r gigs_r`      | 123 ms                      |
-| `r childsds`    | 126 ms                      |
+| `r gigs_r`      | 132 ms                      |
+| `r childsds`    | 132 ms                      |
 | `r gigs_stata`  | 0.4 seconds                 |
 | `r zanthro`     | 2.05 seconds                |
 | `r anthro`      | 2.22 seconds                |
@@ -361,7 +362,7 @@ calculators in some standards.
 
 ## Citation
 
-Parker S (2023). _gigs: Assess Growth in Infants and Newborns_.
+Parker S (2023). _gigs: Assess Fetal, Newborn, and Child Growth_.
 <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct

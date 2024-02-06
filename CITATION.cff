@@ -7,13 +7,13 @@ cff-version: 1.2.0
 message: 'To cite package "gigs" in publications use:'
 type: software
 license: GPL-3.0-or-later
-title: 'gigs: Assess Growth in Infants and Newborns'
-version: 0.3.1.9001
+title: 'gigs: Assess Fetal, Newborn, and Child Growth'
+version: 0.4.0
 abstract: Convert between anthropometric measures and z-scores/centiles in multiple
-  growth standards, and classify infant growth accordingly. With a simple interface
-  to growth standards from the World Health Organisation and International Fetal and
-  Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy
-  and reproducible for clinicians, researchers and policy-makers.
+  growth standards, and classify fetal, newborn, and child growth accordingly. With
+  a simple interface to growth standards from the World Health Organisation and International
+  Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment
+  easy and reproducible for clinicians, researchers and policy-makers.
 authors:
 - family-names: Parker
   given-names: Simon
@@ -28,7 +28,7 @@ preferred-citation:
     email: simon.parker@lshtm.ac.uk
     orcid: https://orcid.org/0009-0003-8214-4496
   year: '2023'
-  notes: 0.3.1.9001
+  notes: 0.4.0
   url: https://github.com/lshtm-gigs/gigs/
 repository-code: https://github.com/lshtm-gigs/gigs
 url: https://github.com/lshtm-gigs/gigs/
@@ -202,6 +202,30 @@ references:
     given-names: Iñaki
     email: iucar@fedoraproject.org
     orcid: https://orcid.org/0000-0001-6403-5550
+  year: '2024'
+- type: software
+  title: withr
+  abstract: 'withr: Run Code ''With'' Temporarily Modified Global State'
+  notes: Suggests
+  url: https://withr.r-lib.org
+  repository: https://CRAN.R-project.org/package=withr
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Müller
+    given-names: Kirill
+    email: krlmlr+r@mailbox.org
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevinushey@gmail.com
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  - family-names: Chang
+    given-names: Winston
   year: '2024'
 identifiers:
 - type: url
