@@ -26,13 +26,18 @@
 #' \doi{10.1002/uog.17347}
 #' @export
 ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
-  recycled <- vctrs::vec_recycle_common(
-    ac = validate_ig_fet_estimation_param(abdocirc_mm) / 10, # mm / 10 for cm
-    hc = validate_ig_fet_estimation_param(headcirc_mm) / 10  # mm / 10 for cm
-  )
-  with(recycled,
-       exp(5.084820 - 54.06633 * (ac/100)^3 - 95.80076 * (ac/100)^3 *
-         log(ac/100) + 3.136370 * (hc/100))
+  recycled <- validate_parameter_lengths(abdocirc_mm = abdocirc_mm,
+                                         headcirc_mm = headcirc_mm) |>
+    mapply(FUN = validate_ig_fet_weight_estimation_param,
+           SIMPLIFY = FALSE,
+           varname = c("abdocirc_mm", "headcirc_mm")) |>
+    do.call(what = vctrs::vec_recycle_common) |>
+    lapply(FUN = \(x) x / 10)
+  with(
+    recycled,
+    exp(5.084820 - 54.06633 * (abdocirc_mm/100)^3 -
+          95.80076 * (abdocirc_mm/100)^3 * log(abdocirc_mm/100) +
+          3.136370 * (headcirc_mm/100))
   )
 }
 
@@ -94,11 +99,13 @@ ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
 ig_fet_estimate_ga <- function(crl_mm = NULL,
                                headcirc_mm = NULL,
                                femurlen_mm = NULL) {
-  recycled <- vctrs::vec_recycle_common(
-    crl_mm = validate_ig_fet_estimation_param(crl_mm),
-    headcirc_mm = validate_ig_fet_estimation_param(headcirc_mm),
-    femurlen_mm = validate_ig_fet_estimation_param(femurlen_mm)
-  )
+  recycled <- validate_parameter_lengths(crl_mm = crl_mm,
+                                         headcirc_mm = headcirc_mm,
+                                         femurlen_mm = femurlen_mm) |>
+    mapply(FUN = validate_ig_fet_estimation_param,
+           SIMPLIFY = FALSE,
+           varname = c("crl_mm", "headcirc_mm", "femurlen_mm")) |>
+    do.call(what = vctrs::vec_recycle_common)
   with(recycled, {
     crl_is_null <- is.null(crl_mm)
     hc_is_null <- is.null(headcirc_mm)
