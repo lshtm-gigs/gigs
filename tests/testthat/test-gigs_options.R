@@ -1,5 +1,3 @@
-library(testthat)
-
 #' @srrstats {G5.2a} The `message()` output of `gigs_options_get()`'s is checked
 #'   here.
 #' @srrstats {EA6.0e} `gigs_options_get()` checked for single-length character
