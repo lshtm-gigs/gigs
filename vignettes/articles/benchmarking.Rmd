@@ -14,6 +14,11 @@ knitr::opts_chunk$set(
 ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
+```{r srr-tags, eval = FALSE, echo = FALSE}
+#' @srrstats {1.5, 1.6} This article contains code for both performance and
+#'   accuracy claims when comparing this package with other software packages.
+```
+
 ```{r load_timings_rda, echo = FALSE}
 load(file = file.path("benchmarking.rda"))
 ```
@@ -39,8 +44,8 @@ z-scores in the WHO Child Growth standards.
 
 We have performed these benchmarks on a Windows 10 system running a Ryzen 7
 3700X processor and 16GB of DDR4 RAM, using R version 4.3.2. The Stata
-benchmarks have been run on the same system in Stata 18.0, using the
-[benchmark](https://github.com/mcaceresb/stata-benchmark) package for Stata.
+benchmarks have been run on the same system in Stata 18.0 (revision 15 May
+2023), using the [benchmark](https://github.com/mcaceresb/stata-benchmark) package for Stata.
 
 ## Set up benchmark dataset
 The benchmarking and package comparisons will all use the same 100,000-row
@@ -200,18 +205,17 @@ foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
 
 ```{r bind_stata_timings, echo = FALSE, eval = FALSE}
 possible_n <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_3_1 <- c(0.008, 0.009, 0.009, 0.010, 0.012, 0.028, 0.047, 0.106, 0.204,
-                0.310, 0.410)
+gigs_0_4_0 <- c(0.009, 0.008, 0.009, 0.010, 0.012, 0.028, 0.047, 0.104, 0.198, 0.296, 0.405)
 zbmicat_1_0_2 <- c(0.007, 0.008, 0.009, 0.017, 0.027, 0.105, 0.203, 0.479,
                    0.951, 1.4450, 2.046)
-lens <- lengths(list(gigs_0_3_1, zbmicat_1_0_2))
+lens <- lengths(list(gigs_0_4_0, zbmicat_1_0_2))
 n_inputs <- unlist(lapply(X = lens, FUN = \(x) possible_n[seq_len(x)]))
 stata_timings <-  data.frame(n_inputs = n_inputs,
-                             median_time = c(gigs_0_3_1, zbmicat_1_0_2),
+                             median_time = c(gigs_0_4_0, zbmicat_1_0_2),
                              time_units = "seconds",
-                             package = c(rep("Stata: gigs 0.3.1", lens[1]),
-                                         rep("Stata: zbmicat 1.0.2", lens[2])))
-rm(gigs_0_3_1, zbmicat_1_0_2, lens, n_inputs, possible_n)
+                             package = c(rep("Stata: gigs 0.4.0", lens[1]),
+                                         rep("Stata: zanthro 1.0.2", lens[2])))
+rm(gigs_0_4_0, zbmicat_1_0_2, lens, n_inputs, possible_n)
 ```
 
 The outputs from this script give a table of timings that look like this:
@@ -254,25 +258,26 @@ conversion than the other packages.
 
 Next slowest is the Stata package `zanthro`, which takes around 2.05 seconds to
 compute results in just one WHO standard. About 4 times faster than `zanthro` is
-`gigs` for Stata 0.3.1, which scales more efficiently than `zanthro` and takes
+`gigs` for Stata 0.4.0, which scales more efficiently than `zanthro` and takes
 0.4 seconds to convert 100,000 measurements to z-scores.
 
 Leading the pack are three R implementations: `growthstandards`, `gigs`, and
 `childsds`. The `growthstandards` package was the fastest at ~ 121 ms for
-100,000 inputs, followed by `gigs` (~ 123 ms) and the `childsds` package
-(~ 126 ms).
+100,000 inputs, followed by `gigs` and `childsds` (both ~ 132 ms).
 
 # Package output similarity
-The packages also differ slightly in how they convert between different values,
-which can affect the z-scores computed by each package, even if inputs are the
-same. In our testing, we found that the tested packages mostly agreed with each
-other, but that `childsds` did not correctly perform z-scoring the WHO
-standards.
+The packages also differ slightly in how they convert values to
+centiles/z-scores, which can affect the z-scores computed by each package even
+when inputs are the same. In our testing of the WHO standards, we found that the
+tested packages mostly agreed with each other, but that `childsds` did not
+correctly perform z-scoring in the WHO standards.
 
 This is because the WHO Child Growth standards constrain z-scores in the outer
-tails to within the z-scores where more data was available, i.e. between -3 and
-+3 SD. More information on this constraining procedure can be found in the
-reports referenced in the `gigs::who_gs_value2zscore()` documentation.
+tails (i.e. past 3 z-scores), as there were fewer data available at these
+extreme values. More information on this constraining procedure can be found in
+the reports referenced in the `gigs::who_gs_value2zscore()` documentation. As
+`childsds` does not perform this constraining procedure, extreme values are
+computed incorrectly:
 ```{r discrepancies, eval = FALSE}
 discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
