@@ -30,14 +30,14 @@
 #' classify_sfga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_days = 267,
-#'   sex = "F"
+#'   sex = "M"
 #' )
 #'
 #' # With severe = TRUE, highlights p < 0.03
 #' classify_sfga(
 #'   weight_kg = c(2.2, 3.4, 4.2),
 #'   gest_days = 267,
-#'   sex = "F",
+#'   sex = "M",
 #'   severe = TRUE
 #' )
 #' @references
@@ -96,6 +96,7 @@ classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' @export
 classify_svn <- function(weight_kg, gest_days, sex) {
   is_term <- gest_days >= 37 * 7
+  # classify_sfga/ig_nbs_value2centile will perform checks on params
   sfga <- classify_sfga(weight_kg = weight_kg,
                         gest_days = gest_days,
                         sex = sex,
@@ -173,14 +174,9 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' @export
 classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
                               outliers = FALSE) {
-
   checkmate::qassert(outliers, rules = "B1")
-  params <- list(lenht_cm = lenht_cm, age_days = age_days,
-                 gest_days = gest_days, sex = sex) |>
-    do.call(what = validate_stunting_params)
-
-  z_scores <- gigs_laz(lenht_cm = params[[1]], age_days = params[[2]],
-                       gest_days = params[[3]], sex = params[[4]])
+  z_scores <- gigs_laz(lenht_cm = lenht_cm, age_days = age_days,
+                       gest_days = gest_days, sex = sex)
   stunting <- rep(NA_character_, length(z_scores))
   stunting[z_scores <= -2] <- "stunting"
   stunting[z_scores <= -3] <- "stunting_severe"
@@ -235,14 +231,8 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
                              outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
-  params <- validate_parameter_lengths(weight_kg = weight_kg,
-                                       lenht_cm = lenht_cm,
-                                       age_days = age_days,
-                                       gest_days = gest_days, sex = sex) |>
-    do.call(what = vctrs::vec_recycle_common)
-  z_scores <- gigs_wlz(weight_kg = params[[1]], lenht_cm = params[[2]],
-                       age_days = params[[3]], gest_days = params[[4]],
-                       sex = params[[5]])
+  z_scores <- gigs_wlz(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                       age_days = age_days, gest_days = gest_days, sex = sex)
   wasting <- character(length = length(z_scores))
   wasting[z_scores <= -2] <- "wasting"
   wasting[z_scores <= -3] <- "wasting_severe"
@@ -294,12 +284,9 @@ classify_wfa <- function(weight_kg,
                          sex,
                          outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
-  params <- validate_parameter_lengths(weight_kg = weight_kg,
-                                       age_days = age_days,
-                                       gest_days = gest_days, sex = sex) |>
-    do.call(what = vctrs::vec_recycle_common)
-  z_scores <- gigs_waz(weight_kg = params[[1]], age_days = params[[2]],
-                       gest_days = params[[3]], sex = params[[4]])
+  # gigs_waz does argument checking
+  z_scores <- gigs_waz(weight_kg = weight_kg, age_days = age_days,
+                       gest_days = gest_days, sex = sex)
   wfa <- character(length(z_scores))
   wfa[z_scores <= -2] <- "underweight"
   wfa[z_scores <= -3] <- "underweight_severe"

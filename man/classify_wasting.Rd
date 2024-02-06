@@ -15,17 +15,21 @@ classify_wasting(
 )
 }
 \arguments{
-\item{weight_kg}{Numeric vector of length one or greater with weight
+\item{weight_kg}{Numeric vector of length one or more with weight
 value(s) in kg.}
 
-\item{lenht_cm}{Numeric vector of length one or greater  with length/height
+\item{lenht_cm}{Numeric vector of length one or more with length/height
 measurement(s) in cm.}
 
-\item{gest_days}{Numeric vector of length one or greater with gestational
-age(s) at birth in days.}
+\item{gest_days}{Numeric vector of length one or more with gestational
+age(s) at birth in days between \code{168} and \code{300}. By default, gigs will
+replace out-of-bounds elements in \code{gest_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{age_days}{Numeric vector of length one or greater  with age(s) in days
-for each child. Should be between \code{0} to \code{1856} days.}
+\item{age_days}{Numeric vector of length one or more with age(s) in days
+for each child. Should be between \code{0} to \code{1856} days. By default, gigs will
+replace out-of-bounds elements in \code{age_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs

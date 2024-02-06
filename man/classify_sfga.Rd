@@ -8,11 +8,13 @@ weight-for-gestational age standard}
 classify_sfga(weight_kg, gest_days, sex, severe = FALSE)
 }
 \arguments{
-\item{weight_kg}{Numeric vector of length one or greater with weight
+\item{weight_kg}{Numeric vector of length one or more with weight
 value(s) in kg.}
 
-\item{gest_days}{Numeric vector of length one or greater with gestational
-age(s) at birth in days.}
+\item{gest_days}{Numeric vector of length one or more with gestational
+age(s) at birth in days between \code{168} and \code{300}. By default, gigs will
+replace out-of-bounds elements in \code{gest_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
@@ -24,9 +26,9 @@ and warn you. This behaviour can be customised using the functions in
 values are below the third centile as \code{"SGA(<3)"}. Default = \code{FALSE}.}
 }
 \value{
-Factor with gestational age classification(s). If \code{severe = FALSE},
-levels are \code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are
-\code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
+Factor the same length as the longest input vector, with
+size-for-gestational age classification(s). If \code{severe = FALSE}, levels are
+\code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
 }
 \description{
 Size for gestational age categories are split by centile: small-for-GA
@@ -36,7 +38,8 @@ centile). This function also supports classification of severe SGA
 (<3\if{html}{\out{<sup>}}rd\if{html}{\out{</sup>}} centile) using the \code{severe} parameter.
 }
 \note{
-Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Without severe flag, does not differentiate between
@@ -44,14 +47,14 @@ Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recy
 classify_sfga(
   weight_kg = c(2.2, 3.4, 4.2),
   gest_days = 267,
-  sex = "F"
+  sex = "M"
 )
 
 # With severe = TRUE, highlights p < 0.03
 classify_sfga(
   weight_kg = c(2.2, 3.4, 4.2),
   gest_days = 267,
-  sex = "F",
+  sex = "M",
   severe = TRUE
 )
 }
@@ -64,4 +67,8 @@ Royal College of Obstetricians and Gynaecologists. \strong{The Investigation and
 Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
 31.} \emph{Technical report, Royal College of Obstetricians and Gynaecologists,
 London, 2013.}
+}
+\seealso{
+\code{\link[=ig_nbs_wfga_value2centile]{ig_nbs_wfga_value2centile()}}, which this function calls to get
+centiles for each observation.
 }
