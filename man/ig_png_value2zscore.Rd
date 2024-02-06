@@ -111,11 +111,11 @@ ig_png_value2zscore(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_png_value2zscore(y = 65.1, x = 55, sex = "F", acronym = "lfa") |>
+ig_png_value2zscore(y = 65.1, x = 55, sex = "M", acronym = "lfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_png_lfa_value2zscore(length_cm = 65.1, pma_weeks = 55, sex = "F") |>
+ig_png_lfa_value2zscore(length_cm = 65.1, pma_weeks = 55, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
