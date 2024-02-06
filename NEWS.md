@@ -1,10 +1,23 @@
-# gigs 0.3.1.9001
-* Added `checkmate`-based verification of inputs.
-* Added INTERGROWTH-21<sup>st</sup> Fetal standards, including the Fetal Growth 
-  standards, Fetal Doppler standards, Brain Development, and more!
-* **TODO**: The INTERGROWTH-21<sup>st</sup> Postnatal Growth (`ig_png`) 
-  conversion functions now accept post-menstrual age in weeks (`pma_weeks`) as
-  either integers (whole weeks) or decimals (weeks+days).
+# gigs 0.4.0
+
+* **BREAKING CHANGES:**
+  * Changed name of `classify_sga()` to `classify_sfga()`
+* **NEW FEATURES:** 
+  * Added INTERGROWTH-21<sup>st</sup> Fetal standards, including the Fetal Growth 
+    standards, Fetal Doppler standards, Brain Development, and more!
+  * The INTERGROWTH-21<sup>st</sup> Postnatal Growth (`ig_png`) 
+    conversion functions now accept post-menstrual age in weeks (`pma_weeks`) as
+    either whole weeks or decimals, e.g. `37` or `37.142857`, where `37.142857`
+    is equal to `37` weeks + `1` day, so `37 + 1/7` weeks.
+  * Added `checkmate`-based verification of inputs, with customised `warning()`
+    and `stop()` mechanisms to exported functions. See documentation for allowed
+    data types/lengths in each function argument.
+  * gigs package options via `.gigs_options`, which lets you customise warning
+    and error behaviour as you see fit.
+* **INTERNAL/DOCS CHANGES:**
+  * Added [statistical review roclets](https://docs.ropensci.org/srr/) tags.
+  * Better documentation, for compliance with SRR tags.
+  * Internal, non-breaking changes to test suite and documentation.
 
 # gigs 0.3.1
 * Internal, non-breaking changes to test suite and documentation.
