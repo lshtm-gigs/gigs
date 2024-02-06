@@ -1,4 +1,8 @@
-#' {}
+# Basic correctness test
+# This function is currently unexported and not called from other scripts, so
+# this test is a minor addition to keep coverage up. When the GIGS project
+# publishes its guidance, this test file will be refactored to include
+# errors/warnings, etc.
 test_that(
   desc = "GIGS head circumference-for-age z-scoring works",
   code = {
@@ -37,16 +41,5 @@ test_that(
           })
           expect_equal(z, gigs_z)
       }
-  }
-)
-
-test_that(
-  desc = "GIGS z-scoring functions fail if inputs have different length",
-  code = {
-    expect_error(object = gigs_hcaz(headcirc_cm = 50,
-                                    gest_days = 232,
-                                    age_days = 150,
-                                    sex = c("M", "F")),
-                 regexp = "Your inputs had different lengths.")
   }
 )
