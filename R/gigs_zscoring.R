@@ -24,18 +24,27 @@
 #'   * `gest_days` ≥ 43 weeks:
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
-#' @note These functions expect vectors of the same length, and will fail if
-#'   these are not provided.
+#' @note These functions expect vectors which have lengths such that they can
+#'   be recycled with [vctrs::vec_recycle_common()].
 #' @rdname gigs_waz
 #' @noRd
 gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(weight_kg, gest_days, age_days, sex)
+  validated <- validate_waz_params(weight_kg = weight_kg,
+                                   age_days = age_days,
+                                   gest_days = gest_days,
+                                   sex = sex)
+  weight_kg <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(weight_kg))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_wfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            weight_kg, gest_days, sex)
@@ -58,13 +67,22 @@ gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
 #'   standing height measurements.
 #' @noRd
 gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(lenht_cm, gest_days, age_days, sex)
+  validated <- validate_laz_params(lenht_cm = lenht_cm,
+                                   age_days = age_days,
+                                   gest_days = gest_days,
+                                   sex = sex)
+  lenht_cm <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(lenht_cm))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_lfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            lenht_cm, gest_days, sex)
@@ -81,16 +99,26 @@ gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
 }
 
 #' @rdname gigs_waz
-#' @param headcirc_cm Numeric vector with head circumferences in cm.
+#' @param headcirc_cm Numeric vector of length one or more with head
+#'   circumferences in cm.
 #' @noRd
 gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(headcirc_cm, gest_days, age_days, sex)
+  validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,
+                                    age_days = age_days,
+                                    gest_days = gest_days,
+                                    sex = sex)
+  headcirc_cm <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(headcirc_cm))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_hcfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            headcirc_cm, gest_days, sex)
@@ -109,14 +137,23 @@ gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
 #' @rdname gigs_waz
 #' @noRd
 gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(weight_kg, lenht_cm, gest_days, age_days, sex)
+  validated <- validate_wlz_params(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                                   age_days = age_days, gest_days = gest_days,
+                                   sex = sex)
+  weight_kg <- validated[[1]]
+  lenht_cm <- validated[[2]]
+  age_days <- validated[[3]]
+  gest_days <- validated[[4]]
+  sex <- validated[[5]]
 
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
+
   use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
   use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
 
