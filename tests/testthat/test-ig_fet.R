@@ -88,22 +88,20 @@ test_that(
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- ig_fet[[acronym]][[1]][[1]]
         for (seed in seq(300, 400, 30)) {
-          # withr::with_seed(
-          #   seed,
-          #   code = {
-              dbl_z_or_p <- rnorm(n = length(xvar))
-              if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+          dbl_z_or_p <- withr::with_seed(seed, code = {
+            rnorm(n = length(xvar))
+          })
+          if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
-              fn_stem <- paste0("ig_fet_", acronym)
-              fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
-              y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
+          fn_stem <- paste0("ig_fet_", acronym)
+          fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+          y_gigs <- fn_zp2val(dbl_z_or_p, xvar)
 
-              fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
-              gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
+          fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+          gigs_z_or_p <- fn_val2zp(y_gigs, xvar)
 
-              expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
-                           tolerance = sqrt(.Machine$double.eps))
-            # })
+          expect_equal(gigs_z_or_p, expected = dbl_z_or_p,
+                       tolerance = sqrt(.Machine$double.eps))
         }
       }
     }
