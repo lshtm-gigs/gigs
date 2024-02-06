@@ -10,3 +10,9 @@ library(testthat)
 library(gigs)
 
 test_check("gigs")
+
+#' @srrstats {G5.0, G5.1} gigs conversion functions are validated against growth
+#'   curve tables published by the World Health Organisation and
+#'   INTERGROWTH-21st Project. These tables are exported within the package as
+#'   `gigs::ig_nbs`, `gigs::ig_png`, `gigs::ig_fet`, and `gigs::who_gs`.
+NULL

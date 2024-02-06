@@ -53,47 +53,80 @@ ig_nbs_bfpfga_value2zscore(body_fat_perc, gest_days, sex)
 ig_nbs_ffmfga_value2zscore(fatfree_mass_g, gest_days, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
-Units depend on which \code{acronym}(s) are in use.}
+\item{y}{Numeric vector of length one or more with anthropometric
+measurement(s) to convert to centiles/z-scores. Units depend on which
+\code{acronym}(s) are in use.}
 
-\item{gest_days}{Numeric vector of gestational age(s) in days. Elements
-should be between \code{266} to \code{294} for body composition equations (\code{"fmfga"},
-\code{"bfpfga"}, or \code{"ffmfga"}), or between \code{168} and \code{300} for the other
-standards. If not inside these bounds, will return \code{NA}.}
+\item{gest_days}{Numeric vector of length one or more with gestational ages
+in days. Elements should be between certain values depending on the Newborn
+Size standard in use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 168 and 300 days for \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, and
+\code{"wlrfga"}.
+\item Between 154 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace elements in \code{gest_days} that are out of
+bounds for the growth standard in use with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{acronym}{Acronym(s) denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} NBS
-standard to use. Must be one of \code{"wfga"} (weight-for-GA), \code{"lfga"}
-(length-for-GA), \code{"hcfga"} (head circumference-for-GA), \code{"wlrfga"}
-(weight/length ratio-for-GA), \code{"fmfga"} (fat mass-for-GA), \code{"bfpfga"}
-(body fat \%-for-GA), or \code{"ffmfga"} (fat-free mass-for-GA).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{weight_kg}{Birth weight(s) in kg.}
+\item{acronym}{Character vector of length one or more denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standard to use for each
+observation. Each element should be one of:
+\itemize{
+\item \code{"wfga"} (weight-for-GA)
+\item \code{"lfga"} (length-for-GA)
+\item \code{"hcfga"} (head circumference-for-GA)
+\item \code{"wlrfga"} (weight/length ratio-for-GA)
+\item \code{"fmfga"} (fat mass-for-GA)
+\item \code{"bfpfga"} (body fat \%-for-GA)
+\item \code{"ffmfga"} (fat-free mass-for-GA)
+}
 
-\item{length_cm}{Birth length(s) in cm.}
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will throw
+an error.}
 
-\item{headcirc_cm}{Birth head circumference(s) in cm.}
+\item{weight_kg}{Numeric vector of length one or more with birth weight(s) in
+kg.}
 
-\item{wei_len_ratio}{Weight-length ratio(s) in kg per m.}
+\item{length_cm}{Numeric vector of length one or more with birth length(s) in
+cm.}
 
-\item{fat_mass_g}{Fat mass(es) in g.}
+\item{headcirc_cm}{Numeric vector of length one or more with birth head
+circumference(s) in cm.}
 
-\item{body_fat_perc}{Body fat percentage(s).}
+\item{wei_len_ratio}{Numeric vector of length one or more with weight-length
+ratio(s) in kg per m.}
 
-\item{fatfree_mass_g}{Fat-free mass(es) in g.}
+\item{fat_mass_g}{Numeric vector of length one or more with fat mass(es) in
+g.}
+
+\item{body_fat_perc}{Numeric vector of length one or more with body fat
+percentage(s).}
+
+\item{fatfree_mass_g}{Numeric vector of length one or more with fat-free
+mass(es) in g.}
 }
 \value{
-Numeric vector of z-scores/centiles with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Numeric vector of z-scores/centiles with length equal to the longest
+input vector.
 }
 \description{
 Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 Newborn Size Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles
@@ -105,11 +138,11 @@ ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "F", acronym = "lfga") |>
+ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "M", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "F") |>
+ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -123,7 +156,7 @@ ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
 # standards
 ig_nbs_hcfga_value2centile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
                               gest_days = c(168, 217, 266, 301),
-                              sex = "F") |>
+                              sex = "M") |>
   round(digits = 2)
 }
 \references{
@@ -139,7 +172,6 @@ Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
 
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric
-ratios: the newborn body composition study of the INTERGROWTH-21st
-project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
-\doi{10.1038/pr.2017.52}
+ratios: the newborn body composition study of the INTERGROWTH-21st project.}
+\emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
 }

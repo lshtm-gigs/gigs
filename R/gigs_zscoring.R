@@ -1,12 +1,3 @@
-#  - title: GIGS z-scoring procedures
-#    desc: >
-#      Z-scoring functions in which growth standards are applied according to
-#      GIGS guidance.
-#    contents:
-#      - gigs_waz
-#      - gigs_laz
-#      - gigs_hcaz
-
 #' Calculate z-scores for anthropometric measures according to GIGS guidance
 #'
 #' @description These functions calculate z-scores for either weight-for-age
@@ -33,23 +24,32 @@
 #'   * `gest_days` ≥ 43 weeks:
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
-#' @note This function expects vectors of the same length, and will fail if
-#'   these are not provided.
+#' @note These functions expect vectors which have lengths such that they can
+#'   be recycled with [vctrs::vec_recycle_common()].
 #' @rdname gigs_waz
 #' @noRd
 gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(weight_kg, gest_days, age_days, sex)
+  validated <- validate_waz_params(weight_kg = weight_kg,
+                                   age_days = age_days,
+                                   gest_days = gest_days,
+                                   sex = sex)
+  weight_kg <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(weight_kg))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_wfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            weight_kg, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_wfa_value2zscore, gigs_lgls[["ig_png"]],
-                           weight_kg, floor(pma_weeks), sex)
+                           weight_kg, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_wfa_value2zscore, gigs_lgls[["who_gs"]],
                            weight_kg, age_days, sex)
 
@@ -67,18 +67,27 @@ gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
 #'   standing height measurements.
 #' @noRd
 gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(lenht_cm, gest_days, age_days, sex)
+  validated <- validate_laz_params(lenht_cm = lenht_cm,
+                                   age_days = age_days,
+                                   gest_days = gest_days,
+                                   sex = sex)
+  lenht_cm <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(lenht_cm))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_lfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            lenht_cm, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_lfa_value2zscore, gigs_lgls[["ig_png"]],
-                           lenht_cm, floor(pma_weeks), sex)
+                           lenht_cm, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_lhfa_value2zscore, gigs_lgls[["who_gs"]],
                            lenht_cm, age_days, sex)
 
@@ -90,21 +99,31 @@ gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
 }
 
 #' @rdname gigs_waz
-#' @param headcirc_cm Numeric vector with head circumferences in cm.
+#' @param headcirc_cm Numeric vector of length one or more with head
+#'   circumferences in cm.
 #' @noRd
 gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(headcirc_cm, gest_days, age_days, sex)
+  validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,
+                                    age_days = age_days,
+                                    gest_days = gest_days,
+                                    sex = sex)
+  headcirc_cm <- validated[[1]]
+  age_days <- validated[[2]]
+  gest_days <- validated[[3]]
+  sex <- validated[[4]]
+
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !is.na(headcirc_cm))
 
   z_ig_nbs <- fn_on_subset(ig_nbs_hcfga_value2zscore, gigs_lgls[["ig_nbs"]],
                            headcirc_cm, gest_days, sex)
   z_ig_png <- fn_on_subset(ig_png_hcfa_value2zscore, gigs_lgls[["ig_png"]],
-                           headcirc_cm, floor(pma_weeks), sex)
+                           headcirc_cm, pma_weeks, sex)
   z_who_gs <- fn_on_subset(who_gs_hcfa_value2zscore, gigs_lgls[["who_gs"]],
                            headcirc_cm, age_days, sex)
 
@@ -118,14 +137,23 @@ gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
 #' @rdname gigs_waz
 #' @noRd
 gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
-  stop_if_lengths_unequal(weight_kg, lenht_cm, gest_days, age_days, sex)
+  validated <- validate_wlz_params(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                                   age_days = age_days, gest_days = gest_days,
+                                   sex = sex)
+  weight_kg <- validated[[1]]
+  lenht_cm <- validated[[2]]
+  age_days <- validated[[3]]
+  gest_days <- validated[[4]]
+  sex <- validated[[5]]
 
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days)
+  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
+
   use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
   use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
 
@@ -157,6 +185,8 @@ gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
 #'   `who_gs`. Where these logical vectors are `TRUE`, then the growth standard
 #'   from that named list should be used.
 #' @rdname gigs_xaz
+#' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
+#'   equality.
 #' @noRd
 gigs_xaz_lgls <- function(gest_days, age_days) {
   # Set up vars for use later
@@ -165,8 +195,8 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
 
-  use_ig_nbs <- age_days == 0
-  use_ig_png <- age_days > 0 & !is_term & is_valid_pma_weeks(pma_weeks)
+  use_ig_nbs <- abs(age_days) < sqrt(.Machine$double.eps)
+  use_ig_png <- age_days > 0 & !is_term & inrange(pma_weeks, c(27, 64))
   use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
 
   # Prevents `NAs are not allowed in subscripted assignments` error
@@ -178,12 +208,17 @@ gigs_xaz_lgls <- function(gest_days, age_days) {
 
 #' Run a function over a subset of inputs
 #' @param fn Function to run over `in1`, `in2`, `in3`.
-#' @param lgl Logical vector indicating which indices of `in1` `in2` and `in3`
-#'   to operate on.
+#' @param lgl Logical vector of length one or more indicating which indices of
+#'   `in1` `in2` and `in3` should be operated on `by `fn`.
 #' @param in1,in2,in3 Three vectors of the same length as `lgl` which are
-#'   used as inputs to the function specified by `fn`.
-#' @return Returns a vector the same length as `sum(lgl)`.
+#'   used as inputs to `fn`.
+#' @return Returns a vector of the type outputted by `fn`, with length dependent
+#'   on what `fn` outputs.
 #' @noRd
 fn_on_subset <- function(fn, lgl, in1, in2, in3) {
-  fn(in1[lgl], in2[lgl], in3[lgl])
+  if (any(lgl)) fn(in1[lgl], in2[lgl], in3[lgl]) else double(length = 0L)
 }
+
+# SRR tags ---------------------------------------------------------------------
+#' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
+NULL

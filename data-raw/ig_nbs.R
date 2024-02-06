@@ -34,17 +34,17 @@ make_ig_nbs_list <- function(raw_stem, x, y) {
 
 
 ig_nbs_wfga <- make_ig_nbs_list(raw_stem = "ig_nbs_weight_",
-                                x = "ga_days",
+                                x = "gest_days",
                                 y = "weight_kg")
 ig_nbs_lfga <- make_ig_nbs_list(raw_stem = "ig_nbs_len_",
-                                x = "ga_days",
-                                y = "len_cm")
+                                x = "gest_days",
+                                y = "length_cm")
 ig_nbs_hcfga <- make_ig_nbs_list(raw_stem = "ig_nbs_hc_",
-                                 x = "ga_days",
-                                 y = "hc_cm")
+                                 x = "gest_days",
+                                 y = "headcirc_cm")
 ig_nbs_wlrfga <- make_ig_nbs_list(raw_stem = "ig_nbs_weightlenratio_",
-                                  x = "ga_days",
-                                  y = "weight_len_ratio")
+                                  x = "gest_days",
+                                  y = "wei_len_ratio")
 
 
 make_ig_nbs_bodycomp_list <- function(raw_stem, x, y) {
@@ -66,14 +66,14 @@ make_ig_nbs_bodycomp_list <- function(raw_stem, x, y) {
               y = y))
 }
 ig_nbs_ffmfga <- make_ig_nbs_bodycomp_list(raw_stem = "ig_nbs_ffmfga_",
-                                           x = "ga_days",
+                                           x = "gest_days",
                                            y = "fatfree_mass_g")
 ig_nbs_bfpfga <- make_ig_nbs_bodycomp_list(raw_stem = "ig_nbs_bfpfga_",
-                                           x = "ga_days",
-                                           y = "bodyfat_percentage")
+                                           x = "gest_days",
+                                           y = "body_fat_perc")
 ig_nbs_fmfga <- make_ig_nbs_bodycomp_list(raw_stem = "ig_nbs_fmfga_",
-                                          x = "ga_days",
-                                          y = "fatmass_g")
+                                          x = "gest_days",
+                                          y = "fat_mass_g")
 
 ig_nbs <- list(
   wfga = ig_nbs_wfga,

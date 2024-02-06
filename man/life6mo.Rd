@@ -3,40 +3,37 @@
 \docType{data}
 \name{life6mo}
 \alias{life6mo}
-\title{Data from the Low birthweight Infant Feeding Exploration (LIFE) study}
+\title{Data extract from the Low birthweight Infant Feeding Exploration (LIFE) study}
 \format{
-A data frame with 10,026 rows and 24 variables:
+A data frame with 2,511 rows and 10 variables:
 \itemize{
-\item{\code{infantid}:}{  Unique ID for each infant in the dataset. First number is site, second is facility ID (1--5) for that site. The last number denotes whether the infant is a singleton or twin.}
-\item{\code{motherid}:}{  Unique ID for each mother in the dataset. Same convention as \code{infantid}, but without sibling status.}
-\item{\code{site}:}{  Site ID, derived from first number of \code{infantid} (1 = Tanzania; 2 = Malawi; 3 = India-Karnataka; 4 = India-Odisha).}
-\item{\code{facility}:}{  Facility ID, derived from third number of \code{infantid} (1--5).}
-\item{\code{birthdate}:}{  Date of birth for a given infant.}
-\item{\code{visitweek}:}{  Chronological age in weeks when study visit occurred (0--26).}
-\item{\code{visitattend}:}{  Visit attendance status (1 = Attended; 2 = Missed).}
-\item{\code{visitdate}:}{  Date of visit as double.}
-\item{\code{visittime}:}{  Time of visit as character.}
-\item{\code{withdrawalrsn}:}{  Reason for withdrawal, if withdrawn (1 = Baby died; 2 = Mother moved away; 3 = Lost contact with mother; 4 = Mother withdrew consent; 5 = Mother died and new caregiver withdrew consent; 6 = Other; NA = No withdrawal).}
-\item{\code{deliverymode2}:}{  Mode of delivery for baby (1 = Vaginal delivery; 2 = Caesarean delivery).}
-\item{\code{birthcount}:}{  Number of babies born in delivery (1 = Singleton; 2 = Twins). Note: not all babies from twin births were enrolled in the study.}
-\item{\code{sibling}:}{  Siblings enrolled in the study (1--2)}
-\item{\code{sex}:}{  Sex of the infant (1 = Male; 2 = Female).}
-\item{\code{gestage}:}{  Best obstetric estimate of gestational age (132--311). Note: missing or implausible (<24 weeks) values excluded from analysis}
-\item{\code{preterm}:}{  Term status based on \code{gestage} (0 = Term (>=37 weeks \code{gestage}); 1 = Preterm (<37 weeks \code{gestage}).}
-\item{\code{sizega}:}{  Size for gestational age (1 = Small for GA (SGA); 2 = Appropriate for GA (AGA); 3 = Large for GA (LGA)).}
-\item{\code{LBWtype4}:}{  Low birthweight type (1 = Preterm + SGA; 2 = Preterm + AGA; 3 = Preterm + LGA; 4 = Term + SGA).}
-\item{\code{pma}:}{  Post-menstrual age in days (133--545)}
-\item{\code{age_days}:}{  Chronological age in days derived from \code{gestage} and \code{pma} (0--245).}
-\item{\code{meaninfwgt}:}{  Mean weight in g (1233.33--9905).}
-\item{\code{meaninflen}:}{  Mean length in cm (35.03--72.93).}
-\item{\code{meanhead}:}{  Mean head circumference in cm (23.20--45.73).}
-\item{\code{meanmuac}:}{  Mean mid-upper arm circumference (5.97--17.03).}
+\item{\code{id}:}{  Unique ID for each infant in the dataset (1--300).}
+\item{\code{gestage}:}{  Best obstetric estimate of gestational age in days
+(201--311).}
+\item{\code{sex}:}{  Sex of the infant as a factor (\code{"M"} = Male; \code{"F"} =
+Female).}
+\item{\code{visitweek}:}{  Chronological age in weeks (±1) when study visit
+occurred (0--26).}
+\item{\code{pma}:}{  Post-menstrual age in days (202--545).}
+\item{\code{age_days}:}{  Chronological age in days at each visit; equal to
+\code{pma - gestage} (0--245).}
+\item{\code{weight_g}:}{  Mean weight in g (1271.67--9050.00).}
+\item{\code{len_cm}:}{  Mean length in cm (35.03--72.93).}
+\item{\code{headcirc_cm}:}{  Mean head circumference in cm (23.20--45.17).}
+\item{\code{muac_cm}:}{  Mean mid-upper arm circumference in cm (6.13--17.03).}
 }
 }
 \description{
-A dataset with anthropometric data for infants enrolled in the
-Low birthweight Infant Feeding Exploration (LIFE) study. The variables are as
-follows:
+A subset of anthropometric data for 300 singleton infants
+enrolled in the Low birthweight Infant Feeding Exploration (LIFE) study. The
+variables are as follows:
+}
+\note{
+We subsetted the full LIFE 6 month dataset for \link{gigs}. As such, this
+extract only includes data from 300 singleton pregnancies where the best
+estimate of gestational age was >168 days. We also removed rows corresponding
+to visit weeks where no measurement data was taken due to non-attendance of
+the visit.
 }
 \examples{
 head(gigs::life6mo)

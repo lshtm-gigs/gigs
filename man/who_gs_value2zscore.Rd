@@ -64,51 +64,83 @@ who_gs_ssfa_value2centile(subscap_sf_mm, age_days, sex)
 who_gs_tsfa_value2centile(triceps_sf_mm, age_days, sex)
 }
 \arguments{
-\item{y}{Numeric vector of measurement(s) to convert to centiles/z-scores.
-Units depend on which \code{acronym}(s) are in use.}
+\item{y}{Numeric vector of length one or more with anthropometric
+measurement(s) to convert to centiles/z-scores. Units depend on which
+\code{acronym}(s) are in use.}
 
-\item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
-to convert inputs. Must be within bounds of available \code{x} values for given
-acronym. The standard-specific versions of each function specify \code{x}:
-either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
-measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in
-cm).}
+\item{x, age_days, length_cm, height_cm}{Numeric vector of length one or more
+with x values. Elements in \code{x} or its standard-specific equivalents
+(\code{age_days}, \code{length_cm}, and \code{height_cm}) should have specific units and
+be between certain values depending on the standard in use (defined by
+\code{acronym}). These are:
+\itemize{
+\item Between 0 and 1856 days for \code{"wfa"}, \code{"bfa"}, \code{"lhfa"}, and \code{"hcfa"}.
+\item Between 45 and 110 days for \code{"wfl"}.
+\item Between 65 and 120 days for \code{"wfh"}.
+\item Between 91 and 1856 days for \code{"acfa"}, \code{"ssfa"}, \code{"tsfa"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{acronym}{Valid acronym(s) for the WHO Child Growth standards: either
-\code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
-(length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
-(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
-(arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
-\code{"tsfa"} (triceps skinfold-for-age).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{weight_kg}{Numeric vector of weight measurement(s) in kg.}
+\item{acronym}{Character vector of length one or more denoting the WHO Child
+Growth standard(s) in use. Each element should be one of:
+\itemize{
+\item \code{"wfa"} (weight-for-age)
+\item \code{"bfa"} (BMI-for-age)
+\item \code{"lhfa"} (length/height-for-age)
+\item \code{"wfl"} (weight-for-length)
+\item \code{"wfh"} (weight-for-height)
+\item \code{"hcfa"} (head circumference-for-age)
+\item \code{"acfa"} (arm circumference-for-age)
+\item \code{"ssfa"} (subscapular skinfold-for-age)
+\item \code{"tsfa"} (triceps skinfold-for-age)
+}
 
-\item{bmi}{Numeric vector of body mass index measurement(s) in
-kg/m\if{html}{\out{<sup>}}2\if{html}{\out{</sup>}}.}
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will throw
+an error.}
 
-\item{lenht_cm}{Numeric vector of length/height measurement(s) in cm.}
+\item{weight_kg}{Numeric vector of length one or more with weight
+measurement(s) in kg.}
 
-\item{headcirc_cm}{Numeric vector of head circumference measurement(s) in cm.}
+\item{bmi}{Numeric vector of length one or more with body mass index
+measurement(s) in kg/m\if{html}{\out{<sup>}}2\if{html}{\out{</sup>}}.}
 
-\item{armcirc_cm}{Numeric vector of arm circumference measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector of length one or more with length/height
+measurement(s) in cm.}
 
-\item{subscap_sf_mm}{Numeric vector of subscapular skinfold measurement(s) in
-mm.}
+\item{headcirc_cm}{Numeric vector of length one or more with head
+circumference measurement(s) in cm.}
 
-\item{triceps_sf_mm}{Numeric vector of triceps skinfold measurement(s) in mm.}
+\item{armcirc_cm}{Numeric vector of length one or more with arm circumference
+measurement(s) in cm.}
+
+\item{subscap_sf_mm}{Numeric vector of length one or more with subscapular
+skinfold measurement(s) in mm.}
+
+\item{triceps_sf_mm}{Numeric vector of length one or more with triceps
+skinfold measurement(s) in mm.}
 }
 \value{
-Numeric vector of expected measurements with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Numeric vector of z-scores/centiles with length equal to the longest
+input vector.
 }
 \description{
 Convert values to z-scores/centiles in the WHO Child Growth Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles
@@ -144,8 +176,8 @@ who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
 \references{
 de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
 WHO Multicentre Growth Reference Study: planning, study design, and
-methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
-\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
+\doi{10.1177/15648265040251s104}
 
 World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height

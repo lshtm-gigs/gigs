@@ -8,37 +8,44 @@ length/height-for-age standards}
 classify_stunting(lenht_cm, age_days, gest_days, sex, outliers = FALSE)
 }
 \arguments{
-\item{lenht_cm}{Numeric vector with length/height measurement(s) in cm.}
+\item{lenht_cm}{Numeric vector of length one or more with length/height
+measurement(s) in cm.}
 
-\item{age_days}{Numeric vector with age(s) in days for each child. Should be
-between \code{0} to \code{1856} days.}
+\item{age_days}{Numeric vector of length one or more with age(s) in days
+for each child. Should be between \code{0} to \code{1856} days. By default, gigs will
+replace out-of-bounds elements in \code{age_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{gest_days}{Numeric vector with gestational age(s) at birth in days.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of stunting classification(s) with levels
-\code{c("stunting_severe", "stunting", "normal")} or \code{c("stunting_severe", "stunting", "normal", "outlier")}, depending on whether the \code{outliers}
-argument is set to \code{TRUE}.
+Factor of stunting classification(s) with same length as longest
+input vector. Levels are \code{c("stunting_severe", "stunting", "not_stunting")}
+if \code{outliers = FALSE}, else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
 }
 \description{
 Classify stunting (low length/height-for-age) using WHO or
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards depending on the
 gestational age at birth of the child. Severe stunting is below <-3 SD
-relative to median length/height at a given age, whereas moderate stunting is
--2SD from the median.
+relative to mean length/height at a given age, whereas moderate stunting is
+-2SD from the mean.
 }
 \note{
-Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}. The
-function assumes that your measurements were taken according to the WHO
-guidelines, which stipulate that recumbent length should not be measured
-after 730 days. Implausible z-score bounds are sourced from the referenced
-WHO report, and classification cut-offs from the DHS manual.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules. This function assumes that your
+measurements were taken according to the WHO guidelines, which stipulate
+that recumbent length should not be measured after 730 days. Implausible
+z-score bounds are sourced from the referenced WHO report, and
+classification cut-offs from the DHS manual.
 }
 \examples{
 # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;

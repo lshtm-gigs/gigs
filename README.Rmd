@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -12,7 +12,17 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dev.args = list(png = list(type = "cairo"))
 )
+intergrowth21st <- knitr::asis_output(x = "INTERGROWTH-21<sup>st</sup>")
 library(gigs)
+```
+
+```{r srr-tags-1, eval = FALSE, echo = FALSE}
+#' srr-tags-readme
+#'
+#' @srrstats {G1.1} Addressed existence of other packages/implementations in
+#'   section on 'Other packages'.
+#' @srrstats {EA1.0, EA1.1, EA1.2} Addressed target audience, kinds of data,
+#'   and kinds of questions addressable through gigs.
 ```
 
 # gigs <img src="man/figures/logo.png" align="right" height="138" />
@@ -21,42 +31,53 @@ library(gigs)
 [![R-CMD-check](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
+[![pkgcheck](https://github.com/lshtm-gigs/gigs/workflows/pkgcheck/badge.svg)](https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck)
 [![test-coverage](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/lshtm-gigs/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/lshtm-gigs/gigs)
 <!-- badges: end -->
 
 ## Overview
 Produced as part of the Guidance for International Growth Standards project,
-gigs provides a single, simple interface for working with the WHO Child Growth
-standards and outputs from the INTERGROWTH-21<sup>st</sup> project. You will
+**gigs** provides a single, simple interface for working with the WHO Child
+Growth standards and outputs from the `r intergrowth21st` project. You will
 find functions for converting from anthropometric measures (e.g. weight or
 length) to z-scores and centiles, and the inverse. Also included are functions
 for classifying newborn and infant growth according to literature-based
 cut-offs.
 
+**gigs** is be of use to anyone interested in fetal and child growth,
+including child health researchers, policymakers, and clinicians. This package
+is best suited to growth data where the gestational age of each child is known,
+as the use of the growth standards included in **gigs** is gestational
+age-dependent. We recommend you check out the [available
+standards](#available-standards) section to see if your anthropometric
+measurements can be converted to z-scores/centiles by **gigs**. We recommend
+using **gigs** to generate continuous or categorical measures of
+fetal/newborn/child growth, which can then be used in downstream analyses.
+
 ## Installation
-```{r, eval = FALSE}
+```{r installation, eval = FALSE}
 # You can install the development version from GitHub with `remotes`:
 # install.packages("remotes")
 remotes::install_github(repo = "lshtm-gigs/gigs")
 ```
 
 ## Available standards
-* `ig_nbs` - INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm)
+* `ig_nbs` - `r intergrowth21st` Newborn Size standards (including very preterm)
   <details><summary>Component standards</summary>
 
   | Acronym  | Description                                | Unit  | `gest_days` range |
   |----------|--------------------------------------------|-------|-------------------|
-  | `wfga`   | Weight-or-gestational age                  | kg    | 168 to 300 days   |
-  | `lfga`   | Length-for-gestational age                 | cm    | 168 to 300 days   |
-  | `hcfga`  | Head circumference-for-gestational age     | cm    | 168 to 300 days   |
-  | `wlrfga` | Weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days   |
-  | `ffmfga` | Fat-free mass-for-gestational age          | kg    | 266 to 294 days   |
-  | `bfpfga` | Body fat percentage-for-gestational age    | %     | 266 to 294 days   |
-  | `fmfga`  | Fat mass-for-gestational age               | kg    | 266 to 294 days   |
+  | `wfga`   | weight-or-gestational age                  | kg    | 168 to 300 days   |
+  | `lfga`   | length-for-gestational age                 | cm    | 168 to 300 days   |
+  | `hcfga`  | head circumference-for-gestational age     | cm    | 168 to 300 days   |
+  | `wlrfga` | weight-to-length ratio-for-gestational age | kg/cm | 168 to 300 days   |
+  | `ffmfga` | fat-free mass-for-gestational age          | kg    | 266 to 294 days   |
+  | `bfpfga` | body fat percentage-for-gestational age    | %     | 266 to 294 days   |
+  | `fmfga`  | fat mass-for-gestational age               | kg    | 266 to 294 days   |
 
   </details>
-* `ig_png` - INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards
+* `ig_png` - `r intergrowth21st` Postnatal Growth of Preterm Infants standards
   <details><summary>Component standards</summary>
 
   | Acronym | Description                | Unit | `x` range             |
@@ -65,6 +86,33 @@ remotes::install_github(repo = "lshtm-gigs/gigs")
   | `lfa`   | length-for-age             | cm   | 27 to <64 exact weeks |
   | `hcfa`  | head circumference-for-age | cm   | 27 to <64 exact weeks |
   | `wfl`   | weight-for-length          | kg   | 35 to 65 cm           |
+
+  </details>
+* `ig_fet` - `r intergrowth21st` Fetal standards
+  <details><summary>Component standards</summary>
+
+  | Acronym  | Description                                                               | Unit | `x` range       |
+  |----------|---------------------------------------------------------------------------|------|-----------------|
+  | `hcfga`  | head circumference-for-gestational age                                    | mm   | 98 to 280 days  |
+  | `bpdfga` | biparietal diameter-for-gestational age                                   | mm   | 98 to 280 days  |
+  | `acfga`  | abdominal circumference-for-gestational age                               | mm   | 98 to 280 days  |
+  | `flfga`  | femur length-for-gestational age                                          | mm   | 98 to 280 days  |
+  | `ofdfga` | occipito-frontal diameter for-gestational age                             | mm   | 98 to 280 days  |
+  | `efwfga` | estimated fetal weight-for-gestational age                                | g    | 154 to 280 days |
+  | `sfhfga` | symphisis-fundal height-for-gestational age                               | mm   | 112 to 294 days |
+  | `crlfga` | crown-rump length-for-gestational age                                     | mm   | 58 to 105 days  |
+  | `gafcrl` | gestational age-for-crown-rump length                                     | days | 15 to 95 mm     |
+  | `gwgfga` | gestational weight gain-for-gestational age                               | kg   | 98 to 280 days  |
+  | `pifga`  | pulsatility index-for-gestational age                                     |      | 168 to 280 days |
+  | `rifga`  | resistance index-for-gestational age                                      |      | 168 to 280 days |
+  | `sdrfga` | systolic/diastolic ratio-for-gestational age                              |      | 168 to 280 days |
+  | `tcdfga` | transcerebellar diameter-for-gestational age                              | mm   | 98 to 280 days  |
+  | `tcdfga` | gestational age-for-transcerebellar diameter                              | mm   | 98 to 280 days  |
+  | `poffga` | parietal-occipital fissure-for-gestational age                            | mm   | 105 to 252 days |
+  | `sffga`  | Sylvian fissue-for-gestational age                                        | mm   | 105 to 252 days |
+  | `avfga`  | anterior horn of the lateral ventricle-for-gestational age                | mm   | 105 to 252 days |
+  | `pvfga`  | atrium of the posterior horn of the lateral ventricle-for-gestational age | mm   | 105 to 252 days |
+  | `cmfga`  | cisterna magna-for-gestational age                                        | mm   | 105 to 252 days |
 
   </details>
 * `who_gs` - WHO Child Growth Standards for term infants
@@ -85,15 +133,31 @@ remotes::install_github(repo = "lshtm-gigs/gigs")
   </details>
 
 ## Conversion functions
+### Terminology
+```{r srr-tags-2, eval = FALSE, echo = FALSE}
+#' @srrstats {G1.3} Explained z-scores and centiles prior to discussing
+#'   functions which convert between these and measured values.
+```
+The package operates with on measured anthropometric values, and can convert
+between these and *z-scores*/*centiles*. Z-scores and centiles represent the
+location of a measurement within a normal distribution of values, such that:
+
+* A *z-score* is the number of standard deviations from the mean for a given
+  anthropometric measurement (e.g. height or weight).
+* A *centile* represents the proportion of measurements in some distribution
+  which we would expect to be lower than a measurement we've taken, represented
+  as a value between 0 and 1.
+
+### Usage
 Conversion functions are named according to the set of standards in use, the
 component standard from that set, then the type of conversion. For example, to
 convert *values to z-scores* in the *weight-for-GA* standard from the
-*INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
+*`r intergrowth21st` Newborn Size Standards* would be:
   `ig_nbs`/`_wfga`/`_value2zscore()`
 
 Similarly, the conversion of length-for-age values to centiles in term and
 preterm infants could be performed with the WHO Child Growth standards and
-INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards,
+`r intergrowth21st` Postnatal Growth of Preterm Infants standards,
 respectively:
 
 * Term infants:    `who_gs`/`_lhfa`/`_value2zscore()`
@@ -181,7 +245,7 @@ classification of suboptimal growth. The cut-offs used are sourced from research
 literature; you can check the function documentation to see these sources.
 ```{r examples_classification}
 # Size for gestational age
-classify_sga(
+classify_sfga(
   weight_kg = c(2.1, 3.2, 4.5),
   gest_days = c(252, 259, 290),
   sex = "M"
@@ -219,3 +283,90 @@ classify_wfa(
   sex = c("M", "M", "F", "F", "F")
 )
 ```
+
+# Other packages
+
+Other R packages can be used to analyse growth data with international
+standards, but have limitations which are not present in gigs. There are also
+software packages external to R which implement these standards. The table
+below describes these packages, and to what extent they have implemented
+functions that let users convert anthropometric measurements to
+z-scores/centiles in each set of standards implemented in gigs - the WHO Child
+Growth standards, `r intergrowth21st` Newborn Size standards (including Very
+Preterm), and the `r intergrowth21st` Postnatal Growth standards for preterm
+infants. A green tick (✅) indicates that all possible standards are included in
+a package, a red cross (❌) indicates that these standards are completely
+missing, and an exclamation mark (❕) indicates that some of these standards are
+implemented but not others.
+
+```{r arrows, echo = FALSE}
+ig21st <- knitr::asis_output(x = "IG-21<sup>st</sup>")
+
+larr <- knitr::asis_output(x = "&larr;")
+rarr <- knitr::asis_output(x = "&rarr;")
+harr <- knitr::asis_output(x = "&harr;")
+yes <- knitr::asis_output(x = "✅")
+no <- knitr::asis_output(x = "❌")
+half <- knitr::asis_output(x = "❕")
+
+anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
+childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
+gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs/)")
+growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
+gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs-stata/)")
+zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211)")
+intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
+```
+
+| Software        | Platform | WHO (0-5 years) | `r ig21st` NBS | `r ig21st` PNG | `r ig21st` Fetal | Functionality                     |
+|-----------------|----------|-----------------|----------------|----------------|------------------|-----------------------------------|
+| `r gigs_r`      | R        | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
+| `r anthro`      | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores          |
+| `r childsds`    | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
+| `r growthstans` | R        | `r yes`         | `r yes`        | `r no`         | `r half`         | Values `r harr` z-scores/centiles |
+| `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | NA                                |
+| `r gigs_stata`  | Stata    | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
+| `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
+
+We have benchmarked some of these implementations against each other for
+conversion of values to z-scores in the WHO Child Growth standards. At 100,000
+inputs, each package took:
+
+| Package         | Time taken (100,000 inputs) |
+|-----------------|-----------------------------|
+| `r growthstans` | 121 ms                      |
+| `r gigs_r`      | 132 ms                      |
+| `r childsds`    | 132 ms                      |
+| `r gigs_stata`  | 0.4 seconds                 |
+| `r zanthro`     | 2.05 seconds                |
+| `r anthro`      | 2.22 seconds                |
+| `r intergrowth` | NA (no WHO functions)       |
+
+```{r srr-tags-3, eval = FALSE, echo = FALSE}
+#' @srrstats {G1.5, G1.6} The linked article contains code for both performance
+#'   and accuracy claims when comparing this package with other software
+#'   packages.
+```
+
+The results can be seen in the online benchmarking
+[article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
+
+The WHO and `r intergrowth21st` standards are also available in standalone form,
+available from the [WHO
+website](https://www.who.int/tools/child-growth-standards/software) and
+[`r intergrowth21st`
+website](https://intergrowth21.tghn.org/intergrowth-21st-applications/),
+respectively.
+The `r intergrowth21st` website also includes download links for Excel-based
+calculators in some standards.
+
+## Citation
+
+Parker S (2023). _gigs: Assess Fetal, Newborn, and Child Growth_.
+<https://github.com/lshtm-gigs/gigs/>.
+
+## Code of Conduct
+
+Please note that the gigs project is released with a [Contributor Code of
+Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project
+you agree to abide by its terms.

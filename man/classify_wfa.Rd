@@ -7,16 +7,24 @@
 classify_wfa(weight_kg, age_days, gest_days, sex, outliers = FALSE)
 }
 \arguments{
-\item{weight_kg}{Numeric vector with weight value(s) in kg.}
+\item{weight_kg}{Numeric vector of length one or more with weight
+value(s) in kg.}
 
-\item{age_days}{Numeric vector with age(s) in days for each child. Should be
-between \code{0} to \code{1856} days.}
+\item{age_days}{Numeric vector of length one or more with age(s) in days
+for each child. Should be between \code{0} to \code{1856} days. By default, gigs will
+replace out-of-bounds elements in \code{age_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{gest_days}{Numeric vector with gestational age(s) at birth in days.
-Values not between \code{168} and \code{300} will be set to \code{NA}.}
+\item{gest_days}{Numeric vector of length one or more with gestational
+age(s) at birth in days between \code{168} and \code{300}. By default, gigs will
+replace out-of-bounds elements in \code{gest_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
@@ -30,8 +38,8 @@ input. If \code{outliers = FALSE}, levels are \code{c("underweight_severe", "und
 Classify weight-for-age z-scores using the WHO Child Growth Standards or
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standards depending on the
 gestational age at birth for the infant. Severely underweight is less than 3
-SD below the median, underweight is less than 2 SD below the median, and
-overweight is > 2 SDs above the median.
+SD below the mean, underweight is less than 2 SD below the mean, and
+overweight is > 2 SDs above the mean.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.

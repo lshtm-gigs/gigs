@@ -2,13 +2,13 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "gigs",
-  "description": "Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify infant growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
-  "name": "gigs: Assess Growth in Infants and Newborns",
+  "description": "Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
+  "name": "gigs: Assess Fetal, Newborn, and Child Growth",
   "relatedLink": "https://lshtm-gigs.github.io/gigs/",
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -25,6 +25,12 @@
     }
   ],
   "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Linda",
+      "familyName": "Vesel",
+      "@id": "https://orcid.org/0000-0003-3753-4172"
+    },
     {
       "@type": "Person",
       "givenName": "Eric",
@@ -90,6 +96,30 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "units",
+      "name": "units",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=units"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
     }
   ],
   "softwareRequirements": {
@@ -101,6 +131,11 @@
     },
     "2": {
       "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
       "identifier": "gamlss.dist",
       "name": "gamlss.dist",
       "provider": {
@@ -111,12 +146,19 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=gamlss.dist"
     },
-    "3": {
-      "@type": "SoftwareApplication",
-      "identifier": "stats",
-      "name": "stats"
-    },
     "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "checkmate",
+      "name": "checkmate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=checkmate"
+    },
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "vctrs",
       "name": "vctrs",
@@ -130,7 +172,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1556.987KB",
+  "fileSize": "1816.035KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -140,20 +182,16 @@
           "@type": "Person",
           "givenName": "Simon",
           "familyName": "Parker"
-        },
-        {
-          "@type": "Person",
-          "givenName": "Eric",
-          "familyName": "Ohuma"
         }
       ],
       "name": "{gigs}: Assess Growth in Infants and Newborns",
-      "url": "https://github.com/lshtm-gigs/gigs/"
+      "url": "https://github.com/lshtm-gigs/gigs/",
+      "description": "0.4.0"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
   "readme": "https://github.com/lshtm-gigs/gigs/blob/master/README.md",
-  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/lshtm-gigs/gigs"],
+  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/lshtm-gigs/gigs"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": ["growth-standards", "anthropometry", "intergrowth", "r", "who", "r-package", "rstats"]
 }

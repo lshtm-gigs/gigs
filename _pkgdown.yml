@@ -13,7 +13,7 @@ reference:
     desc: >
       Classify growth data into commonly used growth indicators.
     contents:
-      - classify_sga
+      - classify_sfga
       - classify_svn
       - classify_stunting
       - classify_wasting
@@ -33,19 +33,38 @@ reference:
     contents:
       - ig_png_value2zscore
       - ig_png_zscore2value
+  - title: INTERGROWTH-21<sup>st</sup> Fetal Standards
+    desc: >
+      Conversion functions for the INTERGROWTH-21<sup>st</sup> Fetal Standards.
+    contents:
+      - ig_fet_value2zscore
+      - ig_fet_zscore2value
   - title: WHO Child Growth Standards
     desc: Conversion functions for the WHO Child Growth Standards.
     contents:
       - who_gs_value2zscore
       - who_gs_zscore2value
+  - title: INTERGROWTH-21<sup>st</sup> Estimation Functions
+    desc: Estimation functions from the INTERGROWTH-21<sup>st</sup> Project.
+    contents:
+      - ig_fet_estimate_fetal_weight
+      - ig_fet_estimate_ga
   - title: Reference data and coefficient tables
     desc: >
-      Lists containing growth curve data, model parameters for WHO and some
-      INTERGROWTH-21<sup>st</sup> standards, and data from the LIFE study.
+      Lists containing data frames with growth curve data, model parameters for 
+      WHO and some INTERGROWTH-21<sup>st</sup> standards, and data from the 
+      LIFE study.
     contents:
       - ig_nbs
       - ig_nbs_coeffs
       - ig_png
+      - ig_fet
       - who_gs
       - who_gs_coeffs
       - life6mo
+  - title: GIGS package options
+    desc: >
+      Options for how gigs should handle missing or undefined data, and some
+      out-of bounds values.
+    contents:
+      - gigs_options

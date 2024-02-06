@@ -68,8 +68,8 @@ circumference in female newborns across a range of gestational ages. You can do
 this with the relevant `centile2value` function:
 ```{r conversion_hcfga}
 ig_nbs_hcfga_centile2value(p = 0.5,
-                              gest_days = 266:272,
-                              sex = "M") |>
+                           gest_days = 266:272,
+                           sex = "M") |>
         round(digits = 1)
 ```
 
@@ -89,13 +89,13 @@ third weight-for-GA centile. Whether you do this depends on whether you set the
 ```{r example_sga}
 df_newborn_weights$sga <- with(
         df_newborn_weights,
-        classify_sga(weight_kg = weight_kg, gest_days = gest_days, sex = sex))
+        classify_sfga(weight_kg = weight_kg, gest_days = gest_days, sex = sex))
 df_newborn_weights$sga_severe <- with(
         df_newborn_weights,
-        classify_sga(weight_kg = weight_kg,
-                     gest_days = gest_days,
-                     sex = sex,
-                     severe = TRUE))
+        classify_sfga(weight_kg = weight_kg,
+                      gest_days = gest_days,
+                      sex = sex,
+                      severe = TRUE))
 df_newborn_weights
 ```
 

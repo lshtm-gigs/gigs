@@ -19,8 +19,8 @@ head(gigs::who_gs_coeffs$lhfa$male)
 \references{
 de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
 WHO Multicentre Growth Reference Study: planning, study design, and
-methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
-\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
+\doi{10.1177/15648265040251s104}
 
 World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height

@@ -64,34 +64,63 @@ who_gs_ssfa_centile2value(p, age_days, sex)
 who_gs_tsfa_centile2value(p, age_days, sex)
 }
 \arguments{
-\item{z, p}{Numeric vector of centiles/z-scores to convert to values.}
+\item{z, p}{Numeric vector of length one or more with centiles/z-scores to
+convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
+\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
+customised using the functions in \link{gigs_options}.}
 
-\item{x, age_days, length_cm, height_cm}{Numeric vector with \code{x} values at which
-to convert inputs. Must be within bounds of available \code{x} values for given
-acronym. The standard-specific versions of each function specify \code{x}:
-either \code{age_days} (age since birth in days), \code{length_cm} (recumbent length
-measurement(s) in cm) or \code{height_cm} (standing height measurement(s) in
-cm).}
+\item{x, age_days, length_cm, height_cm}{Numeric vector of length one or more
+with x values. Elements in \code{x} or its standard-specific equivalents
+(\code{age_days}, \code{length_cm}, and \code{height_cm}) should have specific units and
+be between certain values depending on the standard in use (defined by
+\code{acronym}). These are:
+\itemize{
+\item Between 0 and 1856 days for \code{"wfa"}, \code{"bfa"}, \code{"lhfa"}, and \code{"hcfa"}.
+\item Between 45 and 110 days for \code{"wfl"}.
+\item Between 65 and 120 days for \code{"wfh"}.
+\item Between 91 and 1856 days for \code{"acfa"}, \code{"ssfa"}, \code{"tsfa"}.
+}
 
-\item{sex}{Character vector of sex(es), either \code{"M"} (male) or \code{"F"}
-(female).}
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
 
-\item{acronym}{Valid acronym(s) for the WHO Child Growth standards: either
-\code{"wfa"} (weight-for-age), \code{"bfa"} (BMI-for-age), \code{"lhfa"}
-(length/height-for-age), \code{"wfl"} (weight-for-length), or \code{"wfh"}
-(weight-for-height), \code{"hcfa"} (head circumference-for-age), \code{"acfa"}
-(arm circumference-for-age), \code{"ssfa"} (subscapular skinfold-for-age), or
-\code{"tsfa"} (triceps skinfold-for-age).}
+\item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
+(male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
+will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
+and warn you. This behaviour can be customised using the functions in
+\link{gigs_options}.}
+
+\item{acronym}{Character vector of length one or more denoting the WHO Child
+Growth standard(s) in use. Each element should be one of:
+\itemize{
+\item \code{"wfa"} (weight-for-age)
+\item \code{"bfa"} (BMI-for-age)
+\item \code{"lhfa"} (length/height-for-age)
+\item \code{"wfl"} (weight-for-length)
+\item \code{"wfh"} (weight-for-height)
+\item \code{"hcfa"} (head circumference-for-age)
+\item \code{"acfa"} (arm circumference-for-age)
+\item \code{"ssfa"} (subscapular skinfold-for-age)
+\item \code{"tsfa"} (triceps skinfold-for-age)
+}
+
+This argument is case-sensitive. By default, gigs will replace elements in
+\code{acronym} which are not one of the above values with \code{NA} and warn you.
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will throw
+an error.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the
-outputs from \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+longest input vector.
 }
 \description{
 Convert z-scores/centiles to values in the WHO Child Growth Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values
@@ -129,8 +158,8 @@ who_gs_wfh_zscore2value(z = 0,
 \references{
 de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
 WHO Multicentre Growth Reference Study: planning, study design, and
-methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.} doi:
-\href{https://journals.sagepub.com/doi/10.1177/15648265040251S104}{10.1177/15648265040251s104}
+methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
+\doi{10.1177/15648265040251s104}
 
 World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height

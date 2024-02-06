@@ -25,8 +25,8 @@ make_ig_png_list <- function(raw_stem, x, y) {
                    centiles = make_centile_tbl(sex = "male", x = x)),
        female = list(zscores = make_zscore_tbl(sex = "female", x = x),
                      centiles = make_centile_tbl(sex = "female", x = x)),
-              x = x,
-              y = y)
+       x = x,
+       y = y)
 }
 
 ig_png_weight <- make_ig_png_list(raw_stem = "ig_png_weight_",

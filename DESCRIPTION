@@ -1,21 +1,23 @@
 Type: Package
 Package: gigs
-Title: Assess Growth in Infants and Newborns
-Version: 0.3.1
+Title: Assess Fetal, Newborn, and Child Growth
+Version: 0.4.0
 Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker@lshtm.ac.uk",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
-    person(given = "Eric", family = "Ohuma", role = c("dtc", "rev"),
+    person(given = "Linda", family = "Vesel", role = c("dtc"),
+           comment = c(ORCID = "0000-0003-3753-4172")),
+    person(given = "Eric", family = "Ohuma", role = c("dtc"),
            comment = c(ORCID = "0000-0002-3116-2593")),
     person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
     )
 Description: Convert between anthropometric measures and z-scores/centiles in
-    multiple growth standards, and classify infant growth accordingly. With a
-    simple interface to growth standards from the World Health Organisation and
-    International Fetal and Newborn Growth Consortium for the 21st Century, gigs
-    makes growth assessment easy and reproducible for clinicians, researchers
-    and policy-makers.
+    multiple growth standards, and classify fetal, newborn, and child growth
+    accordingly. With a simple interface to growth standards from the World
+    Health Organisation and International Fetal and Newborn Growth Consortium
+    for the 21st Century, gigs makes growth assessment easy and reproducible for
+    clinicians, researchers and policy-makers.
 License: GPL (>= 3)
 URL: https://github.com/lshtm-gigs/gigs/,
     https://lshtm-gigs.github.io/gigs/
@@ -23,17 +25,22 @@ BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    gamlss.dist,
     stats,
+    gamlss.dist,
+    checkmate,
     vctrs
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    units,
+    withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/testthat/parallel: true
+Config/testthat/start-first: who_gs, ig_nbs, ig_fet, ig_png
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
-RoxygenNote: 7.2.3
-Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.0
+Roxygen: list(markdown = TRUE, roclets = c ("namespace", "rd", "srr::srr_stats_roclet"))

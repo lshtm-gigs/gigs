@@ -1,3 +1,11 @@
+# gigs 0.3.1.9001
+* Added `checkmate`-based verification of inputs.
+* Added INTERGROWTH-21<sup>st</sup> Fetal standards, including the Fetal Growth 
+  standards, Fetal Doppler standards, Brain Development, and more!
+* **TODO**: The INTERGROWTH-21<sup>st</sup> Postnatal Growth (`ig_png`) 
+  conversion functions now accept post-menstrual age in weeks (`pma_weeks`) as
+  either integers (whole weeks) or decimals (weeks+days).
+
 # gigs 0.3.1
 * Internal, non-breaking changes to test suite and documentation.
 * Classification functions now use `gigs_**z()` functions internally for z-scoring. These z-scoring functions, found in `gigs-zscoring.R`, will be made user-facing once the GIGS guidance documentation is made public.

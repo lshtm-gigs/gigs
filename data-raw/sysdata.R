@@ -48,12 +48,26 @@ bodycomp_tables <- list(fmfga_M = gigs::ig_nbs$fmfga$male$centiles,
                         ffmfga_M = gigs::ig_nbs$ffmfga$male$centiles,
                         ffmfga_F = gigs::ig_nbs$ffmfga$female$centiles)
 
-## Save as list of coefficients
-ig_nbs_bc_li <- lapply(bodycomp_tables, extract_eqn_params)
+
+# Valid x-ranges for each acronym ----------------------------------------------
+xvar_ranges <- list()
+for (chr_standard in c("ig_fet", "ig_nbs", "ig_png", "who_gs")) {
+  li_ranges <- list()
+  li_standard <- getExportedValue(ns = "gigs", chr_standard)
+  for (chr_acronym in names(li_standard)) {
+    curr_xvar <- switch(chr_standard,
+                        ig_fet = li_standard[[chr_acronym]][[1]][[1]],
+                        li_standard[[chr_acronym]][[1]][[1]][[1]])
+    li_ranges[[chr_acronym]] <- range(curr_xvar)
+  }
+  names(li_ranges) <- names(li_standard)
+  xvar_ranges[[chr_standard]] <- li_ranges
+}
+
+rm(li_ranges, li_standard, curr_xvar, chr_acronym, chr_standard)
 
 # Save data to sysdata.rda with usethis ----------------------------------------
-usethis::use_data(ig_nbs_bc_li, coeff_rownames,
-                  internal = TRUE, overwrite = TRUE)
+usethis::use_data(ig_nbs_bc_li, xvar_ranges, internal = TRUE, overwrite = TRUE)
 
 # Save body composition data as .dta file for use in stata-gigs ----------------
 dta_dir <- file.path("data-raw", "tables", "ig_nbs", "stata")
