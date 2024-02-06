@@ -69,9 +69,7 @@ Size standard in use (defined by \code{acronym}). These are:
 
 By default, gigs will replace elements in \code{gest_days} that are out of
 bounds for the growth standard in use with \code{NA} and warn you. This
-behaviour can be customised using the functions in \link{gigs_options}. If all
-elements in \code{acronym} are not one of the above values, gigs will throw an
-error.}
+behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
@@ -94,7 +92,9 @@ observation. Each element should be one of:
 
 This argument is case-sensitive. By default, gigs will replace elements in
 \code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}.}
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will throw
+an error.}
 }
 \value{
 Numeric vector of expected measurements with length equal to the
@@ -135,10 +135,10 @@ ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
 
 # Bad inputs will not stop the function but will instead return NA - here 140
 # days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
-# size standards
+# size standards.
 ig_nbs_hcfga_zscore2value(z = z,
                           gest_days = c(140, 182, 224, 266),
-                          sex = "F") |>
+                          sex = "M") |>
   round(digits = 2)
 }
 \references{

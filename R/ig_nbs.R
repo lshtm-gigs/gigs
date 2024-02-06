@@ -79,13 +79,12 @@
 #' # size standards.
 #' ig_nbs_hcfga_zscore2value(z = z,
 #'                           gest_days = c(140, 182, 224, 266),
-#'                           sex = "F") |>
+#'                           sex = "M") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
-  list(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
-    do.call(what = validate_ig_nbs) |>
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
     do.call(what = ig_nbs_c2v_internal)
 }
 
@@ -93,122 +92,144 @@ ig_nbs_centile2value <- function(p, gest_days, sex, acronym) {
 #' @export
 ig_nbs_wfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "wfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_lfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "lfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_hcfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "hcfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_wlrfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "wlrfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_fmfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "fmfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_bfpfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "bfpfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_ffmfga_centile2value <- function(p, gest_days, sex) {
   acronym <- "ffmfga"
-  list(p = p, x = gest_days, sex = sex, acronym = acronym,
-       x_name = ig_nbs[[acronym]][["x"]]) |>
-    do.call(what = validate_ig_nbs) |>
-    do.call(what = ig_png_c2v_internal)
+  validate_ig_nbs(p = p, gest_days = gest_days, sex = sex, acronym = acronym) |>
+    do.call(what = ig_nbs_c2v_internal)
 }
 
 #' @importFrom stats pnorm
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_zscore2value <- function(z, gest_days, sex, acronym) {
-  validated <- list(z = z, gest_days = gest_days, sex = sex,
-                    acronym = acronym) |>
-    do.call(what = validate_ig_nbs)
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
   with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_wfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "wfga")
+  acronym <- "wfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_lfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "lfga")
+  acronym <- "lfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_hcfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "hcfga")
+  acronym <- "hcfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_wlrfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "wlrfga")
+  acronym <- "wlrfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_fmfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "fmfga")
+  acronym <- "fmfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_bfpfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "bfpfga")
+  acronym <- "bfpfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' @rdname ig_nbs_centile2value
 #' @export
 ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
-  ig_nbs_zscore2value(z, gest_days, sex, acronym = "ffmfga")
+  acronym <- "ffmfga"
+  validated <- validate_ig_nbs(z = z,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
+  with(validated, ig_nbs_c2v_internal(pnorm(z), gest_days, sex, acronym))
 }
 
 #' Convert values to z-scores/centiles in the INTERGROWTH-21<sup>st</sup>
@@ -241,11 +262,11 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "F", acronym = "lfga") |>
+#' ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "M", acronym = "lfga") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "F") |>
+#' ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
@@ -259,65 +280,86 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #' # standards
 #' ig_nbs_hcfga_value2centile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
 #'                               gest_days = c(168, 217, 266, 301),
-#'                               sex = "F") |>
+#'                               sex = "M") |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_value2centile <- function(y, gest_days, sex, acronym) {
-  list(y = y, gest_days = gest_days, sex = sex, acronym = acronym) |>
-    do.call(what = validate_ig_nbs) |>
+  validate_ig_nbs(y = y, gest_days = gest_days, sex = sex, acronym = acronym) |>
     do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_wfga_value2centile <- function(weight_kg, gest_days, sex) {
-  ig_nbs_value2centile(weight_kg, gest_days, sex, acronym = "wfga")
+  acronym <- "wfga"
+  validate_ig_nbs(y = weight_kg, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_lfga_value2centile <- function(length_cm, gest_days, sex) {
-  ig_nbs_value2centile(length_cm, gest_days, sex, acronym = "lfga")
+  acronym <- "lfga"
+  validate_ig_nbs(y = length_cm, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_hcfga_value2centile <- function(headcirc_cm, gest_days, sex) {
-  ig_nbs_value2centile(headcirc_cm, gest_days, sex, acronym = "hcfga")
+  acronym <- "hcfga"
+  validate_ig_nbs(y = headcirc_cm, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_wlrfga_value2centile <- function(wei_len_ratio, gest_days, sex) {
-  ig_nbs_value2centile(wei_len_ratio, gest_days, sex, acronym = "wlrfga")
+  acronym <- "wlrfga"
+  validate_ig_nbs(y = wei_len_ratio, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_fmfga_value2centile <- function(fat_mass_g, gest_days, sex) {
-  ig_nbs_value2centile(fat_mass_g, gest_days, sex, acronym = "fmfga")
+  acronym <- "fmfga"
+  validate_ig_nbs(y = fat_mass_g, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_bfpfga_value2centile <- function(body_fat_perc, gest_days, sex) {
-  ig_nbs_value2centile(body_fat_perc, gest_days, sex, acronym = "bfpfga")
+  acronym <- "bfpfga"
+  validate_ig_nbs(y = body_fat_perc, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_ffmfga_value2centile <- function(fatfree_mass_g, gest_days, sex) {
-  ig_nbs_value2centile(fatfree_mass_g, gest_days, sex, acronym = "ffmfga")
+  acronym <- "ffmfga"
+  validate_ig_nbs(y = fatfree_mass_g, gest_days = gest_days, sex = sex,
+                  acronym = acronym, y_name = gigs::ig_nbs[[acronym]][["y"]]) |>
+    do.call(what = ig_nbs_v2c_internal)
 }
 
 #' @importFrom stats qnorm
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_value2zscore <- function(y, gest_days, sex, acronym) {
-  validated <- list(y = y, gest_days = gest_days,
-                    sex = sex, acronym = acronym) |>
-    do.call(what = validate_ig_nbs)
+  validated <- validate_ig_nbs(y = y,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
   with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
     qnorm()
 }
@@ -325,43 +367,92 @@ ig_nbs_value2zscore <- function(y, gest_days, sex, acronym) {
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_wfga_value2zscore <- function(weight_kg, gest_days, sex) {
-  ig_nbs_value2zscore(weight_kg, gest_days, sex, acronym = "wfga")
+  acronym <- "wfga"
+  validated <- validate_ig_nbs(y = weight_kg,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_lfga_value2zscore <- function(length_cm, gest_days, sex) {
-  ig_nbs_value2zscore(length_cm, gest_days, sex, acronym = "lfga")
+  acronym <- "lfga"
+  validated <- validate_ig_nbs(y = length_cm,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_hcfga_value2zscore <- function(headcirc_cm, gest_days, sex) {
-  ig_nbs_value2zscore(headcirc_cm, gest_days, sex, acronym = "hcfga")
+  acronym <- "hcfga"
+  validated <- validate_ig_nbs(y = headcirc_cm,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_wlrfga_value2zscore <- function(wei_len_ratio, gest_days, sex) {
-  ig_nbs_value2zscore(wei_len_ratio, gest_days, sex, acronym = "wlrfga")
+  acronym <- "wlrfga"
+  validated <- validate_ig_nbs(y = wei_len_ratio,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_fmfga_value2zscore <- function(fat_mass_g, gest_days, sex) {
-  ig_nbs_value2zscore(fat_mass_g, gest_days, sex, acronym = "fmfga")
+  acronym <- "fmfga"
+  validated <- validate_ig_nbs(y = fat_mass_g,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_bfpfga_value2zscore <- function(body_fat_perc, gest_days, sex) {
-  ig_nbs_value2zscore(body_fat_perc, gest_days, sex, acronym = "bfpfga")
+  acronym <- "bfpfga"
+  validated <- validate_ig_nbs(y = body_fat_perc,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 #' @rdname ig_nbs_value2centile
 #' @export
 ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
-  ig_nbs_value2zscore(fatfree_mass_g, gest_days, sex, acronym = "ffmfga")
+  acronym <- "ffmfga"
+  validated <- validate_ig_nbs(y = fatfree_mass_g,
+                               gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym,
+                               y_name = gigs::ig_nbs[[acronym]][["y"]])
+  with(validated, ig_nbs_v2c_internal(y, gest_days, sex, acronym)) |>
+    qnorm()
 }
 
 # INTERNAL: INTERGROWTH-21st Newborn Size standards conversion logic -----------
@@ -371,7 +462,6 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_nbs_c2v_internal <- function(p, gest_days, sex, acronym) {
-  stop_if_lengths_unequal(p, gest_days, sex, acronym)
   vpns_lim <- 231
   ifelse(
     test = acronym == "wlrfga",
@@ -393,7 +483,6 @@ ig_nbs_c2v_internal <- function(p, gest_days, sex, acronym) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_nbs_v2c_internal <- function(y, gest_days, sex, acronym) {
-  stop_if_lengths_unequal(y, gest_days, sex, acronym)
   vpns_lim <- 231
   ifelse(
     test = acronym == "wlrfga",

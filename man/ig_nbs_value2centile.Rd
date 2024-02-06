@@ -68,9 +68,7 @@ Size standard in use (defined by \code{acronym}). These are:
 
 By default, gigs will replace elements in \code{gest_days} that are out of
 bounds for the growth standard in use with \code{NA} and warn you. This
-behaviour can be customised using the functions in \link{gigs_options}. If all
-elements in \code{acronym} are not one of the above values, gigs will throw an
-error.}
+behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
@@ -93,7 +91,9 @@ observation. Each element should be one of:
 
 This argument is case-sensitive. By default, gigs will replace elements in
 \code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}.}
+This behaviour can be customised using the functions in \link{gigs_options}. If
+all elements in \code{acronym} are not one of the above values, gigs will throw
+an error.}
 
 \item{weight_kg}{Numeric vector of length one or more with birth weight(s) in
 kg.}
@@ -138,11 +138,11 @@ ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "F", acronym = "lfga") |>
+ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "M", acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "F") |>
+ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -156,7 +156,7 @@ ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
 # standards
 ig_nbs_hcfga_value2centile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
                               gest_days = c(168, 217, 266, 301),
-                              sex = "F") |>
+                              sex = "M") |>
   round(digits = 2)
 }
 \references{
