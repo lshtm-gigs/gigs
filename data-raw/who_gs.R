@@ -96,7 +96,7 @@ who_gs <- list(
   wfl = get_who_data(indicator = "weight-for-length-height",
                      acronym = "wfl",
                      tbls_vars = c("table", "tables"),
-                     x_y = c("len_cm", "weight_kg")),
+                     x_y = c("length_cm", "weight_kg")),
   wfh = get_who_data(indicator = "weight-for-length-height",
                      acronym = "wfh",
                      x_y = c("height_cm", "weight_kg")),

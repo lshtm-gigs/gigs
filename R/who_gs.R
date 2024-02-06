@@ -87,8 +87,7 @@
 #' @rdname who_gs_zscore2value
 #' @export
 who_gs_zscore2value <- function(z, x, sex, acronym) {
-  list(z = z, x = x, sex = sex, acronym = acronym) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = x, sex = sex, acronym = acronym) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -96,9 +95,8 @@ who_gs_zscore2value <- function(z, x, sex, acronym) {
 #' @export
 who_gs_wfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "wfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -106,9 +104,8 @@ who_gs_wfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_bfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "bfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -116,9 +113,8 @@ who_gs_bfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_lhfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "lhfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -126,9 +122,8 @@ who_gs_lhfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_wfl_zscore2value <- function(z, length_cm, sex) {
   acronym <- "wfl"
-  list(z = z, x = length_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = length_cm, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -136,9 +131,8 @@ who_gs_wfl_zscore2value <- function(z, length_cm, sex) {
 #' @export
 who_gs_wfh_zscore2value <- function(z, height_cm, sex) {
   acronym <- "wfh"
-  list(z = z, x = height_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = height_cm, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -146,9 +140,8 @@ who_gs_wfh_zscore2value <- function(z, height_cm, sex) {
 #' @export
 who_gs_hcfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "hcfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -156,9 +149,8 @@ who_gs_hcfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_acfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "acfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -166,9 +158,8 @@ who_gs_acfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_ssfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "ssfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -176,9 +167,8 @@ who_gs_ssfa_zscore2value <- function(z, age_days, sex) {
 #' @export
 who_gs_tsfa_zscore2value <- function(z, age_days, sex) {
   acronym <- "tsfa"
-  list(z = z, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(z = z, x = age_days, sex = sex, acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]]) |>
     do.call(what = who_gs_z2v_internal)
 }
 
@@ -186,8 +176,7 @@ who_gs_tsfa_zscore2value <- function(z, age_days, sex) {
 #' @importFrom stats qnorm
 #' @export
 who_gs_centile2value <- function(p, x, sex, acronym) {
-  validated <- list(p = p, x = x, sex = sex, acronym = acronym) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p, x = x, sex = sex, acronym = acronym)
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -195,9 +184,11 @@ who_gs_centile2value <- function(p, x, sex, acronym) {
 #' @export
 who_gs_wfa_centile2value <- function(p, age_days, sex) {
   acronym <- "wfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -205,9 +196,11 @@ who_gs_wfa_centile2value <- function(p, age_days, sex) {
 #' @export
 who_gs_bfa_centile2value <- function(p, age_days, sex) {
   acronym <- "bfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -215,9 +208,11 @@ who_gs_bfa_centile2value <- function(p, age_days, sex) {
 #' @export
 who_gs_lhfa_centile2value <- function(p, age_days, sex)  {
   acronym <- "lhfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -225,9 +220,11 @@ who_gs_lhfa_centile2value <- function(p, age_days, sex)  {
 #' @export
 who_gs_wfl_centile2value <- function(p, length_cm, sex) {
   acronym <- "wfl"
-  validated <- list(p = p, x = length_cm, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = length_cm,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -235,9 +232,11 @@ who_gs_wfl_centile2value <- function(p, length_cm, sex) {
 #' @export
 who_gs_wfh_centile2value <- function(p, height_cm, sex) {
   acronym <- "wfh"
-  validated <- list(p = p, x = height_cm, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = height_cm,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -245,9 +244,11 @@ who_gs_wfh_centile2value <- function(p, height_cm, sex) {
 #' @export
 who_gs_hcfa_centile2value <- function(p, age_days, sex) {
   acronym <- "hcfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -255,9 +256,11 @@ who_gs_hcfa_centile2value <- function(p, age_days, sex) {
 #' @export
 who_gs_acfa_centile2value <- function(p, age_days, sex) {
   acronym <- "acfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -265,9 +268,11 @@ who_gs_acfa_centile2value <- function(p, age_days, sex) {
 #' @export
 who_gs_ssfa_centile2value <- function(p, age_days, sex) {
   acronym <- "ssfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -275,9 +280,11 @@ who_gs_ssfa_centile2value <- function(p, age_days, sex) {
 #' @export
 who_gs_tsfa_centile2value <- function(p, age_days, sex) {
   acronym <- "tsfa"
-  validated <- list(p = p, x = age_days, sex = sex, acronym = acronym,
-                    x_name = who_gs[[acronym]][["x"]]) |>
-    do.call(what = validate_who_gs)
+  validated <- validate_who_gs(p = p,
+                               x = age_days,
+                               sex = sex,
+                               acronym = acronym,
+                               x_name = gigs::who_gs[[acronym]][["x"]])
   with(validated, who_gs_z2v_internal(qnorm(p), x, sex, acronym))
 }
 
@@ -333,8 +340,7 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_value2zscore <- function(y, x, sex, acronym) {
-  list(y = y, x = x, sex = sex, acronym = acronym) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -342,19 +348,25 @@ who_gs_value2zscore <- function(y, x, sex, acronym) {
 #' @export
 who_gs_wfa_value2zscore <- function(weight_kg, age_days, sex) {
   acronym <- "wfa"
-  list(y = weight_kg, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-  do.call(what = validate_who_gs) |>
-  do.call(what = who_gs_v2z_internal)
+  validate_who_gs(y = weight_kg,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
+    do.call(what = who_gs_v2z_internal)
 }
 
 #' @rdname who_gs_value2zscore
 #' @export
 who_gs_bfa_value2zscore <- function(bmi, age_days, sex) {
   acronym <- "bfa"
-  list(y = bmi, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = bmi,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -362,9 +374,12 @@ who_gs_bfa_value2zscore <- function(bmi, age_days, sex) {
 #' @export
 who_gs_lhfa_value2zscore <- function(lenht_cm, age_days, sex) {
   acronym <- "lhfa"
-  list(y = lenht_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = lenht_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -372,9 +387,12 @@ who_gs_lhfa_value2zscore <- function(lenht_cm, age_days, sex) {
 #' @export
 who_gs_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
   acronym <- "wfl"
-  list(y = weight_kg, x = length_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = weight_kg,
+                  x = length_cm,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -382,9 +400,12 @@ who_gs_wfl_value2zscore <- function(weight_kg, length_cm, sex) {
 #' @export
 who_gs_wfh_value2zscore <- function(weight_kg, height_cm, sex) {
   acronym <- "wfh"
-  list(y = weight_kg, x = height_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = weight_kg,
+                  x = height_cm,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -392,9 +413,12 @@ who_gs_wfh_value2zscore <- function(weight_kg, height_cm, sex) {
 #' @export
 who_gs_hcfa_value2zscore <- function(headcirc_cm, age_days, sex) {
   acronym <- "hcfa"
-  list(y = headcirc_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = headcirc_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -402,9 +426,12 @@ who_gs_hcfa_value2zscore <- function(headcirc_cm, age_days, sex) {
 #' @export
 who_gs_acfa_value2zscore <- function(armcirc_cm, age_days, sex) {
   acronym <- "acfa"
-  list(y = armcirc_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = armcirc_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -412,9 +439,12 @@ who_gs_acfa_value2zscore <- function(armcirc_cm, age_days, sex) {
 #' @export
 who_gs_ssfa_value2zscore <- function(subscap_sf_mm, age_days, sex) {
   acronym <- "ssfa"
-  list(y = subscap_sf_mm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = subscap_sf_mm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -422,9 +452,12 @@ who_gs_ssfa_value2zscore <- function(subscap_sf_mm, age_days, sex) {
 #' @export
 who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
   acronym <- "tsfa"
-  list(y = triceps_sf_mm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = triceps_sf_mm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal)
 }
 
@@ -432,8 +465,7 @@ who_gs_tsfa_value2zscore <- function(triceps_sf_mm, age_days, sex) {
 #' @importFrom stats pnorm
 #' @export
 who_gs_value2centile <- function(y, x, sex, acronym) {
-  list(y = y, x = x, sex = sex, acronym = acronym) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = y, x = x, sex = sex, acronym = acronym) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -442,9 +474,12 @@ who_gs_value2centile <- function(y, x, sex, acronym) {
 #' @export
 who_gs_wfa_value2centile <- function(weight_kg, age_days, sex) {
   acronym <- "wfa"
-  list(y = weight_kg, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = weight_kg,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -453,9 +488,12 @@ who_gs_wfa_value2centile <- function(weight_kg, age_days, sex) {
 #' @export
 who_gs_bfa_value2centile <- function(bmi, age_days, sex) {
   acronym <- "bfa"
-  list(y = bmi, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = bmi,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -464,9 +502,12 @@ who_gs_bfa_value2centile <- function(bmi, age_days, sex) {
 #' @export
 who_gs_lhfa_value2centile <- function(lenht_cm, age_days, sex) {
   acronym <- "lhfa"
-  list(y = lenht_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = lenht_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -475,9 +516,12 @@ who_gs_lhfa_value2centile <- function(lenht_cm, age_days, sex) {
 #' @export
 who_gs_wfl_value2centile <- function(weight_kg, length_cm, sex) {
   acronym <- "wfl"
-  list(y = weight_kg, x = length_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = weight_kg,
+                  x = length_cm,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -486,9 +530,12 @@ who_gs_wfl_value2centile <- function(weight_kg, length_cm, sex) {
 #' @export
 who_gs_wfh_value2centile <- function(weight_kg, height_cm, sex) {
   acronym <- "wfh"
-  list(y = weight_kg, x = height_cm, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = weight_kg,
+                  x = height_cm,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -497,9 +544,12 @@ who_gs_wfh_value2centile <- function(weight_kg, height_cm, sex) {
 #' @export
 who_gs_hcfa_value2centile <- function(headcirc_cm, age_days, sex) {
   acronym <- "hcfa"
-  list(y = headcirc_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = headcirc_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -508,9 +558,12 @@ who_gs_hcfa_value2centile <- function(headcirc_cm, age_days, sex) {
 #' @export
 who_gs_acfa_value2centile <- function(armcirc_cm, age_days, sex) {
   acronym <- "acfa"
-  list(y = armcirc_cm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = armcirc_cm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -519,9 +572,12 @@ who_gs_acfa_value2centile <- function(armcirc_cm, age_days, sex) {
 #' @export
 who_gs_ssfa_value2centile <- function(subscap_sf_mm, age_days, sex) {
   acronym <- "ssfa"
-  list(y = subscap_sf_mm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = subscap_sf_mm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -530,9 +586,12 @@ who_gs_ssfa_value2centile <- function(subscap_sf_mm, age_days, sex) {
 #' @export
 who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
   acronym <- "tsfa"
-  list(y = triceps_sf_mm, x = age_days, sex = sex, acronym = acronym,
-       x_name = who_gs[[acronym]][["x"]], y_name = who_gs[[acronym]][["y"]]) |>
-    do.call(what = validate_who_gs) |>
+  validate_who_gs(y = triceps_sf_mm,
+                  x = age_days,
+                  sex = sex,
+                  acronym = acronym,
+                  x_name = gigs::who_gs[[acronym]][["x"]],
+                  y_name = gigs::who_gs[[acronym]][["y"]]) |>
     do.call(what = who_gs_v2z_internal) |>
     pnorm()
 }
@@ -545,7 +604,6 @@ who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 who_gs_z2v_internal <- function(z, x, sex, acronym) {
-  stop_if_lengths_unequal(z, x, sex, acronym)
   lms <- who_gs_lms(x = x, sex = sex, acronym = acronym)
   with(lms, who_gs_lms_z2v(z = z, l = L, m = M, s = S, acronym = acronym))
 }
@@ -556,7 +614,6 @@ who_gs_z2v_internal <- function(z, x, sex, acronym) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 who_gs_v2z_internal <- function(y, x, sex, acronym) {
-  stop_if_lengths_unequal(y, x, sex, acronym)
   lms <- who_gs_lms(x = x, sex = sex, acronym = acronym)
   with(lms, who_gs_lms_v2z(y, l = L, m = M, s = S, acronym = acronym))
 }
