@@ -36,23 +36,6 @@ inrange <- function(x, vec) {
   x >= min(vec) & x <= max(vec)
 }
 
-# Custom error messages --------------------------------------------------------
-
-#' Throw an error if object lengths are unequal
-#' @param ... An arbitrary number of arguments which will be checked for
-#'   equality of length.
-#' @returns Invisibly returns inputs in list. Throws an error if the lengths of
-#'   passed-in objects are not equal.
-#' @noRd
-stop_if_lengths_unequal <- function(...) {
-  lengths <- lengths(x = list(...))
-  if (length(unique(lengths)) > 1) {
-    stop(paste("Your inputs had different lengths. Please give the function",
-               "input vectors of the same length."), call. = FALSE)
-  }
-  invisible(list(...))
-}
-
 # Extra ------------------------------------------------------------------------
 
 #' Drop null elements from a list
