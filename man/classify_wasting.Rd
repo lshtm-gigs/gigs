@@ -41,9 +41,9 @@ and warn you. This behaviour can be customised using the functions in
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of wasting classifications with same length as longest input.
-If \code{outliers = FALSE}, levels are \code{c("wasting_severe", "wasting", "not_wasting", "overweight")}. If \code{outliers = TRUE}, levels are
-\code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
+An object of class factor with the same length as the longest input
+vector, containing wasting classifications. Its levels are
+\code{c("wasting_severe", "wasting", "not_wasting", "overweight")} if \code{outliers = FALSE} (the default), else \code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
 }
 \description{
 Classify wasting (low weight-for-length/height) using the

@@ -103,19 +103,30 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles
-ig_png_value2centile(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
+ig_png_value2centile(y = c(5.79, 5.92, 7.25),
+                     x = 54:56,
+                     sex = c("M", "F", "M"),
+                     acronym = "wfa") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_png_value2zscore(y = 5.94, x = 55, sex = "M", acronym = "wfa") |>
+ig_png_value2zscore(y = c(5.79, 5.92, 7.25),
+                    x = 54:56,
+                    sex = c("M", "F", "M"),
+                    acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_png_value2zscore(y = 65.1, x = 55, sex = "M", acronym = "lfa") |>
+ig_png_value2zscore(y = c(60.2, 60.3, 64.1),
+                    x = 54:56,
+                    sex = c("M", "F", "M"),
+                    acronym = "lfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_png_lfa_value2zscore(length_cm = 65.1, pma_weeks = 55, sex = "M") |>
+ig_png_lfa_value2zscore(length_cm = c(60.2, 60.3, 64.1),
+                        pma_weeks = 54:56,
+                        sex = c("M", "F", "M")) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -124,10 +135,9 @@ ig_png_lfa_value2zscore(length_cm = c(51.10, 51.48, 51.86, 52.24, 52.63),
                         sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 25
-# weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
-# postnatal growth standards for preterm infants
-ig_png_hcfa_value2centile(headcirc_cm = c(20.6, 22.5, 38.2, 42.8),
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_png_hcfa_value2centile(headcirc_cm = c(20.6, NA, 38.2, 42.8),
                           pma_weeks = c(25, 27, 46, 64),
                           sex = "M") |>
   round(digits = 2)

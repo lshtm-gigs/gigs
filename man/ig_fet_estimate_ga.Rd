@@ -43,21 +43,24 @@ finally with head circumference alone.
 }
 \examples{
 # Estimate gestational age in days using crown-rump length (most accurate)
-ig_fet_estimate_ga(crl_mm = 25)
+ig_fet_estimate_ga(crl_mm = 40:45)
 
 # Estimate gestational age in days using head circumference and femur length
 # (second-most accurate)
-ig_fet_estimate_ga(headcirc_mm = 250, femurlen_mm = 55)
+ig_fet_estimate_ga(headcirc_mm = 250:255, femurlen_mm = 55:60)
 
 # Estimate gestational age in days using head circumference only (least
 # accurate)
-ig_fet_estimate_ga(headcirc_mm = 250)
+ig_fet_estimate_ga(headcirc_mm = 250:255)
 
 # The function defaults to CRL if available
-ig_fet_estimate_ga(crl_mm = 25, headcirc_mm = 250, femurlen_mm = 55)
+ig_fet_estimate_ga(crl_mm = 40:45,
+                   headcirc_mm = 250:255,
+                   femurlen_mm = 55:60)
 
 # Inputs are recycled using [vctrs::vec_recycle_common]
-ig_fet_estimate_ga(headcirc_mm = 249:251, femurlen_mm = 55)
+ig_fet_estimate_ga(headcirc_mm = 252,
+                   femurlen_mm = 55:60)
 }
 \references{
 Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L, Barros

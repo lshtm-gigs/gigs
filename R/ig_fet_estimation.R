@@ -10,10 +10,12 @@
 #' @note Inputs are recycled using [vctrs::vec_recycle_common()].
 #' @examples
 #' # Estimate fetal weight in grams
-#' ig_fet_estimate_fetal_weight(abdocirc_mm = 31, headcirc_mm = 26.5)
+#' ig_fet_estimate_fetal_weight(abdocirc_mm = 31:33,
+#'                              headcirc_mm = 25:27)
 #'
 #' # Input vectors are recycled using vctrs::vec_recycle_common
-#' ig_fet_estimate_fetal_weight(abdocirc_mm = 25, headcirc_mm = 24:26)
+#' ig_fet_estimate_fetal_weight(abdocirc_mm = 25.0,
+#'                              headcirc_mm = 24:26)
 #' @returns Numeric vector with estimated fetal weight(s) in g, with the same
 #'   length as the longest input vector.
 #' @seealso Get z-scores/centiles for estimated fetal weights at known
@@ -67,21 +69,24 @@ ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
 #'   finally with head circumference alone.
 #' @examples
 #' # Estimate gestational age in days using crown-rump length (most accurate)
-#' ig_fet_estimate_ga(crl_mm = 25)
+#' ig_fet_estimate_ga(crl_mm = 40:45)
 #'
 #' # Estimate gestational age in days using head circumference and femur length
 #' # (second-most accurate)
-#' ig_fet_estimate_ga(headcirc_mm = 250, femurlen_mm = 55)
+#' ig_fet_estimate_ga(headcirc_mm = 250:255, femurlen_mm = 55:60)
 #'
 #' # Estimate gestational age in days using head circumference only (least
 #' # accurate)
-#' ig_fet_estimate_ga(headcirc_mm = 250)
+#' ig_fet_estimate_ga(headcirc_mm = 250:255)
 #'
 #' # The function defaults to CRL if available
-#' ig_fet_estimate_ga(crl_mm = 25, headcirc_mm = 250, femurlen_mm = 55)
+#' ig_fet_estimate_ga(crl_mm = 40:45,
+#'                    headcirc_mm = 250:255,
+#'                    femurlen_mm = 55:60)
 #'
 #' # Inputs are recycled using [vctrs::vec_recycle_common]
-#' ig_fet_estimate_ga(headcirc_mm = 249:251, femurlen_mm = 55)
+#' ig_fet_estimate_ga(headcirc_mm = 252,
+#'                    femurlen_mm = 55:60)
 #' @returns A numeric vector with estimated gestational ages in days. This
 #'   vector will have a length equal to the outputs from
 #'   [vctrs::vec_recycle_common()].
