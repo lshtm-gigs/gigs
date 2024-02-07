@@ -334,12 +334,12 @@ inputs, each package took:
 
 | Package         | Time taken (100,000 inputs) |
 |-----------------|-----------------------------|
-| `r growthstans` | 121 ms                      |
-| `r gigs_r`      | 132 ms                      |
-| `r childsds`    | 132 ms                      |
-| `r gigs_stata`  | 0.4 seconds                 |
+| `r growthstans` | 125 ms                      |
+| `r childsds`    | 126 ms                      |
+| `r gigs_r`      | 128 ms                      |
+| `r gigs_stata`  | 0.41 seconds                |
 | `r zanthro`     | 2.05 seconds                |
-| `r anthro`      | 2.22 seconds                |
+| `r anthro`      | 2.24 seconds                |
 | `r intergrowth` | NA (no WHO functions)       |
 
 ```{r srr-tags-3, eval = FALSE, echo = FALSE}

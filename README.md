@@ -349,12 +349,12 @@ conversion of values to z-scores in the WHO Child Growth standards. At
 
 | Package                                                                      | Time taken (100,000 inputs) |
 |------------------------------------------------------------------------------|-----------------------------|
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | 121 ms                      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | 132 ms                      |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | 132 ms                      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | 0.4 seconds                 |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | 125 ms                      |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | 126 ms                      |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | 128 ms                      |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | 0.41 seconds                |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211)  | 2.05 seconds                |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)          | 2.22 seconds                |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)          | 2.24 seconds                |
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)         | NA (no WHO functions)       |
 
 The results can be seen in the online benchmarking

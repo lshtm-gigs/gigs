@@ -250,20 +250,25 @@ dplyr::bind_rows(anthro_timings,
   ggsci::scale_colour_lancet()
 ```
 
-On the whole, `anthro` is by far the slowest R package, taking around 2.22
-seconds to run over 100,000 inputs. This is in part because `anthro` computes
-results in every WHO Child Growth standard each time `anthro::anthro_zscores()`
-is called, but also due to a slower implementation of the LMS-to-z-score
-conversion than the other packages.
+On the whole, `anthro` is by far the slowest R package, taking around
+`r round(anthro_timings$median_time[11], digits = 2)` seconds to process 100,000
+inputs. This is in part because `anthro` computes results in every WHO Child
+Growth standard each time `anthro::anthro_zscores()` is called, but also due to
+a slower implementation of the WHO LMS process conversion than the other
+packages.
 
-Next slowest is the Stata package `zanthro`, which takes around 2.05 seconds to
-compute results in just one WHO standard. About 4 times faster than `zanthro` is
-`gigs` for Stata 0.4.0, which scales more efficiently than `zanthro` and takes
-0.4 seconds to convert 100,000 measurements to z-scores.
+Next slowest is the Stata package `zanthro`, which takes around
+`r round(stata_timings$median_time[22], digits = 2)` seconds to compute results
+in a single WHO standard. About 4 times faster than `zanthro` is `gigs` for
+Stata 0.4.0, which scales more efficiently than `zanthro` and takes around
+`r round(stata_timings$median_time[11], digits = 2)` seconds to convert 100,000
+measurements to z-scores.
 
 Leading the pack are three R implementations: `growthstandards`, `gigs`, and
-`childsds`. The `growthstandards` package was the fastest at ~ 121 ms for
-100,000 inputs, followed by `gigs` and `childsds` (both ~ 132 ms).
+`childsds`. The `growthstandards` package was the fastest at
+ ~`r round(growthstandards_timings$median_time[11])` ms for 100,000 inputs,
+followed by `gigs` (~`r round(gigs_timings$median_time[11])` ms) and `childsds`
+(~`r round(childsds_timings$median_time[11])` ms).
 
 # Package output similarity
 The packages also differ slightly in how they convert values to
@@ -286,9 +291,11 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
     weight_kg = gigs::who_gs_wfa_zscore2value(z, age_days, sex),
     # GIGS z-score
     z_gigs = gigs::who_gs_wfa_value2zscore(weight_kg, age_days, sex),
+    # growthstandards z-score
     z_growthstandards = growthstandards::who_wtkg2zscore(
       age_days, weight_kg, "Male"
     ),
+    # childsds z-score
     z_childsds = childsds::sds(
       value = weight_kg, age = age_days / 365.25,
       sex = sex, male = "M", female = "F",
