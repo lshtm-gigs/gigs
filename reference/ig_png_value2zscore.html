@@ -14,7 +14,7 @@ Postnatal Growth Standards for preterm infants"><meta property="og:image" conten
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,24 +171,35 @@ Follow-up Study of the INTERGROWTH-21st Project.</strong> <em>Lancet Glob Health
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Convert values to centiles</span></span></span>
-<span class="r-in"><span><span class="fu">ig_png_value2centile</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">5.94</span>, x <span class="op">=</span> <span class="fl">55</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_png_value2centile</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.79</span>, <span class="fl">5.92</span>, <span class="fl">7.25</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     x <span class="op">=</span> <span class="fl">54</span><span class="op">:</span><span class="fl">56</span>,</span></span>
+<span class="r-in"><span>                     sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.25 0.50 0.75</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or values to z-scores</span></span></span>
-<span class="r-in"><span><span class="fu">ig_png_value2zscore</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">5.94</span>, x <span class="op">=</span> <span class="fl">55</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_png_value2zscore</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.79</span>, <span class="fl">5.92</span>, <span class="fl">7.25</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    x <span class="op">=</span> <span class="fl">54</span><span class="op">:</span><span class="fl">56</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.67  0.00  0.68</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Specify which standard to use with the acronym parameter...</span></span></span>
-<span class="r-in"><span><span class="fu">ig_png_value2zscore</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">65.1</span>, x <span class="op">=</span> <span class="fl">55</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"lfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_png_value2zscore</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60.2</span>, <span class="fl">60.3</span>, <span class="fl">64.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    x <span class="op">=</span> <span class="fl">54</span><span class="op">:</span><span class="fl">56</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"lfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.69  0.02  0.62</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ... or by using a standard-specific function</span></span></span>
-<span class="r-in"><span><span class="fu">ig_png_lfa_value2zscore</span><span class="op">(</span>length_cm <span class="op">=</span> <span class="fl">65.1</span>, pma_weeks <span class="op">=</span> <span class="fl">55</span>, sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_png_lfa_value2zscore</span><span class="op">(</span>length_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60.2</span>, <span class="fl">60.3</span>, <span class="fl">64.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        pma_weeks <span class="op">=</span> <span class="fl">54</span><span class="op">:</span><span class="fl">56</span>,</span></span>
+<span class="r-in"><span>                        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.69  0.02  0.62</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inputs are recycled to the input of the longest length</span></span></span>
 <span class="r-in"><span><span class="fu">ig_png_lfa_value2zscore</span><span class="op">(</span>length_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51.10</span>, <span class="fl">51.48</span>, <span class="fl">51.86</span>, <span class="fl">52.24</span>, <span class="fl">52.63</span><span class="op">)</span>,</span></span>
@@ -197,15 +208,15 @@ Follow-up Study of the INTERGROWTH-21st Project.</strong> <em>Lancet Glob Health
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1 0.3 0.5 0.7 0.9</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return NA - here 25</span></span></span>
-<span class="r-in"><span><span class="co"># weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st</span></span></span>
-<span class="r-in"><span><span class="co"># postnatal growth standards for preterm infants</span></span></span>
-<span class="r-in"><span><span class="fu">ig_png_hcfa_value2centile</span><span class="op">(</span>headcirc_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20.6</span>, <span class="fl">22.5</span>, <span class="fl">38.2</span>, <span class="fl">42.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead produce `NA`s in the</span></span></span>
+<span class="r-in"><span><span class="co"># output - by default gigs will issue useful warnings</span></span></span>
+<span class="r-in"><span><span class="fu">ig_png_hcfa_value2centile</span><span class="op">(</span>headcirc_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20.6</span>, <span class="cn">NA</span>, <span class="fl">38.2</span>, <span class="fl">42.8</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          pma_weeks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">27</span>, <span class="fl">46</span>, <span class="fl">64</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'headcirc_cm': 1 in 4 elements were missing (`NA`).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'pma_weeks': 1 in 4 elements were out-of-bounds (see the 'ig_png' conversion functions documentation).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   NA 0.09 0.65 0.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   NA   NA 0.65 0.43</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

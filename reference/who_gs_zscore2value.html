@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,26 +181,35 @@ J Clin Nutr.</em> 1990, <strong>44(1):45-60.</strong> PMID:
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Convert centiles to values</span></span></span>
-<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">0.25</span> <span class="co"># 25th centile</span></span></span>
-<span class="r-in"><span><span class="fu">who_gs_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, x <span class="op">=</span> <span class="fl">501</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">who_gs_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, <span class="co"># 25th, 50th, 70th centiles</span></span></span>
+<span class="r-in"><span>                     x <span class="op">=</span> <span class="fl">500</span><span class="op">:</span><span class="fl">502</span>,</span></span>
+<span class="r-in"><span>                     sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  9.85  9.91 11.45</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or z-scores to values</span></span></span>
-<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="co"># Z-score equivalent of 25th centile</span></span></span>
-<span class="r-in"><span><span class="fu">who_gs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="fl">501</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">who_gs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    x <span class="op">=</span> <span class="fl">500</span><span class="op">:</span><span class="fl">502</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  9.85  9.91 11.45</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Specify which standard to use with the acronym parameter...</span></span></span>
-<span class="r-in"><span><span class="fu">who_gs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="fl">300</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"lhfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">who_gs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                    x <span class="op">=</span> <span class="fl">349</span><span class="op">:</span><span class="fl">351</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"lhfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 71.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 72.76 75.15 77.54</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ... or by using a standard-specific function</span></span></span>
-<span class="r-in"><span><span class="fu">who_gs_lhfa_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, age_days <span class="op">=</span> <span class="fl">300</span>, sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">who_gs_lhfa_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                         age_days <span class="op">=</span> <span class="fl">349</span><span class="op">:</span><span class="fl">351</span>,</span></span>
+<span class="r-in"><span>                         sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 71.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 72.76 75.15 77.54</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inputs are recycled to the input of the longest length</span></span></span>
 <span class="r-in"><span><span class="fu">who_gs_ssfa_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, by <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span></span>
@@ -209,15 +218,16 @@ J Clin Nutr.</em> 1990, <strong>44(1):45-60.</strong> PMID:
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.81 5.45 5.97 6.58 7.66</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return NA - here 60</span></span></span>
-<span class="r-in"><span><span class="co"># cm for height_cm is incompatible with the WHO Growth Standard for</span></span></span>
-<span class="r-in"><span><span class="co"># weight-for-height</span></span></span>
-<span class="r-in"><span><span class="fu">who_gs_wfh_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>                        height_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">85</span>, <span class="fl">105</span>, <span class="fl">120</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return `NA`, and by</span></span></span>
+<span class="r-in"><span><span class="co"># default print useful warnings</span></span></span>
+<span class="r-in"><span><span class="fu">who_gs_wfh_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">15</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         height_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">85</span>, <span class="fl">105</span>, <span class="fl">120</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'p': 1 in 4 elements were not between 0 and 1.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'height_cm': 1 in 4 elements were out-of-bounds (see the 'who_gs' conversion functions documentation).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]    NA 11.67 16.85 22.35</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'sex': 1 in 4 elements were missing (`NA`).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]    NA 11.43 17.21    NA</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

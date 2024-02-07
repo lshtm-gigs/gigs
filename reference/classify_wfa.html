@@ -18,7 +18,7 @@ overweight is &amp;gt; 2 SDs above the mean."><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,9 +110,10 @@ implausible z-score value thresholds should be applied. Default = <code>FALSE</c
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Factor of weight-for-age classifications with same length as longest
-input. If <code>outliers = FALSE</code>, levels are <code>c("underweight_severe", "underweight", "normal", "overweight")</code>. If <code>outliers = TRUE</code>, levels are
-<code>c("underweight_severe", "underweight", "normal", "overweight", "outlier")</code>.</p>
+<p>An object of class factor with the same length as the longest input
+vector, containing weight-for-age classifications. Its levels are
+<code>c("underweight_severe", "underweight", "normal", "overweight")</code> if
+<code>outliers = FALSE</code> (the default), else <code>c("underweight_severe", "underweight", "normal", "overweight", "outlier")</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

@@ -20,7 +20,7 @@ relative to mean length/height at a given age, whereas moderate stunting is
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,11 +110,12 @@ implausible z-score value thresholds should be applied. Default = <code>FALSE</c
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Factor of stunting classification(s) with same length as longest
-input vector. Levels are <code>c("stunting_severe", "stunting", "not_stunting")</code></p>
+<p>An object of class factor with the same length as the longest input
+vector, containing stunting classifications. Its levels are
+<code>c("stunting_severe", "stunting", "not_stunting")</code> if <code>outliers = FALSE</code></p>
 
 
-<p>if <code>outliers = FALSE</code>, else <code>c("stunting_severe", "stunting", "not_stunting", "outlier")</code>.</p>
+<p>(the default), else <code>c("stunting_severe", "stunting", "not_stunting", "outlier")</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

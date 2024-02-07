@@ -14,7 +14,7 @@ predictive equation"><meta property="og:image" content="https://simpar1471.githu
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,11 +106,13 @@ gestational ages using the <code><a href="ig_fet_value2zscore.html">ig_fet_value
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Estimate fetal weight in grams</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_fetal_weight</span><span class="op">(</span>abdocirc_mm <span class="op">=</span> <span class="fl">31</span>, headcirc_mm <span class="op">=</span> <span class="fl">26.5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 177.0155</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_fetal_weight</span><span class="op">(</span>abdocirc_mm <span class="op">=</span> <span class="fl">31</span><span class="op">:</span><span class="fl">33</span>,</span></span>
+<span class="r-in"><span>                             headcirc_mm <span class="op">=</span> <span class="fl">25</span><span class="op">:</span><span class="fl">27</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 176.1847 176.8672 177.5590</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Input vectors are recycled using vctrs::vec_recycle_common</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_fetal_weight</span><span class="op">(</span>abdocirc_mm <span class="op">=</span> <span class="fl">25</span>, headcirc_mm <span class="op">=</span> <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_fetal_weight</span><span class="op">(</span>abdocirc_mm <span class="op">=</span> <span class="fl">25.0</span>,</span></span>
+<span class="r-in"><span>                             headcirc_mm <span class="op">=</span> <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 174.9972 175.5469 176.0984</span>
 </code></pre></div>
     </div>

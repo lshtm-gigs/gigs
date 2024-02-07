@@ -14,7 +14,7 @@ Newborn Size Standards"><meta property="og:image" content="https://simpar1471.gi
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -172,26 +172,35 @@ ratios: the newborn body composition study of the INTERGROWTH-21st project.</str
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Convert centiles to values</span></span></span>
-<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">0.25</span> <span class="co"># 25th centile</span></span></span>
-<span class="r-in"><span><span class="fu">ig_nbs_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, gest_days <span class="op">=</span> <span class="fl">280</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_nbs_centile2value</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     gest_days <span class="op">=</span> <span class="fl">274</span><span class="op">:</span><span class="fl">276</span>,</span></span>
+<span class="r-in"><span>                     sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.90 3.17 3.46</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or z-scores to values</span></span></span>
-<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">ig_nbs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, gest_days <span class="op">=</span> <span class="fl">280</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_nbs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    gest_days <span class="op">=</span> <span class="fl">280</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="st">"M"</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.12 3.38 3.66</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Specify which standard to use with the acronym parameter...</span></span></span>
-<span class="r-in"><span><span class="fu">ig_nbs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, gest_days <span class="op">=</span> <span class="fl">280</span>, sex <span class="op">=</span> <span class="st">"M"</span>, acronym <span class="op">=</span> <span class="st">"lfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_nbs_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    gest_days <span class="op">=</span> <span class="fl">280</span>,</span></span>
+<span class="r-in"><span>                    sex <span class="op">=</span> <span class="st">"M"</span>,</span></span>
+<span class="r-in"><span>                    acronym <span class="op">=</span> <span class="st">"lfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 48.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 48.84 49.92 51.01</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ... or by using a standard-specific function</span></span></span>
-<span class="r-in"><span><span class="fu">ig_nbs_lfga_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, gest_days <span class="op">=</span> <span class="fl">280</span>, sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">ig_nbs_lfga_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">:</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                         gest_days <span class="op">=</span> <span class="fl">278</span><span class="op">:</span><span class="fl">282</span>,</span></span>
+<span class="r-in"><span>                         sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 48.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 46.32 48.21 49.92 51.63 53.50</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inputs are recycled to the input of the longest length</span></span></span>
 <span class="r-in"><span><span class="fu">ig_nbs_lfga_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, by <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span></span>
@@ -200,15 +209,15 @@ ratios: the newborn body composition study of the INTERGROWTH-21st project.</str
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50.08 50.40 50.73 51.05 51.38</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead return NA - here 140</span></span></span>
-<span class="r-in"><span><span class="co"># days for gest_days is outside the bounds of the INTERGROWTH-21st newborn</span></span></span>
-<span class="r-in"><span><span class="co"># size standards.</span></span></span>
-<span class="r-in"><span><span class="fu">ig_nbs_hcfga_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>,</span></span>
+<span class="r-in"><span><span class="co"># Bad inputs will not stop the function but will instead produce `NA`s in the</span></span></span>
+<span class="r-in"><span><span class="co"># output - by default gigs will issue useful warnings</span></span></span>
+<span class="r-in"><span><span class="fu">ig_nbs_hcfga_zscore2value</span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                          gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">140</span>, <span class="fl">182</span>, <span class="fl">224</span>, <span class="fl">266</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                          sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>                          sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="cn">NA</span>, <span class="st">"M"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'gest_days': 1 in 4 elements were out-of-bounds (see the 'ig_nbs' conversion functions documentation).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]    NA 23.06 28.39 32.68</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variable 'sex': 1 in 4 elements were missing (`NA`).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]    NA    NA 28.66 32.88</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

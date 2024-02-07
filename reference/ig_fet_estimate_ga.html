@@ -14,7 +14,7 @@ equations"><meta property="og:image" content="https://simpar1471.github.io/gigs/
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,26 +122,29 @@ of pregnancy.</strong> <em>Ultrasound Obstet Gynecol</em> 2014, <strong>44(6):64
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Estimate gestational age in days using crown-rump length (most accurate)</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>crl_mm <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 65.70725</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>crl_mm <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">45</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 75.20116 75.80278 76.40134 76.99695 77.58970 78.17970</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Estimate gestational age in days using head circumference and femur length</span></span></span>
 <span class="r-in"><span><span class="co"># (second-most accurate)</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">250</span>, femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 200.5229</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">250</span><span class="op">:</span><span class="fl">255</span>, femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 200.5229 202.7155 204.9335 207.1772 209.4469 211.7429</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Estimate gestational age in days using head circumference only (least</span></span></span>
 <span class="r-in"><span><span class="co"># accurate)</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 189.803</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">250</span><span class="op">:</span><span class="fl">255</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 189.8030 190.5331 191.2662 192.0023 192.7416 193.4839</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The function defaults to CRL if available</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>crl_mm <span class="op">=</span> <span class="fl">25</span>, headcirc_mm <span class="op">=</span> <span class="fl">250</span>, femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 65.70725</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>crl_mm <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">45</span>,</span></span>
+<span class="r-in"><span>                   headcirc_mm <span class="op">=</span> <span class="fl">250</span><span class="op">:</span><span class="fl">255</span>,</span></span>
+<span class="r-in"><span>                   femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 75.20116 75.80278 76.40134 76.99695 77.58970 78.17970</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inputs are recycled using [vctrs::vec_recycle_common]</span></span></span>
-<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">249</span><span class="op">:</span><span class="fl">251</span>, femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 200.1629 200.5229 200.8824</span>
+<span class="r-in"><span><span class="fu">ig_fet_estimate_ga</span><span class="op">(</span>headcirc_mm <span class="op">=</span> <span class="fl">252</span>,</span></span>
+<span class="r-in"><span>                   femurlen_mm <span class="op">=</span> <span class="fl">55</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 201.2413 203.0790 204.9335 206.8049 208.6934 210.5992</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

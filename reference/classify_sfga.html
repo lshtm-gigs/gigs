@@ -20,7 +20,7 @@ centile). This function also supports classification of severe SGA
     
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,9 +106,9 @@ values are below the third centile as <code>"SGA(&lt;3)"</code>. Default = <code
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Factor the same length as the longest input vector, with
-size-for-gestational age classification(s). If <code>severe = FALSE</code>, levels are
-<code>c("SGA", "AGA",  "LGA")</code>. If <code>severe = TRUE</code>, levels are <code>c("SGA(&lt;3)", "SGA", "AGA",  "LGA")</code>.</p>
+<p>An object of class factor with the same length as the longest input
+vector, containing size-for-GA classifications. If <code>severe = FALSE</code>, levels
+are <code>c("SGA", "AGA", "LGA")</code>. If <code>severe = TRUE</code>, levels are <code>c("SGA(&lt;3)", "SGA", "AGA", "LGA")</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -133,21 +133,20 @@ centiles for each observation.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Without severe flag, does not differentiate between</span></span></span>
-<span class="r-in"><span><span class="co"># p &lt; 0.03 and p &lt; 0.10</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># By default, does not differentiate between p &lt; 0.03 and p &lt; 0.10</span></span></span>
 <span class="r-in"><span><span class="fu">classify_sfga</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">3.4</span>, <span class="fl">4.2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fl">267</span>,</span></span>
-<span class="r-in"><span>  sex <span class="op">=</span> <span class="st">"M"</span></span></span>
+<span class="r-in"><span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">3.3</span>, <span class="fl">4.2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fl">267</span><span class="op">:</span><span class="fl">269</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] SGA AGA LGA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: SGA AGA LGA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With severe = TRUE, highlights p &lt; 0.03</span></span></span>
 <span class="r-in"><span><span class="fu">classify_sfga</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">3.4</span>, <span class="fl">4.2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fl">267</span>,</span></span>
-<span class="r-in"><span>  sex <span class="op">=</span> <span class="st">"M"</span>,</span></span>
+<span class="r-in"><span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">3.3</span>, <span class="fl">4.2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fl">267</span><span class="op">:</span><span class="fl">269</span>,</span></span>
+<span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  severe <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] SGA(&lt;3) AGA     LGA    </span>
