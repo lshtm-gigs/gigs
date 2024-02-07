@@ -4,7 +4,7 @@
 \name{gigs-package}
 \alias{gigs-package}
 \alias{gigs}
-\title{gigs: Assess Growth in Infants and Newborns}
+\title{gigs: Assess Fetal, Newborn, and Child Growth with International Standards}
 \description{
 Convert between anthropometric measures and z-scores/centiles using WHO
 and INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} growth standards. This includes functions for
