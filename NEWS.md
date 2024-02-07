@@ -1,3 +1,8 @@
+# gigs 0.4.1
+
+* Changes to documentation to facilitate `autotest::autotest_package()` pass.
+* Minor changes to vignettes for new patched version.
+
 # gigs 0.4.0
 
 * **BREAKING CHANGES:**

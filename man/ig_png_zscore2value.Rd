@@ -94,35 +94,43 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values
-p <- 0.25 # 25th centile
-ig_png_centile2value(p = p, x = 55, sex = "M", acronym = "wfa") |>
+ig_png_centile2value(p = c(0.25, 0.5, 0.75),
+                     x = 54:56,
+                     sex = c("M", "F", "M"),
+                     acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p)
-ig_png_zscore2value(z = z, x = 55, sex = "M", acronym = "wfa") |>
+ig_png_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    x = 54:56,
+                    sex = c("M", "F", "M"),
+                    acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_png_zscore2value(z = z, x = 55, sex = "M", acronym = "lfa") |>
+ig_png_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    x = 54:56,
+                    sex = c("M", "F", "M"),
+                    acronym = "lfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_png_lfa_zscore2value(z = z, pma_weeks = 55, sex = "M") |>
+ig_png_lfa_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                        pma_weeks = 54:56,
+                        sex = c("M", "F", "M")) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
-ig_png_lfa_zscore2value(z = seq(0.1, 0.9, by = 0.2),
+ig_png_lfa_zscore2value(z = seq(-0.5, 0.5, by = 0.2),
                         pma_weeks = 40,
                         sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 25
-# weeks post-menstrual age is outside the bounds of the INTERGROWTH-21st
-# postnatal growth standards for preterm infants
-ig_png_hcfa_zscore2value(z = z,
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_png_hcfa_zscore2value(z = 0,
                          pma_weeks = c(25, 27, 46, 64),
-                         sex = "M") |>
+                         sex = c("M", "M", NA, "M")) |>
   round(digits = 2)
 }
 \references{

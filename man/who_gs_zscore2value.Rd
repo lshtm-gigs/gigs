@@ -124,21 +124,30 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values
-p <- 0.25 # 25th centile
-who_gs_centile2value(p = p, x = 501, sex = "M", acronym = "wfa") |>
+who_gs_centile2value(p = c(0.25, 0.5, 0.75), # 25th, 50th, 70th centiles
+                     x = 500:502,
+                     sex = c("M", "F", "M"),
+                     acronym = "wfa") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p) # Z-score equivalent of 25th centile
-who_gs_zscore2value(z = z, x = 501, sex = "M", acronym = "wfa") |>
+who_gs_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    x = 500:502,
+                    sex = c("M", "F", "M"),
+                    acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-who_gs_zscore2value(z = z, x = 300, sex = "M", acronym = "lhfa") |>
+who_gs_zscore2value(z = -1:1,
+                    x = 349:351,
+                    sex = c("M", "M", "M"),
+                    acronym = "lhfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-who_gs_lhfa_zscore2value(z = z, age_days = 300, sex = "M") |>
+who_gs_lhfa_zscore2value(z = -1:1,
+                         age_days = 349:351,
+                         sex = c("M", "M", "M")) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -147,12 +156,11 @@ who_gs_ssfa_centile2value(p = seq(0.1, 0.9, by = 0.2),
                           sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 60
-# cm for height_cm is incompatible with the WHO Growth Standard for
-# weight-for-height
-who_gs_wfh_zscore2value(z = 0,
-                        height_cm = c(60, 85, 105, 120),
-                        sex = "M") |>
+# Bad inputs will not stop the function but will instead return `NA`, and by
+# default print useful warnings
+who_gs_wfh_centile2value(p = c(0.2, 0.4, 0.6, 15),
+                         height_cm = c(60, 85, 105, 120),
+                         sex = c("M", "M", "M", NA)) |>
   round(digits = 2)
 }
 \references{

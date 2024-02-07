@@ -26,9 +26,9 @@ and warn you. This behaviour can be customised using the functions in
 values are below the third centile as \code{"SGA(<3)"}. Default = \code{FALSE}.}
 }
 \value{
-Factor the same length as the longest input vector, with
-size-for-gestational age classification(s). If \code{severe = FALSE}, levels are
-\code{c("SGA", "AGA",  "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA",  "LGA")}.
+An object of class factor with the same length as the longest input
+vector, containing size-for-GA classifications. If \code{severe = FALSE}, levels
+are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}.
 }
 \description{
 Size for gestational age categories are split by centile: small-for-GA
@@ -42,19 +42,18 @@ Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_
 adhere to the \link{vctrs} recycling rules.
 }
 \examples{
-# Without severe flag, does not differentiate between
-# p < 0.03 and p < 0.10
+# By default, does not differentiate between p < 0.03 and p < 0.10
 classify_sfga(
-  weight_kg = c(2.2, 3.4, 4.2),
-  gest_days = 267,
-  sex = "M"
+  weight_kg = c(2.2, 3.3, 4.2),
+  gest_days = 267:269,
+  sex = c("M", "F", "M")
 )
 
 # With severe = TRUE, highlights p < 0.03
 classify_sfga(
-  weight_kg = c(2.2, 3.4, 4.2),
-  gest_days = 267,
-  sex = "M",
+  weight_kg = c(2.2, 3.3, 4.2),
+  gest_days = 267:269,
+  sex = c("M", "F", "M"),
   severe = TRUE
 )
 }

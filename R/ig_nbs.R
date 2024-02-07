@@ -51,21 +51,30 @@
 #' *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
 #' @examples
 #' # Convert centiles to values
-#' p <- 0.25 # 25th centile
-#' ig_nbs_centile2value(p = p, gest_days = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_centile2value(p = c(0.25, 0.5, 0.75),
+#'                      gest_days = 274:276,
+#'                      sex = c("F", "F", "F"),
+#'                      acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Or z-scores to values
-#' z <- qnorm(p)
-#' ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+#'                     gest_days = 280,
+#'                     sex = "M",
+#'                     acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "lfga") |>
+#' ig_nbs_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+#'                     gest_days = 280,
+#'                     sex = "M",
+#'                     acronym = "lfga") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' ig_nbs_lfga_zscore2value(z = z, gest_days = 280, sex = "M") |>
+#' ig_nbs_lfga_zscore2value(z = -2:2,
+#'                          gest_days = 278:282,
+#'                          sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
@@ -74,12 +83,11 @@
 #'                          sex = "M") |>
 #'   round(digits = 2)
 #'
-#' # Bad inputs will not stop the function but will instead return NA - here 140
-#' # days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
-#' # size standards.
-#' ig_nbs_hcfga_zscore2value(z = z,
+#' # Bad inputs will not stop the function but will instead produce `NA`s in the
+#' # output - by default gigs will issue useful warnings
+#' ig_nbs_hcfga_zscore2value(z = -0.5,
 #'                           gest_days = c(140, 182, 224, 266),
-#'                           sex = "M") |>
+#'                           sex = c("M", NA, "M", "M")) |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_centile2value
 #' @export
@@ -254,19 +262,30 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #' @inherit shared_value2zscore_returns return
 #' @examples
 #' # Convert values to centiles
-#' ig_nbs_value2centile(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_value2centile(y = c(2.90, 3.17, 3.46),
+#'                      gest_days = 274:276,
+#'                      sex = c("F", "F", "F"),
+#'                      acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Or values to z-scores
-#' ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
+#' ig_nbs_value2zscore(y = c(2.90, 3.17, 3.46),
+#'                     gest_days = 274:276,
+#'                     sex = c("F", "F", "F"),
+#'                     acronym = "wfga") |>
 #'   round(digits = 2)
 #'
 #' # Specify which standard to use with the acronym parameter...
-#' ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "M", acronym = "lfga") |>
+#' ig_nbs_value2zscore(y = 48.84,
+#'                     gest_days = 280,
+#'                     sex = "M",
+#'                     acronym = "lfga") |>
 #'   round(digits = 2)
 #'
 #' # ... or by using a standard-specific function
-#' ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "M") |>
+#' ig_nbs_lfga_value2zscore(length_cm = 48.84,
+#'                          gest_days = 280,
+#'                          sex = "M") |>
 #'   round(digits = 2)
 #'
 #' # Inputs are recycled to the input of the longest length
@@ -275,12 +294,11 @@ ig_nbs_ffmfga_zscore2value <- function(z, gest_days, sex) {
 #'                            sex = "M") |>
 #'   round(digits = 2)
 #'
-#' # Bad inputs will not stop the function but will instead return NA - here 301
-#' # days gest_days is outside the bounds of the INTERGROWTH-21st newborn size
-#' # standards
-#' ig_nbs_hcfga_value2centile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
-#'                               gest_days = c(168, 217, 266, 301),
-#'                               sex = "M") |>
+#' # Bad inputs will not stop the function but will instead produce `NA`s in the
+#' # output - by default gigs will issue useful warnings
+#' ig_nbs_hcfga_value2centile(headcirc_cm = 34.0,
+#'                            gest_days = c(262, 264, 266, 301),
+#'                            sex = c(NA, "M", "M", "M")) |>
 #'   round(digits = 2)
 #' @rdname ig_nbs_value2centile
 #' @export

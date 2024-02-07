@@ -28,9 +28,10 @@ and warn you. This behaviour can be customised using the functions in
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of stunting classification(s) with same length as longest
-input vector. Levels are \code{c("stunting_severe", "stunting", "not_stunting")}
-if \code{outliers = FALSE}, else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+An object of class factor with the same length as the longest input
+vector, containing stunting classifications. Its levels are
+\code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE}
+(the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
 }
 \description{
 Classify stunting (low length/height-for-age) using WHO or

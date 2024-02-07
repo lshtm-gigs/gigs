@@ -144,19 +144,30 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles
-who_gs_value2centile(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
+who_gs_value2centile(y = c(10.1, 10.2, 10.3),
+                     x = 504:506,
+                     sex = c("M", "F", "M"),
+                     acronym = "wfa") |>
   round(digits = 2)
 
 # Or values to z-scores
-who_gs_value2zscore(y = 10.1, x = 505, sex = "M", acronym = "wfa") |>
+who_gs_value2zscore(y = c(10.1, 10.2, 10.3),
+                    x = 504:506,
+                    sex = c("M", "F", "M"),
+                    acronym = "wfa") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-who_gs_value2centile(y = 75.2, x = 300, sex = "M", acronym = "lhfa") |>
+who_gs_value2centile(y = c(73.9, 67.9, 71.4),
+                     x = 299:301,
+                     sex = c("M", "F", "M"),
+                     acronym = "lhfa") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-who_gs_lhfa_value2centile(lenht_cm = 75.2, age_days = 300, sex = "M") |>
+who_gs_lhfa_value2centile(lenht_cm = c(73.9, 67.9, 71.4),
+                          age_days = 299:301,
+                          sex = c("M", "F", "M")) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -165,13 +176,12 @@ who_gs_ssfa_value2centile(subscap_sf_mm = 6.1,
                           sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here
-# 121 cm for height_cm is incompatible with the WHO Growth Standard for
-# weight-for-height
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
 who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
-                        height_cm = c(65, 95, 120, 121),
-                        sex = "M") |>
-  round(digits = 2)
+                        height_cm = c(65, 95, 120, NA),
+                        sex = c("M", "M", "F", NA)) |>
+    round(digits = 2)
 }
 \references{
 de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The

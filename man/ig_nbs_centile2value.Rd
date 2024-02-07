@@ -110,21 +110,30 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values
-p <- 0.25 # 25th centile
-ig_nbs_centile2value(p = p, gest_days = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_centile2value(p = c(0.25, 0.5, 0.75),
+                     gest_days = 274:276,
+                     sex = c("F", "F", "F"),
+                     acronym = "wfga") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p)
-ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    gest_days = 280,
+                    sex = "M",
+                    acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_zscore2value(z = z, gest_days = 280, sex = "M", acronym = "lfga") |>
+ig_nbs_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    gest_days = 280,
+                    sex = "M",
+                    acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_zscore2value(z = z, gest_days = 280, sex = "M") |>
+ig_nbs_lfga_zscore2value(z = -2:2,
+                         gest_days = 278:282,
+                         sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -133,12 +142,11 @@ ig_nbs_lfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
                          sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 140
-# days for gest_days is outside the bounds of the INTERGROWTH-21st newborn
-# size standards.
-ig_nbs_hcfga_zscore2value(z = z,
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_nbs_hcfga_zscore2value(z = -0.5,
                           gest_days = c(140, 182, 224, 266),
-                          sex = "M") |>
+                          sex = c("M", NA, "M", "M")) |>
   round(digits = 2)
 }
 \references{

@@ -258,20 +258,26 @@ Growth standards
 }
 \examples{
 # Convert values to centiles
-y <- 335
-ig_fet_value2centile(y = y, x = 280, acronym = "hcfga") |>
+ig_fet_value2centile(y = 335:345,
+                     x = 260:270,
+                     acronym = "hcfga") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_fet_value2zscore(y = y, x = 280, acronym = "hcfga") |>
+ig_fet_value2zscore(y = 335:345,
+                    x = 260:270,
+                    acronym = "hcfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_fet_value2zscore(y = 340, x = 280, acronym = "acfga") |>
+ig_fet_value2zscore(y = 335:345,
+                    x = 260:270,
+                    acronym = "acfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_fet_acfga_value2zscore(abdocirc_mm = 340, gest_days = 280) |>
+ig_fet_acfga_value2zscore(abdocirc_mm = 335:345,
+                          gest_days = 260:270) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -279,10 +285,9 @@ ig_fet_efwfga_value2zscore(efw_g = seq(3200, 3500, by = 50),
                            gest_days = 280) |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 90
-# days for `gest_days` is outside the bounds of the INTERGROWTH-21st Fetal
-# Growth standards
-ig_fet_hcfga_value2zscore(headcirc_mm = c(90, 100, 300, 310),
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_fet_hcfga_value2zscore(headcirc_mm = c(90, 100, 300, NaN),
                           gest_days = c(91, 98, 224, 266)) |>
   round(digits = 2)
 }

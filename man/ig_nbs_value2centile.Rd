@@ -130,19 +130,30 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert values to centiles
-ig_nbs_value2centile(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_value2centile(y = c(2.90, 3.17, 3.46),
+                     gest_days = 274:276,
+                     sex = c("F", "F", "F"),
+                     acronym = "wfga") |>
   round(digits = 2)
 
 # Or values to z-scores
-ig_nbs_value2zscore(y = 3.12, gest_days = 280, sex = "M", acronym = "wfga") |>
+ig_nbs_value2zscore(y = c(2.90, 3.17, 3.46),
+                    gest_days = 274:276,
+                    sex = c("F", "F", "F"),
+                    acronym = "wfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_nbs_value2zscore(y = 48.84, gest_days = 280, sex = "M", acronym = "lfga") |>
+ig_nbs_value2zscore(y = 48.84,
+                    gest_days = 280,
+                    sex = "M",
+                    acronym = "lfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_nbs_lfga_value2zscore(length_cm = 48.84, gest_days = 280, sex = "M") |>
+ig_nbs_lfga_value2zscore(length_cm = 48.84,
+                         gest_days = 280,
+                         sex = "M") |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
@@ -151,12 +162,11 @@ ig_nbs_wlrfga_value2zscore(wei_len_ratio = c(7.37, 6.47, 6.12, 6.86),
                            sex = "M") |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 301
-# days gest_days is outside the bounds of the INTERGROWTH-21st newborn size
-# standards
-ig_nbs_hcfga_value2centile(headcirc_cm = c(23.0, 28.0, 33.0, 35.0),
-                              gest_days = c(168, 217, 266, 301),
-                              sex = "M") |>
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_nbs_hcfga_value2centile(headcirc_cm = 34.0,
+                           gest_days = c(262, 264, 266, 301),
+                           sex = c(NA, "M", "M", "M")) |>
   round(digits = 2)
 }
 \references{

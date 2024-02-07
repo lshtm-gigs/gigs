@@ -23,8 +23,9 @@ and warn you. This behaviour can be customised using the functions in
 \link{gigs_options}.}
 }
 \value{
-Factor with small vulnerable newborn classification(s), with levels
-\code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}.
+An object of class factor with the same length as the longest input
+vector, containing small vulnerable newborn classifications. Its levels
+are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}.
 }
 \description{
 A small vulnerable newborn (SVN) can be preterm (born too soon),

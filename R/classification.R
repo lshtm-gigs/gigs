@@ -16,28 +16,27 @@
 #'   behaviour can be customised using the functions in [gigs_options].
 #' @param severe A single logical value specifying whether to categorise SGA
 #'   values are below the third centile as `"SGA(<3)"`. Default = `FALSE`.
-#' @return Factor the same length as the longest input vector, with
-#'   size-for-gestational age classification(s). If `severe = FALSE`, levels are
-#'   `c("SGA", "AGA",  "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)",
-#'   "SGA", "AGA",  "LGA")`.
+#' @returns An object of class factor with the same length as the longest input
+#'   vector, containing size-for-GA classifications. If `severe = FALSE`, levels
+#'   are `c("SGA", "AGA", "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)",
+#'   "SGA", "AGA", "LGA")`.
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
 #'   adhere to the [vctrs] recycling rules.
 #' @seealso [ig_nbs_wfga_value2centile()], which this function calls to get
 #'   centiles for each observation.
 #' @examples
-#' # Without severe flag, does not differentiate between
-#' # p < 0.03 and p < 0.10
+#' # By default, does not differentiate between p < 0.03 and p < 0.10
 #' classify_sfga(
-#'   weight_kg = c(2.2, 3.4, 4.2),
-#'   gest_days = 267,
-#'   sex = "M"
+#'   weight_kg = c(2.2, 3.3, 4.2),
+#'   gest_days = 267:269,
+#'   sex = c("M", "F", "M")
 #' )
 #'
 #' # With severe = TRUE, highlights p < 0.03
 #' classify_sfga(
-#'   weight_kg = c(2.2, 3.4, 4.2),
-#'   gest_days = 267,
-#'   sex = "M",
+#'   weight_kg = c(2.2, 3.3, 4.2),
+#'   gest_days = 267:269,
+#'   sex = c("M", "F", "M"),
 #'   severe = TRUE
 #' )
 #' @references
@@ -77,8 +76,9 @@ classify_sfga <- function(weight_kg, gest_days, sex, severe = FALSE) {
 #' newborns according to their SVN type, for use in downstream analyses.
 #'
 #' @inherit classify_sfga params note
-#' @return Factor with small vulnerable newborn classification(s), with levels
-#'   `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
+#' @returns An object of class factor with the same length as the longest input
+#'   vector, containing small vulnerable newborn classifications. Its levels
+#'   are `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
 #'   "Term LGA")`.
 #' @examples
 #' classify_svn(
@@ -132,10 +132,11 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #' @param outliers A single `TRUE` or `FALSE` value specifying whether
 #'   implausible z-score value thresholds should be applied. Default = `FALSE`.
-#' @return Factor of stunting classification(s) with same length as longest
-#'   input vector. Levels are `c("stunting_severe", "stunting", "not_stunting")`
-#'   if `outliers = FALSE`, else `c("stunting_severe", "stunting",
-#'   "not_stunting", "outlier")`.
+#' @returns An object of class factor with the same length as the longest input
+#'   vector, containing stunting classifications. Its levels are
+#'   `c("stunting_severe", "stunting", "not_stunting")` if `outliers = FALSE`
+#'   (the default), else `c("stunting_severe", "stunting", "not_stunting",
+#'   "outlier")`.
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
 #'   adhere to the [vctrs] recycling rules. This function assumes that your
 #'   measurements were taken according to the WHO guidelines, which stipulate
@@ -200,10 +201,11 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #'
 #' @inheritParams classify_sfga
 #' @inheritParams classify_stunting
-#' @return Factor of wasting classifications with same length as longest input.
-#'   If `outliers = FALSE`, levels are `c("wasting_severe", "wasting",
-#'   "not_wasting", "overweight")`. If `outliers = TRUE`, levels are
-#'   `c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")`.
+#' @returns An object of class factor with the same length as the longest input
+#'   vector, containing wasting classifications. Its levels are
+#'   `c("wasting_severe", "wasting", "not_wasting", "overweight")` if `outliers
+#'   = FALSE` (the default), else `c("wasting_severe", "wasting", "not_wasting",
+#'   "overweight", "outlier")`.
 #' @note Input vectors will be recycled by [vctrs::vec_recycle_common()].
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
@@ -256,11 +258,11 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #'
 #' @inheritParams classify_sfga
 #' @inherit classify_stunting params references
-#' @return Factor of weight-for-age classifications with same length as longest
-#'   input. If `outliers = FALSE`, levels are `c("underweight_severe",
-#'   "underweight", "normal", "overweight")`. If `outliers = TRUE`, levels are
-#'   `c("underweight_severe", "underweight", "normal", "overweight",
-#'   "outlier")`.
+#' @returns An object of class factor with the same length as the longest input
+#'   vector, containing weight-for-age classifications. Its levels are
+#'   `c("underweight_severe", "underweight", "normal", "overweight")` if
+#'   `outliers = FALSE` (the default), else `c("underweight_severe",
+#'   "underweight", "normal", "overweight", "outlier")`.
 #' @inherit classify_wasting note
 #' @examples
 #' classify_wfa(

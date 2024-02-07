@@ -1,4 +1,4 @@
-#' gigs: Assess Growth in Infants and Newborns
+#' gigs: Assess Fetal, Newborn, and Child Growth with International Standards
 #'
 #' Convert between anthropometric measures and z-scores/centiles using WHO
 #' and INTERGROWTH-21<sup>st</sup> growth standards. This includes functions for

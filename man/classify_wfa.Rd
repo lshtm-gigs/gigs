@@ -30,9 +30,10 @@ and warn you. This behaviour can be customised using the functions in
 implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 }
 \value{
-Factor of weight-for-age classifications with same length as longest
-input. If \code{outliers = FALSE}, levels are \code{c("underweight_severe", "underweight", "normal", "overweight")}. If \code{outliers = TRUE}, levels are
-\code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
+An object of class factor with the same length as the longest input
+vector, containing weight-for-age classifications. Its levels are
+\code{c("underweight_severe", "underweight", "normal", "overweight")} if
+\code{outliers = FALSE} (the default), else \code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
 }
 \description{
 Classify weight-for-age z-scores using the WHO Child Growth Standards or

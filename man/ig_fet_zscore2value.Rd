@@ -207,32 +207,37 @@ adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # Convert centiles to values
-p <- 0.25 # 25th centile
-ig_fet_centile2value(p = p, x = 280, acronym = "hcfga") |>
+ig_fet_centile2value(p = c(0.25, 0.5, 0.75), # 25th, 50th, 75th centile
+                     x = 279:281,
+                     acronym = "hcfga") |>
   round(digits = 2)
 
 # Or z-scores to values
-z <- qnorm(p)
-ig_fet_zscore2value(z = z, x = 280, acronym = "hcfga") |>
+ig_fet_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
+                    x = 279:281,
+                    acronym = "hcfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
-ig_fet_zscore2value(z = z, x = 280, acronym = "acfga") |>
+ig_fet_zscore2value(z = -1:1,
+                    x = 279:281,
+                    acronym = "acfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
-ig_fet_acfga_zscore2value(z = z, gest_days = 280) |>
+ig_fet_acfga_zscore2value(z = -1:1,
+                          gest_days = 279:281) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
-ig_fet_efwfga_zscore2value(z = seq(0.1, 0.9, by = 0.2),
-                           gest_days = 280) |>
+ig_fet_acfga_zscore2value(z = 0,
+                          gest_days = 279:281) |>
   round(digits = 2)
 
-# Bad inputs will not stop the function but will instead return NA - here 91
-# days for gest_days is outside the bounds of the INTERGROWTH-21st Fetal
-# Growth standard for head circumference-for-GA
-ig_fet_hcfga_zscore2value(z = z, gest_days = c(91, 98, 224, 266)) |>
+# Bad inputs will not stop the function but will instead produce `NA`s in the
+# output - by default gigs will issue useful warnings
+ig_fet_hcfga_centile2value(p = c(-0.5, 0.15, 0.5, 0.85),
+                           gest_days = c(91, 98, 224, NA)) |>
   round(digits = 2)
 }
 \references{

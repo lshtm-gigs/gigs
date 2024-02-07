@@ -59,7 +59,7 @@ check_differences <- function(centile_tbl) {
 }
 ```
 
-Let's check this the results for `fmfga_female`:
+Let's check the results for `fmfga_female`:
 ```{r looking_into_data_3}
 check_differences(fmfga_female)
 ```
