@@ -4,48 +4,52 @@
 \alias{gigs_options}
 \alias{gigs_option_get}
 \alias{gigs_option_set}
-\title{Get and set gigs package options}
+\title{Get and set gigs package-level options}
 \usage{
 gigs_option_get(option, silent = FALSE)
 
 gigs_option_set(option, new_value, silent = FALSE)
 }
 \arguments{
-\item{option}{A single character variable, one of:
+\item{option}{A single case-sensitive character variable, one of:
 \itemize{
-\item \code{"handle_missing"} - How should gigs handle missing (\code{NA}) data?
-\item \code{"handle_undefined"} - How should gigs handle undefined (\code{NaN}, \code{Inf},
-\code{-Inf}) data?
-\item \code{"handle_invalid_xvar"} - How should gigs handle \code{x} variables that
-are out of bounds for the standard in use?
+\item \code{"handle_missing_data"} - How should gigs handle missing (\code{NA}) elements?
+\item \code{"handle_undefined_data"} - How should gigs handle undefined (\code{NaN}, \code{Inf},
+\code{-Inf}) elements?
+\item \code{"handle_oob_xvar"} - How should gigs handle elements of \code{x}
+variables which are out of bounds for the standard in use?
 \item \code{"handle_invalid_sex"} - How should gigs handle elements of \code{sex} which
 are not one of \code{"M"} or \code{"F"}?
 \item \code{"handle_invalid_acronym"} - In conversion functions, how should gigs
 handle \code{acronym} elements which do not map onto any implemented growth
 standard?
-\item \code{"handle_invalid_centiles"} - In \code{centile2value} functions, how should
+\item \code{"handle_oob_centiles"} - In \code{centile2value} functions, how should
 gigs handle elements of \code{p} that are not between \code{0} and \code{1}?
 }}
 
-\item{silent}{A single logical value denoting whether the function will send
-a \code{message()} to the console describing either:
+\item{silent}{A single logical value controlling whether a message() will be
+printed to the console describing either:
 \itemize{
-\item The current value of \code{option} for \code{gigs_option_get()}.
-\item The newly-set value of \code{option} for \code{gigs_option_set()}.
-}}
+\item The current value of \code{option} in \code{gigs_option_get()}.
+\item The \code{new_value} of \code{option} in \code{gigs_option_set()}.
+}
 
-\item{new_value}{A single character variable, one of:
+This argument will not accept an integer value in place of a logical value.}
+
+\item{new_value}{A single case-sensitive character variable, one of:
 \itemize{
-\item \code{"quiet"} - gigs will replace invalid vector elements to \code{NA} quietly
-\item \code{"warn"} - gigs will replace invalid vector elements with \code{NA} loudly
+\item \code{"quiet"} - gigs will replace invalid vector elements to \code{NA} quietly.
+\item \code{"warn"} - gigs will replace invalid vector elements with \code{NA} loudly.
 \item \code{"error"} - gigs will throw informative errors if invalid inputs are
-encountered
+encountered.
 }}
 }
 \value{
-For \code{\link[=gigs_option_get]{gigs_option_get()}}, noisiliy returns the current value of
-\code{option}. For \code{\link[=gigs_option_set]{gigs_option_set()}}, invisibly returns the new value of
-\code{option}.
+Invisibly returns either a single character variable with the
+current or new value of \code{option}, depending on which of \code{\link[=gigs_option_get]{gigs_option_get()}}
+or \code{\link[=gigs_option_set]{gigs_option_set()}} is called. If \code{silent = FALSE} (default), then an
+informative message will be printed to the console regarding the
+current/new value of \code{option}.
 }
 \description{
 By default, gigs will handle invalid input data, e.g. missing
@@ -55,17 +59,21 @@ this behaviour with \code{gigs_option_set()} so that gigs does this silently, or
 make gigs throw errors when confronted with bad data.
 }
 \examples{
-\dontrun{
-  library(gigs)
+# Show the names of all available options
+names(.gigs_options)
 
-  # Get the names of all available options
-  names(.gigs_options)
+# Retrieve the value of a gigs option (with `silent =  FALSE`, would print a
+# message)
+option_value <- gigs_option_get("handle_missing_data", silent = TRUE)
+print(option_value)
 
-  # Retrieve the value of a given option --> will invisibly return value and
-  # print to console
-  gigs_option_get("handle_missing_data")
-  # Set the value of an option --> will invisibly return the new value and
-  # print your change to the console
-  gigs_option_set("handle_missing_data", "quiet")
-}
+# Set the value of an option
+gigs_option_set("handle_undefined_data", "error", silent = TRUE)
+
+# Check that change has occurred
+option_value <- gigs_option_get("handle_undefined_data", silent = TRUE)
+print(option_value)
+
+# Suppress printed output with `silent = TRUE`
+gigs_option_set("handle_undefined_data", "warn", silent = TRUE)
 }
