@@ -28,7 +28,7 @@
 #'   be recycled with [vctrs::vec_recycle_common()].
 #' @rdname gigs_waz
 #' @noRd
-gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
+gigs_waz <- function(weight_kg, age_days, gest_days, sex) {
   validated <- validate_waz_params(weight_kg = weight_kg,
                                    age_days = age_days,
                                    gest_days = gest_days,
@@ -66,7 +66,7 @@ gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
 #'   measurements, and all `lenht_cm` values where `age_days` >= 731 are
 #'   standing height measurements.
 #' @noRd
-gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
+gigs_laz <- function(lenht_cm, age_days, gest_days, sex) {
   validated <- validate_laz_params(lenht_cm = lenht_cm,
                                    age_days = age_days,
                                    gest_days = gest_days,
@@ -102,7 +102,7 @@ gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
 #' @param headcirc_cm Numeric vector of length one or more with head
 #'   circumferences in cm.
 #' @noRd
-gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
+gigs_hcaz <- function(headcirc_cm, age_days, gest_days, sex) {
   validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,
                                     age_days = age_days,
                                     gest_days = gest_days,
@@ -136,7 +136,7 @@ gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
 
 #' @rdname gigs_waz
 #' @noRd
-gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
+gigs_wlz <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
   validated <- validate_wlz_params(weight_kg = weight_kg, lenht_cm = lenht_cm,
                                    age_days = age_days, gest_days = gest_days,
                                    sex = sex)
@@ -188,7 +188,7 @@ gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
 #' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
-gigs_xaz_lgls <- function(gest_days, age_days) {
+gigs_xaz_lgls <- function(age_days, gest_days) {
   # Set up vars for use later
   term_cutoff_days <- 37 * 7 # i.e. 37 weeks = term baby
   is_term <- gest_days >= term_cutoff_days
