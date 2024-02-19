@@ -353,7 +353,7 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' # output - by default gigs will issue useful warnings
 #' who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
 #'                         height_cm = c(65, 95, 120, NA),
-#'                         sex = c("M", "M", "F", NA)) |>
+#'                         sex = c("M", "X", "F", NA)) |>
 #'     round(digits = 2)
 #' @rdname who_gs_value2zscore
 #' @export
@@ -764,7 +764,7 @@ who_gs_lms_z2v <- function(z, l, m, s, acronym) {
     yes = ifelse(
       #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
       test = abs(l) > sqrt(.Machine$double.eps),
-      yes = exponent(z * s * l + 1, (1 / l)) * m,
+      yes = (z * s * l + 1)^(1 / l) * m,
       no = m * exp(s * z)),
     no = ifelse(
       test = z > 3,
@@ -792,16 +792,6 @@ who_gs_lms_z2v_under_minus_three <- function(z, l, m, s) {
   sd23neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -2) - sd3neg
   (z + 3) * sd23neg + sd3neg
 }
-
-#' Robust exponentiation for use internally by [who_gs_lms_z2v()]
-#'
-#' @param a Numeric vector of length one or more. Can be negative.
-#' @param pow Power to raise `a` to. Can be fractional.
-#' @note Starting using this function as I would sometimes get errors in
-#'   `y_from_LMS()` from odd but necessary exponentiations.
-#' @source From StackOverflow: https://stackoverflow.com/questions/29920302/
-#' @noRd
-exponent <- function(a, pow) (abs(a)^pow) * sign(a)
 
 #' Get values which are a specific z-score from the mean using WHO LMS
 #' coefficients

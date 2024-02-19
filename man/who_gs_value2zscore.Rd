@@ -180,7 +180,7 @@ who_gs_ssfa_value2centile(subscap_sf_mm = 6.1,
 # output - by default gigs will issue useful warnings
 who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
                         height_cm = c(65, 95, 120, NA),
-                        sex = c("M", "M", "F", NA)) |>
+                        sex = c("M", "X", "F", NA)) |>
     round(digits = 2)
 }
 \references{
