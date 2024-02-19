@@ -208,30 +208,30 @@ adhere to the \link{vctrs} recycling rules.
 \examples{
 # Convert centiles to values
 ig_fet_centile2value(p = c(0.25, 0.5, 0.75), # 25th, 50th, 75th centile
-                     x = 279:281,
+                     x = 274:276,
                      acronym = "hcfga") |>
   round(digits = 2)
 
 # Or z-scores to values
 ig_fet_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
-                    x = 279:281,
+                    x = 274:276,
                     acronym = "hcfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
 ig_fet_zscore2value(z = -1:1,
-                    x = 279:281,
+                    x = 274:276,
                     acronym = "acfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
 ig_fet_acfga_zscore2value(z = -1:1,
-                          gest_days = 279:281) |>
+                          gest_days = 274:276) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_fet_acfga_zscore2value(z = 0,
-                          gest_days = 279:281) |>
+                          gest_days = 274:276) |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead produce `NA`s in the
