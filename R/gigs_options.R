@@ -38,35 +38,28 @@
 #' @name gigs_options
 #' @export
 gigs_option_get <- function(option, silent = FALSE) {
-  checkmate::qassert(option, rules = "S1") |>
-    checkmate::assert_subset(choices = names(.gigs_options))
-  value <- get(option, envir = .gigs_options, inherits = FALSE)
+  checkmate::qassert(option, rules = "S1")
+  checkmate::qassert(silent, rules = "B1")
+  checkmate::assert_subset(option, choices = names(gigs::.gigs_options))
+  value <- get(option, envir = gigs::.gigs_options, inherits = FALSE)
   if (!silent) {
-    message("gigs options: `", option, "` is currently set to \"", value, "\".")
+    message("gigs options: '", option, "' is currently set to \"", value, "\".")
   }
-  value
+  invisible(value)
 }
 
 #' @name gigs_options
-#' @param new_value A single character variable, one of:
-#'   * `"quiet"` - gigs will replace invalid vector elements to `NA` quietly
-#'   * `"warn"` - gigs will replace invalid vector elements with `NA` loudly
-#'   * `"error"` - gigs will throw informative errors if invalid inputs are
-#'     encountered
-#' @param silent A single logical value denoting whether the function will send
-#'   a `message()` to the console describing either:
-#'   * The current value of `option` for `gigs_option_get()`.
-#'   * The newly-set value of `option` for `gigs_option_set()`.
 #' @export
 gigs_option_set <- function(option, new_value, silent = FALSE) {
-  checkmate::qassert(silent, rules = "B1")
   checkmate::qassert(option, rules = "S1")
-  checkmate::assert_subset(option, choices = names(.gigs_options))
+  checkmate::qassert(silent, rules = "B1")
   checkmate::qassert(new_value, rules = "S1")
+  checkmate::assert_subset(option, choices = names(gigs::.gigs_options))
   checkmate::assert_subset(new_value, choices = c("quiet", "warn", "error"))
-  assign(x = option, value = new_value, envir = .gigs_options, inherits = FALSE)
+  assign(x = option, value = new_value, envir = gigs::.gigs_options,
+         inherits = FALSE)
   if (!silent) {
-    message("gigs options: `",  option, "` is now set to \"", new_value, "\".")
+    message("gigs options: '",  option, "' is now set to \"", new_value, "\".")
   }
   invisible(new_value)
 }
