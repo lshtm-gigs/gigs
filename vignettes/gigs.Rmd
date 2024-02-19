@@ -36,9 +36,9 @@ where the `value2zscore` and `value2centile` functions are useful:
 #### Example 1a: Converting newborn weights
 ```{r example_1a}
 df_newborn_weights <- data.frame(
-        weight_kg = c(0.91, 3.33, 2.75, 3.35, 3.47, 1.90),
-        gest_days = c(183, 280, 293, 259, 277, 231),
-        sex = c(rep("M", 3), rep("F", 3))
+  weight_kg = c(0.91, 3.33, 2.75, 3.35, 3.47, 1.90),
+  gest_days = c(183, 280, 293, 259, 277, 231),
+  sex = c(rep("M", 3), rep("F", 3))
 )
 # Use the `acronym` parameter to specify the standard in use...
 df_newborn_weights$weight_p <- with(
@@ -59,8 +59,9 @@ df_newborn_weights$weight_z <- with(
 df_newborn_weights
 ```
 
-Given that the outputs of these functions are vectors, gigs functions integrate
-easily with [dplyr](https://dplyr.tidyverse.org/) verbs.
+Given that the outputs of these functions are vectors, with equal length to
+their inputs (after recycling), gigs functions integrate easily with
+[dplyr](https://dplyr.tidyverse.org/) verbs.
 
 ### From z-scores/centiles to values
 
