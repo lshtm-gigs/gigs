@@ -116,12 +116,11 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #' Classify stunting using WHO or INTERGROWTH-21<sup>st</sup>
 #' length/height-for-age standards
 #'
-#' Classify stunting (low length/height-for-age) using WHO or
-#' INTERGROWTH-21<sup>st</sup> length/height-for-age standards depending on the
-#' gestational age at birth of the child. Severe stunting is below <-3 SD
-#' relative to mean length/height at a given age, whereas moderate stunting is
-#' -2SD from the mean.
-#'
+#' @description Classify stunting (low length/height-for-age) using WHO or
+#'   INTERGROWTH-21<sup>st</sup> length/height-for-age standards depending on
+#'   the gestational age at birth of the child. Severe stunting is below <-3 SD
+#'   relative to mean length/height at a given age, whereas moderate stunting is
+#'   -2 SD from the mean.
 #' @inheritParams classify_sfga
 #' @param lenht_cm Numeric vector of length one or more with length/height
 #'   measurement(s) in cm.
@@ -134,15 +133,24 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #'   implausible z-score value thresholds should be applied. Default = `FALSE`.
 #' @returns An object of class factor with the same length as the longest input
 #'   vector, containing stunting classifications. Its levels are
-#'   `c("stunting_severe", "stunting", "not_stunting")` if `outliers = FALSE`
-#'   (the default), else `c("stunting_severe", "stunting", "not_stunting",
-#'   "outlier")`.
+#'   `c("stunting_severe", "stunting", "not_stunting")` if `outliers =
+#'   FALSE` (the default), else `c("stunting_severe", "stunting",
+#'   "not_stunting", "outlier")`.
+#'
+#'   \tabular{lll}{
+#'     \strong{Category} \tab \strong{Factor level} \tab
+#'       \strong{Z-score bounds} \cr
+#'     Severe stunting \tab `"stunting_severe"`     \tab `z` ≤ -3         \cr
+#'     Stunting        \tab `"stunting"`            \tab -3 < `z` ≤ -2    \cr
+#'     No stunting     \tab `"not_stunting"`        \tab `z` > -2         \cr
+#'     Outlier         \tab `"outlier"`             \tab `abs(z)` > 5
+#'   }
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
 #'   adhere to the [vctrs] recycling rules. This function assumes that your
 #'   measurements were taken according to the WHO guidelines, which stipulate
-#'   that recumbent length should not be measured after 730 days. Implausible
-#'   z-score bounds are sourced from the referenced WHO report, and
-#'   classification cut-offs from the DHS manual.
+#'   that recumbent length should not be measured after 730 days. Instead,
+#'   standing height should be used. Implausible z-score bounds are sourced from
+#'   the referenced WHO report, and classification cut-offs from the DHS manual.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
 #' *Recommendations for data collection, analysis and reporting on
@@ -173,7 +181,10 @@ classify_svn <- function(weight_kg, gest_days, sex) {
 #'   outliers = TRUE
 #' )
 #' @export
-classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
+classify_stunting <- function(lenht_cm,
+                              age_days,
+                              gest_days,
+                              sex,
                               outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
   z_scores <- gigs_laz(lenht_cm = lenht_cm, age_days = age_days,
@@ -193,12 +204,13 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #' Classify wasting using INTERGROWTH-21<sup>st</sup> weight-for-length or WHO
 #' weight-for-length/height standards
 #'
-#' Classify wasting (low weight-for-length/height) using the
-#' INTERGROWTH-21<sup>st</sup> weight-for-length or WHO Child Growth standards,
-#' specifically either the weight-for-length or weight-for-height standard
-#' depending on the age of the child. Severe wasting is <-3SD relative to the
-#' mean expected weight, whereas moderate wasting is -2SD from the mean.
 #'
+#' @description Classify wasting (low weight-for-length/height) using the
+#'   INTERGROWTH-21<sup>st</sup> weight-for-length or WHO Child Growth standards,
+#'   specifically either the weight-for-length or weight-for-height standard
+#'   depending on the age of the child. Severe stunting is `< -3` SD relative to
+#'   the mean expected weight, whereas moderate wasting is `< -2` SD from the
+#'   mean.
 #' @inheritParams classify_sfga
 #' @inheritParams classify_stunting
 #' @returns An object of class factor with the same length as the longest input
@@ -206,8 +218,18 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #'   `c("wasting_severe", "wasting", "not_wasting", "overweight")` if `outliers
 #'   = FALSE` (the default), else `c("wasting_severe", "wasting", "not_wasting",
 #'   "overweight", "outlier")`.
+#'
+#'   \tabular{lll}{
+#'     \strong{Category} \tab \strong{Factor level} \tab
+#'       \strong{Z-score bounds} \cr
+#'     Severe wasting \tab `"wasting_severe"`       \tab `z` ≤ -3      \cr
+#'     Wasting        \tab `"wasting"`              \tab -3 < `z` ≤ -2 \cr
+#'     No wasting     \tab `"not_wasting"`          \tab `abs(z)` < 2  \cr
+#'     Overweight     \tab `"overweight"`           \tab `z` ≥ 2       \cr
+#'     Outlier        \tab `"outlier"`              \tab `abs(z)` > 5
+#'   }
 #' @note Input vectors will be recycled by [vctrs::vec_recycle_common()].
-#'   Implausible z-score bounds are sourced from the referenced WHO report, and
+#'   Outlier z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
 #' @inherit classify_stunting references
 #' @examples
@@ -220,7 +242,7 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #'   sex =  c("F", "M", "F", "M")
 #' )
 #'
-#' # Outliers  can be flagged if `outliers` set to TRUE
+#' # Outliers can be flagged if `outliers` set to TRUE
 #' classify_wasting(
 #'   weight_kg = c(5.75, 2.18, 3.00, 6.75),
 #'   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
@@ -230,7 +252,11 @@ classify_stunting <- function(lenht_cm, age_days, gest_days, sex,
 #'   outliers = TRUE
 #' )
 #' @export
-classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
+classify_wasting <- function(weight_kg,
+                             lenht_cm,
+                             age_days,
+                             gest_days,
+                             sex,
                              outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
   z_scores <- gigs_wlz(weight_kg = weight_kg, lenht_cm = lenht_cm,
@@ -263,6 +289,16 @@ classify_wasting <- function(weight_kg, lenht_cm, gest_days, age_days, sex,
 #'   `c("underweight_severe", "underweight", "normal", "overweight")` if
 #'   `outliers = FALSE` (the default), else `c("underweight_severe",
 #'   "underweight", "normal", "overweight", "outlier")`.
+#'
+#'   \tabular{lll}{
+#'     \strong{Category}    \tab \strong{Factor level}  \tab
+#'       \strong{Z-score bounds} \cr
+#'     Severely underweight \tab `"underweight_severe"` \tab `z` ≤ -3      \cr
+#'     Underweight          \tab `"underweight"`        \tab -3 < `z` ≤ -2 \cr
+#'     Normal weight        \tab `"normal_weight"`      \tab `abs(z)` < 2  \cr
+#'     Overweight           \tab `"overweight"`         \tab `z` ≥ 2       \cr
+#'     Outlier              \tab `"outlier"`            \tab `z` < -6 or `z` > 5
+#'   }
 #' @inherit classify_wasting note
 #' @examples
 #' classify_wfa(

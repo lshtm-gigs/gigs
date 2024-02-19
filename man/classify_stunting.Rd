@@ -30,23 +30,31 @@ implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 \value{
 An object of class factor with the same length as the longest input
 vector, containing stunting classifications. Its levels are
-\code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE}
-(the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+\code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE} (the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Z-score bounds} \cr
+Severe stunting \tab \code{"stunting_severe"}     \tab \code{z} ≤ -3         \cr
+Stunting        \tab \code{"stunting"}            \tab -3 < \code{z} ≤ -2    \cr
+No stunting     \tab \code{"not_stunting"}        \tab \code{z} > -2         \cr
+Outlier         \tab \code{"outlier"}             \tab \code{abs(z)} > 5
+}
 }
 \description{
 Classify stunting (low length/height-for-age) using WHO or
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards depending on the
-gestational age at birth of the child. Severe stunting is below <-3 SD
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} length/height-for-age standards depending on
+the gestational age at birth of the child. Severe stunting is below <-3 SD
 relative to mean length/height at a given age, whereas moderate stunting is
--2SD from the mean.
+-2 SD from the mean.
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
 adhere to the \link{vctrs} recycling rules. This function assumes that your
 measurements were taken according to the WHO guidelines, which stipulate
-that recumbent length should not be measured after 730 days. Implausible
-z-score bounds are sourced from the referenced WHO report, and
-classification cut-offs from the DHS manual.
+that recumbent length should not be measured after 730 days. Instead,
+standing height should be used. Implausible z-score bounds are sourced from
+the referenced WHO report, and classification cut-offs from the DHS manual.
 }
 \examples{
 # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;

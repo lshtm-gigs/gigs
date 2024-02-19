@@ -8,8 +8,8 @@ weight-for-length/height standards}
 classify_wasting(
   weight_kg,
   lenht_cm,
-  gest_days,
   age_days,
+  gest_days,
   sex,
   outliers = FALSE
 )
@@ -21,14 +21,14 @@ value(s) in kg.}
 \item{lenht_cm}{Numeric vector of length one or more with length/height
 measurement(s) in cm.}
 
-\item{gest_days}{Numeric vector of length one or more with gestational
-age(s) at birth in days between \code{168} and \code{300}. By default, gigs will
-replace out-of-bounds elements in \code{gest_days} with \code{NA} and warn you. This
-behaviour can be customised using the functions in \link{gigs_options}.}
-
 \item{age_days}{Numeric vector of length one or more with age(s) in days
 for each child. Should be between \code{0} to \code{1856} days. By default, gigs will
 replace out-of-bounds elements in \code{age_days} with \code{NA} and warn you. This
+behaviour can be customised using the functions in \link{gigs_options}.}
+
+\item{gest_days}{Numeric vector of length one or more with gestational
+age(s) at birth in days between \code{168} and \code{300}. By default, gigs will
+replace out-of-bounds elements in \code{gest_days} with \code{NA} and warn you. This
 behaviour can be customised using the functions in \link{gigs_options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
@@ -44,17 +44,28 @@ implausible z-score value thresholds should be applied. Default = \code{FALSE}.}
 An object of class factor with the same length as the longest input
 vector, containing wasting classifications. Its levels are
 \code{c("wasting_severe", "wasting", "not_wasting", "overweight")} if \code{outliers = FALSE} (the default), else \code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Z-score bounds} \cr
+Severe wasting \tab \code{"wasting_severe"}       \tab \code{z} ≤ -3      \cr
+Wasting        \tab \code{"wasting"}              \tab -3 < \code{z} ≤ -2 \cr
+No wasting     \tab \code{"not_wasting"}          \tab \code{abs(z)} < 2  \cr
+Overweight     \tab \code{"overweight"}           \tab \code{z} ≥ 2       \cr
+Outlier        \tab \code{"outlier"}              \tab \code{abs(z)} > 5
+}
 }
 \description{
 Classify wasting (low weight-for-length/height) using the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO Child Growth standards,
 specifically either the weight-for-length or weight-for-height standard
-depending on the age of the child. Severe wasting is <-3SD relative to the
-mean expected weight, whereas moderate wasting is -2SD from the mean.
+depending on the age of the child. Severe stunting is \verb{< -3} SD relative to
+the mean expected weight, whereas moderate wasting is \verb{< -2} SD from the
+mean.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
-Implausible z-score bounds are sourced from the referenced WHO report, and
+Outlier z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.
 }
 \examples{
@@ -67,7 +78,7 @@ classify_wasting(
   sex =  c("F", "M", "F", "M")
 )
 
-# Outliers  can be flagged if `outliers` set to TRUE
+# Outliers can be flagged if `outliers` set to TRUE
 classify_wasting(
   weight_kg = c(5.75, 2.18, 3.00, 6.75),
   lenht_cm = c(67.7, 46.6, 50.0, 80.1),

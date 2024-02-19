@@ -34,6 +34,16 @@ An object of class factor with the same length as the longest input
 vector, containing weight-for-age classifications. Its levels are
 \code{c("underweight_severe", "underweight", "normal", "overweight")} if
 \code{outliers = FALSE} (the default), else \code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
+
+\tabular{lll}{
+\strong{Category}    \tab \strong{Factor level}  \tab
+\strong{Z-score bounds} \cr
+Severely underweight \tab \code{"underweight_severe"} \tab \code{z} ≤ -3      \cr
+Underweight          \tab \code{"underweight"}        \tab -3 < \code{z} ≤ -2 \cr
+Normal weight        \tab \code{"normal_weight"}      \tab \code{abs(z)} < 2  \cr
+Overweight           \tab \code{"overweight"}         \tab \code{z} ≥ 2       \cr
+Outlier              \tab \code{"outlier"}            \tab \code{z} < -6 or \code{z} > 5
+}
 }
 \description{
 Classify weight-for-age z-scores using the WHO Child Growth Standards or
@@ -44,7 +54,7 @@ overweight is > 2 SDs above the mean.
 }
 \note{
 Input vectors will be recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
-Implausible z-score bounds are sourced from the referenced WHO report, and
+Outlier z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.
 }
 \examples{
