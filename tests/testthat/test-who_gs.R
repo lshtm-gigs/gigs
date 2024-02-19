@@ -24,8 +24,7 @@ test_that(desc = "Conversion of z-scores/centiles to values works", {
         fn <- get(paste0("who_gs_", acronym, "_", chr_z_or_p, "2value"))
         pkg_tbl <- lapply(X = dbl_z_or_p,
                           FUN = \(zp) {
-                            round(fn(zp, xvar, sexvar),
-                                  digits = who_roundto())
+                            round(fn(zp, xvar, sexvar), digits = who_roundto())
                           }) |>
           do.call(what = cbind) |>
           as.data.frame() |>
@@ -49,6 +48,34 @@ test_that(desc = "Conversion of z-scores/centiles to values works", {
   }
 })
 
+#' @srrstats {G5.5, G5.6, G5.6a, G5.6b, G5.9b} Checks that conversion
+#'   functionality works when converting values to z-scores/centiles AND vice
+#'   versa. Uses multiple fixed seeds to generate random inputs, which do not
+#'   affect the functions' results.
+test_that(desc = "Conversion of values to z-scores works", {
+  for (acronym in names(gigs::who_gs)) {
+    for (chr_z_or_p in c("zscore", "centile")) {
+      xvar <- gigs::who_gs[[acronym]][[1]][[1]][[1]]
+      for (seed in seq(450, 550, 30)) {
+        withr::with_seed(seed, {
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        })
+        if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
+
+        fn_stem <- paste0("who_gs_", acronym)
+        fn_zp2val <- get(paste0(fn_stem, "_", chr_z_or_p, "2value"))
+        y_gigs <- fn_zp2val(dbl_z_or_p, xvar, sexvar)
+
+        fn_val2zp <- get(paste0(fn_stem, "_value2", chr_z_or_p))
+        gigs_z_or_p <- fn_val2zp(y_gigs, xvar, sexvar)
+
+        expect_equal(gigs_z_or_p, expected = dbl_z_or_p, tolerance = 10e-10)
+      }
+    }
+  }
+})
+
 #' @srrstats {G5.9, G5.9a} Trivial noise does not meaningfully alter results.
 test_that(
   desc = "Conversion of values to z-scores works with trivial noise",
@@ -56,7 +83,11 @@ test_that(
     for (acronym in names(gigs::who_gs)) {
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- who_gs[[acronym]][[1]][[1]][[1]]
+        xrange <- range(xvar)
         withr::with_seed(50, code = {
+          xvar <- jitter(xvar, 1)
+          xvar[xvar < xrange[1]] <- xrange[1]
+          xvar[xvar > xrange[2]] <- xrange[2]
           dbl_z_or_p <- rnorm(n = length(xvar))
           sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
         })

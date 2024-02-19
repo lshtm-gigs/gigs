@@ -87,11 +87,9 @@ test_that(
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- gigs::ig_nbs[[acronym]][[1]][[1]][[1]]
         for (seed in seq(300, 400, 30)) {
-          dbl_z_or_p <- withr::with_seed(seed, {
-            rnorm(n = length(xvar))
-          })
-          sexvar <- withr::with_seed(seed, {
-            sample(c("M", "F"), size = length(xvar), replace = TRUE)
+          withr::with_seed(seed, {
+            dbl_z_or_p <- rnorm(n = length(xvar))
+            sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
           })
           if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
@@ -116,12 +114,14 @@ test_that(
     for (acronym in names(gigs::ig_nbs)) {
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- ig_nbs[[acronym]][[1]][[1]][[1]]
-          dbl_z_or_p <- withr::with_seed(50, {
-            rnorm(n = length(xvar))
-          })
-          sexvar <- withr::with_seed(50, {
-            sample(c("M", "F"), size = length(xvar), replace = TRUE)
-          })
+        xrange <- range(xvar)
+        withr::with_seed(50, code = {
+          xvar <- jitter(xvar, 1)
+          xvar[xvar < xrange[1]] <- xrange[1]
+          xvar[xvar > xrange[2]] <- xrange[2]
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        })
         if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
         fn_stem <- paste0("ig_nbs_", acronym)

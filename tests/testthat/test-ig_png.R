@@ -51,11 +51,9 @@ test_that(desc = "Conversion of values to z-scores works", {
     for (chr_z_or_p in c("zscore", "centile")) {
       xvar <- gigs::ig_png[[acronym]][[1]][[1]][[1]]
       for (seed in seq(450, 550, 30)) {
-        dbl_z_or_p <- withr::with_seed(seed = seed, {
-          rnorm(n = length(xvar))
-        })
-        sexvar <- withr::with_seed(seed = seed, {
-           sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        withr::with_seed(seed, {
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
         })
         if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
@@ -73,17 +71,20 @@ test_that(desc = "Conversion of values to z-scores works", {
 })
 
 #' @srrstats {G5.9, G5.9a} Trivial noise does not meaningfully alter results.
+bench::mark(
 test_that(
   desc = "Conversion of values to z-scores works with trivial noise",
   code = {
     for (acronym in names(gigs::ig_png)) {
       for (chr_z_or_p in c("zscore", "centile")) {
         xvar <- ig_png[[acronym]][[1]][[1]][[1]]
-        dbl_z_or_p <- withr::with_seed(seed = 800, {
-          rnorm(n = length(xvar))
-        })
-        sexvar <- withr::with_seed(seed = 800, {
-           sample(c("M", "F"), size = length(xvar), replace = TRUE)
+        xrange <- range(xvar)
+        withr::with_seed(50, code = {
+          xvar <- jitter(xvar, 1)
+          xvar[xvar < xrange[1]] <- xrange[1]
+          xvar[xvar > xrange[2]] <- xrange[2]
+          dbl_z_or_p <- rnorm(n = length(xvar))
+          sexvar <- sample(c("M", "F"), size = length(xvar), replace = TRUE)
         })
         if (chr_z_or_p == "centile") dbl_z_or_p <- pnorm(dbl_z_or_p)
 
@@ -99,6 +100,7 @@ test_that(
       }
     }
   }
+)
 )
 
 # Appropriate errors for zero-length data + data of wrong type -----------------
