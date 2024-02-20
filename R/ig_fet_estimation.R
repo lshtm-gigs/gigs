@@ -4,8 +4,8 @@
 #' predictive equation
 #'
 #' @param abdocirc_mm Numeric vector with abdominal circumference value(s) in
-#'   cm. Should have length one or same length as `headcirc_mm`.
-#' @param headcirc_mm Numeric vector with head circumference value(s) in cm.
+#'   mm. Should have length one or same length as `headcirc_mm`.
+#' @param headcirc_mm Numeric vector with head circumference value(s) in mm.
 #'   Should have length one or same length as `abdocirc_mm`.
 #' @note Inputs are recycled using [vctrs::vec_recycle_common()].
 #' @examples
