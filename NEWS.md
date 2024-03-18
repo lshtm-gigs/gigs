@@ -1,3 +1,14 @@
+# gigs 0.4.1.9000
+
+* **BREAKING CHANGES**:
+  * In standard-agnostic conversion functions (e.g. `ig_nbs_value2zscore()` or
+    `who_gs_centile2value()`), the `acronym` parameter must now be a single
+    string or an error will be thrown.
+* **FIXES**:
+  * `.gigs_options` is now actively exported by gigs and available to end-users
+* **INTERNAL/DOCS CHANGES**:
+  * Non-breaking changes to documentation and test suite.
+ 
 # gigs 0.4.1
 
 * Changes to documentation to facilitate `autotest::autotest_package()` pass.

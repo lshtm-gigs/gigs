@@ -81,17 +81,15 @@ be between certain values depending on the standard in use (defined by
 }
 
 By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
-warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
-and warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
-\item{acronym}{Character vector of length one or more denoting the WHO Child
-Growth standard(s) in use. Each element should be one of:
+\item{acronym}{A single-length character vector denoting the WHO Child Growth
+standard in use. Should be one of:
 \itemize{
 \item \code{"wfa"} (weight-for-age)
 \item \code{"bfa"} (BMI-for-age)
@@ -104,11 +102,8 @@ Growth standard(s) in use. Each element should be one of:
 \item \code{"tsfa"} (triceps skinfold-for-age)
 }
 
-This argument is case-sensitive. By default, gigs will replace elements in
-\code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}. If
-all elements in \code{acronym} are not one of the above values, gigs will throw
-an error.}
+This argument is case-sensitive. If \code{acronym} is not one of the values
+listed above the function will throw an error.}
 
 \item{weight_kg}{Numeric vector of length one or more with weight
 measurement(s) in kg.}
@@ -139,8 +134,9 @@ input vector.
 Convert values to z-scores/centiles in the WHO Child Growth Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+Input vectors other than \code{acronym} are recycled by
+\code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
+rules.
 }
 \examples{
 # Convert values to centiles
@@ -180,7 +176,7 @@ who_gs_ssfa_value2centile(subscap_sf_mm = 6.1,
 # output - by default gigs will issue useful warnings
 who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
                         height_cm = c(65, 95, 120, NA),
-                        sex = c("M", "M", "F", NA)) |>
+                        sex = c("M", "X", "F", NA)) |>
     round(digits = 2)
 }
 \references{

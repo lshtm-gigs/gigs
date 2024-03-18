@@ -67,18 +67,16 @@ Size standard in use (defined by \code{acronym}). These are:
 }
 
 By default, gigs will replace elements in \code{gest_days} that are out of
-bounds for the growth standard in use with \code{NA} and warn you. This
-behaviour can be customised using the functions in \link{gigs_options}.}
+bounds for the growth standard in use with \code{NA} and warn you. You can
+customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
-and warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
-\item{acronym}{Character vector of length one or more denoting the
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standard to use for each
-observation. Each element should be one of:
+\item{acronym}{A single string denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+Newborn Size standard to use. Should be one of:
 \itemize{
 \item \code{"wfga"} (weight-for-GA)
 \item \code{"lfga"} (length-for-GA)
@@ -89,11 +87,8 @@ observation. Each element should be one of:
 \item \code{"ffmfga"} (fat-free mass-for-GA)
 }
 
-This argument is case-sensitive. By default, gigs will replace elements in
-\code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}. If
-all elements in \code{acronym} are not one of the above values, gigs will throw
-an error.}
+This argument is case-sensitive. If \code{acronym} is not one of the values
+listed above, the function will throw an error.}
 
 \item{weight_kg}{Numeric vector of length one or more with birth weight(s) in
 kg.}
@@ -125,8 +120,9 @@ Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}s
 Newborn Size Standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+Input vectors other than \code{acronym} are recycled by
+\code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
+rules.
 }
 \examples{
 # Convert values to centiles

@@ -39,28 +39,14 @@ ig_png_wfl_value2centile(weight_kg, length_cm, sex)
 measurement(s) to convert to centiles/z-scores. Units depend on which
 \code{acronym}(s) are in use.}
 
-\item{x}{Numeric vector of length one or more with x values. Elements of \code{x}
-or its standard-specific equivalents (\code{pma_weeks}, \code{length_cm}) should have
-specific units and be between certain values depending on the standard in
-use (defined by \code{acronym}). These are:
-\itemize{
-\item Between 27 and 64 weeks for \code{"wfa"}, \code{"lfa"}, and \code{"hcfa"}.
-\item Between 35 and 65 days for \code{"wfl"}.
-}
-
-By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
-warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
-
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
-and warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
-\item{acronym}{Character vector of length one or more denoting the
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standard(s) in use. Each
-element should be one of:
+\item{acronym}{Single-length character variable denoting the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standard(s) in use. Should be
+one of:
 \itemize{
 \item \code{"wfa"} (weight-for-age)
 \item \code{"lfa"} (length-for-age)
@@ -68,11 +54,8 @@ element should be one of:
 \item \code{"wfl"} (weight-for-length)
 }
 
-This argument is case-sensitive. By default, gigs will replace elements in
-\code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}. If
-all elements in \code{acronym} are not one of the above values, gigs will throw
-an error.}
+This argument is case-sensitive. If \code{acronym} is not one of the values
+listed above the function will throw an error.}
 
 \item{weight_kg}{Numeric vector of length one or more with weight
 measurement(s) in kg.}
@@ -98,8 +81,9 @@ Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}s
 Postnatal Growth Standards for preterm infants
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+Input vectors other than \code{acronym} are recycled by
+\code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
+rules.
 }
 \examples{
 # Convert values to centiles

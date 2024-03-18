@@ -154,12 +154,10 @@ standards).
 }
 
 By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
-warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
-\item{acronym}{Character vector of length one or more denoting the
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standard(s) in use. Each value
-should be one of:
+\item{acronym}{A single string denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
+Growth standard to use. Each value should be one of:
 \itemize{
 \item \code{"hcfga"} (head circumference-for-GA)
 \item \code{"bpdfga"} (biparietal diameter-for-GA)
@@ -182,11 +180,8 @@ should be one of:
 \item \code{"cmfga"} (cisterna magna-for-GA)
 }
 
-This argument is case-sensitive. By default, gigs will replace elements in
-\code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}. If
-all elements in \code{acronym} are not one of the above values, gigs will
-throw an error.}
+This argument is case-sensitive. If \code{acronym} is not one of the values
+list above, gigs will throw an error.}
 
 \item{headcirc_mm}{Numeric vector of length one or more with head
 circumference measurements in mm.}
@@ -195,7 +190,7 @@ circumference measurements in mm.}
 as the x variable, but can also be a y variable for the \code{"gafcrl"}
 and \code{"gaftcd"} standards. When \code{gest_days} is being used as the x variable,
 out of bounds elements of \code{gest_days} will be handled according to the
-\link{gigs_options} for \code{"handle_invalid_xvar"}.}
+\link[=gigs_options]{GIGS package-level option} for \code{"handle_invalid_xvar"}.}
 
 \item{bpd_mm}{Numeric vector of length one or more with biparietal diameter
 measurement(s) in mm.}

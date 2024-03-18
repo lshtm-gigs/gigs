@@ -1,22 +1,57 @@
 # Handle missing, undefined, or invalid data inputs ----------------------------
 
+#' Handle variables based on gigs options
+#'
+#' @param option A single-length character vector which should be one of
+#'   `names(.gigs_options)`.
+#' @param vec Vector of length one or more which will be checked for invalid
+#'   values by `test_fn`.
+#' @param varname Single-length character vector with the variable name for
+#'   `vec` which should be printed out by `msg_fn`.
+#' @param test_lgl A logical vector-producing function (anonymous or otherwise)
+#'   that is used with `vec` as input.
+#' @param msg_fn A string-producing function to produce a helpful message when
+#'   `option` is set to `"warn"` or `"error"`.
+#' @seealso Check out the [GIGS package-level options][gigs_options], which can
+#'   be used to define how this function behaves for different sorts of data.
 #' @rdname handle_var
 #' @noRd
-handle_missing_data <- function(vec, varname) {
+handle_var <- function(vec, varname, option, test_lgl, msg_fn) {
+  lgl_is_invalid <- test_lgl
+  if (!any(lgl_is_invalid)) {
+    return(vec)
+  }
+  out <- replace(vec, lgl_is_invalid, values = NA)
+  str_msg <- msg_fn(lgl_is_invalid, varname = varname)
+  switch(gigs_option_get(option, silent = TRUE),
+         warn = warning(str_msg, call. = FALSE),
+         error = stop(str_msg, call. = FALSE))
+  out
+}
+
+#' @rdname handle_var
+#' @param is_na Logical vector the same length as `vec`, which is the same as
+#'   `is.na(vec)`. This check is cached in a specific object to prevent
+#'   re-computing `is.na(vec)`.
+#' @param is_na Logical vector the same length as `vec`, which is the same as
+#'   `is.nan(vec)`. This check is cached in a specific object to prevent
+#'   re-computing `is.nan(vec)`.
+#' @noRd
+handle_missing_data <- function(vec, varname, is_na, is_nan) {
   handle_var(vec = vec,
              varname = varname,
              option = "handle_missing_data",
-             test_fn = \(x) is.na(x) & !is.nan(x),
+             test_lgl = is_na & !is_nan,
              msg_fn = msg_missing_data)
 }
 
 #' @rdname handle_var
 #' @noRd
-handle_undefined_data <- function(vec, varname) {
+handle_undefined_data <- function(vec, varname, is_nan) {
   handle_var(vec = vec,
              varname = varname,
              option = "handle_undefined_data",
-             test_fn = \(x) is.infinite(x) | is.nan(x),
+             test_lgl = is.infinite(vec) | is_nan,
              msg_fn = msg_undefined_data)
 }
 
@@ -26,61 +61,31 @@ handle_oob_centiles <- function(vec) {
   handle_var(vec = vec,
              varname = "p",
              option = "handle_oob_centiles",
-             test_fn = \(x) !is.na(x) & !(x > 0 & x < 1),
+             test_lgl = !is.na(vec) & (0.5 < abs(vec - 0.5)),
              msg_fn = msg_oob_centiles)
 }
 
 #' @rdname handle_var
 #' @noRd
-handle_invalid_chr_options <- function(vec, gigs_opt, varname, options) {
+handle_invalid_chr_options <- function(vec, gigs_opt, varname, options, is_na) {
   handle_var(vec = vec,
              varname = varname,
              option = gigs_opt,
-             test_fn = \(x) !is.na(x) & !x %in% options,
+             test_lgl = !is_na & !vec %in% options,
              msg_fn = msg_invalid_sex_acronym)
 }
 
 #' @rdname handle_var
-#' @param is_oob Denotes whether values in `x` were out of bounds. This checking
-#'   step is performed in [validate_xvar()].
+#' @param is_oob A logical vector the same length as `vec` which denotes whether
+#'   elements in `vec` are out of bounds for the growth standard being used.
+#' @seealso [validate_xvar()], which this function is called by.
 #' @noRd
 handle_oob_xvar <- function(vec, varname, is_oob) {
   handle_var(vec = vec,
              varname = varname,
              option = "handle_oob_xvar",
-             test_fn = \(x) is_oob,
+             test_lgl = is_oob,
              msg_fn = msg_oob_xvar)
-}
-
-#' Handle variables based on gigs options
-#'
-#' @param option A single-length character vector which should be one of
-#'   `names(.gigs_options)`.
-#' @param vec Vector of length one or more which will be checked for invalid
-#'   values by `test_fn`.
-#' @param varname Single-length character vector with the variable name for
-#'   `vec` which should be printed out by `msg_fn`.
-#' @param test_fn A logical vector-producing function (anonymous or otherwise)
-#'   that is used with `vec` as input.
-#' @param msg_fn A string-producing function to produce a helpful message when
-#'   `option` is set to `"warn"` or `"error"`.
-#' @seealso Check out [gigs_options], which can be used to define how this
-#'   function behaves for different sorts of data.
-#' @rdname handle_var
-#' @noRd
-handle_var <- function(vec, varname, option, test_fn, msg_fn) {
-  lgl_is_invalid <- test_fn(vec)
-  if (!any(lgl_is_invalid)) {
-    return(vec)
-  }
-
-  opt_value <- gigs_option_get(option, silent = TRUE)
-  out <- replace(vec, lgl_is_invalid, values = NA)
-  str_msg <- msg_fn(lgl_is_invalid, varname = varname)
-  switch(opt_value,
-         "warn" = warning(str_msg, call. = FALSE),
-         "error" = stop(str_msg, call. = FALSE))
-  out
 }
 
 # `error()`/`warning()` messages for missing/undefined/invalid inputs ----------
@@ -146,19 +151,21 @@ msg_oob_xvar <- function(lgl_oob_xvar, varname) {
 msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
   count <- sum(lgl_invalid_sex_acronym)
   len <- length(lgl_invalid_sex_acronym)
+  all_invalid <- count == len
+  chr_x_in_y <- if (all_invalid) "All" else paste0(count, " in ", len)
+
   if (varname == "sex") {
-    paste0("Variable 'sex': ", count, " in ", len, " elements were neither ",
+    paste0("Variable 'sex': ", chr_x_in_y, " elements were neither ",
            "\"M\" nor \"F\".")
   } else {
+    # This get() use smells --> refactor later if possible
     standard <- get(x = "standard", envir = parent.frame(n = 4))
     see_sentence <- paste0("See the '", standard, "' documentation for valid ",
                            "'acronym' values.")
-    if (count == len) {
+    if (all_invalid) {
       stop("Variable 'acronym': All elements were invalid. ", see_sentence,
            call. = FALSE)
     }
-    paste0("Variable 'acronym': ", count, " in ", len, " elements were ",
-           "invalid. ", see_sentence)
   }
 }
 
@@ -181,36 +188,14 @@ validate_numeric <- function(num, varname) {
   num <- num |>
     checkmate::assert_numeric(min.len = 1, .var.name = varname) |>
     checkmate::assert_atomic_vector()
+  # Save on recomputation
+  num_is_na <- is.na(num)
+  num_is_nan <- is.nan(num)
   num <- num |>
     remove_attributes() |>
-    handle_missing_data(varname = varname) |>
-    handle_undefined_data(varname = varname)
-}
-
-#' Validate user-inputted character vectors
-#'
-#' @param chr User-inputted character vector. Will be either `sex` or `acronym`,
-#'   passed down from an exported growth standard conversion function.
-#' @param options A character vector with permitted values for `chr`. If no
-#'   values in `chr` are `%in% options` the function will throw an
-#'   appropriately-formatted error.
-#' @returns The vector `chr`, with all elements where `!chr %in% options` are
-#'   replaced with `NA`.
-#' @srrstats {G2.3, G2.3a, G2.3b} Univariate character input assertions.
-#' @noRd
-validate_chr <- function(chr, options) {
-  varname <- deparse(substitute(chr))
-  gigs_opt <- paste0("handle_invalid_", varname)
-  chr <- chr |>
-    checkmate::assert_character(min.len = 1, .var.name = varname) |>
-    checkmate::assert_atomic_vector()
-  chr |>
-    remove_attributes() |>
-    handle_missing_data(varname = varname) |>
-    handle_undefined_data(varname = varname) |>
-    handle_invalid_chr_options(gigs_opt = gigs_opt,
-                               varname = varname,
-                               options = options)
+    handle_missing_data(varname = varname, is_na = num_is_na,
+                        is_nan = num_is_nan) |>
+    handle_undefined_data(varname = varname, is_nan = num_is_nan)
 }
 
 # General parameter checking for conversion in growth standards ----------------
@@ -240,9 +225,9 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL, y_name = NULL) {
     stop("Your 'y'/'z'/'p' argument was `NULL`. Ensure it is not `NULL`, then ",
          "try again.", call. = FALSE)
   }
-  y_name <- if (is.null(y_name)) names(yzp_nulls)[!yzp_nulls] else y_name
+  yzp_name <- if (is.null(y_name)) names(yzp_nulls)[!yzp_nulls] else y_name
   vec <- yzp[!yzp_nulls][[1]]
-  vec <- validate_numeric(vec, y_name)
+  vec <- validate_numeric(vec, yzp_name)
 
   # Flag bad centile values
   if (!yzp_nulls[["p"]]) {
@@ -257,36 +242,21 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL, y_name = NULL) {
 #' @param x A numeric vector of `x` values to check.
 #' @param standard A single string containing a code for a set of growth
 #'   standards, either `"ig_fet"`, `"ig_nbs`", `"ig_png"` or `"who_gs"`.
-#' @param acronym An already validated `acronym` variable, the same length as
-#'   `x`. This should always be a character vector, as it will have been passed
-#'   through [validate_acronym()].
+#' @param acronym A single-length character vector containing an
+#'   already-validated `acronym` value.
 #' @returns A numeric vector identical to `x`, except elements not within the
-#'   permitted bounds of different `acronym`s  are replaced with `NA`. Throws an
-#'   error if `x` is not numeric, is non-atomic, or is zero-length.
+#'   permitted bounds for `acronym` are replaced with `NA`. Throws informative
+#'   errors if `x` is not numeric, is non-atomic, or is zero-length.
 #' @noRd
 validate_xvar <- function(x, acronym, standard, x_name) {
   checkmate::qassert(standard, rules = "S1")
-  if (is.null(x_name))  x_name <- "x"
+  if (is.null(x_name)) x_name <- "x"
   x <- validate_numeric(x, varname = x_name)
 
-  # Recycle to get x/acronym to same length if not already
-  lens <- lengths(list(x = x, acronym = acronym))
-  if (lens[1] != lens[2]) {
-    lengthened <- vctrs::vec_recycle_common(x = x, acronym = acronym)
-    x <- lengthened[["x"]]
-    acronym <- lengthened[["acronym"]]
-  }
   # Check for out of bounds where `x` was not NA or undefined
-  unique_acronyms <- unique(acronym[!is.na(acronym)])
-  is_oob_overall <- logical(length = length(x))
-  is_na_x <- is.na(x)
-  for (idx in length(unique_acronyms)) {
-    chr_acronym <- unique_acronyms[idx]
-    is_curr_acronym <- acronym == chr_acronym
-    range <- xvar_ranges[[standard]][[chr_acronym]]
-    is_oob_overall[!is_na_x & is_curr_acronym & !inrange(x, range)] <- TRUE
-  }
-  handle_oob_xvar(vec = x, varname = x_name, is_oob = is_oob_overall)
+  range <- xvar_ranges[[standard]][[acronym]]
+  is_oob <- !is.na(x) & !inrange(x, range)
+  handle_oob_xvar(vec = x, varname = x_name, is_oob = is_oob)
 }
 
 #' Validate user-inputted sexes prior to growth standard conversion
@@ -298,20 +268,40 @@ validate_xvar <- function(x, acronym, standard, x_name) {
 #' @noRd
 validate_sex <- function(sex) {
   # May add "U" back to package later
-  validate_chr(sex, options = c("M", "F"))
+  varname <- "sex"
+  chr <- sex |>
+    checkmate::assert_character(min.len = 1, .var.name = varname) |>
+    checkmate::assert_atomic_vector()
+  chr_is_na <- is.na(chr)
+  chr |>
+    remove_attributes() |>
+    handle_missing_data(varname = varname, is_na = chr_is_na, is_nan = FALSE) |>
+    handle_invalid_chr_options(gigs_opt = "handle_invalid_sex",
+                               varname = varname,
+                               options = c("M", "F"),
+                               is_na = chr_is_na)
 }
 
 #' Validate user-inputted acronyms prior to growth standard conversion
 #'
-#' @param acronym Character vector with user-inputted acronym values.
+#' @param acronym A single-length character vector; will be a user-inputted
+#'   acronym.
 #' @param allowed_acronyms Character vector with acceptable values for
-#'   `acronym`. Members of `acronym` which are not `%in% allowed_acronyms` will
-#'   be set to `NA`.
+#'   `acronym`. An error will be thrown is `acronym` is not
+#'   `%in% allowed_acronyms`.
 #' @returns Returns `acronym`, with values not `%in% allowed_acronyms` set to
 #'   `NA`. Will throw an error if `acronym` is not a character vector.
 #' @noRd
 validate_acronym <- function(acronym, allowed_acronyms, standard) {
-  validate_chr(acronym, options = allowed_acronyms)
+  varname <- "acronym"
+  gigs_opt <- "handle_invalid_acronym"
+  acronym <- acronym |>
+    checkmate::qassert(rules = "S1", .var.name = varname) |>
+    checkmate::qassert(rules = "V1", .var.name = varname)
+  acronym |>
+    remove_attributes() |>
+    handle_invalid_chr_options(gigs_opt = gigs_opt, varname = varname,
+                               options = allowed_acronyms, is_na = FALSE)
 }
 
 # Standard-specific parameter validation ---------------------------------------
@@ -324,9 +314,9 @@ validate_acronym <- function(acronym, allowed_acronyms, standard) {
 #' @param x Numeric vector of length one or more with user-inputted x values.
 #' @param sex Character vector of length one or more with user-inputted sex
 #'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
-#' @param acronym Character vector of length one or more with user-inputted
-#'   acronym values. Values which are not in `names(gigs::who_gs)` will be
-#'   replaced with `NA`.
+#' @param acronym A single-length character vector with user-inputted
+#'   acronym value. An error will be thrown if `acronym` is not in
+#'   `names(gigs::who_gs)`.
 #' @param y_name,x_name Single-length character vectors with standard-specific
 #'   names for `y` and `x`. If `NULL`, error messages will print out that there
 #'   are issues with `'y'` and `'x'`, instead of standard-specific variables
@@ -355,10 +345,11 @@ validate_who_gs <- function(y = NULL,
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym, x_name = x_name)
   sex <- validate_sex(sex)
-  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex,
-       acronym = acronym) |>
-    drop_null_elements() |>
-    do.call(what = vctrs::vec_recycle_common)
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
 }
 
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_nbs`
@@ -370,9 +361,9 @@ validate_who_gs <- function(y = NULL,
 #'   gestational age values in days.
 #' @param sex Character vector of length one or more with user-inputted sex
 #'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
-#' @param acronym Character vector of length one or more with user-inputted
-#'   acronym values. Values which are not in `names(gigs::ig_nbs)` will be
-#'   replaced with `NA`.
+#' @param acronym A single-length character vector with user-inputted
+#'   acronym value. An error will be thrown if `acronym` is not in
+#'   `names(gigs::ig_nbs)`.
 #' @param y_name Single-length character vectors with standard-specific name for
 #'   `y` (when applicable). If `NULL`, warning/error messages will print out
 #'   that there are issues with `'y'`, instead of standard-specific variables
@@ -401,10 +392,11 @@ validate_ig_nbs <- function(y = NULL,
   gest_days <- validate_xvar(gest_days, standard = standard, acronym = acronym,
                              x_name = "gest_days")
   sex <- validate_sex(sex)
-  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], gest_days = gest_days,
-       sex = sex, acronym = acronym) |>
-    drop_null_elements() |>
-    do.call(what = vctrs::vec_recycle_common)
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], gest_days = gest_days, sex = sex
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
 }
 
 #' Check whether user-inputted `sex` and `acronym` values are valid in `ig_png`
@@ -415,9 +407,9 @@ validate_ig_nbs <- function(y = NULL,
 #' @param x Numeric vector with user-inputted x values.
 #' @param sex Character vector of length one or more with user-inputted sex
 #'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
-#' @param acronym Character vector of length one or more with user-inputted
-#'   acronym values. Values which are not in `names(gigs::ig_png)` will be
-#'   replaced with `NA`.
+#' @param acronym A single-length character vector with user-inputted
+#'   acronym value. An error will be thrown if `acronym` is not in
+#'   `names(gigs::ig_png)`.
 #' @param y_name,x_name Single-length character vectors with standard-specific
 #'   names for `y` and `x`. If `NULL`, error messages will print out that there
 #'   are issues with `'y'` and `'x'`, instead of standard-specific variables
@@ -446,10 +438,12 @@ validate_ig_png <- function(y = NULL,
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym, x_name = x_name)
   sex <- validate_sex(sex)
-  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex,
-       acronym = acronym) |>
-    drop_null_elements() |>
-    do.call(what = vctrs::vec_recycle_common)
+
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
 }
 
 #' Check whether user-inputted `z`, `y`, `gest_days` and `acronym` values are

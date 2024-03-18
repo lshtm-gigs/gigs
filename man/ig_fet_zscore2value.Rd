@@ -132,9 +132,8 @@ ig_fet_cmfga_centile2value(p, gest_days)
 }
 \arguments{
 \item{z, p}{Numeric vector of length one or more with centiles/z-scores to
-convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
-\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
-customised using the functions in \link{gigs_options}.}
+convert to values. For \code{p}, gigs will warn you if elements of \code{p} are not
+between \code{0} and \code{1}. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{x}{Numeric vector of length one or more with x values. Elements should
 have specific units and be between certain values depending on the standard
@@ -155,12 +154,10 @@ standards).
 }
 
 By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
-warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
-\item{acronym}{Character vector of length one or more denoting the
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standard(s) in use. Each value
-should be one of:
+\item{acronym}{A single string denoting the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
+Growth standard to use. Each value should be one of:
 \itemize{
 \item \code{"hcfga"} (head circumference-for-GA)
 \item \code{"bpdfga"} (biparietal diameter-for-GA)
@@ -183,11 +180,8 @@ should be one of:
 \item \code{"cmfga"} (cisterna magna-for-GA)
 }
 
-This argument is case-sensitive. By default, gigs will replace elements in
-\code{acronym} which are not one of the above values with \code{NA} and warn you.
-This behaviour can be customised using the functions in \link{gigs_options}. If
-all elements in \code{acronym} are not one of the above values, gigs will
-throw an error.}
+This argument is case-sensitive. If \code{acronym} is not one of the values
+list above, gigs will throw an error.}
 
 \item{gest_days, crl_mm, tcd_mm}{Numeric vector of length one or more with
 standard-specific \code{x} variables. See the documentation for \code{x} for
@@ -202,36 +196,37 @@ Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}s
 standards
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+Input vectors other than \code{acronym} are recycled by
+\code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
+rules.
 }
 \examples{
 # Convert centiles to values
 ig_fet_centile2value(p = c(0.25, 0.5, 0.75), # 25th, 50th, 75th centile
-                     x = 279:281,
+                     x = 274:276,
                      acronym = "hcfga") |>
   round(digits = 2)
 
 # Or z-scores to values
 ig_fet_zscore2value(z = qnorm(c(0.25, 0.5, 0.75)),
-                    x = 279:281,
+                    x = 274:276,
                     acronym = "hcfga") |>
   round(digits = 2)
 
 # Specify which standard to use with the acronym parameter...
 ig_fet_zscore2value(z = -1:1,
-                    x = 279:281,
+                    x = 274:276,
                     acronym = "acfga") |>
   round(digits = 2)
 
 # ... or by using a standard-specific function
 ig_fet_acfga_zscore2value(z = -1:1,
-                          gest_days = 279:281) |>
+                          gest_days = 274:276) |>
   round(digits = 2)
 
 # Inputs are recycled to the input of the longest length
 ig_fet_acfga_zscore2value(z = 0,
-                          gest_days = 279:281) |>
+                          gest_days = 274:276) |>
   round(digits = 2)
 
 # Bad inputs will not stop the function but will instead produce `NA`s in the

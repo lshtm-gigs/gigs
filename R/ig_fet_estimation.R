@@ -145,7 +145,7 @@ ig_fet_estimate_ga <- function(crl_mm = NULL,
 #' \doi{10.1002/uog.13448}
 #' @noRd
 ig_fet_estimate_ga_crl <- function(crl_mm) {
-  ig_fet_mu_sigma(crl_mm, acronym = rep.int("gafcrl", length(crl_mm)))[["mu"]]
+  ig_fet_mu_sigma(crl_mm, acronym = "gafcrl")[["mu"]]
 }
 
 #' Estimate gestational age using head circumference only

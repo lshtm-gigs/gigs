@@ -11,10 +11,10 @@
 #'   * Between 91 and 1856 days for `"acfa"`, `"ssfa"`, `"tsfa"`.
 #'
 #'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
-#'   warn you. This behaviour can be customised using the functions in
-#'   [gigs_options].
-#' @param acronym Character vector of length one or more denoting the WHO Child
-#'   Growth standard(s) in use. Each element should be one of:
+#'   warn you. You can customise this behaviour using the [GIGS package-level
+#'   options][gigs_options].
+#' @param acronym A single-length character vector denoting the WHO Child Growth
+#'   standard in use. Should be one of:
 #'   * `"wfa"` (weight-for-age)
 #'   * `"bfa"` (BMI-for-age)
 #'   * `"lhfa"` (length/height-for-age)
@@ -25,11 +25,8 @@
 #'   * `"ssfa"` (subscapular skinfold-for-age)
 #'   * `"tsfa"` (triceps skinfold-for-age)
 #'
-#'   This argument is case-sensitive. By default, gigs will replace elements in
-#'   `acronym` which are not one of the above values with `NA` and warn you.
-#'   This behaviour can be customised using the functions in [gigs_options]. If
-#'   all elements in `acronym` are not one of the above values, gigs will throw
-#'   an error.
+#'   This argument is case-sensitive. If `acronym` is not one of the values
+#'   listed above the function will throw an error.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
@@ -353,7 +350,7 @@ who_gs_tsfa_centile2value <- function(p, age_days, sex) {
 #' # output - by default gigs will issue useful warnings
 #' who_gs_wfh_value2zscore(weight_kg = c(7.4, 14.2, 21.8, 22.4),
 #'                         height_cm = c(65, 95, 120, NA),
-#'                         sex = c("M", "M", "F", NA)) |>
+#'                         sex = c("M", "X", "F", NA)) |>
 #'     round(digits = 2)
 #' @rdname who_gs_value2zscore
 #' @export
@@ -616,8 +613,7 @@ who_gs_tsfa_value2centile <- function(triceps_sf_mm, age_days, sex) {
 
 # INTERNAL: WHO Child Growth Standards conversion functions --------------------
 
-#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Postnatal
-#' Growth standards
+#' Convert z-scores to values in the WHO Child Growth Standards
 #' @inherit who_gs_zscore2value params return
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
@@ -626,8 +622,7 @@ who_gs_z2v_internal <- function(z, x, sex, acronym) {
   with(lms, who_gs_lms_z2v(z = z, l = L, m = M, s = S, acronym = acronym))
 }
 
-#' Convert values to z-scores in the INTERGROWTH-21<sup>st</sup> Postnatal
-#' Growth standards
+#' Convert values to z-scores in the WHO Child Growth Standards
 #' @inherit who_gs_zscore2value params return
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
@@ -646,16 +641,15 @@ who_gs_v2z_internal <- function(y, x, sex, acronym) {
 #'   `S`.
 #' @param sex Character vector of same length as `x` with sex(es), either `"M"`
 #'   (male) or `"F"` (female).
-#' @param acronym Character vector of same length as `x` with acronyms for the
-#'   WHO Child Growth standards. Each element should be one of
-#'  `"wfa"` (weight-for-age), `"bfa"` (BMI-for-age), `"lhfa"`
-#'  (length/height-for-age), `"wfl"` (weight-for-length), or `"wfh"`
-#'  (weight-for-height), `"hcfa"` (head circumference-for-age), `"acfa"`
-#'  (arm circumference-for-age), `"ssfa"` (subscapular skinfold-for-age), or
-#'  `"tsfa"` (triceps skinfold-for-age).
-#' @returns A dataframe with lambda (`"L"`), mu (`"M"`) and sigma (`"S"`) values
-#'   for the WHO standard(s) specified by the `acronym` parameter, for the
-#'   supplied `x` and `sex` values.
+#' @param acronym A single-length character vector denoting the WHO Child Growth
+#'   standard in use. Should be one of `"wfa"` (weight-for-age), `"bfa"`
+#'   (BMI-for-age), `"lhfa"` (length/height-for-age), `"wfl"`
+#'   (weight-for-length), or `"wfh"` (weight-for-height), `"hcfa"` (head
+#'   circumference-for-age), `"acfa"` (arm circumference-for-age), `"ssfa"`
+#'   (subscapular skinfold-for-age), or `"tsfa"` (triceps skinfold-for-age).
+#' @returns A named list with lambda (`"L"`), mu (`"M"`) and sigma (`"S"`)
+#'   values for the WHO standard specified by `acronym`, for each
+#'   elementwise combination of `x` and `sex`.
 #' @references
 #' World Health Organisation. **WHO child growth standards:
 #' length/height-for-age, weight-for-age, weight-for-length, weight-for-height
@@ -673,8 +667,8 @@ who_gs_v2z_internal <- function(y, x, sex, acronym) {
 #' @rdname who_gs_lms
 #' @noRd
 who_gs_lms <- function(x, sex, acronym) {
-  retrieve_coefficients(x = x, sex = sex, acronym = acronym,
-                        coeff_tbls = gigs::who_gs_coeffs,
+  retrieve_coefficients(x = x, sex = sex,
+                        coeff_tbls = gigs::who_gs_coeffs[[acronym]],
                         coeff_names = c("L", "M", "S"))
 }
 
@@ -709,11 +703,13 @@ who_gs_lms_v2z <- function(y, l, m, s, acronym) {
 #' @param z_unconstrained A numeric vector of length one or more with
 #'   unconstrained z-scores calculated using values and Cole's (1990) LMS
 #'   method.
-#' @param y A numeric vector of the same length as `z` with measured values.
-#' @param l,m,s Numeric vectors of the same length as `z` with lambda/mu/sigma
-#'   values to use in the constraining procedure.
+#' @param y A numeric vector of the same length as `z_unconstrained` with
+#'   measured values.
+#' @param l,m,s Numeric vectors of the same length as `z_unconstrained` with
+#'   lambda/mu/sigma values to use in the constraining procedure.
 #' @note See WHO reports in attached references for the rationale for this
 #'   constraining procedure.
+#' @inherit who_gs_lms references
 #' @returns Numeric vector of z-scores calculated using WHO Child Growth
 #'   standards constraining procedures.
 #' @noRd
@@ -725,9 +721,10 @@ who_gs_lms_v2z_constrained <- function(z_unconstrained, y, l, m, s) {
   )
 }
 
-#' Get constrained z-scores from values when z-scores were `> 3` for the WHO
-#' Growth Standards
+#' Get constrained z-scores from values when unconstrained z-scores were `>3` in
+#' the WHO Child Growth Standards
 #' @inheritParams who_gs_lms_v2z_constrained
+#' @inherit who_gs_lms references
 #' @noRd
 who_gs_lms_v2z_over_three <- function(y, l, m, s) {
   sd3pos <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
@@ -735,9 +732,10 @@ who_gs_lms_v2z_over_three <- function(y, l, m, s) {
   3 + (y - sd3pos) / sd23pos
 }
 
-#' Get constrained z-scores from values when z-scores were `< -3` for the WHO
-#' Growth Standards
+#' Get constrained z-scores from values when unconstrained z-scores were `< -3`
+#' in the WHO Child Growth Standards
 #' @inheritParams who_gs_lms_v2z_constrained
+#' @inherit who_gs_lms references
 #' @noRd
 who_gs_lms_v2z_under_minus_three <- function(y, l, m, s) {
   sd3neg <-  who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
@@ -751,12 +749,16 @@ who_gs_lms_v2z_under_minus_three <- function(y, l, m, s) {
 #' @param z A numeric vector of length one or more with z-scores.
 #' @param l,m,s Numeric vectors of the same length as `y` with lambda/mu/sigma
 #'   values to use for conversion.
+#' @param acronym A single-length character vector denoting the WHO Child Growth
+#'   standard in use. Should be one of `names(gigs::who_gs)`.
 #' @note Performs constraining procedures described in WHO 2006/2007 reports
 #'   using [who_gs_lms_z2v_over_three()] and
 #'   [who_gs_lms_z2v_under_minus_three()], which compute an expected
-#'   measurement accounting for the WHO constraining procedure..
-#' @returns Numeric vector of expected values calculated using the WHO Child
-#'   Growth standards' flavour of Cole (1990)'s LMS method.
+#'   measurement accounting for the WHO constraining procedure.
+#' @returns Numeric vector the same length as `z`, with expected values
+#'   calculated using the WHO Child Growth standards' flavour of Cole (1990)'s
+#'   LMS method.
+#' @inherit who_gs_lms references
 #' @noRd
 who_gs_lms_z2v <- function(z, l, m, s, acronym) {
   ifelse(
@@ -764,7 +766,7 @@ who_gs_lms_z2v <- function(z, l, m, s, acronym) {
     yes = ifelse(
       #' @srrstats {G3.0} Compare to sqrt(.Machine$double.eps) without `!= 0`
       test = abs(l) > sqrt(.Machine$double.eps),
-      yes = exponent(z * s * l + 1, (1 / l)) * m,
+      yes = (z * s * l + 1)^(1 / l) * m,
       no = m * exp(s * z)),
     no = ifelse(
       test = z > 3,
@@ -775,7 +777,8 @@ who_gs_lms_z2v <- function(z, l, m, s, acronym) {
 
 #' Get constrained values from z-scores when z-scores were `>3` for the WHO
 #' Growth Standards
-#' @inheritParams who_gs_lms_v2z_constrained
+#' @inheritParams who_gs_lms_z2v
+#' @inherit who_gs_lms references
 #' @noRd
 who_gs_lms_z2v_over_three <- function(z, l, m, s) {
   sd3pos <- who_gs_lms2value(l = l, m = m, s = s, n_sd = 3)
@@ -785,7 +788,7 @@ who_gs_lms_z2v_over_three <- function(z, l, m, s) {
 
 #' Get constrained values from z-scores when z-scores were `< -3` for the WHO
 #' Growth Standards
-#' @inheritParams who_gs_lms_v2z_constrained
+#' @inheritParams who_gs_lms_z2v
 #' @noRd
 who_gs_lms_z2v_under_minus_three <- function(z, l, m, s) {
   sd3neg <- who_gs_lms2value(l = l, m = m, s = s, n_sd = -3)
@@ -793,25 +796,16 @@ who_gs_lms_z2v_under_minus_three <- function(z, l, m, s) {
   (z + 3) * sd23neg + sd3neg
 }
 
-#' Robust exponentiation for use internally by [who_gs_lms_z2v()]
-#'
-#' @param a Numeric vector of length one or more. Can be negative.
-#' @param pow Power to raise `a` to. Can be fractional.
-#' @note Starting using this function as I would sometimes get errors in
-#'   `y_from_LMS()` from odd but necessary exponentiations.
-#' @source From StackOverflow: https://stackoverflow.com/questions/29920302/
-#' @noRd
-exponent <- function(a, pow) (abs(a)^pow) * sign(a)
-
 #' Get values which are a specific z-score from the mean using WHO LMS
 #' coefficients
 #'
-#' @param l,m,s Numeric vectors of lambda/mu/sigma value(s) from [who_gs_lms()].
-#'   Each of these vectors should have the same length.
-#' @param n_sd Single number denoting the number of standard deviations from the
-#'   mean at which to compute expected values. This is equivalent ot z-score,
-#'   but is not called 'z' here to reduce confusion between user-inputted
-#'   z-scores and internally required `n_sd` values.
+#' @param l,m,s Numeric vectors of length one or more containing lambda/mu/sigma
+#'   value(s) from [who_gs_lms()]. Each of these vectors should have the same
+#'   length.
+#' @param n_sd A single-length numeric vector denoting the number of standard
+#'   deviations from the mean at which to compute expected values. This is
+#'   equivalent to a z-score, but is not called 'z' here to delineate between
+#'   user-inputted z-scores and internally used `n_sd` values.
 #' @inherit who_gs_lms references
 #' @returns Numeric vector the same length as `l`/`m`/`s`, containing value(s)
 #'   which are `n_sd` standard deviations from the `m` for the distributions

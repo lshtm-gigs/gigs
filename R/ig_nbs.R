@@ -13,11 +13,11 @@
 #'   * Between 154 and 280 days for `"fmfga"`, `"bfpfga"`, and `"ffmfga"`.
 #'
 #'   By default, gigs will replace elements in `gest_days` that are out of
-#'   bounds for the growth standard in use with `NA` and warn you. This
-#'   behaviour can be customised using the functions in [gigs_options].
-#' @param acronym Character vector of length one or more denoting the
-#'   INTERGROWTH-21<sup>st</sup> Newborn Size standard to use for each
-#'   observation. Each element should be one of:
+#'   bounds for the growth standard in use with `NA` and warn you. You can
+#'   customise this behaviour using the [GIGS package-level
+#'   options][gigs_options].
+#' @param acronym A single string denoting the INTERGROWTH-21<sup>st</sup>
+#'   Newborn Size standard to use. Should be one of:
 #'   * `"wfga"` (weight-for-GA)
 #'   * `"lfga"` (length-for-GA)
 #'   * `"hcfga"` (head circumference-for-GA)
@@ -26,11 +26,8 @@
 #'   * `"bfpfga"` (body fat %-for-GA)
 #'   * `"ffmfga"` (fat-free mass-for-GA)
 #'
-#'   This argument is case-sensitive. By default, gigs will replace elements in
-#'   `acronym` which are not one of the above values with `NA` and warn you.
-#'   This behaviour can be customised using the functions in [gigs_options]. If
-#'   all elements in `acronym` are not one of the above values, gigs will throw
-#'   an error.
+#'   This argument is case-sensitive. If `acronym` is not one of the values
+#'   listed above, the function will throw an error.
 #' @srrstats {G2.3b} Explicit reference to `acronym` case-sensitivity.
 #' @inherit shared_roxygen_params params note
 #' @inherit shared_zscore2value_returns return
@@ -480,20 +477,20 @@ ig_nbs_ffmfga_value2zscore <- function(fatfree_mass_g, gest_days, sex) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_nbs_c2v_internal <- function(p, gest_days, sex, acronym) {
-  vpns_lim <- 231
-  ifelse(
-    test = acronym == "wlrfga",
-    yes = ig_nbs_wlrfga_p2v(p, gest_days, sex),
-    no = ifelse(
-      test = acronym %in% c("fmfga", "bfpfga", "ffmfga"),
-      yes =  ig_nbs_bodycomp_p2v(p, gest_days, sex, acronym),
-      no = ifelse(
-        test = gest_days >= vpns_lim,
-        yes = ig_nbs_msnt_p2v(p, gest_days, sex, acronym),
-        no = ig_vpns_zscore2value(z = qnorm(p), gest_days, sex, acronym)
-      )
+  if (acronym == "wlrfga") {
+    y <- ig_nbs_wlrfga_p2v(p, gest_days, sex)
+  } else if (acronym == "fmfga" || acronym == "bfpfga" || acronym == "ffmfga") {
+    y <- ig_nbs_bodycomp_p2v(p, gest_days, sex, acronym)
+  } else {
+    vpns_lim <- 231
+    # y <- rep_len(x = NA_real_, length = length(p))
+    y <- ifelse(
+      test = gest_days >= vpns_lim,
+      yes = ig_nbs_msnt_p2v(p, gest_days, sex, acronym),
+      no = ig_vpns_zscore2value(z = qnorm(p), gest_days, sex, acronym)
     )
-  )
+  }
+  y
 }
 
 #' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Fetal standards
@@ -501,20 +498,19 @@ ig_nbs_c2v_internal <- function(p, gest_days, sex, acronym) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_nbs_v2c_internal <- function(y, gest_days, sex, acronym) {
-  vpns_lim <- 231
-  ifelse(
-    test = acronym == "wlrfga",
-    yes = ig_nbs_wlrfga_v2p(y, gest_days, sex),
-    no = ifelse(
-      test = acronym %in% c("fmfga", "bfpfga", "ffmfga"),
-      yes = ig_nbs_bodycomp_v2p(y, gest_days, sex, acronym),
-      no = ifelse(
-        test = gest_days >= vpns_lim,
-        yes = ig_nbs_msnt_v2p(y, gest_days, sex, acronym),
-        no = pnorm(ig_vpns_value2zscore(y, gest_days, sex, acronym))
-      )
+    if (acronym == "wlrfga") {
+    p <- ig_nbs_wlrfga_v2p(y, gest_days, sex)
+  } else if (acronym == "fmfga" || acronym == "bfpfga" || acronym == "ffmfga") {
+    p <- ig_nbs_bodycomp_v2p(y, gest_days, sex, acronym)
+  } else {
+    vpns_lim <- 231
+    p <- ifelse(
+      test = gest_days >= vpns_lim,
+      yes = ig_nbs_msnt_v2p(y, gest_days, sex, acronym),
+      no = pnorm(ig_vpns_value2zscore(y, gest_days, sex, acronym))
     )
-  )
+  }
+  p
 }
 
 # INTERNAL: mu/sigma/nu/tau-based INTERGROWTH-21st Newborn Size standards ------
@@ -530,11 +526,11 @@ ig_nbs_v2c_internal <- function(y, gest_days, sex, acronym) {
 #'   in days. Elements not between `231` and `300` will return `NA`.
 #' @param sex Character vector of length one or more with sex(es), either `"M"`
 #'   (male) or `"F"` (female).
-#' @param acronym Character vector of acronym(s) denoting which
-#'   coefficient-based INTERGROWTH-21<sup>st</sup> standard to use. Elements
-#'   which are not one of `"wfga"`,`"lfga"`, or `"hcfga"` will be return `NA`.
+#' @param acronym A single string denoting which coefficient-based
+#'   INTERGROWTH-21<sup>st</sup> standard to use. Must be one of `"wfga"`,
+#'   `"lfga"`, or `"hcfga"` and is case-sensitive.
 #' @return A list with names `"mu"`, `"sigma"`, `"nu"`, and `"tau"`, where each
-#'   is a numeric vector with mu, sigma, nu and tau values for each elementwise
+#'   is a numeric vector with mu, sigma, nu or tau values for each elementwise
 #'   combination of `gest_days`, `sex`, and `acronym`.
 #' @note The mu/sigma/nu/tau coefficients in gigs are not included in the
 #'   referenced publication, but were supplied directly by Eric Ohuma. Villar
@@ -550,7 +546,7 @@ ig_nbs_v2c_internal <- function(y, gest_days, sex, acronym) {
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #' @noRd
 ig_nbs_msnt <- function(gest_days, sex, acronym) {
-  retrieve_coefficients(gest_days, sex, acronym, gigs::ig_nbs_coeffs,
+  retrieve_coefficients(gest_days, sex, gigs::ig_nbs_coeffs[[acronym]],
                         c("mu", "sigma", "nu", "tau"))
 }
 
@@ -563,7 +559,7 @@ ig_nbs_msnt <- function(gest_days, sex, acronym) {
 #' @noRd
 ig_nbs_msnt_p2v <- function(p, gest_days, sex, acronym) {
   msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
-  y <- rep_len(x = NA, length.out = length(p))
+  y <- rep_len(x = NA_real_, length.out = length(p))
   # Remove NA p/mu/sigma/nu/tau values, or qST3C() will fail
   lgl_complete_msnt <- !is.na(p) & stats::complete.cases(as.data.frame(msnt))
   msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
@@ -586,7 +582,7 @@ ig_nbs_msnt_p2v <- function(p, gest_days, sex, acronym) {
 #' @noRd
 ig_nbs_msnt_v2p <- function(y, gest_days, sex, acronym) {
   msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
-  p <- rep_len(x = NA, length.out = length(y))
+  p <- rep_len(x = NA_real_, length.out = length(y))
   # Remove NA y/mu/sigma/nu/tau values, or pST3() will fail
   lgl_complete_msnt <- !is.na(y) & stats::complete.cases(as.data.frame(msnt))
   msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
@@ -623,7 +619,7 @@ ig_nbs_msnt_v2p <- function(y, gest_days, sex, acronym) {
 #' *Pediatric Research* 2017, **82:305-316.** \doi{10.1038/pr.2017.52}
 #' @noRd
 ig_nbs_wlr_mu_sigma <- function(ga_weeks, sex) {
-  sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
+  sex_as_numeric <- sex == "M"
   lgl_very_preterm <- ga_weeks < 33
   mu <- ifelse(
     test = lgl_very_preterm,
@@ -689,9 +685,9 @@ ig_nbs_wlrfga_p2v <- function(p, gest_days, sex) {
 #'   `266` and `294`.
 #' @param sex Character vector of same length as `gest_days` with sex(es),
 #'   either `"M"` (male) or `"F"` (female).
-#' @param acronym Character vector of same length as `gest_days` with acronym(s)
-#'   denoting the INTERGROWTH-21<sup>st</sup> NBS normative body composition
-#'   standard to use. Must be one of `"fmfga"`, `"bfpfga"`, or `"ffmfga"`.
+#' @param acronym A single string denoting the INTERGROWTH-21<sup>st</sup>
+#'   NBS normative body composition standard to use. Must be one of `"fmfga"`,
+#'   `"bfpfga"`, or `"ffmfga"` and is case-sensitive.
 #' @return A numeric matrix with two columns and same number of rows as
 #'   the length of `gest_days`/`sex`/`acronym`. The columns contain the (1)
 #'   mean and (2) standard deviation for each elementwise combination of

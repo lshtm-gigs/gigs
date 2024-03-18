@@ -174,9 +174,6 @@ ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_days = 182, sex = "F") |>
   round(digits = 2)
 ```
 
-A vector of `acronym` values can be used if you want to convert with different
-standards for each input.
-
 ### Values to z-scores/centiles
 These functions allow easy conversion from measured values to z-scores or
 centiles for the standard used.

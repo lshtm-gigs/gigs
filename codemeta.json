@@ -3,18 +3,18 @@
   "@type": "SoftwareSourceCode",
   "identifier": "gigs",
   "description": "Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
-  "name": "gigs: Assess Fetal, Newborn, and Child Growth with International Standards",
+  "name": "gigs: Assess Fetal, Newborn, and Child Growth with International\n    Standards",
   "relatedLink": "https://lshtm-gigs.github.io/gigs/",
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.4.1",
+  "version": "0.4.1.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.2 (2023-10-31 ucrt)",
+  "runtimePlatform": "R version 4.3.3 (2024-02-29 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -60,6 +60,11 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "autotest",
+      "name": "autotest"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -131,8 +136,15 @@
     },
     "2": {
       "@type": "SoftwareApplication",
-      "identifier": "stats",
-      "name": "stats"
+      "identifier": "checkmate",
+      "name": "checkmate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=checkmate"
     },
     "3": {
       "@type": "SoftwareApplication",
@@ -148,15 +160,8 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "checkmate",
-      "name": "checkmate",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=checkmate"
+      "identifier": "stats",
+      "name": "stats"
     },
     "5": {
       "@type": "SoftwareApplication",
@@ -172,7 +177,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1823.803KB",
+  "fileSize": "1848.557KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -186,7 +191,7 @@
       ],
       "name": "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
       "url": "https://github.com/lshtm-gigs/gigs/",
-      "description": "0.4.1"
+      "description": "0.4.1.9000"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
