@@ -282,24 +282,24 @@ NULL
 #' Shared roxygen parameters
 #'
 #' Many of the parameters in `[gigs]` are shared between different functions.
-#' This roxygen block is designed to make inheriting these parameters as simple
-#' as possible.
+#' This roxygen block makes sharing these parameters more simple.
 #'
 #' @name shared_roxygen_params
 #' @param y Numeric vector of length one or more with anthropometric
 #'   measurement(s) to convert to centiles/z-scores. Units depend on which
 #'   `acronym`(s) are in use.
 #' @param z,p Numeric vector of length one or more with centiles/z-scores to
-#'   convert to values. For `p`, if an element of `p` is not between `0` and
-#'   `1`, gigs will replace it with `NA` and warn you. This behaviour can be
-#'   customised using the functions in [gigs_options].
+#'   convert to values. For `p`, gigs will warn you if elements of `p` are not
+#'   between `0` and `1`. You can customise this behaviour using the [GIGS
+#'   package-level options][gigs_options].
 #' @param sex Character vector of length one or more with sex(es), either `"M"`
 #'   (male) or `"F"` (female). This argument is case-sensitive. By default, gigs
 #'   will replace elements of `sex` which are not `"M"` or `"F"` with `NA`
-#'   and warn you. This behaviour can be customised using the functions in
-#'   [gigs_options].
-#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
-#'   adhere to the [vctrs] recycling rules.
+#'   and warn you. You can customise this behaviour using the [GIGS
+#'   package-level options][gigs_options].
+#' @note Input vectors other than `acronym` are recycled by
+#'   [vctrs::vec_recycle_common()], and must adhere to the [vctrs] recycling
+#'   rules.
 #' @keywords internal
 NULL
 

@@ -4,8 +4,8 @@
 #' predictive equation
 #'
 #' @param abdocirc_mm Numeric vector with abdominal circumference value(s) in
-#'   cm. Should have length one or same length as `headcirc_mm`.
-#' @param headcirc_mm Numeric vector with head circumference value(s) in cm.
+#'   mm. Should have length one or same length as `headcirc_mm`.
+#' @param headcirc_mm Numeric vector with head circumference value(s) in mm.
 #'   Should have length one or same length as `abdocirc_mm`.
 #' @note Inputs are recycled using [vctrs::vec_recycle_common()].
 #' @examples
@@ -34,7 +34,7 @@ ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
            SIMPLIFY = FALSE,
            varname = c("abdocirc_mm", "headcirc_mm")) |>
     do.call(what = vctrs::vec_recycle_common) |>
-    lapply(FUN = \(x) x / 10)
+    lapply(FUN = \(x) x / 10) # Standard in paper is in centimetres
   with(
     recycled,
     exp(5.084820 - 54.06633 * (abdocirc_mm/100)^3 -

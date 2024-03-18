@@ -38,16 +38,6 @@ inrange <- function(x, vec) {
 
 # Extra ------------------------------------------------------------------------
 
-#' Drop null elements from a list
-#'
-#' @param list List which may or may not contain `NULL` elements.
-#' @returns The list supplied as `list`, but with `NULL` elements removed.
-#' @noRd
-drop_null_elements <- function(list) {
-  null_elems <- vapply(list, is.null, FUN.VALUE = logical(length = 1))
-  list[!null_elems]
-}
-
 #' Remove attributes from a vector
 #'
 #' @param x Object from which to remove attributes.

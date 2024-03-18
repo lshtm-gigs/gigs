@@ -479,9 +479,11 @@ validate_ig_fet <- function(y = NULL,
                               allowed_acronyms = names(gigs::ig_fet),
                               standard = standard)
   x <- validate_xvar(x, standard = standard, acronym = acronym, x_name = x_name)
-  list(y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, acronym = acronym) |>
-    drop_null_elements() |>
-    do.call(what = vctrs::vec_recycle_common)
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
 }
 
 # Parameter validation for IG-21st estimation equations ------------------------

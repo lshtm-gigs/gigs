@@ -37,13 +37,13 @@ library(gigs)
 <!-- badges: end -->
 
 ## Overview
-Produced as part of the Guidance for International Growth Standards project,
-**gigs** provides a single, simple interface for working with the WHO Child
-Growth standards and outputs from the `r intergrowth21st` project. You will
-find functions for converting from anthropometric measures (e.g. weight or
-length) to z-scores and centiles, and the inverse. Also included are functions
-for classifying newborn and infant growth according to literature-based
-cut-offs.
+Produced as part of the Guidance for International Growth Standards project at
+the London School of Hygiene & Tropical Medicine, **gigs** provides a single,
+simple interface for working with the WHO Child Growth standards and outputs
+from the `r intergrowth21st` project. You will find functions for converting
+from anthropometric measures (e.g. weight or length) to z-scores and centiles,
+and the inverse. Also included are functions for classifying newborn and infant
+growth according to literature-based cut-offs.
 
 **gigs** is be of use to anyone interested in fetal and child growth,
 including child health researchers, policymakers, and clinicians. This package

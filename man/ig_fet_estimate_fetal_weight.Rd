@@ -9,9 +9,9 @@ ig_fet_estimate_fetal_weight(abdocirc_mm, headcirc_mm)
 }
 \arguments{
 \item{abdocirc_mm}{Numeric vector with abdominal circumference value(s) in
-cm. Should have length one or same length as \code{headcirc_mm}.}
+mm. Should have length one or same length as \code{headcirc_mm}.}
 
-\item{headcirc_mm}{Numeric vector with head circumference value(s) in cm.
+\item{headcirc_mm}{Numeric vector with head circumference value(s) in mm.
 Should have length one or same length as \code{abdocirc_mm}.}
 }
 \value{

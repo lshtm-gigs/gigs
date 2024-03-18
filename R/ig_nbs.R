@@ -2,9 +2,9 @@
 #' Newborn Size Standards
 #'
 #' @param p,z Numeric vector of length one or more with centiles/z-scores to
-#'   convert to values. For `p`, if an element of `p` is not between `0` and
-#'   `1`, gigs will replace it with `NA` and warn you informatively. This
-#'   behaviour can be customised using the functions in [gigs_options].
+#'   convert to values. For `p`, gigs will warn you if elements of `p` are not
+#'   between `0` and `1`. You can customise this behaviour using the [GIGS
+#'   package-level options][gigs_options].
 #' @param gest_days Numeric vector of length one or more with gestational ages
 #'   in days. Elements should be between certain values depending on the Newborn
 #'   Size standard in use (defined by `acronym`). These are:
