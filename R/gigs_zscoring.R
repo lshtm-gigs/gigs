@@ -1,8 +1,8 @@
 #' Calculate z-scores for anthropometric measures according to GIGS guidance
 #'
-#' @description These functions calculate z-scores for either weight-for-age
-#'   (WAZs), length-for-age (LAZs), head circumference-for-age (HCAZs), or
-#'   weight-for-length (WLZs).
+#' @description These functions calculate z-scores for weight-for-age (WAZs),
+#'   length/height-for-age (LHAZs), head circumference-for-age (HCAZs), or
+#'   weight-for-length/height (WLZs).
 #'
 #'   The z-scoring procedure used differs for each observation based on the
 #'   gestational and post-menstrual age of the infants being analysed. The
@@ -24,34 +24,81 @@
 #'   * `gest_days` ≥ 43 weeks:
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
+#'
+#'   For `gigs_wlz()`, two WHO standards are available:
+#'   * The weight-for-length standard, which is applied when `age_days < 731`.
+#'   * The weight-for-height standard, which is applied when `age_days >= 731`.
+#' @param weight_kg A numeric vector of length one or more with weight in kg.
+#' @param age_days A numeric vector of length one or more with ages in days.
+#' @param gest_days A numeric vector of length one or more with weight in kg.
+#' @param sex A character vector of sexes, either `"M"` or `"F"`.
 #' @note These functions expect vectors which have lengths such that they can
 #'   be recycled with [vctrs::vec_recycle_common()].
 #' @rdname gigs_waz
 #' @noRd
-gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
-  validated <- validate_waz_params(weight_kg = weight_kg,
-                                   age_days = age_days,
-                                   gest_days = gest_days,
-                                   sex = sex)
-  weight_kg <- validated[[1]]
-  age_days <- validated[[2]]
-  gest_days <- validated[[3]]
-  sex <- validated[[4]]
+gigs_waz <- function(weight_kg, age_days, gest_days, sex) {
+  validate_waz_params(weight_kg = weight_kg,
+                      age_days = age_days,
+                      gest_days = gest_days,
+                      sex = sex) |>
+    do.call(what = gigs_waz_internal)
+}
 
+#' @rdname gigs_waz
+#' @param lenht_cm A numeric vector of length one or more with length or height
+#'   in cm. Should be recumbent length when `age_days < 731`, and standing
+#'   height when `age_days >= 731`.
+#' @noRd
+gigs_lhaz <- function(lenht_cm, age_days, gest_days, sex) {
+  validate_lhaz_params(lenht_cm = lenht_cm,
+                       age_days = age_days,
+                       gest_days = gest_days,
+                       sex = sex) |>
+    do.call(what = gigs_lhaz_internal)
+}
+
+#' @rdname gigs_waz
+#' @noRd
+gigs_wlz <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
+  validate_wlz_params(weight_kg = weight_kg,
+                      lenht_cm = lenht_cm,
+                      age_days = age_days,
+                      gest_days = gest_days,
+                      sex = sex) |>
+    do.call(what = gigs_wlz_internal)
+}
+
+#' @rdname gigs_waz
+#' @param headcirc_cm Numeric vector of length one or more with head
+#'   circumference in cm.
+#' @noRd
+gigs_hcaz <- function(headcirc_cm, age_days, gest_days, sex) {
+  validate_hcaz_params(headcirc_cm = headcirc_cm,
+                       age_days = age_days,
+                       gest_days = gest_days,
+                       sex = sex) |>
+    do.call(what = gigs_hcaz_internal)
+}
+
+# GIGS z-scoring functions (INTERNAL) ------------------------------------------
+
+#' @inheritParams gigs_waz
+#' @noRd
+gigs_waz_internal <- function(weight_kg, age_days, gest_days, sex) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
     lapply(FUN = \(lgl) lgl & !is.na(weight_kg))
 
-  z_ig_nbs <- fn_on_subset(ig_nbs_wfga_value2zscore, gigs_lgls[["ig_nbs"]],
-                           weight_kg, gest_days, sex)
-  z_ig_png <- fn_on_subset(ig_png_wfa_value2zscore, gigs_lgls[["ig_png"]],
-                           weight_kg, pma_weeks, sex)
-  z_who_gs <- fn_on_subset(who_gs_wfa_value2zscore, gigs_lgls[["who_gs"]],
-                           weight_kg, age_days, sex)
+  z_ig_nbs <- qnorm(fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]],
+                                 weight_kg, gest_days, sex, acronym = "wfga"))
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
+                           weight_kg, pma_weeks, sex, acronym = "wfa")
+  z_who_gs <- fn_on_subset(who_gs_v2z_internal, gigs_lgls[["who_gs"]],
+                           weight_kg, age_days, sex, acronym = "wfa")
 
   z_out <- rep(NA_real_, length(weight_kg))
   z_out[gigs_lgls[["ig_nbs"]]] <- z_ig_nbs
@@ -60,36 +107,24 @@ gigs_waz <- function(weight_kg, gest_days, age_days, sex) {
   z_out
 }
 
-#' @rdname gigs_waz
-#' @param lenht_cm Numeric vector with lengths/heights in cm. It is assumed that
-#'   all `lenht_cm` values where `age_days` < 731 are recumbent length
-#'   measurements, and all `lenht_cm` values where `age_days` >= 731 are
-#'   standing height measurements.
-#' @noRd
-gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
-  validated <- validate_laz_params(lenht_cm = lenht_cm,
-                                   age_days = age_days,
-                                   gest_days = gest_days,
-                                   sex = sex)
-  lenht_cm <- validated[[1]]
-  age_days <- validated[[2]]
-  gest_days <- validated[[3]]
-  sex <- validated[[4]]
 
+#' @inheritParams gigs_lhaz
+#' @noRd
+gigs_lhaz_internal <- function(lenht_cm, age_days, gest_days, sex) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
     lapply(FUN = \(lgl) lgl & !is.na(lenht_cm))
 
-  z_ig_nbs <- fn_on_subset(ig_nbs_lfga_value2zscore, gigs_lgls[["ig_nbs"]],
-                           lenht_cm, gest_days, sex)
-  z_ig_png <- fn_on_subset(ig_png_lfa_value2zscore, gigs_lgls[["ig_png"]],
-                           lenht_cm, pma_weeks, sex)
-  z_who_gs <- fn_on_subset(who_gs_lhfa_value2zscore, gigs_lgls[["who_gs"]],
-                           lenht_cm, age_days, sex)
+  z_ig_nbs <- qnorm(fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]],
+                                 lenht_cm, gest_days, sex, acronym = "lfga"))
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
+                           lenht_cm, pma_weeks, sex, acronym = "lfa")
+  z_who_gs <- fn_on_subset(who_gs_v2z_internal, gigs_lgls[["who_gs"]],
+                           lenht_cm, age_days, sex, acronym = "lhfa")
 
   z_out <- rep(NA_real_, length(lenht_cm))
   z_out[gigs_lgls[["ig_nbs"]]] <- z_ig_nbs
@@ -98,34 +133,53 @@ gigs_laz <- function(lenht_cm, gest_days, age_days, sex) {
   z_out
 }
 
-#' @rdname gigs_waz
-#' @param headcirc_cm Numeric vector of length one or more with head
-#'   circumferences in cm.
+#' @inheritParams gigs_wlz
 #' @noRd
-gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
-  validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,
-                                    age_days = age_days,
-                                    gest_days = gest_days,
-                                    sex = sex)
-  headcirc_cm <- validated[[1]]
-  age_days <- validated[[2]]
-  gest_days <- validated[[3]]
-  sex <- validated[[4]]
-
+gigs_wlz_internal <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
+  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
+    lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
+
+  use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
+  use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
+
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
+                           weight_kg, lenht_cm, sex, acronym = "wfl")
+  z_who_gs_wfl <- fn_on_subset(who_gs_v2z_internal, use_who_wfl,
+                               weight_kg, lenht_cm, sex, acronym = "wfl")
+  z_who_gs_wfh <- fn_on_subset(who_gs_v2z_internal, use_who_wfh,
+                               weight_kg, lenht_cm, sex, acronym = "wfh")
+
+  z_out <- rep(NA_real_, length(weight_kg))
+  z_out[gigs_lgls[["ig_png"]]] <- z_ig_png
+  z_out[use_who_wfl] <- z_who_gs_wfl
+  z_out[use_who_wfh] <- z_who_gs_wfh
+  z_out
+}
+
+#' @inheritParams gigs_hcaz
+#' @noRd
+gigs_hcaz_internal <- function(headcirc_cm, age_days, gest_days, sex) {
+  # Set up PMA
+  pma_days <- gest_days + age_days
+  pma_weeks <- pma_days / 7
+  pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
+
+  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
     lapply(FUN = \(lgl) lgl & !is.na(headcirc_cm))
 
-  z_ig_nbs <- fn_on_subset(ig_nbs_hcfga_value2zscore, gigs_lgls[["ig_nbs"]],
-                           headcirc_cm, gest_days, sex)
-  z_ig_png <- fn_on_subset(ig_png_hcfa_value2zscore, gigs_lgls[["ig_png"]],
-                           headcirc_cm, pma_weeks, sex)
-  z_who_gs <- fn_on_subset(who_gs_hcfa_value2zscore, gigs_lgls[["who_gs"]],
-                           headcirc_cm, age_days, sex)
+  z_ig_nbs <- qnorm(
+    fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]], headcirc_cm,
+                 gest_days, sex, acronym = "hcfga")
+  )
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
+                           headcirc_cm, pma_weeks, sex, acronym = "hcfa")
+  z_who_gs <- fn_on_subset(who_gs_v2z_internal, gigs_lgls[["who_gs"]],
+                           headcirc_cm, age_days, sex, acronym = "hcfa")
 
   z_out <- rep(NA_real_, length(headcirc_cm))
   z_out[gigs_lgls[["ig_nbs"]]] <- z_ig_nbs
@@ -134,42 +188,7 @@ gigs_hcaz <- function(headcirc_cm, gest_days, age_days, sex) {
   z_out
 }
 
-#' @rdname gigs_waz
-#' @noRd
-gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
-  validated <- validate_wlz_params(weight_kg = weight_kg, lenht_cm = lenht_cm,
-                                   age_days = age_days, gest_days = gest_days,
-                                   sex = sex)
-  weight_kg <- validated[[1]]
-  lenht_cm <- validated[[2]]
-  age_days <- validated[[3]]
-  gest_days <- validated[[4]]
-  sex <- validated[[5]]
-
-  # Set up PMA
-  pma_days <- gest_days + age_days
-  pma_weeks <- pma_days / 7
-  pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
-
-  gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days, age_days = age_days) |>
-    lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
-
-  use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
-  use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
-
-  z_ig_png <- fn_on_subset(ig_png_wfl_value2zscore, gigs_lgls[["ig_png"]],
-                           weight_kg, lenht_cm, sex)
-  z_who_gs_wfl <- fn_on_subset(who_gs_wfl_value2zscore, use_who_wfl,
-                               weight_kg, lenht_cm, sex)
-  z_who_gs_wfh <- fn_on_subset(who_gs_wfh_value2zscore, use_who_wfh,
-                               weight_kg, lenht_cm, sex)
-
-  z_out <- rep(NA_real_, length(weight_kg))
-  z_out[gigs_lgls[["ig_png"]]] <- z_ig_png
-  z_out[use_who_wfl] <- z_who_gs_wfl
-  z_out[use_who_wfh] <- z_who_gs_wfh
-  z_out
-}
+# GIGS z-scoring logic ---------------------------------------------------------
 
 #' Get logical vectors describing which standards to apply for an observation
 #' using GIGS cut-off logic
@@ -179,8 +198,8 @@ gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
 #'   growth standards.
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #' @param age_days Numeric vector with age(s) in days.
-#' @note The logical vectors returned by this function will be `FALSE` if either
-#'   `gest_days` or `age_days` is NA.
+#' @note The logical vectors returned by this function will have `FALSE`
+#'   elements where either `gest_days` or `age_days` is `NA`.
 #' @returns Named list with three logical vectors `ig_nbs`, `ig_png`, and
 #'   `who_gs`. Where these logical vectors are `TRUE`, then the growth standard
 #'   from that named list should be used.
@@ -188,35 +207,104 @@ gigs_wlz <- function(weight_kg, lenht_cm, gest_days, age_days, sex) {
 #' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
-gigs_xaz_lgls <- function(gest_days, age_days) {
+gigs_zscoring_lgls <- function(age_days, gest_days) {
   # Set up vars for use later
   term_cutoff_days <- 37 * 7 # i.e. 37 weeks = term baby
   is_term <- gest_days >= term_cutoff_days
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
 
-  use_ig_nbs <- abs(age_days) < sqrt(.Machine$double.eps)
-  use_ig_png <- age_days > 0 & !is_term & inrange(pma_weeks, c(27, 64))
+  is_birth_measurement <- age_days < 0.5
+  is_inrange_ig_nbs <- inrange(gest_days, c(168, 300))
+  is_inrange_ig_png <- inrange(pma_weeks, c(27, 64))
+
+  use_ig_nbs <- is_birth_measurement & is_inrange_ig_nbs
+  use_ig_png <- age_days > 0 & !is_term & is_inrange_ig_png
   use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
 
   # Prevents `NAs are not allowed in subscripted assignments` error
-  use_ig_nbs[is.na(use_ig_nbs)] <- FALSE
-  use_ig_png[is.na(use_ig_png)] <- FALSE
-  use_who_gs[is.na(use_who_gs)] <- FALSE
+  is_na_input <- is.na(age_days) | is.na(gest_days)
+  use_ig_nbs[is_na_input] <- FALSE
+  use_ig_png[is_na_input] <- FALSE
+  use_who_gs[is_na_input] <- FALSE
   list(ig_nbs = use_ig_nbs, ig_png = use_ig_png, who_gs = use_who_gs)
 }
 
-#' Run a function over a subset of inputs
-#' @param fn Function to run over `in1`, `in2`, `in3`.
-#' @param lgl Logical vector of length one or more indicating which indices of
-#'   `in1` `in2` and `in3` should be operated on `by `fn`.
-#' @param in1,in2,in3 Three vectors of the same length as `lgl` which are
-#'   used as inputs to `fn`.
-#' @return Returns a vector of the type outputted by `fn`, with length dependent
-#'   on what `fn` outputs.
+# Parameter validation ---------------------------------------------------------
+
+#' Validate inputs to the INTERGROWTH-21st weight-for-age z-scoring function
+#' @inheritParams gigs_waz
+#' @seealso [classify_wfa()]
 #' @noRd
-fn_on_subset <- function(fn, lgl, in1, in2, in3) {
-  if (any(lgl)) fn(in1[lgl], in2[lgl], in3[lgl]) else double(length = 0L)
+validate_waz_params <- function(weight_kg, age_days, gest_days, sex) {
+  validate_parameter_lengths(
+    weight_kg = weight_kg, age_days = age_days, gest_days = gest_days, sex = sex
+  )
+  catch_and_throw_validate_issues(expr = {
+    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(
+    weight_kg = weight_kg, age_days = age_days, gest_days = gest_days, sex = sex
+  )
+}
+
+#' Validate inputs to the GIGS length-for-age z-scoring function
+#' @inheritParams gigs_laz
+#' @seealso [classify_stunting()]
+#' @noRd
+validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex) {
+  validate_parameter_lengths(
+    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex
+  )
+  catch_and_throw_validate_issues(expr = {
+    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(
+    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex
+  )
+}
+
+#' Validate inputs to the `gigs_hcaz()`
+#' @inheritParams gigs_hcaz
+#' @seealso [gigs_hcaz()]
+#' @noRd
+validate_hcaz_params <- function(headcirc_cm, age_days, gest_days, sex) {
+  validate_parameter_lengths(headcirc_cm = headcirc_cm, age_days = age_days,
+                             gest_days = gest_days, sex = sex)
+  catch_and_throw_validate_issues(expr = {
+    headcirc_cm <- validate_numeric(headcirc_cm, varname = "headcirc_cm")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(headcirc_cm = headcirc_cm, age_days = age_days,
+                            gest_days = gest_days, sex = sex)
+}
+
+#' Validate inputs to the GIGS weight-for-length z-scoring function
+#' @inheritParams gigs_wlz
+#' @seealso [classify_wasting()]
+#' @noRd
+validate_wlz_params <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
+  validate_parameter_lengths(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                             age_days = age_days, gest_days = gest_days,
+                             sex = sex)
+  catch_and_throw_validate_issues(expr = {
+    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
+    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(weight_kg = weight_kg, lenht_cm = lenht_cm,
+                            age_days = age_days, gest_days = gest_days,
+                            sex = sex)
 }
 
 # SRR tags ---------------------------------------------------------------------
