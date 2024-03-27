@@ -4,6 +4,8 @@
   * In standard-agnostic conversion functions (e.g. `ig_nbs_value2zscore()` or
     `who_gs_centile2value()`), the `acronym` parameter must now be a single
     string or an error will be thrown.
+* **NEW FEATURES**:
+  * You can now set all GIGS options at once with `gigs_options_set()`.
 * **FIXES**:
   * `.gigs_options` is now actively exported by gigs and available to end-users
 * **INTERNAL/DOCS CHANGES**:
