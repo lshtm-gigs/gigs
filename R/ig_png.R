@@ -185,9 +185,16 @@ ig_png_wfl_centile2value <- function(p, length_cm, sex) {
 #'
 #' @param weight_kg Numeric vector of length one or more with weight
 #'   measurement(s) in kg.
-#' @param pma_weeks Numeric vector of length one or more with post-menstrual
-#'   age(s) in weeks. Values should be within the bounds defined in the
-#'   documentation for `x`.
+#' @param x,pma_weeks Numeric vector of length one or more with x
+#'   values. Elements of `x` or its standard-specific equivalents (`pma_weeks`,
+#'   `length_cm`) should have specific units and be between certain values
+#'   depending on the standard in use (defined by `acronym`). These are:
+#'   * Between 27 and 64 weeks for `"wfa"`, `"lfa"`, and `"hcfa"`.
+#'   * Between 35 and 65 cm for `"wfl"`.
+#'
+#'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
+#'   warn you. You can customise this behaviour using the [GIGS package-level
+#'   options][gigs_options].
 #' @param length_cm Numeric vector of length one or more with recumbent length
 #'   measurement(s) in cm. This argument can be either an `x` variable when
 #'   using the length-for-age standard (`"lfa"`), or a `y` variable when using

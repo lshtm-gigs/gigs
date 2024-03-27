@@ -39,6 +39,18 @@ ig_png_wfl_value2centile(weight_kg, length_cm, sex)
 measurement(s) to convert to centiles/z-scores. Units depend on which
 \code{acronym}(s) are in use.}
 
+\item{x, pma_weeks}{Numeric vector of length one or more with x
+values. Elements of \code{x} or its standard-specific equivalents (\code{pma_weeks},
+\code{length_cm}) should have specific units and be between certain values
+depending on the standard in use (defined by \code{acronym}). These are:
+\itemize{
+\item Between 27 and 64 weeks for \code{"wfa"}, \code{"lfa"}, and \code{"hcfa"}.
+\item Between 35 and 65 cm for \code{"wfl"}.
+}
+
+By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
+warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
+
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
@@ -59,10 +71,6 @@ listed above the function will throw an error.}
 
 \item{weight_kg}{Numeric vector of length one or more with weight
 measurement(s) in kg.}
-
-\item{pma_weeks}{Numeric vector of length one or more with post-menstrual
-age(s) in weeks. Values should be within the bounds defined in the
-documentation for \code{x}.}
 
 \item{length_cm}{Numeric vector of length one or more with recumbent length
 measurement(s) in cm. This argument can be either an \code{x} variable when
