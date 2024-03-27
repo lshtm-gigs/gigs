@@ -3,7 +3,7 @@
   "@type": "SoftwareSourceCode",
   "identifier": "gigs",
   "description": "Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
-  "name": "gigs: Assess Fetal, Newborn, and Child Growth with International\n    Standards",
+  "name": "gigs: Assess Fetal, Newborn, and Child Growth with International Standards",
   "relatedLink": "https://lshtm-gigs.github.io/gigs/",
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
@@ -165,6 +165,18 @@
     },
     "5": {
       "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
       "identifier": "vctrs",
       "name": "vctrs",
       "provider": {
@@ -177,7 +189,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1848.557KB",
+  "fileSize": "1943.371KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -191,7 +203,7 @@
       ],
       "name": "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
       "url": "https://github.com/lshtm-gigs/gigs/",
-      "description": "0.4.1.9000"
+      "description": "0.4.1"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",

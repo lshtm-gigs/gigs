@@ -28,7 +28,7 @@ preferred-citation:
     email: simon.parker@lshtm.ac.uk
     orcid: https://orcid.org/0009-0003-8214-4496
   year: '2023'
-  notes: 0.4.1.9000
+  notes: 0.4.1
   url: https://github.com/lshtm-gigs/gigs/
 repository-code: https://github.com/lshtm-gigs/gigs
 url: https://github.com/lshtm-gigs/gigs/
@@ -98,6 +98,20 @@ references:
   year: '2024'
   institution:
     name: R Foundation for Statistical Computing
+- type: software
+  title: rlang
+  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
+  notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2024'
 - type: software
   title: vctrs
   abstract: 'vctrs: Vector Helpers'
