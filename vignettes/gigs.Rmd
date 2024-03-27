@@ -49,7 +49,7 @@ df_newborn_weights$weight_p <- with(
                        acronym = "wfga")) |>
   round(digits = 2)
 
-# Or put the acronym in the function call for the standard-specific function
+# Or put the acronym in the function call to use a standard-specific function
 df_newborn_weights$weight_z <- with(
   df_newborn_weights,
   ig_nbs_wfga_value2zscore(weight_kg = weight_kg,
@@ -86,18 +86,12 @@ The `classify_sfga()` function offers size for GA classifications based on
 cut-offs from the research literature. Typically, the 10<sup>th</sup> and
 90<sup>th</sup> centiles are used as the size for GA cut-offs, but some
 publications also specify severely small-for-GA newborns as those below the
-third weight-for-GA centile. If you want to use this 'severe' cut-off, just
-change the `severe` parameter in `classify_sfga()` to `TRUE`:
+third weight-for-GA centile.
 ```{r example_sga}
-df_newborn_weights$sga <- with(
-        df_newborn_weights,
-        classify_sfga(weight_kg = weight_kg, gest_days = gest_days, sex = sex))
-df_newborn_weights$sga_severe <- with(
-        df_newborn_weights,
-        classify_sfga(weight_kg = weight_kg,
-                      gest_days = gest_days,
-                      sex = sex,
-                      severe = TRUE))
+df_newborn_weights <- classify_sfga(.data = df_newborn_weights,
+                                    weight_kg = weight_kg,
+                                    gest_days = gest_days,
+                                    sex = sex)
 df_newborn_weights
 ```
 
@@ -108,10 +102,10 @@ Series](https://www.thelancet.com/infographics-do/small-vulnerable-newborns-2023
 Essentially, `classify_svn()` stratifies results from `classify_sfga()` by
 whether newborns are term or preterm:
 ```{r example_svn}
-df_newborn_weights$svn <- with(
-  df_newborn_weights,
-  classify_svn(weight_kg = weight_kg, gest_days = gest_days, sex = sex)
-)
+df_newborn_weights <- classify_svn(.data = df_newborn_weights[, c(1:4, 6)],
+                                   weight_kg = weight_kg,
+                                   gest_days = gest_days,
+                                   sex = sex)
 df_newborn_weights
 ```
 
@@ -124,18 +118,11 @@ stunting_df <- data.frame(lenht_cm = c(52.2, 75.4, 63.1),
                           age_days = c(357, 375, 250),
                           gest_days = c(196, 287, 266),
                           sex = c("M", "M", "F"))
-stunting_df$stunting <-
-  with(stunting_df,
-       classify_stunting(lenht_cm, age_days, gest_days, sex))
-stunting_df
-```
-
-You can also specify for `classify_stunting()` to classify likely
-outlier/implausible values by setting the `outliers` parameter to `TRUE`:
-```{r example_stunting_outliers}
-stunting_df$stunting_out <-
-  with(stunting_df,
-       classify_stunting(lenht_cm, age_days, gest_days, sex, outliers = TRUE))
+stunting_df <- classify_stunting(stunting_df,
+                                 lenht_cm,
+                                 age_days,
+                                 gest_days,
+                                 sex)
 stunting_df
 ```
 
@@ -149,18 +136,14 @@ wasting_df <- data.frame(weight_kg = c(5.75, 2.18, 3.00, 6.75),
                          gest_days = c(268, 247, 250, 278),
                          age_days = c(45, 33, 230, 278),
                          sex =  c("F", "M", "F", "M"))
-wasting_df$wasting <-
-  with(wasting_df,
-       classify_wasting(weight_kg, lenht_cm, age_days, gest_days, sex))
-wasting_df
-```
 
-You can also specify for `classify_wasting()` to classify likely
-outlier/implausible values by setting the `outliers` parameter to `TRUE`:
-```{r example_wasting_outliers}
-wasting_df$wasting_out <-
-  with(wasting_df,
-       classify_wasting(weight_kg, lenht_cm, age_days, gest_days, sex, outliers = TRUE))
+wasting_df <- classify_wasting(.data = wasting_df,
+                               weight_kg,
+                               lenht_cm,
+                               age_days,
+                               gest_days,
+                               sex)
+
 wasting_df
 ```
 
@@ -173,15 +156,26 @@ wfa_df <- data.frame(weight_kg = c(7.2, 4.5, 9.1, 24),
                      age_days = c(401, 185, 101, 607),
                      gest_days = 7 * c(27, 36, 40, 41),
                      sex = c("F", "M", "F", "M"))
-wfa_df$wfa <- with(wfa_df, classify_wfa(weight_kg, age_days, gest_days, sex))
+
+wfa_df <- classify_wfa(wfa_df, weight_kg, age_days, gest_days, sex)
 wfa_df
 ```
 
-You can also specify for `classify_wasting()` to classify likely
-outlier/implausible values by setting the `outliers` parameter to `TRUE`:
-```{r example_weight_for_age_outliers}
-wfa_df$wfa_out <- with(
-        wfa_df,
-        classify_wfa(weight_kg, age_days, gest_days, sex, outliers = TRUE))
-wfa_df
+### Head size
+The `classify_headsize()` function offers classification of head size based on
+cut-offs from the research literature. The output is a factor with levels
+corresponding to different degrees of microcephaly and macrocephaly:
+
+```{r example_headsize}
+headsize_df <- data.frame(headcirc_cm = c(48, 42, 40, 43),
+                          age_days = c(401, 185, 101, 607),
+                          gest_days = 7 * c(27, 36, 40, 41),
+                          sex = c("F", "M", "F", "M"))
+
+headsize_df <- classify_headsize(.data = headsize_df,
+                                 headcirc_cm,
+                                 age_days,
+                                 gest_days,
+                                 sex)
+headsize_df
 ```

@@ -19,6 +19,32 @@ mu_sigma_z2y <- function(z, mu, sigma) mu + z * sigma
 #' @rdname mu_sigma_conv
 mu_sigma_y2z <- function(y, mu, sigma) (y - mu) / sigma
 
+#' Run an internal GIGS conversion function over subsetted input vectors
+#'
+#' Sometimes it is helpful apply a growth standard in specific elements of a
+#' vector. This function does just that, and works for converting in all but the
+#' INTERGROWTH-21<sup>st</sup> Fetal standards.
+#'
+#' @param fn Function to run using `in1`, `in2`, `in3`, each of which will be
+#'   subsetted to where elements of `lgl` are `TRUE`.
+#' @param lgl Logical vector of length one or more indicating which indices of
+#'   `in1` `in2` and `in3` should be operated on `by `fn`.
+#' @param in1,in2,in3 Three vectors of the same length as `lgl` which are
+#'   used as inputs to `fn`.
+#' @param acronym A single-length character vector denoting which growth
+#'   standard to use.
+#' @return Returns an empty `double()` vector if `any(lgl) == FALSE`, else
+#'   returns the result of applying `fn()` over `in1[lgl]`, `in2[lgl]`, and
+#'   `in3[lgl]`.
+#' @noRd
+fn_on_subset <- function(fn, lgl, in1, in2, in3, acronym) {
+  if (any(lgl)) {
+     fn(in1[lgl], in2[lgl], in3[lgl], acronym)
+  } else {
+    double(length = 0L)
+  }
+}
+
 # Parameter checking -----------------------------------------------------------
 
 #' Check if values in `x` are within `min()` and `max()` of another numeric
@@ -60,6 +86,15 @@ remove_attributes <- function(x) {
 #' @noRd
 paste_sep_commas_quoted <- function(x) {
   paste0("`\"", x, "\"`", collapse = ", ")
+}
+
+#' Use `paste()` to separate elements in a vector with commas
+#' @param x A character vector to paste and separate with commas
+#' @returns A single string with the elements of `x` separated by commas, e.g.
+#'   `paste_sep_commas(c("A", "B", "C"))` becomes `"\`A\`, \`B\`, \`C\`"`.
+#' @noRd
+paste_sep_commas <- function(x) {
+  paste0("`", x, "`", collapse = ", ")
 }
 
 # SRR tags ---------------------------------------------------------------------

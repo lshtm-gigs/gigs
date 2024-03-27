@@ -4,7 +4,16 @@
   * In standard-agnostic conversion functions (e.g. `ig_nbs_value2zscore()` or
     `who_gs_centile2value()`), the `acronym` parameter must now be a single
     string or an error will be thrown.
+  * The `classify_*()` family of functions no longer take vectors as input, but
+    instead take a `data.frame`-like objects.
 * **NEW FEATURES**:
+  * The `classify_growth()` function can be used to generate multiple growth indicators at the same time.
+  * The `categorise_*()` functions for growth analysis. These functions vectors 
+  of vector of growth centiles/z-scores as input, and return a factor of 
+  growth categories.
+  * The `compute_*()` functions for growth analysis. These functions take 
+  several vectors containing age, sex, and anthropometric information, and 
+  return a factor of growth categories.
   * Errors, warnings, and messages from GIGS are now handled with 
     `rlang::abort()` and friends, and looks much prettier. 
   * You can now set all GIGS options at once with `gigs_options_set()`.
