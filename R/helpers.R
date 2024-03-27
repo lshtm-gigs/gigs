@@ -53,6 +53,15 @@ remove_attributes <- function(x) {
   x
 }
 
+#' Use `paste()` to separate elements in a vector with commas
+#' @param x A character vector to paste and separate with commas
+#' @returns A single string with the elements of `x` separated by commas, e.g.
+#'   `paste_sep_commas(c("A", "B", "C"))` becomes `"\`A\`, \`B\`, \`C\`"`.
+#' @noRd
+paste_sep_commas_quoted <- function(x) {
+  paste0("`\"", x, "\"`", collapse = ", ")
+}
+
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
 NULL

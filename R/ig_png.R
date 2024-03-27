@@ -466,6 +466,53 @@ ig_png_equations <- function(x, sex, acronym) {
          })
 }
 
+# Parameter validation ---------------------------------------------------------
+
+#' Check user-inputted variables in `ig_png` functions
+#'
+#' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
+#'   one of these arguments are provided; see [validate_yzp()] documentation.
+#' @param x Numeric vector with user-inputted x values.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param acronym A single-length character vector with user-inputted
+#'   acronym value. An error will be thrown if `acronym` is not in
+#'   `names(gigs::ig_png)`.
+#' @param y_name,x_name Single-length character vectors with standard-specific
+#'   names for `y` and `x`. If `NULL`, error messages will print out that there
+#'   are issues with `'y'` and `'x'`, instead of standard-specific variables
+#'   like `headcirc_cm` or `pma_weeks`.
+#' @returns List with names `"x"`, `"sex"`, and `"acronym"`, containing
+#'   vectors where invalid `sex` or `acronym` elements have been replaced with
+#'   NA. If any of `x`, `sex`, or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#'   depending on which was provided to the function.
+#' @noRd
+validate_ig_png <- function(y = NULL,
+                            z = NULL,
+                            p = NULL,
+                            x,
+                            sex,
+                            acronym,
+                            y_name = NULL,
+                            x_name = NULL) {
+  validate_parameter_lengths(y = y, z = z, p = p, x = x, sex = sex,
+                             acronym = acronym, y_name = y_name,
+                             x_name = x_name)
+  catch_and_throw_validate_issues({
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
+    standard <- "ig_png"
+    acronym <- validate_acronym(acronym, names(gigs::ig_png), standard)
+    x <- validate_xvar(x, acronym, standard, x_name)
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
+}
+
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.0} Primary literature referenced for each exported function,
 #'   and for internal functions.

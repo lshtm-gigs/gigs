@@ -5,6 +5,8 @@
     `who_gs_centile2value()`), the `acronym` parameter must now be a single
     string or an error will be thrown.
 * **NEW FEATURES**:
+  * Errors, warnings, and messages from GIGS are now handled with 
+    `rlang::abort()` and friends, and looks much prettier. 
   * You can now set all GIGS options at once with `gigs_options_set()`.
 * **FIXES**:
   * `.gigs_options` is now actively exported by gigs and available to end-users

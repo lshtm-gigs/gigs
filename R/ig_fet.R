@@ -1636,6 +1636,47 @@ ig_fet_gwg_z2y <- function(z, gest_days) {
   with(log_mu_sigma, exp(log_mu + z * log_sigma) - 8.75)
 }
 
+# Parameter validation ---------------------------------------------------------
+
+#' Check user-inputted variables in `ig_fet` functions
+#'
+#' @param y,z,p Either a numeric vector or NULL. Checks will fail if more than
+#'   one of these arguments are provided; see [validate_yzp()] documentation.
+#' @param x Numeric vector of length one or more with user-inputted gestational
+#'   age values in days.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param y_name,x_name Single-length character vectors with standard-specific
+#'   names for `y` and `x`. If `NULL`, error messages will print out that there
+#'   are issues with `'y'` and `'x'`, instead of standard-specific variables
+#'   like `bpd_mm` or `gest_days`.
+#' @returns List with five elements named `"y"`, `"z"`, `"p"`, and
+#'   `"x"`, and `"acronym"`. Each of these values will contain the parameter
+#'   they share a name with, but all invalid values in each vector will have
+#'   been replaced with `NA`. If any parameters are the wrong type or length,
+#'   errors will be thrown.
+#' @noRd
+validate_ig_fet <- function(y = NULL,
+                            z = NULL,
+                            p = NULL,
+                            x, acronym,
+                            y_name = NULL,
+                            x_name = NULL) {
+  validate_parameter_lengths(y = y, z = z, p = p, x = x, acronym = acronym,
+                             y_name = y_name, x_name = x_name)
+  catch_and_throw_validate_issues(expr = {
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
+    standard <- "ig_fet"
+    acronym <- validate_acronym(acronym, names(gigs::ig_fet), standard)
+    x <- validate_xvar(x, acronym, standard, x_name)
+  }, call = rlang::caller_env())
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
+}
+
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.0} Primary literature referenced for each exported function,
 #'   and for internal functions.

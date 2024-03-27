@@ -752,6 +752,54 @@ ig_nbs_bodycomp_v2p <- function(y, gest_days, sex, acronym) {
     pnorm()
 }
 
+# Parameter validation ---------------------------------------------------------
+
+#' Validate user-inputted variables in `ig_nbs` functions
+#'
+#' @param y,z,p Either a numeric vector of length one or more, or NULL. Checks
+#'   will fail if more than one of these arguments are provided; see
+#'   [validate_yzp()] documentation.
+#' @param gest_days Numeric vector of length one or more with user-inputted
+#'   gestational age values in days.
+#' @param sex Character vector of length one or more with user-inputted sex
+#'   values. Values which are not `"M"` or `"F"` will be replaced with `NA`.
+#' @param acronym A single-length character vector with user-inputted
+#'   acronym value. An error will be thrown if `acronym` is not in
+#'   `names(gigs::ig_nbs)`.
+#' @param y_name Single-length character vectors with standard-specific name for
+#'   `y` (when applicable). If `NULL`, warning/error messages will print out
+#'   that there are issues with `'y'`, instead of standard-specific variables
+#'   like `headcirc_cm` or `weight_kg`.
+#' @returns List with names `"x"`, `"sex"`, and `"acronym"`, containing
+#'   vectors where invalid `sex` or `acronym` elements have been replaced with
+#'   NA. If any of `x`, `sex`, or `acronym` are the wrong type or length, an
+#'   error will be thrown. Will also contain one of `"y"`, `"z"`, or `"p"`,
+#'   depending on which was provided to the function.
+#' @noRd
+validate_ig_nbs <- function(y = NULL,
+                            z = NULL,
+                            p = NULL,
+                            gest_days,
+                            sex,
+                            acronym,
+                            y_name = NULL) {
+  validate_parameter_lengths(y = y, z = z, p = p, gest_days = gest_days,
+                             sex = sex, acronym = acronym, y_name = y_name,
+                             x_name = "gest_days")
+  catch_and_throw_validate_issues({
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
+    standard <- "ig_nbs"
+    acronym <- validate_acronym(acronym, names(gigs::ig_nbs), standard)
+    gest_days <- validate_xvar(gest_days, acronym, standard, "gest_days")
+    sex <- validate_sex(sex)
+  }, call = rlang::caller_env())
+  recycled <- vctrs::vec_recycle_common(
+    y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], gest_days = gest_days, sex = sex
+  )
+  recycled[["acronym"]] <- acronym
+  vctrs::list_drop_empty(recycled)
+}
+
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.0} Primary literature referenced for each exported function,
 #'   and for internal functions.
