@@ -9,15 +9,35 @@ articles:
   - articles/ig-nbs-body-composition
   - articles/benchmarking
 reference:
-  - title: Growth classification
-    desc: >
-      Classify growth data into commonly used growth indicators.
+  - title: Get growth indicator classifications in `data.frame`-like objects
     contents:
+      - classify_growth
       - classify_sfga
       - classify_svn
       - classify_stunting
       - classify_wasting
       - classify_wfa
+      - classify_headsize
+  - title: Get growth indicator classifications using multiple vectors
+    desc: >
+      Compute growth categories using data from several vectors.
+    contents:
+      - compute_sfga
+      - compute_svn
+      - compute_stunting
+      - compute_wasting
+      - compute_wfa
+      - compute_headsize
+  - title: Categorise growth z-scores/centiles
+    desc: >
+      Classify growth z-scores and centiles into commonly used growth indicators
+    contents:
+      - categorise_sfga
+      - categorise_svn
+      - categorise_stunting
+      - categorise_wasting
+      - categorise_wfa
+      - categorise_headsize
   - title: INTERGROWTH-21<sup>st</sup> Newborn Size Standards
     desc: >
       Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
@@ -68,3 +88,4 @@ reference:
       out-of bounds values.
     contents:
       - gigs_options
+      - .gigs_options
