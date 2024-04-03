@@ -106,16 +106,16 @@ life6mo_classified <- classify_growth(
 #> ✔ Stunting: Success
 
 head(life6mo_classified, n = 4)
-#>     id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm
-#> 1    1     273   M         0 273        0     2300 42.06667    33.26667
-#> 100 12     252   M         0 252        0     2050 43.50000    33.70000
-#> 199 23     241   M         0 241        0     1500 42.50000    30.43333
-#> 217 25     210   M         0 210        0     2045 42.33333    31.06667
-#>      muac_cm birthweight_centile         svn lhaz stunting stunting_outliers
-#> 1   9.433333          0.01076542    Term SGA   NA     <NA>              <NA>
-#> 100 9.500000          0.05448365 Preterm SGA   NA     <NA>              <NA>
-#> 199 8.533334          0.02123840 Preterm SGA   NA     <NA>              <NA>
-#> 217 9.000000          0.98053512 Preterm LGA   NA     <NA>              <NA>
+#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    birthweight_centile         svn       lhaz        stunting stunting_outliers
+#> 1          0.010765424    Term SGA -3.5406446 stunting_severe   stunting_severe
+#> 28         0.002833163 Preterm SGA -2.2854751        stunting          stunting
+#> 36         0.756367868 Preterm AGA -0.6087434    not_stunting      not_stunting
+#> 56         0.126440075 Preterm AGA -1.6989568    not_stunting      not_stunting
 ```
 
 When using `classify_growth()`, you will be informed which of the
@@ -137,16 +137,16 @@ life6mo_classified <- classify_growth(
 #> ✔ Stunting: Success
 
 head(life6mo_classified, n = 4)
-#>     id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm
-#> 1    1     273   M         0 273        0     2300 42.06667    33.26667
-#> 100 12     252   M         0 252        0     2050 43.50000    33.70000
-#> 199 23     241   M         0 241        0     1500 42.50000    30.43333
-#> 217 25     210   M         0 210        0     2045 42.33333    31.06667
-#>      muac_cm birthweight_centile         svn
-#> 1   9.433333          0.01076542    Term SGA
-#> 100 9.500000          0.05448365 Preterm SGA
-#> 199 8.533334          0.02123840 Preterm SGA
-#> 217 9.000000          0.98053512 Preterm LGA
+#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    birthweight_centile         svn
+#> 1          0.010765424    Term SGA
+#> 28         0.002833163 Preterm SGA
+#> 36         0.756367868 Preterm AGA
+#> 56         0.126440075 Preterm AGA
 ```
 
 You can also use `classify_*()` functions which are specific to the
@@ -162,16 +162,16 @@ life6mo_svn <- classify_svn(
 )
 
 head(life6mo_svn, n = 4)
-#>     id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm
-#> 1    1     273   M         0 273        0     2300 42.06667    33.26667
-#> 100 12     252   M         0 252        0     2050 43.50000    33.70000
-#> 199 23     241   M         0 241        0     1500 42.50000    30.43333
-#> 217 25     210   M         0 210        0     2045 42.33333    31.06667
-#>      muac_cm birthweight_centile         svn
-#> 1   9.433333          0.01076542    Term SGA
-#> 100 9.500000          0.05448365 Preterm SGA
-#> 199 8.533334          0.02123840 Preterm SGA
-#> 217 9.000000          0.98053512 Preterm LGA
+#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    birthweight_centile         svn
+#> 1          0.010765424    Term SGA
+#> 28         0.002833163 Preterm SGA
+#> 36         0.756367868 Preterm AGA
+#> 56         0.126440075 Preterm AGA
 ```
 
 ## Conversion functions
@@ -399,26 +399,26 @@ implemented but not others.
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores          |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 | [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | ✅              | ✅                     | ❕                     | ❕                       | Values ↔ z-scores/centiles |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ❕                       | NA                         |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ❕                       | Values → z-scores/centiles |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 
 We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth standards. At
-100,000 inputs, each package took:
-
-| Package                                                                             | Time taken (100,000 inputs) |
-|-------------------------------------------------------------------------------------|-----------------------------|
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | 125 ms                      |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | 126 ms                      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | 128 ms                      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | 0.41 seconds                |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | 2.05 seconds                |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | 2.24 seconds                |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | NA (no WHO functions)       |
-
-The results can be seen in the online benchmarking
+conversion of values to z-scores in the WHO Child Growth standards. The
+table below shows relative speed of each software package to process
+100,000 inputs. The code used to generate these timings can be seen
+online in the GIGS benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
+
+| Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
+|-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 96                   | 76                          | 20                          | 9                             |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2132                 | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 123                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 89                   | 69                          | 39                          | 10                            |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
 
 The WHO and INTERGROWTH-21<sup>st</sup> standards are also available in
 standalone form, available from the [WHO

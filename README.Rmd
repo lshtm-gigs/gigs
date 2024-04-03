@@ -328,7 +328,7 @@ a package, a red cross (❌) indicates that these standards are completely
 missing, and an exclamation mark (❕) indicates that some of these standards are
 implemented but not others.
 
-```{r arrows, echo = FALSE}
+```{r arrows_and_bench_data, echo = FALSE}
 ig21st <- knitr::asis_output(x = "IG-21<sup>st</sup>")
 
 larr <- knitr::asis_output(x = "&larr;")
@@ -345,6 +345,8 @@ growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.gi
 gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)")
 zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata)")
 intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
+
+load("vignettes/articles/benchmarking.rda")
 ```
 
 | Software        | Platform | WHO (0-5 years) | `r ig21st` NBS | `r ig21st` PNG | `r ig21st` Fetal | Functionality                     |
@@ -353,23 +355,25 @@ intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.c
 | `r anthro`      | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores          |
 | `r childsds`    | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r growthstans` | R        | `r yes`         | `r yes`        | `r half`       | `r half`         | Values `r harr` z-scores/centiles |
-| `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | NA                                |
+| `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | Values `r rarr` z-scores/centiles |
 | `r gigs_stata`  | Stata    | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 
 We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth standards. At 100,000
-inputs, each package took:
+conversion of values to z-scores in the WHO Child Growth standards. The table
+below shows relative speed of each software package to process 100,000 inputs.
+The code used to generate these timings can be seen online in the GIGS
+benchmarking [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
-| Package         | Time taken (100,000 inputs) |
-|-----------------|-----------------------------|
-| `r growthstans` | 125 ms                      |
-| `r childsds`    | 126 ms                      |
-| `r gigs_r`      | 128 ms                      |
-| `r gigs_stata`  | 0.41 seconds                |
-| `r zanthro`     | 2.05 seconds                |
-| `r anthro`      | 2.24 seconds                |
-| `r intergrowth` | NA (no WHO functions)       |
+| Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |
+|-----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
+| `r gigs_r`      | R        | `r max_len_bench[[1]][["gigs"]]`          | `r max_len_bench[[2]][["gigs"]]`       | `r max_len_bench[[3]][["gigs"]]`       | `r max_len_bench[[4]][["gigs"]]`        |
+| `r anthro`      | R        | `r max_len_bench[[1]][["anthro"]]`        | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r childsds`    | R        | `r max_len_bench[[1]][["childsds"]]`      | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r growthstans` | R        | `r max_len_bench[[1]][["gs"]]`            | `r  max_len_bench[[2]][["gs"]]`        | `r max_len_bench[[3]][["gs"]]`         | `r max_len_bench[[4]][["gs"]]`          |
+| `r intergrowth` | R        | `r no`                                    | `r no`                                 | `r no`                                 | `r max_len_bench[[4]][["intergrowth"]]` |
+| `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["stata_gigs"]]`    | `r max_len_bench[[2]][["stata_gigs"]]` | `r max_len_bench[[3]][["stata_gigs"]]` | `r max_len_bench[[4]][["stata_gigs"]]`  |
+| `r zanthro`     | Stata    | `r max_len_bench[[1]][["stata_zanthro"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
 
 ```{r srr-tags-3, eval = FALSE, echo = FALSE}
 #' @srrstats {G1.5, G1.6} The linked article contains code for both performance
@@ -377,17 +381,13 @@ inputs, each package took:
 #'   packages.
 ```
 
-The results can be seen in the online benchmarking
-[article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
-
 The WHO and `r intergrowth21st` standards are also available in standalone form,
 available from the [WHO
 website](https://www.who.int/tools/child-growth-standards/software) and
 [`r intergrowth21st`
 website](https://intergrowth21.tghn.org/intergrowth-21st-applications/),
-respectively.
-The `r intergrowth21st` website also includes download links for Excel-based
-calculators in some standards.
+respectively. The `r intergrowth21st` website also includes download links for
+Excel-based calculators in some standards.
 
 ## Citation
 
