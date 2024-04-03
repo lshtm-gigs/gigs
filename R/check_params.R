@@ -22,12 +22,14 @@ handle_var <- function(vec, varname, option, test_lgl, msg_fn) {
     return(vec)
   }
   out <- replace(vec, lgl_is_invalid, values = NA)
-  str_msg <- msg_fn(lgl_is_invalid, varname = varname)
-  option_value <- gigs_option_get(option, silent = TRUE)
-  warn_stop_fn <- switch(option_value,
-                         warn = rlang::warn,
-                         error = rlang::abort)
-  warn_stop_fn(str_msg, call = NULL, class = sprintf("gigs_%s", option))
+  if (option != "quiet") {
+    str_msg <- msg_fn(lgl_is_invalid, varname = varname)
+    option_value <- gigs_option_get(option, silent = TRUE)
+    warn_stop_fn <- switch(option_value,
+                           warn = rlang::warn,
+                           error = rlang::abort)
+    warn_stop_fn(str_msg, call = NULL, class = sprintf("gigs_%s", option))
+  }
   out
 }
 
