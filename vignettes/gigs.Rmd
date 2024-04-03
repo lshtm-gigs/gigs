@@ -145,7 +145,7 @@ dataset. We can then convert these counts to percentages:
 
 ```{r compute_sfga, warning = FALSE}
 life6mo_newborns <- with(life6mo,
- life6mo[visitweek == 0 & complete.cases(weight_g, gestage, sex), ]
+ life6mo[visitweek == 0 & age_days < 0.5 & complete.cases(weight_g, gestage, sex), ]
 )
 life6mo_newborns$sfga <- with(life6mo_newborns,
                               compute_sfga(weight_kg = weight_g / 1000,
@@ -197,11 +197,11 @@ svn_summary
 names(svn_summary) <- paste0(c(rep("Preterm\n", 3), rep("Term\n", 3)),
                              names(sfga_summary))
 par(bg = "#f0f0f0")
-barplot(svn_summary,
+barplot(svn_summary[1:4],
         col = "#606060",
         main = "Small vulnerable newborn categorisations in the LIFE data extract",
         axis.lty = 1, border = NA, mgp = c(2, 1.5, 0),
-        ylab = "Percentage", ylim = c(0, 85), yaxt = "n",
+        ylab = "Percentage", ylim = c(0, 65), yaxt = "n",
         panel.first = {
           abline(h = 0.485, col = "white", lwd = 360)
           abline(v = -0.04, col = "black", lwd = 1.5)

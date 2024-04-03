@@ -27,13 +27,15 @@ life6mo <- readxl::read_xls(file.path("data-raw", "tables", "life6mo",
   # Remove rows where visit wasn't attended
   dplyr::filter(visitattend == 1) |>
   dplyr::select(!visitattend) |>
-  # Remove rows where visit wasn't attended
-  dplyr::filter(gestage > 24 * 7) |>
+  # Remove rows where gestational age is not within INTERGROWTH-21st NBS bounds
+  dplyr::filter(gestage > 24 * 7 & gestage < 300) |>
   # Re-generate IDs |>
   dplyr::mutate(id = dplyr::consecutive_id(id)) |>
   # Remove rows with all missing measurement data --> not useful
   ## Start by converting 0 meaninfwgt to NA
   dplyr::mutate(meaninfwgt = ifelse(meaninfwgt == 0, yes = NA, meaninfwgt)) |>
+  ## Then do a complete.cases drop
+  dplyr::filter(complete.cases(meaninfwgt, meaninflen, meanhead, meanmuac)) |>
   # Convert sex to "M"/"F"
   dplyr::mutate(sex = factor(dplyr::case_when(sex == 1 ~ "M", sex == 2 ~ "F",
                                               .default = NA),
@@ -48,11 +50,29 @@ life6mo <- readxl::read_xls(file.path("data-raw", "tables", "life6mo",
                 headcirc_cm = meanhead, muac_cm = meanmuac) |>
   # Reorder columns
   dplyr::select(id, gestage, sex, visitweek, pma, age_days, weight_g, len_cm,
-                headcirc_cm, muac_cm) |>
-  # Select 300 IDs at random without replacement, then reset IDs
-  dplyr::filter(id %in% withr::with_seed(
-    seed = 349067,
-    sample(x = unique(id), size = 300, replace = FALSE))) |>
+                headcirc_cm, muac_cm)
+
+# Select subset of IDs:
+#   * Keep all IDs which have a birthweight and are not term AGA
+#   * Keep enough other IDs at random without replacement to have 300 IDs
+IDs_with_birthweight_and_not_term_AGA <- life6mo |>
+  dplyr::filter(visitweek == 0 & age_days < 0.5) |>
+  dplyr::mutate(svn = gigs::compute_svn(weight_g / 1000, gestage, as.character(sex))) |>
+  dplyr::filter(svn != "Term AGA") |>
+  dplyr::pull(id) |>
+  unique()
+lgl_IDs_to_sample <- !unique(life6mo$id) %in% IDs_with_birthweight_and_not_term_AGA
+IDs_to_sample <- unique(life6mo$id)[lgl_IDs_to_sample]
+IDs_to_use <- c(
+  IDs_with_birthweight_and_not_term_AGA,
+  withr::with_seed(seed = 34789, {
+    sample(x = IDs_to_sample,
+           size = 300 - length(IDs_with_birthweight_and_not_term_AGA),
+           replace = FALSE)
+  }))
+
+life6mo <- life6mo |>
+  dplyr::filter(id %in% IDs_to_use) |>
   dplyr::mutate(id = dplyr::consecutive_id(id)) |>
   # Set to data frame (i.e. not tibble)
   as.data.frame()
