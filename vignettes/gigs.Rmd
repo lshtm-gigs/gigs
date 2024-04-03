@@ -3,6 +3,7 @@ title: "Introduction to gigs"
 description: >
   Learn how to get started with the basics of gigs.
 output: rmarkdown::html_vignette
+bibliography: gigs_bib.bib
 vignette: >
   %\VignetteIndexEntry{Introduction to gigs}
   %\VignetteEngine{knitr::rmarkdown}
@@ -13,6 +14,8 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
+# Introduction
+
 gigs is designed to make working with outputs from either the
 INTERGROWTH-21<sup>st</sup> project and World Health Organisation Child Growth
 Standards as easy as possible. It also provides functions for easy and
@@ -20,162 +23,196 @@ reproducible classification of fetal, newborn, and infant growth.
 
 Which functions you want to use depend on whether you're **converting between
 values and z-scores/centiles**, or **classifying observations**. Let's start
-by loading the package.
+by loading the package. We're also turning off the warnings which GIGS prints
+if inputs are `NA`, `NaN`, or similarly invalid, as to avoid cluttering the
+console output.
 
 ```{r setup}
 library(gigs)
+gigs_options_set(new_value = "quiet")
 ```
 
-## Converting between z-scores/centiles and values
+We will show off two ways of working with growth data in gigs. The first
+'step-by-step' approach involves you picking and choosing your growth standards
+throughout. The second 'single-step' approach lets you hand over that work to
+gigs, letting its growth classification functions do the work for you.
 
-### From values to z-scores/centiles
-Much of the time, you'll want to know where a measurement for a given
-observation lies relative to 'expected' values for that observation. This is
-where the `value2zscore` and `value2centile` functions are useful:
+Before we get started, we need some data. This tutorial uses a sample of data
+from 300 infants enrolled in the Low birthweight Infant Feeding Exploration
+(LIFE) study [@Vesel2022LowSettings; @Vesel2023FeedingStudy]. Thse infants were
+assessed at birth, and followed through after birth, with data available up to
+six months of age in this data extract.
 
-#### Example 1a: Converting newborn weights
-```{r example_1a}
-df_newborn_weights <- data.frame(
-        weight_kg = c(0.91, 3.33, 2.75, 3.35, 3.47, 1.90),
-        gest_days = c(183, 280, 293, 259, 277, 231),
-        sex = c(rep("M", 3), rep("F", 3))
+Though `gigs::life6mo` has data on length in cm (`len_cm`), head circumference
+(`headcirc_cm`), and mid-upper arm circumference (`muac_cm`), we are going to
+subset `gigs::life6mo` to focus on weight in grams (`weight_g`). The dataset
+also has columns with an ID number per infant in the study (`id`), the
+gestational age at birth for each infant (`gestage`), the sex of each infant
+(`sex`; `"M"` = male, `"F"` = female), the visit week at which weight was
+recorded (`visitweek`), and post-menstrual age in days (`pma`).
+
+After loading the dataset, we add a variable `preterm`, which is `TRUE` wherever
+an infant was born before 37 weeks' gestational age. We also convert `sex` from
+a `factor` to a `character` variable so that gigs will accept it as an input.
+```{r load_data}
+life6mo <- gigs::life6mo[, 1:7]
+life6mo$preterm <- life6mo$gestage < 37 * 7
+life6mo$sex <- as.character(life6mo$sex)
+head(life6mo, n = 5)
+```
+
+# Single-step (easier) approach
+
+# Step-by-step (harder) approach
+Instead of letting GIGS do the heavy lifting, you may want to clearly lay out
+the steps taken in your analysis. Luckily, gigs provides all the functionality
+you need for this.
+
+## Weight-for-age z-scores over time, by term status
+We start by generating WAZs for each growth standard. This follows the gigs
+conversion function naming structure, where we start with the set of growth
+standards we want to use (`ig_nbs`/`who_gs`/`ig_png`), then the type of ]
+conversion we want to perform (in this case `value2zscore`). We use the
+`acronym` parameter in these functions to tell gigs exactly which growth
+standard to use.
+
+```{r complex_gen_WAZs}
+waz_nbs <- with(life6mo, ig_nbs_value2zscore(y =  weight_g / 1000, gestage, sex, "wfga"))
+waz_who <- with(life6mo, who_gs_value2zscore(y =  weight_g / 1000, x = age_days, sex = sex, acronym = "wfa"))
+waz_png <- with(life6mo, ig_png_value2zscore(y =  weight_g / 1000, x = pma / 7, sex = sex, acronym = "wfa"))
+```
+
+Once we have our standard-specific WAZs, we can use a chain of `ifelse()`
+functions to make one overall `waz` column in `life6mo`:
+
+```{r complex_make_WAZ}
+life6mo$waz <- with(life6mo, expr = {
+  ifelse(test = age_days <= 0.5,
+         yes = waz_nbs,
+         no = ifelse(age_days > 0.5 & !preterm | (preterm & pma > 64 * 7),
+                     yes = waz_who,
+                     no = waz_png))
+})
+```
+
+We can then plot the weight-for-age z-score over time - which looks just like
+the plot we got above!
+
+```{r complex_plot_WAZs, echo = FALSE, out.width = "95%"}
+visitweeks <- unique(life6mo$visitweek)
+waz_avgs_preterm <- sapply(
+  X = visitweeks,
+  FUN = \(week) {
+    mean(life6mo$waz[life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+  })
+waz_avgs_term <- sapply(
+  X = visitweeks,
+  FUN = \(week) {
+    mean(life6mo$waz[!life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+  })
+mat <- matrix(data = c(waz_avgs_term, waz_avgs_preterm), nrow = length(visitweeks), ncol = 2)
+```
+
+```{r plot_waz, echo = FALSE}
+par(bg = "#f0f0f0")
+graphics::matplot(x = visitweeks, y = mat, type = "l",
+                  main = "WAZ over time in 300 infants from the LIFE data extract",
+                  bty = "o",, col = "black",
+                  xlab = "Visit week", ylab = "Weight-for-age z-score (WAZ)",
+                  xlim = range(visitweeks), xaxt = "n",
+                  ylim = c(-3, 0), yaxt = "n",
+                  panel.first = {
+                    abline(v = -1:30, col = "white", lwd = 50)
+                    abline(h = 5:-5, col = "white", lwd = 50)
+                    abline(h = 0:-3, col = "#e8e8e8")
+                  })
+graphics::axis(side = 2, at = -3:0, las = 2)
+graphics::axis(side = 1, at = visitweeks)
+graphics::legend(x = "bottomright", bg = "white", ncol = 2,
+                 legend = c("Term", "Preterm"), col = "black",
+                 lty = 1:2)
+```
+
+## Assessing size at birth
+We can assess size at birth without reference to whether an infant is term or
+preterm using simple size-for-gestational age (SfGA) categorisations, or we can
+include information on term status using small, vulnerable newborn (SVN)
+classifications.
+
+### Size-for-GA
+Let's use `compute_sfga()` to get obtain counts of SfGA categories in this
+dataset. We can then convert these counts to percentages:
+
+```{r compute_sfga, warning = FALSE}
+life6mo_newborns <- with(life6mo,
+ life6mo[visitweek == 0 & complete.cases(weight_g, gestage, sex), ]
 )
-# Use the `acronym` parameter to specify the standard in use...
-df_newborn_weights$weight_p <- with(
-  df_newborn_weights,
-  ig_nbs_value2centile(y = weight_kg,
-                       gest_days = gest_days,
-                       sex = sex,
-                       acronym = "wfga")) |>
-  round(digits = 2)
-
-# Or put the acronym in the function call to use a standard-specific function
-df_newborn_weights$weight_z <- with(
-  df_newborn_weights,
-  ig_nbs_wfga_value2zscore(weight_kg = weight_kg,
-                           gest_days = gest_days,
-                           sex = sex)) |>
-  round(digits = 2)
-df_newborn_weights
+life6mo_newborns$sfga <- with(life6mo_newborns,
+                              compute_sfga(weight_kg = weight_g / 1000,
+                                           gest_days = gestage,
+                                           sex = sex))
+sfga_summary <- with(life6mo_newborns, summary(sfga[!is.na(sfga)]))
+sfga_summary <- round(sfga_summary / sum(sfga_summary) * 100, 2)
+sfga_summary
 ```
 
-Given that the outputs of these functions are vectors, gigs functions integrate
-easily with [dplyr](https://dplyr.tidyverse.org/) verbs.
+Here's a bar plot for good measure. In this dataset, the bulk of newborns are
+SGA - but what if we take the gestational ages into account?
 
-### From z-scores/centiles to values
-
-For data simulation or for reconstructing centile curves, it can be useful to
-calculate an expected measurement for some z-score or centile. This is where the
-`zscore2value` and `centile2value` functions come in. For example, you could
-generate calculate median head circumferences for female newborns across a range
-of gestational ages:
-```{r conversion_hcfga}
-ig_nbs_hcfga_centile2value(p = 0.5,
-                           gest_days = 266:272,
-                           sex = "F") |>
-        round(digits = 1)
-```
-
-## Classifying observations
-In addition to generating continuous z-scores and centiles, you may wish to
-classify attained growth. The classification functions offered by this package
-allow the user to easily classify growth status:
-
-### Size for gestational age
-The `classify_sfga()` function offers size for GA classifications based on
-cut-offs from the research literature. Typically, the 10<sup>th</sup> and
-90<sup>th</sup> centiles are used as the size for GA cut-offs, but some
-publications also specify severely small-for-GA newborns as those below the
-third weight-for-GA centile.
-```{r example_sga}
-df_newborn_weights <- classify_sfga(.data = df_newborn_weights,
-                                    weight_kg = weight_kg,
-                                    gest_days = gest_days,
-                                    sex = sex)
-df_newborn_weights
+```{r plot_sfga, echo = FALSE}
+par(bg = "#f0f0f0")
+barplot(sfga_summary,
+        col = "#606060",
+        main = "Size-for-GA categorisations in the LIFE data extract",
+        axis.lty = 1, border = NA,
+        ylab = "Percentage", ylim = c(0, 85), yaxt = "n",
+        panel.first = {
+          abline(h = 0.485, col = "white", lwd = 360)
+          abline(v = -0.04, col = "black", lwd = 1.5)
+          abline(h = seq(0, 1, 0.2352941), col = "#e8e8e8")
+          abline(h = -0.01, col = "black", lwd = 5)
+          abline(v = -0.2, lwd = 170, col = "#f0f0f0") # "#f0f0f0") # LHS
+          abline(v = 1.1, lwd = 95, col = "#f0f0f0") #"#f0f0f0") # RHS
+          abline(h = -0.2, lwd = 101, col = "#f0f0f0") #"#f0f0f0") # BOTTOM
+          abline(h = 1.2, lwd = 110, col = "#f0f0f0") #"#f0f0f0") # TOP
+        })
+graphics::axis(side = 2, at = seq(0, 80, 20))
 ```
 
 ### Small vulnerable newborns
-The `classify_svn()` function offers small, vulnerable newborn classifications,
-based on the framework set out in the Lancet's 2023 [Small Vulnerable Newborn
-Series](https://www.thelancet.com/infographics-do/small-vulnerable-newborns-2023).
-Essentially, `classify_svn()` stratifies results from `classify_sfga()` by
-whether newborns are term or preterm:
-```{r example_svn}
-df_newborn_weights <- classify_svn(.data = df_newborn_weights[, c(1:4, 6)],
-                                   weight_kg = weight_kg,
-                                   gest_days = gest_days,
-                                   sex = sex)
-df_newborn_weights
+Let's use `compute_svn()` to get obtain counts of small, vulnerable newborn
+categories in this dataset. We can then convert these counts to percentages:
+
+```{r compute_svn, warning = FALSE}
+life6mo_newborns$svn <- with(life6mo_newborns,
+                             compute_svn(weight_kg = weight_g / 1000,
+                                         gest_days = gestage,
+                                         sex = sex))
+svn_summary <- with(life6mo_newborns, summary(svn[!is.na(svn)]))
+svn_summary <- round(svn_summary / sum(svn_summary) * 100, 2)
+svn_summary
 ```
 
-### Stunting
-The `classify_stunting()` function offers stunting (length/height-for-age)
-classifications based on cut-offs from the research literature. The output is a
-factor with levels corresponding to different degrees of stunting:
-```{r example_stunting}
-stunting_df <- data.frame(lenht_cm = c(52.2, 75.4, 63.1),
-                          age_days = c(357, 375, 250),
-                          gest_days = c(196, 287, 266),
-                          sex = c("M", "M", "F"))
-stunting_df <- classify_stunting(stunting_df,
-                                 lenht_cm,
-                                 age_days,
-                                 gest_days,
-                                 sex)
-stunting_df
+```{r plot_svn, echo = FALSE}
+names(svn_summary) <- paste0(c(rep("Preterm\n", 3), rep("Term\n", 3)),
+                             names(sfga_summary))
+par(bg = "#f0f0f0")
+barplot(svn_summary,
+        col = "#606060",
+        main = "Small vulnerable newborn categorisations in the LIFE data extract",
+        axis.lty = 1, border = NA, mgp = c(2, 1.5, 0),
+        ylab = "Percentage", ylim = c(0, 85), yaxt = "n",
+        panel.first = {
+          abline(h = 0.485, col = "white", lwd = 360)
+          abline(v = -0.04, col = "black", lwd = 1.5)
+          abline(h = seq(0, 1, 0.2352941), col = "#e8e8e8")
+          abline(h = 0, col = "black", lwd = 1) # x-axis replacement
+          abline(v = -0.2, lwd = 170, col = "#f0f0f0") # "#f0f0f0") # LHS
+          abline(v = 1.1, lwd = 95, col = "#f0f0f0")   # "#f0f0f0") # RHS
+          abline(h = -0.2, lwd = 101, col = "#f0f0f0") # "#f0f0f0") # BOTTOM
+          abline(h = 1.2, lwd = 110, col = "#f0f0f0")  # "#f0f0f0") # TOP
+        })
+graphics::axis(side = 2, at = seq(0, 80, 20))
 ```
 
-### Wasting
-The `classify_wasting()` function offers wasting (weight-for-length)
-classifications based on cut-offs from the research literature. The output is a
-factor with levels corresponding to different degrees of wasting:
-```{r example_wasting}
-wasting_df <- data.frame(weight_kg = c(5.75, 2.18, 3.00, 6.75),
-                         lenht_cm = c(64.6, 46.6, 50.0, 80.1),
-                         gest_days = c(268, 247, 250, 278),
-                         age_days = c(45, 33, 230, 278),
-                         sex =  c("F", "M", "F", "M"))
-
-wasting_df <- classify_wasting(.data = wasting_df,
-                               weight_kg,
-                               lenht_cm,
-                               age_days,
-                               gest_days,
-                               sex)
-
-wasting_df
-```
-
-### Weight-for-age
-The `classify_wfa()` function offers weight-for-age classifications based on
-cut-offs from the research literature. The output is a factor with levels
-corresponding to different degrees of underweight and overweight:
-```{r example_weight_for_age}
-wfa_df <- data.frame(weight_kg = c(7.2, 4.5, 9.1, 24),
-                     age_days = c(401, 185, 101, 607),
-                     gest_days = 7 * c(27, 36, 40, 41),
-                     sex = c("F", "M", "F", "M"))
-
-wfa_df <- classify_wfa(wfa_df, weight_kg, age_days, gest_days, sex)
-wfa_df
-```
-
-### Head size
-The `classify_headsize()` function offers classification of head size based on
-cut-offs from the research literature. The output is a factor with levels
-corresponding to different degrees of microcephaly and macrocephaly:
-
-```{r example_headsize}
-headsize_df <- data.frame(headcirc_cm = c(48, 42, 40, 43),
-                          age_days = c(401, 185, 101, 607),
-                          gest_days = 7 * c(27, 36, 40, 41),
-                          sex = c("F", "M", "F", "M"))
-
-headsize_df <- classify_headsize(.data = headsize_df,
-                                 headcirc_cm,
-                                 age_days,
-                                 gest_days,
-                                 sex)
-headsize_df
-```
+# References
