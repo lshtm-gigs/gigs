@@ -600,10 +600,10 @@ classify_growth <- function(
       }
       if (analysis == "sfga") {
         .data[[.new[[analysis]][2]]] <- categorise_sfga_internal(
-          p = ig_nbs_wfga_p, severe = TRUE
+          p = ig_nbs_wfga_p, severe = FALSE
         )
         .data[[.new[[analysis]][3]]] <- categorise_sfga_internal(
-          p = ig_nbs_wfga_p, severe = FALSE
+          p = ig_nbs_wfga_p, severe = TRUE
         )
       } else {
         .data[[.new[[analysis]][2]]] <- categorise_svn_internal(
@@ -619,7 +619,7 @@ classify_growth <- function(
       .data[[.new[[analysis]][2]]] <- categorise_stunting_internal(lhaz, FALSE)
       .data[[.new[[analysis]][3]]] <- categorise_stunting_internal(lhaz, TRUE)
     }
-    if (analysis == "stunting" & !(missing_weight | missing_lenht)) {
+    if (analysis == "wasting" & !(missing_weight | missing_lenht)) {
       wlz <- with(growth_data,
                    gigs_wlz_internal(weight_kg = weight_kg,
                                      lenht_cm = lenht_cm, age_days = age_days,
