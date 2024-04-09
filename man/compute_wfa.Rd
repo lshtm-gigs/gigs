@@ -2,7 +2,8 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_wfa}
 \alias{compute_wfa}
-\title{Compute wasting classifications using multiple vectors}
+\title{Get weight-for-age categories using multiple vectors and GIGS-recommended
+growth standards}
 \usage{
 compute_wfa(weight_kg, age_days, gest_days, sex, outliers = FALSE)
 }
@@ -29,19 +30,23 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 An object of class factor with the same length as \code{wlz}, containing
 wasting classifications. Its levels are \code{c("wasting_severe", "wasting", "not_wasting", "overweight")} if \code{outliers = FALSE} (the default), else
 \code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
-
-\tabular{lll}{
-\strong{Category} \tab \strong{Factor level} \tab
-\strong{Z-score bounds} \cr
-Severe wasting \tab \code{"wasting_severe"}       \tab \code{wlz} ≤ -3      \cr
-Wasting        \tab \code{"wasting"}              \tab -3 < \code{wlz} ≤ -2 \cr
-No wasting     \tab \code{"not_wasting"}          \tab \code{abs(wlz)} < 2  \cr
-Overweight     \tab \code{"overweight"}           \tab \code{wlz} ≥ 2       \cr
-Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
-}
 }
 \description{
-Compute wasting classifications using multiple vectors
+Get weight-for-age categories using multiple vectors and GIGS-recommended
+growth standards
+}
+\details{
+Cut-offs for weight-for-age categories are:
+
+\tabular{lll}{
+\strong{Category}    \tab \strong{Factor level}  \tab
+\strong{Z-score bounds} \cr
+Severely underweight \tab \code{"underweight_severe"} \tab \code{waz} ≤ -3      \cr
+Underweight          \tab \code{"underweight"}        \tab -3 < \code{waz} ≤ -2 \cr
+Normal weight        \tab \code{"normal_weight"}      \tab \code{abs(waz)} < 2  \cr
+Overweight           \tab \code{"overweight"}         \tab \code{waz} ≥ 2       \cr
+Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
+}
 }
 \examples{
 compute_wfa(

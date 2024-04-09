@@ -26,6 +26,29 @@ are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
 Categorise birthweight centiles and gestational ages into small vulnerable
 newborn strata
 }
+\details{
+Cut-offs for small, vulnerable newborn categorisations are:
+
+\tabular{llll}{
+\strong{SVN category} \tab \strong{Factor level} \tab
+\strong{Gestational age range} \tab \strong{Centile bounds} \cr
+Preterm-SGA \tab \code{"Preterm SGA"} \tab \code{p} < 0.1       \tab
+\code{gest_days} < 259  \cr
+Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} < 259  \cr
+Preterm-LGA \tab \code{"Preterm LGA"} \tab \code{p} > 0.9       \tab
+\code{gest_days} < 259  \cr
+Term-SGA \tab \code{"Term SGA"}    \tab \code{p} < 0.1       \tab
+\code{gest_days} ≥ 259  \cr
+Term-AGA \tab \code{"Term AGA"}    \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} ≥ 259  \cr
+Term-LGA \tab \code{"Term LGA"}    \tab \code{p} > 0.9       \tab
+\code{gest_days} ≥ 259
+}
+
+\emph{Abbreviations:} SGA, small-for-gestational age; AGA,
+appropriate-for-gestational age; LGA, large-for-gestational age.
+}
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
 adhere to the \link{vctrs} recycling rules.

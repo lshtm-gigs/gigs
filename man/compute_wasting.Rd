@@ -2,7 +2,8 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_wasting}
 \alias{compute_wasting}
-\title{Compute wasting classifications using multiple vectors}
+\title{Get wasting categories using multiple vectors and GIGS-recommended growth
+standards}
 \usage{
 compute_wasting(
   weight_kg,
@@ -39,6 +40,13 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 An object of class factor with the same length as \code{wlz}, containing
 wasting classifications. Its levels are \code{c("wasting_severe", "wasting", "not_wasting", "overweight")} if \code{outliers = FALSE} (the default), else
 \code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
+}
+\description{
+Get wasting categories using multiple vectors and GIGS-recommended growth
+standards
+}
+\details{
+Cut-offs for wasting categories are:
 
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
@@ -49,9 +57,6 @@ No wasting     \tab \code{"not_wasting"}          \tab \code{abs(wlz)} < 2  \cr
 Overweight     \tab \code{"overweight"}           \tab \code{wlz} ≥ 2       \cr
 Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
 }
-}
-\description{
-Compute wasting classifications using multiple vectors
 }
 \examples{
 compute_wasting(

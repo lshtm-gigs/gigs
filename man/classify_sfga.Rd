@@ -2,8 +2,8 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_sfga}
 \alias{classify_sfga}
-\title{Classify size-for-gestational age using the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-weight-for-gestational age standard}
+\title{Classify size-for-gestational age in \code{data.frame}-like objects with the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard}
 \usage{
 classify_sfga(
   .data,
@@ -19,7 +19,9 @@ be permissible by \code{\link[checkmate:checkDataFrame]{checkmate::assert_data_f
 a \code{tibble}, \code{data.table}, or similar.}
 
 \item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a numeric vector of weight values in kg.}
+column in \code{.data} which is a numeric vector of birth weight values in kg.
+It is assumed that weight measurements provided to this function are
+birth weights recorded <12 hours after an infant's birth.}
 
 \item{gest_days}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of gestational age(s) at birth
@@ -54,12 +56,20 @@ classification
 }
 }
 \description{
-Classify size-for-gestational age using the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
-weight-for-gestational age standard
+Classify size-for-gestational age in \code{data.frame}-like objects with the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard
 }
-\note{
-This function assumes that all weights were collected within 12 hours
-of birth.
+\details{
+Cut-offs for size-for-gestational age categorisations are:
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Centile bounds} \cr
+Severely small-for-GA \tab \code{"SGA(<3)"} \tab \code{p} < 0.03      \cr
+Small-for-GA          \tab \code{"SGA"}     \tab \code{p} < 0.1       \cr
+Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 ≤ \code{p} ≤ 0.9 \cr
+Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
+}
 }
 \examples{
 data <- data.frame(
@@ -67,6 +77,7 @@ data <- data.frame(
  gestage = 266:269,
  sex = c("F", "M", "F", "M")
 )
+
 data |>
   classify_sfga(weight_kg = wtkg,
                 gest_days = gestage,
@@ -84,6 +95,5 @@ London, 2013.}
 }
 \seealso{
 \code{\link[=ig_nbs_wfga_value2centile]{ig_nbs_wfga_value2centile()}}, which this function uses to get
-a centile for each observation. Check out the \code{\link[=categorise_sfga]{categorise_sfga()}}
-documentation to see the size-for-GA categorisation thresholds.
+a centile for each observation.
 }

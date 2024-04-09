@@ -2,7 +2,7 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_svn}
 \alias{classify_svn}
-\title{Classify small vulnerable newborns according to the
+\title{Classify small vulnerable newborns in \code{data.frame}-like objects with the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard}
 \usage{
 classify_svn(
@@ -19,7 +19,9 @@ be permissible by \code{\link[checkmate:checkDataFrame]{checkmate::assert_data_f
 a \code{tibble}, \code{data.table}, or similar.}
 
 \item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a numeric vector of weight values in kg.}
+column in \code{.data} which is a numeric vector of birth weight values in kg.
+It is assumed that weight measurements provided to this function are
+birth weights recorded <12 hours after an infant's birth.}
 
 \item{gest_days}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of gestational age(s) at birth
@@ -51,19 +53,43 @@ weight-for-GA
 }
 }
 \description{
-Classify small vulnerable newborns according to the
+Classify small vulnerable newborns in \code{data.frame}-like objects with the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard
+}
+\details{
+Cut-offs for small, vulnerable newborn categorisations are:
+
+\tabular{llll}{
+\strong{SVN category} \tab \strong{Factor level} \tab
+\strong{Gestational age range} \tab \strong{Centile bounds} \cr
+Preterm-SGA \tab \code{"Preterm SGA"} \tab \code{p} < 0.1       \tab
+\code{gest_days} < 259  \cr
+Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} < 259  \cr
+Preterm-LGA \tab \code{"Preterm LGA"} \tab \code{p} > 0.9       \tab
+\code{gest_days} < 259  \cr
+Term-SGA \tab \code{"Term SGA"}    \tab \code{p} < 0.1       \tab
+\code{gest_days} ≥ 259  \cr
+Term-AGA \tab \code{"Term AGA"}    \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} ≥ 259  \cr
+Term-LGA \tab \code{"Term LGA"}    \tab \code{p} > 0.9       \tab
+\code{gest_days} ≥ 259
+}
+
+\emph{Abbreviations:} SGA, small-for-gestational age; AGA,
+appropriate-for-gestational age; LGA, large-for-gestational age.
 }
 \examples{
 data <- data.frame(
   wtkg = c(1.5, 2.6, 2.6, 3.5),
   gestage = c(235, 257, 275, 295),
   sex = c("F", "M", "F", "M")
- )
- data |>
-   classify_svn(weight_kg = wtkg,
-                 gest_days = gestage,
-                 sex = sex)
+)
+
+data |>
+  classify_svn(weight_kg = wtkg,
+               gest_days = gestage,
+               sex = sex)
 }
 \references{
 WHO. \strong{Physical status: the use and interpretation of anthropometry. Report
@@ -77,6 +103,5 @@ London, 2013.}
 }
 \seealso{
 \code{\link[=ig_nbs_wfga_value2centile]{ig_nbs_wfga_value2centile()}}, which this function uses to get
-a centile for each observation. Check out the \code{\link[=categorise_svn]{categorise_svn()}}
-documentation to see the SVN categorisation thresholds.
+a centile for each observation.
 }

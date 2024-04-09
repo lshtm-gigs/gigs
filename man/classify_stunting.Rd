@@ -2,8 +2,8 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_stunting}
 \alias{classify_stunting}
-\title{Classify stunting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} or WHO
-length/height-for-age standards}
+\title{Classify stunting in \code{data.frame}-like objects with GIGS-recommended growth
+standards}
 \usage{
 classify_stunting(
   .data,
@@ -15,10 +15,6 @@ classify_stunting(
 )
 }
 \arguments{
-\item{.data}{A \code{data.frame}-like tabular object with one or more rows. Must
-be permissible by \code{\link[checkmate:checkDataFrame]{checkmate::assert_data_frame()}}, so you can also supply
-a \code{tibble}, \code{data.table}, or similar.}
-
 \item{lenht_cm}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of length/height values in cm.}
 
@@ -31,17 +27,14 @@ in days. This column, in conjunction with the column referred to by
 \code{age_days}, is used to select which growth standard to use for each
 observation.}
 
-\item{sex}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a case-sensitive character vector of sexes,
-either \code{"M"} (male) or \code{"F"} (female). By default, gigs will warn you if
-any elements of \code{sex} are not \code{"M"} or \code{"F"}, or are missing (\code{NA}). You
-can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
-
 \item{.new}{A three-length character vector with names for the output
 columns. These inputs will be repaired if necessary using
 \code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}}, which will print any changes to the console. If
 any elements in \code{.new} are the same as elements in \code{colnames(.data)}, the
 function will throw an error. Default = \code{c("lhaz", "stunting", "stunting_outliers")}.}
+
+\item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
+column in \code{.data} which is a numeric vector of weight values in kg.}
 }
 \value{
 A tabular object of the same class that was provided as \code{.data},
@@ -54,8 +47,20 @@ with three new columns named according to \code{.new}. These columns will be
 }
 }
 \description{
-Classify stunting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} or WHO
-length/height-for-age standards
+Classify stunting in \code{data.frame}-like objects with GIGS-recommended growth
+standards
+}
+\details{
+Cut-offs for stunting categories are:
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Z-score bounds} \cr
+Severe stunting \tab \code{"stunting_severe"}     \tab \code{lhaz} ≤ -3         \cr
+Stunting        \tab \code{"stunting"}            \tab -3 < \code{lhaz} ≤ -2    \cr
+No stunting     \tab \code{"not_stunting"}        \tab \code{lhaz} > -2         \cr
+Outlier         \tab \code{"outlier"}             \tab \code{abs(lhaz)} > 6
+}
 }
 \examples{
 # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
@@ -84,8 +89,4 @@ pp. 64-65.
 for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
 Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
-}
-\seealso{
-Check out the \code{\link[=categorise_stunting]{categorise_stunting()}} documentation to see the
-stunting categorisation thresholds.
 }

@@ -2,8 +2,8 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_wasting}
 \alias{classify_wasting}
-\title{Classify wasting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO
-weight-for-length/height standards}
+\title{Classify wasting in \code{data.frame}-like objects with GIGS-recommended growth
+standards}
 \usage{
 classify_wasting(
   .data,
@@ -58,8 +58,21 @@ with three new columns named according to \code{.new}. These columns will be
 }
 }
 \description{
-Classify wasting using INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-length or WHO
-weight-for-length/height standards
+Classify wasting in \code{data.frame}-like objects with GIGS-recommended growth
+standards
+}
+\details{
+Cut-offs for wasting categories are:
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Z-score bounds} \cr
+Severe wasting \tab \code{"wasting_severe"}       \tab \code{wlz} ≤ -3      \cr
+Wasting        \tab \code{"wasting"}              \tab -3 < \code{wlz} ≤ -2 \cr
+No wasting     \tab \code{"not_wasting"}          \tab \code{abs(wlz)} < 2  \cr
+Overweight     \tab \code{"overweight"}           \tab \code{wlz} ≥ 2       \cr
+Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
+}
 }
 \examples{
 # Returns factor with stunting classifications
@@ -88,8 +101,4 @@ pp. 64-65.
 for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
 Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
-}
-\seealso{
-Check out the \code{\link[=categorise_wasting]{categorise_wasting()}} documentation to see the
-wasting categorisation thresholds.
 }

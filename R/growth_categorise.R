@@ -17,7 +17,8 @@
 #' @returns An object of class factor with the same length as `p`, containing
 #'   size-for-GA classifications. If `severe = FALSE`, levels are `c("SGA",
 #'   "AGA", "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)", "SGA", "AGA",
-#'   "LGA")`
+#'   "LGA")`.
+#' @details Cut-offs for size-for-gestational age categorisations are:
 #'
 #'   \tabular{lll}{
 #'     \strong{Category} \tab \strong{Factor level} \tab
@@ -41,7 +42,9 @@
 #' @export
 categorise_sfga <- function(p, severe = FALSE) {
   checkmate::qassert(severe, rules = "B1")
-  catch_and_throw_validate_issues(centiles <- vctrs::list_drop_empty(validate_yzp(p = p))[[1]])
+  catch_and_throw_validate_issues(
+    centiles <- vctrs::list_drop_empty(validate_yzp(p = p))[[1]]
+  )
   categorise_sfga_internal(centiles, severe)
 }
 
@@ -60,6 +63,27 @@ categorise_sfga <- function(p, severe = FALSE) {
 #' p <- c(0.01, 0.07, 0.25, 0.75, 0.93, 0.99)
 #' gest_days <- c(250, 250, 250, 280, 280, 280) # 3 preterm, 3 term
 #' categorise_svn(p = p, gest_days = gest_days)
+#' @details Cut-offs for small, vulnerable newborn categorisations are:
+#'
+#'   \tabular{llll}{
+#'     \strong{SVN category} \tab \strong{Factor level} \tab
+#'       \strong{Gestational age range} \tab \strong{Centile bounds} \cr
+#'     Preterm-SGA \tab `"Preterm SGA"` \tab `p` < 0.1       \tab
+#'       `gest_days` < 259  \cr
+#'     Preterm-AGA \tab `"Preterm AGA"` \tab 0.1 ≤ `p` ≤ 0.9 \tab
+#'       `gest_days` < 259  \cr
+#'     Preterm-LGA \tab `"Preterm LGA"` \tab `p` > 0.9       \tab
+#'       `gest_days` < 259  \cr
+#'     Term-SGA \tab `"Term SGA"`    \tab `p` < 0.1       \tab
+#'       `gest_days` ≥ 259  \cr
+#'     Term-AGA \tab `"Term AGA"`    \tab 0.1 ≤ `p` ≤ 0.9 \tab
+#'       `gest_days` ≥ 259  \cr
+#'     Term-LGA \tab `"Term LGA"`    \tab `p` > 0.9       \tab
+#'       `gest_days` ≥ 259
+#'   }
+#'
+#'   *Abbreviations:* SGA, small-for-gestational age; AGA,
+#'     appropriate-for-gestational age; LGA, large-for-gestational age.
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
 #'   adhere to the [vctrs] recycling rules.
 #' @references
@@ -91,6 +115,7 @@ categorise_svn <- function(p, gest_days) {
 #'   `c("stunting_severe", "stunting", "not_stunting")` if `outliers =
 #'   FALSE` (the default), else `c("stunting_severe", "stunting",
 #'   "not_stunting", "outlier")`.
+#' @details Cut-offs for stunting categories are:
 #'
 #'   \tabular{lll}{
 #'     \strong{Category} \tab \strong{Factor level} \tab
@@ -137,6 +162,7 @@ categorise_stunting <- function(lhaz, outliers = FALSE) {
 #'   wasting classifications. Its levels are `c("wasting_severe", "wasting",
 #'   "not_wasting", "overweight")` if `outliers = FALSE` (the default), else
 #'   `c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")`.
+#' @details Cut-offs for wasting categories are:
 #'
 #'   \tabular{lll}{
 #'     \strong{Category} \tab \strong{Factor level} \tab
@@ -176,6 +202,7 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
 #'   "underweight", "normal", "overweight")` if `outliers = FALSE` (the
 #'   default), else `c("underweight_severe", "underweight", "normal",
 #'   "overweight", "outlier")`.
+#' @details Cut-offs for weight-for-age categories are:
 #'
 #'   \tabular{lll}{
 #'     \strong{Category}    \tab \strong{Factor level}  \tab
@@ -209,6 +236,7 @@ categorise_wfa <- function(waz, outliers = FALSE) {
 #'   head circumference-for-age classifications. Its levels are
 #'   `c("microcephaly_severe", "microcephaly", "normal_headcirc",
 #'   "macrocephaly", "macrocephaly_severe")`.
+#' @details Cut-offs for head size categories are:
 #'
 #'   \tabular{lll}{
 #'     \strong{Category}    \tab \strong{Factor level}  \tab

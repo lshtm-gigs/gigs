@@ -2,7 +2,8 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_stunting}
 \alias{compute_stunting}
-\title{Compute stunting classifications using multiple vectors}
+\title{Get stunting categories using multiple vectors and GIGS-recommended growth
+standards}
 \usage{
 compute_stunting(lenht_cm, age_days, gest_days, sex, outliers = FALSE)
 }
@@ -29,6 +30,13 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 An object of class factor with the same length as the longest input
 vector, containing stunting classifications. Its levels are
 \code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE} (the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+}
+\description{
+Get stunting categories using multiple vectors and GIGS-recommended growth
+standards
+}
+\details{
+Cut-offs for stunting categories are:
 
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
@@ -38,9 +46,6 @@ Stunting        \tab \code{"stunting"}            \tab -3 < \code{lhaz} ≤ -2  
 No stunting     \tab \code{"not_stunting"}        \tab \code{lhaz} > -2         \cr
 Outlier         \tab \code{"outlier"}             \tab \code{abs(lhaz)} > 6
 }
-}
-\description{
-Compute stunting classifications using multiple vectors
 }
 \note{
 This function assumes that your measurements were taken according to

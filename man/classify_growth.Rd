@@ -2,7 +2,7 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_growth}
 \alias{classify_growth}
-\title{Classify multiple growth indicators at the same time using international
+\title{Classify multiple growth indicators at the same time using GIGS-recommended
 growth standards}
 \usage{
 classify_growth(
@@ -42,7 +42,10 @@ any elements of \code{sex} are not \code{"M"} or \code{"F"}, or are missing (\co
 can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a numeric vector of weight values in kg.}
+column in \code{.data} which is a numeric vector of weight values in kg. When
+performing size-for-GA and small vulnerable newborn classifications,
+centiles and classifications will only be provided where measurements were
+taken <12hrs after birth, i.e. \code{age_days < 0.5}.}
 
 \item{lenht_cm}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of length/height values in cm.}
@@ -61,11 +64,11 @@ not a member of this argument's default. Default = \code{c("sfga", "svn", "stunt
 \item{.new}{A list with names corresponding to \code{.analyses}, which describes
 the names of new columns to be added to \code{.data}. If any elements of the
 vectors in \code{.new} are equal to existing elements of \code{colnames(.data)}, the
-function will throw an error. Excluding the centiles produced for
-size-for-gestational age (\code{"sfga"}) and small vulnerable newborn (\code{"svn"})
-classification, all strings in \code{.new} must be unique. Each character vector
-in \code{.new} is repaired with \code{vctrs::as_names()}, which will issue messages
-if elements in \code{.new} are changed.
+function will throw an error. Excluding the birthweight centiles produced
+when getting size-for-gestational age (\code{"sfga"}) and small vulnerable
+newborn (\code{"svn"}) classifications, all strings in \code{.new} must be unique.
+Each character vector in \code{.new} is repaired with \code{vctrs::as_names()}, which
+will issue messages if any elements in \code{.new} are changed.
 
 \itemize{
 \item{\code{"sfga"}:}{  \code{c("birthweight_centile", "sfga", "sfga_severe")}}

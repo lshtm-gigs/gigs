@@ -2,13 +2,15 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_svn}
 \alias{compute_svn}
-\title{Compute small vulnerable newborn classifications using multiple vectors}
+\title{Get small vulnerable newborn categories using multiple vectors and the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard}
 \usage{
 compute_svn(weight_kg, gest_days, sex)
 }
 \arguments{
 \item{weight_kg}{Numeric vector of length one or more with weight value(s) in
-kg.}
+kg. It is assumed that weight measurements provided to this function are
+birth weights recorded <12 hours after an infant's birth.}
 
 \item{gest_days}{Numeric vector of length one or more with gestational ages
 in days. Classifications can only be computed when \code{gest_days} is between
@@ -29,13 +31,35 @@ vector, containing small vulnerable newborn classifications. Its levels
 are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}.
 }
 \description{
-Compute small vulnerable newborn classifications using multiple vectors
+Get small vulnerable newborn categories using multiple vectors and the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard
+}
+\details{
+Cut-offs for small, vulnerable newborn categorisations are:
+
+\tabular{llll}{
+\strong{SVN category} \tab \strong{Factor level} \tab
+\strong{Gestational age range} \tab \strong{Centile bounds} \cr
+Preterm-SGA \tab \code{"Preterm SGA"} \tab \code{p} < 0.1       \tab
+\code{gest_days} < 259  \cr
+Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} < 259  \cr
+Preterm-LGA \tab \code{"Preterm LGA"} \tab \code{p} > 0.9       \tab
+\code{gest_days} < 259  \cr
+Term-SGA \tab \code{"Term SGA"}    \tab \code{p} < 0.1       \tab
+\code{gest_days} ≥ 259  \cr
+Term-AGA \tab \code{"Term AGA"}    \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+\code{gest_days} ≥ 259  \cr
+Term-LGA \tab \code{"Term LGA"}    \tab \code{p} > 0.9       \tab
+\code{gest_days} ≥ 259
+}
+
+\emph{Abbreviations:} SGA, small-for-gestational age; AGA,
+appropriate-for-gestational age; LGA, large-for-gestational age.
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules. It is assumed that all weights
-provided to this function are birth weights recorded <12 hours after an
-infant's birth.
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 compute_svn(

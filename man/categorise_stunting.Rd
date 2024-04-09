@@ -17,6 +17,12 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 An object of class factor with the same length as the longest input
 vector, containing stunting classifications. Its levels are
 \code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE} (the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+}
+\description{
+Categorise length/height-for-age z-scores into stunting strata
+}
+\details{
+Cut-offs for stunting categories are:
 
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
@@ -26,9 +32,6 @@ Stunting        \tab \code{"stunting"}            \tab -3 < \code{lhaz} ≤ -2  
 No stunting     \tab \code{"not_stunting"}        \tab \code{lhaz} > -2         \cr
 Outlier         \tab \code{"outlier"}             \tab \code{abs(lhaz)} > 6
 }
-}
-\description{
-Categorise length/height-for-age z-scores into stunting strata
 }
 \note{
 This function assumes that your measurements were taken according to

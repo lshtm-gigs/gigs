@@ -15,6 +15,13 @@ head circumference-for-age z-scores (HCAZs).}
 An object of class factor with the same length as \code{hcaz}, containing
 head circumference-for-age classifications. Its levels are
 \code{c("microcephaly_severe", "microcephaly", "normal_headcirc", "macrocephaly", "macrocephaly_severe")}.
+}
+\description{
+Categorise head circumference-for-age z-scores into head
+circumference-for-age strata
+}
+\details{
+Cut-offs for head size categories are:
 
 \tabular{lll}{
 \strong{Category}    \tab \strong{Factor level}  \tab
@@ -25,10 +32,6 @@ Normal head circumference \tab \code{"normal_headcirc"}      \tab \code{abs(hcaz
 Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} ≥ 2       \cr
 Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} ≥ 3
 }
-}
-\description{
-Categorise head circumference-for-age z-scores into head
-circumference-for-age strata
 }
 \examples{
 hcaz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)

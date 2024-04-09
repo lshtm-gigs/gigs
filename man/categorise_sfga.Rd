@@ -17,7 +17,13 @@ values below the third centile as \code{"SGA(<3)"}. Default = \code{FALSE}.}
 }
 \value{
 An object of class factor with the same length as \code{p}, containing
-size-for-GA classifications. If \code{severe = FALSE}, levels are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}
+size-for-GA classifications. If \code{severe = FALSE}, levels are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}.
+}
+\description{
+Categorise birthweight centiles into size-for-gestational age strata
+}
+\details{
+Cut-offs for size-for-gestational age categorisations are:
 
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
@@ -27,9 +33,6 @@ Small-for-GA          \tab \code{"SGA"}     \tab \code{p} < 0.1       \cr
 Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 ≤ \code{p} ≤ 0.9 \cr
 Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
-}
-\description{
-Categorise birthweight centiles into size-for-gestational age strata
 }
 \examples{
 p <- c(0.01, 0.07, 0.25, 0.75, 0.93, 0.99)

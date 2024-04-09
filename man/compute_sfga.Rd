@@ -2,13 +2,15 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_sfga}
 \alias{compute_sfga}
-\title{Compute size-for-GA classifications using multiple vectors}
+\title{Get size-for-gestational age categories using multiple vectors and the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard}
 \usage{
 compute_sfga(weight_kg, gest_days, sex, severe = FALSE)
 }
 \arguments{
 \item{weight_kg}{Numeric vector of length one or more with weight value(s) in
-kg.}
+kg. It is assumed that weight measurements provided to this function are
+birth weights recorded <12 hours after an infant's birth.}
 
 \item{gest_days}{Numeric vector of length one or more with gestational ages
 in days. Classifications can only be computed when \code{gest_days} is between
@@ -32,13 +34,24 @@ vector, containing size-for-GA classifications. If \code{severe = FALSE}, levels
 are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}.
 }
 \description{
-Compute size-for-GA classifications using multiple vectors
+Get size-for-gestational age categories using multiple vectors and the
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} weight-for-gestational age standard
+}
+\details{
+Cut-offs for size-for-gestational age categorisations are:
+
+\tabular{lll}{
+\strong{Category} \tab \strong{Factor level} \tab
+\strong{Centile bounds} \cr
+Severely small-for-GA \tab \code{"SGA(<3)"} \tab \code{p} < 0.03      \cr
+Small-for-GA          \tab \code{"SGA"}     \tab \code{p} < 0.1       \cr
+Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 ≤ \code{p} ≤ 0.9 \cr
+Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
+}
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules. It is assumed that all weights
-provided to this function are birth weights recorded <12 hours after an
-infant's birth.
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # By default, does not differentiate between p < 0.03 and p < 0.10

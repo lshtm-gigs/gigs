@@ -2,12 +2,14 @@
 #   Takes multiple input vectors, passes these to z-scoring/centile-ing
 #   functions, then returns a single vector.
 
-#' Compute size-for-GA classifications using multiple vectors
+#' Get size-for-gestational age categories using multiple vectors and the
+#' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
 #'
 #'
 #' @inheritParams shared_roxygen_params
 #' @param weight_kg Numeric vector of length one or more with weight value(s) in
-#'   kg.
+#'   kg. It is assumed that weight measurements provided to this function are
+#'   birth weights recorded <12 hours after an infant's birth.
 #' @param gest_days Numeric vector of length one or more with gestational ages
 #'   in days. Classifications can only be computed when `gest_days` is between
 #'   `168` and `300`, as these are the limits of the INTERGROWTH-21<sup>st</sup>
@@ -36,10 +38,9 @@
 #'   sex = c("M", "F", "M"),
 #'   severe = TRUE
 #' )
+#' @inherit categorise_sfga details
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
-#'   adhere to the [vctrs] recycling rules. It is assumed that all weights
-#'   provided to this function are birth weights recorded <12 hours after an
-#'   infant's birth.
+#'   adhere to the [vctrs] recycling rules.
 #' @inherit categorise_sfga references
 #' @export
 compute_sfga <- function(weight_kg,
@@ -53,13 +54,15 @@ compute_sfga <- function(weight_kg,
   categorise_sfga_internal(p, severe = severe)
 }
 
-#' Compute small vulnerable newborn classifications using multiple vectors
+#' Get small vulnerable newborn categories using multiple vectors and the
+#' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
+#'
 #' @inherit compute_sfga params note
 #' @returns An object of class factor with the same length as the longest input
 #'   vector, containing small vulnerable newborn classifications. Its levels
 #'   are `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
 #'   "Term LGA")`.
-#' @inherit categorise_svn references
+#' @inherit categorise_svn details references
 #' @examples
 #' compute_svn(
 #'   weight_kg = c(1.5, 2.6, 2.6, 3.5),
@@ -74,10 +77,11 @@ compute_svn <- function(weight_kg, gest_days, sex) {
   categorise_svn_internal(p, gest_days = gest_days)
 }
 
-#' Compute stunting classifications using multiple vectors
+#' Get stunting categories using multiple vectors and GIGS-recommended growth
+#' standards
 #'
 #' @inheritParams compute_wasting
-#' @inherit categorise_stunting params note references return
+#' @inherit categorise_stunting params note details references return
 #' @examples
 #' # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
 #' # the next two use the WHO Child Growth Standards.
@@ -111,7 +115,8 @@ compute_stunting <- function(lenht_cm,
   categorise_stunting_internal(lhaz, outliers = outliers)
 }
 
-#' Compute wasting classifications using multiple vectors
+#' Get wasting categories using multiple vectors and GIGS-recommended growth
+#' standards
 #'
 #' @param weight_kg Numeric vector of length one or more with weight
 #'   measurement(s) in kg.
@@ -142,7 +147,7 @@ compute_stunting <- function(lenht_cm,
 #'   sex =  c("F", "M", "F", "M"),
 #'   outliers = TRUE
 #' )
-#' @inherit categorise_wasting references return
+#' @inherit categorise_wasting details references return
 #' @export
 compute_wasting <- function(weight_kg,
                             lenht_cm,
@@ -160,7 +165,9 @@ compute_wasting <- function(weight_kg,
   categorise_wasting_internal(wlz, outliers = outliers)
 }
 
-#' Compute wasting classifications using multiple vectors
+#' Get weight-for-age categories using multiple vectors and GIGS-recommended
+#' growth standards
+#'
 #' @inheritParams compute_wasting
 #' @inherit categorise_wasting params references return
 #' @examples
@@ -179,7 +186,7 @@ compute_wasting <- function(weight_kg,
 #'   sex = c("F", "M", "F", "M"),
 #'   outliers = TRUE
 #' )
-#' @inherit categorise_wfa references return
+#' @inherit categorise_wfa details references return
 #' @export
 compute_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
@@ -191,7 +198,8 @@ compute_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
   categorise_wfa_internal(waz, outliers = outliers)
 }
 
-#' Compute head size classifications using multiple vectors
+#' Get head size categories using multiple vectors and GIGS-recommended growth
+#' standards
 #'
 #' @param headcirc_cm Numeric vector of length one or more with head
 #'   circumference measurement(s) in cm.
@@ -204,7 +212,7 @@ compute_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
 #'   gest_days = c(189, 252, 280, 287),
 #'   sex = c("F", "M", "F", "M")
 #' )
-#' @inherit categorise_headsize references return
+#' @inherit categorise_headsize details references return
 #' @export
 compute_headsize <- function(headcirc_cm, age_days, gest_days, sex) {
   validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,

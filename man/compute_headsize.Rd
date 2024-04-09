@@ -2,7 +2,8 @@
 % Please edit documentation in R/growth_compute.R
 \name{compute_headsize}
 \alias{compute_headsize}
-\title{Compute head size classifications using multiple vectors}
+\title{Get head size categories using multiple vectors and GIGS-recommended growth
+standards}
 \usage{
 compute_headsize(headcirc_cm, age_days, gest_days, sex)
 }
@@ -26,19 +27,23 @@ and warn you. You can customise this behaviour using the \link[=gigs_options]{GI
 An object of class factor with the same length as \code{wlz}, containing
 wasting classifications. Its levels are \code{c("wasting_severe", "wasting", "not_wasting", "overweight")} if \code{outliers = FALSE} (the default), else
 \code{c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")}.
-
-\tabular{lll}{
-\strong{Category} \tab \strong{Factor level} \tab
-\strong{Z-score bounds} \cr
-Severe wasting \tab \code{"wasting_severe"}       \tab \code{wlz} ≤ -3      \cr
-Wasting        \tab \code{"wasting"}              \tab -3 < \code{wlz} ≤ -2 \cr
-No wasting     \tab \code{"not_wasting"}          \tab \code{abs(wlz)} < 2  \cr
-Overweight     \tab \code{"overweight"}           \tab \code{wlz} ≥ 2       \cr
-Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
-}
 }
 \description{
-Compute head size classifications using multiple vectors
+Get head size categories using multiple vectors and GIGS-recommended growth
+standards
+}
+\details{
+Cut-offs for head size categories are:
+
+\tabular{lll}{
+\strong{Category}    \tab \strong{Factor level}  \tab
+\strong{Z-score bounds} \cr
+Severe microcephaly       \tab \code{"microcephaly_severe"} \tab \code{hcaz} ≤ -3      \cr
+Microcephaly              \tab \code{"microcephaly"}        \tab -3 < \code{hcaz} ≤ -2 \cr
+Normal head circumference \tab \code{"normal_headcirc"}      \tab \code{abs(hcaz)} < 2 \cr
+Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} ≥ 2       \cr
+Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} ≥ 3
+}
 }
 \examples{
 compute_headsize(

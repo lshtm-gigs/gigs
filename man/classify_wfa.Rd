@@ -2,7 +2,8 @@
 % Please edit documentation in R/growth_classify.R
 \name{classify_wfa}
 \alias{classify_wfa}
-\title{Classify weight-for-age using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standards}
+\title{Classify weight-for-age in \code{data.frame}-like objects with GIGS-recommended
+growth standards}
 \usage{
 classify_wfa(
   .data,
@@ -54,7 +55,21 @@ flagging
 }
 }
 \description{
-Classify weight-for-age using WHO or INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} standards
+Classify weight-for-age in \code{data.frame}-like objects with GIGS-recommended
+growth standards
+}
+\details{
+Cut-offs for weight-for-age categories are:
+
+\tabular{lll}{
+\strong{Category}    \tab \strong{Factor level}  \tab
+\strong{Z-score bounds} \cr
+Severely underweight \tab \code{"underweight_severe"} \tab \code{waz} ≤ -3      \cr
+Underweight          \tab \code{"underweight"}        \tab -3 < \code{waz} ≤ -2 \cr
+Normal weight        \tab \code{"normal_weight"}      \tab \code{abs(waz)} < 2  \cr
+Overweight           \tab \code{"overweight"}         \tab \code{waz} ≥ 2       \cr
+Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
+}
 }
 \examples{
 data <- data.frame(
@@ -80,8 +95,4 @@ pp. 64-65.
 for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
 Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
-}
-\seealso{
-Check out the \code{\link[=categorise_wfa]{categorise_wfa()}} documentation to see the
-weight-for-age categorisation thresholds.
 }

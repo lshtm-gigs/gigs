@@ -2,14 +2,16 @@
 #   Take a `data.frame` or similar tabular object, assigns new columns with
 #   growth categories, then returns the extended table to the user
 
-#' Classify size-for-gestational age using the INTERGROWTH-21<sup>st</sup>
-#' weight-for-gestational age standard
+#' Classify size-for-gestational age in `data.frame`-like objects with the
+#' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
 #'
 #' @param .data A `data.frame`-like tabular object with one or more rows. Must
 #'   be permissible by [checkmate::assert_data_frame()], so you can also supply
 #'   a `tibble`, `data.table`, or similar.
 #' @param weight_kg <[`data-masking`][rlang::args_data_masking]> The name of a
-#'   column in `.data` which is a numeric vector of weight values in kg.
+#'   column in `.data` which is a numeric vector of birth weight values in kg.
+#'   It is assumed that weight measurements provided to this function are
+#'   birth weights recorded <12 hours after an infant's birth.
 #' @param gest_days <[`data-masking`][rlang::args_data_masking]> The name of a
 #'   column in `.data` which is a numeric vector of gestational age(s) at birth
 #'   in days between `168` and `300`. By default, gigs will warn you about
@@ -39,22 +41,20 @@
 #'     classification
 #'   * `sfga_severe` - Factor of size-for-GA categories with severe small-for-GA
 #'     classification
-#' @note This function assumes that all weights were collected within 12 hours
-#'   of birth.
 #' @seealso [ig_nbs_wfga_value2centile()], which this function uses to get
-#'   a centile for each observation. Check out the [categorise_sfga()]
-#'   documentation to see the size-for-GA categorisation thresholds.
+#'   a centile for each observation.
 #' @examples
 #' data <- data.frame(
 #'  wtkg = c(2.2, 2.5, 3.3, 4.0),
 #'  gestage = 266:269,
 #'  sex = c("F", "M", "F", "M")
 #' )
+#'
 #' data |>
 #'   classify_sfga(weight_kg = wtkg,
 #'                 gest_days = gestage,
 #'                 sex = sex)
-#' @inherit categorise_sfga references
+#' @inherit categorise_sfga details references
 #' @export
 classify_sfga <- function(
     .data,
@@ -81,7 +81,7 @@ classify_sfga <- function(
   .data
 }
 
-#' Classify small vulnerable newborns according to the
+#' Classify small vulnerable newborns in `data.frame`-like objects with the
 #' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
 #'
 #' @inherit classify_sfga params
@@ -98,19 +98,20 @@ classify_sfga <- function(
 #'     INTERGROWTH-21<sup>st</sup> Newborn Size standard for
 #'     weight-for-GA
 #'   * `svn` - Factor of small vulnerable newborn (SVN) categories
+#' @inherit categorise_svn details
 #' @examples
 #' data <- data.frame(
 #'   wtkg = c(1.5, 2.6, 2.6, 3.5),
 #'   gestage = c(235, 257, 275, 295),
 #'   sex = c("F", "M", "F", "M")
-#'  )
-#'  data |>
-#'    classify_svn(weight_kg = wtkg,
-#'                  gest_days = gestage,
-#'                  sex = sex)
+#' )
+#'
+#' data |>
+#'   classify_svn(weight_kg = wtkg,
+#'                gest_days = gestage,
+#'                sex = sex)
 #' @seealso [ig_nbs_wfga_value2centile()], which this function uses to get
-#'   a centile for each observation. Check out the [categorise_svn()]
-#'   documentation to see the SVN categorisation thresholds.
+#'   a centile for each observation.
 #' @inherit classify_sfga references
 #' @export
 classify_svn <- function(.data,
@@ -130,15 +131,16 @@ classify_svn <- function(.data,
   .new <- vctrs::vec_as_names(.new, repair = "universal")
   .data[[.new[1]]] <- p
   .data[[.new[2]]] <- categorise_svn_internal(
-    p, rlang::eval_tidy(expr = rlang::enquo(gest_days), data = .data)
+    p, eval_tidy(expr = enquo(gest_days), data = .data)
   )
   return(.data)
 }
 
-#' Classify stunting using INTERGROWTH-21<sup>st</sup> or WHO
-#' length/height-for-age standards
+#' Classify stunting in `data.frame`-like objects with GIGS-recommended growth
+#' standards
 #'
-#' @inheritParams classify_sfga
+#' @param weight_kg <[`data-masking`][rlang::args_data_masking]> The name of a
+#'   column in `.data` which is a numeric vector of weight values in kg.
 #' @param lenht_cm <[`data-masking`][rlang::args_data_masking]> The name of a
 #'   column in `.data` which is a numeric vector of length/height values in cm.
 #' @param age_days <[`data-masking`][rlang::args_data_masking]> The name of a
@@ -161,9 +163,7 @@ classify_svn <- function(.data,
 #'   * `lhaz` - Numeric vector of length/height-for-age zscores
 #'   * `stunting` - Factor of stunting categories without outlier flagging
 #'   * `stunting_outliers` - Factor of stunting categories with outlier flagging
-#' @seealso Check out the [categorise_stunting()] documentation to see the
-#'   stunting categorisation thresholds.
-#' @inherit categorise_stunting references
+#' @inherit categorise_stunting details references
 #' @examples
 #' # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
 #' # the next two use the WHO Child Growth Standards.
@@ -204,8 +204,8 @@ classify_stunting <- function(
   .data
 }
 
-#' Classify wasting using INTERGROWTH-21<sup>st</sup> weight-for-length or WHO
-#' weight-for-length/height standards
+#' Classify wasting in `data.frame`-like objects with GIGS-recommended growth
+#' standards
 #'
 #' @inheritParams classify_stunting
 #' @inheritParams classify_sfga
@@ -222,8 +222,7 @@ classify_stunting <- function(
 #'   * `wlz` - Numeric vector of weight-for-length/height zscores
 #'   * `wasting` - Factor of wasting categories without outlier flagging
 #'   * `wasting_outliers` - Factor of wasting categories with outlier flagging
-#' @seealso Check out the [categorise_wasting()] documentation to see the
-#'   wasting categorisation thresholds.
+#' @inherit categorise_wasting details
 #' @inherit categorise_stunting references
 #' @examples
 #' # Returns factor with stunting classifications
@@ -266,7 +265,8 @@ classify_wasting <- function(.data,
   .data
 }
 
-#' Classify weight-for-age using WHO or INTERGROWTH-21<sup>st</sup> standards
+#' Classify weight-for-age in `data.frame`-like objects with GIGS-recommended
+#' growth standards
 #'
 #' @inheritParams classify_stunting
 #' @inheritParams classify_sfga
@@ -283,8 +283,7 @@ classify_wasting <- function(.data,
 #'   * `wfa` - Factor of weight-for-age categories without outlier flagging
 #'   * `wfa_outliers` - Factor of weight-for-age categories with outlier
 #'     flagging
-#' @seealso Check out the [categorise_wfa()] documentation to see the
-#'   weight-for-age categorisation thresholds.
+#' @inherit categorise_wfa details
 #' @inherit categorise_stunting references
 #' @examples
 #' data <- data.frame(
@@ -322,8 +321,8 @@ classify_wfa <- function(.data,
   .data
 }
 
-#' Classify head circumference using WHO or INTERGROWTH-21<sup>st</sup>
-#' standards
+#' Classify head size in `data.frame`-like objects with GIGS-recommended
+#' growth standards
 #'
 #' @inheritParams classify_stunting
 #' @inheritParams classify_sfga
@@ -343,9 +342,7 @@ classify_wfa <- function(.data,
 #'   * `wfa` - Factor of weight-for-age categories without outlier flagging
 #'   * `wfa_outliers` - Factor of weight-for-age categories with outlier
 #'     flagging
-#' @seealso Check out the [categorise_wfa()] documentation to see the
-#'   weight-for-age categorisation thresholds.
-#' @inherit categorise_headsize references
+#' @inherit categorise_headsize details references
 #' @examples
 #' data <- data.frame(
 #'   head_cm = c(41, 40, 41, 51),
@@ -384,12 +381,17 @@ classify_headsize <- function(.data,
   .data
 }
 
-#' Classify multiple growth indicators at the same time using international
+#' Classify multiple growth indicators at the same time using GIGS-recommended
 #' growth standards
 #'
 #' This function permits classification of multiple growth indicators (stunting,
 #' wasting, weight-for-age, and more) at once in `data.frame`-like objects.
 #'
+#' @param weight_kg <[`data-masking`][rlang::args_data_masking]> The name of a
+#'   column in `.data` which is a numeric vector of weight values in kg. When
+#'   performing size-for-GA and small vulnerable newborn classifications,
+#'   centiles and classifications will only be provided where measurements were
+#'   taken <12hrs after birth, i.e. `age_days < 0.5`.
 #' @inheritParams classify_wasting
 #' @inheritParams classify_headsize
 #' @param .analyses A character vector of up to six elements in length
@@ -402,11 +404,11 @@ classify_headsize <- function(.data,
 #' @param .new A list with names corresponding to `.analyses`, which describes
 #'   the names of new columns to be added to `.data`. If any elements of the
 #'   vectors in `.new` are equal to existing elements of `colnames(.data)`, the
-#'   function will throw an error. Excluding the centiles produced for
-#'   size-for-gestational age (`"sfga"`) and small vulnerable newborn (`"svn"`)
-#'   classification, all strings in `.new` must be unique. Each character vector
-#'   in `.new` is repaired with `vctrs::as_names()`, which will issue messages
-#'   if elements in `.new` are changed.
+#'   function will throw an error. Excluding the birthweight centiles produced
+#'   when getting size-for-gestational age (`"sfga"`) and small vulnerable
+#'   newborn (`"svn"`) classifications, all strings in `.new` must be unique.
+#'   Each character vector in `.new` is repaired with `vctrs::as_names()`, which
+#'   will issue messages if any elements in `.new` are changed.
 #'
 #'   \itemize{
 #'    \item{`"sfga"`:}{  `c("birthweight_centile", "sfga", "sfga_severe")`}
@@ -847,22 +849,20 @@ msg_classify_growth <- function(all, requested, run) {
 #' @srrstats {G2.3, G2.3a, G2.3b} Univariate character inputs are restricted to
 #'   specific inputs by `{checkmate}` calls; these are case-sensitive and
 #'   documented as such.
-#' @srrstats {G2.7} We use `checkmate::assert_data_frame()` to check that the
-#'   supplied `.data` objects inherit from `data.frame`, allowing the use of at
-#'   `tibble`s, `data.table`s, and more.
-#' @srrstats {G2.8} The package passes columns to various GIGS-specific
-#'   `validate_*()` functions. These ensure that passed columns are atomic and
-#'   have the right type.
-#' @srrstats {G2.9} Users can select names to apply to new columns, which are
-#'   fixed by `vctrs::as_names()`. This function prints messages to the console
-#'   if any of the names supplied by the user require changing.
-#' @srrstats {G2.11} In this script, all vector columns are passed to functions
-#'   which strip attributes - this lets `units`-like non-standard vector columns
-#'   work in these functions.
-#' @srrstats {G2.8} The package passes columns to various GIGS-specific
-#'   `validate_*()` functions. These ensure that passed columns are atomic and
-#'   have the right type.
 NULL
+
+# @srrstats {G2.7} We use `checkmate::assert_data_frame()` to check that the
+#   supplied `.data` objects inherit from `data.frame`, allowing the use of at
+#   `tibble`s, `data.table`s, and more.
+# @srrstats {G2.8} The package passes columns to various GIGS-specific
+#   `validate_*()` functions. These ensure that passed columns are atomic and
+#   have the right type.
+# @srrstats {G2.9} Users can select names to apply to new columns, which are
+#   fixed by `vctrs::as_names()`. This function prints messages to the console
+#   if any of the names supplied by the user require changing.
+# @srrstats {G2.11} In this script, all vector columns are passed to functions
+#   which strip attributes - this lets `units`-like non-standard vector columns
+#   work in these functions.
 
 
 # #' @srrstats {G2.12} For this script
