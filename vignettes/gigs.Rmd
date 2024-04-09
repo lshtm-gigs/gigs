@@ -4,6 +4,7 @@ description: >
   Learn how to get started with the basics of gigs.
 output: rmarkdown::html_vignette
 bibliography: gigs_bib.bib
+csl: nature.csl
 vignette: >
   %\VignetteIndexEntry{Introduction to gigs}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,12 +13,17 @@ vignette: >
 
 ```{r knitr_opts, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+intergrowth21st <- if (knitr::is_html_output()) {
+  "INTERGROWTH-21<sup>st</sup>"
+} else {
+  "INTERGROWTH-21\textsuperscript{st}"
+}
 ```
 
 # Introduction
 
 gigs is designed to make working with outputs from either the
-INTERGROWTH-21<sup>st</sup> project and World Health Organisation Child Growth
+`r intergrowth21st` project and World Health Organisation Child Growth
 Standards as easy as possible. It also provides functions for easy and
 reproducible classification of fetal, newborn, and infant growth.
 
@@ -32,20 +38,28 @@ library(gigs)
 gigs_options_set(new_value = "quiet")
 ```
 
-We will show off two ways of working with growth data in gigs. The first
-'step-by-step' approach involves you picking and choosing your growth standards
-throughout. The second 'single-step' approach lets you hand over that work to
-gigs, letting its growth classification functions do the work for you.
+We will show off two use cases for gigs. The first is using gigs to generate
+continuous indices of growth (i.e. centiles or z-scores). This can be done in a
+single step by letting gigs do the work in the background, or you can
 
+[//]: # (TODO: MAKE PURDY)
+
+involves simpler
+'single-step' approach involves passing the hard work to gigs, and letting it
+pick the right growth standards to apply for each measurement in your data. The
+more complex 'step-by-step' approach involves you picking and choosing your
+growth standards throughout.
+
+## Example data
 Before we get started, we need some data. This tutorial uses a sample of data
 from 300 infants enrolled in the Low birthweight Infant Feeding Exploration
 (LIFE) study [@Vesel2022LowSettings; @Vesel2023FeedingStudy]. Thse infants were
-assessed at birth, and followed through after birth, with data available up to
-six months of age in this data extract.
+assessed at birth then followed up at intervals after birth, with data available
+up to six months of age in this data extract.
 
 Though `gigs::life6mo` has data on length in cm (`len_cm`), head circumference
 (`headcirc_cm`), and mid-upper arm circumference (`muac_cm`), we are going to
-subset `gigs::life6mo` to focus on weight in grams (`weight_g`). The dataset
+subset this dataset to focus on weight in grams (`weight_g`). The dataset
 also has columns with an ID number per infant in the study (`id`), the
 gestational age at birth for each infant (`gestage`), the sex of each infant
 (`sex`; `"M"` = male, `"F"` = female), the visit week at which weight was
@@ -61,59 +75,53 @@ life6mo$sex <- as.character(life6mo$sex)
 head(life6mo, n = 5)
 ```
 
-# Single-step (easier) approach
+# Obtaining z-scores from measurements
 
-# Step-by-step (harder) approach
-Instead of letting GIGS do the heavy lifting, you may want to clearly lay out
-the steps taken in your analysis. Luckily, gigs provides all the functionality
-you need for this.
+## Single-step (easier) approach
+The easiest way to use gigs is to let it handle work for you. Using its growth
+classification functions, you can apply GIGS-recommended growth standards for
+each measurement and time point in a dataset. Standards are applied based on the
+best practices advised by WHO and `r intergrowth21st` when using their
+respective growth standards.
 
-## Weight-for-age z-scores over time, by term status
-We start by generating WAZs for each growth standard. This follows the gigs
-conversion function naming structure, where we start with the set of growth
-standards we want to use (`ig_nbs`/`who_gs`/`ig_png`), then the type of ]
-conversion we want to perform (in this case `value2zscore`). We use the
-`acronym` parameter in these functions to tell gigs exactly which growth
-standard to use.
+We can use `classify_wfa()` to add weight-for-age z-scores to our dataset in a
+single step. This function works like `dplyr::mutate()` and other
+[data-masking](https://rlang.r-lib.org/reference/args_data_masking.html)
+functions: you refer to columns in `.data` using raw column names:
 
-```{r complex_gen_WAZs}
-waz_nbs <- with(life6mo, ig_nbs_value2zscore(y =  weight_g / 1000, gestage, sex, "wfga"))
-waz_who <- with(life6mo, who_gs_value2zscore(y =  weight_g / 1000, x = age_days, sex = sex, acronym = "wfa"))
-waz_png <- with(life6mo, ig_png_value2zscore(y =  weight_g / 1000, x = pma / 7, sex = sex, acronym = "wfa"))
+```{r simple_gen_WAZs}
+life6mo_zscored <- classify_wfa(.data = life6mo,
+                                weight_kg = weight_g / 1000,
+                                age_days = age_days,
+                                gest_days = gestage,
+                                sex = sex)
+life6mo_zscored[, c("id", "visitweek", "gestage", "age_days", "sex", "waz")] |>
+  head(n = 5)
 ```
 
-Once we have our standard-specific WAZs, we can use a chain of `ifelse()`
-functions to make one overall `waz` column in `life6mo`:
+On plotting the mean weight-for-age z-scores as a function of the visit week, we
+see that preterm z-scores in the LIFE data extract are on average higher than
+for term infants. This is expected for this dataset, as term infants in the
+LIFE study were only included if they were particularly small at birth. In
+contrast, preterm infants were included irrespective of their relative size at
+birth.
 
-```{r complex_make_WAZ}
-life6mo$waz <- with(life6mo, expr = {
-  ifelse(test = age_days <= 0.5,
-         yes = waz_nbs,
-         no = ifelse(age_days > 0.5 & !preterm | (preterm & pma > 64 * 7),
-                     yes = waz_who,
-                     no = waz_png))
-})
-```
-
-We can then plot the weight-for-age z-score over time - which looks just like
-the plot we got above!
-
-```{r complex_plot_WAZs, echo = FALSE, out.width = "95%"}
-visitweeks <- unique(life6mo$visitweek)
+```{r simple_plot_WAZs, echo = FALSE}
+visitweeks <- unique(life6mo_zscored$visitweek)
 waz_avgs_preterm <- sapply(
   X = visitweeks,
   FUN = \(week) {
-    mean(life6mo$waz[life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+    mean(life6mo_zscored$waz[life6mo_zscored$preterm & life6mo_zscored$visitweek == week], na.rm = TRUE)
   })
 waz_avgs_term <- sapply(
   X = visitweeks,
   FUN = \(week) {
-    mean(life6mo$waz[!life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+    mean(life6mo_zscored$waz[!life6mo_zscored$preterm & life6mo_zscored$visitweek == week], na.rm = TRUE)
   })
 mat <- matrix(data = c(waz_avgs_term, waz_avgs_preterm), nrow = length(visitweeks), ncol = 2)
 ```
 
-```{r plot_waz, echo = FALSE}
+```{r plot_waz_simple, echo = FALSE}
 par(bg = "#f0f0f0")
 graphics::matplot(x = visitweeks, y = mat, type = "l",
                   main = "WAZ over time in 300 infants from the LIFE data extract",
@@ -133,20 +141,121 @@ graphics::legend(x = "bottomright", bg = "white", ncol = 2,
                  lty = 1:2)
 ```
 
-## Assessing size at birth
-We can assess size at birth without reference to whether an infant is term or
-preterm using simple size-for-gestational age (SfGA) categorisations, or we can
-include information on term status using small, vulnerable newborn (SVN)
-classifications.
+## Step-by-step (harder) approach
+Instead of letting GIGS do the heavy lifting, you may want to clearly lay out
+the steps taken in your analysis. Luckily, gigs provides all the functionality
+you need for this.
 
-### Size-for-GA
-Let's use `compute_sfga()` to get obtain counts of SfGA categories in this
+We start by generating WAZs for each growth standard. To do this, we need to use
+the gigs conversion functions. These take vectors of growth data and convert
+them into z-scores or centiles. To get the right function, follow the gigs
+conversion function naming scheme:
+
+1. Start with the broad set of growth standards you want to use
+   * `ig_nbs` - `r intergrowth21st` Newborn Size Standards (incl. very preterm) [@Villar2014InternationalProject; @Villar2016INTERGROWTH-21stCharts; @Villar2017BodyProject]
+   * `who_gs` - `r intergrowth21st` Postnatal Growth Standards [@Villar2015PostnatalProject]
+   * `ig_png` - `r intergrowth21st` WHO Child Growth Standards [@WHOMulticentreGrowthReferenceStudyGroup2006WHOAge; @WHO2006WHODevelopment; @WHO2007WHODevelopment]
+2. The type of conversion we want to perform:
+   *  `value2zscore`
+   *  `value2centile`
+   *  `zscore2value`
+   *  `centile2value`
+3. Then use the `acronym` parameter in these functions to tell gigs exactly
+   which growth standard to use. Valid values for `acronym` are detailed in the
+   documentation for each conversion function.
+
+```{r complex_gen_WAZs}
+waz_nbs <- with(life6mo, ig_nbs_value2zscore(y = weight_g / 1000,
+                                             gest_days = gestage,
+                                             sex = sex,
+                                             acronym = "wfga"))
+waz_who <- with(life6mo, who_gs_value2zscore(y =  weight_g / 1000,
+                                             x = age_days,
+                                             sex = sex,
+                                             acronym = "wfa"))
+waz_png <- with(life6mo, ig_png_value2zscore(y =  weight_g / 1000,
+                                             x = pma / 7,
+                                             sex = sex,
+                                             acronym = "wfa"))
+```
+
+Once we have our standard-specific WAZs, we can use a chain of `ifelse()`
+functions to make one overall `waz` column in `life6mo`:
+
+```{r complex_make_WAZ}
+life6mo$waz <- with(life6mo, expr = {
+  ifelse(test = age_days <= 0.5,
+         yes = waz_nbs,
+         no = ifelse(age_days > 0.5 & !preterm | (preterm & pma > 64 * 7),
+                     yes = waz_who,
+                     no = waz_png))
+})
+```
+
+We can then plot the weight-for-age z-score over time - which looks just like
+the plot we got above!
+
+```{r plot_WAZs_complex, echo = FALSE, out.width = "95%"}
+visitweeks <- unique(life6mo$visitweek)
+waz_avgs_preterm <- sapply(
+  X = visitweeks,
+  FUN = \(week) {
+    mean(life6mo$waz[life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+  })
+waz_avgs_term <- sapply(
+  X = visitweeks,
+  FUN = \(week) {
+    mean(life6mo$waz[!life6mo$preterm & life6mo$visitweek == week], na.rm = TRUE)
+  })
+mat <- matrix(data = c(waz_avgs_term, waz_avgs_preterm), nrow = length(visitweeks), ncol = 2)
+```
+
+```{r plot_waz_complex, echo = FALSE}
+par(bg = "#f0f0f0")
+graphics::matplot(x = visitweeks, y = mat, type = "l",
+                  main = "WAZ over time in 300 infants from the LIFE data extract",
+                  bty = "o",, col = "black",
+                  xlab = "Visit week", ylab = "Weight-for-age z-score (WAZ)",
+                  xlim = range(visitweeks), xaxt = "n",
+                  ylim = c(-3, 0), yaxt = "n",
+                  panel.first = {
+                    abline(v = -1:30, col = "white", lwd = 50)
+                    abline(h = 5:-5, col = "white", lwd = 50)
+                    abline(h = 0:-3, col = "#e8e8e8")
+                  })
+graphics::axis(side = 2, at = -3:0, las = 2)
+graphics::axis(side = 1, at = visitweeks)
+graphics::legend(x = "bottomright", bg = "white", ncol = 2,
+                 legend = c("Term", "Preterm"), col = "black",
+                 lty = 1:2)
+```
+
+# Obtaining growth classifications from measurements
+The gigs package contains functions to classify growth in several ways:
+
+* Size-for-gestational age with `compute_sfga()`/`classify_sfga()`
+* Small, vulnerable newborns with `compute_svn()`/`classify_svn()`
+* Stunting with `compute_stunting()`/`classify_stunting()`
+* Wasting with `compute_wasting()`/`classify_wasting()`
+* Weight-for-age with `compute_wfa()`/`classify_wfa()`
+* Head size with `compute_headsize()`/`classify_headsize()`
+
+You can also run all (or some) of these analyses at the same time with
+`classify_growth()`. In this vignette, we will focus on size-for-GA and
+small, vulnerable newborn (SVN) classifications.
+
+## Size-for-GA
+Let's use `compute_sfga()` to get obtain counts of size-for-GA categories in this
 dataset. We can then convert these counts to percentages:
 
 ```{r compute_sfga, warning = FALSE}
+# Restrict LIFE data to only rows with birthweights (i.e. age <12hrs) that
+# have all a weight, GA, and sex value
 life6mo_newborns <- with(life6mo,
  life6mo[visitweek == 0 & age_days < 0.5 & complete.cases(weight_g, gestage, sex), ]
 )
+
+# Compute birthweight centiles and convert these to size-for-GA categories
 life6mo_newborns$sfga <- with(life6mo_newborns,
                               compute_sfga(weight_kg = weight_g / 1000,
                                            gest_days = gestage,
@@ -179,9 +288,12 @@ barplot(sfga_summary,
 graphics::axis(side = 2, at = seq(0, 80, 20))
 ```
 
-### Small vulnerable newborns
-Let's use `compute_svn()` to get obtain counts of small, vulnerable newborn
-categories in this dataset. We can then convert these counts to percentages:
+## Small vulnerable newborns
+Let's use `compute_svn()` to get small, vulnerable newborn classifications for
+this dataset. SVN categories are more useful than size-for-GA alone, as they
+incorporate information on whether infants were term or preterm
+[@Lawn2023SmallCounting]. We can use `gigs::compute_svn()` to get SVN categories
+for newborns in the LIFE data extract, then convert these counts to percentages:
 
 ```{r compute_svn, warning = FALSE}
 life6mo_newborns$svn <- with(life6mo_newborns,
@@ -193,6 +305,11 @@ svn_summary <- round(svn_summary / sum(svn_summary) * 100, 2)
 svn_summary
 ```
 
+On plotting this data, we find that the bulk of SGA cases are from term
+infants. We would usually expect that size-for-GA categories were distributed
+similarly for preterm and term infants. However, due again to the sampling
+process for the LIFE study, we should expect that the term infants are SGA
+whilst the preterm infants are a mix of SGA/AGA/LGA.
 ```{r plot_svn, echo = FALSE}
 names(svn_summary) <- paste0(c(rep("Preterm\n", 3), rep("Term\n", 3)),
                              names(sfga_summary))
