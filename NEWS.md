@@ -7,20 +7,23 @@
   * The `classify_*()` family of functions no longer take vectors as input, but
     instead take a `data.frame`-like objects.
 * **NEW FEATURES**:
-  * The `classify_growth()` function can be used to generate multiple growth indicators at the same time.
-  * The `categorise_*()` functions for growth analysis. These functions vectors 
-  of vector of growth centiles/z-scores as input, and return a factor of 
-  growth categories.
-  * The `compute_*()` functions for growth analysis. These functions take 
-  several vectors containing age, sex, and anthropometric information, and 
-  return a factor of growth categories.
-  * Errors, warnings, and messages from GIGS are now handled with 
-    `rlang::abort()` and friends, and looks much prettier. 
+  * The `classify_growth()` function can be used to get data on multiple growth 
+    indicators at the same time.
+  * The `compute_*()` functions for growth analysis. These functions take
+    several vectors containing anthropometric measurements, age, and sex; they
+    return a factor of growth categories. They are equivalent to the 
+    `classify_*()` functions from GIGS 0.4.1 and earlier.
+  * The `categorise_*()` functions for growth analysis. These functions take 
+    vectors of growth centiles/z-scores as input, and return a factor of 
+    growth categories.
   * You can now set all GIGS options at once with `gigs_options_set()`.
 * **FIXES**:
   * `.gigs_options` is now actively exported by gigs and available to end-users
 * **INTERNAL/DOCS CHANGES**:
-  * Non-breaking changes to documentation and test suite.
+  * Errors, warnings, and messages from GIGS are now handled with 
+    `rlang::abort()` and friends, and looks much prettier.  
+  * Updates to the 'Getting Started' vignette and 'Benchmarking' article.
+  * Other non-breaking changes to documentation and test suite.
  
 # gigs 0.4.1
 

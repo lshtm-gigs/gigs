@@ -19,8 +19,6 @@ reference:
       - classify_wfa
       - classify_headsize
   - title: Get growth indicator classifications using multiple vectors
-    desc: >
-      Compute growth categories using data from several vectors.
     contents:
       - compute_sfga
       - compute_svn
@@ -28,9 +26,7 @@ reference:
       - compute_wasting
       - compute_wfa
       - compute_headsize
-  - title: Categorise growth z-scores/centiles
-    desc: >
-      Classify growth z-scores and centiles into commonly used growth indicators
+  - title: Get growth indicator classifications from z-scores/centiles
     contents:
       - categorise_sfga
       - categorise_svn
