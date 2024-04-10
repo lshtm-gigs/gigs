@@ -227,8 +227,8 @@ compute_headsize <- function(headcirc_cm, age_days, gest_days, sex) {
 #' @srrstats {G1.0} Primary literature referenced where relevant for each
 #'   function in this script.
 #' @srrstats {G1.4} This file's functions are all documented with `{roxygen2}`.
-#' @srrstats {G2.0} Each exported function passes its inputs to
-#'   a `validate_*()` functions, which enforce specific input lengths.
+#' @srrstats {G2.0} Each exported function passes its inputs to `validate_*()`
+#'   functions, which enforce specific input lengths.
 #' @srrstats {G2.0a, EA1.3} Documentation in this script explicitly references
 #'   length of inputs. Single-length inputs are explicitly referenced in the
 #'   documentation and checked in their respective functions.
