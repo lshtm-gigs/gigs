@@ -1,27 +1,30 @@
 #' Calculate z-scores for anthropometric measures according to GIGS guidance
 #'
 #' @description These functions calculate z-scores for weight-for-age (WAZs),
-#'   length/height-for-age (LHAZs), head circumference-for-age (HCAZs), or
-#'   weight-for-length/height (WLZs).
+#'   length/height-for-age (LHAZs), weight-for-length/height (WLZs), or
+#'   head circumference-for-age (HCAZs).
 #'
-#'   The z-scoring procedure used differs for each observation based on the
-#'   gestational and post-menstrual age of the infants being analysed. The
-#'   different procedures are based on the advised use of each growth standard:
-#'   * `gest_days` < 24 weeks:
+#'   The growth standard used for each observation differs based on the
+#'   gestational and post-menstrual age of the infant being analysed. The
+#'   different procedures are based on the advised use of each growth standard,
+#'   where a measurement is considered a 'birth measurement' if taken <1 day
+#'   after birth:
+#'   * `gest_days` < 24 weeks (168 days):
 #'     - Birth: No standard available
 #'     - Postnatal: IG-21<sup>st</sup> Postnatal Growth standards from 27 to 64
 #'       weeks' PMA
 #'     - Postnatal: Uncorrected WHO standard after 64 weeks' PMA
-#'   * `gest_days` >= 24 weeks:
-#'     - Birth: IG-21<sup>st</sup> Newborn Size standards at birth (including
-#'       Very Preterm Newborn Size standards if born before 33 weeks).
+#'   * `gest_days` >= 24 weeks (168 days):
+#'     - Birth: IG-21<sup>st</sup> Newborn Size standards at birth
+#'       (including Very Preterm Newborn Size standards if born before 33
+#'       weeks).
 #'     - Postnatal: IG-21<sup>st</sup> Postnatal Growth standards from 27 to 64
 #'       weeks' PMA
 #'     - Postnatal: Uncorrected WHO Child Growth standards after 64 weeks' PMA
-#'   * `gest_days` ≥ 37 weeks:
+#'   * `gest_days` ≥ 37 weeks (259 days):
 #'     - Birth: IG-21<sup>st</sup> Newborn Size standards
 #'     - Postnatal: Uncorrected WHO Child Growth standards
-#'   * `gest_days` ≥ 43 weeks:
+#'   * `gest_days` ≥ 43 weeks (301 days):
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
 #'
@@ -30,11 +33,12 @@
 #'   * The weight-for-height standard, which is applied when `age_days >= 731`.
 #' @param weight_kg A numeric vector of length one or more with weight in kg.
 #' @param age_days A numeric vector of length one or more with ages in days.
-#' @param gest_days A numeric vector of length one or more with weight in kg.
-#' @param sex A character vector of sexes, either `"M"` or `"F"`.
+#' @param gest_days A numeric vector of length one or more with gestational ages
+#'   in days.
+#' @inheritParams shared_roxygen_params
 #' @note These functions expect vectors which have lengths such that they can
 #'   be recycled with [vctrs::vec_recycle_common()].
-#' @rdname gigs_waz
+#' @rdname gigs_zscoring
 #' @noRd
 gigs_waz <- function(weight_kg, age_days, gest_days, sex) {
   validate_waz_params(weight_kg = weight_kg,
@@ -44,7 +48,7 @@ gigs_waz <- function(weight_kg, age_days, gest_days, sex) {
     do.call(what = gigs_waz_internal)
 }
 
-#' @rdname gigs_waz
+#' @rdname gigs_zscoring
 #' @param lenht_cm A numeric vector of length one or more with length or height
 #'   in cm. Should be recumbent length when `age_days < 731`, and standing
 #'   height when `age_days >= 731`.
@@ -57,7 +61,7 @@ gigs_lhaz <- function(lenht_cm, age_days, gest_days, sex) {
     do.call(what = gigs_lhaz_internal)
 }
 
-#' @rdname gigs_waz
+#' @rdname gigs_zscoring
 #' @noRd
 gigs_wlz <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
   validate_wlz_params(weight_kg = weight_kg,
@@ -68,7 +72,7 @@ gigs_wlz <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
     do.call(what = gigs_wlz_internal)
 }
 
-#' @rdname gigs_waz
+#' @rdname gigs_zscoring
 #' @param headcirc_cm Numeric vector of length one or more with head
 #'   circumference in cm.
 #' @noRd
@@ -196,18 +200,29 @@ gigs_hcaz_internal <- function(headcirc_cm, age_days, gest_days, sex) {
 #' @description Applies gestational age/PMA cutoffs for term and preterm infants
 #'   to generate logical vectors describing where to apply GIGS-compliant
 #'   growth standards.
-#' @param gest_days Numeric vector with gestational age(s) at birth in days.
-#' @param age_days Numeric vector with age(s) in days.
+#' @param gest_days Numeric vector of length one or more with gestational ages
+#'   in days.
+#' @param age_days Numeric vector with of length one or more with ages in days.
 #' @note The logical vectors returned by this function will have `FALSE`
 #'   elements where either `gest_days` or `age_days` is `NA`.
 #' @returns Named list with three logical vectors `ig_nbs`, `ig_png`, and
 #'   `who_gs`. Where these logical vectors are `TRUE`, then the growth standard
 #'   from that named list should be used.
 #' @rdname gigs_xaz
-#' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
-#'   equality.
 #' @noRd
 gigs_zscoring_lgls <- function(age_days, gest_days) {
+  len_age_days <- length(age_days)
+  len_gest_days <- length(gest_days)
+  if (len_age_days != len_gest_days) {
+    rlang::abort(
+      message = c("`age_days` and `gest_days` must have the same length.",
+                  "!" = paste0("`age_days` had length ", len_age_days,
+                               "; `gest_days` had length ", len_gest_days,
+                               ".")),
+      .internal = TRUE
+    )
+  }
+
   # Set up vars for use later
   term_cutoff_days <- 37 * 7 # i.e. 37 weeks = term baby
   is_term <- gest_days >= term_cutoff_days
@@ -219,8 +234,8 @@ gigs_zscoring_lgls <- function(age_days, gest_days) {
   is_inrange_ig_png <- inrange(pma_weeks, c(27, 64))
 
   use_ig_nbs <- is_birth_measurement & is_inrange_ig_nbs
-  use_ig_png <- age_days > 0 & !is_term & is_inrange_ig_png
-  use_who_gs <- age_days > 0 & is_term | (!is_term & pma_weeks > 64)
+  use_ig_png <- !is_birth_measurement & !is_term & is_inrange_ig_png
+  use_who_gs <- !is_birth_measurement & is_term | (!is_term & pma_weeks > 64)
 
   # Prevents `NAs are not allowed in subscripted assignments` error
   is_na_input <- is.na(age_days) | is.na(gest_days)
