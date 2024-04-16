@@ -2,7 +2,7 @@
 % Please edit documentation in R/growth_categorise.R
 \name{categorise_wfa}
 \alias{categorise_wfa}
-\title{Classify weight-for-age z-scores into weight-for-age strata}
+\title{Categorise weight-for-age z-scores into weight-for-age strata}
 \usage{
 categorise_wfa(waz, outliers = FALSE)
 }
@@ -19,7 +19,7 @@ weight-for-age classifications. Its levels are \code{c("underweight_severe", "un
 default), else \code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
 }
 \description{
-Classify weight-for-age z-scores into weight-for-age strata
+Categorise weight-for-age z-scores into weight-for-age strata
 }
 \details{
 Cut-offs for weight-for-age categories are:

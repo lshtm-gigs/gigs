@@ -247,18 +247,18 @@ NULL
 #' \itemize{
 #'   \item{`id`:}{  Unique ID for each infant in the dataset (1--300).}
 #'   \item{`gestage`:}{  Best obstetric estimate of gestational age in days
-#'     (201--311).}
+#'     (181--291).}
 #'   \item{`sex`:}{  Sex of the infant as a factor (`"M"` = Male; `"F"` =
 #'     Female).}
 #'   \item{`visitweek`:}{  Chronological age in weeks (±1) when study visit
 #'     occurred (0--26).}
-#'   \item{`pma`:}{  Post-menstrual age in days (202--545).}
+#'   \item{`pma`:}{  Post-menstrual age in days (182--528).}
 #'   \item{`age_days`:}{  Chronological age in days at each visit; equal to
-#'     `pma - gestage` (0--245).}
-#'   \item{`weight_g`:}{  Mean weight in g (1271.67--9050.00).}
-#'   \item{`len_cm`:}{  Mean length in cm (35.03--72.93).}
-#'   \item{`headcirc_cm`:}{  Mean head circumference in cm (23.20--45.17).}
-#'   \item{`muac_cm`:}{  Mean mid-upper arm circumference in cm (6.13--17.03).}
+#'     `pma - gestage` (0--242).}
+#'   \item{`weight_g`:}{  Mean weight in g (1240.00--9406.67).}
+#'   \item{`len_cm`:}{  Mean length in cm (37.37--72.93).}
+#'   \item{`headcirc_cm`:}{  Mean head circumference in cm (23.20--44.87).}
+#'   \item{`muac_cm`:}{  Mean mid-upper arm circumference in cm (6.30--16.83).}
 #' }
 #'
 #' @note We subsetted the full LIFE 6 month dataset for [gigs]. As such, this
