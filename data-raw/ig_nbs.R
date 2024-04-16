@@ -109,35 +109,3 @@ ig_nbs_coeffs <- list(
     path = "data-raw/tables/ig_nbs/Newborn standards parameters (HC).xlsx")
 )
 usethis::use_data(ig_nbs_coeffs, overwrite = TRUE)
-
-write_dta_gamlssfiles <- function(gamlss_tbls) {
-  dta_dir <- file.path("data-raw", "tables", "ig_nbs", "stata")
-  if (!dir.exists(dta_dir)) dir.create(dta_dir)
-  purrr::map2(
-    .x = gamlss_tbls,
-    .y = names(gamlss_tbls),
-    .f = ~ {
-      tbls <- .x
-      acronym <- .y
-      out <- purrr::map2_dfr(
-        .x = tbls, 
-        .y = names(tbls), 
-        .f = ~ {
-          tbl <- .x
-          sex <- .y
-          sex_col <- ifelse(sex == "male", 1, 0)
-          tbl |>
-            dplyr::mutate(nbsMSNT_sex = as.integer(sex_col)) |>
-            dplyr::rename(nbsMSNT_gest_age = gest_age,
-                          nbsMSNT_mu = mu,
-                          nbsMSNT_sigma = sigma,
-                          nbsMSNT_nu = nu,
-                          nbsMSNT_tau = tau)
-        })
-      haven::write_dta(data = out, 
-                       path = file.path(dta_dir, 
-                                        paste0("ig_nbsGAMLSS_",
-                                               acronym, ".dta")))
-    })
-}
-write_dta_gamlssfiles(ig_nbs_coeffs)

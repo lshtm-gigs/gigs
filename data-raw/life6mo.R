@@ -79,8 +79,3 @@ life6mo <- life6mo |>
 
 # Save to gigs
 usethis::use_data(life6mo, overwrite = TRUE)
-
-# Prepare for Stata package
-# life6mo_stata <- life6mo |>
-#   dplyr::mutate(sex = as.integer(sex)) |>
-#   haven::write_dta(path = "exclude/life6mo.dta")
