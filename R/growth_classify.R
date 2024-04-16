@@ -63,9 +63,7 @@ classify_sfga <- function(
     sex,
     .new = c("birthweight_centile", "sfga", "sfga_severe")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
-  err_if_.new_in_.data(new = .new,
-                       .data_names = colnames(.data),
-                       .data_varname = rlang::expr_text(substitute(.data)))
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
   checkmate::qassert(.new, rules = "S3")
 
   p <- ig_nbs_wfga_value2centile(
@@ -121,7 +119,7 @@ classify_svn <- function(.data,
                           .new = c("birthweight_centile", "svn")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S2")
-
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
   p <- ig_nbs_wfga_value2centile(
     weight_kg = eval_tidy(enquo(weight_kg), .data),
     gest_days = eval_tidy(enquo(gest_days), .data),
@@ -189,6 +187,7 @@ classify_stunting <- function(
     .new = c("lhaz", "stunting", "stunting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
   lhaz <- gigs_lhaz(
     lenht_cm = eval_tidy(enquo(lenht_cm), .data),
@@ -249,6 +248,7 @@ classify_wasting <- function(.data,
                              .new = c("wlz", "wasting", "wasting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
   wlz <- gigs_wlz(
     weight_kg = eval_tidy(enquo(weight_kg), .data),
@@ -306,6 +306,7 @@ classify_wfa <- function(.data,
                          .new = c("waz", "wfa", "wfa_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
   waz <- gigs_waz(
     weight_kg = eval_tidy(enquo(weight_kg), data = .data),
@@ -367,6 +368,7 @@ classify_headsize <- function(.data,
                               .new = c("hcaz", "headsize")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S2")
+  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
   hcaz <- gigs_hcaz(
     headcirc_cm = eval_tidy(enquo(headcirc_cm), .data),
@@ -535,8 +537,7 @@ classify_growth <- function(
 
   # Ascertain integrity of `.data`, `.analyses`, and `.new`
   err_if_.new_in_.data(new = unique(unlist(.new)),
-                       .data_names = colnames(.data),
-                       .data_varname = rlang::expr_text(substitute(.data)))
+                       .data_colnames = colnames(.data))
   check_all_.new_names_valid(.new = .new, all = all_analyses)
   check_all_.analyses_in_.new(.new = .new, .analyses = .analyses)
   .new <- .new[.analyses]
@@ -545,15 +546,17 @@ classify_growth <- function(
   check_if_.new_elements_unique(.new)
   .new <- repair_.new_names(.new)
 
-  growth_data <- data.frame(
-    "gest_days" = validate_numeric(eval_tidy(enquo(gest_days), .data),
-                                   varname = "gest_days"),
-    "age_days" = validate_numeric(eval_tidy(enquo(age_days), .data),
-                                  varname = "age_days"),
-    "sex" = validate_sex(eval_tidy(enquo(sex), .data))
-  )
+  catch_and_throw_validate_issues(expr = {
+    growth_data <- data.frame(
+      "gest_days" = validate_numeric(eval_tidy(enquo(gest_days), .data),
+                                     varname = "gest_days"),
+      "age_days" = validate_numeric(eval_tidy(enquo(age_days), .data),
+                                    varname = "age_days"),
+      "sex" = validate_sex(eval_tidy(enquo(sex), .data))
+    )
+  }, call = rlang::current_env())
 
-  # What data was provided? Store data in `mask_available_data` where possible
+  # What data was provided? Store data in `growth_data` where possible
   missing_weight <- rlang::quo_is_null(enquo(weight_kg))
   missing_lenht <- rlang::quo_is_null(enquo(lenht_cm))
   missing_headcirc <- rlang::quo_is_null(enquo(headcirc_cm))
@@ -575,24 +578,19 @@ classify_growth <- function(
 
   # Run analyses if data allows
   for (analysis in .analyses) {
-    if (analysis == "wfa" & !missing_weight) {
-      waz <- with(growth_data,
-                  gigs_waz_internal(weight_kg = weight_kg, age_days = age_days,
-                                    gest_days = gest_days, sex = sex))
-      .data[[.new[[analysis]][1]]] <- waz
-      .data[[.new[[analysis]][2]]] <- categorise_wfa_internal(waz, FALSE)
-      .data[[.new[[analysis]][3]]] <- categorise_wfa_internal(waz, TRUE)
-    }
-
     if (analysis == "sfga" | analysis == "svn" & !missing_weight) {
-      is_birthweight <- growth_data[["age_days"]] > -sqrt(.Machine$double.eps) &
-        growth_data[["age_days"]] < 0.5
-      is_birthweight[is.na(is_birthweight)] <- FALSE
-      if (!.new[[analysis]][1] %in% names(.data)) {
+      bweight_centile_not_calculated <- !.new[[analysis]][1] %in% names(.data)
+      if (bweight_centile_not_calculated) {
+        is_birthweight <-
+          growth_data[["age_days"]] > -sqrt(.Machine$double.eps) &
+          growth_data[["age_days"]] < 0.5
+        is_birthweight[is.na(is_birthweight)] <- FALSE
+        is_calculable <- is_birthweight &
+          inrange(growth_data[["gest_days"]], vec = c(168, 300))
         ig_nbs_wfga_p <- rep(NA_real_, nrow(.data))
-        ig_nbs_wfga_p[is_birthweight] <- fn_on_subset(
+        ig_nbs_wfga_p[is_calculable] <- fn_on_subset(
           fn = ig_nbs_v2c_internal,
-          lgl = is_birthweight,
+          lgl = is_calculable,
           growth_data[["weight_kg"]],
           growth_data[["gest_days"]],
           growth_data[["sex"]],
@@ -613,6 +611,7 @@ classify_growth <- function(
         )
       }
     }
+
     if (analysis == "stunting" & !missing_lenht) {
       lhaz <- with(growth_data,
                    gigs_lhaz_internal(lenht_cm = lenht_cm, age_days = age_days,
@@ -621,6 +620,7 @@ classify_growth <- function(
       .data[[.new[[analysis]][2]]] <- categorise_stunting_internal(lhaz, FALSE)
       .data[[.new[[analysis]][3]]] <- categorise_stunting_internal(lhaz, TRUE)
     }
+
     if (analysis == "wasting" & !(missing_weight | missing_lenht)) {
       wlz <- with(growth_data,
                    gigs_wlz_internal(weight_kg = weight_kg,
@@ -630,6 +630,16 @@ classify_growth <- function(
       .data[[.new[[analysis]][2]]] <- categorise_wasting_internal(wlz, FALSE)
       .data[[.new[[analysis]][3]]] <- categorise_wasting_internal(wlz, TRUE)
     }
+
+    if (analysis == "wfa" & !missing_weight) {
+      waz <- with(growth_data,
+                  gigs_waz_internal(weight_kg = weight_kg, age_days = age_days,
+                                    gest_days = gest_days, sex = sex))
+      .data[[.new[[analysis]][1]]] <- waz
+      .data[[.new[[analysis]][2]]] <- categorise_wfa_internal(waz, FALSE)
+      .data[[.new[[analysis]][3]]] <- categorise_wfa_internal(waz, TRUE)
+    }
+
     if (analysis == "headsize" & !missing_headcirc) {
       hcaz <- with(growth_data,
                    gigs_hcaz_internal(headcirc_cm = headcirc_cm,
@@ -780,25 +790,24 @@ repair_.new_names <- function(.new) {
 #' Check whether a character vector has any elements in another, and issue an
 #' @param new A character vector of length one or more with new column names to
 #'   check against `existing`.
-#' @param .data_names A character vector of length one or more with column names
+#' @param .data_colnames A character vector of length one or more with column names
 #'   to be checked against with `new`.
-#' @param .data_varname A single-length character vector with the variable name
-#'   for `.data`.
 #' @return Returns `new` invisibly if there are no matches between `new` and
 #'   `existing`, else throws an error.
 #' @noRd
-err_if_.new_in_.data <- function(new, .data_names, .data_varname) {
-  matches <- new %in% .data_names
+err_if_.new_in_.data <- function(new, .data_colnames) {
+  matches <- new %in% .data_colnames
   any_matches <- any(matches)
   if (any_matches) {
-    matched_names <- new[matches] |>
+    matched_names <- paste0("`", new[matches], "`") |>
       setNames(nm = "!")
     rlang::abort(
       message =
-        c(paste0("Columns requested in `.new` already exist in `colnames(",
-                 .data_varname, ")`:"),
+        c(paste0("Column names requested in `.new` already exist in `.data`. ",
+                 "These are:"),
           matched_names
         ),
+      call = rlang::env_parent(),
       class = "gigs_classify_.new_in_.data")
   }
   invisible(new)
