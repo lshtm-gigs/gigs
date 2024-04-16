@@ -192,7 +192,7 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
   categorise_wasting_internal(wlz, outliers)
 }
 
-#' Classify weight-for-age z-scores into weight-for-age strata
+#' Categorise weight-for-age z-scores into weight-for-age strata
 #'
 #' @param waz A numeric vector of length one or more containing
 #'   weight-for-age z-scores (WAZs).
