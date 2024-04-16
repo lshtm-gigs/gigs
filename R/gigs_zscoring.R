@@ -148,18 +148,31 @@ gigs_wlz_internal <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
   gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
     lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
 
+  use_ig_png <- gigs_lgls[["ig_png"]] & inrange(lenht_cm, c(35, 65))
   use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
   use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
 
-  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
-                           weight_kg, lenht_cm, sex, acronym = "wfl")
-  z_who_gs_wfl <- fn_on_subset(who_gs_v2z_internal, use_who_wfl,
-                               weight_kg, lenht_cm, sex, acronym = "wfl")
-  z_who_gs_wfh <- fn_on_subset(who_gs_v2z_internal, use_who_wfh,
-                               weight_kg, lenht_cm, sex, acronym = "wfh")
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal,
+                           use_ig_png,
+                           weight_kg,
+                           lenht_cm,
+                           sex,
+                           acronym = "wfl")
+  z_who_gs_wfl <- fn_on_subset(who_gs_v2z_internal,
+                               use_who_wfl,
+                               weight_kg,
+                               lenht_cm,
+                               sex,
+                               acronym = "wfl")
+  z_who_gs_wfh <- fn_on_subset(who_gs_v2z_internal,
+                               use_who_wfh,
+                               weight_kg,
+                               lenht_cm,
+                               sex,
+                               acronym = "wfh")
 
   z_out <- rep(NA_real_, length(weight_kg))
-  z_out[gigs_lgls[["ig_png"]]] <- z_ig_png
+  z_out[use_ig_png] <- z_ig_png
   z_out[use_who_wfl] <- z_who_gs_wfl
   z_out[use_who_wfh] <- z_who_gs_wfh
   z_out
@@ -180,10 +193,18 @@ gigs_hcaz_internal <- function(headcirc_cm, age_days, gest_days, sex) {
     fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]], headcirc_cm,
                  gest_days, sex, acronym = "hcfga")
   )
-  z_ig_png <- fn_on_subset(ig_png_v2z_internal, gigs_lgls[["ig_png"]],
-                           headcirc_cm, pma_weeks, sex, acronym = "hcfa")
-  z_who_gs <- fn_on_subset(who_gs_v2z_internal, gigs_lgls[["who_gs"]],
-                           headcirc_cm, age_days, sex, acronym = "hcfa")
+  z_ig_png <- fn_on_subset(ig_png_v2z_internal,
+                           gigs_lgls[["ig_png"]],
+                           headcirc_cm,
+                           pma_weeks,
+                           sex,
+                           acronym = "hcfa")
+  z_who_gs <- fn_on_subset(who_gs_v2z_internal,
+                           gigs_lgls[["who_gs"]],
+                           headcirc_cm,
+                           age_days,
+                           sex,
+                           acronym = "hcfa")
 
   z_out <- rep(NA_real_, length(headcirc_cm))
   z_out[gigs_lgls[["ig_nbs"]]] <- z_ig_nbs
