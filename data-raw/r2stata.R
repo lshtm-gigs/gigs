@@ -66,26 +66,20 @@ write_dta_lmsfiles(who_gs_lms = gigs::who_gs_coeffs)
 # LIFE dataset -----------------------------------------------------------------
 
 life6mo_stata <- gigs::life6mo |>
-  dplyr::mutate(sex = as.integer(sex)) |>
-  haven::write_dta(path = "exclude/r2stata/life6mo.dta")
-
-life6mo_comp <- gigs::life6mo |>
   dplyr::mutate(
-    weight_kg = weight_g / 1000,
-    sex = as.character(sex),
-    gest_days = pma - age_days) |>
-  dplyr::select(!muac_cm) |>
-  gigs::classify_growth(weight_kg = weight_kg,
-                        lenht_cm = len_cm,
-                        headcirc_cm = headcirc_cm,
-                        sex = sex,
-                        age_days = age_days,
-                        gest_days = gest_days)
-  dplyr::select(id, visitweek,
-                birthweight_centile, sfga, sfga_severe, svn,
-                lhaz, stunting, stunting_outliers,
-                wlz, wasting, wasting_outliers,
-                waz, wfa, wfa_outliers,
-                hcaz, headsize) |>
-  haven::write_dta(path = "exclude/r2stata/life6mo_comparison.dta",
-                   version = 13)
+    sex = haven::labelled(
+      x = as.integer(dplyr::if_else(sex == "M", true = 1, false = 2)),
+      labels = c("Male" = 1, "Female" = 2),
+      label = "Sex of each infant (male = 1; female = 2)."
+    ),
+    gestage = as.integer(gestage),
+    age_days = as.integer(age_days),
+    pma = as.integer(pma),
+  ) |>
+  dplyr::relocate(id, visitweek, sex, gestage, visitweek, age_days, pma) |>
+  haven::write_dta(path = "exclude/r2stata/life6mo.dta", version = 13)
+rlang::warn(c(
+  "",
+  "i" = "You generated a new version of `life6mo.dta`.",
+  "!" = "Run Stata's `compress' function to make the dataset smaller!"
+))

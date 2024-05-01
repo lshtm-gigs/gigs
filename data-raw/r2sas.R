@@ -14,7 +14,7 @@ write.table_sas <- function(x, file, sep = ",") {
               row.names = FALSE,
               col.names = FALSE,
               quote = FALSE)
-  x
+  invisible(x)
 }
 
 ig_fet_zscores <- list()
@@ -130,6 +130,13 @@ ig_png_centiles <- ig_png_centiles |>
 gigs::gigs_options_set(new_value = "quiet")
 write.table_sas(gigs::life6mo, file = "exclude/r2sas/life6mo.txt")
 
+
+# LIFE dataset -----------------------------------------------------------------
+life6mo_sas <- gigs::life6mo |>
+  dplyr::relocate(id, visitweek, sex, gestage, visitweek, age_days, pma) |>
+  write.table_sas(file = "exclude/r2sas/life6mo.txt")
+
+# LIFE dataset (for package comparisons) ---------------------------------------
 life6mo_comp <- gigs::life6mo |>
   dplyr::mutate(
     weight_kg = weight_g / 1000,
@@ -147,5 +154,6 @@ life6mo_comp <- gigs::life6mo |>
                 lhaz, stunting, stunting_outliers,
                 wlz, wasting, wasting_outliers,
                 waz, wfa, wfa_outliers,
-                hcaz, headsize)
+                hcaz, headsize) |>
+  dplyr::mutate(dplyr::across(dplyr::where(is.factor), as.character))
 write.table_sas(life6mo_comp, file = "exclude/r2sas/life6mo_comparison.txt")
