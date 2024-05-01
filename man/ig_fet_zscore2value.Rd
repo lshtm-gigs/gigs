@@ -22,6 +22,7 @@
 \alias{ig_fet_avfga_zscore2value}
 \alias{ig_fet_pvfga_zscore2value}
 \alias{ig_fet_cmfga_zscore2value}
+\alias{ig_fet_hefwfga_zscore2value}
 \alias{ig_fet_centile2value}
 \alias{ig_fet_hcfga_centile2value}
 \alias{ig_fet_bpdfga_centile2value}
@@ -43,6 +44,7 @@
 \alias{ig_fet_avfga_centile2value}
 \alias{ig_fet_pvfga_centile2value}
 \alias{ig_fet_cmfga_centile2value}
+\alias{ig_fet_hefwfga_centile2value}
 \title{Convert z-scores/centiles to values in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
 standards}
 \usage{
@@ -88,6 +90,8 @@ ig_fet_pvfga_zscore2value(z, gest_days)
 
 ig_fet_cmfga_zscore2value(z, gest_days)
 
+ig_fet_hefwfga_zscore2value(z, gest_days)
+
 ig_fet_centile2value(p, x, acronym)
 
 ig_fet_hcfga_centile2value(p, gest_days)
@@ -129,6 +133,8 @@ ig_fet_avfga_centile2value(p, gest_days)
 ig_fet_pvfga_centile2value(p, gest_days)
 
 ig_fet_cmfga_centile2value(p, gest_days)
+
+ig_fet_hefwfga_centile2value(p, gest_days)
 }
 \arguments{
 \item{z, p}{Numeric vector of length one or more with centiles/z-scores to
@@ -150,7 +156,9 @@ in use (defined by \code{acronym}). These are:
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
 \item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
 \code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
-standards).
+standards).#
+\item Between 126 and 287 days for \code{"hefwfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+standard for Hadlock-based estimated fetal weight).
 }
 
 By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
@@ -178,6 +186,7 @@ Growth standard to use. Each value should be one of:
 \item \code{"avfga"} (anterior horn of lateral ventricle-for-GA)
 \item \code{"pvfga"} (atrium of posterior horn of lateral ventricle-for-GA)
 \item \code{"cmfga"} (cisterna magna-for-GA)
+\item \code{"hefwfga"} (Hadlock esimated fetal weight-for-GA)
 }
 
 This argument is case-sensitive. If \code{acronym} is not one of the values
@@ -246,6 +255,10 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 \strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
+
+Stirnemann J, Salomon LJ, Papageorghiou AT. \strong{INTERGROWTH-21st standards for
+Hadlock's estimation of fetal weight.} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(6):946-948} \doi{10.1002/uog.22000}
 
 Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
 \strong{International standards for symphysis-fundal height based on serial

@@ -22,6 +22,7 @@
 \alias{ig_fet_avfga_value2zscore}
 \alias{ig_fet_pvfga_value2zscore}
 \alias{ig_fet_cmfga_value2zscore}
+\alias{ig_fet_hefwfga_value2zscore}
 \alias{ig_fet_value2centile}
 \alias{ig_fet_hcfga_value2centile}
 \alias{ig_fet_bpdfga_value2centile}
@@ -43,6 +44,7 @@
 \alias{ig_fet_avfga_value2centile}
 \alias{ig_fet_pvfga_value2centile}
 \alias{ig_fet_cmfga_value2centile}
+\alias{ig_fet_hefwfga_value2centile}
 \title{Convert values to z-scores/centiles in the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal
 Growth standards}
 \usage{
@@ -88,6 +90,8 @@ ig_fet_pvfga_value2zscore(atr_phlv_mm, gest_days)
 
 ig_fet_cmfga_value2zscore(cist_mag_mm, gest_days)
 
+ig_fet_hefwfga_value2zscore(hadlock_efw_g, gest_days)
+
 ig_fet_value2centile(y, x, acronym)
 
 ig_fet_hcfga_value2centile(headcirc_mm, gest_days)
@@ -129,6 +133,8 @@ ig_fet_avfga_value2centile(ant_hlv_mm, gest_days)
 ig_fet_pvfga_value2centile(atr_phlv_mm, gest_days)
 
 ig_fet_cmfga_value2centile(cist_mag_mm, gest_days)
+
+ig_fet_hefwfga_value2centile(hadlock_efw_g, gest_days)
 }
 \arguments{
 \item{y}{Numeric vector of length one or more with anthropometric
@@ -150,7 +156,9 @@ in use (defined by \code{acronym}). These are:
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
 \item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
 \code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
-standards).
+standards).#
+\item Between 126 and 287 days for \code{"hefwfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
+standard for Hadlock-based estimated fetal weight).
 }
 
 By default, gigs will replace out-of-bounds elements in \code{x} with \code{NA} and
@@ -178,6 +186,7 @@ Growth standard to use. Each value should be one of:
 \item \code{"avfga"} (anterior horn of lateral ventricle-for-GA)
 \item \code{"pvfga"} (atrium of posterior horn of lateral ventricle-for-GA)
 \item \code{"cmfga"} (cisterna magna-for-GA)
+\item \code{"hefwfga"} (Hadlock esimated fetal weight-for-GA)
 }
 
 This argument is case-sensitive. If \code{acronym} is not one of the values
@@ -297,6 +306,10 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 \strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
+
+Stirnemann J, Salomon LJ, Papageorghiou AT. \strong{INTERGROWTH-21st standards for
+Hadlock's estimation of fetal weight.} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(6):946-948} \doi{10.1002/uog.22000}
 
 Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
 \strong{International standards for symphysis-fundal height based on serial

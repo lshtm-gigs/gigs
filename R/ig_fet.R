@@ -16,7 +16,9 @@
 #'     INTERGROWTH-21<sup>st</sup> Fetal Doppler standards).
 #'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`, and
 #'     `"pvfga"` (the INTERGROWTH-21<sup>st</sup> Fetal Brain Development
-#'     standards).
+#'     standards).#
+#'   * Between 126 and 287 days for `"hefwfga"` (the INTERGROWTH-21<sup>st</sup>
+#'     standard for Hadlock-based estimated fetal weight).
 #'
 #'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
 #'   warn you. You can customise this behaviour using the [GIGS package-level
@@ -42,6 +44,7 @@
 #'   * `"avfga"` (anterior horn of lateral ventricle-for-GA)
 #'   * `"pvfga"` (atrium of posterior horn of lateral ventricle-for-GA)
 #'   * `"cmfga"` (cisterna magna-for-GA)
+#'   * `"hefwfga"` (Hadlock esimated fetal weight-for-GA)
 #'
 #'   This argument is case-sensitive. If `acronym` is not one of the values
 #'   list above, gigs will throw an error.
@@ -61,6 +64,10 @@
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
+#'
+#' Stirnemann J, Salomon LJ, Papageorghiou AT. **INTERGROWTH-21st standards for
+#' Hadlock's estimation of fetal weight.** *Ultrasound Obstet Gynecol* 2020,
+#' **56(6):946-948** \doi{10.1002/uog.22000}
 #'
 #' Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
 #' **International standards for symphysis-fundal height based on serial
@@ -357,6 +364,17 @@ ig_fet_cmfga_zscore2value <- function(z, gest_days) {
 }
 
 #' @rdname ig_fet_zscore2value
+#' @export
+ig_fet_hefwfga_zscore2value <- function(z, gest_days) {
+  acronym <- "hefwfga"
+  validate_ig_fet(z = z,
+                  x = gest_days,
+                  acronym = acronym,
+                  x_name = gigs::ig_fet[[acronym]][["x"]]) |>
+    do.call(what = ig_fet_z2v_internal)
+}
+
+#' @rdname ig_fet_zscore2value
 #' @importFrom stats qnorm
 #' @export
 ig_fet_centile2value <- function(p, x, acronym) {
@@ -577,6 +595,17 @@ ig_fet_pvfga_centile2value <- function(p, gest_days) {
 #' @export
 ig_fet_cmfga_centile2value <- function(p, gest_days) {
   acronym <- "cmfga"
+  validated <- validate_ig_fet(p = p,
+                               x = gest_days,
+                               acronym = acronym,
+                               x_name = gigs::ig_fet[[acronym]][["x"]])
+  with(validated, ig_fet_z2v_internal(qnorm(p), x, acronym))
+}
+
+#' @rdname ig_fet_zscore2value
+#' @export
+ig_fet_hefwfga_centile2value <- function(p, gest_days) {
+  acronym <- "hefwfga"
   validated <- validate_ig_fet(p = p,
                                x = gest_days,
                                acronym = acronym,
@@ -913,6 +942,18 @@ ig_fet_cmfga_value2zscore <- function(cist_mag_mm, gest_days) {
 }
 
 #' @rdname ig_fet_value2zscore
+#' @export
+ig_fet_hefwfga_value2zscore <- function(hadlock_efw_g, gest_days) {
+  acronym <- "hefwfga"
+  validate_ig_fet(y = hadlock_efw_g,
+                  x = gest_days,
+                  acronym = acronym,
+                  y_name = gigs::ig_fet[[acronym]][["y"]],
+                  x_name = gigs::ig_fet[[acronym]][["x"]]) |>
+    do.call(what = ig_fet_v2z_internal)
+}
+
+#' @rdname ig_fet_value2zscore
 #' @importFrom stats pnorm
 #' @export
 ig_fet_value2centile <- function(y, x, acronym) {
@@ -1181,6 +1222,19 @@ ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
     pnorm()
 }
 
+#' @rdname ig_fet_value2zscore
+#' @export
+ig_fet_hefwfga_value2centile <- function(hadlock_efw_g, gest_days) {
+  acronym <- "hefwfga"
+  validate_ig_fet(y = hadlock_efw_g,
+                  x = gest_days,
+                  acronym = acronym,
+                  y_name = gigs::ig_fet[[acronym]][["y"]],
+                  x_name = gigs::ig_fet[[acronym]][["x"]]) |>
+    do.call(what = ig_fet_v2z_internal) |>
+    pnorm()
+}
+
 # INTERNAL: INTERGROWTH-21st Fetal standards conversion logic ------------------
 
 #' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Fetal standards
@@ -1190,8 +1244,8 @@ ig_fet_cmfga_value2centile <- function(cist_mag_mm, gest_days) {
 ig_fet_z2v_internal <- function(z, x, acronym) {
   if (acronym %in% c("pifga", "rifga", "sdrfga")) {
     ig_fet_doppler_z2y(z = z, gest_days = x, acronym = acronym)
-  } else if (acronym == "efwfga") {
-    ig_fet_efw_z2y(z = z, gest_days = x)
+  } else if (acronym %in% c("efwfga", "hefwfga")) {
+    ig_fet_lms_z2y(z = z, gest_days = x, acronym = acronym)
   } else if (acronym == "gwgfga") {
     ig_fet_gwg_z2y(z = z, gest_days = x)
   } else {
@@ -1206,8 +1260,8 @@ ig_fet_z2v_internal <- function(z, x, acronym) {
 ig_fet_v2z_internal <- function(y, x, acronym) {
   if (acronym %in% c("pifga", "rifga", "sdrfga")) {
     ig_fet_doppler_y2z(y = y, gest_days = x, acronym = acronym)
-  } else if (acronym == "efwfga") {
-    ig_fet_efw_y2z(efw_g = y, gest_days = x)
+  } else if (acronym %in% c("efwfga", "hefwfga")) {
+    ig_fet_lms_y2z(efw_g = y, gest_days = x, acronym = acronym)
   } else if (acronym == "gwgfga") {
     ig_fet_gwg_y2z(gwg_kg = y, gest_days = x)
   } else {
@@ -1380,25 +1434,44 @@ ig_fet_mu_sigma_z2y <- function(z, x, acronym) {
 
 # INTERNAL: Estimated fetal weight functions -----------------------------------
 
-#' Get lambda/mu/sigma values for the INTERGROWTH-21st estimated fetal weight
-#' standard (internal; part of the INTERGROWTH-21st Fetal Growth standards)
+#' Get lambda/mu/sigma values for some INTERGROWTH-21st fetal standards
+#' (internal; part of the INTERGROWTH-21st Fetal Growth standards)
 #'
 #' @param gest_days Numeric vector of gestational age in days, ranging from
 #'   `154` to `280`.
+#' @param acronym A single string denoting an INTERGROWTH-21<sup>st</sup> fetal
+#'   standard. Should be one of `"efwfga"` or `"hewfga"`.
 #' @references
 #' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
-#' @returns Named list with three elements `l` (lambda), `m` (mu),
-#'   and `s` (sigma), each of which is the same length as `gest_days`.
+#'
+#' Stirnemann J, Salomon LJ, Papageorghiou AT. **INTERGROWTH-21st standards for
+#' Hadlock's estimation of fetal weight.** *Ultrasound Obstet Gynecol* 2020,
+#' **56(6):946-948** \doi{10.1002/uog.22000}
+#' @returns Named list with three elements `l` (lambda), `m` (mu), and `s`
+#'   (sigma), each of which is the same length as `gest_days`.
 #' @noRd
-ig_fet_efw_lms <- function(gest_days) {
+ig_fet_lms <- function(gest_days, acronym) {
   GA <- gest_days / 7
-  log_ga <- log(GA)
-  list(l = -4.257629 - 2162.234 * GA^(-2) + 0.0002301829 * GA^3,
-       m = 4.956737 + 0.0005019687 * GA^3 - 0.0001227065 * GA^3 * log_ga,
-       s = 1e-04 * (-6.997171 + 0.057559 * GA^3 - 0.01493946 * GA^3 * log_ga))
+  GA_cubed <- GA^3 # for both EFW standards
+  efwfga_coeff <- GA_cubed * log(GA) # for IG-21st EFW standard
+  GA_10 <- GA / 10 # for Hadlock EFW standard
+  hefwfga_coeff <- log(GA_10) * (GA_10)^(-2) # for Hadlock EFW standard
+  switch(
+    acronym,
+    efwfga = list(
+      l = -4.257629 - 2162.234 * GA^(-2) + 0.0002301829 * GA_cubed,
+      m = 4.956737 + 0.0005019687 * GA_cubed - 0.0001227065 * efwfga_coeff,
+      s = 1e-04 * (-6.997171 + 0.057559 * GA_cubed - 0.01493946 * efwfga_coeff)
+    ),
+    hefwfga = list(
+      l = 9.43643 + 9.41579 * (GA_10)^(-2) - 83.54220 * hefwfga_coeff,
+      m = -2.42272 + 1.86478 * GA^0.5 - 1.93299e-5 * GA_cubed,
+      s =  0.0193557  + 0.0310716 * (GA_10)^(-2) - 0.0657587 * hefwfga_coeff
+    )
+  )
 }
 
 #' Convert values to z-scores in the INTERGROWTH-21st estimated fetal weight
@@ -1413,13 +1486,17 @@ ig_fet_efw_lms <- function(gest_days) {
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
+#'
+#' Stirnemann J, Salomon LJ, Papageorghiou AT. **INTERGROWTH-21st standards for
+#' Hadlock's estimation of fetal weight.** *Ultrasound Obstet Gynecol* 2020,
+#' **56(6):946-948** \doi{10.1002/uog.22000}
 #' @returns Numeric vector with same length as `z` and `gest_days` containing
 #'   z-scores.
 #' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
-ig_fet_efw_y2z <- function(efw_g, gest_days) {
-  lms <- ig_fet_efw_lms(gest_days)
+ig_fet_lms_y2z <- function(efw_g, gest_days, acronym) {
+  lms <- ig_fet_lms(gest_days, acronym)
   efw_g[efw_g < 0] <- NA
   log_efw <- log(efw_g)
   with(lms,
@@ -1440,13 +1517,17 @@ ig_fet_efw_y2z <- function(efw_g, gest_days) {
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 #' Project.** *Ultrasound Obstet Gynecol* 2016, **49:478-486**
 #' \doi{10.1002/uog.17347}
+#'
+#' Stirnemann J, Salomon LJ, Papageorghiou AT. **INTERGROWTH-21st standards for
+#' Hadlock's estimation of fetal weight.** *Ultrasound Obstet Gynecol* 2020,
+#' **56(6):946-948** \doi{10.1002/uog.22000}
 #' @returns Numeric vector with same length as `z` and `gest_days` containing
 #'   expected estimated fetal weight values in grams.
 #' @srrstats {G3.0} Using `abs() < sqrt(.Machine$double.eps)` for floating point
 #'   equality.
 #' @noRd
-ig_fet_efw_z2y <- function(z, gest_days) {
-  lms <- ig_fet_efw_lms(gest_days)
+ig_fet_lms_z2y <- function(z, gest_days, acronym) {
+  lms <- ig_fet_lms(gest_days, acronym)
   log_efw <- with(lms,
                   ifelse(test = abs(l) < sqrt(.Machine$double.eps),
                           yes = m * exp(s * z),

@@ -16,6 +16,9 @@
   * The `categorise_*()` functions for growth analysis. These functions take 
     vectors of growth centiles/z-scores as input, and return a factor of 
     growth categories.
+  * Added the INTERGROWTH-21st standard for estimated fetal weight based on 
+    the Hadlock formula. The is available through `ig_fet_value2zscore()` and
+    friends provided that `acronym = "hefwfga"`.
   * You can now set all GIGS options at once with `gigs_options_set()`.
 * **FIXES**:
   * `.gigs_options` is now actively exported by gigs and available to end-users
