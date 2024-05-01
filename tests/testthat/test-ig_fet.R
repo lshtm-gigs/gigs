@@ -15,6 +15,7 @@ fet_zvals <- function(acronym) {
     avfga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
     pvfga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
     cmfga = qnorm(c(0.03, 0.05, 0.5, 0.95, 0.97)),
+    hefwfga = qnorm(c(0.03, 0.05, 0.1, 0.5, 0.9, 0.95, 0.97)),
     -3:3) # Where z-score tables are available
 }
 
@@ -38,7 +39,9 @@ fet_roundto <- function(acronym) {
                                "avfga", "pvfga", "cmfga", "tcdfga", "gwgfga",
                                "gaftcd"),
          yes = 2,
-         no = ifelse(acronym %in% c("efwfga", "gafcrl"), yes = 0, no = 1))
+         no = ifelse(acronym %in% c("efwfga", "gafcrl", "hefwfga"),
+                     yes = 0,
+                     no = 1))
 }
 
 
