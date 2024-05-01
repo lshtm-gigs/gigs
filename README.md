@@ -32,11 +32,11 @@ including child health researchers, policymakers, and clinicians. This
 package is best suited to growth data where the gestational age (GA) of
 each child is known, as the use of the growth standards included in
 **gigs** is GA-dependent. We recommend you check out the [available
-standards](#available-standards) section to see if your anthropometric
-measurements can be converted to z-scores/centiles by **gigs**. We
-recommend using **gigs** to generate continuous or categorical measures
-of fetal/newborn/child growth, which can then be used in downstream
-analyses.
+standards](#available-international-growth-standards) section to see if
+your anthropometric measurements can be converted to z-scores/centiles
+by **gigs**. We recommend using **gigs** to generate continuous or
+categorical measures of fetal/newborn/child growth, which can then be
+used in downstream analyses.
 
 ## Installation
 
@@ -246,6 +246,7 @@ INTERGROWTH-21<sup>st</sup> project:
   | `avfga`  | anterior horn of the lateral ventricle-for-GA                | mm   | 105 to 252 days |
   | `pvfga`  | atrium of the posterior horn of the lateral ventricle-for-GA | mm   | 105 to 252 days |
   | `cmfga`  | cisterna magna-for-GA                                        | mm   | 105 to 252 days |
+  | `efwfga` | Hadlock estimated fetal weight-for-GA                        | g    | 126 to 287 days |
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
