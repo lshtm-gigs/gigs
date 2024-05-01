@@ -5,7 +5,7 @@
 \alias{life6mo}
 \title{Data extract from the Low birthweight Infant Feeding Exploration (LIFE) study}
 \format{
-A data frame with 2,511 rows and 10 variables:
+A data frame with 2,191 rows and 10 variables:
 \itemize{
 \item{\code{id}:}{  Unique ID for each infant in the dataset (1--300).}
 \item{\code{gestage}:}{  Best obstetric estimate of gestational age in days

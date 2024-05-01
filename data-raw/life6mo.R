@@ -30,7 +30,7 @@ life6mo <- readxl::read_xls(file.path("data-raw", "tables", "life6mo",
   # Remove rows where gestational age is not within INTERGROWTH-21st NBS bounds
   dplyr::filter(gestage > 24 * 7 & gestage < 300) |>
   # Re-generate IDs |>
-  dplyr::mutate(id = dplyr::consecutive_id(id)) |>
+  dplyr::mutate(id = as.integer(dplyr::consecutive_id(id))) |>
   # Remove rows with all missing measurement data --> not useful
   ## Start by converting 0 meaninfwgt to NA
   dplyr::mutate(meaninfwgt = ifelse(meaninfwgt == 0, yes = NA, meaninfwgt)) |>

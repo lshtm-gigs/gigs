@@ -243,7 +243,7 @@ NULL
 #' @description A subset of anthropometric data for 300 singleton infants
 #' enrolled in the Low birthweight Infant Feeding Exploration (LIFE) study. The
 #' variables are as follows:
-#' @format A data frame with 2,511 rows and 10 variables:
+#' @format A data frame with 2,191 rows and 10 variables:
 #' \itemize{
 #'   \item{`id`:}{  Unique ID for each infant in the dataset (1--300).}
 #'   \item{`gestage`:}{  Best obstetric estimate of gestational age in days
