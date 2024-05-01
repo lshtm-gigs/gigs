@@ -75,8 +75,8 @@ be between certain values depending on the standard in use (defined by
 \code{acronym}). These are:
 \itemize{
 \item Between 0 and 1856 days for \code{"wfa"}, \code{"bfa"}, \code{"lhfa"}, and \code{"hcfa"}.
-\item Between 45 and 110 days for \code{"wfl"}.
-\item Between 65 and 120 days for \code{"wfh"}.
+\item Between 45 and 110 cm for \code{"wfl"}.
+\item Between 65 and 120 cm for \code{"wfh"}.
 \item Between 91 and 1856 days for \code{"acfa"}, \code{"ssfa"}, \code{"tsfa"}.
 }
 

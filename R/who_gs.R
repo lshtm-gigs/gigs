@@ -6,8 +6,8 @@
 #'   be between certain values depending on the standard in use (defined by
 #'   `acronym`). These are:
 #'   * Between 0 and 1856 days for `"wfa"`, `"bfa"`, `"lhfa"`, and `"hcfa"`.
-#'   * Between 45 and 110 days for `"wfl"`.
-#'   * Between 65 and 120 days for `"wfh"`.
+#'   * Between 45 and 110 cm for `"wfl"`.
+#'   * Between 65 and 120 cm for `"wfh"`.
 #'   * Between 91 and 1856 days for `"acfa"`, `"ssfa"`, `"tsfa"`.
 #'
 #'   By default, gigs will replace out-of-bounds elements in `x` with `NA` and
