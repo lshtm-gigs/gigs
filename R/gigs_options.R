@@ -61,7 +61,10 @@ gigs_option_get <- function(option, silent = FALSE) {
   checkmate::assert_subset(option, choices = names(gigs::.gigs_options))
   value <- get(option, envir = gigs::.gigs_options, inherits = FALSE)
   if (!silent) {
-    message("gigs options: '", option, "' is currently set to \"", value, "\".")
+    rlang::inform(
+      c("i" = paste0("gigs options: '", option, "' is currently set to \"",
+                     value, "\"."))
+    )
   }
   invisible(value)
 }
@@ -77,7 +80,10 @@ gigs_option_set <- function(option, new_value, silent = FALSE) {
   assign(x = option, value = new_value, envir = gigs::.gigs_options,
          inherits = FALSE)
   if (!silent) {
-    message("gigs options: '",  option, "' is now set to \"", new_value, "\".")
+    rlang::inform(
+      c("i" = paste0("gigs options: '",  option, "' is now set to \"",
+                     new_value, "\"."))
+    )
   }
   invisible(new_value)
 }
