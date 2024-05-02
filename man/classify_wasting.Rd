@@ -77,14 +77,14 @@ Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
 \examples{
 # Returns factor with stunting classifications
 data <- data.frame(
-  wtkg = c(5.75, 2.18, 3.00, 6.75),
+  wt_kg = c(5.75, 2.18, 3.00, 6.75),
   length_height = c(67.7, 46.6, 50.0, 80.1),
   gestage = c(251, 197, 225, 243),
   age = c(251, 197, 225, 243),
   sex =  c("F", "M", "F", "M")
 )
 data |>
-  classify_wasting(weight_kg = wtkg,
+  classify_wasting(weight_kg = wt_kg,
                    lenht_cm = length_height,
                    gest_days = gestage,
                    age_days = age,

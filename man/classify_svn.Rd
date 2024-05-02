@@ -81,13 +81,13 @@ appropriate-for-gestational age; LGA, large-for-gestational age.
 }
 \examples{
 data <- data.frame(
-  wtkg = c(1.5, 2.6, 2.6, 3.5),
+  wt_kg = c(1.5, 2.6, 2.6, 3.5),
   gestage = c(235, 257, 275, 295),
   sex = c("F", "M", "F", "M")
 )
 
 data |>
-  classify_svn(weight_kg = wtkg,
+  classify_svn(weight_kg = wt_kg,
                gest_days = gestage,
                sex = sex)
 }

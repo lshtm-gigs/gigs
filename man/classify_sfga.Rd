@@ -73,13 +73,13 @@ Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 \examples{
 data <- data.frame(
- wtkg = c(2.2, 2.5, 3.3, 4.0),
+ wt_kg = c(2.2, 2.5, 3.3, 4.0),
  gestage = 266:269,
  sex = c("F", "M", "F", "M")
 )
 
 data |>
-  classify_sfga(weight_kg = wtkg,
+  classify_sfga(weight_kg = wt_kg,
                 gest_days = gestage,
                 sex = sex)
 }

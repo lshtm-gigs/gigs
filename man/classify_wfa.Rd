@@ -73,13 +73,13 @@ Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{
 }
 \examples{
 data <- data.frame(
-  wtkg = c(7.2, 4.5, 9.1, 24),
+  wt_kg = c(7.2, 4.5, 9.1, 24),
   age = c(401, 185, 101, 607),
   gestage = 7 * c(27, 36, 40, 41),
   sex = c("F", "M", "F", "M")
 )
 data |>
-  classify_wfa(weight_kg = wtkg,
+  classify_wfa(weight_kg = wt_kg,
                age_days = age,
                gest_days = gestage,
                sex = sex)
