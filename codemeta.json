@@ -189,7 +189,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1943.371KB",
+  "fileSize": "1994.026KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -203,7 +203,7 @@
       ],
       "name": "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
       "url": "https://github.com/lshtm-gigs/gigs/",
-      "description": "0.4.1"
+      "description": "0.4.1.9000"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
