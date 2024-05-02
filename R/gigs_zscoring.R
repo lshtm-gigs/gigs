@@ -36,8 +36,8 @@
 #' @param gest_days A numeric vector of length one or more with gestational ages
 #'   in days.
 #' @inheritParams shared_roxygen_params
-#' @note These functions expect vectors which have lengths such that they can
-#'   be recycled with [vctrs::vec_recycle_common()].
+#' @note These functions expect vectors which are recyclable with
+#'   [vctrs::vec_recycle_common()].
 #' @rdname gigs_zscoring
 #' @noRd
 gigs_waz <- function(weight_kg, age_days, gest_days, sex) {
