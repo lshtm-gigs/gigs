@@ -13,7 +13,7 @@ classify_growth(
   weight_kg = NULL,
   lenht_cm = NULL,
   headcirc_cm = NULL,
-  .analyses = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
+  .outcomes = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
   .new = list(sfga = c("birthweight_centile", "sfga", "sfga_severe"), svn =
     c("birthweight_centile", "svn"), stunting = c("lhaz", "stunting",
     "stunting_outliers"), wasting = c("wlz", "wasting", "wasting_outliers"), wfa =
@@ -54,7 +54,7 @@ column in \code{.data} which is a numeric vector of length/height values in cm.}
 column in \code{.data} which is a numeric vector of head circumference values in
 cm.}
 
-\item{.analyses}{A character vector of up to six elements in length
+\item{.outcomes}{A character vector of up to six elements in length
 describing which growth analyses you want to run. Use this when you supply
 data that can be used to generate multiple growth indicators, but only want
 to run a specific set. This argument is case-sensitive, and an error will
@@ -97,40 +97,49 @@ the column referred to by \code{weight_kg} has an age between \code{0} and \code
 data <- data.frame(
   agedays = c(0, 100, 100),
   gestage = c(270, 270, 270),
-  wtkg = c(2.5, 7.5, 7.5),
+  wt_kg = c(2.5, 7.5, 7.5),
   len_cm = c(45, 60, 60),
   head_cm = c(36, 40.2, 40.2),
   sex = c("M", "M", "F")
 )
 
 data_classified <- classify_growth(data,
-                                   weight_kg = wtkg,
                                    age_days = agedays,
                                    gest_days = gestage,
+                                   weight_kg = wt_kg,
                                    sex = sex)
 
 data_classified
 
 # Use `.analyses` to set which growth indicators will be computed
 data_svn <- classify_growth(data,
-                            weight_kg = wtkg,
                             age_days = agedays,
                             gest_days = gestage,
                             sex = sex,
-                            .analyses = "svn")
+                            weight_kg = wt_kg,
+                            .outcomes = "svn")
 
 data_svn
 
 # Use `.new` to set new column names
 data_svn <- classify_growth(data,
-                            weight_kg = wtkg,
                             age_days = agedays,
                             gest_days = gestage,
                             sex = sex,
-                            .analyses = "svn",
+                            .outcomes = "svn",
+                            weight_kg = wt_kg,
                             .new = list("svn" = c("ig_nbs_centile",
                                                   "SVN_Category")))
 data_svn
+
+# The function will warn you if you don't provide data for your outcomes
+data_svn_stunting <- classify_growth(data,
+                                     age_days = agedays,
+                                     gest_days = gestage,
+                                     sex = sex,
+                                     weight_kg = wt_kg,
+                                     .outcomes = c("svn", "stunting"))
+data_svn_stunting
 }
 \references{
 WHO. \strong{Physical status: the use and interpretation of anthropometry. Report

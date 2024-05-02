@@ -45,13 +45,13 @@
 #'   a centile for each observation.
 #' @examples
 #' data <- data.frame(
-#'  wtkg = c(2.2, 2.5, 3.3, 4.0),
+#'  wt_kg = c(2.2, 2.5, 3.3, 4.0),
 #'  gestage = 266:269,
 #'  sex = c("F", "M", "F", "M")
 #' )
 #'
 #' data |>
-#'   classify_sfga(weight_kg = wtkg,
+#'   classify_sfga(weight_kg = wt_kg,
 #'                 gest_days = gestage,
 #'                 sex = sex)
 #' @inherit categorise_sfga details references
@@ -99,13 +99,13 @@ classify_sfga <- function(
 #' @inherit categorise_svn details
 #' @examples
 #' data <- data.frame(
-#'   wtkg = c(1.5, 2.6, 2.6, 3.5),
+#'   wt_kg = c(1.5, 2.6, 2.6, 3.5),
 #'   gestage = c(235, 257, 275, 295),
 #'   sex = c("F", "M", "F", "M")
 #' )
 #'
 #' data |>
-#'   classify_svn(weight_kg = wtkg,
+#'   classify_svn(weight_kg = wt_kg,
 #'                gest_days = gestage,
 #'                sex = sex)
 #' @seealso [ig_nbs_wfga_value2centile()], which this function uses to get
@@ -226,14 +226,14 @@ classify_stunting <- function(
 #' @examples
 #' # Returns factor with stunting classifications
 #' data <- data.frame(
-#'   wtkg = c(5.75, 2.18, 3.00, 6.75),
+#'   wt_kg = c(5.75, 2.18, 3.00, 6.75),
 #'   length_height = c(67.7, 46.6, 50.0, 80.1),
 #'   gestage = c(251, 197, 225, 243),
 #'   age = c(251, 197, 225, 243),
 #'   sex =  c("F", "M", "F", "M")
 #' )
 #' data |>
-#'   classify_wasting(weight_kg = wtkg,
+#'   classify_wasting(weight_kg = wt_kg,
 #'                    lenht_cm = length_height,
 #'                    gest_days = gestage,
 #'                    age_days = age,
@@ -287,13 +287,13 @@ classify_wasting <- function(.data,
 #' @inherit categorise_stunting references
 #' @examples
 #' data <- data.frame(
-#'   wtkg = c(7.2, 4.5, 9.1, 24),
+#'   wt_kg = c(7.2, 4.5, 9.1, 24),
 #'   age = c(401, 185, 101, 607),
 #'   gestage = 7 * c(27, 36, 40, 41),
 #'   sex = c("F", "M", "F", "M")
 #' )
 #' data |>
-#'   classify_wfa(weight_kg = wtkg,
+#'   classify_wfa(weight_kg = wt_kg,
 #'                age_days = age,
 #'                gest_days = gestage,
 #'                sex = sex)
@@ -396,7 +396,7 @@ classify_headsize <- function(.data,
 #'   taken <12hrs after birth, i.e. `age_days < 0.5`.
 #' @inheritParams classify_wasting
 #' @inheritParams classify_headsize
-#' @param .analyses A character vector of up to six elements in length
+#' @param .outcomes A character vector of up to six elements in length
 #'   describing which growth analyses you want to run. Use this when you supply
 #'   data that can be used to generate multiple growth indicators, but only want
 #'   to run a specific set. This argument is case-sensitive, and an error will
@@ -431,40 +431,49 @@ classify_headsize <- function(.data,
 #' data <- data.frame(
 #'   agedays = c(0, 100, 100),
 #'   gestage = c(270, 270, 270),
-#'   wtkg = c(2.5, 7.5, 7.5),
+#'   wt_kg = c(2.5, 7.5, 7.5),
 #'   len_cm = c(45, 60, 60),
 #'   head_cm = c(36, 40.2, 40.2),
 #'   sex = c("M", "M", "F")
 #' )
 #'
 #' data_classified <- classify_growth(data,
-#'                                    weight_kg = wtkg,
 #'                                    age_days = agedays,
 #'                                    gest_days = gestage,
+#'                                    weight_kg = wt_kg,
 #'                                    sex = sex)
 #'
 #' data_classified
 #'
 #' # Use `.analyses` to set which growth indicators will be computed
 #' data_svn <- classify_growth(data,
-#'                             weight_kg = wtkg,
 #'                             age_days = agedays,
 #'                             gest_days = gestage,
 #'                             sex = sex,
-#'                             .analyses = "svn")
+#'                             weight_kg = wt_kg,
+#'                             .outcomes = "svn")
 #'
 #' data_svn
 #'
 #' # Use `.new` to set new column names
 #' data_svn <- classify_growth(data,
-#'                             weight_kg = wtkg,
 #'                             age_days = agedays,
 #'                             gest_days = gestage,
 #'                             sex = sex,
-#'                             .analyses = "svn",
+#'                             .outcomes = "svn",
+#'                             weight_kg = wt_kg,
 #'                             .new = list("svn" = c("ig_nbs_centile",
 #'                                                   "SVN_Category")))
 #' data_svn
+#'
+#' # The function will warn you if you don't provide data for your outcomes
+#' data_svn_stunting <- classify_growth(data,
+#'                                      age_days = agedays,
+#'                                      gest_days = gestage,
+#'                                      sex = sex,
+#'                                      weight_kg = wt_kg,
+#'                                      .outcomes = c("svn", "stunting"))
+#' data_svn_stunting
 #' @references
 #' WHO. **Physical status: the use and interpretation of anthropometry. Report
 #' of a WHO Expert Committee.** *World Health Organisation Technical Report
@@ -501,15 +510,15 @@ classify_headsize <- function(.data,
 #' @importFrom rlang eval_tidy enquo
 #' @export
 classify_growth <- function(
-    .data,
-    gest_days,
-    age_days,
-    sex,
-    weight_kg = NULL,
-    lenht_cm = NULL,
-    headcirc_cm = NULL,
-    .analyses = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
-    .new = list(
+  .data,
+  gest_days,
+  age_days,
+  sex,
+  weight_kg = NULL,
+  lenht_cm = NULL,
+  headcirc_cm = NULL,
+  .outcomes = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
+  .new = list(
       sfga = c("birthweight_centile", "sfga", "sfga_severe"),
       svn = c("birthweight_centile", "svn"),
       stunting = c("lhaz", "stunting", "stunting_outliers"),
@@ -517,30 +526,30 @@ classify_growth <- function(
       wfa = c("waz", "wfa", "wfa_outliers"),
       headsize = c("hcaz", "headsize")
     ),
-    .verbose = TRUE) {
+  .verbose = TRUE) {
 
   # All possible analyses
   all_analyses <- c("sfga", "svn", "stunting", "wasting", "wfa", "headsize")
   all_analyses_len <- length(all_analyses)
   # Which analyses have been run
-  analyses_run <- rep_len(x = FALSE, length.out = all_analyses_len) |>
+  outcomes_run <- rep_len(x = FALSE, length.out = all_analyses_len) |>
     setNames(all_analyses)
 
   # Variable checking - basic assertions on length/type
   checkmate::assert_data_frame(.data, min.rows = 1)
-  checkmate::assert_character(.analyses, any.missing = FALSE, min.len = 1,
+  checkmate::assert_character(.outcomes, any.missing = FALSE, min.len = 1,
                               max.len = all_analyses_len)
-  checkmate::assert_subset(.analyses, choices = all_analyses)
+  checkmate::assert_subset(.outcomes, choices = all_analyses)
   checkmate::assert_list(.new, any.missing = FALSE, min.len = 1,
                          max.len = all_analyses_len)
   checkmate::qassert(x = .verbose, rules = "B1")
 
-  # Ascertain integrity of `.data`, `.analyses`, and `.new`
+  # Ascertain integrity of `.data`, `.outcomes`, and `.new`
   err_if_.new_in_.data(new = unique(unlist(.new)),
                        .data_colnames = colnames(.data))
   check_all_.new_names_valid(.new = .new, all = all_analyses)
-  check_all_.analyses_in_.new(.new = .new, .analyses = .analyses)
-  .new <- .new[.analyses]
+  check_all_.outcomes_in_.new(.new = .new, .outcomes = .outcomes)
+  .new <- .new[.outcomes]
   check_.new_vector_lengths(.new)
   .new <- check_sfga_svn_centile_colname(.new)
   check_if_.new_elements_unique(.new)
@@ -576,10 +585,11 @@ classify_growth <- function(
     )
   }
 
-  # Run analyses if data allows
-  for (analysis in .analyses) {
-    if (analysis == "sfga" | analysis == "svn" & !missing_weight) {
-      bweight_centile_not_calculated <- !.new[[analysis]][1] %in% names(.data)
+  # Compute outcomes if data allows
+  for (outcome in .outcomes) {
+    if (outcome == "sfga" | outcome == "svn") {
+      if (missing_weight) next
+      bweight_centile_not_calculated <- !.new[[outcome]][1] %in% names(.data)
       if (bweight_centile_not_calculated) {
         is_birthweight <-
           growth_data[["age_days"]] > -sqrt(.Machine$double.eps) &
@@ -596,66 +606,75 @@ classify_growth <- function(
           growth_data[["sex"]],
           acronym = "wfga"
         )
-        .data[[.new[[analysis]][1]]] <- ig_nbs_wfga_p
+        .data[[.new[[outcome]][1]]] <- ig_nbs_wfga_p
       }
-      if (analysis == "sfga") {
-        .data[[.new[[analysis]][2]]] <- categorise_sfga_internal(
+      if (outcome == "sfga") {
+        .data[[.new[[outcome]][2]]] <- categorise_sfga_internal(
           p = ig_nbs_wfga_p, severe = FALSE
         )
-        .data[[.new[[analysis]][3]]] <- categorise_sfga_internal(
+        .data[[.new[[outcome]][3]]] <- categorise_sfga_internal(
           p = ig_nbs_wfga_p, severe = TRUE
         )
       } else {
-        .data[[.new[[analysis]][2]]] <- categorise_svn_internal(
+        .data[[.new[[outcome]][2]]] <- categorise_svn_internal(
           p = ig_nbs_wfga_p, gest_days = growth_data[["gest_days"]]
         )
       }
     }
 
-    if (analysis == "stunting" & !missing_lenht) {
+    if (outcome == "stunting") {
+      if (missing_lenht) next
       lhaz <- with(growth_data,
                    gigs_lhaz_internal(lenht_cm = lenht_cm, age_days = age_days,
                                       gest_days = gest_days, sex = sex))
-      .data[[.new[[analysis]][1]]] <- lhaz
-      .data[[.new[[analysis]][2]]] <- categorise_stunting_internal(lhaz, FALSE)
-      .data[[.new[[analysis]][3]]] <- categorise_stunting_internal(lhaz, TRUE)
+      .data[[.new[[outcome]][1]]] <- lhaz
+      .data[[.new[[outcome]][2]]] <- categorise_stunting_internal(lhaz, FALSE)
+      .data[[.new[[outcome]][3]]] <- categorise_stunting_internal(lhaz, TRUE)
     }
 
-    if (analysis == "wasting" & !(missing_weight | missing_lenht)) {
+    if (outcome == "wasting") {
+      if (missing_weight | missing_lenht) next
       wlz <- with(growth_data,
                    gigs_wlz_internal(weight_kg = weight_kg,
                                      lenht_cm = lenht_cm, age_days = age_days,
                                      gest_days = gest_days, sex = sex))
-      .data[[.new[[analysis]][1]]] <- wlz
-      .data[[.new[[analysis]][2]]] <- categorise_wasting_internal(wlz, FALSE)
-      .data[[.new[[analysis]][3]]] <- categorise_wasting_internal(wlz, TRUE)
+      .data[[.new[[outcome]][1]]] <- wlz
+      .data[[.new[[outcome]][2]]] <- categorise_wasting_internal(wlz, FALSE)
+      .data[[.new[[outcome]][3]]] <- categorise_wasting_internal(wlz, TRUE)
     }
 
-    if (analysis == "wfa" & !missing_weight) {
+    if (outcome == "wfa") {
+      if (missing_weight) next
       waz <- with(growth_data,
                   gigs_waz_internal(weight_kg = weight_kg, age_days = age_days,
                                     gest_days = gest_days, sex = sex))
-      .data[[.new[[analysis]][1]]] <- waz
-      .data[[.new[[analysis]][2]]] <- categorise_wfa_internal(waz, FALSE)
-      .data[[.new[[analysis]][3]]] <- categorise_wfa_internal(waz, TRUE)
+      .data[[.new[[outcome]][1]]] <- waz
+      .data[[.new[[outcome]][2]]] <- categorise_wfa_internal(waz, FALSE)
+      .data[[.new[[outcome]][3]]] <- categorise_wfa_internal(waz, TRUE)
     }
 
-    if (analysis == "headsize" & !missing_headcirc) {
+    if (outcome == "headsize") {
+      if (missing_headcirc) next
       hcaz <- with(growth_data,
                    gigs_hcaz_internal(headcirc_cm = headcirc_cm,
                                       age_days = age_days, gest_days = gest_days,
                                       sex = sex))
-      .data[[.new[[analysis]][1]]] <- hcaz
-      .data[[.new[[analysis]][2]]] <- categorise_headsize_internal(hcaz)
+      .data[[.new[[outcome]][1]]] <- hcaz
+      .data[[.new[[outcome]][2]]] <- categorise_headsize_internal(hcaz)
     }
-    analyses_run[analysis] <- TRUE
-  }
-  if (.verbose) {
-    rlang::inform(message = msg_classify_growth(all = all_analyses,
-                                                requested = .analyses,
-                                                run = analyses_run))
+
+    outcomes_run[outcome] <- TRUE
   }
 
+ if (.verbose) {
+    msg <- msg_classify_growth(all = all_analyses,
+                               requested = .outcomes,
+                               run = outcomes_run,
+                               missing = c(weight_kg = missing_weight,
+                                           lenht_cm = missing_lenht,
+                                           headcirc_cm = missing_headcirc))
+    rlang::inform(msg)
+  }
   .data
 }
 
@@ -716,14 +735,14 @@ check_sfga_svn_centile_colname <- function(.new) {
 
 #' Check dot
 #' @noRd
-check_all_.analyses_in_.new <- function(.analyses, .new) {
-  lgl_.analyses_in_.new <- .analyses %in% names(.new)
+check_all_.outcomes_in_.new <- function(.outcomes, .new) {
+  lgl_.analyses_in_.new <- .outcomes %in% names(.new)
   if (!all(lgl_.analyses_in_.new)) {
     rlang::abort(
-      c("Elements of `.analyses` are missing new column names in `.new`:",
+      c("Elements of `.outcomes` are missing new column names in `.new`:",
         "!" = paste0("`.new` must have column names for",
                      paste_sep_commas(.new[!lgl_.analyses_in_.new]))),
-      class = "gigs_classify_growth_.analyses_not_in_.new"
+      class = "gigs_classify_growth_.outcomes_not_in_.new"
     )
   }
 }
@@ -813,8 +832,8 @@ err_if_.new_in_.data <- function(new, .data_colnames) {
   invisible(new)
 }
 
-#' Build a character vector describing which analyses in `classify_growth()`
-#' were performed, formatted for `rlang::inform()`
+#' Build a character vector describing which outcomes in `classify_growth()`
+#' were computed, formatted for `rlang::inform()`
 #'
 #' @param all A character vector denoting all growth analyses offered by GIGS.
 #'   Equivalent to the default argument of `.analyses` in [classify_growth()].
@@ -825,7 +844,7 @@ err_if_.new_in_.data <- function(new, .data_colnames) {
 #' @return A character vector the same length as `requested` describing which
 #'   growth indicators were (not) computed.
 #' @noRd
-msg_classify_growth <- function(all, requested, run) {
+msg_classify_growth <- function(all, requested, run, missing) {
   analysis_msg_strings <- c("Size-for-gestational age",
                             "Small vulnerable newborns", "Stunting", "Wasting",
                             "Weight-for-age", "Head size") |>
@@ -835,7 +854,25 @@ msg_classify_growth <- function(all, requested, run) {
   for (idx in seq_along(requested)) {
     chr_analysis <- requested[idx]
     lgl_was_run <- run[chr_analysis]
-    chr_was_run <- if (lgl_was_run) "Success" else "Not computed"
+    if (lgl_was_run) {
+      chr_was_run <- "Success"
+    } else {
+      if (chr_analysis != "stunting") {
+        chr_was_run <- switch(
+          chr_analysis,
+          stunting = "Not computed (`lenht_cm` not supplied)",
+          headsize = "Not computed (`headcirc_cm` not supplied)",
+          "Not computed (`weight_kg` not supplied)")
+      } else {
+        if (!missing["weight_kg"]) {
+          chr_was_run <- "Not computed (`lenht_cm` not supplied)"
+        } else if (!missing["lenht_cm"]) {
+          chr_was_run <- "Not computed (`weight_kg` not supplied)"
+        } else {
+          chr_was_run <- "Not computed (`weight_kg`, `lenht_cm` not supplied)"
+        }
+      }
+    }
     names(msg_strings)[idx] <- if (lgl_was_run) "v" else "!"
     msg_strings[idx] <- paste0(analysis_msg_strings[chr_analysis], ": ",
                                chr_was_run)
