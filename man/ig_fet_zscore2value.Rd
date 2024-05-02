@@ -156,7 +156,7 @@ in use (defined by \code{acronym}). These are:
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
 \item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
 \code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
-standards).#
+standards).
 \item Between 126 and 287 days for \code{"hefwfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 standard for Hadlock-based estimated fetal weight).
 }

@@ -156,7 +156,7 @@ in use (defined by \code{acronym}). These are:
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
 \item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
 \code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
-standards).#
+standards).
 \item Between 126 and 287 days for \code{"hefwfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 standard for Hadlock-based estimated fetal weight).
 }
@@ -214,7 +214,8 @@ in mm.}
 diameter(s) in mm.}
 
 \item{efw_g}{Numeric vector of length one or more with estimated fetal
-weight(s) in g.}
+weight(s) from the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} formula
+(\code{ig_fet_estimate_fetal_weight()}) in g.}
 
 \item{sfh_cm}{Numeric vector of length one or more with symphisis-fundal
 height(s) in mm.}
@@ -251,6 +252,9 @@ posterior horn of lateral ventricle measurement(s) in mm.}
 
 \item{cist_mag_mm}{Numeric vector of length one or more with cisterna magna
 measurement(s) in mm.}
+
+\item{hadlock_efw_g}{Numeric vector of length one or more with estimated
+fetal weight(s) from Hadlock's formula in g.}
 }
 \value{
 Numeric vector of z-scores/centiles with length equal to the longest

@@ -16,7 +16,7 @@
 #'     INTERGROWTH-21<sup>st</sup> Fetal Doppler standards).
 #'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`, and
 #'     `"pvfga"` (the INTERGROWTH-21<sup>st</sup> Fetal Brain Development
-#'     standards).#
+#'     standards).
 #'   * Between 126 and 287 days for `"hefwfga"` (the INTERGROWTH-21<sup>st</sup>
 #'     standard for Hadlock-based estimated fetal weight).
 #'
@@ -632,7 +632,8 @@ ig_fet_hefwfga_centile2value <- function(p, gest_days) {
 #' @param ofd_mm Numeric vector of length one or more with in occipito-frontal
 #'   diameter(s) in mm.
 #' @param efw_g Numeric vector of length one or more with estimated fetal
-#'   weight(s) in g.
+#'   weight(s) from the INTERGROWTH-21<sup>st</sup> formula
+#'   (`ig_fet_estimate_fetal_weight()`) in g.
 #' @param sfh_cm Numeric vector of length one or more with symphisis-fundal
 #'   height(s) in mm.
 #' @param crl_mm Numeric vector of length one or more with crown-rump length(s)
@@ -657,6 +658,8 @@ ig_fet_hefwfga_centile2value <- function(p, gest_days) {
 #'   posterior horn of lateral ventricle measurement(s) in mm.
 #' @param cist_mag_mm Numeric vector of length one or more with cisterna magna
 #'   measurement(s) in mm.
+#' @param hadlock_efw_g Numeric vector of length one or more with estimated
+#'   fetal weight(s) from Hadlock's formula in g.
 #' @inheritParams shared_roxygen_params
 #' @inherit ig_fet_zscore2value params references
 #' @inherit shared_value2zscore_returns return
@@ -1530,8 +1533,8 @@ ig_fet_lms_z2y <- function(z, gest_days, acronym) {
   lms <- ig_fet_lms(gest_days, acronym)
   log_efw <- with(lms,
                   ifelse(test = abs(l) < sqrt(.Machine$double.eps),
-                          yes = m * exp(s * z),
-                          no = m * (z * s * l + 1)^(1 / l)))
+                         yes = m * exp(s * z),
+                         no = m * (z * s * l + 1)^(1 / l)))
   exp(log_efw)
 }
 
