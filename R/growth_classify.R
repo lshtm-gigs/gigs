@@ -397,12 +397,12 @@ classify_headsize <- function(.data,
 #' @inheritParams classify_wasting
 #' @inheritParams classify_headsize
 #' @param .outcomes A character vector of up to six elements in length
-#'   describing which growth analyses you want to run. Use this when you supply
-#'   data that can be used to generate multiple growth indicators, but only want
-#'   to run a specific set. This argument is case-sensitive, and an error will
-#'   be thrown if you supply a string in `.analyses` which is either `NA` or is
-#'   not a member of this argument's default. Default = `c("sfga", "svn",
-#'   "stunting", "wasting", "wfa", "headsize")`.
+#'   describing which growth outcomes you want to assess. Use this when you
+#'   supply data that can be used to generate multiple growth indicators, but
+#'   only want to run a specific set. This argument is case-sensitive, and an
+#'   error will be thrown if you supply a string in `.analyses` which is either
+#'   `NA` or is not a member of this argument's default. Default = `c("sfga",
+#'   "svn", "stunting", "wasting", "wfa", "headsize")`.
 #' @param .new A list with names corresponding to `.analyses`, which describes
 #'   the names of new columns to be added to `.data`. If any elements of the
 #'   vectors in `.new` are equal to existing elements of `colnames(.data)`, the
@@ -426,7 +426,7 @@ classify_headsize <- function(.data,
 #'   still be printed even if `.verbose` is `FALSE`.
 #' @note For size-for-GA and small vulnerable newborn analyses, centiles and
 #'   categorisations will only be applied on birthweights, i.e. rows where
-#'   the column referred to by `weight_kg` has an age between `0` and `0.5`.
+#'   the column referred to by `age_days` is between `0` and `0.5`.
 #' @examples
 #' data <- data.frame(
 #'   agedays = c(0, 100, 100),
@@ -441,11 +441,13 @@ classify_headsize <- function(.data,
 #'                                    age_days = agedays,
 #'                                    gest_days = gestage,
 #'                                    weight_kg = wt_kg,
+#'                                    lenht_cm = len_cm,
+#'                                    headcirc_cm = head_cm,
 #'                                    sex = sex)
 #'
 #' data_classified
 #'
-#' # Use `.analyses` to set which growth indicators will be computed
+#' # Use `.outcomes` to set which growth indicators will be computed
 #' data_svn <- classify_growth(data,
 #'                             age_days = agedays,
 #'                             gest_days = gestage,
@@ -455,13 +457,13 @@ classify_headsize <- function(.data,
 #'
 #' data_svn
 #'
-#' # Use `.new` to set new column names
+#' # Use `.new` to specify new column names
 #' data_svn <- classify_growth(data,
 #'                             age_days = agedays,
 #'                             gest_days = gestage,
 #'                             sex = sex,
-#'                             .outcomes = "svn",
 #'                             weight_kg = wt_kg,
+#'                             .outcomes = "svn",
 #'                             .new = list("svn" = c("ig_nbs_centile",
 #'                                                   "SVN_Category")))
 #' data_svn

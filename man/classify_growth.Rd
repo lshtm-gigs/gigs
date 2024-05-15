@@ -55,11 +55,11 @@ column in \code{.data} which is a numeric vector of head circumference values in
 cm.}
 
 \item{.outcomes}{A character vector of up to six elements in length
-describing which growth analyses you want to run. Use this when you supply
-data that can be used to generate multiple growth indicators, but only want
-to run a specific set. This argument is case-sensitive, and an error will
-be thrown if you supply a string in \code{.analyses} which is either \code{NA} or is
-not a member of this argument's default. Default = \code{c("sfga", "svn", "stunting", "wasting", "wfa", "headsize")}.}
+describing which growth outcomes you want to assess. Use this when you
+supply data that can be used to generate multiple growth indicators, but
+only want to run a specific set. This argument is case-sensitive, and an
+error will be thrown if you supply a string in \code{.analyses} which is either
+\code{NA} or is not a member of this argument's default. Default = \code{c("sfga", "svn", "stunting", "wasting", "wfa", "headsize")}.}
 
 \item{.new}{A list with names corresponding to \code{.analyses}, which describes
 the names of new columns to be added to \code{.data}. If any elements of the
@@ -91,7 +91,7 @@ wasting, weight-for-age, and more) at once in \code{data.frame}-like objects.
 \note{
 For size-for-GA and small vulnerable newborn analyses, centiles and
 categorisations will only be applied on birthweights, i.e. rows where
-the column referred to by \code{weight_kg} has an age between \code{0} and \code{0.5}.
+the column referred to by \code{age_days} is between \code{0} and \code{0.5}.
 }
 \examples{
 data <- data.frame(
@@ -107,11 +107,13 @@ data_classified <- classify_growth(data,
                                    age_days = agedays,
                                    gest_days = gestage,
                                    weight_kg = wt_kg,
+                                   lenht_cm = len_cm,
+                                   headcirc_cm = head_cm,
                                    sex = sex)
 
 data_classified
 
-# Use `.analyses` to set which growth indicators will be computed
+# Use `.outcomes` to set which growth indicators will be computed
 data_svn <- classify_growth(data,
                             age_days = agedays,
                             gest_days = gestage,
@@ -121,13 +123,13 @@ data_svn <- classify_growth(data,
 
 data_svn
 
-# Use `.new` to set new column names
+# Use `.new` to specify new column names
 data_svn <- classify_growth(data,
                             age_days = agedays,
                             gest_days = gestage,
                             sex = sex,
-                            .outcomes = "svn",
                             weight_kg = wt_kg,
+                            .outcomes = "svn",
                             .new = list("svn" = c("ig_nbs_centile",
                                                   "SVN_Category")))
 data_svn
