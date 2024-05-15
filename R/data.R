@@ -246,15 +246,15 @@ NULL
 #' @format A data frame with 2,191 rows and 10 variables:
 #' \itemize{
 #'   \item{`id`:}{  Unique ID for each infant in the dataset (1--300).}
-#'   \item{`gestage`:}{  Best obstetric estimate of gestational age in days
-#'     (181--291).}
-#'   \item{`sex`:}{  Sex of the infant as a factor (`"M"` = Male; `"F"` =
-#'     Female).}
 #'   \item{`visitweek`:}{  Chronological age in weeks (±1) when study visit
 #'     occurred (0--26).}
-#'   \item{`pma`:}{  Post-menstrual age in days (182--528).}
+#'   \item{`sex`:}{  Sex of the infant as a factor (`"M"` = Male; `"F"` =
+#'     Female).}
+#'   \item{`gestage`:}{  Best obstetric estimate of gestational age in days
+#'     (181--291).}
 #'   \item{`age_days`:}{  Chronological age in days at each visit; equal to
 #'     `pma - gestage` (0--242).}
+#'   \item{`pma`:}{  Post-menstrual age in days (182--528).}
 #'   \item{`wt_kg`:}{  Mean weight in kg (1.24--9.40667).}
 #'   \item{`len_cm`:}{  Mean length in cm (37.37--72.93).}
 #'   \item{`headcirc_cm`:}{  Mean head circumference in cm (23.20--44.87).}

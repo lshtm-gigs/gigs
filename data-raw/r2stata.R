@@ -67,16 +67,44 @@ write_dta_lmsfiles(who_gs_lms = gigs::who_gs_coeffs)
 
 life6mo_stata <- gigs::life6mo |>
   dplyr::mutate(
+    id = haven::labelled(
+      x = as.integer(id),
+      label = "Unique ID for each infant in the dataset (1--300)"
+    ),
+    visitweek = haven::labelled(
+      x = as.integer(visitweek),
+      label = "Chronological age in weeks (+/-1 week) when study visit occurred"
+    ),
     sex = haven::labelled(
       x = as.integer(dplyr::if_else(sex == "M", true = 1, false = 2)),
-      labels = c("Male" = 1, "Female" = 2),
       label = "Sex of each infant (male = 1; female = 2)."
     ),
-    gestage = as.integer(gestage),
-    age_days = as.integer(age_days),
-    pma = as.integer(pma),
+    gestage = haven::labelled(
+      x = as.integer(gestage),
+      label = "Best obstetric estimate of gestational age in days (181--291)"
+    ),
+    age_days = haven::labelled(
+      x = as.integer(age_days),
+      label = "Chronological age in days at each visit (0--242)."
+    ),
+    pma = haven::labelled(
+      x = as.integer(pma),
+      label = "Post-menstrual age in days at each visit (182--528)."
+    ),
+    wt_kg = haven::labelled(wt_kg,
+      label = "Mean weight at each visit in kg (1.24--9.40667)."
+    ),
+    len_cm = haven::labelled(len_cm,
+      label = "Mean length at each visit in cm (37.37--72.93)."
+    ),
+    headcirc_cm = haven::labelled(headcirc_cm,
+      label = "Mean head circumference at each visit in cm (23.20--44.87)."
+    ),
+    muac_cm = haven::labelled(muac_cm,
+      label = "Mean mid-upper arm circumference at each visit in cm (6.30--16.83)."
+    )
   ) |>
-  dplyr::relocate(id, visitweek, sex, gestage, visitweek, age_days, pma) |>
+  dplyr::relocate(id, visitweek, sex, gestage, age_days, pma) |>
   haven::write_dta(path = "exclude/r2stata/life6mo.dta", version = 13)
 rlang::warn(c(
   "",

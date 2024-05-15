@@ -133,7 +133,7 @@ write.table_sas(gigs::life6mo, file = "exclude/r2sas/life6mo.txt")
 
 # LIFE dataset -----------------------------------------------------------------
 life6mo_sas <- gigs::life6mo |>
-  dplyr::relocate(id, visitweek, sex, gestage, visitweek, age_days, pma) |>
+  dplyr::relocate(id, visitweek, sex, gestage, age_days, pma) |>
   write.table_sas(file = "exclude/r2sas/life6mo.txt")
 
 # LIFE dataset (for package comparisons) ---------------------------------------
