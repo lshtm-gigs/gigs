@@ -17,7 +17,7 @@ occurred (0--26).}
 \item{\code{pma}:}{  Post-menstrual age in days (182--528).}
 \item{\code{age_days}:}{  Chronological age in days at each visit; equal to
 \code{pma - gestage} (0--242).}
-\item{\code{weight_g}:}{  Mean weight in g (1240.00--9406.67).}
+\item{\code{wt_kg}:}{  Mean weight in kg (1.24--9.40667).}
 \item{\code{len_cm}:}{  Mean length in cm (37.37--72.93).}
 \item{\code{headcirc_cm}:}{  Mean head circumference in cm (23.20--44.87).}
 \item{\code{muac_cm}:}{  Mean mid-upper arm circumference in cm (6.30--16.83).}

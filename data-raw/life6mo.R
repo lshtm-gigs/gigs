@@ -74,6 +74,9 @@ IDs_to_use <- c(
 life6mo <- life6mo |>
   dplyr::filter(id %in% IDs_to_use) |>
   dplyr::mutate(id = dplyr::consecutive_id(id)) |>
+  dplyr::mutate(wt_kg = weight_g / 1000,
+                .after = age_days,
+                .keep = "unused") |>
   # Set to data frame (i.e. not tibble)
   as.data.frame()
 
