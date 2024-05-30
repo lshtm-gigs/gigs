@@ -154,8 +154,9 @@ in use (defined by \code{acronym}). These are:
 \item Between 105 and 280 days for \code{"gwgfga"}.
 \item Between 168 and 280 days for \code{"pifga"}, \code{"rifga"}, and \code{"sdrfga"} (the
 INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards).
-\item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, and
-\code{"pvfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
+\item Between 12 and 55 mm for\code{"tcdfga"}.
+\item Between 105 and 252 days for \code{"poffga"}, \code{"sffga"}, \code{"avfga"}, \code{"pvfga"},
+and \code{"cmfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Brain Development
 standards).
 \item Between 126 and 287 days for \code{"hefwfga"} (the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}}
 standard for Hadlock-based estimated fetal weight).
@@ -186,7 +187,7 @@ Growth standard to use. Each value should be one of:
 \item \code{"avfga"} (anterior horn of lateral ventricle-for-GA)
 \item \code{"pvfga"} (atrium of posterior horn of lateral ventricle-for-GA)
 \item \code{"cmfga"} (cisterna magna-for-GA)
-\item \code{"hefwfga"} (Hadlock esimated fetal weight-for-GA)
+\item \code{"hefwfga"} (Hadlock estimated fetal weight-for-GA)
 }
 
 This argument is case-sensitive. If \code{acronym} is not one of the values

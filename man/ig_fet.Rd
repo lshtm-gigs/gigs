@@ -37,6 +37,10 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
 
+Stirnemann J, Salomon LJ, Papageorghiou AT. \strong{INTERGROWTH-21st standards for
+Hadlock's estimation of fetal weight.} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(6):946-948} \doi{10.1002/uog.22000}
+
 Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
 \strong{International standards for symphysis-fundal height based on serial
 measurements from the Fetal Growth Longitudinal Study of the INTERGROWTH-21st

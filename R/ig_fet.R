@@ -14,8 +14,9 @@
 #'   * Between 105 and 280 days for `"gwgfga"`.
 #'   * Between 168 and 280 days for `"pifga"`, `"rifga"`, and `"sdrfga"` (the
 #'     INTERGROWTH-21<sup>st</sup> Fetal Doppler standards).
-#'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`, and
-#'     `"pvfga"` (the INTERGROWTH-21<sup>st</sup> Fetal Brain Development
+#'   * Between 12 and 55 mm for`"tcdfga"`.
+#'   * Between 105 and 252 days for `"poffga"`, `"sffga"`, `"avfga"`, `"pvfga"`,
+#'     and `"cmfga"` (the INTERGROWTH-21<sup>st</sup> Fetal Brain Development
 #'     standards).
 #'   * Between 126 and 287 days for `"hefwfga"` (the INTERGROWTH-21<sup>st</sup>
 #'     standard for Hadlock-based estimated fetal weight).
@@ -44,7 +45,7 @@
 #'   * `"avfga"` (anterior horn of lateral ventricle-for-GA)
 #'   * `"pvfga"` (atrium of posterior horn of lateral ventricle-for-GA)
 #'   * `"cmfga"` (cisterna magna-for-GA)
-#'   * `"hefwfga"` (Hadlock esimated fetal weight-for-GA)
+#'   * `"hefwfga"` (Hadlock estimated fetal weight-for-GA)
 #'
 #'   This argument is case-sensitive. If `acronym` is not one of the values
 #'   list above, gigs will throw an error.
@@ -1306,6 +1307,7 @@ ig_fet_v2z_internal <- function(y, x, acronym) {
 #' FC et al. **International standards for early fetal size and pregnancy dating
 #' based on ultrasound measurement of crown-rump length in the first trimester
 #' of pregnancy.** *Ultrasound Obstet Gynecol* 2014, **44(6):641-48**
+#' \doi{10.1002/uog.13448}
 #'
 #' Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp B et al.
 #' **International standards for fetal brain structures based on serial
