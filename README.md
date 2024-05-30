@@ -93,24 +93,24 @@ life6mo_newborns <- gigs::life6mo[life6mo$age_days == 0, ]
 
 # Use classify_growth() to get multiple growth indicators at once
 life6mo_classified <- classify_growth(
-  .data = life6mo_newborns,
-  weight_kg = weight_g / 1000,
-  lenht_cm = len_cm,
-  gest_days = gestage,
-  age_days = age_days,
-  sex = as.character(sex),
-  .analyses = c("svn", "stunting")
+        .data = life6mo_newborns,
+        gest_days = gestage,
+        age_days = age_days,
+        sex = as.character(sex),
+        weight_kg = wt_kg,
+        lenht_cm = len_cm,
+        .outcomes = c("svn", "stunting")
 )
 #> `gigs::classify_growth()`
 #> ✔ Small vulnerable newborns: Success
 #> ✔ Stunting: Success
 
 head(life6mo_classified, n = 4)
-#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
-#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
-#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
-#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
-#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334
 #>    birthweight_centile         svn       lhaz        stunting stunting_outliers
 #> 1          0.010765424    Term SGA -3.5406446 stunting_severe   stunting_severe
 #> 28         0.002833163 Preterm SGA -2.2854751        stunting          stunting
@@ -125,23 +125,23 @@ computed.
 
 ``` r
 life6mo_classified <- classify_growth(
-  .data = life6mo_newborns,
-  weight_kg = weight_g / 1000,
-  gest_days = gestage,
-  age_days = age_days,
-  sex = as.character(sex),
-  .analyses = c("svn", "stunting")
+        .data = life6mo_newborns,
+        gest_days = gestage,
+        age_days = age_days,
+        sex = as.character(sex),
+        weight_kg = wt_kg,
+        .outcomes = c("svn", "stunting")
 )
 #> `gigs::classify_growth()`
 #> ✔ Small vulnerable newborns: Success
-#> ✔ Stunting: Success
+#> ! Stunting: Not computed (`lenht_cm` not supplied)
 
 head(life6mo_classified, n = 4)
-#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
-#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
-#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
-#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
-#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334
 #>    birthweight_centile         svn
 #> 1          0.010765424    Term SGA
 #> 28         0.002833163 Preterm SGA
@@ -156,17 +156,17 @@ growth indicator you’d like to calculate, for example `classify_svn()`:
 # Small vulnerable newborns
 life6mo_svn <- classify_svn(
   .data = life6mo_newborns,
-  weight_kg = weight_g / 1000,
+  weight_kg = wt_kg,
   gest_days = gestage,
   sex = as.character(sex)
 )
 
 head(life6mo_svn, n = 4)
-#>    id gestage sex visitweek pma age_days weight_g   len_cm headcirc_cm  muac_cm
-#> 1   1     273   M         0 273        0     2300 42.06667    33.26667 9.433333
-#> 28  4     250   F         0 250        0     1500 42.03333    30.03333 8.066667
-#> 36  5     238   F         0 238        0     2390 43.46667    33.63333 9.166667
-#> 56  8     240   F         0 240        0     1800 41.73333    31.46667 8.033334
+#>    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm
+#> 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333
+#> 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667
+#> 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667
+#> 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334
 #>    birthweight_centile         svn
 #> 1          0.010765424    Term SGA
 #> 28         0.002833163 Preterm SGA
@@ -224,29 +224,29 @@ INTERGROWTH-21<sup>st</sup> project:
   Component standards
   </summary>
 
-  | Acronym  | Description                                                  | Unit | `x` range       |
-  |----------|--------------------------------------------------------------|------|-----------------|
-  | `hcfga`  | head circumference-for-GA                                    | mm   | 98 to 280 days  |
-  | `bpdfga` | biparietal diameter-for-GA                                   | mm   | 98 to 280 days  |
-  | `acfga`  | abdominal circumference-for-GA                               | mm   | 98 to 280 days  |
-  | `flfga`  | femur length-for-GA                                          | mm   | 98 to 280 days  |
-  | `ofdfga` | occipito-frontal diameter for-GA                             | mm   | 98 to 280 days  |
-  | `efwfga` | estimated fetal weight-for-GA                                | g    | 154 to 280 days |
-  | `sfhfga` | symphisis-fundal height-for-GA                               | mm   | 112 to 294 days |
-  | `crlfga` | crown-rump length-for-GA                                     | mm   | 58 to 105 days  |
-  | `gafcrl` | GA-for-crown-rump length                                     | days | 15 to 95 mm     |
-  | `gwgfga` | gestational weight gain-for-GA                               | kg   | 98 to 280 days  |
-  | `pifga`  | pulsatility index-for-GA                                     |      | 168 to 280 days |
-  | `rifga`  | resistance index-for-GA                                      |      | 168 to 280 days |
-  | `sdrfga` | systolic/diastolic ratio-for-GA                              |      | 168 to 280 days |
-  | `tcdfga` | transcerebellar diameter-for-GA                              | mm   | 98 to 280 days  |
-  | `tcdfga` | GA-for-transcerebellar diameter                              | mm   | 98 to 280 days  |
-  | `poffga` | parietal-occipital fissure-for-GA                            | mm   | 105 to 252 days |
-  | `sffga`  | Sylvian fissue-for-GA                                        | mm   | 105 to 252 days |
-  | `avfga`  | anterior horn of the lateral ventricle-for-GA                | mm   | 105 to 252 days |
-  | `pvfga`  | atrium of the posterior horn of the lateral ventricle-for-GA | mm   | 105 to 252 days |
-  | `cmfga`  | cisterna magna-for-GA                                        | mm   | 105 to 252 days |
-  | `efwfga` | Hadlock estimated fetal weight-for-GA                        | g    | 126 to 287 days |
+  | Acronym   | Description                                                  | Unit | `x` range       |
+  |-----------|--------------------------------------------------------------|------|-----------------|
+  | `hcfga`   | head circumference-for-GA                                    | mm   | 98 to 280 days  |
+  | `bpdfga`  | biparietal diameter-for-GA                                   | mm   | 98 to 280 days  |
+  | `acfga`   | abdominal circumference-for-GA                               | mm   | 98 to 280 days  |
+  | `flfga`   | femur length-for-GA                                          | mm   | 98 to 280 days  |
+  | `ofdfga`  | occipito-frontal diameter for-GA                             | mm   | 98 to 280 days  |
+  | `efwfga`  | estimated fetal weight-for-GA                                | g    | 154 to 280 days |
+  | `sfhfga`  | symphisis-fundal height-for-GA                               | mm   | 112 to 294 days |
+  | `crlfga`  | crown-rump length-for-GA                                     | mm   | 58 to 105 days  |
+  | `gafcrl`  | GA-for-crown-rump length                                     | days | 15 to 95 mm     |
+  | `gwgfga`  | gestational weight gain-for-GA                               | kg   | 98 to 280 days  |
+  | `pifga`   | pulsatility index-for-GA                                     |      | 168 to 280 days |
+  | `rifga`   | resistance index-for-GA                                      |      | 168 to 280 days |
+  | `sdrfga`  | systolic/diastolic ratio-for-GA                              |      | 168 to 280 days |
+  | `tcdfga`  | transcerebellar diameter-for-GA                              | mm   | 98 to 280 days  |
+  | `tcdfga`  | GA-for-transcerebellar diameter                              | mm   | 98 to 280 days  |
+  | `poffga`  | parietal-occipital fissure-for-GA                            | mm   | 105 to 252 days |
+  | `sffga`   | Sylvian fissue-for-GA                                        | mm   | 105 to 252 days |
+  | `avfga`   | anterior horn of the lateral ventricle-for-GA                | mm   | 105 to 252 days |
+  | `pvfga`   | atrium of the posterior horn of the lateral ventricle-for-GA | mm   | 105 to 252 days |
+  | `cmfga`   | cisterna magna-for-GA                                        | mm   | 105 to 252 days |
+  | `hefwfga` | Hadlock estimated fetal weight-for-GA                        | g    | 126 to 287 days |
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
