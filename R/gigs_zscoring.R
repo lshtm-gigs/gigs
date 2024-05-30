@@ -111,7 +111,6 @@ gigs_waz_internal <- function(weight_kg, age_days, gest_days, sex) {
   z_out
 }
 
-
 #' @inheritParams gigs_lhaz
 #' @noRd
 gigs_lhaz_internal <- function(lenht_cm, age_days, gest_days, sex) {
@@ -143,7 +142,7 @@ gigs_wlz_internal <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
-  pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
+  pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA_real_
 
   gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days) |>
     lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
