@@ -26,7 +26,7 @@
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @importFrom stats complete.cases
 #' @noRd
-ig_vpns_equations <- function(gest_days, sex, acronym) {
+ig_vpns_mu_sigma <- function(gest_days, sex, acronym) {
   gest_days[gest_days >= 231] <- NA_real_
   ga_weeks <- gest_days / 7
   sex_as_numeric <- ifelse(sex == "M", yes = 1, no = 0)
@@ -36,7 +36,7 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
       sigma = sqrt(x = 0.0373218)
     ),
     lfga = list(
-      mu = 1.307633 + 1.270022 * ga_weeks +  0.4263885 * sex_as_numeric,
+      mu = 1.307633 + 1.270022 * ga_weeks + 0.4263885 * sex_as_numeric,
       sigma = sqrt(x = 6.757543)
     ),
     hcfga = list(
@@ -67,9 +67,9 @@ ig_vpns_equations <- function(gest_days, sex, acronym) {
 #' 2016, **387(10021):844-45.** \doi{10.1016/S0140-6736(16)00384-6}
 #' @noRd
 ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
-  mu_sigma <- ig_vpns_equations(gest_days = gest_days,
-                                sex = sex,
-                                acronym = acronym)
+  mu_sigma <- ig_vpns_mu_sigma(gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
   y <- with(mu_sigma, mu_sigma_z2y(z = z, mu = mu, sigma = sigma))
   if (acronym == "wfga") exp(y) else y
 }
@@ -94,9 +94,9 @@ ig_vpns_zscore2value <- function(z, gest_days, sex, acronym) {
 #' @srrstats {G1.0} Primary literature referenced here.
 #' @noRd
 ig_vpns_value2zscore <- function(y, gest_days, sex, acronym) {
-  mu_sigma <- ig_vpns_equations(gest_days = gest_days,
-                                sex = sex,
-                                acronym = acronym)
+  mu_sigma <- ig_vpns_mu_sigma(gest_days = gest_days,
+                               sex = sex,
+                               acronym = acronym)
   if (acronym == "wfga") {
     y <- log(y)
   }

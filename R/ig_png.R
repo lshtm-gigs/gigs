@@ -376,7 +376,7 @@ ig_png_wfl_value2centile <- function(weight_kg, length_cm, sex) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_png_z2v_internal <- function(z, x, sex, acronym) {
-  png_coeffs <- ig_png_equations(x = x, sex = sex, acronym = acronym)
+  png_coeffs <- ig_png_mu_sigma(x = x, sex = sex, acronym = acronym)
   is_logarithmic <- acronym == "wfa" || acronym == "lfa"
   y <- with(png_coeffs, mu_sigma_z2y(z = z, mu = mu, sigma = sigma))
   if (is_logarithmic) exp(y) else y
@@ -388,7 +388,7 @@ ig_png_z2v_internal <- function(z, x, sex, acronym) {
 #' @note This function will fail if given inputs of different lengths.
 #' @noRd
 ig_png_v2z_internal <- function(y, x, sex, acronym) {
-  png_coeffs <- ig_png_equations(x = x, sex = sex, acronym = acronym)
+  png_coeffs <- ig_png_mu_sigma(x = x, sex = sex, acronym = acronym)
   is_logarithmic <- acronym == "wfa" || acronym == "lfa"
   if (is_logarithmic) {
     y <- log(y)
@@ -426,9 +426,8 @@ ig_png_v2z_internal <- function(y, x, sex, acronym) {
 #' **Postnatal growth standards for preterm infants: the Preterm Postnatal
 #' Follow-up Study of the INTERGROWTH-21st Project.** *Lancet Glob Health* 2015,
 #' *3(11):e681-e691.* \doi{10.1016/S2214-109X(15)00163-1}
-#' @rdname ig_png_equations
 #' @noRd
-ig_png_equations <- function(x, sex, acronym) {
+ig_png_mu_sigma <- function(x, sex, acronym) {
   sex_as_numeric <- sex == "M"
   switch(acronym,
          wfa = list(
