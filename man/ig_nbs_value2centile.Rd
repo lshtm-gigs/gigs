@@ -63,7 +63,7 @@ Size standard in use (defined by \code{acronym}). These are:
 \itemize{
 \item Between 168 and 300 days for \code{"wfga"}, \code{"lfga"}, \code{"hcfga"}, and
 \code{"wlrfga"}.
-\item Between 154 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
+\item Between 266 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
 }
 
 By default, gigs will replace elements in \code{gest_days} that are out of

@@ -10,7 +10,7 @@
 #'   Size standard in use (defined by `acronym`). These are:
 #'   * Between 168 and 300 days for `"wfga"`, `"lfga"`, `"hcfga"`, and
 #'     `"wlrfga"`.
-#'   * Between 154 and 280 days for `"fmfga"`, `"bfpfga"`, and `"ffmfga"`.
+#'   * Between 266 and 280 days for `"fmfga"`, `"bfpfga"`, and `"ffmfga"`.
 #'
 #'   By default, gigs will replace elements in `gest_days` that are out of
 #'   bounds for the growth standard in use with `NA` and warn you. You can
@@ -735,7 +735,7 @@ ig_nbs_bodycomp_mu_sigma <- function(gest_days, sex, acronym) {
 ig_nbs_bodycomp_p2v <- function(p, gest_days, sex, acronym) {
   body_comp <- ig_nbs_bodycomp_mu_sigma(gest_days, sex, acronym)
   out <- mu_sigma_z2y(z = qnorm(p), mu = body_comp[,1], sigma = body_comp[,2])
-  replace(out, out <= 0, values = NA)
+  unname(replace(out, out <= 0, values = NA))
 }
 
 #' Convert values to centiles for the INTERGROWTH-21st weight-to-length ratio
@@ -749,6 +749,7 @@ ig_nbs_bodycomp_p2v <- function(p, gest_days, sex, acronym) {
 ig_nbs_bodycomp_v2p <- function(y, gest_days, sex, acronym) {
   body_comp <- ig_nbs_bodycomp_mu_sigma(gest_days, sex, acronym)
   mu_sigma_y2z(y = y, mu = body_comp[,1], sigma = body_comp[, 2]) |>
+    unname() |>
     pnorm()
 }
 
