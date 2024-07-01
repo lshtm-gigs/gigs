@@ -370,7 +370,7 @@ download links for Excel-based calculators in some standards.
 
 ## Citation
 
-Parker S (2023). *gigs: Assess Fetal, Newborn, and Child Growth*.
+Parker SR, Vesel L, Ohuma EO (2023). *gigs: Assess Fetal, Newborn, and Child Growth*.
 <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
