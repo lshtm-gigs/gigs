@@ -675,43 +675,105 @@ classify_growth <- function(
                                missing = c(weight_kg = missing_weight,
                                            lenht_cm = missing_lenht,
                                            headcirc_cm = missing_headcirc))
-    rlang::inform(msg)
+    rlang::inform(msg, class = "gigs_classify_growth_msg")
   }
   .data
 }
 
-# INTERNAL ---------------------------------------------------------------------
+# INTERNAL; checkers for all growth_classify.R functions -----------------------
 
+#' Throw an error if elements of vectors in `.new` are in `.data`
+#' @param new A character vector of length one or more with new column names to
+#'   check against `existing`.
+#' @param .data_colnames A character vector of length one or more with column
+#'   names to be checked against `new`.
+#' @return Returns `new` invisibly if there are no matches between `new` and
+#'   `existing`, else throws an error.
 #' @noRd
-check_.new_vector_lengths <- function(.new) {
-  .new_names <- names(.new)
-  for (idx in seq_along(.new)) {
-    curr_vec <- .new[[idx]]
-    curr_name <- .new_names[idx]
-    expected_len <- switch(curr_name, sfga = 3, svn = 2, wasting = 3,
-                           stunting = 3, wfa = 3, headsize = 2)
-    checkmate::assert_character(
-      curr_vec,
-      any.missing = FALSE,
-      len = expected_len,
-      .var.name = paste0(".new[[\"", curr_name, "\"]]")
-    )
+err_if_.new_in_.data <- function(new, .data_colnames) {
+  matches <- new %in% .data_colnames
+  any_matches <- any(matches)
+  if (any_matches) {
+    matched_names <- paste0("`", new[matches], "`") |>
+      setNames(nm = rep.int("!", length(new[matches])))
+    rlang::abort(
+      message =
+        c(paste0("Column names requested in `.new` already exist in `.data`. ",
+                 "These are:"),
+          matched_names
+        ),
+      call = rlang::env_parent(),
+      class = "gigs_classify_.new_in_.data")
   }
+  invisible(new)
 }
 
 check_all_.new_names_valid <- function(.new, all) {
   .new_names <- names(.new)
   lgl_invalid_.new_name <- !.new_names %in% all
   if (any(lgl_invalid_.new_name)) {
-    rlang::abort(c(
-      "Some elements in `names(.new)` are not valid.",
-      "!" = paste0("Bad names in `.new`: ",
-                   paste_sep_commas_quoted(.new_names[lgl_invalid_.new_name])),
-      "i" = paste0("Each name in `.new` must be one of: ",
-                   paste_sep_commas_quoted(all))
-    ), call = rlang::expr(gigs::classify_growth()))
+    rlang::abort(
+      c(
+        "Some elements in `names(.new)` are not valid.",
+        "!" = paste0("Bad names in `.new`: ", paste_sep_commas_quoted(
+          .new_names[lgl_invalid_.new_name])
+        ),
+        "i" = paste0("Each name in `.new` must be one of: ",
+                     paste_sep_commas_quoted(all), ".")
+      ),
+      call = rlang::expr(gigs::classify_growth()),
+      class = "gigs_classify_growth_invalid_.new_names"
+    )
   }
-  return(invisible(.new))
+  invisible(.new)
+}
+
+# INTERNAL; checkers for classify_growth() -------------------------------------
+
+#' Check dot
+#' @noRd
+check_all_.outcomes_in_.new <- function(.outcomes, .new) {
+  lgl_.analyses_in_.new <- .outcomes %in% names(.new)
+  if (!all(lgl_.analyses_in_.new)) {
+    rlang::abort(
+      c("Elements of `.outcomes` are missing new column names in `.new`:",
+        "!" = paste0("`.new` must have column names for ",
+                     paste_sep_commas(.outcomes[!lgl_.analyses_in_.new]))),
+      call = rlang::expr(gigs::classify_growth()),
+      class = "gigs_classify_growth_.outcomes_not_in_.new"
+    )
+  }
+}
+
+#' @noRd
+check_.new_vector_lengths <- function(.new) {
+  .new_names <- names(.new)
+  msgs <- vector(length = length(.new), mode = "list") |>
+    setNames(.new_names)
+  for (idx in seq_along(.new)) {
+    curr_vec <- .new[[idx]]
+    curr_name <- .new_names[idx]
+    expected_len <- switch(curr_name, sfga = 3, svn = 2, wasting = 3,
+                           stunting = 3, wfa = 3, headsize = 2)
+    check <- checkmate::check_character(
+      curr_vec,
+      any.missing = FALSE,
+      len = expected_len
+    )
+    if (is.character(check)) {
+      msgs[[curr_name]] <- check
+    }
+  }
+  msgs <- vctrs::list_drop_empty(msgs)
+  if (length(msgs) > 0) {
+    msg <- setNames(paste0("`.new[[\"", names(msgs), "\"]]`: ", msgs, "."),
+                    rep.int("i", length(msgs)))
+    rlang::abort(
+      message = c("Some vectors in `.new` have the wrong length:", msg),
+      call = rlang::expr(gigs::classify_growth()),
+      class = "gigs_classify_growth_.new_lengths_incorrect"
+    )
+  }
 }
 
 #' @noRd
@@ -726,27 +788,16 @@ check_sfga_svn_centile_colname <- function(.new) {
                            "did not match."),
                     "*" = paste0("Size-for-GA: `", bweight_centiles_sfga, "`."),
                     "*" = paste0("SVN:         `", bweight_centiles_svn, "`."),
-                    "i" = paste0("GIGS will use the name provided for ",
-                                 "size-for-GA (", bweight_centiles_sfga, ")."))
+                    "i" = paste0("`classify_growth()` will use the name ",
+                                 "provided for size-for-GA (`\"",
+                                 bweight_centiles_sfga, "\"`).")),
+        call = rlang::expr(gigs::classify_growth()),
+        class = "gigs_classify_growth_bweight_centile_not_identical"
       )
       .new[["svn"]][1] <- bweight_centiles_sfga
     }
   }
   .new
-}
-
-#' Check dot
-#' @noRd
-check_all_.outcomes_in_.new <- function(.outcomes, .new) {
-  lgl_.analyses_in_.new <- .outcomes %in% names(.new)
-  if (!all(lgl_.analyses_in_.new)) {
-    rlang::abort(
-      c("Elements of `.outcomes` are missing new column names in `.new`:",
-        "!" = paste0("`.new` must have column names for",
-                     paste_sep_commas(.new[!lgl_.analyses_in_.new]))),
-      class = "gigs_classify_growth_.outcomes_not_in_.new"
-    )
-  }
 }
 
 #' @noRd
@@ -759,11 +810,30 @@ check_if_.new_elements_unique <- function(.new) {
     return(invisible(.new))
   }
   chr_duplicated <- chr_unlisted[lgl_duplicated]
+  # Exclude sfga/svn bweight centile name from the set of bad duplicates
+  if (all(c("sfga", "svn") %in% .new_names)) {
+    chr_duplicated <- chr_duplicated[chr_duplicated != .new[["sfga"]][1]]
+  }
+
+  msgs <- vapply(
+    X = chr_duplicated,
+    FUN.VALUE = character(length = 1L),
+    FUN = \(current_duplicate) {
+      present_in <- vapply(X = .new_names,
+                           FUN.VALUE = logical(length = 1),
+                           FUN = \(name) {
+                             current_duplicate %in% .new[[name]]
+                           })
+      present_in <- paste0("new[[\"", .new_names[present_in], "\"]]")
+      paste0("`\"", current_duplicate, "\"`: Present in ",
+             paste_sep_commas(present_in), ".")
+    }) |>
+    setNames(rep.int("!", length(chr_duplicated)))
+
   rlang::abort(
-    c("Some elements in `.new` are not unique.",
-      setNames(sprintf(fmt = "`\"%s\"`", chr_duplicated),
-               rep("!", length(chr_duplicated)))),
-    call = rlang::caller_env()
+    c("Some elements in `.new` are not unique:", msgs),
+    call = rlang::caller_env(),
+    class = "gigs_classify_growth_.new_elements_not_unique"
   )
 }
 
@@ -802,36 +872,11 @@ repair_.new_names <- function(.new) {
     rlang::warn(
       c("Column names in `.new` repaired by `rlang::vec_as_names()`:",
         unlist(li_renamed)),
-      call = caller_env()
+      class = "gigs_repaired_names_in_.new",
+      call = rlang::caller_env()
     )
   }
   .new
-}
-
-#' Check whether a character vector has any elements in another, and issue an
-#' @param new A character vector of length one or more with new column names to
-#'   check against `existing`.
-#' @param .data_colnames A character vector of length one or more with column names
-#'   to be checked against with `new`.
-#' @return Returns `new` invisibly if there are no matches between `new` and
-#'   `existing`, else throws an error.
-#' @noRd
-err_if_.new_in_.data <- function(new, .data_colnames) {
-  matches <- new %in% .data_colnames
-  any_matches <- any(matches)
-  if (any_matches) {
-    matched_names <- paste0("`", new[matches], "`") |>
-      setNames(nm = "!")
-    rlang::abort(
-      message =
-        c(paste0("Column names requested in `.new` already exist in `.data`. ",
-                 "These are:"),
-          matched_names
-        ),
-      call = rlang::env_parent(),
-      class = "gigs_classify_.new_in_.data")
-  }
-  invisible(new)
 }
 
 #' Build a character vector describing which outcomes in `classify_growth()`
@@ -859,7 +904,7 @@ msg_classify_growth <- function(all, requested, run, missing) {
     if (lgl_was_run) {
       chr_was_run <- "Success"
     } else {
-      if (chr_analysis != "stunting") {
+      if (chr_analysis != "wasting") {
         chr_was_run <- switch(
           chr_analysis,
           stunting = "Not computed (`lenht_cm` not supplied)",

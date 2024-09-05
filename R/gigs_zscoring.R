@@ -148,7 +148,7 @@ gigs_wlz_internal <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
     lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
 
   use_ig_png <- gigs_lgls[["ig_png"]] & inrange(lenht_cm, c(35, 65))
-  use_who_wfl <- gigs_lgls[["who_gs"]] & age_days < 731
+  use_who_wfl <- gigs_lgls[["who_gs"]] & age_days  < 731
   use_who_wfh <- gigs_lgls[["who_gs"]] & age_days >= 731
 
   z_ig_png <- fn_on_subset(ig_png_v2z_internal,
