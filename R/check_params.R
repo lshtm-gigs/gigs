@@ -282,7 +282,6 @@ validate_xvar <- function(x, acronym, standard, x_name) {
 #'   Will throw an error if `sex` is not a character vector.
 #' @noRd
 validate_sex <- function(sex) {
-  # May add "U" back to package later
   varname <- "sex"
   chr <- sex |>
     checkmate::assert_character(min.len = 1, .var.name = varname) |>
@@ -319,6 +318,20 @@ validate_acronym <- function(acronym, allowed_acronyms, standard) {
                                options = allowed_acronyms, is_na = FALSE)
 }
 
+#' Validate user-inputted ID data for z-scoring/growth analysis
+#' @param id An `id` input from one of the gigs_zscoring functions, i.e.
+#'   `[gigs_waz()]`, `[gigs_lhaz()]`, `[gigs_wlz()]`, `[gigs_hcaz()]`.
+#' @returns Throws an error if `id` is not a factor variable, else
+#' @noRd
+validate_id <- function(id) {
+  if (!is.null(id)) {
+    checkmate::assert_factor(id,
+                             min.len = 1,
+                             .var.name = "id") |>
+      checkmate::assert_atomic_vector()
+  }
+}
+
 # Prettier printing of warnings/errors when validating user inputs -------------
 ## These functions capture warnings/errors from `handle_*()` functions and print
 ## them nicely for end-users with rlang::warn and rlang::abort
@@ -352,7 +365,6 @@ validation_alerts <- function(alerts,
     call = call, class = alert_class
   )
 }
-
 
 catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
   warnings <- list()

@@ -590,6 +590,7 @@ classify_growth <- function(
   # Compute outcomes if data allows
   for (outcome in .outcomes) {
     if (outcome == "sfga" | outcome == "svn") {
+      # TODO: Add logic which limits birth analysis to first observation per ID
       if (missing_weight) next
       bweight_centile_not_calculated <- !.new[[outcome]][1] %in% names(.data)
       if (bweight_centile_not_calculated) {
