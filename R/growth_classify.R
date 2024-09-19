@@ -155,6 +155,12 @@ classify_svn <- function(.data,
 #'   in days. This column, in conjunction with the column referred to by
 #'   `age_days`, is used to select which growth standard to use for each
 #'   observation.
+#' @param id <[`data-masking`][rlang::args_data_masking]> The name of a
+#'   column in `.data` which is a factor variable with IDs for each observation.
+#'   When not `NULL`, this variable is used to ensure that only the first
+#'   measurement taken from each infant is used as a birth measure. If all your
+#'   data is from one individual, leave this parameter as `NULL`. Default =
+#'   `NULL`.
 #' @param .new A three-length character vector with names for the output
 #'   columns. These inputs will be repaired if necessary using
 #'   [vctrs::vec_as_names()], which will print any changes to the console. If
@@ -209,7 +215,7 @@ classify_stunting <- function(
     .new = c("lhaz", "stunting", "stunting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
 
   if (!rlang::quo_is_null(enquo(id))) {
     id <- eval_tidy(enquo(id), data = .data)
@@ -307,7 +313,7 @@ classify_wasting <- function(.data,
     id = id
   )
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
+  .new <- repair_.new_names(.new = list("wasting" = .new), mode = "specific")
   .data[[.new[1]]] <- wlz
   .data[[.new[2]]] <- categorise_wasting_internal(wlz, outliers = FALSE)
   .data[[.new[3]]] <- categorise_wasting_internal(wlz, outliers = TRUE)
@@ -385,7 +391,7 @@ classify_wfa <- function(.data,
     id = id
   )
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
+  .new <- repair_.new_names(.new = list("wfa" = .new), mode = "specific")
   .data[[.new[1]]] <- waz
   .data[[.new[2]]] <- categorise_wfa_internal(waz, outliers = FALSE)
   .data[[.new[3]]] <- categorise_wfa_internal(waz, outliers = TRUE)
@@ -404,15 +410,13 @@ classify_wfa <- function(.data,
 #'   columns. These inputs will be repaired if necessary using
 #'   [vctrs::vec_as_names()], which will print any changes to the console. If
 #'   any elements in `.new` are the same as elements in `colnames(.data)`, the
-#'   function will throw an error. Default = `c("waz", "wfa", "wfa_outliers")`.
+#'   function will throw an error. Default = `c("hcaz", "headsize")`.
 #' @returns A tabular object of the same class that was provided as `.data`,
 #'   with three new columns named according to `.new`. These columns will be
 #'   (from left to right):
 #'
-#'   * `wlz` - Numeric vector of weight-for-length/height zscores
-#'   * `wfa` - Factor of weight-for-age categories without outlier flagging
-#'   * `wfa_outliers` - Factor of weight-for-age categories with outlier
-#'     flagging
+#'   * `hcaz` - Numeric vector of weight-for-length/height zscores
+#'   * `headsize` - Factor of head size categories
 #' @inherit categorise_headsize details references
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
@@ -465,7 +469,7 @@ classify_headsize <- function(.data,
     id = id
   )
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
+  .new <- repair_.new_names(.new = list("headsize" = .new), mode = "specific")
   .data[[.new[1]]] <- hcaz
   .data[[.new[2]]] <- categorise_headsize_internal(hcaz)
   .data
@@ -953,7 +957,14 @@ check_if_.new_elements_unique <- function(.new) {
 }
 
 #' @noRd
-repair_.new_names <- function(.new) {
+repair_.new_names <- function(.new, mode = "classify_growth") {
+  if (!mode %in% c("classify_growth", "specific")) {
+    rlang::abort(
+      c("!" = paste0("{.arg mode} should be one of `\"classify_growth\"`",
+                     "or `\"specific\".`")),
+      call = rlang::caller_env(),
+      .internal = TRUE)
+  }
   .new_names <- names(.new)
   chr_OLD <- unlist(.new)
   chr_NEW <- vctrs::vec_as_names(chr_OLD, repair = "universal_quiet")
@@ -984,14 +995,22 @@ repair_.new_names <- function(.new) {
   }
   li_renamed <- vctrs::list_drop_empty(renaming_info)
   if (length(li_renamed) != 0) {
+    renamed <- unlist(li_renamed)
+    if (mode == "specific") {
+      renamed <- renamed[-1]
+    }
     rlang::warn(
-      c("Column names in `.new` repaired by `rlang::vec_as_names()`:",
-        unlist(li_renamed)),
+      c("Column names in `.new` repaired by `rlang::vec_as_names()`:", renamed),
       class = "gigs_repaired_names_in_.new",
       call = rlang::caller_env()
     )
   }
-  .new
+
+  if (mode == "specific") {
+    .new[[1]]
+  } else {
+    .new
+  }
 }
 
 #' Build a character vector describing which outcomes in `classify_growth()`
