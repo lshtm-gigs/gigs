@@ -8,11 +8,22 @@
     instead take a `data.frame`-like objects.
 * **NEW FEATURES**:
   * The `classify_growth()` function can be used to get data on multiple growth 
-    indicators at the same time.
+    indicators at the same time. It will try to compute as many growth outcomes 
+    (i.e. size-for-GA, SVN, stunting, wasting, weight-for-age and head size) as
+    possible based on the data you provide, and will tell you which analyses 
+    were performed.
+  * The GIGS z-scoring functions are explicitly user-facing now. Go check out
+    `gigs_waz()` and friends for easy z-scoring using GIGS-recommended 
+    standards.
+  * Added an `id` parameter to `classify_growth()` and friends, as well as the 
+    GIGS z-scoring functions. This parameter informs the functions about *who*
+    each data point is from, so that birth measurements for each individual can
+    be identified and assessed with the IG-21<sup>st</sup> Newborn Size 
+    standards.
   * The `compute_*()` functions for growth analysis. These functions take
     several vectors containing anthropometric measurements, age, and sex; they
     return a factor of growth categories. They are equivalent to the 
-    `classify_*()` functions from GIGS 0.4.1 and earlier.
+    `classify_*()` functions from v0.4.1 and earlier.
   * The `categorise_*()` functions for growth analysis. These functions take 
     vectors of growth centiles/z-scores as input, and return a factor of 
     growth categories.
@@ -21,6 +32,9 @@
     friends provided that `acronym = "hefwfga"`.
   * You can now set all GIGS options at once with `gigs_options_set()`.
 * **FIXES**:
+  * Z-scoring based on GIGS-recommended standards now accounts for measurements 
+    from different individuals, whereas in earlier versions the z-scoring logic
+    treated data as if it all came from the same individual.
   * `.gigs_options` is now actively exported by gigs and available to end-users
 * **INTERNAL/DOCS CHANGES**:
   * Errors, warnings, and messages from GIGS are now handled with 
