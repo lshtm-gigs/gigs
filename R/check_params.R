@@ -329,14 +329,16 @@ validate_id <- function(id) {
 ## These functions capture warnings/errors from `handle_*()` functions and print
 ## them nicely for end-users with rlang::warn and rlang::abort
 
-validation_warnings_errors <- function(warnings,
-                                       errors,
-                                       arg_type = "arguments",
-                                       call = rlang::caller_env()) {
-  validation_alerts(warnings, mode = "warn", call, arg_type)
-  validation_alerts(errors, mode = "abort", call, arg_type)
-}
-
+#' Pretty formatting for GIGS warnings/errors
+#' @param alerts A list of warnings/errors captured by
+#'   `catch_and_throw_validate_issues()`
+#' @param mode A single-length character variable, one of either `warning` or
+#'   `error`. This controls whether `rlang::warn()` or `rlang::error()` is used
+#'   to deliver the messages, respectively.
+#' @inheritParams catch_and_throw_validate_issues
+#' @returns Returns NULL invisibly if `alerts` has length 0, else throw errors
+#'   or warnings depending on `mode`.
+#' @noRd
 validation_alerts <- function(alerts,
                               mode,
                               call = rlang::caller_env(),
@@ -359,6 +361,31 @@ validation_alerts <- function(alerts,
   )
 }
 
+#' Throw warnings *then* errors when validating GIGS inputs.
+#' @param warnings,errors A list of warnings or errors, captured by the
+#'   `rlang::try_fetch()`/`rlang::cnd_muffle()`/`rlang::zap()` construct in
+#'   `catch_and_throw_validate_issues()`.
+#' @inheritParams catch_and_throw_validate_issues
+#' @noRd
+validation_warnings_errors <- function(warnings,
+                                       errors,
+                                       call = rlang::caller_env()) {
+  validation_alerts(warnings, mode = "warn", call)
+  validation_alerts(errors, mode = "abort", call)
+}
+
+#' Catch warnings/errors thrown up during parameter validation, and print them
+#' prettily
+#' @param An R expression which contains multiple `validate_*()` function calls.
+#'   These will be caught, collected together, and returned to the user in one
+#'   block.
+#' @param call A calling environment, which defaults to rlang::caller_env().
+#'   This parameter ensures the warnings/errors print with the right function
+#'   call at the start.
+#' @returns Either `expr` is evaluated and NULL is returned by
+#'   `validation_warnings_errors()`, or the function ends up printing the
+#'   errors/warnings collected in `warnings` and `errors`.
+#' @noRd
 catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
   warnings <- list()
   errors <- list()
@@ -430,6 +457,13 @@ validate_parameter_lengths <- function(..., y_name = NULL, x_name = NULL) {
   invisible(inputs)
 }
 
+#' Format errors where inputs are zero-length
+#' @param varnames A character vector with variable names.
+#' @param is_zero_length A logical vector the same length as `varnames`, which
+#'   is used to pluck out values in `varnames` to be used by `rlang::abort()`.
+#' @returns Is only called to throw errors, which tell the user which of their
+#'   input(s) was zero-length.
+#' @noRd
 err_input_is_zero_length <- function(varnames, is_zero_length) {
   zero_len_names <- varnames[is_zero_length]
   count <- sum(is_zero_length)
@@ -469,6 +503,12 @@ err_input_is_zero_length <- function(varnames, is_zero_length) {
   )
 }
 
+#' Format errors where inputs are unrecyclable
+#' @param varnames A character vector with variable names.
+#' @param is_unrecyclable A logical vector the same length as `varnames`, which
+#'   is used to pluck out values in `varnames` to be used by `rlang::abort()`.
+#' @returns Is only called to throw errors, which tell the user which of their
+#'   inputs have bad lengths for tidyverse-style recycling.
 err_inputs_unrecyclable <- function(varnames, is_unrecyclable) {
   unrecyclable_names <- varnames[is_unrecyclable]
   count <- sum(is_unrecyclable)
@@ -487,8 +527,7 @@ err_inputs_unrecyclable <- function(varnames, is_unrecyclable) {
 }
 
 # SRR tags ---------------------------------------------------------------------
-# TODO: Document all functions with `{roxygen2}`
-# #' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
+#' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
 #' @srrstats {G2.0, G2.1, G2.2} Length/type/univariate input assertions using
 #'   `{checkmate}` package.
 #' @srrstats {G2.13, G2.14, G2.14a, G2.14b, G2.16} The various `handle_*`
