@@ -788,11 +788,11 @@ validate_ig_nbs <- function(y = NULL,
                              sex = sex, acronym = acronym, y_name = y_name,
                              x_name = "gest_days")
   catch_and_throw_validate_issues({
-    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
     standard <- "ig_nbs"
     acronym <- validate_acronym(acronym, names(gigs::ig_nbs), standard)
-    gest_days <- validate_xvar(gest_days, acronym, standard, "gest_days")
     sex <- validate_sex(sex)
+    gest_days <- validate_xvar(gest_days, acronym, standard, "gest_days")
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
   }, call = rlang::caller_env())
   recycled <- vctrs::vec_recycle_common(
     y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], gest_days = gest_days, sex = sex

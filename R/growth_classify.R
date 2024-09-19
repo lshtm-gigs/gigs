@@ -208,7 +208,6 @@ classify_stunting <- function(
     id <- eval_tidy(enquo(id), data = .data)
   }
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
   lhaz <- validate_lhaz_params(
     lenht_cm = eval_tidy(enquo(lenht_cm), data = .data),
     age_days = eval_tidy(enquo(age_days), data = .data),
@@ -218,6 +217,7 @@ classify_stunting <- function(
   ) |>
     do.call(what = gigs_lhaz_internal)
 
+  .new <- repair_.new_names(.new = list("stunting" = .new), mode = "specific")
   .data[[.new[1]]] <- lhaz
   .data[[.new[2]]] <- categorise_stunting_internal(lhaz, outliers = FALSE)
   .data[[.new[3]]] <- categorise_stunting_internal(lhaz, outliers = TRUE)
@@ -285,7 +285,7 @@ classify_wasting <- function(.data,
                              .new = c("wlz", "wasting", "wasting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
 
   if (!rlang::quo_is_null(enquo(id))) {
     id <- eval_tidy(enquo(id), .data)
@@ -364,7 +364,8 @@ classify_wfa <- function(.data,
                          .new = c("waz", "wfa", "wfa_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
+
   if (!rlang::quo_is_null(enquo(id))) {
     id <- eval_tidy(enquo(id), data = .data)
   }
@@ -443,7 +444,8 @@ classify_headsize <- function(.data,
                               .new = c("hcaz", "headsize")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S2")
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
+
   if (!rlang::quo_is_null(enquo(id))) {
     id <- eval_tidy(enquo(id), data = .data)
   }
@@ -508,6 +510,7 @@ classify_headsize <- function(.data,
 #'   the column referred to by `age_days` is between `0` and `0.5`.
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
+#' # 500 days of age.
 #' data <- data.frame(
 #'   child = factor(rep.int(c("A", "B"), c(3, 3))),
 #'   agedays = c(0, 100, 500, 2, 100, 500),
@@ -632,8 +635,8 @@ classify_growth <- function(
                          max.len = all_analyses_len)
   checkmate::qassert(x = .verbose, rules = "B1")
 
-  # Ascertain integrity of `.data`, `.outcomes`, and `.new`
-  err_if_.new_in_.data(new = unique(unlist(.new)),
+  # Sanity checks: Integrity of `.data`, `.outcomes`, and `.new`
+  err_if_.new_in_.data(.new = unique(unlist(.new)),
                        .data_colnames = colnames(.data))
   check_all_.new_names_valid(.new = .new, all = all_analyses)
   check_all_.outcomes_in_.new(.new = .new, .outcomes = .outcomes)

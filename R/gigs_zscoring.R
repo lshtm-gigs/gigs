@@ -97,16 +97,23 @@ gigs_hcaz <- function(headcirc_cm, age_days, gest_days, sex, id = NULL) {
 
 #' @inheritParams gigs_waz
 #' @noRd
-gigs_waz_internal <- function(weight_kg, age_days, gest_days, sex, id = NULL) {
+gigs_waz_internal <- function(weight_kg,
+                              age_days,
+                              gest_days,
+                              sex,
+                              id = NULL,
+                              gigs_lgls = NULL) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
-                                  age_days = age_days,
-                                  id = id) |>
-    lapply(FUN = \(lgl) lgl & !is.na(weight_kg))
+  if (is.null(gigs_lgls)) {
+    gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
+                                    age_days = age_days,
+                                    id = id)
+  }
+  gigs_lgls <- lapply(X = gigs_lgls, FUN = \(lgl) lgl & !is.na(weight_kg))
 
   z_ig_nbs <- qnorm(fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]],
                                  weight_kg, gest_days, sex, acronym = "wfga"))
@@ -124,16 +131,23 @@ gigs_waz_internal <- function(weight_kg, age_days, gest_days, sex, id = NULL) {
 
 #' @inheritParams gigs_lhaz
 #' @noRd
-gigs_lhaz_internal <- function(lenht_cm, age_days, gest_days, sex, id = NULL) {
+gigs_lhaz_internal <- function(lenht_cm,
+                               age_days,
+                               gest_days,
+                               sex,
+                               id = NULL,
+                               gigs_lgls = NULL) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
-                                  age_days = age_days,
-                                  id = id) |>
-    lapply(FUN = \(lgl) lgl & !is.na(lenht_cm))
+  if (is.null(gigs_lgls)) {
+    gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
+                                    age_days = age_days,
+                                    id = id)
+  }
+  gigs_lgls <- lapply(X = gigs_lgls, FUN = \(lgl) lgl & !is.na(lenht_cm))
 
   z_ig_nbs <- qnorm(fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]],
                                  lenht_cm, gest_days, sex, acronym = "lfga"))
@@ -156,16 +170,21 @@ gigs_wlz_internal <- function(weight_kg,
                               age_days,
                               gest_days,
                               sex,
-                              id = NULL) {
+                              id = NULL,
+                              gigs_lgls = NULL) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA_real_
 
-  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
-                                  age_days = age_days,
-                                  id = id) |>
-    lapply(FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
+  if (is.null(gigs_lgls)) {
+    gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
+                                    age_days = age_days,
+                                    id = id)
+  }
+  gigs_lgls <- lapply(X = gigs_lgls,
+                      FUN = \(lgl) lgl & !(is.na(weight_kg) | is.na(lenht_cm)))
+
 
   use_ig_png <- gigs_lgls[["ig_png"]] & inrange(lenht_cm, c(35, 65))
   use_who_wfl <- gigs_lgls[["who_gs"]] & age_days  < 731
@@ -199,16 +218,23 @@ gigs_wlz_internal <- function(weight_kg,
 
 #' @inheritParams gigs_hcaz
 #' @noRd
-gigs_hcaz_internal <- function(headcirc_cm, age_days, gest_days, sex) {
+gigs_hcaz_internal <- function(headcirc_cm,
+                               age_days,
+                               gest_days,
+                               sex,
+                               id = NULL,
+                               gigs_lgls = NULL) {
   # Set up PMA
   pma_days <- gest_days + age_days
   pma_weeks <- pma_days / 7
   pma_weeks[!inrange(x = pma_weeks, vec = c(27, 64))] <- NA
 
-  gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
-                                  age_days = age_days,
-                                  id = id) |>
-    lapply(FUN = \(lgl) lgl & !is.na(headcirc_cm))
+  if (is.null(gigs_lgls)) {
+    gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
+                                    age_days = age_days,
+                                    id = id)
+  }
+  gigs_lgls <- lapply(X = gigs_lgls, FUN = \(lgl) lgl & !is.na(headcirc_cm))
 
   z_ig_nbs <- qnorm(
     fn_on_subset(ig_nbs_v2c_internal, gigs_lgls[["ig_nbs"]], headcirc_cm,

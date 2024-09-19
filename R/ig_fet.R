@@ -1751,10 +1751,10 @@ validate_ig_fet <- function(y = NULL,
   validate_parameter_lengths(y = y, z = z, p = p, x = x, acronym = acronym,
                              y_name = y_name, x_name = x_name)
   catch_and_throw_validate_issues(expr = {
-    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
     standard <- "ig_fet"
     acronym <- validate_acronym(acronym, names(gigs::ig_fet), standard)
     x <- validate_xvar(x, acronym, standard, x_name)
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
   }, call = rlang::caller_env())
   recycled <- vctrs::vec_recycle_common(
     y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x

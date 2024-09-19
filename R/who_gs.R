@@ -850,11 +850,11 @@ validate_who_gs <- function(y = NULL,
                              acronym = acronym, y_name = y_name,
                              x_name = x_name)
   catch_and_throw_validate_issues({
-    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
     standard <- "who_gs"
     acronym <- validate_acronym(acronym, names(gigs::who_gs), standard)
-    x <- validate_xvar(x, acronym, standard, x_name)
     sex <- validate_sex(sex)
+    x <- validate_xvar(x, acronym, standard, x_name)
+    yzp <- validate_yzp(y = y, z = z, p = p, y_name = y_name)
   }, call = rlang::caller_env())
   recycled <- vctrs::vec_recycle_common(
     y = yzp[[1]], z = yzp[[2]], p = yzp[[3]], x = x, sex = sex
