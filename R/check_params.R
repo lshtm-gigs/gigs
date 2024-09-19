@@ -365,12 +365,18 @@ catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
   rlang::try_fetch(
     expr = expr,
     warning = \(cnd) {
-      warnings <<- c(cnd$message, warnings)
+      warnings_temp <- get("warnings", envir = rlang::env_parent())
+      assign(x = "warnings",
+             value = c(cnd$message, warnings_temp),
+             envir = rlang::env_parent())
       rlang::cnd_muffle(cnd)
       rlang::zap()
     },
     error = \(cnd) {
-      errors <<- c(cnd$message, errors)
+      errors_temp <- get("errors", envir = rlang::env_parent())
+      assign(x = "warnings",
+             value = c(cnd$message, errors_temp),
+             envir = rlang::env_parent())
       rlang::cnd_muffle(cnd)
       rlang::zap()
     })
