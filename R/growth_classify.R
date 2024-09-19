@@ -63,16 +63,19 @@ classify_sfga <- function(
     sex,
     .new = c("birthweight_centile", "sfga", "sfga_severe")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
   checkmate::qassert(.new, rules = "S3")
 
-  p <- ig_nbs_wfga_value2centile(
-    weight_kg = eval_tidy(enquo(weight_kg), .data),
+  p <- validate_ig_nbs(
+    y = eval_tidy(enquo(weight_kg), .data),
     gest_days = eval_tidy(enquo(gest_days), .data),
-    sex = eval_tidy(enquo(sex), .data)
-  )
+    sex = eval_tidy(enquo(sex), .data),
+    acronym = "wfga",
+    y_name = "weight_kg"
+  ) |>
+    do.call(what = ig_nbs_v2c_internal)
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
+  .new <- repair_.new_names(.new = list("sfga" = .new), mode = "specific")
   .data[[.new[1]]] <- p
   .data[[.new[2]]] <- categorise_sfga_internal(p, severe = FALSE)
   .data[[.new[3]]] <- categorise_sfga_internal(p, severe = TRUE)
@@ -119,19 +122,23 @@ classify_svn <- function(.data,
                           .new = c("birthweight_centile", "svn")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S2")
-  err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
-  p <- ig_nbs_wfga_value2centile(
-    weight_kg = eval_tidy(enquo(weight_kg), .data),
-    gest_days = eval_tidy(enquo(gest_days), .data),
-    sex = eval_tidy(enquo(sex), .data)
-  )
+  err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
 
-  .new <- vctrs::vec_as_names(.new, repair = "universal")
+  p <- validate_ig_nbs(
+    y = eval_tidy(enquo(weight_kg), .data),
+    gest_days = eval_tidy(enquo(gest_days), .data),
+    sex = eval_tidy(enquo(sex), .data),
+    acronym = "wfga",
+    y_name = "weight_kg"
+  ) |>
+    do.call(what = ig_nbs_v2c_internal)
+
+  .new <- repair_.new_names(.new = list("svn" = .new), mode = "specific")
   .data[[.new[1]]] <- p
   .data[[.new[2]]] <- categorise_svn_internal(
     p, eval_tidy(expr = enquo(gest_days), data = .data)
   )
-  return(.data)
+  .data
 }
 
 #' Classify stunting in `data.frame`-like objects with GIGS-recommended growth
