@@ -35,10 +35,11 @@
 #' @param age_days A numeric vector of length one or more with ages in days.
 #' @param gest_days A numeric vector of length one or more with gestational ages
 #'   in days.
-#' @param id A factor variable with an ID for each observation. When not `NULL`,
-#'   this variable is used to ensure that only the earliest measurement for each
-#'   individual is used as a birth measure. Leave this argument as `NULL` if all
-#'   your data comes from the same individual. Default = `NULL`.
+#' @param id A factor of length one or more with an ID for each observation,
+#'   either ordered or unordered, containing no missing (`NA`) values. When
+#'   supplied, `id` is used to ensure that only the earliest measurement for
+#'   each individual is used as a birth measure. Leave this argument as `NULL`
+#'   if all your data comes from the same individual. Default = `NULL`.
 #' @inheritParams shared_roxygen_params
 #' @note These functions expect vectors which are recyclable with
 #'   [vctrs::vec_recycle_common()].
@@ -263,7 +264,6 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id) {
       message = c("`age_days` and `gest_days` must have the same length.",
                   "!" = paste0("`age_days` had length ", len_age_days,
                                "; `gest_days` had length ", len_gest_days,
-                               "; `id` had length ", len_id,
                                ".")),
       .internal = TRUE
     )
@@ -342,7 +342,8 @@ validate_waz_params <- function(weight_kg, age_days, gest_days, sex, id) {
 #' @noRd
 validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex, id) {
   validate_parameter_lengths(
-    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex
+    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex,
+    id = id
   )
   catch_and_throw_validate_issues(expr = {
     lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
@@ -352,7 +353,8 @@ validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex, id) {
     id <- validate_id(id)
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(
-    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex
+    lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex,
+    id = id
   )
 }
 
@@ -362,7 +364,7 @@ validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex, id) {
 #' @noRd
 validate_hcaz_params <- function(headcirc_cm, age_days, gest_days, sex, id) {
   validate_parameter_lengths(headcirc_cm = headcirc_cm, age_days = age_days,
-                             gest_days = gest_days, sex = sex)
+                             gest_days = gest_days, sex = sex, id = id)
   catch_and_throw_validate_issues(expr = {
     headcirc_cm <- validate_numeric(headcirc_cm, varname = "headcirc_cm")
     age_days <- validate_numeric(age_days, varname = "age_days")
@@ -371,29 +373,37 @@ validate_hcaz_params <- function(headcirc_cm, age_days, gest_days, sex, id) {
     id <- validate_id(id)
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(headcirc_cm = headcirc_cm, age_days = age_days,
-                            gest_days = gest_days, sex = sex)
+                            gest_days = gest_days, sex = sex, id = id)
 }
 
 #' Validate inputs to the GIGS weight-for-length z-scoring function
 #' @inheritParams gigs_wlz
 #' @seealso [classify_wasting()]
 #' @noRd
-validate_wlz_params <- function(weight_kg, lenht_cm, age_days, gest_days, sex) {
+validate_wlz_params <- function(weight_kg,
+                                lenht_cm,
+                                age_days,
+                                gest_days,
+                                sex,
+                                id) {
   validate_parameter_lengths(weight_kg = weight_kg, lenht_cm = lenht_cm,
                              age_days = age_days, gest_days = gest_days,
-                             sex = sex)
+                             sex = sex, id = id)
   catch_and_throw_validate_issues(expr = {
     weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
     lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
     age_days <- validate_numeric(age_days, varname = "age_days")
     gest_days <- validate_numeric(gest_days, varname = "gest_days")
     sex <- validate_sex(sex)
+    id <- validate_id(id)
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(weight_kg = weight_kg, lenht_cm = lenht_cm,
                             age_days = age_days, gest_days = gest_days,
-                            sex = sex)
+                            sex = sex, id = id)
 }
 
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G1.4a} This file's functions are all documented with `{roxygen2}`.
+#' @srrstats {G2.5} It is specifically noted that input factors can be ordered
+#'   or unordered.
 NULL

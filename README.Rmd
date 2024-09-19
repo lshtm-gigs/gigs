@@ -111,6 +111,7 @@ life6mo_classified <- classify_growth(
         sex = as.character(sex),
         weight_kg = wt_kg,
         lenht_cm = len_cm,
+        id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
 
@@ -127,6 +128,7 @@ life6mo_classified <- classify_growth(
         age_days = age_days,
         sex = as.character(sex),
         weight_kg = wt_kg,
+        id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
 
@@ -136,7 +138,8 @@ head(life6mo_classified, n = 4)
 You can also use `classify_*()` functions which are specific to the growth
 indicator you'd like to calculate, for example `classify_svn()`:
 ```{r examples_classification2}
-# Small vulnerable newborns
+# Small vulnerable newborns - note no ID parameter, as it is assumed that all
+# measures are taken at birth
 life6mo_svn <- classify_svn(
   .data = life6mo_newborns,
   weight_kg = wt_kg,

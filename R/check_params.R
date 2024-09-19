@@ -311,10 +311,14 @@ validate_acronym <- function(acronym, allowed_acronyms, standard) {
                                options = allowed_acronyms, is_na = FALSE)
 }
 
-#' Validate user-inputted ID data for z-scoring/growth analysis
+#' Validate user-inputted IDs for z-scoring/growth analysis
 #' @param id An `id` input from one of the gigs_zscoring functions, i.e.
-#'   `[gigs_waz()]`, `[gigs_lhaz()]`, `[gigs_wlz()]`, `[gigs_hcaz()]`.
-#' @returns Throws an error if `id` is not a factor variable, else
+#'   `[gigs_waz()]`, `[gigs_lhaz()]`, `[gigs_wlz()]`, `[gigs_hcaz()]`. This must
+#'   be a factor or `NULL` (the default). If a factor, `id` does not have to be
+#'   either `ordered` or unordered.
+#' @returns If `id` was `NULL`, returns a single-length factor variable of
+#'   `"A"`, which can be recycled to any length. Otherwise returns `id` if
+#'   `checkmate::assert_factor()` has no issues.
 #' @noRd
 validate_id <- function(id) {
   if (!is.null(id)) {
@@ -322,6 +326,8 @@ validate_id <- function(id) {
                              min.len = 1,
                              .var.name = "id") |>
       checkmate::assert_atomic_vector()
+  } else {
+    factor(x = "A")
   }
 }
 

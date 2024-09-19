@@ -163,15 +163,29 @@ classify_svn <- function(.data,
 #'   * `stunting_outliers` - Factor of stunting categories with outlier flagging
 #' @inherit categorise_stunting details references
 #' @examples
-#' # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
-#' # the next two use the WHO Child Growth Standards.
+#' # This dummy dataset contains data from two people, from birth (<3 days) to
+#' # 500 days of age.
 #' data <- data.frame(
-#'   length_cm = c(52.2, 75.4, 63.1),
-#'   agedays = c(357, 375, 250),
-#'   gestage  = c(196, 287, 266),
-#'   sex = c("M", "M", "F")
+#'   child = factor(rep.int(c("A", "B"), c(3, 3))),
+#'   agedays = c(0, 100, 500, 2, 100, 500),
+#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   sex = rep.int(c("M", "F"), c(3, 3)),
+#'   weight_kg = c(3, 6, 9, 3, 6, 9),
+#'   length_cm = rep.int(c(52.2, 60.4, 75), 2),
+#'   headcirc_cm = rep.int(c(40, 50, 60), 2)
 #' )
 #'
+#' # Use the `id` argument to ensure that `classify_stunting` uses the correct
+#' # standard for each observation
+#' data |>
+#'   classify_stunting(lenht_cm = length_cm,
+#'                     age_days = agedays,
+#'                     gest_days = gestage,
+#'                     sex = sex,
+#'                     id = child)
+#'
+#' # If you don't specify `id`, `classify_stunting` will assume data is from one
+#' # child only
 #' data |>
 #'   classify_stunting(lenht_cm = length_cm,
 #'                     age_days = agedays,
@@ -184,19 +198,26 @@ classify_stunting <- function(
     age_days,
     gest_days,
     sex,
+    id = NULL,
     .new = c("lhaz", "stunting", "stunting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
   err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
-  lhaz <- gigs_lhaz(
-    lenht_cm = eval_tidy(enquo(lenht_cm), .data),
-    age_days = eval_tidy(enquo(age_days), .data),
-    gest_days = eval_tidy(enquo(gest_days), .data),
-    sex = eval_tidy(enquo(sex), .data)
-  )
+  if (!rlang::quo_is_null(enquo(id))) {
+    id <- eval_tidy(enquo(id), data = .data)
+  }
 
   .new <- vctrs::vec_as_names(.new, repair = "universal")
+  lhaz <- validate_lhaz_params(
+    lenht_cm = eval_tidy(enquo(lenht_cm), data = .data),
+    age_days = eval_tidy(enquo(age_days), data = .data),
+    gest_days = eval_tidy(enquo(gest_days), data = .data),
+    sex = eval_tidy(enquo(sex), data = .data),
+    id = id
+  ) |>
+    do.call(what = gigs_lhaz_internal)
+
   .data[[.new[1]]] <- lhaz
   .data[[.new[2]]] <- categorise_stunting_internal(lhaz, outliers = FALSE)
   .data[[.new[3]]] <- categorise_stunting_internal(lhaz, outliers = TRUE)
@@ -224,19 +245,34 @@ classify_stunting <- function(
 #' @inherit categorise_wasting details
 #' @inherit categorise_stunting references
 #' @examples
-#' # Returns factor with stunting classifications
+#' # This dummy dataset contains data from two people, from birth (<3 days) to
+#' # 500 days of age.
 #' data <- data.frame(
-#'   wt_kg = c(5.75, 2.18, 3.00, 6.75),
-#'   length_height = c(67.7, 46.6, 50.0, 80.1),
-#'   gestage = c(251, 197, 225, 243),
-#'   age = c(251, 197, 225, 243),
-#'   sex =  c("F", "M", "F", "M")
+#'   child = factor(rep.int(c("A", "B"), c(3, 3))),
+#'   agedays = c(0, 100, 500, 2, 100, 500),
+#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   sex = rep.int(c("M", "F"), c(3, 3)),
+#'   weight_kg = c(3, 6, 9, 3, 6, 9),
+#'   length_cm = rep.int(c(52.2, 60.4, 75), 2)
 #' )
+#'
+#' # Use the `id` argument to ensure that `classify_wasting` uses the correct
+#' # standard for each observation
 #' data |>
-#'   classify_wasting(weight_kg = wt_kg,
-#'                    lenht_cm = length_height,
+#'   classify_wasting(weight_kg = weight_kg,
+#'                    lenht_cm = length_cm,
+#'                    age_days = agedays,
 #'                    gest_days = gestage,
-#'                    age_days = age,
+#'                    sex = sex,
+#'                    id = child)
+#'
+#' # If you don't specify `id`, `classify_wasting` will assume data is from one
+#' # child only
+#' data |>
+#'   classify_wasting(weight_kg = weight_kg,
+#'                    lenht_cm = length_cm,
+#'                    age_days = agedays,
+#'                    gest_days = gestage,
 #'                    sex = sex)
 #' @export
 classify_wasting <- function(.data,
@@ -245,17 +281,23 @@ classify_wasting <- function(.data,
                              age_days,
                              gest_days,
                              sex,
+                             id = NULL,
                              .new = c("wlz", "wasting", "wasting_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
   err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
 
+  if (!rlang::quo_is_null(enquo(id))) {
+    id <- eval_tidy(enquo(id), .data)
+  }
+
   wlz <- gigs_wlz(
-    weight_kg = eval_tidy(enquo(weight_kg), .data),
-    lenht_cm = eval_tidy(enquo(lenht_cm), .data),
-    age_days = eval_tidy(enquo(age_days), .data),
-    gest_days = eval_tidy(enquo(gest_days), .data),
-    sex = eval_tidy(enquo(sex), .data)
+    weight_kg = eval_tidy(enquo(weight_kg), data = .data),
+    lenht_cm = eval_tidy(enquo(lenht_cm), data = .data),
+    age_days = eval_tidy(enquo(age_days), data = .data),
+    gest_days = eval_tidy(enquo(gest_days), data = .data),
+    sex = eval_tidy(enquo(sex), data = .data),
+    id = id
   )
 
   .new <- vctrs::vec_as_names(.new, repair = "universal")
@@ -286,15 +328,30 @@ classify_wasting <- function(.data,
 #' @inherit categorise_wfa details
 #' @inherit categorise_stunting references
 #' @examples
+#' # This dummy dataset contains data from two people, from birth (<3 days) to
+#' # 500 days of age.
 #' data <- data.frame(
-#'   wt_kg = c(7.2, 4.5, 9.1, 24),
-#'   age = c(401, 185, 101, 607),
-#'   gestage = 7 * c(27, 36, 40, 41),
-#'   sex = c("F", "M", "F", "M")
+#'   child = factor(rep.int(c("A", "B"), c(3, 3))),
+#'   agedays = c(0, 100, 500, 2, 100, 500),
+#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   sex = rep.int(c("M", "F"), c(3, 3)),
+#'   weight_kg = c(3, 6, 9, 3, 6, 9)
 #' )
+#'
+#' # Use the `id` argument to ensure that `classify_wfa()` uses the correct
+#' # standard for each observation
 #' data |>
-#'   classify_wfa(weight_kg = wt_kg,
-#'                age_days = age,
+#'   classify_wfa(weight_kg = weight_kg,
+#'                age_days = agedays,
+#'                gest_days = gestage,
+#'                sex = sex,
+#'                id = child)
+#'
+#' # If you don't specify `id`, `classify_wfa()` will assume data is from one
+#' # child only
+#' data |>
+#'   classify_wfa(weight_kg = weight_kg,
+#'                age_days = agedays,
 #'                gest_days = gestage,
 #'                sex = sex)
 #' @export
@@ -303,16 +360,21 @@ classify_wfa <- function(.data,
                          age_days,
                          gest_days,
                          sex,
+                         id = NULL,
                          .new = c("waz", "wfa", "wfa_outliers")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
   err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  if (!rlang::quo_is_null(enquo(id))) {
+    id <- eval_tidy(enquo(id), data = .data)
+  }
 
   waz <- gigs_waz(
     weight_kg = eval_tidy(enquo(weight_kg), data = .data),
     age_days = eval_tidy(enquo(age_days), data = .data),
     gest_days = eval_tidy(enquo(gest_days), data = .data),
-    sex = eval_tidy(enquo(sex), data = .data)
+    sex = eval_tidy(enquo(sex), data = .data),
+    id = id
   )
 
   .new <- vctrs::vec_as_names(.new, repair = "universal")
@@ -345,36 +407,53 @@ classify_wfa <- function(.data,
 #'     flagging
 #' @inherit categorise_headsize details references
 #' @examples
+#' # This dummy dataset contains data from two people, from birth (<3 days) to
+#' # 500 days of age.
 #' data <- data.frame(
-#'   head_cm = c(41, 40, 41, 51),
-#'   age = c(401, 185, 101, 607),
-#'   gestage = c(189, 252, 280, 287),
-#'   sex = c("F", "M", "F", "M")
+#'   child = factor(rep.int(c("A", "B"), c(3, 3))),
+#'   agedays = c(0, 100, 500, 2, 100, 500),
+#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   sex = rep.int(c("M", "F"), c(3, 3)),
+#'   headcirc_cm = rep.int(c(40, 50, 60), 2)
 #' )
 #'
+#' # Use the `id` argument to ensure that `classify_headsize()` uses the correct
+#' # standard for each observation
 #' data |>
-#'   classify_headsize(
-#'     headcirc_cm = head_cm,
-#'     age_days = age,
-#'     gest_days = gestage,
-#'     sex = sex
-#'   )
+#'   classify_headsize(headcirc_cm = headcirc_cm,
+#'                     age_days = agedays,
+#'                     gest_days = gestage,
+#'                     sex = sex,
+#'                     id = child)
+#'
+#' # If you don't specify `id`, `classify_headsize()` will assume data is from
+#' # one child only
+#' data |>
+#'   classify_headsize(headcirc_cm = headcirc_cm,
+#'                     age_days = agedays,
+#'                     gest_days = gestage,
+#'                     sex = sex)
 #' @export
 classify_headsize <- function(.data,
                               headcirc_cm,
                               age_days,
                               gest_days,
                               sex,
+                              id = NULL,
                               .new = c("hcaz", "headsize")) {
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S2")
   err_if_.new_in_.data(new = .new, .data_colnames = colnames(.data))
+  if (!rlang::quo_is_null(enquo(id))) {
+    id <- eval_tidy(enquo(id), data = .data)
+  }
 
   hcaz <- gigs_hcaz(
     headcirc_cm = eval_tidy(enquo(headcirc_cm), .data),
     age_days = eval_tidy(enquo(age_days), .data),
     gest_days = eval_tidy(enquo(gest_days), .data),
-    sex = eval_tidy(enquo(sex), .data)
+    sex = eval_tidy(enquo(sex), .data),
+    id = id
   )
 
   .new <- vctrs::vec_as_names(.new, repair = "universal")
@@ -428,13 +507,15 @@ classify_headsize <- function(.data,
 #'   categorisations will only be applied on birthweights, i.e. rows where
 #'   the column referred to by `age_days` is between `0` and `0.5`.
 #' @examples
+#' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' data <- data.frame(
-#'   agedays = c(0, 100, 100),
-#'   gestage = c(270, 270, 270),
-#'   wt_kg = c(2.5, 7.5, 7.5),
-#'   len_cm = c(45, 60, 60),
-#'   head_cm = c(36, 40.2, 40.2),
-#'   sex = c("M", "M", "F")
+#'   child = factor(rep.int(c("A", "B"), c(3, 3))),
+#'   agedays = c(0, 100, 500, 2, 100, 500),
+#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   sex = rep.int(c("M", "F"), c(3, 3)),
+#'   wt_kg = c(3, 6, 9, 3, 6, 9),
+#'   len_cm = rep.int(c(52.2, 60.4, 75), 2),
+#'   head_cm = rep.int(c(30, 40, 49), 2)
 #' )
 #'
 #' data_classified <- classify_growth(data,
@@ -443,7 +524,8 @@ classify_headsize <- function(.data,
 #'                                    weight_kg = wt_kg,
 #'                                    lenht_cm = len_cm,
 #'                                    headcirc_cm = head_cm,
-#'                                    sex = sex)
+#'                                    sex = sex,
+#'                                    id = child)
 #'
 #' data_classified
 #'
@@ -453,6 +535,7 @@ classify_headsize <- function(.data,
 #'                             gest_days = gestage,
 #'                             sex = sex,
 #'                             weight_kg = wt_kg,
+#'                             id = child,
 #'                             .outcomes = "svn")
 #'
 #' data_svn
@@ -463,6 +546,7 @@ classify_headsize <- function(.data,
 #'                             gest_days = gestage,
 #'                             sex = sex,
 #'                             weight_kg = wt_kg,
+#'                             id = child,
 #'                             .outcomes = "svn",
 #'                             .new = list("svn" = c("ig_nbs_centile",
 #'                                                   "SVN_Category")))
@@ -474,6 +558,7 @@ classify_headsize <- function(.data,
 #'                                      gest_days = gestage,
 #'                                      sex = sex,
 #'                                      weight_kg = wt_kg,
+#'                                      id = child,
 #'                                      .outcomes = c("svn", "stunting"))
 #' data_svn_stunting
 #' @references
@@ -519,6 +604,7 @@ classify_growth <- function(
   weight_kg = NULL,
   lenht_cm = NULL,
   headcirc_cm = NULL,
+  id = NULL,
   .outcomes = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
   .new = list(
       sfga = c("birthweight_centile", "sfga", "sfga_severe"),
@@ -557,53 +643,66 @@ classify_growth <- function(
   check_if_.new_elements_unique(.new)
   .new <- repair_.new_names(.new)
 
+  if (rlang::quo_is_null(enquo(id))) {
+    id <- factor(rep.int("A", nrow(.data)))
+  } else {
+    id <- eval_tidy(enquo(id), .data)
+  }
+
+  # Move passed-in data to new `growth_data` object - and throw warnings/errors
+  # out based on users' GIGS options
   catch_and_throw_validate_issues(expr = {
     growth_data <- data.frame(
       "gest_days" = validate_numeric(eval_tidy(enquo(gest_days), .data),
                                      varname = "gest_days"),
       "age_days" = validate_numeric(eval_tidy(enquo(age_days), .data),
                                     varname = "age_days"),
-      "sex" = validate_sex(eval_tidy(enquo(sex), .data))
+      "sex" = validate_sex(eval_tidy(enquo(sex), .data)),
+      "id" = validate_id(id)
     )
+
+    # What data was provided? Store data in `growth_data` where possible
+    missing_weight <- rlang::quo_is_null(enquo(weight_kg))
+    missing_lenht <- rlang::quo_is_null(enquo(lenht_cm))
+    missing_headcirc <- rlang::quo_is_null(enquo(headcirc_cm))
+    if (!missing_weight) {
+      growth_data[["weight_kg"]] <- validate_numeric(
+        eval_tidy(enquo(weight_kg), .data), varname = "weight_kg"
+      )
+    }
+    if (!missing_lenht) {
+      growth_data[["lenht_cm"]] <- validate_numeric(
+        eval_tidy(enquo(lenht_cm), .data), varname = "lenht_cm"
+      )
+    }
+    if (!missing_headcirc) {
+      growth_data[["headcirc_cm"]] <- validate_numeric(
+        eval_tidy(enquo(headcirc_cm), .data), varname = "headcirc_cm"
+      )
+    }
   }, call = rlang::current_env())
 
-  # What data was provided? Store data in `growth_data` where possible
-  missing_weight <- rlang::quo_is_null(enquo(weight_kg))
-  missing_lenht <- rlang::quo_is_null(enquo(lenht_cm))
-  missing_headcirc <- rlang::quo_is_null(enquo(headcirc_cm))
-  if (!missing_weight) {
-    growth_data[["weight_kg"]] <- validate_numeric(
-      eval_tidy(enquo(weight_kg), .data), varname = "weight_kg"
-    )
-  }
-  if (!missing_lenht) {
-    growth_data[["lenht_cm"]] <- validate_numeric(
-      eval_tidy(enquo(lenht_cm), .data), varname = "lenht_cm"
-    )
-  }
-  if (!missing_headcirc) {
-    growth_data[["headcirc_cm"]] <- validate_numeric(
-      eval_tidy(enquo(headcirc_cm), .data), varname = "headcirc_cm"
-    )
-  }
+  # Cache gigs logicals --> saves a fair chunk of time as the input dataset gets
+  # bigger
+  cached_gigs_lgls <- with(growth_data,
+                           gigs_zscoring_lgls(age_days = age_days,
+                                              gest_days = gest_days,
+                                              id = id))
 
-  # Compute outcomes if data allows
+  # Compute outcomes as provided data allows
   for (outcome in .outcomes) {
     if (outcome == "sfga" | outcome == "svn") {
-      # TODO: Add logic which limits birth analysis to first observation per ID
       if (missing_weight) next
       bweight_centile_not_calculated <- !.new[[outcome]][1] %in% names(.data)
       if (bweight_centile_not_calculated) {
-        is_birthweight <-
-          growth_data[["age_days"]] > -sqrt(.Machine$double.eps) &
-          growth_data[["age_days"]] < 0.5
-        is_birthweight[is.na(is_birthweight)] <- FALSE
-        is_calculable <- is_birthweight &
-          inrange(growth_data[["gest_days"]], vec = c(168, 300))
+        is_birthweight <- gigs_zscoring_lgls(
+          gest_days = growth_data[["gest_days"]],
+          age_days = growth_data[["age_days"]],
+          id = id)[["ig_nbs"]]
         ig_nbs_wfga_p <- rep(NA_real_, nrow(.data))
-        ig_nbs_wfga_p[is_calculable] <- fn_on_subset(
+        ig_nbs_wfga_p[is_birthweight] <- fn_on_subset(
           fn = ig_nbs_v2c_internal,
-          lgl = is_calculable,
+          lgl = is_birthweight,
           growth_data[["weight_kg"]],
           growth_data[["gest_days"]],
           growth_data[["sex"]],
@@ -629,7 +728,8 @@ classify_growth <- function(
       if (missing_lenht) next
       lhaz <- with(growth_data,
                    gigs_lhaz_internal(lenht_cm = lenht_cm, age_days = age_days,
-                                      gest_days = gest_days, sex = sex))
+                                      gest_days = gest_days, sex = sex,
+                                      id = id, gigs_lgls = cached_gigs_lgls))
       .data[[.new[[outcome]][1]]] <- lhaz
       .data[[.new[[outcome]][2]]] <- categorise_stunting_internal(lhaz, FALSE)
       .data[[.new[[outcome]][3]]] <- categorise_stunting_internal(lhaz, TRUE)
@@ -640,7 +740,8 @@ classify_growth <- function(
       wlz <- with(growth_data,
                    gigs_wlz_internal(weight_kg = weight_kg,
                                      lenht_cm = lenht_cm, age_days = age_days,
-                                     gest_days = gest_days, sex = sex))
+                                     gest_days = gest_days, sex = sex,
+                                     id = id, gigs_lgls = cached_gigs_lgls))
       .data[[.new[[outcome]][1]]] <- wlz
       .data[[.new[[outcome]][2]]] <- categorise_wasting_internal(wlz, FALSE)
       .data[[.new[[outcome]][3]]] <- categorise_wasting_internal(wlz, TRUE)
@@ -650,7 +751,8 @@ classify_growth <- function(
       if (missing_weight) next
       waz <- with(growth_data,
                   gigs_waz_internal(weight_kg = weight_kg, age_days = age_days,
-                                    gest_days = gest_days, sex = sex))
+                                    gest_days = gest_days, sex = sex,
+                                    id = id, gigs_lgls = cached_gigs_lgls))
       .data[[.new[[outcome]][1]]] <- waz
       .data[[.new[[outcome]][2]]] <- categorise_wfa_internal(waz, FALSE)
       .data[[.new[[outcome]][3]]] <- categorise_wfa_internal(waz, TRUE)
@@ -660,8 +762,10 @@ classify_growth <- function(
       if (missing_headcirc) next
       hcaz <- with(growth_data,
                    gigs_hcaz_internal(headcirc_cm = headcirc_cm,
-                                      age_days = age_days, gest_days = gest_days,
-                                      sex = sex))
+                                      age_days = age_days,
+                                      gest_days = gest_days,
+                                      sex = sex, id = id,
+                                      gigs_lgls = cached_gigs_lgls))
       .data[[.new[[outcome]][1]]] <- hcaz
       .data[[.new[[outcome]][2]]] <- categorise_headsize_internal(hcaz)
     }
