@@ -32,13 +32,6 @@ handle_var <- function(vec, varname, option, test_lgl, msg_fn) {
   out
 }
 
-test <- function (option, out = rnorm(5), msg = "nipeuwfjr") {
-  warn_stop_fn <- switch(option,
-                           warn = rlang::warn,
-                           error = rlang::abort,
-                           quiet = return(out))
-}
-
 #' @rdname handle_var
 #' @param is_na Logical vector the same length as `vec`, which is the same as
 #'   `is.na(vec)`. This check is cached in a specific object to prevent
@@ -165,8 +158,8 @@ msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
   chr_x_in_y <- if (all_invalid) "All" else paste0(count, " in ", len)
 
   if (varname == "sex") {
-    c("i" = paste0("Argument `sex`: ", chr_x_in_y, " elements were neither ",
-                   "\"M\" nor \"F\"."))
+    paste0("Argument `sex`: ", chr_x_in_y, " elements were neither ",
+             "\"M\" nor \"F\".")
   } else {
     if (all_invalid) {
       acronym <- get(x = "acronym", envir = parent.frame(n = 3))
