@@ -5,7 +5,6 @@
 #' Get size-for-gestational age categories using multiple vectors and the
 #' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
 #'
-#'
 #' @inheritParams shared_roxygen_params
 #' @param weight_kg Numeric vector of length one or more with weight value(s) in
 #'   kg. It is assumed that weight measurements provided to this function are

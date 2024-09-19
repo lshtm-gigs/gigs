@@ -32,7 +32,7 @@ retrieve_coefficients <- function(x, sex, coeff_tbls, coeff_names) {
   len_x <- length(x)
   empty_vec <- rep(NA_real_, len_x)
   out_li <- vector(mode = "list", length = length(coeff_names)) |>
-        rlang::set_names(coeff_names)
+    rlang::set_names(coeff_names)
   for (i in seq_along(coeff_names)) out_li[[i]] <- empty_vec
 
   # Iterate through sexes, and reassign values in out_li based on outputs from
