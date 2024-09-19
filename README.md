@@ -99,6 +99,7 @@ life6mo_classified <- classify_growth(
         sex = as.character(sex),
         weight_kg = wt_kg,
         lenht_cm = len_cm,
+        id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
 #> `gigs::classify_growth()`
@@ -130,6 +131,7 @@ life6mo_classified <- classify_growth(
         age_days = age_days,
         sex = as.character(sex),
         weight_kg = wt_kg,
+        id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
 #> `gigs::classify_growth()`
@@ -153,7 +155,8 @@ You can also use `classify_*()` functions which are specific to the
 growth indicator you’d like to calculate, for example `classify_svn()`:
 
 ``` r
-# Small vulnerable newborns
+# Small vulnerable newborns - note no ID parameter, as it is assumed that all
+# measures are taken at birth
 life6mo_svn <- classify_svn(
   .data = life6mo_newborns,
   weight_kg = wt_kg,
@@ -398,6 +401,7 @@ implemented but not others.
 |-------------------------------------------------------------------------------------|----------|-----------------|------------------------|------------------------|--------------------------|----------------------------|
 | [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores          |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | ✅              | ❌                     | ❌                     | ❌                       | Values ↔ z-scores          |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 | [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | ✅              | ✅                     | ❕                     | ❕                       | Values ↔ z-scores/centiles |
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ❕                       | Values → z-scores/centiles |
@@ -405,18 +409,20 @@ implemented but not others.
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 
 We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth standards. The
-table below shows relative speed of each software package to process
-100,000 inputs. The code used to generate these timings can be seen
-online in the GIGS benchmarking
+conversion of values to z-scores in the WHO Child Growth Standards and
+different sets of INTERGROWTH-21<sup>st</sup> standards. The table below
+shows relative speed of each software package when processing 100,000
+inputs. The code used to generate these timings can be seen online in
+the GIGS benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
 |-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 96                   | 76                          | 20                          | 9                             |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2132                 | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 123                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 89                   | 69                          | 39                          | 10                            |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 99                   | 76                          | 20                          | 9                             |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2356                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 108                  | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 129                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 93                   | 69                          | 41                          | 11                            |
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
@@ -424,15 +430,25 @@ online in the GIGS benchmarking
 The WHO and INTERGROWTH-21<sup>st</sup> standards are also available in
 standalone form, available from the [WHO
 website](https://www.who.int/tools/child-growth-standards/software) and
-[INTERGROWTH-21<sup>st</sup>
-website](https://intergrowth21.tghn.org/intergrowth-21st-applications/),
+[INTERGROWTH-21<sup>st</sup> website](https://intergrowth21.com/),
 respectively. The INTERGROWTH-21<sup>st</sup> website also includes
 download links for Excel-based calculators in some standards.
 
-## Citation
+## Authors + Citation
 
-Parker S (2023). *gigs: Assess Fetal, Newborn, and Child Growth*.
-<https://github.com/lshtm-gigs/gigs/>.
+**S. R. Parker** Maternal, Adolescent, Reproductive, and Child Health
+Centre London School of Hygiene and Tropical Medicine
+
+**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital Harvard T.H.
+Chan School of Public Health
+
+**Professor E. O. Ohuma** Maternal, Adolescent, Reproductive, and Child
+Health Centre London School of Hygiene and Tropical Medicine
+
+### Citation
+
+Parker S, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
+Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 

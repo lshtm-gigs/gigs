@@ -301,7 +301,7 @@ We can use gigs to generate reference curves for the standards by getting
 curves for the expected weight at multiple z-scores across multiple gestational
 ages. We would usually recommend [`ggplot2`](https://ggplot2.tidyverse.org/) for
 such visualisation, but do not use it here to reduce our package's dependencies.
-```{r example_zp2v_curves, dev = "png"}
+```{r example_zp2v_curves, dev = "png", alt.text = "A growth chart for weight against gestational age, with lines for each SD from +2 to -2."}
 z_score_range <- -2:2
 gestage_range <- 168:230
 ref <- mapply(z_score_range,
@@ -344,6 +344,7 @@ no <- knitr::asis_output(x = "❌")
 half <- knitr::asis_output(x = "❕")
 
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
+AGD <- knitr::asis_output(x = "[AGD](https://cran.r-project.org/web/packages/AGD/index.html)")
 childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
 gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs/)")
 growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
@@ -358,6 +359,7 @@ load("vignettes/articles/benchmarking.rda")
 |-----------------|----------|-----------------|----------------|----------------|------------------|-----------------------------------|
 | `r gigs_r`      | R        | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r anthro`      | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores          |
+| `r AGD`         | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r harr` z-scores          |
 | `r childsds`    | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r growthstans` | R        | `r yes`         | `r yes`        | `r half`       | `r half`         | Values `r harr` z-scores/centiles |
 | `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | Values `r rarr` z-scores/centiles |
@@ -365,15 +367,17 @@ load("vignettes/articles/benchmarking.rda")
 | `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 
 We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth standards. The table
-below shows relative speed of each software package to process 100,000 inputs.
-The code used to generate these timings can be seen online in the GIGS
-benchmarking [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
+conversion of values to z-scores in the WHO Child Growth Standards and different
+sets of `r intergrowth21st` standards. The table below shows relative speed of
+each software package when processing 100,000 inputs. The code used to generate
+these timings can be seen online in the GIGS benchmarking
+[article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |
 |-----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
 | `r gigs_r`      | R        | `r max_len_bench[[1]][["gigs"]]`          | `r max_len_bench[[2]][["gigs"]]`       | `r max_len_bench[[3]][["gigs"]]`       | `r max_len_bench[[4]][["gigs"]]`        |
 | `r anthro`      | R        | `r max_len_bench[[1]][["anthro"]]`        | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r AGD`         | R        | `r max_len_bench[[1]][["AGD"]]`           | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r childsds`    | R        | `r max_len_bench[[1]][["childsds"]]`      | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r growthstans` | R        | `r max_len_bench[[1]][["gs"]]`            | `r  max_len_bench[[2]][["gs"]]`        | `r max_len_bench[[3]][["gs"]]`         | `r max_len_bench[[4]][["gs"]]`          |
 | `r intergrowth` | R        | `r no`                                    | `r no`                                 | `r no`                                 | `r max_len_bench[[4]][["intergrowth"]]` |
@@ -390,14 +394,25 @@ The WHO and `r intergrowth21st` standards are also available in standalone form,
 available from the [WHO
 website](https://www.who.int/tools/child-growth-standards/software) and
 [`r intergrowth21st`
-website](https://intergrowth21.tghn.org/intergrowth-21st-applications/),
+website](https://intergrowth21.com/),
 respectively. The `r intergrowth21st` website also includes download links for
 Excel-based calculators in some standards.
 
-## Citation
+## Authors + Citation
 
-Parker S (2023). _gigs: Assess Fetal, Newborn, and Child Growth_.
-<https://github.com/lshtm-gigs/gigs/>.
+**S. R. Parker** Maternal, Adolescent, Reproductive, and Child Health
+Centre, London School of Hygiene & Tropical Medicine
+
+**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital Harvard T.H.
+Chan School of Public Health
+
+**Professor E. O. Ohuma** Maternal, Adolescent, Reproductive, and Child
+Health Centre, London School of Hygiene & Tropical Medicine
+
+### Citation
+
+Parker S, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
+Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 

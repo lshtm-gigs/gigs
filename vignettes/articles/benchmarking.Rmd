@@ -32,11 +32,12 @@ standards.
 | Package name                                                                 | Language | On CRAN? |
 |------------------------------------------------------------------------------|:---------|:---------|
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)          | R        | Yes      |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                | R        | Yes      |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)      | R        | Yes      |
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | R        | No       |
 | [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R        | No       |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | Stata    | No       |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211)  | Stata    | No       |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                              | R        | No       |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/)                        | Stata    | No       |
 
 Thus far, there is no comprehensive benchmark comparing these different
 packages. This short article will compare the speed of each package from 1 to
@@ -47,7 +48,8 @@ We performed these benchmarks on R version
 `r session_info[[1]][["major"]]`.`r session_info[[1]][["minor"]]`, using a
 Windows 10 system with a Ryzen 7 3700X processor and 16GB of DDR4 RAM. The Stata
 benchmarks were run in Stata 18.0 (revision 15 May 2023) on the same system,
-using the [benchmark](https://github.com/mcaceresb/stata-benchmark) package for Stata.
+using the [benchmark](https://github.com/mcaceresb/stata-benchmark) package for
+Stata.
 
 Other R packages can be used to analyse growth data with international
 standards, but have limitations which are not present in gigs. There are also
@@ -73,6 +75,7 @@ no <- knitr::asis_output(x = "❌")
 half <- knitr::asis_output(x = "❕")
 
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
+AGD <- knitr::asis_output(x = "[AGD](https://cran.r-project.org/web/packages/AGD/index.html)")
 childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
 gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs/)")
 growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
@@ -85,6 +88,7 @@ intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.c
 |-----------------|----------|-----------------|----------------|----------------|------------------|-----------------------------------|
 | `r gigs_r`      | R        | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r anthro`      | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores          |
+| `r AGD`         | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r harr` z-scores          |
 | `r childsds`    | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r growthstans` | R        | `r yes`         | `r yes`        | `r half`       | `r half`         | Values `r harr` z-scores/centiles |
 | `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | Values `r rarr` z-scores/centiles |
@@ -107,10 +111,10 @@ from each set of growth standards implemented in gigs. These are the:
 
 The benchmarks utilise pre-generated datasets for growth standard. The z-scores,
 `x` variable and sexes for each row are generated (pseudo)randomly. Because the
-gigs test suite validates its functions against published growth curve data from
-the WHO and `r intergrowth21st` Project, we use gigs to generate expected
-measurements for each observation. This dataset can then be used to compare
-speeds for each package. These datasets are generated with the following
+`gigs` test suite validates its functions against published growth curve data
+from the WHO and the `r intergrowth21st` Project, we use `gigs` to generate
+expected measurements for each observation. This dataset can then be used to
+compare speeds for each package. These datasets are generated with the following
 function:
 ```{r benchmark_dataset, echo = TRUE}
 benchmark_dataset <- function(n, standard, acronym) {
@@ -138,7 +142,6 @@ benchmark_dataset <- function(n, standard, acronym) {
   gigs_fn <- rlang::eval_bare(
     rlang::parse_expr(paste0("gigs::", paste0(standard, "_zscore2value")))
   )
-  # gigs_fn <- get(, rlang::ns_env("gigs"))
   out <- if (standard != "ig_fet") {
     if (standard == "ig_nbs") {
       list(z = z, gest_days = x, sex = sex, acronym = acronym)
@@ -164,6 +167,7 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
   key_pkg_colour <- c("gs" = "#925E9FFF",
                       "gigs" = "#00468BFF",
                       "anthro" = "#AD002AFF",
+                      "AGD" = "cornflowerblue",
                       "intergrowth" = "#FDAF91FF",
                       "childsds" = "#663300FF",
                       "stata_gigs" = "skyblue",
@@ -171,6 +175,7 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
   key_pkg_label <- c("gs" = pkg_str("growthstandards"),
                      "gigs" = pkg_str("gigs"),
                      "anthro" = pkg_str("anthro"),
+                     "AGD" = pkg_str("AGD"),
                      "intergrowth" = pkg_str("intergrowth"),
                      "childsds" = pkg_str("childsds"),
                      "stata_gigs" = "Stata: gigs 0.4.0",
@@ -193,9 +198,8 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
 ```
 
 We're using the `{bench}` package throughout this vignette, specifically the
-`bench::press()` function. This function lets us easily compare scaling for the
-different functions available to us, as we can iterate through increasing
-amounts of observations.
+`bench::press()` function, which lets us compare function scaling by iterating
+through increasing amounts of observations.
 
 # WHO Growth Standards
 The World Health Organisation (WHO) Child Growth Standards are included in gigs
@@ -218,8 +222,8 @@ ds_who_gs[1:10, ]
 ```
 
 
-## Time packages
-
+## Timing
+### R
 ```{r bp_who_gs, echo = TRUE, eval = FALSE}
 bp_who_gs <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
@@ -233,9 +237,14 @@ bp_who_gs <- bench::press(
     bm_who_gs <- bench::mark(
       check = FALSE, filter_gc = TRUE, time_unit = "ms", min_iterations = 50,
       gigs = gigs::who_gs_value2zscore(weight_kg, age_days, sex, ac_who_gs),
-      gs = growthstandards::who_value2zscore(y = weight_kg, x = age_days,
-                                             y_var = "wtkg", x_var = "agedays",
-                                             sex = sex_gs),
+      anthro = anthro::anthro_zscores(weight = weight_kg,
+                                      age = age_days,
+                                      sex = sex)$zwei,
+      AGD = AGD::y2z(y = weight_kg,
+                     x = age_days,
+                     sex = sex,
+                     ref = AGD::who.wgt,
+                     tail.adjust = TRUE),
       childsds = childsds::sds(value = weight_kg,
                                age = age_days / 365.25,
                                sex = sex,
@@ -243,9 +252,9 @@ bp_who_gs <- bench::press(
                                female = "F",
                                item = "weight",
                                ref = childsds::who.ref),
-      anthro = anthro::anthro_zscores(weight = weight_kg,
-                                      age = age_days,
-                                      sex = sex)$zwei
+      gs = growthstandards::who_value2zscore(y = weight_kg, x = age_days,
+                                             y_var = "wtkg", x_var = "agedays",
+                                             sex = sex_gs)
     )
   }) |>
   dplyr::mutate(desc = attr(expression, which = "description")) |>
@@ -303,15 +312,15 @@ rm(gigs_0_4_0, zanthro_1_0_2, lens, n_inputs, input_len)
 
 ## Package comparisons: timing
 
-```{r plot_timings_who_gs, echo = FALSE}
+```{r plot_timings_who_gs, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for different software packages. The results can be read about below."}
 plot_bp(bp_who_gs, bp_who_gs_stata)
 ```
 
 On the whole, `anthro` is by far the slowest R package, taking around
 `r max_median(bp_who_gs, "anthro") / 1000` seconds to process 100,000
-inputs. This is in part because `anthro` computes results in every WHO Child
+inputs. This is mainly because `anthro` computes results in every WHO Child
 Growth standard each time `anthro::anthro_zscores()` is called, but also due to
-a slower implementation of the WHO LMS procedure than the other packages.
+a slower implementation of the WHO LMS procedure than the other R packages.
 
 Next slowest is the Stata package `zanthro`, which takes around
 `r max_median(bp_who_gs_stata, "stata_zanthro") / 1000` seconds to compute
@@ -320,18 +329,21 @@ for Stata 0.4.0, which scales more efficiently than `zanthro` and takes around
 `r max_median(bp_who_gs_stata, "stata_gigs") / 1000` seconds to convert 100,000
 measurements to z-scores.
 
-Let's look at the three fastest R implementations:
+Focussing on the faster R implementations reveals some interesting patterns:
 
-```{r plot_timings_who_gs_faster, echo = FALSE}
+```{r plot_timings_who_gs_faster, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below."}
 bp_who_gs |>
-  dplyr::filter(desc %in% c("gigs", "childsds", "gs")) |>
+  dplyr::filter(desc %in% c("gigs", "childsds", "gs", "AGD")) |>
   plot_bp()
 ```
 
 The `growthstandards` package was the fastest at
 ~`r max_median(bp_who_gs, "gs")` ms for 100,000 inputs, followed by `gigs`
-(~`r max_median(bp_who_gs, "gigs")` ms) and `childsds`
-(~`r max_median(bp_who_gs, "childsds")` ms).
+(~`r max_median(bp_who_gs, "gigs")` ms), `AGD`
+(~`r max_median(bp_who_gs, "AGD")` ms), and lastly `childsds`
+(~`r max_median(bp_who_gs, "childsds")` ms). Interestingly, `AGD` starts out
+much slower than the other three packages, but appears to scale more
+efficiently.
 
 ## Package comparisons: numerical consistency
 In our testing of the WHO standards, we found that the tested packages mostly
@@ -365,8 +377,10 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
 ```
 
 When we look at these z-scores, you can see that both `growthstandards` and
-`gigs` correctly apply the constraining procedure; `childsds` does not. From
-looking at the `anthro` source code, they also apply the constraining procedure.
+`gigs` correctly apply the constraining procedure; `childsds` does not. The
+`AGD` package constrains z-scores if the `tail.adjust` option in `AGD::y2z()` is
+specified, and from looking at the `anthro` source code, they also apply the
+constraining procedure.
 ```{r discrepancies_who_gs_kable, echo = FALSE}
 knitr::kable(discrepancies, align = "ccccc")
 ```
@@ -389,8 +403,8 @@ The first 10 rows of this dataset look like this:
 ds_ig_nbs[1:10, ]
 ```
 
-## Time package
-
+## Timing
+### R
 ```{r bp_ig_nbs, echo = TRUE, eval = FALSE}
 bp_ig_nbs <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
@@ -445,7 +459,7 @@ bp_ig_nbs_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_nbs, echo = FALSE}
+```{r plot_timings_ig_nbs, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below."}
 plot_bp(bp_ig_nbs, bp_ig_nbs_stata)
 ```
 
@@ -466,7 +480,7 @@ version of the z-scoring errors found by
 [Kiger *et al.* (2016)](https://dx.doi.org/10.1007/s10916-015-0389-x) when not
 interpolating LMS coefficients in the WHO standards.
 
-```{r discrepancies_ig_nbs, eval = FALSE}
+```{r discrepancies_ig_nbs, eval = TRUE}
 weight_kg <- 3
 gestage <- seq(274, 278, 0.5)
 gigs <- gigs::ig_nbs_value2centile(y = weight_kg, gest_days = gestage,
@@ -493,8 +507,8 @@ The first 10 rows of this dataset look like this:
 ds_ig_png[1:10, ]
 ```
 
-## Time package
-
+## Timing
+### R
 ```{r bp_ig_png, echo = TRUE, eval = FALSE}
 bp_ig_png <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
@@ -549,7 +563,7 @@ bp_ig_png_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_png, echo = FALSE}
+```{r plot_timings_ig_png, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below."}
 plot_bp(bp_ig_png, bp_ig_png_stata)
 ```
 
@@ -564,7 +578,8 @@ The `r ig21st` Fetal standards are implemented in gigs for R and Stata, and in
 the `growthstandards` and `intergrowth` packages (though more fully in
 `intergrowth`  than in `growthstandards`, and both are missing some standards
 which are included in `gigs`). Let's make a new dataset, `ds_ig_fet`, which we
-will use to benchmark these functions:
+will use to benchmark a conversion in a fetal growth standard common to all
+three packages:
 
 ```{r ds_ig_fet}
 ac_ig_fet <- "ofdfga"
@@ -579,8 +594,8 @@ The first 10 rows of this dataset look like this:
 ds_ig_fet[1:10, ]
 ```
 
-## Time package
-
+## Timing
+### R
 ```{r bp_ig_fet, echo = TRUE, eval = FALSE}
 bp_ig_fet <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
@@ -635,23 +650,24 @@ bp_ig_fet_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_fet, echo = FALSE}
+```{r plot_timings_ig_fet, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below."}
 plot_bp(bp_ig_fet, bp_ig_fet_stata)
 ```
 
 For the `r intergrowth21st` Fetal standard for occipito-frontal diameter, the
 GIGS implementation for Stata is the slowest to analyse 100,000 inputs at
-~`r max_median(bp_ig_fet_stata, "stata_gigs")` ms. GIGS for R is the fastest at
-~`r max_median(bp_ig_fet, "gigs")` ms, followed by `growthstandards` at
-~`r max_median(bp_ig_fet, "gs")`, and then `intergrowth` at
+~`r max_median(bp_ig_fet_stata, "stata_gigs")` ms. The R `gigs` package is the
+fastest at ~`r max_median(bp_ig_fet, "gigs")` ms, followed by `growthstandards`
+at ~`r max_median(bp_ig_fet, "gs")`, and then `intergrowth` at
 ~`r max_median(bp_ig_fet, "intergrowth")`.
 
 # Summary
-## Timings summary
+
+## Timings summary (100,000 inputs)
 
 ```{r save_timings, echo = FALSE, eval = FALSE}
 max_median_all <- function(bp_r, bp_stata) {
-  bp_both <- dplyr::bind_rows(bp_r[, c(2, 4, 15)], bp_stata)
+  bp_both <- dplyr::bind_rows(bp_r[, colnames(bp_stata)], bp_stata)
   vapply(X = unique(bp_both$desc),
          FUN = \(desc) max_median(bp_both, desc),
          FUN.VALUE = double(1L))
@@ -669,25 +685,32 @@ max_len_bench <- list(
 |-----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
 | `r gigs_r`      | R        | `r max_len_bench[[1]][["gigs"]]`          | `r max_len_bench[[2]][["gigs"]]`       | `r max_len_bench[[3]][["gigs"]]`       | `r max_len_bench[[4]][["gigs"]]`        |
 | `r anthro`      | R        | `r max_len_bench[[1]][["anthro"]]`        | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r AGD`         | R        | `r max_len_bench[[1]][["AGD"]]`           | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r childsds`    | R        | `r max_len_bench[[1]][["childsds"]]`      | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r growthstans` | R        | `r max_len_bench[[1]][["gs"]]`            | `r  max_len_bench[[2]][["gs"]]`        | `r max_len_bench[[3]][["gs"]]`         | `r max_len_bench[[4]][["gs"]]`          |
 | `r intergrowth` | R        | `r no`                                    | `r no`                                 | `r no`                                 | `r max_len_bench[[4]][["intergrowth"]]` |
 | `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["stata_gigs"]]`    | `r max_len_bench[[2]][["stata_gigs"]]` | `r max_len_bench[[3]][["stata_gigs"]]` | `r max_len_bench[[4]][["stata_gigs"]]`  |
 | `r zanthro`     | Stata    | `r max_len_bench[[1]][["stata_zanthro"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
 
-
 ## Why GIGS?
-Overall, though the `gigs` package for R isn't always the fastest, it is only a
+Overall, though the `gigs` package for R isn't always the fastest, it is only
 some milliseconds off, and offers:
 
-  * A full complement of growth standards (i.e. no half-implemented sets of
-    growth standards)
+  * A full complement of international growth standards (i.e. no
+    half-implemented sets of growth standards)
   * More accurate implementations in some cases
   * Growth categorisation functions
 
-We think these benefits outweigh a couple of milliseconds slowdown. In Stata,
-where `gigs` consistently runs faster and offers more growth standards than
-`zanthro`, `gigs` is the obvious choice.
+Some users may want to apply growth references in their work - that's fine, and
+other R packages (e.g. `childsds` in R and `zanthro` in Stata) offer reference
+charts which may be of use to end-users. However, for international growth
+standards, we believe we offer the best combination of speed and range of
+standards.
+
+In R, `gigs` also offers input checking via its options, and will tell you if
+you're providing non-workable data. We think this outweighs a couple of
+milliseconds' slowdown. In Stata, where `gigs` consistently runs faster and
+offers more growth standards than `zanthro`, `gigs` is the obvious choice.
 
 # Session information
 ```{r session_info1, echo = TRUE, eval = FALSE}
