@@ -634,7 +634,7 @@ classify_growth <- function(
   all_analyses <- c("sfga", "svn", "stunting", "wasting", "wfa", "headsize")
   all_analyses_len <- length(all_analyses)
   # Which analyses have been run
-  outcomes_run <- rep_len(x = FALSE, length.out = all_analyses_len) |>
+  outcomes_run <- logical(length = all_analyses_len) |>
     setNames(all_analyses)
 
   # Variable checking - basic assertions on length/type
@@ -801,20 +801,21 @@ classify_growth <- function(
 
 # INTERNAL; checkers for all growth_classify.R functions -----------------------
 
-#' Throw an error if elements of vectors in `.new` are in `.data`
-#' @param new A character vector of length one or more with new column names to
-#'   check against `existing`.
+#' For `classify_*() functions`:Throw an error if elements of vectors in `.new`
+#' are in `.data`.
+#' @param .new A character vector of length one or more with new column names to
+#'   check against `.data`.
 #' @param .data_colnames A character vector of length one or more with column
-#'   names to be checked against `new`.
-#' @return Returns `new` invisibly if there are no matches between `new` and
+#'   names to be checked against `.new`.
+#' @return Returns `.new` invisibly if there are no matches between `new` and
 #'   `existing`, else throws an error.
 #' @noRd
-err_if_.new_in_.data <- function(new, .data_colnames) {
-  matches <- new %in% .data_colnames
+err_if_.new_in_.data <- function(.new, .data_colnames) {
+  matches <- .new %in% .data_colnames
   any_matches <- any(matches)
   if (any_matches) {
-    matched_names <- paste0("`", new[matches], "`") |>
-      setNames(nm = rep.int("!", length(new[matches])))
+    matched_names <- paste0("`", .new[matches], "`") |>
+      setNames(nm = rep.int("!", length(.new[matches])))
     rlang::abort(
       message =
         c(paste0("Column names requested in `.new` already exist in `.data`. ",
@@ -824,9 +825,18 @@ err_if_.new_in_.data <- function(new, .data_colnames) {
       call = rlang::env_parent(),
       class = "gigs_classify_.new_in_.data")
   }
-  invisible(new)
+  invisible(.new)
 }
 
+
+
+# INTERNAL; checkers for classify_growth() -------------------------------------
+
+#' For `classify_growth()`: Check that the names of vectors in `.new` map onto
+#' the range of available analyses (i.e. `all`).
+#' @inheritParams classify_growth
+#' @returns Invisibly returns `.new`, unchanged.
+#' @noRd
 check_all_.new_names_valid <- function(.new, all) {
   .new_names <- names(.new)
   lgl_invalid_.new_name <- !.new_names %in% all
@@ -847,9 +857,10 @@ check_all_.new_names_valid <- function(.new, all) {
   invisible(.new)
 }
 
-# INTERNAL; checkers for classify_growth() -------------------------------------
-
-#' Check dot
+#' For `classify_growth()`: check that all requested outcomes in `.outcomes`
+#' have named vectors with column names in `.new`.
+#' @inheritParams classify_growth
+#' @returns @returns Invisibly returns `.new`, unchanged.
 #' @noRd
 check_all_.outcomes_in_.new <- function(.outcomes, .new) {
   lgl_.analyses_in_.new <- .outcomes %in% names(.new)
@@ -862,8 +873,17 @@ check_all_.outcomes_in_.new <- function(.outcomes, .new) {
       class = "gigs_classify_growth_.outcomes_not_in_.new"
     )
   }
+  invisible(.new)
 }
 
+#' Check whether vectors in `.new` are the correct length, given the number of
+#' new columns to be generated
+#' @inheritParams classify_growth
+#' @returns Invisibly returns `.new`, unchanged.
+#' @note This function is a sanity check - for `classify_growth()`, for example,
+#'   running a head size analysis should only add two columns - one for HCAZ and
+#'   one with head size categories. Users can specify column names, but should
+#'   supply one name for each new column - which this function enforces.
 #' @noRd
 check_.new_vector_lengths <- function(.new) {
   .new_names <- names(.new)
@@ -893,8 +913,16 @@ check_.new_vector_lengths <- function(.new) {
       class = "gigs_classify_growth_.new_lengths_incorrect"
     )
   }
+  invisible(.new)
 }
 
+#' Check whether the 'birthweight centile' column name is the same for
+#' size-for-GA and small vulnerable newborns
+#' @inheritParams classify_growth
+#' @returns Returns `.new` unchanged if the column name for birthweight centiles
+#'   is the same in `.new[["sfga"]]` and `.new[["svn"]]`, else returns `.new`
+#'   with the column name for birthweight centiles the same as in
+#'   `.new[["sfga"]]`.
 #' @noRd
 check_sfga_svn_centile_colname <- function(.new) {
   if (all(c("sfga", "svn") %in% names(.new))) {
@@ -919,6 +947,13 @@ check_sfga_svn_centile_colname <- function(.new) {
   .new
 }
 
+#' Check if elements of `.new` are unique, and abort if not
+#'
+#' @inheritParams classify_growth
+#' @details This function is used to ensure that all new column names requested
+#'   by a user in `classify_growth()` are unique.
+#' @return Return its input (`.new`) unchanged, unless any of the elements of
+#'   its vectors were non-unique.
 #' @noRd
 check_if_.new_elements_unique <- function(.new) {
   .new_names <- names(.new)
@@ -956,6 +991,22 @@ check_if_.new_elements_unique <- function(.new) {
   )
 }
 
+#' Repair new names requested by users, and inform them if they need repair
+#'
+#' @inheritParams classify_growth
+#' @param mode A single-length character vector specifying how the function is
+#'   being called. If called for `"classify_growth"` (the default), repaired
+#'   names will be reported as part of a list. If called for a `"specific"`
+#'   growth function (e.g. `classify_stunting()`), the print output will be more
+#'   suitable to a vector of inputs.
+#' @details This function is used to ensure that user-requested column names
+#'   by a user in `classify_*()` functions are valid (i.e. syntactic, minimal,
+#'   and unique).
+#' @return Return its input (`.new`) unchanged, unless any of the elements of
+#'   its vectors were not syntactic, in which case these elements are replaced
+#'   with the output from `vctrs::vec_as_names()`.
+#' @returns A list vector the same length as `.new`, repaired if necessary with
+#'   `vctrs::vec_as_names()`.
 #' @noRd
 repair_.new_names <- function(.new, mode = "classify_growth") {
   if (!mode %in% c("classify_growth", "specific")) {
