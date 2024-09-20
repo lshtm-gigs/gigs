@@ -1,4 +1,4 @@
-url: https://simpar1471.github.io/gigs/
+url: https://lshtm-gigs.github.io/gigs/
 template:
   bootstrap: 5
   bootswatch: journal
@@ -34,6 +34,9 @@ reference:
       - categorise_wasting
       - categorise_wfa
       - categorise_headsize
+  - title: Get z-scores using recommended standards
+    contents:
+      - gigs_waz
   - title: INTERGROWTH-21<sup>st</sup> Newborn Size Standards
     desc: >
       Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
