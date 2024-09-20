@@ -136,5 +136,5 @@ NULL
 # SRR tags ---------------------------------------------------------------------
 #' @srrstats {G2.0, G2.0a, G2.1, G2.1a, G2.2, G2.3, EA1.3} Validation of data
 #'   inputs using the `checkmate` package, and clear documentation of what
-#'   types/lengths of input are supported.
+#'   types of input + input lengths are supported.
 NULL
