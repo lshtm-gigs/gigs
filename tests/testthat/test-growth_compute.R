@@ -902,6 +902,169 @@ test_that(desc = "compute_wfa() errors on bad data types", {
   )
 })
 
+# Testing `compute_headsize()` -------------------------------------------------
 
+#' @srrstats {G5.4, G5.4c} Tests to ensure that `compute_headsize()` reproduces
+#'   expected appropriate categorical data.
+test_that(desc = "compute_headsize() reproduces expected growth categories", {
+  headsize_test <- with(test_data_postnatal, {
+    compute_headsize(
+      headcirc_cm = headcirc_cm,
+      age_days = age_days,
+      gest_days = gest_age,
+      sex = sex,
+      id = id
+    )
+  })
 
+  testthat::expect_equal(headsize_test, test_data_postnatal$headsize_exp)
+})
 
+#' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
+#'   in `compute_headsize()`.
+test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
+  expected_length <- nrow(test_data_postnatal)
+  withr::with_seed(seed = 278564, code = {
+    n_missing_1 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_2 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_3 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_4 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_5 <- sample(1:(expected_length - 5), size = 1)
+  })
+
+  # For missing data (i.e. `NA`)
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = replace(headcirc_cm, 1:n_missing_1, values = NA),
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = id
+      )
+    }),
+    regexp = test_msg_missing("headcirc_cm", expected_length, n_missing_1)
+  )
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = replace(sex, 1:n_missing_3, values = NA),
+        id = id
+      )
+    }),
+    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+  )
+
+  # For ID, including `NA` values causes an error.
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = replace(id, 1:n_missing_2, values = NA)
+      )
+    }),
+    regexp = test_msg_missing("id", expected_length, n_missing_2)
+  )
+
+  # For bad sex data (i.e. not "M" or "F")
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = replace(sex, 1:n_missing_2, values = "X"),
+        id = id
+      )
+    }),
+    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+  )
+
+  # For undefined input data (i.e. `NaN` or Inf)
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = replace(gest_age, 1:n_missing_2, values = Inf),
+        sex = sex,
+        id = id
+      )
+    }),
+    regexp = test_msg_undefined("gest_days", expected_length, n_missing_2)
+  )
+})
+
+#' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_headsize()`.
+test_that(desc = "compute_headsize() errors on bad data types", {
+
+  # Using the wrong data types
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = as.complex(headcirc_cm),
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = id
+      )
+    }),
+    regexp = test_error_wrong_type("headcirc_cm", "numeric", "complex")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = as.character(age_days),
+        gest_days = gest_age,
+        sex = sex,
+        id = id
+      )
+    }),
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = 1L
+      )
+    }),
+    regexp = test_error_wrong_type("id", "factor", "integer")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = as.factor(sex),
+        id = id
+      )
+    }),
+    regexp = test_error_wrong_type("sex", "character", "factor")
+  )
+
+  # Zero-length data
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_headsize(
+        headcirc_cm = headcirc_cm,
+        age_days = numeric(),
+        gest_days = numeric(),
+        sex = sex,
+        id = factor()
+      )
+    }),
+    regexp = test_error_zero_length(c("age_days", "gest_days", "id"))
+  )
+})
