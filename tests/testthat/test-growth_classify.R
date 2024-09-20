@@ -73,7 +73,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_exp", "waz_exp", "sfga_severe")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -85,7 +85,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_test", "sfga", "sfga_severe")
     ),
-    regexp = regex_error_wrong_type("weight_kg", "numeric", "complex")
+    regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
   testthat::expect_error(
     classify_sfga(
@@ -95,7 +95,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_test", "sfga", "sfga_severe")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "character")
+    regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_sfga(
@@ -105,7 +105,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
       sex = sex,
       .new = 1:3
     ),
-    regexp = regex_error_wrong_type(".new", "string", "integer")
+    regexp = test_error_wrong_type(".new", "string", "integer")
   )
   testthat::expect_error(
     classify_sfga(
@@ -182,7 +182,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_test", "svn")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -194,7 +194,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_test", "svn")
     ),
-    regexp = regex_error_wrong_type("weight_kg", "numeric", "complex")
+    regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
   testthat::expect_error(
     classify_svn(
@@ -204,7 +204,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
       sex = sex,
       .new = c("bweight_centile_test", "svn")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "character")
+    regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_svn(
@@ -214,7 +214,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
       sex = sex,
       .new = 5:6
     ),
-    regexp = regex_error_wrong_type(".new", "string", "integer")
+    regexp = test_error_wrong_type(".new", "string", "integer")
   )
   testthat::expect_error(
     classify_svn(
@@ -300,7 +300,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -313,7 +313,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
-    regexp = regex_error_wrong_type("lenht_cm", "numeric", "complex")
+    regexp = test_error_wrong_type("lenht_cm", "numeric", "complex")
   )
   testthat::expect_error(
     classify_stunting(
@@ -324,7 +324,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
-    regexp = regex_error_wrong_type("age_days", "numeric", "character")
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_stunting(
@@ -335,7 +335,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "character")
+    regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_stunting(
@@ -346,7 +346,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
       sex = sex,
       .new = 1:3
     ),
-    regexp = regex_error_wrong_type(".new", "string", "integer")
+    regexp = test_error_wrong_type(".new", "string", "integer")
   )
   testthat::expect_error(
     classify_stunting(
@@ -376,6 +376,7 @@ test_that(desc = "classify_wasting() reproduces expected z-scores", {
     gest_days = gest_age,
     age_days = age_days,
     sex = sex,
+    id = id,
     .new = c("wlz_test", "wasting", "wasting_outliers")
   )
   testthat::expect_equal(
@@ -436,7 +437,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -450,7 +451,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
-    regexp = regex_error_wrong_type("weight_kg", "numeric", "character")
+    regexp = test_error_wrong_type("weight_kg", "numeric", "character")
   )
   testthat::expect_error(
     classify_wasting(
@@ -462,7 +463,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
-    regexp = regex_error_wrong_type("lenht_cm", "numeric", "complex")
+    regexp = test_error_wrong_type("lenht_cm", "numeric", "complex")
   )
   testthat::expect_error(
     classify_wasting(
@@ -474,7 +475,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
-    regexp = regex_error_wrong_type("age_days", "numeric", "character")
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_wasting(
@@ -486,7 +487,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
       sex = sex,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "factor")
+    regexp = test_error_wrong_type("gest_days", "numeric", "factor")
   )
   testthat::expect_error(
     classify_wasting(
@@ -573,7 +574,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
       sex = sex,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -586,7 +587,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
       sex = sex,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
-    regexp = regex_error_wrong_type("weight_kg", "numeric", "complex")
+    regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
   testthat::expect_error(
     classify_wfa(
@@ -597,7 +598,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
       sex = sex,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
-    regexp = regex_error_wrong_type("age_days", "numeric", "character")
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_wfa(
@@ -608,7 +609,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
       sex = sex,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "character")
+    regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_wfa(
@@ -619,7 +620,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
       sex = sex,
       .new = 1:3
     ),
-    regexp = regex_error_wrong_type(".new", "string", "integer")
+    regexp = test_error_wrong_type(".new", "string", "integer")
   )
   testthat::expect_error(
     classify_wfa(
@@ -701,7 +702,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
       sex = sex,
       .new = c("hcaz_test", "headsize")
     ),
-    regexp = regex_error_wrong_type(".data", "data.frame", "list")
+    regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
@@ -714,7 +715,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
       sex = sex,
       .new = c("hcaz_test", "headsize")
     ),
-    regexp = regex_error_wrong_type("headcirc_cm", "numeric", "complex")
+    regexp = test_error_wrong_type("headcirc_cm", "numeric", "complex")
   )
   testthat::expect_error(
     classify_headsize(
@@ -725,7 +726,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
       sex = sex,
       .new = c("hcaz_test", "headsize")
     ),
-    regexp = regex_error_wrong_type("age_days", "numeric", "character")
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_headsize(
@@ -736,7 +737,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
       sex = sex,
       .new = c("hcaz_test", "headsize")
     ),
-    regexp = regex_error_wrong_type("gest_days", "numeric", "character")
+    regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
   testthat::expect_error(
     classify_headsize(
@@ -747,7 +748,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
       sex = sex,
       .new = 1:3
     ),
-    regexp = regex_error_wrong_type(".new", "string", "integer")
+    regexp = test_error_wrong_type(".new", "string", "integer")
   )
   testthat::expect_error(
     classify_headsize(
