@@ -515,6 +515,7 @@ err_input_is_zero_length <- function(varnames, is_zero_length) {
 #'   is used to pluck out values in `varnames` to be used by `rlang::abort()`.
 #' @returns Is only called to throw errors, which tell the user which of their
 #'   inputs have bad lengths for tidyverse-style recycling.
+#' @noRd
 err_inputs_unrecyclable <- function(varnames, is_unrecyclable) {
   unrecyclable_names <- varnames[is_unrecyclable]
   count <- sum(is_unrecyclable)

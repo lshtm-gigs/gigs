@@ -7,14 +7,13 @@ It is based on the tidyverse contributing guidelines.
 This package is currently in a stable state of development, with some degree of active subsequent development as envisioned by the primary authors.
 We plan to add:
 
-* Explicit GIGS z-scoring functions (following publication/dissemination of the planned Guidance for International Growth Standards (GIGS) guidance document)
-  * These already exist internally, but we plan to make them user-facing in a future version
 * Additional growth standards if requested by package users and deemed within the package scope
  
 ## Scope
 This package's scope is limited to international growth standards.
 As a consequence, feature requests or pull requests which add support for growth references (e.g. the CDC growth charts or UK-WHO growth charts) will be rejected.
-If you want to use growth references in your work, the `childsds` package can work with  many charts.
+If you want to use growth references in your work, you may find other packages more useful.
+The `childsds` package can work with many references if you wish to use these instead.
 
 ## Fixing typos
 
