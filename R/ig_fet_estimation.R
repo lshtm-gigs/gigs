@@ -119,7 +119,7 @@ ig_fet_estimate_ga <- function(crl_mm = NULL,
     } else {
       rlang::abort(
         c("!" = "At least one of `crl_mm` or `headcirc_mm` must not be `NULL`."),
-        rlang::current_env()
+        call = NULL
       )
     }
   })
@@ -173,7 +173,7 @@ ig_fet_estimate_ga_hcfl <- function(headcirc_mm, femurlen_mm) {
 validate_ig_fet_estimate_fw_param <- function(vec, varname) {
   if (is.null(vec)) {
     rlang::abort(
-      c("!" = paste0("\nArgument `", varname, "` must not be `NULL`.")),
+      paste0("Argument `", varname, "` must not be `NULL`."),
       call = rlang::caller_env(n = 2)
     )
   }
