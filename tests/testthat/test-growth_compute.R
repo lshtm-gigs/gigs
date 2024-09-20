@@ -357,7 +357,7 @@ test_that(desc = "compute_stunting() reproduces expected growth categories", {
 #'   in `compute_stunting()`.
 test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
   expected_length <- nrow(test_data_postnatal)
-  withr::with_seed(seed = 367495, code = {
+  withr::with_seed(seed = 904813, code = {
     n_missing_1 <- sample(1:(expected_length - 5), size = 1)
     n_missing_2 <- sample(1:(expected_length - 5), size = 1)
     n_missing_3 <- sample(1:(expected_length - 5), size = 1)
@@ -713,10 +713,194 @@ test_that(desc = "compute_wasting() errors on bad data types", {
   )
 })
 
+# Testing `compute_wfa()` ------------------------------------------------------
 
+#' @srrstats {G5.4, G5.4c} Tests to ensure that `compute_wfa()` reproduces
+#'   expected appropriate categorical data.
+test_that(desc = "compute_wfa() reproduces expected growth categories", {
+  wfa_test <- with(test_data_postnatal, {
+    compute_wfa(
+      weight_kg = weight_kg,
+      age_days = age_days,
+      gest_days = gest_age,
+      sex = sex,
+      id = id
+    )
+  })
 
+  wfa_out_test <- with(test_data_postnatal, {
+    compute_wfa(
+      weight_kg = weight_kg,
+      age_days = age_days,
+      gest_days = gest_age,
+      sex = sex,
+      id = id,
+      outliers = TRUE
+    )
+  })
 
+  testthat::expect_equal(wfa_test, test_data_postnatal$wfa_exp)
+  testthat::expect_equal(wfa_out_test, test_data_postnatal$wfa_out_exp)
+})
 
+#' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
+#'   in `compute_wfa()`.
+test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
+  expected_length <- nrow(test_data_postnatal)
+  withr::with_seed(seed = 346633, code = {
+    n_missing_1 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_2 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_3 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_4 <- sample(1:(expected_length - 5), size = 1)
+    n_missing_5 <- sample(1:(expected_length - 5), size = 1)
+  })
+
+  # For missing data (i.e. `NA`)
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = replace(weight_kg, 1:n_missing_1, values = NA),
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1)
+  )
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = replace(sex, 1:n_missing_3, values = NA),
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+  )
+
+  # For ID, including `NA` values causes an error.
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = replace(id, 1:n_missing_2, values = NA),
+        outliers = TRUE
+      )
+    }),
+    regexp = test_msg_missing("id", expected_length, n_missing_2)
+  )
+
+  # For bad sex data (i.e. not "M" or "F")
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = replace(sex, 1:n_missing_2, values = "X"),
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+  )
+
+  # For undefined input data (i.e. `NaN` or Inf)
+  testthat::expect_warning(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = replace(gest_age, 1:n_missing_2, values = Inf),
+        sex = sex,
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_msg_undefined("gest_days", expected_length, n_missing_2)
+  )
+})
+
+#' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_wfa()`.
+test_that(desc = "compute_wfa() errors on bad data types", {
+
+  # Using the wrong data types
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = as.complex(weight_kg),
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = as.character(age_days),
+        gest_days = gest_age,
+        sex = sex,
+        id = id,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_error_wrong_type("age_days", "numeric", "character")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = 1L,
+        outliers = TRUE
+      )
+    }),
+    regexp = test_error_wrong_type("id", "factor", "integer")
+  )
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = gest_age,
+        sex = sex,
+        id = id,
+        outliers = 1L
+      )
+    }),
+    regexp = test_error_wrong_type("outliers", "logical", "integer")
+  )
+
+  # Zero-length data
+  testthat::expect_error(
+    with(test_data_postnatal, {
+      compute_wfa(
+        weight_kg = weight_kg,
+        age_days = age_days,
+        gest_days = numeric(),
+        sex = sex,
+        id = factor(),
+        outliers = TRUE
+      )
+    }),
+    regexp = test_error_zero_length(c("gest_days", "id"))
+  )
+})
 
 
 
