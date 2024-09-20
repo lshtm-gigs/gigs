@@ -322,10 +322,19 @@ validate_acronym <- function(acronym, allowed_acronyms, standard) {
 #' @noRd
 validate_id <- function(id) {
   if (!is.null(id)) {
+    varname <- "id"
     checkmate::assert_factor(id,
                              min.len = 1,
-                             .var.name = "id") |>
+                             .var.name = varname) |>
       checkmate::assert_atomic_vector()
+    curr_gigs_opt <- gigs_option_get("handle_missing_data", silent = TRUE)
+    on.exit(gigs_option_set("handle_missing_data", curr_gigs_opt, TRUE))
+    gigs_option_set("handle_missing_data", "error", TRUE)
+    handle_var(vec = id,
+               varname = varname,
+               option = "handle_missing_data",
+               test_lgl = is.na(id) & !is.nan(id),
+               msg_fn = msg_missing_data)
   } else {
     factor(x = "A")
   }
