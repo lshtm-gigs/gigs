@@ -452,8 +452,10 @@ validate_parameter_lengths <- function(...,
   }
   null_inputs <- vapply(inputs, FUN = is.null, FUN.VALUE = logical(1))
   if (all(null_inputs)) {
-    stop("All inputs were `NULL`. Ensure some inputs are not `NULL`, then ",
-         "try again.", call. = FALSE)
+    rlang::abort(
+      c("!" = paste0("All inputs were `NULL`. Ensure some inputs are not ",
+                     "`NULL`, then try again.")), call = NULL
+    )
   }
   input_lengths <- lengths(inputs)[!null_inputs]
   varnames <- names(input_lengths)
@@ -488,7 +490,7 @@ err_input_is_zero_length <- function(varnames,
   count <- sum(is_zero_length)
 
   if (any(zero_len_names == "acronym")) {
-    str_acronym_err <- paste0("Variable 'acronym': Input had length 0, but ",
+    str_acronym_err <- paste0("Variable `acronym`: Input had length 0, but ",
                               "must have length 1.")
   } else {
     str_acronym_err <- ""
@@ -499,7 +501,7 @@ err_input_is_zero_length <- function(varnames,
     rlang::abort(str_acronym_err, call = call)
   } else if (count == 1) {
     rlang::abort(
-      paste0("Variable '", zero_len_names, "': Input had length 0, but ",
+      paste0("Variable `", zero_len_names, "`: Input had length 0, but ",
              "must have length 1 or greater."),
       call = call, class = "gigs_err_zero_length"
     )
@@ -508,16 +510,19 @@ err_input_is_zero_length <- function(varnames,
   # If multiple inputs are zero-length, need to print differently for vectors
   # (`z`/`y`/`p`/`x`/`sex` etc.) vs scalar (`acronym`)
   varname_str <- paste0(zero_len_names[zero_len_names != "acronym"],
-                        collapse = "', '")
-  str_acronym_err <- paste0("\n", str_acronym_err)
+                        collapse = "`, `")
   if (length(zero_len_names[zero_len_names != "acronym"]) == 1) {
     var_str <- "Variable"
+    input_str <- "Input"
   } else {
     var_str <- "Variables"
+    input_str <- "Inputs"
   }
   rlang::abort(
-    paste0(var_str, " '", varname_str, "': Inputs had length 0, but ",
-           "must have length 1 or greater.", str_acronym_err),
+    c("!" = "You must not provide zero-length data.",
+      "i" = paste0("", var_str, " `", varname_str, "`: ", input_str, " had ",
+                   "length 0, but must have length 1 or greater."),
+      "i" = str_acronym_err),
     call = call, class = "gigs_err_zero_length"
   )
 }
