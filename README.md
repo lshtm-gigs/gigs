@@ -152,7 +152,8 @@ head(life6mo_classified, n = 4)
 ```
 
 You can also use `classify_*()` functions which are specific to the
-growth indicator you’d like to calculate, for example `classify_svn()`:
+growth indicator you’d like to calculate, for example `classify_svn()`
+to get small, vulnerable newborn classifications for each infant:
 
 ``` r
 # Small vulnerable newborns - note no ID parameter, as it is assumed that all
@@ -437,13 +438,13 @@ download links for Excel-based calculators in some standards.
 ## Authors + Citation
 
 **S. R. Parker** Maternal, Adolescent, Reproductive, and Child Health
-Centre London School of Hygiene and Tropical Medicine
+Centre, London School of Hygiene & Tropical Medicine
 
 **Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital Harvard T.H.
 Chan School of Public Health
 
 **Professor E. O. Ohuma** Maternal, Adolescent, Reproductive, and Child
-Health Centre London School of Hygiene and Tropical Medicine
+Health Centre, London School of Hygiene & Tropical Medicine
 
 ### Citation
 

@@ -136,7 +136,8 @@ head(life6mo_classified, n = 4)
 ```
 
 You can also use `classify_*()` functions which are specific to the growth
-indicator you'd like to calculate, for example `classify_svn()`:
+indicator you'd like to calculate, for example `classify_svn()` to get small,
+vulnerable newborn classifications for each infant:
 ```{r examples_classification2}
 # Small vulnerable newborns - note no ID parameter, as it is assumed that all
 # measures are taken at birth
