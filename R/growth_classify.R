@@ -1014,6 +1014,7 @@ repair_.new_names <- function(.new, mode = "classify_growth") {
       c("!" = paste0("{.arg mode} should be one of `\"classify_growth\"`",
                      "or `\"specific\".`")),
       call = rlang::caller_env(),
+      class = "gigs_internal_repair_mode_incorrect",
       .internal = TRUE)
   }
   .new_names <- names(.new)

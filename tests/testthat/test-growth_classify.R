@@ -1105,3 +1105,15 @@ test_that(desc = "`classify_growth()` displays the right errors/messages", {
     class = "gigs_classify_growth_msg"
   )
 })
+
+
+# Ensure full coverage on `repair_.new_names()` --------------------------------
+
+test_that(desc = "`repair_.new_names()` can throw an internal error", {
+  ## Wasting not successful; because length/height not supplied
+  testthat::expect_error(
+    repair_.new_names(.new = list("sfga" = c("test1", "test2", "test3")),
+                      mode = "gorp"),
+    class = "gigs_internal_repair_mode_incorrect"
+  )
+})
