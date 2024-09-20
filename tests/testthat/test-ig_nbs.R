@@ -931,81 +931,68 @@ test_that(
   }
 )
 
-# #' @srrstats {G5.8c} Show how the ig_nbs functions handles all-`NA` inputs.
-# test_that(
-#   desc = "Test that 'ig_nbs' functions can handle all-`NA` inputs",
-#   code = {
-#     # Make gigs error if confronted with any bad data
-#     for (option in names(.gigs_options)) {
-#       gigs_option_set(option, new_value = "warn", silent = TRUE)
-#     }
-#
-#     fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
-#                      "zscore2value")
-#     z <- 0
-#     p <- 0.5
-#
-#     for (fn_suffix in fn_suffixes) {
-#       fn_name <- paste("ig_nbs", fn_suffix, sep = "_")
-#       gigs_fn <- get(fn_name)
-#       for (seed in c(125, 175, 225)) {
-#         str_acronym <- withr::with_seed(seed, code = {
-#           sample(names(gigs::ig_nbs), size = 1)
-#         })
-#         x <- gigs::ig_nbs[[str_acronym]][[1]][[1]][[1]]
-#         len_x <- length(x)
-#         arg_zyp <- rep_len(switch(fn_suffix,
-#                                   centile2value = p,
-#                                   zscore2value = z,
-#                                   gigs::ig_nbs[[str_acronym]][[1]][[1]][[2]]),
-#                            len_x)
-#         arg_zyp_name <- switch(fn_suffix, centile2value = "p",
-#                                zscore2value = "z", "y")
-#         arg_x <- x
-#         arg_acronym <- rep_len(str_acronym, len_x)
-#         arg_sex <- withr::with_seed(seed,
-#           sample(c("M", "F"), len_x, replace = TRUE)
-#         )
-#         all_NA <- rep_len(NA, len_x)
-#
-#         # Will produce all NAs for `y` argument, with a warning
-#         expect_warning(
-#           gigs_fn(all_NA, arg_x, arg_sex, arg_acronym),
-#           test_msg_missing(name = arg_zyp_name, len_x, len_x)
-#         )
-#         # Will produce all NAs for the `x` argument, with a warning
-#         expect_warning(
-#           gigs_fn(arg_zyp, all_NA, arg_sex, arg_acronym),
-#           test_msg_missing(name = "gest_days", len_x, len_x)
-#         )
-#         # Will produce all NAs for the `sex` argument, with a warning
-#         expect_warning(
-#           gigs_fn(arg_zyp, arg_x, all_NA, arg_acronym),
-#           test_msg_missing(name = "sex", len_x, len_x)
-#         )
-#         # Will throw an error if all elements of `acronym` are missing
-#         expect_error(
-#           gigs_fn(arg_zyp, arg_x, arg_sex, all_NA),
-#           regexp = "Variable 'acronym': All elements were missing \\(`NA`\\)."
-#         )
-#         # All invalid `acronym`s will also produce an error
-#         expect_error(
-#           gigs_fn(arg_zyp,
-#                   arg_x,
-#                   arg_sex,
-#                   rep_len("not valid acronym!! oh no!", len_x)),
-#           regexp = paste0("Variable 'acronym': All elements were invalid. ",
-#                           "See the 'ig_nbs' documentation for valid 'acronym' ",
-#                           "values.")
-#         )
-#
-#         # `NULL` z/y/p variable causes error
-#         expect_error(
-#           gigs_fn(NULL, arg_x, arg_sex, arg_acronym),
-#           paste0("Your 'y'/'z'/'p' argument was `NULL`. Ensure it is not ",
-#                  "`NULL`, then try again.")
-#         )
-#       }
-#     }
-#   }
-# )
+#' @srrstats {G5.8c} Show how the ig_nbs functions handles all-`NA` inputs.
+test_that(
+  desc = "Test that 'ig_nbs' functions can handle all-`NA` inputs",
+  code = {
+    # Make gigs start warning again if confronted with any bad data
+    gigs_options_set(new_value = "warn", silent = TRUE)
+
+    fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
+                     "zscore2value")
+    z <- 0
+    p <- 0.5
+
+    for (fn_suffix in fn_suffixes) {
+      fn_name <- paste("ig_nbs", fn_suffix, sep = "_")
+      gigs_fn <- get(fn_name)
+      for (seed in c(125, 175, 225)) {
+        str_acronym <- withr::with_seed(seed, code = {
+          sample(names(gigs::ig_nbs), size = 1)
+        })
+        x <- gigs::ig_nbs[[str_acronym]][[1]][[1]][[1]]
+        len_x <- length(x)
+        arg_zyp <- rep_len(switch(fn_suffix,
+                                  centile2value = p,
+                                  zscore2value = z,
+                                  gigs::ig_nbs[[str_acronym]][[1]][[1]][[2]]),
+                           len_x)
+        arg_zyp_name <- switch(fn_suffix, centile2value = "p",
+                               zscore2value = "z", "y")
+        arg_x <- x
+        arg_acronym <- str_acronym
+        arg_sex <- withr::with_seed(seed,
+          sample(c("M", "F"), len_x, replace = TRUE)
+        )
+        all_NA <- rep_len(NA, len_x)
+
+        # Will produce all NAs for `y` argument, with a warning
+        expect_warning(
+          gigs_fn(all_NA, arg_x, arg_sex, arg_acronym),
+          test_msg_missing(arg_zyp_name, len_x, len_x)
+        )
+        # Will produce all NAs for the `x` argument, with a warning
+        expect_warning(
+          gigs_fn(arg_zyp, all_NA, arg_sex, arg_acronym),
+          test_msg_missing("gest_days", len_x, len_x)
+        )
+        # Will produce all NAs for the `sex` argument, with a warning
+        expect_warning(
+          gigs_fn(arg_zyp, arg_x, all_NA, arg_acronym),
+          test_msg_missing("sex", len_x, len_x)
+        )
+        # Will also throw an error if `acronym` is invalid
+        expect_error(
+          gigs_fn(arg_zyp, arg_x, arg_sex, "not valid"),
+          regexp = "Invalid `acronym` value:"
+        )
+
+        # `NULL` z/y/p variable causes error
+        expect_error(
+          gigs_fn(NULL, arg_x, arg_sex, arg_acronym),
+          regexp = "Your `y`/`z`/`p` argument must not be `NULL`."
+        )
+      }
+    }
+  }
+)
