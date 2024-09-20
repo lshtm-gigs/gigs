@@ -104,12 +104,14 @@ compute_stunting <- function(lenht_cm,
                              age_days,
                              gest_days,
                              sex,
+                             id = NULL,
                              outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
   validated <- validate_lhaz_params(lenht_cm = lenht_cm,
-                                     age_days = age_days,
-                                     gest_days = gest_days,
-                                     sex = sex)
+                                    age_days = age_days,
+                                    gest_days = gest_days,
+                                    sex = sex,
+                                    id = id)
   lhaz <- do.call(validated, what = gigs_lhaz_internal)
   categorise_stunting_internal(lhaz, outliers = outliers)
 }
@@ -153,13 +155,15 @@ compute_wasting <- function(weight_kg,
                             age_days,
                             gest_days,
                             sex,
+                            id = NULL,
                             outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
   validated <- validate_wlz_params(weight_kg = weight_kg,
                                    lenht_cm = lenht_cm,
                                    age_days = age_days,
                                    gest_days = gest_days,
-                                   sex = sex)
+                                   sex = sex,
+                                   id = id)
   wlz <- do.call(validated, what = gigs_wlz_internal)
   categorise_wasting_internal(wlz, outliers = outliers)
 }
@@ -187,12 +191,18 @@ compute_wasting <- function(weight_kg,
 #' )
 #' @inherit categorise_wfa details references return
 #' @export
-compute_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
+compute_wfa <- function(weight_kg,
+                        age_days,
+                        gest_days,
+                        sex,
+                        id = NULL,
+                        outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
   validated <- validate_waz_params(weight_kg = weight_kg,
                                    age_days = age_days,
                                    gest_days = gest_days,
-                                   sex = sex)
+                                   sex = sex,
+                                   id = id)
   waz <- do.call(validated, what = gigs_waz_internal)
   categorise_wfa_internal(waz, outliers = outliers)
 }
@@ -213,11 +223,12 @@ compute_wfa <- function(weight_kg, age_days, gest_days, sex, outliers = FALSE) {
 #' )
 #' @inherit categorise_headsize details references return
 #' @export
-compute_headsize <- function(headcirc_cm, age_days, gest_days, sex) {
+compute_headsize <- function(headcirc_cm, age_days, gest_days, sex, id = NULL) {
   validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,
                                     age_days = age_days,
                                     gest_days = gest_days,
-                                    sex = sex)
+                                    sex = sex,
+                                    id = id)
   hcaz <- do.call(validated, what = gigs_hcaz_internal)
   categorise_headsize_internal(hcaz)
 }
@@ -234,6 +245,6 @@ compute_headsize <- function(headcirc_cm, age_days, gest_days, sex) {
 #' @srrstats {G2.1, G2.1a, G2.2} Documentation explicitly notes expected data
 #'   types, lengths, and expected values for univariate input.
 #' @srrstats {G2.3, G2.3a, G2.3b} Univariate character inputs are restricted to
-#'   specific inputs by `{checkmate}` calls; these are case-sensitive and
-#'   documented as such.
+#'   specific inputs by `{checkmate}` calls in the `validate_*()` functions;
+#'   these are case-sensitive and documented as such.
 NULL
