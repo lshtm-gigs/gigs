@@ -439,7 +439,10 @@ catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
 #'   for its side effect of throwing errors if inputs have bad lengths, either
 #'   because they are zero length or because they cannot be recycled.
 #' @noRd
-validate_parameter_lengths <- function(..., y_name = NULL, x_name = NULL) {
+validate_parameter_lengths <- function(...,
+                                       y_name = NULL,
+                                       x_name = NULL,
+                                       call = rlang::caller_env()) {
   inputs <- list(...)
   if (!is.null(y_name)) {
     names(inputs)[names(inputs) == "y"] <- y_name
@@ -458,7 +461,7 @@ validate_parameter_lengths <- function(..., y_name = NULL, x_name = NULL) {
   # Stop with informative error if any inputs have length 0
   is_zero_length <- input_lengths == 0
   if (any(is_zero_length)) {
-    err_input_is_zero_length(varnames, is_zero_length)
+    err_input_is_zero_length(varnames, is_zero_length, call)
   }
 
   # Stop with informative error if inputs are not recyclable
@@ -466,7 +469,7 @@ validate_parameter_lengths <- function(..., y_name = NULL, x_name = NULL) {
   is_unrecyclable <- input_lengths != 1 & !is_max_input_length
   is_unrecyclable[varnames == "acronym"] <- FALSE
   if (any(is_unrecyclable)) {
-    err_inputs_unrecyclable(varnames, is_unrecyclable)
+    err_inputs_unrecyclable(varnames, is_unrecyclable, call)
   }
   invisible(inputs)
 }
@@ -478,7 +481,9 @@ validate_parameter_lengths <- function(..., y_name = NULL, x_name = NULL) {
 #' @returns Is only called to throw errors, which tell the user which of their
 #'   input(s) was zero-length.
 #' @noRd
-err_input_is_zero_length <- function(varnames, is_zero_length) {
+err_input_is_zero_length <- function(varnames,
+                                     is_zero_length,
+                                     call = rlang::caller_env) {
   zero_len_names <- varnames[is_zero_length]
   count <- sum(is_zero_length)
 
@@ -491,12 +496,12 @@ err_input_is_zero_length <- function(varnames, is_zero_length) {
 
   # If only one input is zero-length, throw errors for one variable
   if (all(zero_len_names == "acronym")) {
-    rlang::abort(str_acronym_err, call. = FALSE)
+    rlang::abort(str_acronym_err, call = call)
   } else if (count == 1) {
     rlang::abort(
       paste0("Variable '", zero_len_names, "': Input had length 0, but ",
              "must have length 1 or greater."),
-      call = NULL, class = "gigs_err_zero_length"
+      call = call, class = "gigs_err_zero_length"
     )
   }
 
@@ -513,7 +518,7 @@ err_input_is_zero_length <- function(varnames, is_zero_length) {
   rlang::abort(
     paste0(var_str, " '", varname_str, "': Inputs had length 0, but ",
            "must have length 1 or greater.", str_acronym_err),
-    call = NULL, class = "gigs_err_zero_length"
+    call = call, class = "gigs_err_zero_length"
   )
 }
 
@@ -524,7 +529,9 @@ err_input_is_zero_length <- function(varnames, is_zero_length) {
 #' @returns Is only called to throw errors, which tell the user which of their
 #'   inputs have bad lengths for tidyverse-style recycling.
 #' @noRd
-err_inputs_unrecyclable <- function(varnames, is_unrecyclable) {
+err_inputs_unrecyclable <- function(varnames,
+                                    is_unrecyclable,
+                                    call = rlang::caller_env()) {
   unrecyclable_names <- varnames[is_unrecyclable]
   count <- sum(is_unrecyclable)
   var_str <- if(count > 1) "Variables" else "Variable"
@@ -537,7 +544,8 @@ err_inputs_unrecyclable <- function(varnames, is_unrecyclable) {
              "documentation to ensure your inputs adhere to the vctrs ",
              "recycling rules ",
              "(https://vctrs.r-lib.org/reference/vec_recycle.html)."),
-    class = "gigs_err_unrecyclable"
+    class = "gigs_err_unrecyclable",
+    call = call
   )
 }
 

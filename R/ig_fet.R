@@ -1749,7 +1749,8 @@ validate_ig_fet <- function(y = NULL,
                             y_name = NULL,
                             x_name = NULL) {
   validate_parameter_lengths(y = y, z = z, p = p, x = x, acronym = acronym,
-                             y_name = y_name, x_name = x_name)
+                             y_name = y_name, x_name = x_name,
+                             call = rlang::caller_env())
   catch_and_throw_validate_issues(expr = {
     standard <- "ig_fet"
     acronym <- validate_acronym(acronym, names(gigs::ig_fet), standard)

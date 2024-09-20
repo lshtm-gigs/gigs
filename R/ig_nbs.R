@@ -786,7 +786,7 @@ validate_ig_nbs <- function(y = NULL,
                             y_name = NULL) {
   validate_parameter_lengths(y = y, z = z, p = p, gest_days = gest_days,
                              sex = sex, acronym = acronym, y_name = y_name,
-                             x_name = "gest_days")
+                             x_name = "gest_days", call = rlang::caller_env())
   catch_and_throw_validate_issues({
     standard <- "ig_nbs"
     acronym <- validate_acronym(acronym, names(gigs::ig_nbs), standard)

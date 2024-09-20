@@ -848,7 +848,7 @@ validate_who_gs <- function(y = NULL,
                             x_name = NULL) {
   validate_parameter_lengths(y = y, z = z, p = p, x = x, sex = sex,
                              acronym = acronym, y_name = y_name,
-                             x_name = x_name)
+                             x_name = x_name, call = rlang::caller_env())
   catch_and_throw_validate_issues({
     standard <- "who_gs"
     acronym <- validate_acronym(acronym, names(gigs::who_gs), standard)

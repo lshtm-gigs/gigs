@@ -341,20 +341,20 @@ validate_waz_params <- function(weight_kg, age_days, gest_days, sex, id) {
   if (is.null(id)) {
     validate_parameter_lengths(
       weight_kg = weight_kg, age_days = age_days, gest_days = gest_days,
-      sex = sex
+      sex = sex, call = rlang::caller_env()
     )
   } else {
     validate_parameter_lengths(
       weight_kg = weight_kg, age_days = age_days, gest_days = gest_days,
-      sex = sex, id = id
+      sex = sex, id = id, call = rlang::caller_env()
     )
   }
   catch_and_throw_validate_issues(expr = {
-    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
-    age_days <- validate_numeric(age_days, varname = "age_days")
-    gest_days <- validate_numeric(gest_days, varname = "gest_days")
-    sex <- validate_sex(sex)
     id <- validate_id(id)
+    sex <- validate_sex(sex)
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(
     weight_kg = weight_kg,age_days = age_days, gest_days = gest_days,
@@ -369,14 +369,14 @@ validate_waz_params <- function(weight_kg, age_days, gest_days, sex, id) {
 validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex, id) {
   validate_parameter_lengths(
     lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex,
-    id = id
+    id = id, call = rlang::caller_env()
   )
   catch_and_throw_validate_issues(expr = {
-    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
-    age_days <- validate_numeric(age_days, varname = "age_days")
-    gest_days <- validate_numeric(gest_days, varname = "gest_days")
-    sex <- validate_sex(sex)
     id <- validate_id(id)
+    sex <- validate_sex(sex)
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(
     lenht_cm = lenht_cm, age_days = age_days, gest_days = gest_days, sex = sex,
@@ -390,13 +390,14 @@ validate_lhaz_params <- function(lenht_cm, age_days, gest_days, sex, id) {
 #' @noRd
 validate_hcaz_params <- function(headcirc_cm, age_days, gest_days, sex, id) {
   validate_parameter_lengths(headcirc_cm = headcirc_cm, age_days = age_days,
-                             gest_days = gest_days, sex = sex, id = id)
+                             gest_days = gest_days, sex = sex, id = id,
+                             call = rlang::caller_env())
   catch_and_throw_validate_issues(expr = {
-    headcirc_cm <- validate_numeric(headcirc_cm, varname = "headcirc_cm")
-    age_days <- validate_numeric(age_days, varname = "age_days")
-    gest_days <- validate_numeric(gest_days, varname = "gest_days")
-    sex <- validate_sex(sex)
     id <- validate_id(id)
+    sex <- validate_sex(sex)
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    headcirc_cm <- validate_numeric(headcirc_cm, varname = "headcirc_cm")
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(headcirc_cm = headcirc_cm, age_days = age_days,
                             gest_days = gest_days, sex = sex, id = id)
@@ -414,14 +415,14 @@ validate_wlz_params <- function(weight_kg,
                                 id) {
   validate_parameter_lengths(weight_kg = weight_kg, lenht_cm = lenht_cm,
                              age_days = age_days, gest_days = gest_days,
-                             sex = sex, id = id)
+                             sex = sex, id = id, call = rlang::caller_env())
   catch_and_throw_validate_issues(expr = {
-    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
-    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
-    age_days <- validate_numeric(age_days, varname = "age_days")
-    gest_days <- validate_numeric(gest_days, varname = "gest_days")
-    sex <- validate_sex(sex)
     id <- validate_id(id)
+    sex <- validate_sex(sex)
+    gest_days <- validate_numeric(gest_days, varname = "gest_days")
+    age_days <- validate_numeric(age_days, varname = "age_days")
+    lenht_cm <- validate_numeric(lenht_cm, varname = "lenht_cm")
+    weight_kg <- validate_numeric(weight_kg, varname = "weight_kg")
   }, call = rlang::caller_env())
   vctrs::vec_recycle_common(weight_kg = weight_kg, lenht_cm = lenht_cm,
                             age_days = age_days, gest_days = gest_days,

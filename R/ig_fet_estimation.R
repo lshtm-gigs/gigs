@@ -185,7 +185,8 @@ validate_ig_fet_estimate_fw_param <- function(vec, varname) {
 #' @noRd
 validate_ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
   validate_parameter_lengths(abdocirc_mm = abdocirc_mm,
-                             headcirc_mm = headcirc_mm)
+                             headcirc_mm = headcirc_mm,
+                             call = rlang::caller_env())
   catch_and_throw_validate_issues({
     headcirc_mm <- validate_ig_fet_estimate_fw_param(headcirc_mm, "headcirc_mm")
     abdocirc_mm <- validate_ig_fet_estimate_fw_param(abdocirc_mm, "abdocirc_mm")
@@ -200,7 +201,8 @@ validate_ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
 validate_ig_fet_estimate_ga <- function(crl_mm, headcirc_mm, femurlen_mm) {
   validate_parameter_lengths(crl_mm = crl_mm,
                              headcirc_mm = headcirc_mm,
-                             femurlen_mm = femurlen_mm)
+                             femurlen_mm = femurlen_mm,
+                             call = rlang::caller_env())
   catch_and_throw_validate_issues({
     femurlen_mm <- if (is.null(femurlen_mm)) NULL else {
       validate_numeric(femurlen_mm, "femurlen_mm")
