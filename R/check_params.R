@@ -416,11 +416,10 @@ catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
     },
     error = \(cnd) {
       errors_temp <- get("errors", envir = rlang::env_parent())
-      assign(x = "warnings",
+      assign(x = "errors",
              value = c(cnd$message, errors_temp),
              envir = rlang::env_parent())
       rlang::cnd_muffle(cnd)
-      rlang::zap()
     })
   validation_warnings_errors(warnings, errors, call = call)
 }
