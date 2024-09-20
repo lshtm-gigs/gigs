@@ -719,238 +719,218 @@ test_that(
   }
 )
 
-# #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-# #' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
-# #'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
-# #'   errors.
-# #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-# #' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
-# #'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
-# #'   warnings.
-# test_that(
-#   desc = "Invalid values can be replaced with `NA` with errors",
-#   code = {
-#     # Make gigs stop() with bad data
-#     for (option in names(.gigs_options)) {
-#       gigs_option_set(option, new_value = "error", silent = TRUE)
-#     }
-#
-#     acronyms_to_test <- names(ig_nbs)[5]
-#     fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
-#                      "zscore2value")
-#     z <- 0
-#     p <- 0.5
-#
-#     # Random set of indices to replace with bad data in each case
-#     num_to_replace1 <- 6
-#     withr::with_seed(200, code = {
-#       replace_ints_1 <- sample(1L:20L, size = num_to_replace1)
-#     })
-#     num_to_replace2 <- 5
-#     withr::with_seed(200, code = {
-#       replace_ints_2 <- sample(1L:20L, size = num_to_replace2)
-#     })
-#     replace_ints_3 <- union(replace_ints_1, replace_ints_2)
-#     num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
-#
-#     for (fn_suffix in fn_suffixes) {
-#       for (str_acronym in acronyms_to_test) {
-#         fn_name <- paste("ig_nbs", str_acronym, fn_suffix, sep = "_")
-#         gigs_fn <- get(fn_name)
-#         x <- gigs::ig_nbs[[str_acronym]][[1]][[1]][[1]]
-#         len_x <- length(x) * 4
-#         arg_x_name <- gigs::ig_nbs[[str_acronym]][["x"]]
-#         y_name <- gigs::ig_nbs[[str_acronym]][["y"]]
-#
-#         arg_zyp <- rep_len(switch(fn_suffix,
-#                                   centile2value = p,
-#                                   zscore2value = z,
-#                                   gigs::ig_nbs[[str_acronym]][[1]][[1]][[3]]),
-#                            len_x)
-#         arg_zyp_name <- switch(fn_suffix,
-#                                centile2value = "p",
-#                                zscore2value = "z",
-#                                y_name)
-#         arg_x <- rep_len(x, len_x)
-#         arg_sex <- withr::with_seed(25, {
-#           sample(c("M", "F"), replace = TRUE, size = len_x)
-#         })
-#
-#         # Bad input 1: Undefined data (NaN, Inf, -Inf) -------------------------
-#         for (undefined_val in c(NaN, Inf, -Inf)) {
-#           ## Replace z/y/p variable and x variable with undefined_val
-#           expect_error(
-#             gigs_fn(replace(arg_zyp, replace_ints_2, undefined_val),
-#                     replace(arg_x, replace_ints_3, undefined_val),
-#                     arg_sex),
-#             test_msg_undefined(arg_zyp_name, len_x, num_to_replace2)
-#           )
-#         }
-#
-#         # Bad input 2: Missing data (NA) ---------------------------------------
-#         ## Replace only x variable with NA
-#         expect_error(
-#           gigs_fn(arg_zyp,
-#                   replace(arg_x, replace_ints_3, values = NA),
-#                   arg_sex),
-#           test_msg_missing(arg_x_name, len_x, num_to_replace3)
-#         )
-#
-#         ## Replace z/y/p variable, x and sex variables with NA
-#         expect_error(
-#           gigs_fn(replace(arg_zyp, replace_ints_2, values = NA),
-#                   replace(arg_x, replace_ints_3, values = NA),
-#                   replace(arg_sex, replace_ints_1, values = NA)),
-#           test_msg_missing(arg_zyp_name, len_x, num_to_replace2)
-#         )
-#
-#         # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ------------
-#         if (fn_suffix == "centile2value") {
-#           expect_error(
-#             gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5),
-#                     arg_x,
-#                     arg_sex),
-#             test_msg_centile_oob(len_x, num_to_replace1)
-#           )
-#           expect_error(
-#             gigs_fn(replace(arg_zyp, replace_ints_2, values = 2.5),
-#                     arg_x,
-#                     arg_sex),
-#             test_msg_centile_oob(len_x, num_to_replace2)
-#           )
-#         }
-#
-#         # Bad input 4: Out of bounds `x` variable ------------------------------
-#         below_lower_bound <- min(x) - replace_ints_1
-#         above_upper_bound <- max(x) + replace_ints_2
-#         out_of_bounds <-withr::with_seed(500, code = {
-#           sample(c(below_lower_bound, above_upper_bound),
-#                  size = num_to_replace3, replace = FALSE)
-#         })
-#         expect_error(
-#           gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, above_upper_bound), arg_sex),
-#           test_msg_xvar_oob(arg_x_name, len_x, num_to_replace2, "ig_nbs")
-#         )
-#         expect_error(
-#           gigs_fn(arg_zyp, replace(arg_x, replace_ints_3, out_of_bounds), arg_sex),
-#           test_msg_xvar_oob(arg_x_name, len_x, num_to_replace3, "ig_nbs")
-#         )
-#
-#         # Bad input 5: Non-"M"/"F" `sex` variables -----------------------------
-#         expect_error(
-#           gigs_fn(arg_zyp,
-#                   arg_x,
-#                   replace(arg_sex, replace_ints_2, "invalid_sex")),
-#           test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
-#         )
-#         expect_error(
-#           gigs_fn(arg_zyp,
-#                   arg_x,
-#                   replace(arg_sex, replace_ints_2, "invalid_sex")),
-#           test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
-#         )
-#       }
-#
-#       fn_name <- paste("ig_nbs", fn_suffix, sep = "_")
-#       gigs_fn <- get(fn_name)
-#       arg_zyp_name <- switch(fn_suffix, centile2value = "p",
-#                              zscore2value = "z", "y")
-#       arg_acronym <- rep_len(str_acronym, len_x)
-#       arg_x_name <- "gest_days"
-#
-#       # Bad input 1: Undefined data (NaN, Inf, -Inf) ---------------------------
-#       for (undefined_val in c(NaN, Inf, -Inf)) {
-#         ## Replace z/y/p variable and x variable with undefined_val
-#         expect_error(
-#           gigs_fn(replace(arg_zyp, replace_ints_3, undefined_val),
-#                   replace(arg_x, replace_ints_2, undefined_val),
-#                   arg_sex,
-#                   arg_acronym),
-#           test_msg_undefined(arg_zyp_name, len_x, num_to_replace3)
-#         )
-#       }
-#
-#       # Bad input 2: Missing data (NA) -----------------------------------------
-#       ## Replace z/y/p variable and acronym variable with NA
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 arg_x,
-#                 replace(arg_sex, replace_ints_2, values = NA),
-#                 replace(arg_acronym, replace_ints_1, NA)),
-#         test_msg_missing("acronym", len_x, num_to_replace1)
-#       )
-#
-#       # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) --------------
-#       if (fn_suffix == "centile2value") {
-#           expect_error(
-#             gigs_fn(replace(arg_zyp, replace_ints_3, values = 2.5),
-#                     arg_x,
-#                     arg_sex,
-#                     arg_acronym),
-#             test_msg_centile_oob(len_x, num_to_replace3)
-#           )
-#           expect_error(
-#             gigs_fn(replace(arg_zyp, replace_ints_2, values = 2.5),
-#                     arg_x,
-#                     arg_sex,
-#                     arg_acronym),
-#             test_msg_centile_oob(len_x, num_to_replace2)
-#           )
-#       }
-#
-#       # Bad input 4: Out of bounds `x` variable --------------------------------
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 replace(arg_x, replace_ints_3, out_of_bounds),
-#                 arg_sex,
-#                 arg_acronym),
-#         test_msg_xvar_oob(arg_x_name, len_x, num_to_replace3, "ig_nbs")
-#       )
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 replace(arg_x, replace_ints_1, below_lower_bound),
-#                 arg_sex,
-#                 arg_acronym),
-#         test_msg_xvar_oob(arg_x_name, len_x, num_to_replace1, "ig_nbs")
-#       )
-#
-#       # Bad input 5: Non-"M"/"F" `sex` variables -----------------------------
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 arg_x,
-#                 replace(arg_sex, replace_ints_2, "m"),
-#                 arg_acronym),
-#         test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
-#       )
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 arg_x,
-#                 replace(arg_sex, replace_ints_3, "f"),
-#                 arg_acronym),
-#         test_msg_acronym_sex_invalid("sex", len_x, num_to_replace3, "ig_nbs")
-#       )
-#
-#       # Bad input 6: Invalid `acronym` values (not in names(gigs::ig_nbs))
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 arg_x,
-#                 arg_sex,
-#                 replace(arg_acronym, replace_ints_2, "invalid")),
-#         test_msg_acronym_sex_invalid("acronym", len_x, num_to_replace2,
-#                                      "ig_nbs")
-#       )
-#       expect_error(
-#         gigs_fn(arg_zyp,
-#                 arg_x,
-#                 arg_sex,
-#                 replace(arg_acronym, replace_ints_3, "invalid")),
-#         test_msg_acronym_sex_invalid("acronym", len_x, num_to_replace3,
-#                                      "ig_nbs")
-#       )
-#     }
-#   }
-# )
-#
+#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
+#' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
+#'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
+#'   errors.
+#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
+#' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
+#'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
+#'   warnings.
+test_that(
+  desc = "Invalid values can be replaced with `NA` with errors",
+  code = {
+    # Make gigs stop() with bad data
+    gigs_options_set(new_value = "error", silent = TRUE)
+
+    acronyms_to_test <- names(ig_nbs)[5]
+    fn_suffixes <- c("value2zscore", "value2centile", "centile2value",
+                     "zscore2value")
+    z <- 0
+    p <- 0.5
+
+    # Random set of indices to replace with bad data in each case
+    num_to_replace1 <- 6
+    withr::with_seed(200, code = {
+      replace_ints_1 <- sample(1L:20L, size = num_to_replace1)
+    })
+    num_to_replace2 <- 5
+    withr::with_seed(200, code = {
+      replace_ints_2 <- sample(1L:20L, size = num_to_replace2)
+    })
+    replace_ints_3 <- union(replace_ints_1, replace_ints_2)
+    num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
+
+    for (fn_suffix in fn_suffixes) {
+      for (str_acronym in acronyms_to_test) {
+        fn_name <- paste("ig_nbs", str_acronym, fn_suffix, sep = "_")
+        gigs_fn <- get(fn_name)
+        x <- gigs::ig_nbs[[str_acronym]][[1]][[1]][[1]]
+        len_x <- length(x) * 4
+        arg_x_name <- gigs::ig_nbs[[str_acronym]][["x"]]
+        y_name <- gigs::ig_nbs[[str_acronym]][["y"]]
+
+        arg_zyp <- rep_len(switch(fn_suffix,
+                                  centile2value = p,
+                                  zscore2value = z,
+                                  gigs::ig_nbs[[str_acronym]][[1]][[1]][[3]]),
+                           len_x)
+        arg_zyp_name <- switch(fn_suffix,
+                               centile2value = "p",
+                               zscore2value = "z",
+                               y_name)
+        arg_x <- rep_len(x, len_x)
+        arg_sex <- withr::with_seed(25, {
+          sample(c("M", "F"), replace = TRUE, size = len_x)
+        })
+
+        # Bad input 1: Undefined data (NaN, Inf, -Inf) -------------------------
+        for (undefined_val in c(NaN, Inf, -Inf)) {
+          ## Replace z/y/p variable and x variable with undefined_val
+          expect_error(
+            gigs_fn(replace(arg_zyp, replace_ints_2, undefined_val),
+                    replace(arg_x, replace_ints_3, undefined_val),
+                    arg_sex),
+            test_msg_undefined(arg_x_name, len_x, num_to_replace3)
+          )
+        }
+
+        # Bad input 2: Missing data (NA) ---------------------------------------
+        ## Replace only x variable with NA
+        expect_error(
+          gigs_fn(arg_zyp,
+                  replace(arg_x, replace_ints_3, values = NA),
+                  arg_sex),
+          test_msg_missing(arg_x_name, len_x, num_to_replace3)
+        )
+
+        ## Replace z/y/p variable, x and sex variables with NA
+        expect_error(
+          gigs_fn(replace(arg_zyp, replace_ints_2, values = NA),
+                  replace(arg_x, replace_ints_3, values = NA),
+                  replace(arg_sex, replace_ints_1, values = NA)),
+          test_msg_missing("sex", len_x, num_to_replace1)
+        )
+
+        # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ------------
+        if (fn_suffix == "centile2value") {
+          expect_error(
+            gigs_fn(replace(arg_zyp, replace_ints_1, values = 2.5),
+                    arg_x,
+                    arg_sex),
+            test_msg_centile_oob(len_x, num_to_replace1)
+          )
+          expect_error(
+            gigs_fn(replace(arg_zyp, replace_ints_2, values = 2.5),
+                    arg_x,
+                    arg_sex),
+            test_msg_centile_oob(len_x, num_to_replace2)
+          )
+        }
+
+        # Bad input 4: Out of bounds `x` variable ------------------------------
+        below_lower_bound <- min(x) - replace_ints_1
+        above_upper_bound <- max(x) + replace_ints_2
+        out_of_bounds <-withr::with_seed(500, code = {
+          sample(c(below_lower_bound, above_upper_bound),
+                 size = num_to_replace3, replace = FALSE)
+        })
+        expect_error(
+          gigs_fn(arg_zyp, replace(arg_x, replace_ints_2, above_upper_bound), arg_sex),
+          test_msg_xvar_oob(arg_x_name, len_x, num_to_replace2, "ig_nbs")
+        )
+        expect_error(
+          gigs_fn(arg_zyp, replace(arg_x, replace_ints_3, out_of_bounds), arg_sex),
+          test_msg_xvar_oob(arg_x_name, len_x, num_to_replace3, "ig_nbs")
+        )
+
+        # Bad input 5: Non-"M"/"F" `sex` variables -----------------------------
+        expect_error(
+          gigs_fn(arg_zyp,
+                  arg_x,
+                  replace(arg_sex, replace_ints_2, "invalid_sex")),
+          test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
+        )
+        expect_error(
+          gigs_fn(arg_zyp,
+                  arg_x,
+                  replace(arg_sex, replace_ints_2, "invalid_sex")),
+          test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
+        )
+      }
+
+      fn_name <- paste("ig_nbs", fn_suffix, sep = "_")
+      gigs_fn <- get(fn_name)
+      arg_zyp_name <- switch(fn_suffix, centile2value = "p",
+                             zscore2value = "z", "y")
+      arg_acronym <- str_acronym
+      arg_x_name <- "gest_days"
+
+      # Bad input 1: Undefined data (NaN, Inf, -Inf) ---------------------------
+      for (undefined_val in c(NaN, Inf, -Inf)) {
+        ## Replace z/y/p variable and x variable with undefined_val
+        expect_error(
+          gigs_fn(replace(arg_zyp, replace_ints_3, undefined_val),
+                  replace(arg_x, replace_ints_2, undefined_val),
+                  arg_sex,
+                  arg_acronym),
+          test_msg_undefined(arg_x_name, len_x, num_to_replace2)
+        )
+      }
+
+      # Bad input 2: Missing data (NA) -----------------------------------------
+      ## Replace sex variable variable with NA
+      expect_error(
+        gigs_fn(arg_zyp,
+                arg_x,
+                replace(arg_sex, replace_ints_2, values = NA),
+                arg_acronym),
+        test_msg_missing("sex", len_x, num_to_replace2)
+      )
+
+      # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) --------------
+      if (fn_suffix == "centile2value") {
+          expect_error(
+            gigs_fn(replace(arg_zyp, replace_ints_3, values = 2.5),
+                    arg_x,
+                    arg_sex,
+                    arg_acronym),
+            test_msg_centile_oob(len_x, num_to_replace3)
+          )
+          expect_error(
+            gigs_fn(replace(arg_zyp, replace_ints_2, values = 2.5),
+                    arg_x,
+                    arg_sex,
+                    arg_acronym),
+            test_msg_centile_oob(len_x, num_to_replace2)
+          )
+      }
+
+      # Bad input 4: Out of bounds `x` variable --------------------------------
+      expect_error(
+        gigs_fn(arg_zyp,
+                replace(arg_x, replace_ints_3, out_of_bounds),
+                arg_sex,
+                arg_acronym),
+        test_msg_xvar_oob(arg_x_name, len_x, num_to_replace3, "ig_nbs")
+      )
+      expect_error(
+        gigs_fn(arg_zyp,
+                replace(arg_x, replace_ints_1, below_lower_bound),
+                arg_sex,
+                arg_acronym),
+        test_msg_xvar_oob(arg_x_name, len_x, num_to_replace1, "ig_nbs")
+      )
+
+      # Bad input 5: Non-"M"/"F" `sex` variables -----------------------------
+      expect_error(
+        gigs_fn(arg_zyp,
+                arg_x,
+                replace(arg_sex, replace_ints_2, "m"),
+                arg_acronym),
+        test_msg_acronym_sex_invalid("sex", len_x, num_to_replace2, "ig_nbs")
+      )
+      expect_error(
+        gigs_fn(arg_zyp,
+                arg_x,
+                replace(arg_sex, replace_ints_3, "f"),
+                arg_acronym),
+        test_msg_acronym_sex_invalid("sex", len_x, num_to_replace3, "ig_nbs")
+      )
+    }
+  }
+)
+
 # #' @srrstats {G5.8c} Show how the ig_nbs functions handles all-`NA` inputs.
 # test_that(
 #   desc = "Test that 'ig_nbs' functions can handle all-`NA` inputs",
