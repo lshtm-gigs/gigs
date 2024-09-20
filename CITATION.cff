@@ -245,6 +245,21 @@ references:
   year: '2024'
   doi: 10.32614/CRAN.package.dplyr
 - type: software
+  title: tidyselect
+  abstract: 'tidyselect: Select from a Set of Strings'
+  notes: Suggests
+  url: https://tidyselect.r-lib.org
+  repository: https://CRAN.R-project.org/package=tidyselect
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2024'
+  doi: 10.32614/CRAN.package.tidyselect
+- type: software
   title: units
   abstract: 'units: Measurement Units for R Vectors'
   notes: Suggests

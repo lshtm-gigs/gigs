@@ -25,16 +25,16 @@
 #' @examples
 #' # By default, does not differentiate between p < 0.03 and p < 0.10
 #' compute_sfga(
-#'   weight_kg = c(2.2, 3.3, 4.2),
-#'   gest_days = 267:269,
-#'   sex = c("M", "F", "M")
+#'   weight_kg = c(2.2, 2.5, 3.3, 4.0),
+#'   gest_days = 266:269,
+#'   sex = c("F", "M", "F", "M")
 #' )
 #'
 #' # With severe = TRUE, highlights p < 0.03
 #' compute_sfga(
-#'   weight_kg = c(2.2, 3.3, 4.2),
-#'   gest_days = 267:269,
-#'   sex = c("M", "F", "M"),
+#'   weight_kg = c(2.2, 2.5, 3.3, 4.0),
+#'   gest_days = 266:269,
+#'   sex = c("F", "M", "F", "M"),
 #'   severe = TRUE
 #' )
 #' @inherit categorise_sfga details
@@ -81,23 +81,37 @@ compute_svn <- function(weight_kg, gest_days, sex) {
 #'
 #' @inheritParams compute_wasting
 #' @inherit categorise_stunting params note details references return
+#' @inherit gigs_waz params
 #' @examples
-#' # The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
-#' # the next two use the WHO Child Growth Standards.
+#' # The first observation for each infant in `id` uses the INTERGROWTH-21st
+#' #  Newborn Size standards; the next two use either the INTERGROWTH-21st
+#' # Postnatal Growth standards or WHO Child Growth Standards.
 #' compute_stunting(
-#'   lenht_cm = c(52.2, 75.4, 63.1),
-#'   age_days = c(357, 375, 250),
-#'   gest_days = c(196, 287, 266),
-#'   sex = c("M", "M", "F")
+#'   lenht_cm = c(52.2, 60.4, 75, 52.2, 60.4, 75),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B"))
 #' )
 #'
-#' # And with outlier flagging:
+#' # With outlier flagging:
 #' compute_stunting(
 #'   lenht_cm = c(52.2, 75.4, 63.1),
 #'   age_days = c(357, 375, 250),
 #'   gest_days = c(196, 287, 266),
 #'   sex = c("M", "M", "F"),
+#'   id = factor(c("A", "B", "C")),
 #'   outliers = TRUE
+#' )
+#'
+#' # If you don't specify `id`, the function will not identify that the fourth
+#' # data point is a birth measurement, and will categorise it as severe
+#' # stunting instead of not stunting
+#' compute_stunting(
+#'   lenht_cm = c(40.0, 60.4, 75, 40.0, 60.4, 75),
+#'   age_days = c(0.45, 100, 500, 0.5, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
 #' @export
 compute_stunting <- function(lenht_cm,
@@ -130,23 +144,41 @@ compute_stunting <- function(lenht_cm,
 #' @param gest_days Numeric vector with gestational age(s) at birth in days.
 #' @inheritParams compute_sfga
 #' @inheritParams categorise_stunting
+#' @inherit gigs_waz params
 #' @examples
+#' # The first observation for each infant in `id` uses the INTERGROWTH-21st
+#' #  Newborn Size standards; the next two use either the INTERGROWTH-21st
+#' # Postnatal Growth standards or WHO Child Growth Standards.
 #' compute_wasting(
-#'   weight_kg = c(5.75, 2.18, 3.00, 6.75),
-#'   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
-#'   age_days = c(251, 197, 225, 243),
-#'   gest_days = c(251, 197, 225, 243),
-#'   sex =  c("F", "M", "F", "M")
+#'   weight_kg = c(3, 6, 11, 3, 6, 11),
+#'   lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B"))
 #' )
 #'
-#' # And with outlier flagging:
+#' # With outlier flagging:
 #' compute_wasting(
-#'   weight_kg = c(5.75, 2.18, 3.00, 6.75),
-#'   lenht_cm = c(67.7, 46.6, 50.0, 80.1),
-#'   gest_days = c(251, 197, 225, 243),
-#'   age_days = c(251, 197, 225, 243),
-#'   sex =  c("F", "M", "F", "M"),
+#'   weight_kg = c(3, 6, 11, 3, 6, 11),
+#'   lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B")),
 #'   outliers = TRUE
+#' )
+#'
+#' # If you don't specify `id`, the function will not identify that the fourth
+#' # data point is a birth measurement. This means a weight-for-length z-score
+#' # (and resulting wasting classification) will be calculated for the fourth
+#' # data point, which is wrong here
+#' compute_wasting(
+#'   weight_kg = c(3, 6, 11, 3, 6, 11),
+#'   lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
 #' @inherit categorise_wasting details references return
 #' @export
@@ -173,21 +205,37 @@ compute_wasting <- function(weight_kg,
 #'
 #' @inheritParams compute_wasting
 #' @inherit categorise_wasting params references return
+#' @inherit gigs_waz params
 #' @examples
+#' # The first observation for each infant in `id` uses the INTERGROWTH-21st
+#' #  Newborn Size standards; the next two use either the INTERGROWTH-21st
+#' # Postnatal Growth standards or WHO Child Growth Standards.
 #' compute_wfa(
-#'   weight_kg = c(7.2, 4.5, 9.1, 24),
-#'   age_days = c(401, 185, 101, 607),
-#'   gest_days = 7 * c(27, 36, 40, 41),
-#'   sex = c("F", "M", "F", "M")
+#'   weight_kg = c(2.05, 8, 18, 2.05, 8, 18),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B"))
 #' )
 #'
-#' # And with outlier flagging:
+#' # With outlier flagging:
 #' compute_wfa(
-#'   weight_kg = c(7.2, 4.5, 9.1, 24),
-#'   age_days = c(401, 185, 101, 607),
-#'   gest_days = 7 * c(27, 36, 40, 41),
-#'   sex = c("F", "M", "F", "M"),
+#'   weight_kg = c(2.05, 8, 18, 2.05, 8, 18),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B")),
 #'   outliers = TRUE
+#' )
+#'
+#' # If you don't specify `id`, the function will not identify that the fourth
+#' # data point is a birth measurement, and will categorise it as underweight
+#' # instead of severely stunting
+#' compute_wfa(
+#'   weight_kg = c(2.05, 8, 18, 2.05, 8, 18),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
 #' @inherit categorise_wfa details references return
 #' @export
@@ -215,11 +263,25 @@ compute_wfa <- function(weight_kg,
 #' @inheritParams compute_wasting
 #' @inherit categorise_wasting params references return
 #' @examples
+#' # The first observation for each infant in `id` uses the INTERGROWTH-21st
+#' #  Newborn Size standards; the next two use either the INTERGROWTH-21st
+#' # Postnatal Growth standards or WHO Child Growth Standards.
 #' compute_headsize(
-#'   headcirc_cm = c(41, 40, 41, 51),
-#'   age_days = c(401, 185, 101, 607),
-#'   gest_days = c(189, 252, 280, 287),
-#'   sex = c("F", "M", "F", "M")
+#'   headcirc_cm = c(31.6, 40, 50, 31.6, 40, 50),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F"),
+#'   id = factor(c("A", "A", "A", "B", "B", "B"))
+#' )
+#'
+#' # If you don't specify `id`, the function will not identify that the fourth
+#' # data point is a birth measurement, and will categorise it as microcephalic
+#' # instead of normal
+#' compute_headsize(
+#'   headcirc_cm = c(31.6, 40, 50, 31.6, 40, 50),
+#'   age_days = c(0, 100, 500, 2, 100, 500),
+#'   gest_days = c(245, 245, 245, 280, 280, 280),
+#'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
 #' @inherit categorise_headsize details references return
 #' @export

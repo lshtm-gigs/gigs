@@ -144,8 +144,7 @@ classify_svn <- function(.data,
 #' Classify stunting in `data.frame`-like objects with GIGS-recommended growth
 #' standards
 #'
-#' @param weight_kg <[`data-masking`][rlang::args_data_masking]> The name of a
-#'   column in `.data` which is a numeric vector of weight values in kg.
+#' @inherit classify_sfga params
 #' @param lenht_cm <[`data-masking`][rlang::args_data_masking]> The name of a
 #'   column in `.data` which is a numeric vector of length/height values in cm.
 #' @param age_days <[`data-masking`][rlang::args_data_masking]> The name of a
@@ -181,11 +180,9 @@ classify_svn <- function(.data,
 #' data <- data.frame(
 #'   child = factor(rep.int(c("A", "B"), c(3, 3))),
 #'   agedays = c(0, 100, 500, 2, 100, 500),
-#'   gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+#'   gestage  = c(rep(35 * 7, 3), rep(40 * 7, 3)),
 #'   sex = rep.int(c("M", "F"), c(3, 3)),
-#'   weight_kg = c(3, 6, 9, 3, 6, 9),
-#'   length_cm = rep.int(c(52.2, 60.4, 75), 2),
-#'   headcirc_cm = rep.int(c(40, 50, 60), 2)
+#'   length_cm = rep.int(c(52.2, 60.4, 75), 2)
 #' )
 #'
 #' # Use the `id` argument to ensure that `classify_stunting` uses the correct
@@ -304,14 +301,15 @@ classify_wasting <- function(.data,
     id <- eval_tidy(enquo(id), .data)
   }
 
-  wlz <- gigs_wlz(
+  wlz <- validate_wlz_params(
     weight_kg = eval_tidy(enquo(weight_kg), data = .data),
     lenht_cm = eval_tidy(enquo(lenht_cm), data = .data),
     age_days = eval_tidy(enquo(age_days), data = .data),
     gest_days = eval_tidy(enquo(gest_days), data = .data),
     sex = eval_tidy(enquo(sex), data = .data),
     id = id
-  )
+  ) |>
+    do.call(what = gigs_wlz_internal)
 
   .new <- repair_.new_names(.new = list("wasting" = .new), mode = "specific")
   .data[[.new[1]]] <- wlz
@@ -383,13 +381,14 @@ classify_wfa <- function(.data,
     id <- eval_tidy(enquo(id), data = .data)
   }
 
-  waz <- gigs_waz(
+  waz <- validate_waz_params(
     weight_kg = eval_tidy(enquo(weight_kg), data = .data),
     age_days = eval_tidy(enquo(age_days), data = .data),
     gest_days = eval_tidy(enquo(gest_days), data = .data),
     sex = eval_tidy(enquo(sex), data = .data),
     id = id
-  )
+  ) |>
+    do.call(what = gigs_waz_internal)
 
   .new <- repair_.new_names(.new = list("wfa" = .new), mode = "specific")
   .data[[.new[1]]] <- waz
@@ -461,13 +460,14 @@ classify_headsize <- function(.data,
     id <- eval_tidy(enquo(id), data = .data)
   }
 
-  hcaz <- gigs_hcaz(
+  hcaz <- validate_hcaz_params(
     headcirc_cm = eval_tidy(enquo(headcirc_cm), .data),
     age_days = eval_tidy(enquo(age_days), .data),
     gest_days = eval_tidy(enquo(gest_days), .data),
     sex = eval_tidy(enquo(sex), .data),
     id = id
-  )
+  ) |>
+    do.call(what = gigs_hcaz_internal)
 
   .new <- repair_.new_names(.new = list("headsize" = .new), mode = "specific")
   .data[[.new[1]]] <- hcaz
@@ -1128,22 +1128,19 @@ msg_classify_growth <- function(all, requested, run, missing) {
 #' @srrstats {G2.3, G2.3a, G2.3b} Univariate character inputs are restricted to
 #'   specific inputs by `{checkmate}` calls; these are case-sensitive and
 #'   documented as such.
+#' @srrstats {G2.7} We use `checkmate::assert_data_frame()` to check that the
+#'   supplied `.data` objects inherit from `data.frame`, allowing the use of
+#'   `tibble`s, `data.table`s, and more.
+#' @srrstats {G2.8, G2.12} The package passes columns to various GIGS-specific
+#'   `validate_*()` functions. These ensure that passed columns are atomic and
+#'   have the right type. This behaviour inherently restricts a user from
+#'   supplying list-columns as input to the function.
+#' @srrstats {G2.9} Users can select names to apply to new columns, which are
+#'   fixed by `vctrs::as_names()`. This function prints messages to the console
+#'   if any of the names supplied by the user require changing.
+#' @srrstats {G2.11} In this script, all vector columns are passed to functions
+#'   which strip attributes - this lets `units`-like non-standard vector columns
+#'   work in these functions.
+#' @srrstats {G2.14, G2.14a, G2.14b} Missing/undefined data checks are
+#'   performed and their behaviour can be customised using [gigs_option_set()].
 NULL
-
-# @srrstats {G2.7} We use `checkmate::assert_data_frame()` to check that the
-#   supplied `.data` objects inherit from `data.frame`, allowing the use of at
-#   `tibble`s, `data.table`s, and more.
-# @srrstats {G2.8} The package passes columns to various GIGS-specific
-#   `validate_*()` functions. These ensure that passed columns are atomic and
-#   have the right type.
-# @srrstats {G2.9} Users can select names to apply to new columns, which are
-#   fixed by `vctrs::as_names()`. This function prints messages to the console
-#   if any of the names supplied by the user require changing.
-# @srrstats {G2.11} In this script, all vector columns are passed to functions
-#   which strip attributes - this lets `units`-like non-standard vector columns
-#   work in these functions.
-
-
-# #' @srrstats {G2.12} For this script
-# #' @srrstats {G2.14, G2.14a, G2.14b, G2.14c} Missing/undefined data checks are
-# #'   performed and their behaviour can be customised using [gigs_option_set()].

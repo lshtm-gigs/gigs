@@ -167,7 +167,7 @@ msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
       valid_acronyms <- names(get(standard, envir = rlang::ns_env("gigs")))
       valid_acronyms <- paste_sep_commas_quoted(valid_acronyms)
       rlang::abort(
-        c("\nInvalid `acronym` value:",
+        c("Invalid `acronym` value:",
           "x" = paste0("Value of `acronym` was `\"", acronym, "\"`."),
           "!" = paste0("Value of `acronym` must be one of ", valid_acronyms,
                        ".")),

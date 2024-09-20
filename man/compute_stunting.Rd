@@ -5,7 +5,14 @@
 \title{Get stunting categories using multiple vectors and GIGS-recommended growth
 standards}
 \usage{
-compute_stunting(lenht_cm, age_days, gest_days, sex, outliers = FALSE)
+compute_stunting(
+  lenht_cm,
+  age_days,
+  gest_days,
+  sex,
+  id = NULL,
+  outliers = FALSE
+)
 }
 \arguments{
 \item{lenht_cm}{Numeric vector of length one or more with length/height
@@ -22,6 +29,12 @@ behaviour can be customised using the functions in \link{gigs_options}.}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
 and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
+
+\item{id}{A factor of length one or more with an ID for each observation,
+either ordered or unordered, containing no missing (\code{NA}) values. When
+supplied, \code{id} is used to ensure that only the earliest measurement for
+each individual is used as a birth measure. Leave this argument as \code{NULL}
+if all your data comes from the same individual. Default = \code{NULL}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score thresholds should be applied. Default = \code{FALSE}.}
@@ -55,22 +68,35 @@ Implausible z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.
 }
 \examples{
-# The first observation uses the INTERGROWTH-21st Postnatal Growth standards;
-# the next two use the WHO Child Growth Standards.
+# The first observation for each infant in `id` uses the INTERGROWTH-21st
+#  Newborn Size standards; the next two use either the INTERGROWTH-21st
+# Postnatal Growth standards or WHO Child Growth Standards.
 compute_stunting(
-  lenht_cm = c(52.2, 75.4, 63.1),
-  age_days = c(357, 375, 250),
-  gest_days = c(196, 287, 266),
-  sex = c("M", "M", "F")
+  lenht_cm = c(52.2, 60.4, 75, 52.2, 60.4, 75),
+  age_days = c(0, 100, 500, 2, 100, 500),
+  gest_days = c(245, 245, 245, 280, 280, 280),
+  sex = c("M", "M", "M", "F", "F", "F"),
+  id = factor(c("A", "A", "A", "B", "B", "B"))
 )
 
-# And with outlier flagging:
+# With outlier flagging:
 compute_stunting(
   lenht_cm = c(52.2, 75.4, 63.1),
   age_days = c(357, 375, 250),
   gest_days = c(196, 287, 266),
   sex = c("M", "M", "F"),
+  id = factor(c("A", "B", "C")),
   outliers = TRUE
+)
+
+# If you don't specify `id`, the function will not identify that the fourth
+# data point is a birth measurement, and will categorise it as severe
+# stunting instead of not stunting
+compute_stunting(
+  lenht_cm = c(40.0, 60.4, 75, 40.0, 60.4, 75),
+  age_days = c(0.45, 100, 500, 0.5, 100, 500),
+  gest_days = c(245, 245, 245, 280, 280, 280),
+  sex = c("M", "M", "M", "F", "F", "F")
 )
 }
 \references{

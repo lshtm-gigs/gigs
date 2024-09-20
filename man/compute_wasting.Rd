@@ -11,6 +11,7 @@ compute_wasting(
   age_days,
   gest_days,
   sex,
+  id = NULL,
   outliers = FALSE
 )
 }
@@ -32,6 +33,12 @@ behaviour can be customised using the functions in \link{gigs_options}.}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
 and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
+
+\item{id}{A factor of length one or more with an ID for each observation,
+either ordered or unordered, containing no missing (\code{NA}) values. When
+supplied, \code{id} is used to ensure that only the earliest measurement for
+each individual is used as a birth measure. Leave this argument as \code{NULL}
+if all your data comes from the same individual. Default = \code{NULL}.}
 
 \item{outliers}{A single \code{TRUE} or \code{FALSE} value specifying whether
 implausible z-score thresholds should be applied. Default = \code{FALSE}.}
@@ -59,22 +66,39 @@ Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
 }
 }
 \examples{
+# The first observation for each infant in `id` uses the INTERGROWTH-21st
+#  Newborn Size standards; the next two use either the INTERGROWTH-21st
+# Postnatal Growth standards or WHO Child Growth Standards.
 compute_wasting(
-  weight_kg = c(5.75, 2.18, 3.00, 6.75),
-  lenht_cm = c(67.7, 46.6, 50.0, 80.1),
-  age_days = c(251, 197, 225, 243),
-  gest_days = c(251, 197, 225, 243),
-  sex =  c("F", "M", "F", "M")
+  weight_kg = c(3, 6, 11, 3, 6, 11),
+  lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+  age_days = c(0, 100, 500, 2, 100, 500),
+  gest_days = c(245, 245, 245, 280, 280, 280),
+  sex = c("M", "M", "M", "F", "F", "F"),
+  id = factor(c("A", "A", "A", "B", "B", "B"))
 )
 
-# And with outlier flagging:
+# With outlier flagging:
 compute_wasting(
-  weight_kg = c(5.75, 2.18, 3.00, 6.75),
-  lenht_cm = c(67.7, 46.6, 50.0, 80.1),
-  gest_days = c(251, 197, 225, 243),
-  age_days = c(251, 197, 225, 243),
-  sex =  c("F", "M", "F", "M"),
+  weight_kg = c(3, 6, 11, 3, 6, 11),
+  lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+  age_days = c(0, 100, 500, 2, 100, 500),
+  gest_days = c(245, 245, 245, 280, 280, 280),
+  sex = c("M", "M", "M", "F", "F", "F"),
+  id = factor(c("A", "A", "A", "B", "B", "B")),
   outliers = TRUE
+)
+
+# If you don't specify `id`, the function will not identify that the fourth
+# data point is a birth measurement. This means a weight-for-length z-score
+# (and resulting wasting classification) will be calculated for the fourth
+# data point, which is wrong here
+compute_wasting(
+  weight_kg = c(3, 6, 11, 3, 6, 11),
+  lenht_cm = c(52.2, 60.4, 61, 52.2, 60.4, 61),
+  age_days = c(0, 100, 500, 2, 100, 500),
+  gest_days = c(245, 245, 245, 280, 280, 280),
+  sex = c("M", "M", "M", "F", "F", "F")
 )
 }
 \references{

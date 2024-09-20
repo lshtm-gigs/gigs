@@ -16,6 +16,10 @@ classify_stunting(
 )
 }
 \arguments{
+\item{.data}{A \code{data.frame}-like tabular object with one or more rows. Must
+be permissible by \code{\link[checkmate:checkDataFrame]{checkmate::assert_data_frame()}}, so you can also supply
+a \code{tibble}, \code{data.table}, or similar.}
+
 \item{lenht_cm}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of length/height values in cm.}
 
@@ -27,6 +31,12 @@ column in \code{.data} which is a numeric vector of gestational age(s) at birth
 in days. This column, in conjunction with the column referred to by
 \code{age_days}, is used to select which growth standard to use for each
 observation.}
+
+\item{sex}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
+column in \code{.data} which is a case-sensitive character vector of sexes,
+either \code{"M"} (male) or \code{"F"} (female). By default, gigs will warn you if
+any elements of \code{sex} are not \code{"M"} or \code{"F"}, or are missing (\code{NA}). You
+can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{id}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a factor variable with IDs for each observation.
@@ -40,9 +50,6 @@ columns. These inputs will be repaired if necessary using
 \code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}}, which will print any changes to the console. If
 any elements in \code{.new} are the same as elements in \code{colnames(.data)}, the
 function will throw an error. Default = \code{c("lhaz", "stunting", "stunting_outliers")}.}
-
-\item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a numeric vector of weight values in kg.}
 }
 \value{
 A tabular object of the same class that was provided as \code{.data},
@@ -76,11 +83,9 @@ Outlier         \tab \code{"outlier"}             \tab \code{abs(lhaz)} > 6
 data <- data.frame(
   child = factor(rep.int(c("A", "B"), c(3, 3))),
   agedays = c(0, 100, 500, 2, 100, 500),
-  gestage  = c(rep(35 * 7, 3), rep(35 * 7, 3)),
+  gestage  = c(rep(35 * 7, 3), rep(40 * 7, 3)),
   sex = rep.int(c("M", "F"), c(3, 3)),
-  weight_kg = c(3, 6, 9, 3, 6, 9),
-  length_cm = rep.int(c(52.2, 60.4, 75), 2),
-  headcirc_cm = rep.int(c(40, 50, 60), 2)
+  length_cm = rep.int(c(52.2, 60.4, 75), 2)
 )
 
 # Use the `id` argument to ensure that `classify_stunting` uses the correct

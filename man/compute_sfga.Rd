@@ -56,16 +56,16 @@ adhere to the \link{vctrs} recycling rules.
 \examples{
 # By default, does not differentiate between p < 0.03 and p < 0.10
 compute_sfga(
-  weight_kg = c(2.2, 3.3, 4.2),
-  gest_days = 267:269,
-  sex = c("M", "F", "M")
+  weight_kg = c(2.2, 2.5, 3.3, 4.0),
+  gest_days = 266:269,
+  sex = c("F", "M", "F", "M")
 )
 
 # With severe = TRUE, highlights p < 0.03
 compute_sfga(
-  weight_kg = c(2.2, 3.3, 4.2),
-  gest_days = 267:269,
-  sex = c("M", "F", "M"),
+  weight_kg = c(2.2, 2.5, 3.3, 4.0),
+  gest_days = 266:269,
+  sex = c("F", "M", "F", "M"),
   severe = TRUE
 )
 }

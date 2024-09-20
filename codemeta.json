@@ -116,6 +116,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "tidyselect",
+      "name": "tidyselect",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyselect"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
       "provider": {
@@ -201,7 +213,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2444.888KB",
+  "fileSize": "2470.756KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

@@ -21,7 +21,9 @@ be permissible by \code{\link[checkmate:checkDataFrame]{checkmate::assert_data_f
 a \code{tibble}, \code{data.table}, or similar.}
 
 \item{weight_kg}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
-column in \code{.data} which is a numeric vector of weight values in kg.}
+column in \code{.data} which is a numeric vector of birth weight values in kg.
+It is assumed that weight measurements provided to this function are
+birth weights recorded <12 hours after an infant's birth.}
 
 \item{age_days}{<\code{\link[rlang:args_data_masking]{data-masking}}> The name of a
 column in \code{.data} which is a numeric vector of age values in days.}
