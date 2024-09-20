@@ -72,6 +72,7 @@ data(life6mo)
 life6mo <- life6mo[, 1:7] # Removes `len_cm`, `headcirc_cm`, and `muac_cm`
 life6mo$preterm <- life6mo$gestage < 37 * 7
 life6mo$sex <- as.character(life6mo$sex)
+life6mo$id <- as.factor(life6mo$id)
 head(life6mo, n = 5)
 ```
 
@@ -94,7 +95,8 @@ life6mo_zscored <- classify_wfa(.data = life6mo,
                                 weight_kg = wt_kg,
                                 age_days = age_days,
                                 gest_days = gestage,
-                                sex = sex)
+                                sex = sex,
+                                id = id)
 life6mo_zscored[, c("id", "visitweek", "gestage", "age_days", "sex", "waz")] |>
   head(n = 5)
 ```
@@ -132,7 +134,7 @@ ggplot_waz_simple |>
                   dpi = 300)
 ```
 
-```{r waz_simple_include, fig.align = "center", out.width="95%", echo = FALSE}
+```{r waz_simple_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
 knitr::include_graphics("gigs_waz_simple.png")
 ```
 
@@ -141,8 +143,8 @@ Instead of letting GIGS do the heavy lifting, you may want to clearly lay out
 the steps taken in your analysis. Luckily, gigs provides all the functionality
 you need for this.
 
-We start by generating WAZs using each growth standard. To do this, we need to use
-the gigs conversion functions. These take vectors of growth data and convert
+We start by generating WAZs using each growth standard. To do this, we need to
+use the gigs conversion functions. These take vectors of growth data and convert
 them into z-scores or centiles. To get the right function, follow the gigs
 conversion function naming scheme:
 
@@ -182,20 +184,25 @@ waz_png <- with(life6mo, ig_png_value2zscore(y =  wt_kg,
                                              sex = sex,
                                              acronym = "wfa"))
 ```
+This "out of bounds" warning from GIGS tells us that for 128 observations GIGS
+couldn't calculate a z-score, because the post-menstrual age for those
+observations was outside the range of the `r intergrowth21st` Postnatal Growth
+Standards (i.e. 27 to 64 weeks' post-menstrual age).
 
-Once we have our standard-specific WAZs, we can use a chain of `ifelse()`
-functions to make one overall `waz` column in `life6mo`. The first condition,
-`age_days < 0.5`, ensures that the `r intergrowth21st` Newborn Size standards
-are used for measures taken <12hrs after birth. The `preterm` and
-`pma <= 64 * 7` conditions ensure that the `r intergrowth21st` Postnatal Growth
-standards are used for preterm infants who are younger than than 64 weeks PMA
-(the upper limit of the `r intergrowth21st` Postnatal Growth standards). The
-final condition, for `use_who_gs`, ensures that the WHO Child Growth standard
-z-scores are used wherever infants were either born term, or were born preterm
-and are older than 64 weeks PMA.
+Nonetheless, we now have standard-specific WAZs. We can use a chain of
+`ifelse()` functions to make one overall `waz` column in `life6mo`. The first
+condition, `visitweek == 0`, ensures that the `r intergrowth21st` Newborn Size
+standards are used for measures taken at visit week zero (which for this study,
+is equivalent to at-birth). The `preterm` and `pma <= 64 * 7` conditions ensure
+that the `r intergrowth21st` Postnatal Growth standards are used for preterm
+infants who are younger than than 64 weeks PMA (the upper limit of the
+`r intergrowth21st` Postnatal Growth standards). The final condition,
+`use_who_gs`, ensures that the WHO Child Growth standard z-scores are used
+wherever infants were either born term, or were born preterm and are older than
+64 weeks PMA.
 
 ```{r complex_make_WAZ}
-is_birth_measure <- with(life6mo_zscored, age_days < 0.5)
+is_birth_measure <- with(life6mo_zscored, visitweek == 0)
 use_ig_nbs <- with(life6mo_zscored, is_birth_measure)
 use_ig_png <- with(life6mo_zscored,
                    !is_birth_measure & preterm & pma <= 64 * 7)
@@ -236,9 +243,14 @@ ggplot_waz_complex |>
                   dpi = 300)
 ```
 
-```{r waz_complex_include, fig.align = "center", out.width="95%", echo = FALSE}
+```{r waz_complex_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
 knitr::include_graphics("gigs_waz_complex.png")
 ```
+
+Sure - you *can* do it yourself, but doing it manually is likelier to have you
+applying the wrong standards at each time point. Instead, use the
+`classify_growth()` function and friends to automatically apply the best
+growth standards for each observation you have in a dataset.
 
 # Using gigs to obtaining growth outcomes from measurements
 The gigs package contains functions which can be used to assess a range of
@@ -302,7 +314,7 @@ ggplot_sfga |>
                   dpi = 300)
 ```
 
-```{r sfga_include, fig.align = "center", out.width="95%", echo = FALSE}
+```{r sfga_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA) in 300 infants from the LIFE study. 72.56% of infants were SGA, 25% were AGA, and 2.44% were LGA."}
 knitr::include_graphics("gigs_sfga.png")
 ```
 
@@ -369,7 +381,7 @@ ggplot_svn |>
                   dpi = 300)
 ```
 
-```{r svn_include, fig.align = "center", out.width="95%", echo = FALSE}
+```{r svn_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA), stratified by whether infants were term or preterm. Of 300 infants from the LIFE study, 15.24% were preterm SGA, 25% were preterm AGA, 2.44% were preterm LGA, and 57.32% were term SGA."}
 knitr::include_graphics("gigs_svn.png")
 ```
 
