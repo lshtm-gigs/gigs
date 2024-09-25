@@ -1143,4 +1143,7 @@ msg_classify_growth <- function(all, requested, run, missing) {
 #'   work in these functions.
 #' @srrstats {G2.14, G2.14a, G2.14b} Missing/undefined data checks are
 #'   performed and their behaviour can be customised using [gigs_option_set()].
+#' @srrstats {EA3.0, EA3.1} The `classify_growth()` function automates growth
+#'   standard selection for end users, which (as far as we have found) was not
+#'   previously available to end-users.
 NULL
