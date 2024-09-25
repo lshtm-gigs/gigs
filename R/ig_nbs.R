@@ -611,7 +611,7 @@ ig_nbs_msnt_v2p <- function(y, gest_days, sex, acronym) {
 #' @note These equations are not included in the referenced publication. Rather,
 #'   they were taken from weight-to-length ratio calculating Excel files
 #'   available on the [INTERGROWTH-21<sup>st</sup>
-#'   website](https://intergrowth21.tghn.org/newborn-size-birth/#c4).
+#'   website](https://intergrowth21.com/tools-resources/newborn-size).
 #' @references
 #' Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 #' **Body composition at birth and its relationship with neonatal anthropometric
