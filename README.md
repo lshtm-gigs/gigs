@@ -418,15 +418,20 @@ the GIGS benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
-|-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 99                   | 76                          | 20                          | 9                             |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2356                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 108                  | ❌                          | ❌                          | ❌                            |
+|:------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 100                  | 79                          | 21                          | 9                             |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2416                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 126                  | ❌                          | ❌                          | ❌                            |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 129                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 93                   | 69                          | 41                          | 11                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 97                   | 71                          | 42                          | 11                            |
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 47                   | ❌                          | ❌                          | ❌                            |
+| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
+
+Note: `zscorer` is NA because we couldn’t time it for 100,000 inputs (it
+takes too long).
 
 The WHO and INTERGROWTH-21<sup>st</sup> standards are also available in
 standalone form, available from the [WHO

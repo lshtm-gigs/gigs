@@ -334,21 +334,41 @@ a package, a red cross (❌) indicates that these standards are completely
 missing, and an exclamation mark (❕) indicates that some of these standards are
 implemented but not others.
 
+
+
 ```{r arrows_and_bench_data, echo = FALSE}
-ig21st <- knitr::asis_output(x = "IG-21<sup>st</sup>")
+ig21st <- if (knitr::is_html_output()) {
+  knitr::asis_output(x = "IG-21<sup>st</sup>")
+} else {
+  knitr::asis_output(x = "IG-21\textsupercript{st}")
+}
 
 larr <- knitr::asis_output(x = "&larr;")
 rarr <- knitr::asis_output(x = "&rarr;")
 harr <- knitr::asis_output(x = "&harr;")
-yes <- knitr::asis_output(x = "✅")
-no <- knitr::asis_output(x = "❌")
-half <- knitr::asis_output(x = "❕")
+yes <- if (knitr::is_html_output()) {
+   knitr::asis_output(x = "✅")
+} else {
+  knitr::asis_output(x = "✓")
+}
+no <- if (knitr::is_html_output()) {
+  knitr::asis_output(x = "❌")
+} else {
+  knitr::asis_output(x = "✘")
+}
+half <- if (knitr::is_html_output()) {
+  knitr::asis_output(x = "❕")
+} else {
+  knitr::asis_output(x = "⚠")
+}
 
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
 AGD <- knitr::asis_output(x = "[AGD](https://cran.r-project.org/web/packages/AGD/index.html)")
 childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
 gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs/)")
 growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
+sitar <- knitr::asis_output(x = "[sitar](https://cran.r-project.org/web/packages/sitar/index.html)")
+zscorer <- knitr::asis_output(x = "[zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)")
 gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)")
 zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata)")
 intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
@@ -375,15 +395,20 @@ these timings can be seen online in the GIGS benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |
-|-----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
+|:----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
 | `r gigs_r`      | R        | `r max_len_bench[[1]][["gigs"]]`          | `r max_len_bench[[2]][["gigs"]]`       | `r max_len_bench[[3]][["gigs"]]`       | `r max_len_bench[[4]][["gigs"]]`        |
 | `r anthro`      | R        | `r max_len_bench[[1]][["anthro"]]`        | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r AGD`         | R        | `r max_len_bench[[1]][["AGD"]]`           | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r childsds`    | R        | `r max_len_bench[[1]][["childsds"]]`      | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r growthstans` | R        | `r max_len_bench[[1]][["gs"]]`            | `r  max_len_bench[[2]][["gs"]]`        | `r max_len_bench[[3]][["gs"]]`         | `r max_len_bench[[4]][["gs"]]`          |
 | `r intergrowth` | R        | `r no`                                    | `r no`                                 | `r no`                                 | `r max_len_bench[[4]][["intergrowth"]]` |
+| `r sitar`       | R        | `r max_len_bench[[1]][["sitar"]]`         | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r zscorer`     | R        | NA                                        | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["stata_gigs"]]`    | `r max_len_bench[[2]][["stata_gigs"]]` | `r max_len_bench[[3]][["stata_gigs"]]` | `r max_len_bench[[4]][["stata_gigs"]]`  |
 | `r zanthro`     | Stata    | `r max_len_bench[[1]][["stata_zanthro"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
+
+Note: `zscorer` is NA because we couldn't time it for 100,000 inputs (it takes
+too long).
 
 ```{r srr-tags-3, eval = FALSE, echo = FALSE}
 #' @srrstats {G1.5, G1.6} The linked article contains code for both performance
