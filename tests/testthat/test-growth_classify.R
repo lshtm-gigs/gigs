@@ -8,20 +8,37 @@ test_data_postnatal_wlz <- test_data_postnatal[
     !is.na(with(test_data_postnatal, weight_kg_from_wlz)),
 ]
 
+#' @srrstats {EA6.0, EA6.0a, EA6.0b, EA6.0c, EA6.0d} This function checks the
+#' output type, output dimensions, column names, and the types of the new
+#' columns in tabular output.
+check_classify_fn_output <- function(old, new, new_names) {
+  checkmate::expect_data_frame(
+    new, nrows = nrow(old), ncols = ncol(old) + length(new_names)
+  )
+  testthat::expect_equal(colnames(new), c(colnames(old), new_names))
+
+  checkmate::expect_numeric(new[[new_names[1]]]) # First new col is continuous
+  for (name in new_names[2:length(new_names)]) {
+    checkmate::expect_factor(new[[name]]) # All other new cols are factors
+  }
+}
+
 # Testing `classify_sfga()` ----------------------------------------------------
 
 #' @srrstats {G5.4, G5.4c} Tests to ensure that `classify_sfga()` reproduces
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_sfga() reproduces expected z-scores", {
+  new_names <- c("bweight_centile_test", "sfga", "sfga_severe")
   sfga <- classify_sfga(
     .data = test_data_birth,
     weight_kg = weight_kg,
     gest_days = gest_age,
     sex = sex,
-    .new = c("bweight_centile_test", "sfga", "sfga_severe")
+    .new = new_names
   )
-  sfga_temp <- dplyr::select(sfga, id, tidyselect::starts_with("bweight"), tidyselect::starts_with("sfga"))
+  check_classify_fn_output(test_data_birth, sfga, new_names)
+
   testthat::expect_equal(
     sfga$bweight_centile_test, sfga$bweight_centile_exp
   )
@@ -127,13 +144,16 @@ test_that(desc = "classify_sfga() errors on bad data types", {
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_svn() reproduces expected z-scores", {
+  new_names <- c("bweight_centile_test", "svn")
   svn <- classify_svn(
     .data = test_data_birth,
     weight_kg = weight_kg,
     gest_days = gest_age,
     sex = sex,
-    .new = c("bweight_centile_test", "svn")
+    .new = new_names
   )
+  check_classify_fn_output(test_data_birth, svn, new_names)
+
   testthat::expect_equal(
     svn$bweight_centile_exp, svn$bweight_centile_test
   )
@@ -236,6 +256,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_stunting() reproduces expected z-scores", {
+  new_names <- c("lhaz_test", "stunting", "stunting_outliers")
   stunting <- classify_stunting(
     .data = test_data[with(test_data, !is.na(lenht_cm)), ],
     lenht_cm = lenht_cm,
@@ -243,8 +264,11 @@ test_that(desc = "classify_stunting() reproduces expected z-scores", {
     age_days = age_days,
     sex = sex,
     id = id,
-    .new = c("lhaz_test", "stunting", "stunting_outliers")
+    .new = new_names
   )
+  check_classify_fn_output(test_data[with(test_data, !is.na(lenht_cm)), ],
+                           stunting, new_names)
+
   testthat::expect_equal(
     stunting$lhaz_test, stunting$lhaz_exp
   )
@@ -369,6 +393,7 @@ test_that(desc = "classify_stunting() errors on bad data", {
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_wasting() reproduces expected z-scores", {
+  new_names <- c("wlz_test", "wasting", "wasting_outliers")
   wasting <- classify_wasting(
     .data = test_data_postnatal_wlz,
     weight_kg = weight_kg_from_wlz,
@@ -377,8 +402,10 @@ test_that(desc = "classify_wasting() reproduces expected z-scores", {
     age_days = age_days,
     sex = sex,
     id = id,
-    .new = c("wlz_test", "wasting", "wasting_outliers")
+    .new = new_names
   )
+  check_classify_fn_output(test_data_postnatal_wlz, wasting, new_names)
+
   testthat::expect_equal(
     wasting$wlz_exp, wasting$wlz_test, tolerance = sqrt(.Machine$double.eps)
   )
@@ -511,6 +538,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_wfa() reproduces expected z-scores", {
+  new_names <- c("waz_test", "wfa", "wfa_outliers")
   wfa <- classify_wfa(
     .data = test_data,
     weight_kg = weight_kg,
@@ -518,8 +546,10 @@ test_that(desc = "classify_wfa() reproduces expected z-scores", {
     age_days = age_days,
     sex = sex,
     id = id,
-    .new = c("waz_test", "wfa", "wfa_outliers")
+    .new = new_names
   )
+  check_classify_fn_output(test_data, wfa, new_names)
+
   testthat::expect_equal(
     wfa$waz_exp, wfa$waz_test, tolerance = sqrt(.Machine$double.eps)
   )
@@ -643,6 +673,7 @@ test_that(desc = "classify_wfa() errors on bad data", {
 #'   expected z-scores from randomly generated growth data, and the appropriate
 #'   categorical data.
 test_that(desc = "classify_headsize() reproduces expected z-scores", {
+  new_names <- c("hcaz_test", "headsize")
   headsize <- classify_headsize(
     .data = test_data,
     headcirc_cm = headcirc_cm,
@@ -652,6 +683,9 @@ test_that(desc = "classify_headsize() reproduces expected z-scores", {
     id = id,
     .new = c("hcaz_test", "headsize")
   )
+  check_classify_fn_output(test_data, headsize, new_names)
+
+
   testthat::expect_equal(
     headsize$hcaz_exp, headsize$hcaz_test, tolerance = sqrt(.Machine$double.eps)
   )
@@ -767,9 +801,55 @@ test_that(desc = "classify_headsize() errors on bad data", {
 
 # Testing `classify_growth()` --------------------------------------------------
 
+#' @srrstats {EA6.0, EA6.0a, EA6.0b, EA6.0c, EA6.0d} This function checks the
+#' output type, output dimensions, column names, and the types of the new
+#' columns in tabular output - but is specific to classify_growth().
+check_classify_growth_output <- function(old, new, .outcomes, .new) {
+  new_names <- .new[.outcomes]
+  if ("sfga" %in% .outcomes & "svn" %in% .outcomes) {
+    new_names[["svn"]][1] <- new_names[["sfga"]][1]
+    continuous_cols <- vapply(X = unname(new_names[names(new_names) != "svn"]),
+                            FUN = \(x) x[1],
+                            FUN.VALUE = character(1L))
+  } else {
+    continuous_cols <- vapply(X = unname(new_names),
+                              FUN = \(x) x[1],
+                              FUN.VALUE = character(1L))
+  }
+  continuous_cols <- continuous_cols |>
+    vctrs::vec_as_names(repair = "universal_quiet")
+  categorical_cols <- lapply(X = unname(new_names),
+                             FUN = \(x) x[2:length(x)]) |>
+    unlist() |>
+    vctrs::vec_as_names(repair = "universal_quiet")
+  for (col_name in continuous_cols) {
+    checkmate::expect_numeric(new[[col_name]])
+  }
+  for (col_name in categorical_cols) {
+    checkmate::expect_factor(new[[col_name]])
+  }
+  n_new_cols <- length(c(continuous_cols, categorical_cols))
+  checkmate::expect_data_frame(
+    new, nrows = nrow(old), ncols = ncol(old) + n_new_cols
+  )
+  if ("sfga" %in% .outcomes & "svn" %in% .outcomes) {
+    new_names[["svn"]] <- new_names[["svn"]][-1]
+  }
+  testthat::expect_equal(colnames(new), c(colnames(old), unlist(new_names)),
+                         ignore_attr = TRUE)
+}
+
 #' @srrstats {G5.4, G5.4c} Tests to ensure that `classify_growth()` reproduces
 #'   expected z-scores from randomly generated growth data.
 test_that(desc = "`classify_growth()` reproduces expected z-scores", {
+  outcomes <- c("sfga", "svn", "stunting", "wfa", "headsize")
+  new <- list(
+      sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
+      svn = c("bweight_centile_test", "svn"),
+      stunting = c("lhaz_test", "stunting", "stunting_outliers"),
+      wfa = c("waz_test", "wfa", "wfa_outliers"),
+      headsize = c("hcaz_test", "headsize")
+    )
   growth <- classify_growth(
     .data = test_data,
     weight_kg = weight_kg,
@@ -779,17 +859,16 @@ test_that(desc = "`classify_growth()` reproduces expected z-scores", {
     age_days = age_days,
     sex = sex,
     id = id,
-    .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
+    .outcomes = outcomes,
     # Also demonstrates column renaming with .new
-    .new = list(
-      sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
-      svn = c("bweight_centile_test", "svn"),
-      stunting = c("lhaz_test", "stunting", "stunting_outliers"),
-      wfa = c("waz_test", "wfa", "wfa_outliers"),
-      headsize = c("hcaz_test", "headsize")
-    ),
+    .new = new,
     .verbose = FALSE # Silence message for this test
   )
+
+  check_classify_growth_output(old = test_data,
+                               new = growth,
+                               .outcomes = outcomes,
+                               .new = new)
 
   # Subset for only birth obs
   growth_birth <- growth[with(growth, !is.na(bweight_centile_test)), ]
