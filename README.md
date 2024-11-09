@@ -466,8 +466,8 @@ Health Centre, London School of Hygiene & Tropical Medicine
 
 ### Citation
 
-Parker S, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
-Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
+Parker SR, Vesel L, Ohuma EO (2023). *gigs: Assess Fetal, Newborn, and Child Growth with International Standards*.
+<https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 
