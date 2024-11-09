@@ -506,13 +506,13 @@ classify_headsize <- function(.data,
 #'   Each character vector in `.new` is repaired with `vctrs::as_names()`, which
 #'   will issue messages if any elements in `.new` are changed.
 #'
-#'   \itemize{
-#'    \item{`"sfga"`:}{  `c("birthweight_centile", "sfga", "sfga_severe")`}
-#'    \item{`"svn"`:}{  `c("birthweight_centile", "svn")`}
-#'    \item{`"stunting"`:}{  `c("lhaz", "stunting", "stunting_outliers")`}
-#'    \item{`"wasting"`:}{  `c("wlz", "wasting", "wasting_outliers")`}
-#'    \item{`"wfa"`:}{  `c("waz", "wfa", "wfa_outliers")`}
-#'    \item{`"headsize"`:}{  `c("hcaz", "headsize")`}
+#'   \describe{
+#'     \item{`"sfga"`:}{  `c("birthweight_centile", "sfga", "sfga_severe")`}
+#'     \item{`"svn"`:}{  `c("birthweight_centile", "svn")`}
+#'     \item{`"stunting"`:}{  `c("lhaz", "stunting", "stunting_outliers")`}
+#'     \item{`"wasting"`:}{  `c("wlz", "wasting", "wasting_outliers")`}
+#'     \item{`"wfa"`:}{  `c("waz", "wfa", "wfa_outliers")`}
+#'     \item{`"headsize"`:}{  `c("hcaz", "headsize")`}
 #'   }
 #' @param .verbose A single logical value. When `TRUE` (the default),
 #'   messages about which analyses were requested versus which were performed

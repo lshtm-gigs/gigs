@@ -9,7 +9,7 @@ We plan to add:
 
 * Additional growth standards if requested by package users and deemed within the package scope
  
-## Scope
+### Scope
 This package's scope is limited to international growth standards.
 As a consequence, feature requests or pull requests which add support for growth references (e.g. the CDC growth charts or UK-WHO growth charts) will be rejected.
 If you want to use growth references in your work, you may find other packages more useful.
