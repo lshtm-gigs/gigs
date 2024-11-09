@@ -1,15 +1,21 @@
 Type: Package
 Package: gigs
 Title: Assess Fetal, Newborn, and Child Growth with International Standards
-Version: 0.4.1.9000
+Version: 0.4.1.9001
 Authors@R: c(
-    person("Simon", "Parker", , "simon.parker1471@outlook.com",
+    person(given = "Simon", family = "Parker",
+           email = "simon.parker1471@outlook.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
     person("Linda", "Vesel", role = "dtc",
            comment = c(ORCID = "0000-0003-3753-4172")),
     person("Eric", "Ohuma", role = "dtc",
            comment = c(ORCID = "0000-0002-3116-2593")),
-    person("Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
+    person("Chitra", "Saraswati", role = "rev",
+           comment = c(ORCID = "0000-0002-8159-0414")),
+    person("Victor", "Ordu", role = "rev",
+           comment = c(ORCID = "0000-0003-3716-0668")),
+    person("Bill & Melinda Gates Foundation", role = "fnd"),
+    person("London School of Hygiene & Tropical Medicine", role = "cph")
   )
 Description: Convert between anthropometric measures and z-scores/centiles
     in multiple growth standards, and classify fetal, newborn, and child
@@ -28,14 +34,14 @@ Imports:
     gamlss.dist,
     stats,
     rlang,
-    vctrs
+    vctrs,
+    cli
 Suggests:
     autotest,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     dplyr,
-    tidyselect,
     units,
     withr
 VignetteBuilder: 
@@ -46,6 +52,6 @@ Config/testthat/start-first: who_gs, ig_nbs, ig_fet, ig_png
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
-Roxygen: list(markdown = TRUE, roclets = c ("namespace", "rd",
-    "srr::srr_stats_roclet"))
+Roxygen: list(markdown = TRUE,
+              roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.3.2

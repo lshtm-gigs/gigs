@@ -8,7 +8,7 @@ message: 'To cite package "gigs" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'gigs: Assess Fetal, Newborn, and Child Growth with International Standards'
-version: 0.4.1.9000
+version: 0.4.1.9001
 identifiers:
 - type: url
   value: https://lshtm-gigs.github.io/gigs/
@@ -35,7 +35,7 @@ preferred-citation:
   - family-names: Ohuma
     given-names: Eric
   year: '2024'
-  notes: 0.4.1.9000
+  notes: 0.4.1.9001
   url: https://github.com/lshtm-gigs/gigs/
 repository-code: https://github.com/lshtm-gigs/gigs
 url: https://github.com/lshtm-gigs/gigs/
@@ -138,6 +138,18 @@ references:
     email: davis@posit.co
   year: '2024'
   doi: 10.32614/CRAN.package.vctrs
+- type: software
+  title: cli
+  abstract: 'cli: Helpers for Developing Command Line Interfaces'
+  notes: Imports
+  url: https://cli.r-lib.org
+  repository: https://CRAN.R-project.org/package=cli
+  authors:
+  - family-names: Csárdi
+    given-names: Gábor
+    email: csardi.gabor@gmail.com
+  year: '2024'
+  doi: 10.32614/CRAN.package.cli
 - type: software
   title: autotest
   abstract: 'autotest: Automatic Package Testing'
@@ -244,21 +256,6 @@ references:
     orcid: https://orcid.org/0000-0003-4777-038X
   year: '2024'
   doi: 10.32614/CRAN.package.dplyr
-- type: software
-  title: tidyselect
-  abstract: 'tidyselect: Select from a Set of Strings'
-  notes: Suggests
-  url: https://tidyselect.r-lib.org
-  repository: https://CRAN.R-project.org/package=tidyselect
-  authors:
-  - family-names: Henry
-    given-names: Lionel
-    email: lionel@posit.co
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@posit.co
-  year: '2024'
-  doi: 10.32614/CRAN.package.tidyselect
 - type: software
   title: units
   abstract: 'units: Measurement Units for R Vectors'

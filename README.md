@@ -102,7 +102,8 @@ life6mo_classified <- classify_growth(
         id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
-#> `gigs::classify_growth()`
+#> 
+#> ── `gigs::classify_growth()` ───────────────────────────────────────────────────
 #> ✔ Small vulnerable newborns: Success
 #> ✔ Stunting: Success
 
@@ -134,7 +135,8 @@ life6mo_classified <- classify_growth(
         id = as.factor(id),
         .outcomes = c("svn", "stunting")
 )
-#> `gigs::classify_growth()`
+#> 
+#> ── `gigs::classify_growth()` ───────────────────────────────────────────────────
 #> ✔ Small vulnerable newborns: Success
 #> ! Stunting: Not computed (`lenht_cm` not supplied)
 
@@ -196,15 +198,15 @@ INTERGROWTH-21<sup>st</sup> project:
   Component standards
   </summary>
 
-  | Acronym  | Description                   | Unit  | `gest_days` range |
-  |----------|-------------------------------|-------|-------------------|
-  | `wfga`   | weight-for-GA                 | kg    | 168 to 300 days   |
-  | `lfga`   | length-for-GA                 | cm    | 168 to 300 days   |
-  | `hcfga`  | head circumference-for-GA     | cm    | 168 to 300 days   |
-  | `wlrfga` | weight-to-length ratio-for-GA | kg/cm | 168 to 300 days   |
-  | `ffmfga` | fat-free mass-for-GA          | kg    | 266 to 294 days   |
-  | `bfpfga` | body fat percentage-for-GA    | %     | 266 to 294 days   |
-  | `fmfga`  | fat mass-for-GA               | kg    | 266 to 294 days   |
+  | Acronym  | Description                   | Unit  | `x` range       |
+  |----------|-------------------------------|-------|-----------------|
+  | `wfga`   | weight-for-GA                 | kg    | 168 to 300 days |
+  | `lfga`   | length-for-GA                 | cm    | 168 to 300 days |
+  | `hcfga`  | head circumference-for-GA     | cm    | 168 to 300 days |
+  | `wlrfga` | weight-to-length ratio-for-GA | kg/cm | 168 to 300 days |
+  | `ffmfga` | fat-free mass-for-GA          | kg    | 266 to 294 days |
+  | `bfpfga` | body fat percentage-for-GA    | %     | 266 to 294 days |
+  | `fmfga`  | fat mass-for-GA               | kg    | 266 to 294 days |
 
   </details>
 - `ig_png` - INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
@@ -275,33 +277,42 @@ INTERGROWTH-21<sup>st</sup> project:
 
 ### Usage
 
-Conversion functions are named according to the set of standards in use,
-the component standard from that set, then the type of conversion. For
-example, to convert *values to z-scores* in the *weight-for-GA* standard
-from the *INTERGROWTH-21<sup>st</sup> Newborn Size Standards* would be:
-`ig_nbs`/`_wfga`/`_value2zscore()`
+Conversion functions are named according to the conversion they perform.
+Either they convert measured values to z-scores/centiles
+(`value2zscore()`/`value2centile()`), or they generate expected values
+for given z-scores/centiles (`zscore2value()`/`centile2value()`).
+
+You tell gigs which international growth standard to use with the
+`family` and `acronym` parameters. The `family` parameter tells gigs
+which set of standards you want to use - e.g. `"ig_nbs"` for the
+INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very
+preterm). The `acronym` parameter describes which exact growth standard
+you want out of all the growth standards in your ‘family’ of standards.
+
+For example, to convert *values to z-scores* in the *weight-for-GA*
+standard from the *INTERGROWTH-21<sup>st</sup> Newborn Size standards*,
+you would run `value2zscore(..., family = "ig_nbs", acronym = "wfga")`.
 
 Similarly, the conversion of length-for-age values to centiles in term
-and preterm infants could be performed with the WHO Child Growth
-standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
-Infants standards, respectively:
+and preterm infants could be performed with the *WHO Child Growth
+standards* and *INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm
+Infants standards*, respectively:
 
-- Term infants: `who_gs`/`_lhfa`/`_value2zscore()`
-- Preterm infants: `ig_png`/`_lfa`/`_value2centile()`
+- Preterm infants:
+  `value2centile(..., family = "ig_png", acronym = "lfa")`
+- Term infants:
+  `value2centile(..., family = "who_gs", acronym = "lhfa")`
 
-If the component standard is not included in the function call, it
-should be passed to the `acronym` parameter of the general function
-call. For example, these two function calls would behave in the same
-way:
+If you don’t know which units are used for a given growth standard, the
+`report_units()` function will help you. Run it with your `family` and
+`acronym` combination to get help:
 
 ``` r
-ig_nbs_value2zscore(y = 25.7, gest_days = 182, sex = "F", acronym = "hcfga") |>
-  round(digits = 2)
-#> [1] 1.18
-
-ig_nbs_hcfga_value2zscore(headcirc_cm = 25.7, gest_days = 182, sex = "F") |>
-  round(digits = 2)
-#> [1] 1.18
+report_units(family = "ig_nbs", acronym = "wfga")
+#> You're using "wfga" from the INTERGROWTH-21st Newborn Size Standards
+#> ("ig_nbs").
+#> ℹ Units for `y`: Weight (kg).
+#> ℹ Units for `x`: Gestational age (days).
 ```
 
 ### Values to z-scores/centiles
@@ -311,21 +322,20 @@ or centiles for the standard used.
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_value2zscore(y = 0.785, gest_days = 182, sex = "F", acronym = "wfga") |>
+value2zscore(y = 0.785, x = 182, sex = "F",
+             family = "ig_nbs", acronym = "wfga") |>
   round(digits = 2)
 #> [1] 0
 
 # .. or for multiple inputs
-ig_nbs_wfga_value2centile(weight_kg = 0.785,
-                          gest_days = seq(175, 196, by = 7),
-                          sex = "F") |>
+value2centile(y = 0.785, x = seq(175, 196, by = 7), sex = "F",
+              family = "ig_nbs", acronym = "wfga") |>
   round(digits = 2)
 #> [1] 0.75 0.50 0.25 0.09
 
-# You can do the same for centiles
-ig_png_wfa_value2centile(weight_kg = c(2.86, 3.12, 3.12, 3.43, 3.77, 4.10),
-                         pma_weeks = 40,
-                         sex = "M") |>
+# You can also get centiles
+value2centile(y = c(2.86, 3.12, 3.12, 3.43, 3.77, 4.10), x = 40, sex = "M",
+              family = "ig_png",  acronym = "wfa") |>
   round(digits = 2)
 #> [1] 0.10 0.25 0.25 0.50 0.75 0.90
 ```
@@ -338,19 +348,20 @@ curves (see below).
 
 ``` r
 # Convert from z-scores for individual values...
-ig_nbs_zscore2value(z = 0, gest_days = 182, sex = "F", acronym = "wfga") |>
+zscore2value(z = 0, x = 182, sex = "F",
+             family = "ig_nbs", acronym = "wfga") |>
   round(digits = 3)
 #> [1] 0.785
 
 # .. or for multiple inputs
-ig_nbs_wfga_zscore2value(z = 0, gest_days = seq(182, 204, by = 7), sex = "F") |>
+zscore2value(z = 0, x = seq(182, 204, by = 7), sex = "F",
+             family = "ig_nbs", acronym = "wfga") |>
   round(digits = 3)
 #> [1] 0.785 0.893 1.013 1.147
 
 # You can do the same for centiles
-ig_png_wfa_centile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9),
-                            pma_weeks = 40,
-                            sex = "M") |>
+centile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9), x = 40, sex = "M",
+              family = "ig_png", acronym = "wfa") |>
   round(digits = 2)
 #> [1] 2.87 3.12 3.43 3.77 4.11
 ```
@@ -368,9 +379,11 @@ z_score_range <- -2:2
 gestage_range <- 168:230
 ref <- mapply(z_score_range,
                FUN = function(z) {
-                 gigs::ig_nbs_wfga_zscore2value(z = z,
-                                                gest_days = gestage_range,
-                                                sex = "F")
+                 gigs::zscore2value(z = z,
+                                    x = gestage_range,
+                                    sex = "F",
+                                    family = "ig_nbs",
+                                    acronym = "wfga")
                })
 matplot(ref, x = gestage_range, col = 1:5, type = "l", lty = 2:6,
         xlab = "Gestational age (days)",
@@ -380,7 +393,7 @@ legend(x = min(gestage_range) + 1, y = ref[length(ref)], legend = 2:-2,
        title = "Z-score", col = 5:1, lty = 2:6)
 ```
 
-<img src="man/figures/README-example_zp2v_curves-1.png" width="100%" />
+<img src="man/figures/README-example_zp2v_curves-1.png" alt="A growth chart for weight against gestational age, with lines for each SD from +2 to -2." width="100%" />
 
 # Other packages
 
@@ -392,11 +405,11 @@ implemented functions that let users convert anthropometric measurements
 to z-scores/centiles in each set of standards implemented in gigs - the
 WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size
 standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup>
-Postnatal Growth standards for preterm infants. A green tick (✅)
-indicates that all possible standards are included in a package, a red
-cross (❌) indicates that these standards are completely missing, and an
-exclamation mark (❕) indicates that some of these standards are
-implemented but not others.
+Postnatal Growth standards for preterm infants. A tick (✅) indicates
+that all possible standards are included in a package, a red cross (❌)
+indicates that these standards are completely missing, and a warning
+sign (⚠️) indicates that some of these standards are implemented but not
+others.
 
 | Software                                                                            | Platform | WHO (0-5 years) | IG-21<sup>st</sup> NBS | IG-21<sup>st</sup> PNG | IG-21<sup>st</sup> Fetal | Functionality              |
 |-------------------------------------------------------------------------------------|----------|-----------------|------------------------|------------------------|--------------------------|----------------------------|
@@ -404,8 +417,8 @@ implemented but not others.
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores          |
 | [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | ✅              | ❌                     | ❌                     | ❌                       | Values ↔ z-scores          |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | ✅              | ✅                     | ❕                     | ❕                       | Values ↔ z-scores/centiles |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ❕                       | Values → z-scores/centiles |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | ✅              | ✅                     | ⚠️                     | ⚠️                       | Values ↔ z-scores/centiles |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ⚠️                       | Values → z-scores/centiles |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 
@@ -419,13 +432,13 @@ the GIGS benchmarking
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
 |:------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 100                  | 79                          | 21                          | 9                             |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2416                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 126                  | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 129                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 97                   | 71                          | 42                          | 11                            |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 100                  | 80                          | 20                          | 8                             |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2211                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 119                  | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 125                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 88                   | 72                          | 43                          | 10                            |
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 47                   | ❌                          | ❌                          | ❌                            |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
