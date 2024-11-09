@@ -32,7 +32,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: | 
+          extra-packages: |
+            github::ropensci-review-tools/autotest
             any::pkgdown
             any::tidyr
             any::viridis
