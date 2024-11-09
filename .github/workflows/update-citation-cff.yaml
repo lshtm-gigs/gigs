@@ -27,6 +27,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
+            github::ropensci-review-tools/autotest
             any::cffr
             any::V8
 
