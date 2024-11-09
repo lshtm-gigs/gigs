@@ -1,3 +1,7 @@
+# Correctness testing ----------------------------------------------------------
+
+#' @srrstats {G5.4, G5.4c} Tests to ensure that `categorise_sfga()` reproduces
+#'   expected categories around the categorisation thresholds
 test_that(
   desc = "Size-for-GA categorisation works as expected",
   code = {

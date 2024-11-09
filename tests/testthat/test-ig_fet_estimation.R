@@ -84,15 +84,15 @@ test_that("Bad GA estimation calls give good errors", {
   # Errors based on input length
   expect_error(
     ig_fet_estimate_ga(crl_mm = integer(), headcirc_mm = 250, femurlen_mm = 50),
-    test_error_zero_length("crl_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_ga(crl_mm = 25, headcirc_mm = double(), femurlen_mm = 50),
-    test_error_zero_length("headcirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_ga(crl_mm = integer(), headcirc_mm = 50, femurlen_mm = numeric()),
-    test_error_zero_length(c("crl_mm", "femurlen_mm"))
+    class = "gigs_err_zero_length"
   )
 
   # NULL for crl_mm + headcirc_mm inputs
@@ -123,15 +123,15 @@ test_that(desc = "Bad fetal weight estimation calls give good errors", code = {
   # Errors based on input length
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = 250),
-    test_error_zero_length("abdocirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = 250, headcirc_mm = double()),
-    test_error_zero_length("headcirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = double()),
-    test_error_zero_length(c("abdocirc_mm", "headcirc_mm"))
+    class = "gigs_err_zero_length"
   )
 
   # NULL inputs
@@ -335,7 +335,8 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning",
         abdocirc_mm,
         replace(headcirc_mm, replace_ints_1, NA)
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace1)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_fetal_weight
@@ -346,11 +347,13 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning",
       ))
     expect_match(
       warnings,
-      test_msg_missing("abdocirc_mm", input_len, num_to_replace2)
+      test_msg_missing("abdocirc_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
     expect_match(
       warnings,
-      test_msg_missing("headcirc_mm", input_len, num_to_replace3)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_ga
@@ -362,11 +365,13 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning",
       ))
     expect_match(
       warnings,
-      test_msg_missing("headcirc_mm", input_len, num_to_replace1)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
     expect_match(
       warnings,
-      test_msg_missing("femurlen_mm", input_len, num_to_replace2)
+      test_msg_missing("femurlen_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
 
     expect_warning(
@@ -374,7 +379,8 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning",
         replace(crl_mm, replace_ints_3, NA),
         abdocirc_mm,
         femurlen_mm),
-      test_msg_missing("crl_mm", input_len, num_to_replace3)
+      test_msg_missing("crl_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
   }
 )
@@ -448,7 +454,8 @@ test_that(desc = "Invalid values can cause error throwing", code = {
         abdocirc_mm,
         replace(headcirc_mm, replace_ints_2, NA)
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace2)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_fetal_weight
@@ -457,7 +464,8 @@ test_that(desc = "Invalid values can cause error throwing", code = {
         replace(abdocirc_mm, replace_ints_1, NA),
         headcirc_mm
       ),
-      test_msg_missing("abdocirc_mm", input_len, num_to_replace1)
+      test_msg_missing("abdocirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_ga
@@ -467,7 +475,8 @@ test_that(desc = "Invalid values can cause error throwing", code = {
         replace(headcirc_mm, replace_ints_3, NA),
         femurlen_mm
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace3)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
 
     expect_error(
@@ -475,7 +484,8 @@ test_that(desc = "Invalid values can cause error throwing", code = {
         replace(crl_mm, replace_ints_3, NA),
         abdocirc_mm,
         femurlen_mm),
-      test_msg_missing("crl_mm", input_len, num_to_replace3)
+      test_msg_missing("crl_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
 
     # Make gigs go back to just warning about bad data

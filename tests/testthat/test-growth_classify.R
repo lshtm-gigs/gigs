@@ -15,7 +15,7 @@ check_classify_fn_output <- function(old, new, new_names) {
   checkmate::expect_data_frame(
     new, nrows = nrow(old), ncols = ncol(old) + length(new_names)
   )
-  testthat::expect_equal(colnames(new), c(colnames(old), new_names))
+  expect_equal(colnames(new), c(colnames(old), new_names))
 
   checkmate::expect_numeric(new[[new_names[1]]]) # First new col is continuous
   for (name in new_names[2:length(new_names)]) {
@@ -39,14 +39,14 @@ test_that(desc = "classify_sfga() reproduces expected z-scores", {
   )
   check_classify_fn_output(test_data_birth, sfga, new_names)
 
-  testthat::expect_equal(
+  expect_equal(
     sfga$bweight_centile_test, sfga$bweight_centile_exp
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_sfga(p = sfga$bweight_centile_test, severe = FALSE),
     sfga$sfga
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_sfga(p = sfga$bweight_centile_test, severe = TRUE),
     sfga$sfga_severe
   )
@@ -55,7 +55,7 @@ test_that(desc = "classify_sfga() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_sfga()`.
 test_that(desc = "classify_sfga() throws appropriate errors/warnings", {
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -66,7 +66,7 @@ test_that(desc = "classify_sfga() throws appropriate errors/warnings", {
     class = "gigs_classify_.new_in_.data"
   )
 
-  testthat::expect_warning(
+  expect_warning(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -82,7 +82,7 @@ test_that(desc = "classify_sfga() throws appropriate errors/warnings", {
 test_that(desc = "classify_sfga() errors on bad data types", {
 
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = as.list(test_data_birth),
       weight_kg = weight_kg,
@@ -94,7 +94,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = as.complex(weight_kg),
@@ -104,7 +104,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
     ),
     regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -114,7 +114,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -124,7 +124,7 @@ test_that(desc = "classify_sfga() errors on bad data types", {
     ),
     regexp = test_error_wrong_type(".new", "string", "integer")
   )
-  testthat::expect_error(
+  expect_error(
     classify_sfga(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -154,10 +154,10 @@ test_that(desc = "classify_svn() reproduces expected z-scores", {
   )
   check_classify_fn_output(test_data_birth, svn, new_names)
 
-  testthat::expect_equal(
+  expect_equal(
     svn$bweight_centile_exp, svn$bweight_centile_test
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_svn(p = svn$bweight_centile_test, gest_days = svn$gest_age),
     svn$svn
   )
@@ -166,7 +166,7 @@ test_that(desc = "classify_svn() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_svn()`.
 test_that(desc = "classify_svn() throws appropriate errors/warnings", {
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -177,7 +177,7 @@ test_that(desc = "classify_svn() throws appropriate errors/warnings", {
     class = "gigs_classify_.new_in_.data"
   )
 
-  testthat::expect_warning(
+  expect_warning(
     classify_svn(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -194,7 +194,7 @@ test_that(desc = "classify_svn() throws appropriate errors/warnings", {
 test_that(desc = "classify_svn() errors on bad data types", {
 
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = as.list(test_data_birth),
       weight_kg = weight_kg,
@@ -206,7 +206,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = test_data_birth,
       weight_kg = as.complex(weight_kg),
@@ -216,7 +216,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
     ),
     regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -226,7 +226,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -236,7 +236,7 @@ test_that(desc = "classify_svn() errors on bad data types", {
     ),
     regexp = test_error_wrong_type(".new", "string", "integer")
   )
-  testthat::expect_error(
+  expect_error(
     classify_svn(
       .data = test_data_birth,
       weight_kg = weight_kg,
@@ -257,26 +257,28 @@ test_that(desc = "classify_svn() errors on bad data types", {
 #'   categorical data.
 test_that(desc = "classify_stunting() reproduces expected z-scores", {
   new_names <- c("lhaz_test", "stunting", "stunting_outliers")
-  stunting <- classify_stunting(
-    .data = test_data[with(test_data, !is.na(lenht_cm)), ],
-    lenht_cm = lenht_cm,
-    gest_days = gest_age,
-    age_days = age_days,
-    sex = sex,
-    id = id,
-    .new = new_names
+  expect_warning(
+    stunting <- classify_stunting(
+      .data = test_data[with(test_data, !is.na(lenht_cm)), ],
+      lenht_cm = lenht_cm,
+      gest_days = gest_age,
+      age_days = age_days,
+      sex = sex,
+      id = id,
+      .new = new_names),
+    class = "gigs_zscoring_old_birth_obs"
   )
   check_classify_fn_output(test_data[with(test_data, !is.na(lenht_cm)), ],
                            stunting, new_names)
 
-  testthat::expect_equal(
+  expect_equal(
     stunting$lhaz_test, stunting$lhaz_exp
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_stunting(lhaz = stunting$lhaz_test, outliers = FALSE),
     stunting$stunting
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_stunting(lhaz = stunting$lhaz_test, outliers = TRUE),
     stunting$stunting_outliers
   )
@@ -285,29 +287,24 @@ test_that(desc = "classify_stunting() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_stunting()`.
 test_that(desc = "classify_stunting() throws appropriate errors/warnings", {
-  testthat::expect_error(
-    classify_stunting(
-      .data = test_data,
-      lenht_cm = lenht_cm,
-      age_days = age_days,
-      gest_days = gest_age,
-      sex = sex,
-      .new = c("lhaz_exp", "stunting", "stunting_outliers")
-    ),
-    class = "gigs_classify_.new_in_.data"
-  )
+  classify_stunting(.data = test_data,
+                    lenht_cm = lenht_cm,
+                    age_days = age_days,
+                    gest_days = gest_age,
+                    sex = sex,
+                    id = id,
+                    .new = c("lhaz_exp", "stunting", "stunting_outliers")) |>
+  expect_error(class = "gigs_classify_.new_in_.data")
 
-  testthat::expect_warning(
-    classify_stunting(
-      .data = test_data,
-      lenht_cm = lenht_cm,
-      age_days = age_days,
-      gest_days = gest_age,
-      sex = sex,
-      .new = c(".3415789.", "stunting", "stunting")
-    ),
-    class = "gigs_repaired_names_in_.new"
-  )
+  classify_stunting(.data = test_data,
+                    lenht_cm = lenht_cm,
+                    age_days = age_days,
+                    gest_days = gest_age,
+                    sex = sex,
+                    id = id,
+                    .new = c(".3415789.", "stunting", "stunting")) |>
+    expect_warning(class = "gigs_repaired_names_in_.new") |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs")
 })
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to
@@ -315,70 +312,76 @@ test_that(desc = "classify_stunting() throws appropriate errors/warnings", {
 test_that(desc = "classify_stunting() errors on bad data", {
 
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = as.list(test_data),
       lenht_cm = lenht_cm,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
     regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = test_data,
       lenht_cm = as.complex(lenht_cm),
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
     regexp = test_error_wrong_type("lenht_cm", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = test_data,
       lenht_cm = lenht_cm,
       age_days = as.character(age_days),
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
     regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = test_data,
       lenht_cm = lenht_cm,
       age_days = age_days,
       gest_days = as.character(gest_age),
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "stunting", "stunting_outliers")
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = test_data,
       lenht_cm = lenht_cm,
       age_days = age_days,
       gest_days = as.character(gest_age),
       sex = sex,
+      id = id,
       .new = 1:3
     ),
     regexp = test_error_wrong_type(".new", "string", "integer")
   )
-  testthat::expect_error(
+  expect_error(
     classify_stunting(
       .data = test_data,
       lenht_cm = lenht_cm,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "stunting_outliers")
     ),
     regexp = regex_error_wrong_length(varname = ".new",
@@ -406,14 +409,14 @@ test_that(desc = "classify_wasting() reproduces expected z-scores", {
   )
   check_classify_fn_output(test_data_postnatal_wlz, wasting, new_names)
 
-  testthat::expect_equal(
+  expect_equal(
     wasting$wlz_exp, wasting$wlz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wasting(wlz = wasting$wlz_test, outliers = FALSE),
     wasting$wasting
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wasting(wlz = wasting$wlz_test, outliers = TRUE),
     wasting$wasting_outliers
   )
@@ -422,7 +425,7 @@ test_that(desc = "classify_wasting() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_wasting()`.
 test_that(desc = "classify_wasting() throws appropriate errors/warnings", {
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -430,12 +433,13 @@ test_that(desc = "classify_wasting() throws appropriate errors/warnings", {
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_exp", "wasting", "wasting_outliers")
     ),
     class = "gigs_classify_.new_in_.data"
   )
 
-  testthat::expect_warning(
+  expect_warning(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -443,6 +447,7 @@ test_that(desc = "classify_wasting() throws appropriate errors/warnings", {
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c(".3415789.", "wasting", "wasting")
     ),
     class = "gigs_repaired_names_in_.new"
@@ -454,7 +459,7 @@ test_that(desc = "classify_wasting() throws appropriate errors/warnings", {
 test_that(desc = "classify_wasting() errors on bad data", {
 
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = as.list(test_data_postnatal_wlz),
       weight_kg = weight_kg_from_wlz,
@@ -462,13 +467,14 @@ test_that(desc = "classify_wasting() errors on bad data", {
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
     regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = as.character(weight_kg_from_wlz),
@@ -476,11 +482,12 @@ test_that(desc = "classify_wasting() errors on bad data", {
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("lhaz_test", "wasting", "wasting_outliers")
     ),
     regexp = test_error_wrong_type("weight_kg", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -492,7 +499,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
     ),
     regexp = test_error_wrong_type("lenht_cm", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -504,7 +511,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
     ),
     regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -516,7 +523,7 @@ test_that(desc = "classify_wasting() errors on bad data", {
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "factor")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wasting(
       .data = test_data_postnatal_wlz,
       weight_kg = weight_kg_from_wlz,
@@ -539,25 +546,25 @@ test_that(desc = "classify_wasting() errors on bad data", {
 #'   categorical data.
 test_that(desc = "classify_wfa() reproduces expected z-scores", {
   new_names <- c("waz_test", "wfa", "wfa_outliers")
-  wfa <- classify_wfa(
-    .data = test_data,
-    weight_kg = weight_kg,
-    gest_days = gest_age,
-    age_days = age_days,
-    sex = sex,
-    id = id,
-    .new = new_names
-  )
+  expect_warning(
+    wfa <- classify_wfa(.data = test_data,
+                        weight_kg = weight_kg,
+                        gest_days = gest_age,
+                        age_days = age_days,
+                        sex = sex,
+                        id = id,
+                        .new = new_names),
+    class = "gigs_zscoring_old_birth_obs")
   check_classify_fn_output(test_data, wfa, new_names)
 
-  testthat::expect_equal(
+  expect_equal(
     wfa$waz_exp, wfa$waz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = wfa$waz_test, outliers = FALSE),
     wfa$wfa
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = wfa$waz_test, outliers = TRUE),
     wfa$wfa_outliers
   )
@@ -566,71 +573,73 @@ test_that(desc = "classify_wfa() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_wfa()`.
 test_that(desc = "classify_wfa() throws appropriate errors/warnings", {
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = weight_kg,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("waz_exp", "wfa", "wfa_outliers")
     ),
     class = "gigs_classify_.new_in_.data"
   )
 
-  testthat::expect_warning(
-    classify_wfa(
-      .data = test_data,
-      weight_kg = weight_kg,
-      age_days = age_days,
-      gest_days = gest_age,
-      sex = sex,
-      .new = c(".3415789.", "wfa", "wfa_outliers")
-    ),
-    class = "gigs_repaired_names_in_.new"
-  )
+  classify_wfa(.data = test_data,
+               weight_kg = weight_kg,
+               age_days = age_days,
+               gest_days = gest_age,
+               sex = sex,
+               id = id,
+               .new = c(".3415789.", "wfa", "wfa_outliers")) |>
+    expect_warning(class = "gigs_repaired_names_in_.new") |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs")
 })
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to
 #'   `classify_wfa()`.
 test_that(desc = "classify_wfa() errors on bad data", {
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = as.list(test_data),
       weight_kg = weight_kg,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
     regexp = test_error_wrong_type(".data", "data.frame", "list")
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = as.complex(weight_kg),
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
     regexp = test_error_wrong_type("weight_kg", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = weight_kg,
       age_days = as.character(age_days),
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("waz_test", "wfa", "wfa_outliers")
     ),
     regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = weight_kg,
@@ -641,24 +650,26 @@ test_that(desc = "classify_wfa() errors on bad data", {
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = weight_kg,
       age_days = age_days,
       gest_days = as.character(gest_age),
       sex = sex,
+      id = id,
       .new = 1:3
     ),
     regexp = test_error_wrong_type(".new", "string", "integer")
   )
-  testthat::expect_error(
+  expect_error(
     classify_wfa(
       .data = test_data,
       weight_kg = weight_kg,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = "waz_test"
     ),
     regexp = regex_error_wrong_length(varname = ".new",
@@ -674,22 +685,25 @@ test_that(desc = "classify_wfa() errors on bad data", {
 #'   categorical data.
 test_that(desc = "classify_headsize() reproduces expected z-scores", {
   new_names <- c("hcaz_test", "headsize")
-  headsize <- classify_headsize(
-    .data = test_data,
-    headcirc_cm = headcirc_cm,
-    gest_days = gest_age,
-    age_days = age_days,
-    sex = sex,
-    id = id,
-    .new = c("hcaz_test", "headsize")
+  expect_warning(
+    headsize <- classify_headsize(
+      .data = test_data,
+      headcirc_cm = headcirc_cm,
+      gest_days = gest_age,
+      age_days = age_days,
+      sex = sex,
+      id = id,
+      .new = c("hcaz_test", "headsize")
+    ),
+    class = "gigs_zscoring_old_birth_obs"
   )
   check_classify_fn_output(test_data, headsize, new_names)
 
 
-  testthat::expect_equal(
+  expect_equal(
     headsize$hcaz_exp, headsize$hcaz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_headsize(hcaz = headsize$hcaz_test),
     headsize$headsize
   )
@@ -698,36 +712,35 @@ test_that(desc = "classify_headsize() reproduces expected z-scores", {
 #' @srrstats {G5.2, G5.2a, G5.2b} Tests of message/warning/error behaviour
 #'   in `classify_stunting()`.
 test_that(desc = "classify_headsize() throws appropriate errors/warnings", {
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = headcirc_cm,
       age_days = age_days,
       gest_days = gest_age,
       sex = sex,
+      id = id,
       .new = c("hcaz_exp", "headsize")
     ),
     class = "gigs_classify_.new_in_.data"
   )
 
-  testthat::expect_warning(
-    classify_headsize(
-      .data = test_data,
-      headcirc_cm = headcirc_cm,
-      age_days = age_days,
-      gest_days = gest_age,
-      sex = sex,
-      .new = c(".3415789.", "headsize")
-    ),
-    class = "gigs_repaired_names_in_.new"
-  )
+  classify_headsize(.data = test_data,
+                    headcirc_cm = headcirc_cm,
+                    age_days = age_days,
+                    gest_days = gest_age,
+                    sex = sex,
+                    id = id,
+                    .new = c(".3415789.", "headsize"))  |>
+    expect_warning(class = "gigs_repaired_names_in_.new") |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs")
 })
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to
 #'   `classify_headsize()`.
 test_that(desc = "classify_headsize() errors on bad data", {
   # Not using a data frame for .data
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = as.list(test_data),
       headcirc_cm = headcirc_cm,
@@ -740,7 +753,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
   )
 
   # Using the wrong data types
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = as.complex(headcirc_cm),
@@ -751,7 +764,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
     ),
     regexp = test_error_wrong_type("headcirc_cm", "numeric", "complex")
   )
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = headcirc_cm,
@@ -762,7 +775,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
     ),
     regexp = test_error_wrong_type("age_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = headcirc_cm,
@@ -773,7 +786,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
     ),
     regexp = test_error_wrong_type("gest_days", "numeric", "character")
   )
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = headcirc_cm,
@@ -784,7 +797,7 @@ test_that(desc = "classify_headsize() errors on bad data", {
     ),
     regexp = test_error_wrong_type(".new", "string", "integer")
   )
-  testthat::expect_error(
+  expect_error(
     classify_headsize(
       .data = test_data,
       headcirc_cm = headcirc_cm,
@@ -835,7 +848,7 @@ check_classify_growth_output <- function(old, new, .outcomes, .new) {
   if ("sfga" %in% .outcomes & "svn" %in% .outcomes) {
     new_names[["svn"]] <- new_names[["svn"]][-1]
   }
-  testthat::expect_equal(colnames(new), c(colnames(old), unlist(new_names)),
+  expect_equal(colnames(new), c(colnames(old), unlist(new_names)),
                          ignore_attr = TRUE)
 }
 
@@ -850,19 +863,22 @@ test_that(desc = "`classify_growth()` reproduces expected z-scores", {
       wfa = c("waz_test", "wfa", "wfa_outliers"),
       headsize = c("hcaz_test", "headsize")
     )
-  growth <- classify_growth(
-    .data = test_data,
-    weight_kg = weight_kg,
-    lenht_cm = lenht_cm,
-    headcirc_cm = headcirc_cm,
-    gest_days = gest_age,
-    age_days = age_days,
-    sex = sex,
-    id = id,
-    .outcomes = outcomes,
-    # Also demonstrates column renaming with .new
-    .new = new,
-    .verbose = FALSE # Silence message for this test
+  expect_warning(
+    growth <- classify_growth(
+      .data = test_data,
+      weight_kg = weight_kg,
+      lenht_cm = lenht_cm,
+      headcirc_cm = headcirc_cm,
+      gest_days = gest_age,
+      age_days = age_days,
+      sex = sex,
+      id = id,
+      .outcomes = outcomes,
+      # Also demonstrates column renaming with .new
+      .new = new,
+      .verbose = FALSE # Silence message for this test
+    ),
+    class = "gigs_zscoring_old_birth_obs"
   )
 
   check_classify_growth_output(old = test_data,
@@ -874,57 +890,57 @@ test_that(desc = "`classify_growth()` reproduces expected z-scores", {
   growth_birth <- growth[with(growth, !is.na(bweight_centile_test)), ]
 
   ## Size-for-GA
-  testthat::expect_equal(
+  expect_equal(
     growth_birth$bweight_centile_exp, growth_birth$bweight_centile_test
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_sfga(p = growth_birth$bweight_centile_test, severe = FALSE),
     growth_birth$sfga
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_sfga(p = growth_birth$bweight_centile_test, severe = TRUE),
     growth_birth$sfga_severe
   )
 
   ## SVN
-  testthat::expect_equal(
+  expect_equal(
     growth_birth$bweight_centile_exp, growth_birth$bweight_centile_test
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_svn(p = growth_birth$bweight_centile_test,
                    gest_days = growth_birth$gest_age),
     growth_birth$svn
   )
 
   # Stunting
-  testthat::expect_equal(growth$lhaz_test[1:10], growth$lhaz_exp[1:10])
-  testthat::expect_equal(
+  expect_equal(growth$lhaz_test[1:10], growth$lhaz_exp[1:10])
+  expect_equal(
     categorise_stunting(lhaz = growth$lhaz_test, outliers = FALSE),
     growth$stunting
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_stunting(lhaz = growth$lhaz_test, outliers = TRUE),
     growth$stunting_outliers
   )
 
   # Weight-for-age
-  testthat::expect_equal(
+  expect_equal(
     growth$waz_exp, growth$waz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = growth$waz_test, outliers = FALSE),
     growth$wfa
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = growth$waz_test, outliers = TRUE),
     growth$wfa_outliers
   )
 
   # Head size
-  testthat::expect_equal(
+  expect_equal(
     growth$hcaz_exp, growth$hcaz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_headsize(hcaz = growth$hcaz_test),
     growth$headsize
   )
@@ -944,253 +960,237 @@ test_that(desc = "`classify_growth()` reproduces expected z-scores", {
     ),
     .verbose = FALSE # Silence message for this test
   )
-  testthat::expect_equal(
+  expect_equal(
     growth$waz_exp, growth$waz_test, tolerance = sqrt(.Machine$double.eps)
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = growth$waz_test, outliers = FALSE),
     growth$wfa
   )
-  testthat::expect_equal(
+  expect_equal(
     categorise_wfa(waz = growth$waz_test, outliers = TRUE),
     growth$wfa_outliers
   )
 })
 
 #' @srrstats {G5.2, G5.2a, G5.2b} Demonstrating some errors + messages from
-#'   `classify_growth()`.
-test_that(desc = "`classify_growth()` displays the right errors/messages", {
+#'   `classify_growth()`. (This and the next 'test_that()' block)
+test_that(desc = "`classify_growth()` displays the right errors", {
   # Throw error when names in .new correspond to existing columns in .data
-  testthat::expect_error(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn"),
-      .new = list(
-        sfga = c("bweight_centile_exp", "sfga", "sfga_severe"),
-        svn = c("bweight_centile_exp", "svn")
-      ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_classify_.new_in_.data"
-  )
+  classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn"),
+                  .new = list(
+                    sfga = c("bweight_centile_exp", "sfga", "sfga_severe"),
+                    svn = c("bweight_centile_exp", "svn")
+                  ),
+                  .verbose = FALSE) |> # Silence message for this test
+    expect_error(class = "gigs_classify_.new_in_.data")
 
-  # Throw error if .new has names() which aren't valid
-  testthat::expect_error(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn"),
-      .new = list(
-        sfga_WRONG = c("bweight_centile_test", "sfga", "sfga_severe"),
-        svn_BAD = c("bweight_centile_test", "svn")
-      ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_invalid_.new_names"
-  )
+  # Throw error if .new has names which aren't valid
+    classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn"),
+                  .new = list(
+                    sfga_WRONG = c("bweight_centile_test", "sfga", "sfga_severe"),
+                    svn_BAD = c("bweight_centile_test", "svn")
+                  ),
+                  .verbose = FALSE) |> # Silence message for this test
+    expect_error(class = "gigs_classify_growth_invalid_.new_names")
 
   # Throw error if members of `.outcomes` aren't in `names(.new)`
-  testthat::expect_error(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting"),
-      .new = list(
-        sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
-        svn = c("bweight_centile_test", "svn")
-      ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_.outcomes_not_in_.new"
-  )
+  classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn", "stunting"),
+                  .new = list(
+                    sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
+                    svn = c("bweight_centile_test", "svn")
+                  ),
+                  .verbose = FALSE) |> # Silence message for this test
+    expect_error(class = "gigs_classify_growth_.outcomes_not_in_.new")
 
   # Throw error if vectors in `.new` are the wrong length
-  testthat::expect_error(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting"),
-      .new = list(
-        sfga = c("bweight_centile_test", "sfga"),
-        svn = "bweight_centile_test",
-        stunting = c("lhaz", "stunting", "stunting_outliers", "stunting3")
-      ),
-      .verbose = TRUE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_.new_lengths_incorrect"
-  )
+
+    classify_growth(.data = test_data,
+                    weight_kg = weight_kg,
+                    gest_days = gest_age,
+                    age_days = age_days,
+                    sex = sex,
+                    id = id,
+                    .outcomes = c("sfga", "svn", "stunting"),
+                    .new = list(
+                      sfga = c("bweight_centile_test", "sfga"),
+                      svn = "bweight_centile_test",
+                      stunting = c("lhaz", "stunting", "stunting_outliers", "stunting3")
+                    ),
+                    .verbose = TRUE) |> # Silence message for this test
+    expect_error(class = "gigs_classify_growth_.new_lengths_incorrect")
 
   # Display warning if names in `.new` for birth weight centile don't match
-  testthat::expect_warning(
-    classify_growth(
+  classify_growth(
       .data = test_data,
       weight_kg = weight_kg,
       gest_days = gest_age,
       age_days = age_days,
       sex = sex,
+      id = id,
       .outcomes = c("sfga", "svn"),
       .new = list(
         sfga = c("bweight_centile_1", "sfga", "sfga_severe"),
         svn = c("bweight_centile_2", "svn")
       ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_bweight_centile_not_identical"
-  )
+      .verbose = FALSE) |> # Silence message for this test
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_warning(
+      class = "gigs_classify_growth_bweight_centile_not_identical"
+    )
 
   # Throw an error if elements of `.new` vectors are not unique
-  testthat::expect_error(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn"),
-      .new = list(
-        sfga = c("bweight_centile1", "TEST", "sfga_severe"),
-        svn = c("bweight_centile1", "TEST")
-      ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_.new_elements_not_unique"
-  )
+
+  classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn"),
+                  .new = list(
+                    sfga = c("bweight_centile1", "TEST", "sfga_severe"),
+                    svn = c("bweight_centile1", "TEST")
+                  ),
+                  .verbose = FALSE) |> # Silence message for this test
+    expect_error(class = "gigs_classify_growth_.new_elements_not_unique")
 
   # Throw a warning if new column names in .new need to be repaired
-  testthat::expect_warning(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
-      .new = list(
-        sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
-        svn = c("bweight_centile_test", "svn"),
-        stunting = c("4795865", "stunting", "stunting_outliers"),
-        wfa = c("waz_test", "wfa", "087912342"),
-        headsize = c("hcaz_test", "headsize")
-      ),
-      .verbose = FALSE # Silence message for this test
-    ),
-    class = "gigs_repaired_names_in_.new"
-  )
 
-  # Issue messages telling the user which outcomes were calculated
-
-  ## All successful
-  testthat::expect_message(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      lenht_cm = lenht_cm,
-      headcirc_cm = headcirc_cm,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
-      .new = list(
-          sfga = c("birthweight_centile", "sfga", "sfga_severe"),
-          svn = c("birthweight_centile", "svn"),
-          stunting = c("lhaz", "stunting", "stunting_outliers"),
-          wfa = c("waz", "wfa", "wfa_outliers"),
-          headsize = c("hcaz", "headsize")
-      ),
-      .verbose = TRUE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_msg"
-  )
-
-  ## Some unsuccessful
-  testthat::expect_message(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      lenht_cm = lenht_cm,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
-      .new = list(
-          sfga = c("birthweight_centile", "sfga", "sfga_severe"),
-          svn = c("birthweight_centile", "svn"),
-          stunting = c("lhaz", "stunting", "stunting_outliers"),
-          wfa = c("waz", "wfa", "wfa_outliers"),
-          headsize = c("hcaz", "headsize")
-      ),
-      .verbose = TRUE # Silence message for this test
-    ),
-    regexp = "Head size: Not computed \\(`headcirc_cm` not supplied\\)",
-    class = "gigs_classify_growth_msg"
-  )
-
-  ## Wasting not successful; because weight not supplied
-  testthat::expect_message(
-    classify_growth(
-      .data = test_data,
-      lenht_cm = lenht_cm,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = "wasting",
-      .new = list(
-          wasting = c("wlz", "wasting", "wasting_outliers")
-      ),
-      .verbose = TRUE # Silence message for this test
-    ),
-    regexp = "Wasting: Not computed \\(`weight_kg` not supplied\\)",
-    class = "gigs_classify_growth_msg"
-  )
-
-  ## Wasting not successful; because length/height not supplied
-  testthat::expect_message(
-    classify_growth(
-      .data = test_data,
-      weight_kg = weight_kg,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = "wasting",
-      .verbose = TRUE # Silence message for this test
-    ),
-    regexp = "Wasting: Not computed \\(`lenht_cm` not supplied\\)",
-    class = "gigs_classify_growth_msg"
-  )
-
-  ## All unsuccessful
-  testthat::expect_message(
-    classify_growth(
-      .data = test_data,
-      gest_days = gest_age,
-      age_days = age_days,
-      sex = sex,
-      .outcomes = c("sfga", "svn", "stunting", "wasting", "wfa", "headsize"),
-      .verbose = TRUE # Silence message for this test
-    ),
-    class = "gigs_classify_growth_msg"
-  )
+    classify_growth(.data = test_data,
+                    weight_kg = weight_kg,
+                    gest_days = gest_age,
+                    age_days = age_days,
+                    sex = sex,
+                    id = id,
+                    .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
+                    .new = list(
+                      sfga = c("bweight_centile_test", "sfga", "sfga_severe"),
+                      svn = c("bweight_centile_test", "svn"),
+                      stunting = c("4795865", "stunting", "stunting_outliers"),
+                      wfa = c("waz_test", "wfa", "087912342"),
+                      headsize = c("hcaz_test", "headsize")
+                    ),
+                    .verbose = FALSE) |> # Silence message for this test
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_warning(class = "gigs_repaired_names_in_.new")
 })
 
+test_that(desc = "`classify_growth()` displays its diagnostic message", {
+  # Issue messages telling the user which outcomes were calculated
+  ## All successful
+  classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  lenht_cm = lenht_cm,
+                  headcirc_cm = headcirc_cm,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
+                  .new = list(
+                    sfga = c("birthweight_centile", "sfga", "sfga_severe"),
+                    svn = c("birthweight_centile", "svn"),
+                    stunting = c("lhaz", "stunting", "stunting_outliers"),
+                    wfa = c("waz", "wfa", "wfa_outliers"),
+                    headsize = c("hcaz", "headsize")
+                  ),
+                  .verbose = TRUE) |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_message(class = "gigs_classify_growth_msg")
+
+  ## Some unsuccessful
+  classify_growth(.data = test_data,
+                  weight_kg = weight_kg,
+                  lenht_cm = lenht_cm,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn", "stunting", "wfa", "headsize"),
+                  .new = list(
+                    sfga = c("birthweight_centile", "sfga", "sfga_severe"),
+                    svn = c("birthweight_centile", "svn"),
+                    stunting = c("lhaz", "stunting", "stunting_outliers"),
+                    wfa = c("waz", "wfa", "wfa_outliers"),
+                    headsize = c("hcaz", "headsize")
+                  ),
+                  .verbose = TRUE) |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_message(
+      regexp = "Head size: Not computed \\(`headcirc_cm` not supplied\\)",
+      class = "gigs_classify_growth_msg")
+
+  ## Wasting not successful; because weight not supplied
+  classify_growth(
+    .data = test_data,
+    lenht_cm = lenht_cm,
+    gest_days = gest_age,
+    age_days = age_days,
+    sex = sex,
+    id = id,
+    .outcomes = "wasting",
+    .new = list(
+      wasting = c("wlz", "wasting", "wasting_outliers")
+    ),
+    .verbose = TRUE) |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_message(
+      regexp = "Wasting: Not computed \\(`weight_kg` not supplied\\)",
+      class = "gigs_classify_growth_msg")
+
+  ## Wasting not successful; because length/height not supplied
+
+  classify_growth(
+    .data = test_data,
+    weight_kg = weight_kg,
+    gest_days = gest_age,
+    age_days = age_days,
+    sex = sex,
+    id = id,
+    .outcomes = "wasting",
+    .verbose = TRUE) |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_message(
+      regexp = "Wasting: Not computed \\(`lenht_cm` not supplied\\)",
+      class = "gigs_classify_growth_msg")
+
+  ## All unsuccessful
+  classify_growth(.data = test_data,
+                  gest_days = gest_age,
+                  age_days = age_days,
+                  sex = sex,
+                  id = id,
+                  .outcomes = c("sfga", "svn", "stunting", "wasting", "wfa",
+                                "headsize"),
+                  .verbose = TRUE) |>
+    expect_warning(class = "gigs_zscoring_old_birth_obs") |>
+    expect_message(class = "gigs_classify_growth_msg")
+})
 
 # Ensure full coverage on `repair_.new_names()` --------------------------------
 
 test_that(desc = "`repair_.new_names()` can throw an internal error", {
   ## Wasting not successful; because length/height not supplied
-  testthat::expect_error(
+  expect_error(
     repair_.new_names(.new = list("sfga" = c("test1", "test2", "test3")),
                       mode = "gorp"),
     class = "gigs_internal_repair_mode_incorrect"

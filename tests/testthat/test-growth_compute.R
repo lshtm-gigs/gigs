@@ -21,7 +21,8 @@ test_data <- gigs_random_growth_dataset(10000, seed = 11, restrict = TRUE) |>
       headsize = c("DROP5", "headsize_exp")
     ),
     .verbose = FALSE # Silence message for this test
-  )
+  ) |>
+  suppressWarnings() # Used to suppress "gigs_zscoring_old_birth_obs" warning
 test_data <- test_data[ , !grepl("^DROP|(ile|z)_exp$", colnames(test_data))]
 
 test_data_birth <- test_data[with(test_data, !is.na(sfga_exp)), ]
@@ -75,7 +76,8 @@ test_that(desc = "compute_sfga() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_3, values = NA)
       )
     }),
-    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1)
+    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_birth, {
@@ -86,7 +88,8 @@ test_that(desc = "compute_sfga() throws appropriate errors/warnings", {
         severe = TRUE
       )
     }),
-    regexp = test_msg_missing("gest_days", expected_length, n_missing_2)
+    regexp = test_msg_missing("gest_days", expected_length, n_missing_2),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_birth, {
@@ -96,7 +99,8 @@ test_that(desc = "compute_sfga() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_3, values = NA),
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+    regexp = test_msg_missing("sex", expected_length, n_missing_3),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -108,7 +112,7 @@ test_that(desc = "compute_sfga() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_2, values = "X")
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_2)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -186,7 +190,7 @@ test_that(desc = "compute_sfga() errors on bad data types/zero-length input", {
         sex = character()
       )
     }),
-    regexp = test_error_zero_length(c("weight_kg", "gest_days", "sex"))
+    class = "gigs_err_zero_length"
   )
 })
 
@@ -225,7 +229,8 @@ test_that(desc = "compute_svn() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_3, values = NA)
       )
     }),
-    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1)
+    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_birth, {
@@ -235,7 +240,8 @@ test_that(desc = "compute_svn() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_3, values = NA)
       )
     }),
-    regexp = test_msg_missing("gest_days", expected_length, n_missing_2)
+    regexp = test_msg_missing("gest_days", expected_length, n_missing_2),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_birth, {
@@ -245,7 +251,8 @@ test_that(desc = "compute_svn() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_3, values = NA)
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+    regexp = test_msg_missing("sex", expected_length, n_missing_3),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -257,7 +264,7 @@ test_that(desc = "compute_svn() throws appropriate errors/warnings", {
         sex = replace(sex, 1:n_missing_2, values = "X")
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_2)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -275,7 +282,6 @@ test_that(desc = "compute_svn() throws appropriate errors/warnings", {
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_svn()`.
 test_that(desc = "compute_svn() errors on bad data types", {
-
   # Using the wrong data types
   testthat::expect_error(
     with(test_data_birth, {
@@ -319,7 +325,7 @@ test_that(desc = "compute_svn() errors on bad data types", {
         sex = character()
       )
     }),
-    regexp = test_error_zero_length(c("weight_kg", "sex"))
+    class = "gigs_err_zero_length"
   )
 })
 
@@ -377,7 +383,8 @@ test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("lenht_cm", expected_length, n_missing_4)
+    regexp = test_msg_missing("lenht_cm", expected_length, n_missing_4),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_postnatal, {
@@ -390,7 +397,8 @@ test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_1)
+    regexp = test_msg_missing("sex", expected_length, n_missing_1),
+    fixed = TRUE
   )
 
   # For ID, including `NA` values causes an error.
@@ -405,7 +413,8 @@ test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("id", expected_length, n_missing_4)
+    regexp = test_msg_missing("id", expected_length, n_missing_4),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -420,7 +429,7 @@ test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_3)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_3)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -441,7 +450,6 @@ test_that(desc = "compute_stunting() throws appropriate errors/warnings", {
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_stunting()`.
 test_that(desc = "compute_stunting() errors on bad data types", {
-
   # Using the wrong data types
   testthat::expect_error(
     with(test_data_postnatal, {
@@ -508,7 +516,7 @@ test_that(desc = "compute_stunting() errors on bad data types", {
         outliers = TRUE
       )
     }),
-    regexp = test_error_zero_length(c("lenht_cm", "gest_days", "id"))
+    class = "gigs_err_zero_length"
   )
 })
 
@@ -569,7 +577,8 @@ test_that(desc = "compute_wasting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("weight_kg", expected_length, n_missing_5)
+    regexp = test_msg_missing("weight_kg", expected_length, n_missing_5),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_postnatal, {
@@ -583,7 +592,8 @@ test_that(desc = "compute_wasting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_4)
+    regexp = test_msg_missing("sex", expected_length, n_missing_4),
+    fixed = TRUE
   )
 
   # For ID, including `NA` values causes an error.
@@ -599,7 +609,8 @@ test_that(desc = "compute_wasting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("id", expected_length, n_missing_4)
+    regexp = test_msg_missing("id", expected_length, n_missing_4),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -615,7 +626,7 @@ test_that(desc = "compute_wasting() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_2)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -637,7 +648,6 @@ test_that(desc = "compute_wasting() throws appropriate errors/warnings", {
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_wasting()`.
 test_that(desc = "compute_wasting() errors on bad data types", {
-
   # Using the wrong data types
   testthat::expect_error(
     with(test_data_postnatal, {
@@ -709,7 +719,7 @@ test_that(desc = "compute_wasting() errors on bad data types", {
         outliers = TRUE
       )
     }),
-    regexp = test_error_zero_length(c("lenht_cm", "id"))
+    class = "gigs_err_zero_length"
   )
 })
 
@@ -767,7 +777,8 @@ test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1)
+    regexp = test_msg_missing("weight_kg", expected_length, n_missing_1),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_postnatal, {
@@ -780,7 +791,8 @@ test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+    regexp = test_msg_missing("sex", expected_length, n_missing_3),
+    fixed = TRUE
   )
 
   # For ID, including `NA` values causes an error.
@@ -795,7 +807,8 @@ test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_missing("id", expected_length, n_missing_2)
+    regexp = test_msg_missing("id", expected_length, n_missing_2),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -810,7 +823,7 @@ test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
         outliers = TRUE
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_2)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -831,7 +844,6 @@ test_that(desc = "compute_wfa() throws appropriate errors/warnings", {
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_wfa()`.
 test_that(desc = "compute_wfa() errors on bad data types", {
-
   # Using the wrong data types
   testthat::expect_error(
     with(test_data_postnatal, {
@@ -898,7 +910,7 @@ test_that(desc = "compute_wfa() errors on bad data types", {
         outliers = TRUE
       )
     }),
-    regexp = test_error_zero_length(c("gest_days", "id"))
+    class = "gigs_err_zero_length"
   )
 })
 
@@ -943,7 +955,8 @@ test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
         id = id
       )
     }),
-    regexp = test_msg_missing("headcirc_cm", expected_length, n_missing_1)
+    regexp = test_msg_missing("headcirc_cm", expected_length, n_missing_1),
+    fixed = TRUE
   )
   testthat::expect_warning(
     with(test_data_postnatal, {
@@ -955,7 +968,8 @@ test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
         id = id
       )
     }),
-    regexp = test_msg_missing("sex", expected_length, n_missing_3)
+    regexp = test_msg_missing("sex", expected_length, n_missing_3),
+    fixed = TRUE
   )
 
   # For ID, including `NA` values causes an error.
@@ -969,7 +983,8 @@ test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
         id = replace(id, 1:n_missing_2, values = NA)
       )
     }),
-    regexp = test_msg_missing("id", expected_length, n_missing_2)
+    regexp = test_msg_missing("id", expected_length, n_missing_2),
+    fixed = TRUE
   )
 
   # For bad sex data (i.e. not "M" or "F")
@@ -983,7 +998,7 @@ test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
         id = id
       )
     }),
-    regexp = test_msg_acronym_sex_invalid("sex", expected_length, n_missing_2)
+    regexp = test_msg_sex_invalid(expected_length, n_missing_2)
   )
 
   # For undefined input data (i.e. `NaN` or Inf)
@@ -1003,7 +1018,6 @@ test_that(desc = "compute_headsize() throws appropriate errors/warnings", {
 
 #' @srrstats {G5.8, G5.8a, G5.8b} Testing bad data inputs to `compute_headsize()`.
 test_that(desc = "compute_headsize() errors on bad data types", {
-
   # Using the wrong data types
   testthat::expect_error(
     with(test_data_postnatal, {
@@ -1065,6 +1079,6 @@ test_that(desc = "compute_headsize() errors on bad data types", {
         id = factor()
       )
     }),
-    regexp = test_error_zero_length(c("age_days", "gest_days", "id"))
+    class = "gigs_err_zero_length"
   )
 })
