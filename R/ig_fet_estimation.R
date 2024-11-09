@@ -4,8 +4,8 @@
 #' predictive equation
 #'
 #' @param abdocirc_mm Numeric vector with abdominal circumference value(s) in
-#'   cm. Should have length one or same length as `headcirc_mm`.
-#' @param headcirc_mm Numeric vector with head circumference value(s) in cm.
+#'   mm. Should have length one or same length as `headcirc_mm`.
+#' @param headcirc_mm Numeric vector with head circumference value(s) in mm.
 #'   Should have length one or same length as `abdocirc_mm`.
 #' @note Inputs are recycled using [vctrs::vec_recycle_common()].
 #' @examples
@@ -18,9 +18,6 @@
 #'                              headcirc_mm = 24:26)
 #' @returns Numeric vector with estimated fetal weight(s) in g, with the same
 #'   length as the longest input vector.
-#' @seealso Get z-scores/centiles for estimated fetal weights at known
-#'   gestational ages using the [ig_fet_value2zscore()] or
-#'   [ig_fet_value2centile()] functions, respectively.
 #' @references
 #' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st
@@ -28,18 +25,15 @@
 #' \doi{10.1002/uog.17347}
 #' @export
 ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
-  recycled <- validate_parameter_lengths(abdocirc_mm = abdocirc_mm,
-                                         headcirc_mm = headcirc_mm) |>
-    mapply(FUN = validate_ig_fet_weight_estimation_param,
-           SIMPLIFY = FALSE,
-           varname = c("abdocirc_mm", "headcirc_mm")) |>
-    do.call(what = vctrs::vec_recycle_common) |>
-    lapply(FUN = \(x) x / 10)
+  validated <- validate_ig_fet_estimate_fetal_weight(abdocirc_mm = abdocirc_mm,
+                                                     headcirc_mm = headcirc_mm)
+  # EFW standard in paper is in centimetres, so do `mm` / 10 for `cm`
+  validated <- lapply(validated, FUN = \(x) x / 10)
   with(
-    recycled,
-    exp(5.084820 - 54.06633 * (abdocirc_mm/100)^3 -
-          95.80076 * (abdocirc_mm/100)^3 * log(abdocirc_mm/100) +
-          3.136370 * (headcirc_mm/100))
+    validated,
+    exp(5.084820 - 54.06633 * (abdocirc_mm / 100)^3 -
+          95.80076 * (abdocirc_mm / 100)^3 * log(abdocirc_mm / 100) +
+          3.136370 * (headcirc_mm / 100))
   )
 }
 
@@ -104,14 +98,8 @@ ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
 ig_fet_estimate_ga <- function(crl_mm = NULL,
                                headcirc_mm = NULL,
                                femurlen_mm = NULL) {
-  recycled <- validate_parameter_lengths(crl_mm = crl_mm,
-                                         headcirc_mm = headcirc_mm,
-                                         femurlen_mm = femurlen_mm) |>
-    mapply(FUN = validate_ig_fet_estimation_param,
-           SIMPLIFY = FALSE,
-           varname = c("crl_mm", "headcirc_mm", "femurlen_mm")) |>
-    do.call(what = vctrs::vec_recycle_common)
-  with(recycled, {
+  validated <- validate_ig_fet_estimate_ga(crl_mm, headcirc_mm, femurlen_mm)
+  with(validated, {
     crl_is_null <- is.null(crl_mm)
     hc_is_null <- is.null(headcirc_mm)
     fl_is_null <- is.null(femurlen_mm)
@@ -126,9 +114,10 @@ ig_fet_estimate_ga <- function(crl_mm = NULL,
         ig_fet_estimate_ga_hc(headcirc_mm)
       }
     } else {
-      stop(paste("At least one of `crl_mm` or `headcirc_mm` must not be `NULL`",
-                 "for ig_fet_estimate_ga() to run."),
-           call. = FALSE)
+      rlang::abort(
+        c("!" = "At least one of `crl_mm` or `headcirc_mm` must not be `NULL`."),
+        call = NULL
+      )
     }
   })
 }
@@ -145,7 +134,7 @@ ig_fet_estimate_ga <- function(crl_mm = NULL,
 #' \doi{10.1002/uog.13448}
 #' @noRd
 ig_fet_estimate_ga_crl <- function(crl_mm) {
-  ig_fet_mu_sigma(crl_mm, acronym = rep.int("gafcrl", length(crl_mm)))[["mu"]]
+  ig_fet_mu_sigma(crl_mm, acronym = "gafcrl")[["mu"]]
 }
 
 #' Estimate gestational age using head circumference only
@@ -167,6 +156,63 @@ ig_fet_estimate_ga_hc <- function(headcirc_mm) {
 ig_fet_estimate_ga_hcfl <- function(headcirc_mm, femurlen_mm) {
   exp(0.03243 * log(headcirc_mm)^2 + 0.001644 * femurlen_mm *
     log(headcirc_mm) + 3.813)
+}
+
+# Parameter validation ---------------------------------------------------------
+
+#' Helper function for `validate_ig_fet_estimate_fetal_weight()`
+#'
+#' @param vec One of `abdocirc_mm` or `headcirc_mm` from
+#'   `validate_ig_fet_estimate_fetal_weight()`. Should be a numeric vector with
+#'   one or more elements.
+#' @param varname Single string used in warning/error text.
+#' @noRd
+validate_ig_fet_estimate_fw_param <- function(vec, varname) {
+  if (is.null(vec)) {
+    rlang::abort(
+      paste0("Argument `", varname, "` must not be `NULL`."),
+      call = rlang::caller_env(n = 2)
+    )
+  }
+  validate_numeric(vec, varname)
+}
+
+#' Validate inputs to `ig_fet_estimate_fetal_weight`
+#' @inheritParams ig_fet_estimate_fetal_weight
+#' @noRd
+validate_ig_fet_estimate_fetal_weight <- function(abdocirc_mm, headcirc_mm) {
+  validate_parameter_lengths(abdocirc_mm = abdocirc_mm,
+                             headcirc_mm = headcirc_mm,
+                             call = rlang::caller_env())
+  catch_and_throw_validate_issues({
+    headcirc_mm <- validate_ig_fet_estimate_fw_param(headcirc_mm, "headcirc_mm")
+    abdocirc_mm <- validate_ig_fet_estimate_fw_param(abdocirc_mm, "abdocirc_mm")
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(abdocirc_mm = abdocirc_mm,
+                            headcirc_mm = headcirc_mm)
+}
+
+#' Validate inputs to `ig_fet_estimate_ga`
+#' @inheritParams ig_fet_estimate_ga
+#' @noRd
+validate_ig_fet_estimate_ga <- function(crl_mm, headcirc_mm, femurlen_mm) {
+  validate_parameter_lengths(crl_mm = crl_mm,
+                             headcirc_mm = headcirc_mm,
+                             femurlen_mm = femurlen_mm,
+                             call = rlang::caller_env())
+  catch_and_throw_validate_issues({
+    femurlen_mm <- if (is.null(femurlen_mm)) NULL else {
+      validate_numeric(femurlen_mm, "femurlen_mm")
+    }
+    headcirc_mm <- if (is.null(headcirc_mm)) NULL else {
+      validate_numeric(headcirc_mm, "headcirc_mm")
+    }
+    crl_mm <- if (is.null(crl_mm)) NULL else {
+      validate_numeric(crl_mm, "crl_mm")
+    }
+  }, call = rlang::caller_env())
+  vctrs::vec_recycle_common(crl_mm = crl_mm, headcirc_mm = headcirc_mm,
+                            femurlen_mm = femurlen_mm)
 }
 
 # SRR tags ---------------------------------------------------------------------

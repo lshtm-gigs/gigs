@@ -27,20 +27,19 @@ names(gigs::ig_nbs)
 head(gigs::ig_nbs$wfga$male$zscores)
 }
 \references{
-Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
-\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
-2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
-
 Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al.
 \strong{International standards for newborn weight, length, and head circumference
 by gestational age and sex: the Newborn Cross-Sectional Study of the
 INTERGROWTH-21st Project.} \emph{Lancet} 2014, \strong{384(9946):857-68.}
 \doi{10.1016/S0140-6736(14)60932-6}
 
+Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al.
+\strong{INTERGROWTH-21st very preterm size at birth reference charts.} \emph{Lancet}
+2016, \strong{387(10021):844-45.} \doi{10.1016/S0140-6736(16)00384-6}
+
 Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al.
 \strong{Body composition at birth and its relationship with neonatal anthropometric
-ratios: the newborn body composition study of the INTERGROWTH-21st
-project.} \emph{Pediatric Research} 2017, \strong{82:305-316.}
-\doi{10.1038/pr.2017.52}
+ratios: the newborn body composition study of the INTERGROWTH-21st project.}
+\emph{Pediatric Research} 2017, \strong{82:305-316.} \doi{10.1038/pr.2017.52}
 }
 \keyword{data}

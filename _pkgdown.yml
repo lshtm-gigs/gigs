@@ -1,4 +1,4 @@
-url: https://simpar1471.github.io/gigs/
+url: https://lshtm-gigs.github.io/gigs/
 template:
   bootstrap: 5
   bootswatch: journal
@@ -9,41 +9,41 @@ articles:
   - articles/ig-nbs-body-composition
   - articles/benchmarking
 reference:
-  - title: Growth classification
-    desc: >
-      Classify growth data into commonly used growth indicators.
+  - title: Get growth indicator classifications in `data.frame`-like objects
     contents:
+      - classify_growth
       - classify_sfga
       - classify_svn
       - classify_stunting
       - classify_wasting
       - classify_wfa
-  - title: INTERGROWTH-21<sup>st</sup> Newborn Size Standards
-    desc: >
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
-      Standards.
+      - classify_headsize
+  - title: Get growth indicator classifications using multiple vectors
     contents:
-      - ig_nbs_value2centile
-      - ig_nbs_centile2value
+      - compute_sfga
+      - compute_svn
+      - compute_stunting
+      - compute_wasting
+      - compute_wfa
+      - compute_headsize
+  - title: Get growth indicator classifications from z-scores/centiles
+    contents:
+      - categorise_sfga
+      - categorise_svn
+      - categorise_stunting
+      - categorise_wasting
+      - categorise_wfa
+      - categorise_headsize
+  - title: Get z-scores using recommended standards
+    contents:
+      - gigs_waz
   - title: >
-      INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants
-    desc: > 
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Postnatal Growth
-      Standards for Preterm Infants.
+      Convert between values and z-scores/centiles using international growth
+      standards
     contents:
-      - ig_png_value2zscore
-      - ig_png_zscore2value
-  - title: INTERGROWTH-21<sup>st</sup> Fetal Standards
-    desc: >
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Fetal Standards.
-    contents:
-      - ig_fet_value2zscore
-      - ig_fet_zscore2value
-  - title: WHO Child Growth Standards
-    desc: Conversion functions for the WHO Child Growth Standards.
-    contents:
-      - who_gs_value2zscore
-      - who_gs_zscore2value
+      - value2zscore
+      - zscore2value
+      - report_units
   - title: INTERGROWTH-21<sup>st</sup> Estimation Functions
     desc: Estimation functions from the INTERGROWTH-21<sup>st</sup> Project.
     contents:
@@ -68,3 +68,4 @@ reference:
       out-of bounds values.
     contents:
       - gigs_options
+      - .gigs_options

@@ -1,8 +1,8 @@
 bibentry(
   bibtype  = "Manual",
   title    = "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
-  author   = person("Simon", "Parker"),
-  year     = 2023,
+  author   = c(person("Simon", "Parker"), person("Linda", "Vesel"), person("Eric", "Ohuma")),
+  year     = 2024,
   note     = packageVersion("gigs"),
   url      = "https://github.com/lshtm-gigs/gigs/"
 )

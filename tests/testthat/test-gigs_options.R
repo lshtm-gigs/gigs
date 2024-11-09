@@ -9,8 +9,8 @@ test_that(
 
       # Should print out nice messages
       expect_message(
-        gigs_option_get(option),
-        paste0("gigs options: `", option, "` is currently set to \"",
+        gigs_option_get(option, silent = FALSE),
+        paste0("gigs options: '", option, "' is currently set to \"",
                "[quiet|warn|error]*\".")
       )
 
@@ -32,8 +32,8 @@ test_that(
       for (value in c("quiet", "warn", "error")) {
         # Should print out nice messages
         expect_message(
-          gigs_option_set(option, value),
-          paste0("gigs options: `",  option, "` is now set to \"", value, "\".")
+          gigs_option_set(option, value, silent = FALSE),
+          paste0("gigs options: '",  option, "' is now set to \"", value, "\".")
         )
       }
 

@@ -3,13 +3,14 @@
 #' @description Retrieves growth standard coefficient values where needed for
 #'  the WHO Child Growth and INTERGROWTH-21<sup>st</sup> Newborn Size standards.
 #' @param x X variable in whatever range and units are appropriate for the
-#'  growth standard(s) in use.
+#'  growth standard in use.
 #' @param sex Character vector of sex(es), either `"M"` (male) or `"F"`
 #'   (female).
-#' @param acronym Acronym(s) denoting which coefficient-based growth standards
-#'  are in use.
-#' @param coeff_tbls A list with LMS or MSNT coefficient tables, either
-#'   `gigs::who_gs_coeffs` or `gigs::ig_nbs_coeffs`.
+#' @param acronym A single character variable denoting which coefficient-based
+#'   growth standard is in use.
+#' @param coeff_tbls A with LMS or MSNT coefficient tables for the growth
+#'   standard specified by `acronym`, taken from  `gigs::who_gs_coeffs` or
+#'   `gigs::ig_nbs_coeffs`.
 #' @param coeff_names Character vector denoting the names of coefficients in
 #'  `coeff_tbls`.
 #' @note The coefficient tables provided by the WHO and INTERGROWTH-21st project
@@ -26,41 +27,29 @@
 #' @rdname retrieve_coefficients
 #' @importFrom stats setNames
 #' @noRd
-retrieve_coefficients <- function(x, sex, acronym, coeff_tbls, coeff_names) {
-  acronyms <- unique(acronym)
-  acronyms <- acronyms[!is.na(acronyms)]
-
-  # 2. Load coeff tables as needed
-  li_coeffs <- lapply(X = acronyms, FUN = \(acronym) coeff_tbls[[acronym]]) |>
-    setNames(acronyms)
-
+retrieve_coefficients <- function(x, sex, coeff_tbls, coeff_names) {
   # Initialise empty list which will contain vectors with each coeff
   len_x <- length(x)
-  empty_vec <- rep(NA, len_x)
+  empty_vec <- rep(NA_real_, len_x)
   out_li <- vector(mode = "list", length = length(coeff_names)) |>
-        setNames(coeff_names)
+    rlang::set_names(coeff_names)
   for (i in seq_along(coeff_names)) out_li[[i]] <- empty_vec
 
-  # Iterate through acronym-sex combinations, and reassign values in out_li
-  # based on outputs from stats::approx(). For loops used to avoid the
-  # environment/assignment constraints of nested apply() calls
-  for (chr_acronym in names(li_coeffs)) {
-    li_sexes <- li_coeffs[[chr_acronym]]
-    is_curr_acro <- chr_acronym == acronym
-    xvars <- li_sexes[[1]][[1]]
-    for (chr_sex in names(li_sexes)) {
-      curr_sex <- if (chr_sex == "male") "M" else "F"
-      is_curr_sex <- curr_sex == sex
-      tbl_coeffs <- li_sexes[[chr_sex]]
-      is_curr_sex_acro <- is_curr_acro & is_curr_sex
-      is_curr_sex_acro[is.na(is_curr_sex_acro)] <- FALSE
-      for (coeff_name in coeff_names) {
-        coeff <- stats::approx(x = xvars,
-                               y = tbl_coeffs[[coeff_name]],
-                               xout = x,
-                               rule = 1)[["y"]]
-        out_li[[coeff_name]][is_curr_sex_acro] <- coeff[is_curr_sex_acro]
-      }
+  # Iterate through sexes, and reassign values in out_li based on outputs from
+  # stats::approx(). For loops used to avoid the environment/assignment
+  # constraints of nested *apply() calls
+  xvars <- coeff_tbls[[1]][[1]]
+  is_na_sex <- is.na(sex)
+  for (chr_sex in names(coeff_tbls)) {
+    curr_sex <- if (chr_sex == "male") "M" else "F"
+    tbl_coeffs <- coeff_tbls[[chr_sex]]
+    is_curr_sex <- curr_sex == sex
+    is_curr_sex[is_na_sex] <- FALSE
+    for (idx in seq_along(coeff_names)) {
+      out_li[[idx]][is_curr_sex] <- stats::approx(x = xvars,
+                                                  y = tbl_coeffs[[idx + 1]],
+                                                  xout = x[is_curr_sex],
+                                                  rule = 1)[["y"]]
     }
   }
   out_li

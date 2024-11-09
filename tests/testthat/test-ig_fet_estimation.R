@@ -84,15 +84,15 @@ test_that("Bad GA estimation calls give good errors", {
   # Errors based on input length
   expect_error(
     ig_fet_estimate_ga(crl_mm = integer(), headcirc_mm = 250, femurlen_mm = 50),
-    test_error_zero_length("crl_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_ga(crl_mm = 25, headcirc_mm = double(), femurlen_mm = 50),
-    test_error_zero_length("headcirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_ga(crl_mm = integer(), headcirc_mm = 50, femurlen_mm = numeric()),
-    test_error_zero_length(c("crl_mm", "femurlen_mm"))
+    class = "gigs_err_zero_length"
   )
 
   # NULL for crl_mm + headcirc_mm inputs
@@ -109,8 +109,7 @@ test_that("Bad GA estimation calls give good errors", {
   )
 })
 
-test_that(
-  desc = "Bad fetal weight estimation calls give good errors", code = {
+test_that(desc = "Bad fetal weight estimation calls give good errors", code = {
   # Non-numeric input errors
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = character(1), headcirc_mm = 250),
@@ -124,44 +123,42 @@ test_that(
   # Errors based on input length
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = 250),
-    test_error_zero_length("abdocirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = 250, headcirc_mm = double()),
-    test_error_zero_length("headcirc_mm")
+    class = "gigs_err_zero_length"
   )
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = double()),
-    test_error_zero_length(c("abdocirc_mm", "headcirc_mm"))
+    class = "gigs_err_zero_length"
   )
 
   # NULL inputs
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = NULL, headcirc_mm = 50),
-    "Variable 'abdocirc_mm' was `NULL`, but should have a value."
+    regexp = "Argument `abdocirc_mm` must not be `NULL`."
   )
   expect_error(
-    ig_fet_estimate_fetal_weight(abdocirc_mm = NULL, headcirc_mm = 50),
-    "Variable 'abdocirc_mm' was `NULL`, but should have a value."
+    ig_fet_estimate_fetal_weight(abdocirc_mm = 40, headcirc_mm = NULL),
+    regexp = "Argument `headcirc_mm` must not be `NULL`."
   )
 })
 
-# Appropriate handling of non-fatal issues with input data ---------------------
+
+
+# # Appropriate handling of non-fatal issues with input data ---------------------
 
 #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
 #' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
 #'   scope of its algorithms by replacing bad inputs with `NA`, and simply
-#'   outputting `NA` for the output elements which map onto `NA` input
+#'   outputting `NA` for the output elements which map onto non-valid input
 #'   elements.
 #' @srrstats {EA6.0, EA6.0a} Also checks that classes/types of returned objects
-#'   are correct using [checkmate::expect_numeric()]
-test_that(
-  desc = "Invalid values can be replaced with `NA` quietly",
-  code = {
+#'   are correct using [checkmate::expect_numeric()].
+test_that(desc = "Invalid values can be replaced with `NA` quietly", code = {
     # Make gigs *quietly* replace bad data with NA
-    for (option in names(.gigs_options)) {
-      gigs_option_set(option, new_value = "quiet", silent = TRUE)
-    }
+    gigs_options_set("quiet", silent = TRUE)
 
     input_len <- 40
     headcirc_mm <- rep_len(285:294, length.out = input_len)
@@ -257,13 +254,10 @@ test_that(
 #' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
 #'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
 #'   warnings.
-test_that(
-  desc = "Invalid values can be replaced with `NA` with a warning",
+test_that(desc = "Invalid values can be replaced with `NA` with a warning",
   code = {
     # Make gigs replace bad data with `NA` and warn
-    for (option in names(.gigs_options)) {
-      gigs_option_set(option, new_value = "warn", silent = TRUE)
-    }
+    gigs_options_set(new_value = "warn", silent = TRUE)
 
     input_len <- 40
     headcirc_mm <- rep_len(285:294, length.out = input_len)
@@ -301,11 +295,11 @@ test_that(
           replace(headcirc_mm, replace_ints_3, undefined_val)
         ))
       expect_match(
-        warnings[[1]],
+        warnings,
         test_msg_undefined("abdocirc_mm", input_len, num_to_replace1)
       )
       expect_match(
-        warnings[[2]],
+        warnings,
         test_msg_undefined("headcirc_mm", input_len, num_to_replace3)
       )
 
@@ -317,11 +311,11 @@ test_that(
           replace(femurlen_mm, replace_ints_1, undefined_val)
         ))
       expect_match(
-        warnings[[1]],
+        warnings,
         test_msg_undefined("headcirc_mm", input_len, num_to_replace2)
       )
       expect_match(
-        warnings[[2]],
+        warnings,
         test_msg_undefined("femurlen_mm", input_len, num_to_replace1)
       )
 
@@ -341,7 +335,8 @@ test_that(
         abdocirc_mm,
         replace(headcirc_mm, replace_ints_1, NA)
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace1)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_fetal_weight
@@ -351,12 +346,14 @@ test_that(
         replace(headcirc_mm, replace_ints_3, NA)
       ))
     expect_match(
-      warnings[[1]],
-      test_msg_missing("abdocirc_mm", input_len, num_to_replace2)
+      warnings,
+      test_msg_missing("abdocirc_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
     expect_match(
-      warnings[[2]],
-      test_msg_missing("headcirc_mm", input_len, num_to_replace3)
+      warnings,
+      test_msg_missing("headcirc_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_ga
@@ -367,12 +364,14 @@ test_that(
         replace(femurlen_mm, replace_ints_2, NA)
       ))
     expect_match(
-      warnings[[1]],
-      test_msg_missing("headcirc_mm", input_len, num_to_replace1)
+      warnings,
+      test_msg_missing("headcirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
     expect_match(
-      warnings[[2]],
-      test_msg_missing("femurlen_mm", input_len, num_to_replace2)
+      warnings,
+      test_msg_missing("femurlen_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
 
     expect_warning(
@@ -380,28 +379,18 @@ test_that(
         replace(crl_mm, replace_ints_3, NA),
         abdocirc_mm,
         femurlen_mm),
-      test_msg_missing("crl_mm", input_len, num_to_replace3)
+      test_msg_missing("crl_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
   }
 )
 
-#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-#' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
-#'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
-#'   errors.
-#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
-#' @srrstats{G5.8, G5.8d} Show that gigs can handle data outside the
-#'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
-#'   warnings.
-test_that(
-  desc = "Invalid values can be replaced with `NA` with errors",
-  code = {
-    # Make gigs *quietly* replace bad data with NA
-    for (option in names(.gigs_options)) {
-      gigs_option_set(option, new_value = "error", silent = TRUE)
-    }
+#' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error behaviour.
+test_that(desc = "Invalid values can cause error throwing", code = {
+    # Make gigs error with bad data
+    gigs_options_set(new_value = "error", silent = TRUE)
 
-        input_len <- 40
+    input_len <- 40
     headcirc_mm <- rep_len(285:294, length.out = input_len)
     abdocirc_mm <- rep_len(255:264, length.out = input_len)
     crl_mm <- rep_len(40:49, length.out = input_len)
@@ -427,26 +416,26 @@ test_that(
           abdocirc_mm,
           replace(headcirc_mm, replace_ints_2, undefined_val)
         ),
-        test_msg_undefined("headcirc_mm", input_len, num_to_replace2)
+        regexp = test_msg_undefined("headcirc_mm", input_len, num_to_replace2)
       )
 
       ## Do for ig_fet_estimate_fetal_weight
       expect_error(
         ig_fet_estimate_fetal_weight(
           replace(abdocirc_mm, replace_ints_1, undefined_val),
-          replace(headcirc_mm, replace_ints_3, undefined_val)
+          headcirc_mm
         ),
-        test_msg_undefined("abdocirc_mm", input_len, num_to_replace1)
+        regexp = test_msg_undefined("abdocirc_mm", input_len, num_to_replace1)
       )
 
       ## Do for ig_fet_estimate_ga
      expect_error(
         ig_fet_estimate_ga(
           NULL,
-          replace(headcirc_mm, replace_ints_1, undefined_val),
+          headcirc_mm,
           replace(femurlen_mm, replace_ints_2, undefined_val)
         ),
-        test_msg_undefined("headcirc_mm", input_len, num_to_replace1)
+        regexp = test_msg_undefined("femurlen_mm", input_len, num_to_replace2)
       )
 
       expect_error(
@@ -454,7 +443,7 @@ test_that(
           replace(crl_mm, replace_ints_3, undefined_val),
           abdocirc_mm,
           femurlen_mm),
-        test_msg_undefined("crl_mm", input_len, num_to_replace3)
+        regexp = test_msg_undefined("crl_mm", input_len, num_to_replace3)
       )
     }
 
@@ -465,15 +454,18 @@ test_that(
         abdocirc_mm,
         replace(headcirc_mm, replace_ints_2, NA)
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace2)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace2),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_fetal_weight
     expect_error(
       ig_fet_estimate_fetal_weight(
         replace(abdocirc_mm, replace_ints_1, NA),
-        replace(headcirc_mm, replace_ints_2, NA)),
-      test_msg_missing("abdocirc_mm", input_len, num_to_replace1)
+        headcirc_mm
+      ),
+      test_msg_missing("abdocirc_mm", input_len, num_to_replace1),
+      fixed = TRUE
     )
 
     ## Do for ig_fet_estimate_ga
@@ -481,9 +473,10 @@ test_that(
       ig_fet_estimate_ga(
         NULL,
         replace(headcirc_mm, replace_ints_3, NA),
-        replace(femurlen_mm, replace_ints_2, NA)
+        femurlen_mm
       ),
-      test_msg_missing("headcirc_mm", input_len, num_to_replace3)
+      test_msg_missing("headcirc_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
 
     expect_error(
@@ -491,15 +484,18 @@ test_that(
         replace(crl_mm, replace_ints_3, NA),
         abdocirc_mm,
         femurlen_mm),
-      test_msg_missing("crl_mm", input_len, num_to_replace3)
+      test_msg_missing("crl_mm", input_len, num_to_replace3),
+      fixed = TRUE
     )
+
+    # Make gigs go back to just warning about bad data
+    gigs_options_set(new_value = "warn", silent = TRUE)
   }
 )
 
 # Test against other R implementations -----------------------------------------
 
-#' @srrstats {G5.4a, G5.4b} Test correctness against other R
-#'   implementations.
+#' @srrstats {G5.4a, G5.4b} Test correctness against other R implementations.
 test_that(
   desc = "GIGS aligns with `intergrowth` package",
   code = {
@@ -544,7 +540,7 @@ test_that(
         ig <- suppressMessages(suppressWarnings(
           intergrowth::calculate_gestage_crl(crl = crl)[[1]]
         ))
-        gigs / 7 - ig < .Machine$double.eps
+        (gigs / 7 - ig) < .Machine$double.eps
       })
     expect_true(all(gigs_ig_equality))
   }

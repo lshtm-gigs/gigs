@@ -51,7 +51,7 @@ download_extract_chart <- function(pdf_url, acronym, z_or_c) {
     c("P03", "P05", "P10", "P50", "P90", "P95", "P97")
   }
   fetal_growth_chart_from_pdf(file = pdf_path) |>
-    dplyr::mutate(gest_days = 7 * gest_days) |>
+    dplyr::mutate(gest_days = as.integer(7 * gest_days)) |>
     setNames(c("gest_days", chart_names))
 }
 
@@ -90,6 +90,7 @@ ig_fet <- purrr::map(
   }
 ) |>
   setNames(ig_fet_acronyms)
+rm(ig_fet_acronyms, chr_zscores_centiles)
 
 # Add symphysis-fundal height standard -----------------------------------------
 
@@ -129,7 +130,7 @@ for (tbl_type in c("zscores", "centiles")) {
 li_crlfga[["x"]] <- "gest_days"
 li_crlfga[["y"]] <- "crl_mm"
 ig_fet[["crlfga"]] <- li_crlfga
-rm(li_crlfga, file, centile_tbl)
+rm(li_crlfga, file, centile_tbl, tbl_type)
 
 ## Gestational age for CRL
 ig_fet[["gafcrl"]] <- list(
@@ -152,7 +153,7 @@ ig_fet[["gwgfga"]] <- list(
     file = "data-raw/tables/ig_fet/ig_fet_gwgfga_centiles.txt",
     header = TRUE
   ) |>
-    dplyr::mutate(gest_days = gest_wks * 7, .keep = "unused",
+    dplyr::mutate(gest_days = as.integer(gest_wks * 7), .keep = "unused",
                   .before = tidyselect::everything()),
   x = "gest_days",
   y = "gest_wt_gain_kg")
@@ -188,7 +189,7 @@ ig_fet[["tcdfga"]] <- list(
 
 ## GA for TCD --> suppl. table 2 of https://dx.doi.org/10.1002/uog.22017 has
 ##     incorrect values, needs correction - using tabulated outputs from
-#      equation for now
+##     equation for now
 ig_fet[["gaftcd"]] <- list(
   centiles = read.table(
     skip = 2,
@@ -218,5 +219,16 @@ for (acronym in ig_fet_neural_acronyms) {
                cmfga = "cist_mag_mm"))
 }
 rm(acronym, ig_fet_neural_acronyms)
+
+# IG-21st Fetal Brain Development standards ------------------------------------
+ig_fet[["hefwfga"]] <- list(
+  centiles = read.table(
+    file = "data-raw/tables/ig_fet/ig_fet_hefwfga_centiles.txt",
+    header = TRUE
+  ) |>
+    dplyr::mutate(gest_days = as.integer(7 * gest_wks), .keep = "unused",
+                  .before = tidyselect::everything()),
+  x = "gest_days",
+  y = "hadlock_efw_g")
 
 usethis::use_data(ig_fet, overwrite = TRUE)

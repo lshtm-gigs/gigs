@@ -9,9 +9,9 @@ ig_fet_estimate_fetal_weight(abdocirc_mm, headcirc_mm)
 }
 \arguments{
 \item{abdocirc_mm}{Numeric vector with abdominal circumference value(s) in
-cm. Should have length one or same length as \code{headcirc_mm}.}
+mm. Should have length one or same length as \code{headcirc_mm}.}
 
-\item{headcirc_mm}{Numeric vector with head circumference value(s) in cm.
+\item{headcirc_mm}{Numeric vector with head circumference value(s) in mm.
 Should have length one or same length as \code{abdocirc_mm}.}
 }
 \value{
@@ -39,9 +39,4 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 \strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
-}
-\seealso{
-Get z-scores/centiles for estimated fetal weights at known
-gestational ages using the \code{\link[=ig_fet_value2zscore]{ig_fet_value2zscore()}} or
-\code{\link[=ig_fet_value2centile]{ig_fet_value2centile()}} functions, respectively.
 }

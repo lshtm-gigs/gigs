@@ -5,21 +5,26 @@
 \alias{ig_fet}
 \title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Standards growth curve data}
 \source{
-\href{https://intergrowth21.tghn.org/pregnancy-dating/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Pregnancy Dating (CRL)}
+\href{https://intergrowth21.com/tools-resources/pregnancy-dating/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Pregnancy Dating (CRL)}
 
-\href{https://intergrowth21.tghn.org/symphysis-fundal-height/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Symphysis-Fundal Height standard}
+\href{https://intergrowth21.com/tools-resources/symphysis-fundal-height/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Symphysis-Fundal Height standard}
 
-\href{https://intergrowth21.tghn.org/fetal-growth/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standards}
+\href{https://intergrowth21.com/tools-resources/fetal-growth/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standards}
 
-\href{https://intergrowth21.tghn.org/fetal-doppler/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards}
+\href{https://intergrowth21.com/tools-resources/fetal-doppler/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards}
 
-\href{https://intergrowth21.tghn.org/gestational-weight-gain/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Gestational Weight Gain standard}
+\href{https://intergrowth21.com/tools-resources/gestational-weight-gain/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Gestational Weight Gain standard}
 }
 \description{
 A set of nested lists containing tables with reference values at different
 z-scores/centiles for valid gestational ages in days. The list is ordered
 by acronym first, then by z-score/centile (as available - some Fetal
 standards only have centile tables).
+}
+\note{
+Where possible, tables were taken from the online sources here. If not
+available on the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} website, they were taken from
+the publications listed here.
 }
 \examples{
 names(gigs::ig_fet)
@@ -36,6 +41,10 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 \strong{International Estimated Fetal Weight Standards of the INTERGROWTH-21st
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
+
+Stirnemann J, Salomon LJ, Papageorghiou AT. \strong{INTERGROWTH-21st standards for
+Hadlock's estimation of fetal weight.} \emph{Ultrasound Obstet Gynecol} 2020,
+\strong{56(6):946-948} \doi{10.1002/uog.22000}
 
 Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al.
 \strong{International standards for symphysis-fundal height based on serial

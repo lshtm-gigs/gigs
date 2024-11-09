@@ -1,23 +1,28 @@
 Type: Package
 Package: gigs
 Title: Assess Fetal, Newborn, and Child Growth with International Standards
-Version: 0.4.1
+Version: 0.4.1.9001
 Authors@R: c(
     person(given = "Simon", family = "Parker",
-           email = "simon.parker@lshtm.ac.uk",
+           email = "simon.parker1471@outlook.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
-    person(given = "Linda", family = "Vesel", role = c("dtc"),
+    person("Linda", "Vesel", role = "dtc",
            comment = c(ORCID = "0000-0003-3753-4172")),
-    person(given = "Eric", family = "Ohuma", role = c("dtc"),
+    person("Eric", "Ohuma", role = "dtc",
            comment = c(ORCID = "0000-0002-3116-2593")),
-    person(given = "Bill & Melinda Gates Foundation", role = c("fnd", "cph"))
-    )
-Description: Convert between anthropometric measures and z-scores/centiles in
-    multiple growth standards, and classify fetal, newborn, and child growth
-    accordingly. With a simple interface to growth standards from the World
-    Health Organisation and International Fetal and Newborn Growth Consortium
-    for the 21st Century, gigs makes growth assessment easy and reproducible for
-    clinicians, researchers and policy-makers.
+    person("Chitra", "Saraswati", role = "rev",
+           comment = c(ORCID = "0000-0002-8159-0414")),
+    person("Victor", "Ordu", role = "rev",
+           comment = c(ORCID = "0000-0003-3716-0668")),
+    person("Bill & Melinda Gates Foundation", role = "fnd"),
+    person("London School of Hygiene & Tropical Medicine", role = "cph")
+  )
+Description: Convert between anthropometric measures and z-scores/centiles
+    in multiple growth standards, and classify fetal, newborn, and child
+    growth accordingly. With a simple interface to growth standards from
+    the World Health Organisation and International Fetal and Newborn
+    Growth Consortium for the 21st Century, gigs makes growth assessment
+    easy and reproducible for clinicians, researchers and policy-makers.
 License: GPL (>= 3)
 URL: https://github.com/lshtm-gigs/gigs/,
     https://lshtm-gigs.github.io/gigs/
@@ -25,22 +30,28 @@ BugReports: https://github.com/lshtm-gigs/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:
-    stats,
-    gamlss.dist,
     checkmate,
-    vctrs
+    gamlss.dist,
+    stats,
+    rlang,
+    vctrs,
+    cli
 Suggests:
+    autotest,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
+    dplyr,
     units,
     withr
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: who_gs, ig_nbs, ig_fet, ig_png
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
-RoxygenNote: 7.3.0
-Roxygen: list(markdown = TRUE, roclets = c ("namespace", "rd", "srr::srr_stats_roclet"))
+Roxygen: list(markdown = TRUE,
+              roclets = c("namespace", "rd", "srr::srr_stats_roclet"))
+RoxygenNote: 7.3.2
