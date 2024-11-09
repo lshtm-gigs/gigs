@@ -19,7 +19,7 @@ NULL
 #' Any non-applicable standards can have their tags changed from `@srrstatsTODO`
 #' to `@srrstatsNA`, and placed together in this block, along with explanations
 #' for why each of these standards have been deemed not applicable.
-#' @srrstatsNA {G2.4. G2.4a, G2.4b, G2.4c, G2.4d, G2.4e} This package does not
+#' @srrstatsNA {G2.4, G2.4a, G2.4b, G2.4c, G2.4d, G2.4e} This package does not
 #'   perform any of these conversions.
 #' @srrstatsNA {G2.10} Column extraction is performed with rlang data-masking,
 #'   so should be flexible for different `data.frame`-based objects.
@@ -36,7 +36,7 @@ NULL
 #'   in accuracy as input sizes change, and the time changes are marked in our
 #'   benchmarking article.
 #' @srrstatsNA {G5.10, G5.11, G5.11a, G5.12} This package has no extended tests.
-#' @srrstatsNA {EA2.0, EA2.1, EA2.2, EA2.2a, EA2.2b, EA2.3, EA2.4, EA 2.5} This
+#' @srrstatsNA {EA2.0, EA2.1, EA2.2, EA2.2a, EA2.2b, EA2.3, EA2.4, EA2.5} This
 #'   package does not perform any extensive table filter/join operations.
 #' @srrstatsNA {EA4.0} This package returns objects which are sufficiently
 #'   different from input data types to make this requirement inapplicable.
