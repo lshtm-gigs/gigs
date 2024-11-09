@@ -110,6 +110,11 @@ classification</p></li>
     <p>Cut-offs for size-for-gestational age categorisations are:</p>
 <table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Centile bounds</strong></td></tr><tr><td>Severely small-for-GA</td><td><code>"SGA(&lt;3)"</code></td><td><code>p</code> &lt; 0.03</td></tr><tr><td>Small-for-GA</td><td><code>"SGA"</code></td><td><code>p</code> &lt; 0.1</td></tr><tr><td>Appropriate-for-GA</td><td><code>"AGA"</code></td><td>0.1 =&lt; <code>p</code> =&lt; 0.9</td></tr><tr><td>Large-for-GA</td><td><code>"LGA"</code></td><td><code>p</code> &gt; 0.9</td></tr></table></div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Categorical (factor) columns produced here may contain unused factor
+levels; use <code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar to remove these.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>WHO. <strong>Physical status: the use and interpretation of anthropometry. Report
 of a WHO Expert Committee.</strong> <em>World Health Organisation Technical Report
@@ -118,6 +123,12 @@ Series 1995,</em> <strong>854: 1–452</strong></p>
 Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
 31.</strong> <em>Technical report, Royal College of Obstetricians and Gynaecologists,
 London, 2013.</em></p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>See <code><a href="classify_svn.html">classify_svn()</a></code> for size-for-GA classifications which are
+stratified by whether a newborn is term. See <code><a href="classify_growth.html">classify_growth()</a></code> to run
+this analysis and others at the same time.</p></div>
     </div>
 
     <div class="section level2">

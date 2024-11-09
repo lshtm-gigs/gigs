@@ -128,6 +128,11 @@ with three new columns named according to <code>.new</code>. These columns will 
     <p>Cut-offs for wasting categories are:</p>
 <table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Z-score bounds</strong></td></tr><tr><td>Severe wasting</td><td><code>"wasting_severe"</code></td><td><code>wlz</code> =&lt; -3</td></tr><tr><td>Wasting</td><td><code>"wasting"</code></td><td>-3 &lt; <code>wlz</code> =&lt; -2</td></tr><tr><td>No wasting</td><td><code>"not_wasting"</code></td><td><code>abs(wlz)</code> &lt; 2</td></tr><tr><td>Overweight</td><td><code>"overweight"</code></td><td><code>wlz</code> &gt;= 2</td></tr><tr><td>Outlier</td><td><code>"outlier"</code></td><td><code>abs(wlz)</code> &gt; 5</td></tr></table></div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Categorical (factor) columns produced here may contain unused factor
+levels; use <code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar to remove these.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p><strong>'Implausible z-score values'</strong> <em>in</em> World Health Organization (ed.)
 <em>Recommendations for data collection, analysis and reporting on
@@ -138,6 +143,11 @@ pp. 64-65.</p>
 for stunting, wasting and underweight'</strong> <em>in</em> <em>Guide to DHS Statistics DHS-7</em>
 Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 <a href="https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm" class="external-link">https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm</a></p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>See <code><a href="classify_growth.html">classify_growth()</a></code> to run this analysis and others at the same
+time.</p></div>
     </div>
 
     <div class="section level2">

@@ -69,6 +69,12 @@ size-for-GA classifications. If <code>severe = FALSE</code>, levels are <code>c(
     <p>Cut-offs for size-for-gestational age categorisations are:</p>
 <table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Centile bounds</strong></td></tr><tr><td>Severely small-for-GA</td><td><code>"SGA(&lt;3)"</code></td><td><code>p</code> &lt; 0.03</td></tr><tr><td>Small-for-GA</td><td><code>"SGA"</code></td><td><code>p</code> &lt; 0.1</td></tr><tr><td>Appropriate-for-GA</td><td><code>"AGA"</code></td><td>0.1 =&lt; <code>p</code> =&lt; 0.9</td></tr><tr><td>Large-for-GA</td><td><code>"LGA"</code></td><td><code>p</code> &gt; 0.9</td></tr></table></div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+<code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>WHO. <strong>Physical status: the use and interpretation of anthropometry. Report
 of a WHO Expert Committee.</strong> <em>World Health Organisation Technical Report
@@ -81,7 +87,7 @@ London, 2013.</em></p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="classify_sfga.html">classify_sfga()</a></code>, which wraps this function for easy use in
-analytic pipelines.</p></div>
+<code>data.frame</code>-based analytic pipelines.</p></div>
     </div>
 
     <div class="section level2">

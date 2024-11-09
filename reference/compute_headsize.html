@@ -92,6 +92,12 @@ wasting classifications. Its levels are <code>c("wasting_severe", "wasting", "no
     <p>Cut-offs for head size categories are:</p>
 <table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Z-score bounds</strong></td></tr><tr><td>Severe microcephaly</td><td><code>"microcephaly_severe"</code></td><td><code>hcaz</code> =&lt; -3</td></tr><tr><td>Microcephaly</td><td><code>"microcephaly"</code></td><td>-3 &lt; <code>hcaz</code> =&lt; -2</td></tr><tr><td>Normal head circumference</td><td><code>"normal_headcirc"</code></td><td><code>abs(hcaz)</code> &lt; 2</td></tr><tr><td>Macrocephaly</td><td><code>"macrocephaly"</code></td><td><code>hcaz</code> &gt;= 2</td></tr><tr><td>Severe macrocephaly</td><td><code>"macrocephaly_severe"</code></td><td><code>hcaz</code> &gt;= 3</td></tr></table></div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+<code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p><strong>'Implausible z-score values'</strong> <em>in</em> World Health Organization (ed.)
 <em>Recommendations for data collection, analysis and reporting on

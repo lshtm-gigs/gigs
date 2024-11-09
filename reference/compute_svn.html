@@ -88,7 +88,9 @@ appropriate-for-gestational age; LGA, large-for-gestational age.</p>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Input vectors are recycled by <code><a href="https://vctrs.r-lib.org/reference/vec_recycle.html" class="external-link">vctrs::vec_recycle_common()</a></code>, and must
-adhere to the vctrs recycling rules.</p>
+adhere to the vctrs recycling rules. The returned factor will have unused
+levels if none of your observed z-scores/centiles fit given categories. To
+drop these, you will need to use <code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
