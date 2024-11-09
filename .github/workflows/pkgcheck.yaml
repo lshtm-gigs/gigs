@@ -20,8 +20,4 @@ jobs:
     permissions:
       issues: write
     steps:
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: |
-            github::ropensci-review-tools/autotest
       - uses: ropensci-review-tools/pkgcheck-action@main
