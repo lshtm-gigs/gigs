@@ -292,4 +292,56 @@ references:
     given-names: Winston
   year: '2024'
   doi: 10.32614/CRAN.package.withr
+- type: software
+  title: ggsci
+  abstract: 'ggsci: Scientific Journal and Sci-Fi Themed Color Palettes for ''ggplot2'''
+  notes: Suggests
+  url: https://nanx.me/ggsci/
+  repository: https://CRAN.R-project.org/package=ggsci
+  authors:
+  - family-names: Xiao
+    given-names: Nan
+    email: me@nanx.me
+    orcid: https://orcid.org/0000-0002-0250-5673
+  year: '2024'
+  doi: 10.32614/CRAN.package.ggsci
+- type: software
+  title: bench
+  abstract: 'bench: High Precision Timing of R Expressions'
+  notes: Suggests
+  url: https://bench.r-lib.org/
+  repository: https://CRAN.R-project.org/package=bench
+  authors:
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+  year: '2024'
+  doi: 10.32614/CRAN.package.bench
+- type: software
+  title: cowplot
+  abstract: 'cowplot: Streamlined Plot Theme and Plot Annotations for ''ggplot2'''
+  notes: Suggests
+  url: https://wilkelab.org/cowplot/
+  repository: https://CRAN.R-project.org/package=cowplot
+  authors:
+  - family-names: Wilke
+    given-names: Claus O.
+    email: wilke@austin.utexas.edu
+    orcid: https://orcid.org/0000-0002-7470-9261
+  year: '2024'
+  doi: 10.32614/CRAN.package.cowplot
+- type: software
+  title: viridis
+  abstract: 'viridis: Colorblind-Friendly Color Maps for R'
+  notes: Suggests
+  url: https://sjmgarnier.github.io/viridis/
+  repository: https://CRAN.R-project.org/package=viridis
+  authors:
+  - family-names: Garnier
+    given-names: Simon
+    email: garnier@njit.edu
+  year: '2024'
+  doi: 10.32614/CRAN.package.viridis
 

@@ -42,7 +42,11 @@ Suggests:
     testthat (>= 3.0.0),
     dplyr,
     units,
-    withr
+    withr,
+    ggsci,
+    bench,
+    cowplot,
+    viridis
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
