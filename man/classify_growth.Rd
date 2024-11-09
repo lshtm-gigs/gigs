@@ -78,7 +78,7 @@ newborn (\code{"svn"}) classifications, all strings in \code{.new} must be uniqu
 Each character vector in \code{.new} is repaired with \code{vctrs::as_names()}, which
 will issue messages if any elements in \code{.new} are changed.
 
-\itemize{
+\describe{
 \item{\code{"sfga"}:}{  \code{c("birthweight_centile", "sfga", "sfga_severe")}}
 \item{\code{"svn"}:}{  \code{c("birthweight_centile", "svn")}}
 \item{\code{"stunting"}:}{  \code{c("lhaz", "stunting", "stunting_outliers")}}
