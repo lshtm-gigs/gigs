@@ -71,11 +71,11 @@ Cut-offs for head size categories are:
 \tabular{lll}{
 \strong{Category}    \tab \strong{Factor level}  \tab
 \strong{Z-score bounds} \cr
-Severe microcephaly       \tab \code{"microcephaly_severe"} \tab \code{hcaz} ≤ -3      \cr
-Microcephaly              \tab \code{"microcephaly"}        \tab -3 < \code{hcaz} ≤ -2 \cr
+Severe microcephaly       \tab \code{"microcephaly_severe"} \tab \code{hcaz} =< -3      \cr
+Microcephaly              \tab \code{"microcephaly"}        \tab -3 < \code{hcaz} =< -2 \cr
 Normal head circumference \tab \code{"normal_headcirc"}      \tab \code{abs(hcaz)} < 2 \cr
-Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} ≥ 2       \cr
-Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} ≥ 3
+Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} >= 2       \cr
+Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} >= 3
 }
 }
 \examples{

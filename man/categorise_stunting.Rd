@@ -27,8 +27,8 @@ Cut-offs for stunting categories are:
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
 \strong{Z-score bounds} \cr
-Severe stunting \tab \code{"stunting_severe"}     \tab \code{lhaz} ≤ -3         \cr
-Stunting        \tab \code{"stunting"}            \tab -3 < \code{lhaz} ≤ -2    \cr
+Severe stunting \tab \code{"stunting_severe"}     \tab \code{lhaz} =< -3         \cr
+Stunting        \tab \code{"stunting"}            \tab -3 < \code{lhaz} =< -2    \cr
 No stunting     \tab \code{"not_stunting"}        \tab \code{lhaz} > -2         \cr
 Outlier         \tab \code{"outlier"}             \tab \code{abs(lhaz)} > 6
 }

@@ -74,12 +74,12 @@ weeks).
 weeks' PMA
 \item Postnatal: Uncorrected WHO Child Growth standards after 64 weeks' PMA
 }
-\item \code{gest_days} ≥ 37 weeks (259 days):
+\item \code{gest_days} >= 37 weeks (259 days):
 \itemize{
 \item Birth: IG-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standards
 \item Postnatal: Uncorrected WHO Child Growth standards
 }
-\item \code{gest_days} ≥ 43 weeks (301 days):
+\item \code{gest_days} >= 43 weeks (301 days):
 \itemize{
 \item Birth: No standard available
 \item Postnatal: Uncorrected WHO Child Growth standards

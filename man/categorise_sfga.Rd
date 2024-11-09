@@ -30,7 +30,7 @@ Cut-offs for size-for-gestational age categorisations are:
 \strong{Centile bounds} \cr
 Severely small-for-GA \tab \code{"SGA(<3)"} \tab \code{p} < 0.03      \cr
 Small-for-GA          \tab \code{"SGA"}     \tab \code{p} < 0.1       \cr
-Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 ≤ \code{p} ≤ 0.9 \cr
+Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 =< \code{p} =< 0.9 \cr
 Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 }

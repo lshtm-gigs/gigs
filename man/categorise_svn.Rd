@@ -34,16 +34,16 @@ Cut-offs for small, vulnerable newborn categorisations are:
 \strong{Gestational age range} \tab \strong{Centile bounds} \cr
 Preterm-SGA \tab \code{"Preterm SGA"} \tab \code{p} < 0.1       \tab
 \code{gest_days} < 259  \cr
-Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
+Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 =< \code{p} =< 0.9 \tab
 \code{gest_days} < 259  \cr
 Preterm-LGA \tab \code{"Preterm LGA"} \tab \code{p} > 0.9       \tab
 \code{gest_days} < 259  \cr
 Term-SGA \tab \code{"Term SGA"}    \tab \code{p} < 0.1       \tab
-\code{gest_days} ≥ 259  \cr
-Term-AGA \tab \code{"Term AGA"}    \tab 0.1 ≤ \code{p} ≤ 0.9 \tab
-\code{gest_days} ≥ 259  \cr
+\code{gest_days} >= 259  \cr
+Term-AGA \tab \code{"Term AGA"}    \tab 0.1 =< \code{p} =< 0.9 \tab
+\code{gest_days} >= 259  \cr
 Term-LGA \tab \code{"Term LGA"}    \tab \code{p} > 0.9       \tab
-\code{gest_days} ≥ 259
+\code{gest_days} >= 259
 }
 
 \emph{Abbreviations:} SGA, small-for-gestational age; AGA,

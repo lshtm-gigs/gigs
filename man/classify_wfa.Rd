@@ -74,10 +74,10 @@ Cut-offs for weight-for-age categories are:
 \tabular{lll}{
 \strong{Category}    \tab \strong{Factor level}  \tab
 \strong{Z-score bounds} \cr
-Severely underweight \tab \code{"underweight_severe"} \tab \code{waz} ≤ -3      \cr
-Underweight          \tab \code{"underweight"}        \tab -3 < \code{waz} ≤ -2 \cr
+Severely underweight \tab \code{"underweight_severe"} \tab \code{waz} =< -3      \cr
+Underweight          \tab \code{"underweight"}        \tab -3 < \code{waz} =< -2 \cr
 Normal weight        \tab \code{"normal_weight"}      \tab \code{abs(waz)} < 2  \cr
-Overweight           \tab \code{"overweight"}         \tab \code{waz} ≥ 2       \cr
+Overweight           \tab \code{"overweight"}         \tab \code{waz} >= 2      \cr
 Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
 }
 }

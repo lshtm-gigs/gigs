@@ -21,10 +21,10 @@
 #'     - Postnatal: IG-21<sup>st</sup> Postnatal Growth standards from 27 to 64
 #'       weeks' PMA
 #'     - Postnatal: Uncorrected WHO Child Growth standards after 64 weeks' PMA
-#'   * `gest_days` ≥ 37 weeks (259 days):
+#'   * `gest_days` >= 37 weeks (259 days):
 #'     - Birth: IG-21<sup>st</sup> Newborn Size standards
 #'     - Postnatal: Uncorrected WHO Child Growth standards
-#'   * `gest_days` ≥ 43 weeks (301 days):
+#'   * `gest_days` >= 43 weeks (301 days):
 #'     - Birth: No standard available
 #'     - Postnatal: Uncorrected WHO Child Growth standards
 #'

@@ -27,10 +27,10 @@ Cut-offs for wasting categories are:
 \tabular{lll}{
 \strong{Category} \tab \strong{Factor level} \tab
 \strong{Z-score bounds} \cr
-Severe wasting \tab \code{"wasting_severe"}       \tab \code{wlz} ≤ -3      \cr
-Wasting        \tab \code{"wasting"}              \tab -3 < \code{wlz} ≤ -2 \cr
+Severe wasting \tab \code{"wasting_severe"}       \tab \code{wlz} =< -3      \cr
+Wasting        \tab \code{"wasting"}              \tab -3 < \code{wlz} =< -2 \cr
 No wasting     \tab \code{"not_wasting"}          \tab \code{abs(wlz)} < 2  \cr
-Overweight     \tab \code{"overweight"}           \tab \code{wlz} ≥ 2       \cr
+Overweight     \tab \code{"overweight"}           \tab \code{wlz} >= 2      \cr
 Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
 }
 }

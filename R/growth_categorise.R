@@ -25,7 +25,7 @@
 #'       \strong{Centile bounds} \cr
 #'     Severely small-for-GA \tab `"SGA(<3)"` \tab `p` < 0.03      \cr
 #'     Small-for-GA          \tab `"SGA"`     \tab `p` < 0.1       \cr
-#'     Appropriate-for-GA    \tab `"AGA"`     \tab 0.1 ≤ `p` ≤ 0.9 \cr
+#'     Appropriate-for-GA    \tab `"AGA"`     \tab 0.1 =< `p` =< 0.9 \cr
 #'     Large-for-GA          \tab `"LGA"`     \tab `p` > 0.9
 #'   }
 #' @seealso [classify_sfga()], which wraps this function for easy use in
@@ -70,16 +70,16 @@ categorise_sfga <- function(p, severe = FALSE) {
 #'       \strong{Gestational age range} \tab \strong{Centile bounds} \cr
 #'     Preterm-SGA \tab `"Preterm SGA"` \tab `p` < 0.1       \tab
 #'       `gest_days` < 259  \cr
-#'     Preterm-AGA \tab `"Preterm AGA"` \tab 0.1 ≤ `p` ≤ 0.9 \tab
+#'     Preterm-AGA \tab `"Preterm AGA"` \tab 0.1 =< `p` =< 0.9 \tab
 #'       `gest_days` < 259  \cr
 #'     Preterm-LGA \tab `"Preterm LGA"` \tab `p` > 0.9       \tab
 #'       `gest_days` < 259  \cr
 #'     Term-SGA \tab `"Term SGA"`    \tab `p` < 0.1       \tab
-#'       `gest_days` ≥ 259  \cr
-#'     Term-AGA \tab `"Term AGA"`    \tab 0.1 ≤ `p` ≤ 0.9 \tab
-#'       `gest_days` ≥ 259  \cr
+#'       `gest_days` >= 259  \cr
+#'     Term-AGA \tab `"Term AGA"`    \tab 0.1 =< `p` =< 0.9 \tab
+#'       `gest_days` >= 259  \cr
 #'     Term-LGA \tab `"Term LGA"`    \tab `p` > 0.9       \tab
-#'       `gest_days` ≥ 259
+#'       `gest_days` >= 259
 #'   }
 #'
 #'   *Abbreviations:* SGA, small-for-gestational age; AGA,
@@ -120,8 +120,8 @@ categorise_svn <- function(p, gest_days) {
 #'   \tabular{lll}{
 #'     \strong{Category} \tab \strong{Factor level} \tab
 #'       \strong{Z-score bounds} \cr
-#'     Severe stunting \tab `"stunting_severe"`     \tab `lhaz` ≤ -3         \cr
-#'     Stunting        \tab `"stunting"`            \tab -3 < `lhaz` ≤ -2    \cr
+#'     Severe stunting \tab `"stunting_severe"`     \tab `lhaz` =< -3         \cr
+#'     Stunting        \tab `"stunting"`            \tab -3 < `lhaz` =< -2    \cr
 #'     No stunting     \tab `"not_stunting"`        \tab `lhaz` > -2         \cr
 #'     Outlier         \tab `"outlier"`             \tab `abs(lhaz)` > 6
 #'   }
@@ -167,10 +167,10 @@ categorise_stunting <- function(lhaz, outliers = FALSE) {
 #'   \tabular{lll}{
 #'     \strong{Category} \tab \strong{Factor level} \tab
 #'       \strong{Z-score bounds} \cr
-#'     Severe wasting \tab `"wasting_severe"`       \tab `wlz` ≤ -3      \cr
-#'     Wasting        \tab `"wasting"`              \tab -3 < `wlz` ≤ -2 \cr
+#'     Severe wasting \tab `"wasting_severe"`       \tab `wlz` =< -3      \cr
+#'     Wasting        \tab `"wasting"`              \tab -3 < `wlz` =< -2 \cr
 #'     No wasting     \tab `"not_wasting"`          \tab `abs(wlz)` < 2  \cr
-#'     Overweight     \tab `"overweight"`           \tab `wlz` ≥ 2       \cr
+#'     Overweight     \tab `"overweight"`           \tab `wlz` >= 2      \cr
 #'     Outlier        \tab `"outlier"`              \tab `abs(wlz)` > 5
 #'   }
 #' @note This function assumes that your measurements were taken according to
@@ -207,10 +207,10 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
 #'   \tabular{lll}{
 #'     \strong{Category}    \tab \strong{Factor level}  \tab
 #'       \strong{Z-score bounds} \cr
-#'     Severely underweight \tab `"underweight_severe"` \tab `waz` ≤ -3      \cr
-#'     Underweight          \tab `"underweight"`        \tab -3 < `waz` ≤ -2 \cr
+#'     Severely underweight \tab `"underweight_severe"` \tab `waz` =< -3      \cr
+#'     Underweight          \tab `"underweight"`        \tab -3 < `waz` =< -2 \cr
 #'     Normal weight        \tab `"normal_weight"`      \tab `abs(waz)` < 2  \cr
-#'     Overweight           \tab `"overweight"`         \tab `waz` ≥ 2       \cr
+#'     Overweight           \tab `"overweight"`         \tab `waz` >= 2      \cr
 #'     Outlier              \tab `"outlier"`        \tab `waz` < -6 or `waz` > 5
 #'   }
 #' @examples
@@ -241,11 +241,11 @@ categorise_wfa <- function(waz, outliers = FALSE) {
 #'   \tabular{lll}{
 #'     \strong{Category}    \tab \strong{Factor level}  \tab
 #'       \strong{Z-score bounds} \cr
-#'     Severe microcephaly       \tab `"microcephaly_severe"` \tab `hcaz` ≤ -3      \cr
-#'     Microcephaly              \tab `"microcephaly"`        \tab -3 < `hcaz` ≤ -2 \cr
-#'     Normal head circumference \tab `"normal_headcirc"`      \tab `abs(hcaz)` < 2 \cr
-#'     Macrocephaly              \tab `"macrocephaly"`        \tab `hcaz` ≥ 2       \cr
-#'     Severe macrocephaly       \tab `"macrocephaly_severe"` \tab `hcaz` ≥ 3
+#'     Severe microcephaly       \tab `"microcephaly_severe"` \tab `hcaz` =< -3      \cr
+#'     Microcephaly              \tab `"microcephaly"`        \tab -3 < `hcaz` =< -2 \cr
+#'     Normal head circumference \tab `"normal_headcirc"`     \tab `abs(hcaz)` < 2   \cr
+#'     Macrocephaly              \tab `"macrocephaly"`        \tab `hcaz` >= 2       \cr
+#'     Severe macrocephaly       \tab `"macrocephaly_severe"` \tab `hcaz` >= 3
 #'   }
 #' @examples
 #' hcaz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)
