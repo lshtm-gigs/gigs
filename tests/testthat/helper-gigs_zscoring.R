@@ -24,7 +24,8 @@
 #'   * `headcirc_cm`: Expected head circumference, given the value of `hcaz` and
 #'        age/sex
 #' @note This is **not** suitable for simulating growth data accurately. The
-#'   z-score sampling procedure does **not** account for autocorrelation in
+#'   z-score sampling procedure does **not** account for within-individual
+#'   correlation in growth measures over time).
 #' @noRd
 gigs_random_growth_dataset <- function(n = 10L,
                                        seed = 472346,
@@ -57,7 +58,9 @@ gigs_random_growth_dataset <- function(n = 10L,
   })
   gigs_options_set("quiet", TRUE)
 
-  gigs_lgls <- with(data, gigs_zscoring_lgls(age_days, gest_age, id))
+  gigs_lgls <- with(
+    data, suppressWarnings(gigs_zscoring_lgls(age_days, gest_age, id))
+  )
 
   out <- data |>
     dplyr::mutate(

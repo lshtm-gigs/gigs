@@ -41,6 +41,60 @@
 #'   each individual is used as a birth measure. Leave this argument as `NULL`
 #'   if all your data comes from the same individual. Default = `NULL`.
 #' @inheritParams shared_roxygen_params
+#' @examples
+#' gest_days <- c(rep(35 * 7, 3), rep(35 * 7, 3))
+#' age_days <- c(0, 100, 500, 2, 100, 500)
+#' sex <- rep.int(c("M", "F"), c(3, 3))
+#' wt_kg <- c(3, 6, 9, 3, 6, 9)
+#' len_cm <- rep.int(c(52.2, 60.4, 75), 2)
+#' head_cm <- rep.int(c(30, 40, 49), 2)
+#' ids <- factor(rep.int(c("A", "B"), c(3, 3)))
+#'
+#' # Weight-for-age z-score (WAZ)
+#' waz <- gigs_waz(weight_kg = wt_kg,
+#'                 age_days = age_days,
+#'                 gest_days = gest_days,
+#'                 sex = sex,
+#'                 id = ids)
+#' print(waz)
+#'
+#' # Note - if you don't specify 'id' you'll get different results!
+#' waz_no_id <- gigs_waz(weight_kg = wt_kg,
+#'                       age_days = age_days,
+#'                       gest_days = gest_days,
+#'                       sex = sex)
+#' print(waz == waz_no_id)
+#'
+#' # Length/height-for-age z-score (LHAZ)
+#' lhaz <- gigs_lhaz(lenht_cm = len_cm,
+#'                   age_days = age_days,
+#'                   gest_days = gest_days,
+#'                   sex = sex,
+#'                   id = ids)
+#' print(lhaz)
+#'
+#' # Weight-for-length/height z-score (WLZ)
+#' #   Note: There's no at-birth standards for weight-for-length, so elements 1
+#' #   and 4 have `NA` values
+#' wlz <- gigs_wlz(weight_kg = wt_kg,
+#'                 lenht_cm = len_cm,
+#'                 age_days = age_days,
+#'                 gest_days = gest_days,
+#'                 sex = sex,
+#'                 id = ids)
+#' print(wlz)
+#'
+#' # Head circumference-for-age z-score (HCAZ)
+#' hcaz <- gigs_hcaz(headcirc_cm = head_cm,
+#'                   age_days = age_days,
+#'                   gest_days = gest_days,
+#'                   sex = sex,
+#'                   id = ids)
+#' print(hcaz)
+#' @returns A numeric vector of z-scores, derived using the appropriate growth
+#'   standard for each element-wise combination of `gest_days` and `age_days`.
+#'   For `gigs_wlz()`, all birth WLZs will be missing (`NA`), as there is no
+#'   INTERGROWTH-21<sup>st<sup> Newborn standard for weight-for-length.
 #' @note These functions expect vectors which are recyclable with
 #'   [vctrs::vec_recycle_common()].
 #' @rdname gigs_zscoring
@@ -282,7 +336,7 @@ gigs_hcaz_internal <- function(headcirc_cm,
 #'   from that named list should be used.
 #' @rdname gigs_xaz
 #' @noRd
-gigs_zscoring_lgls <- function(age_days, gest_days, id) {
+gigs_zscoring_lgls <- function(age_days, gest_days, id = NULL) {
   len_age_days <- length(age_days)
   len_gest_days <- length(gest_days)
   if (len_age_days != len_gest_days) {
@@ -291,12 +345,22 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id) {
                   "!" = paste0("`age_days` had length ", len_age_days,
                                "; `gest_days` had length ", len_gest_days,
                                ".")),
+      class = "gigs_zscoring_inconsistent_lengths",
       .internal = TRUE
     )
   }
 
+  id_provided <- TRUE
   if (is.null(id)) {
+    id_provided <- FALSE
     id <- factor(x = rep.int(x = 1, times = len_age_days))
+  } else if (!checkmate::test_factor(id)) {
+    cli::cli_abort(
+      c("Non-factor `id` variable used in `gigs_zscoring_lgls`.",
+        "i" = "`id` had class {.cls {class(id)}}."),
+      class = "gigs_zscoring_id_not_factor",
+      .internal = TRUE
+    )
   }
 
   # Set up vars for use later
@@ -310,25 +374,73 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id) {
   for (level in levels(id)) {
     is_curr_level <- id == level
     age_days_subset <- age_days[is_curr_level]
-    is_first_measure <-  age_days_subset == min(age_days_subset, na.rm = TRUE)
+    is_first_measure <- suppressWarnings(
+      age_days_subset == min(age_days_subset, na.rm = TRUE)
+    )
     is_first_measurement[is_curr_level] <- is_first_measure
   }
   is_first_measurement[is.na(is_first_measurement)] <- FALSE
 
-  is_birth_adjacent <- age_days < 3
+  is_birth_measure <- is_first_measurement & age_days < 3
   is_inrange_ig_nbs <- inrange(gest_days, c(168, 300))
   is_inrange_ig_png <- inrange(pma_weeks, c(27, 64))
+  is_birth_with_large_ga <- is_birth_measure & gest_days > 300
 
-  use_ig_nbs <- is_first_measurement & is_birth_adjacent & is_inrange_ig_nbs
+  use_ig_nbs <- is_birth_measure & is_inrange_ig_nbs
   use_ig_png <- !use_ig_nbs & !is_term & is_inrange_ig_png
-  use_who_gs <- !use_ig_nbs & is_term | (!is_term & pma_weeks > 64)
+  use_who_gs <- !use_ig_nbs & is_term | (!is_term & pma_weeks > 64) |
+    is_birth_with_large_ga
+
+  is_older_birth <- use_ig_nbs & age_days > 0.5
+  if (any(is_older_birth, na.rm = FALSE)) {
+    qty_is_older_birth <- sum(is_older_birth)
+    msg <- c("!" = paste0("There {cli::qty(qty_is_older_birth)} {?was/were} ",
+                          "{.val {qty_is_older_birth}} 'at birth' ",
+                          "observation{?s} where {.var age_days} > ",
+                          "{.val {0.5}}."))
+    if (id_provided) {
+      ids_older_birth <- cli::cli_vec(unique(id[is_older_birth]),
+                                      style = list("vec-trunc" = 15))
+      msg <- c(msg,
+               "i" = paste("This occurred for{cli::qty(ids_older_birth)}",
+                           "ID{?s} {.val {ids_older_birth}}."))
+    }
+    cli::cli_warn(msg,
+                  class = "gigs_zscoring_old_birth_obs",
+                  call = rlang::caller_env(4))
+  }
+  if (any(is_birth_with_large_ga, na.rm = TRUE)) {
+    qty_birth_w_large_ga <- sum(is_birth_with_large_ga)
+    msg <- c("!" = paste("There {cli::qty(qty_birth_w_large_ga)}{?was/were}",
+                         "{.val {qty_birth_w_large_ga}} birth observation{?s}",
+                         "where {.var gest_age} > {.val {300L}}. The WHO",
+                         "Growth standards were used for ",
+                         "{cli::qty(qty_birth_w_large_ga)}{?this/these}",
+                         "{cli::qty(qty_birth_w_large_ga)} observation{?s},",
+                         "instead of the INTERGROWTH-21st Newborn Size",
+                         "standards."))
+    if (id_provided) {
+      ids_birth_w_large_ga <- cli::cli_vec(unique(id[is_birth_with_large_ga]),
+                                           style = list("vec-trunc" = 15))
+      msg <- c(msg,
+               "i" = paste("This occurred for{cli::qty(ids_birth_w_large_ga)}",
+                           "ID{?s} {.val {ids_birth_w_large_ga}}."))
+    }
+    cli::cli_warn(msg,
+                  class = "gigs_zscoring_birth_w_large_ga",
+                  call = rlang::caller_env(4))
+  }
 
   # Prevents `NAs are not allowed in subscripted assignments` error
   is_na_input <- is.na(age_days) | is.na(gest_days)
   use_ig_nbs[is_na_input] <- FALSE
   use_ig_png[is_na_input] <- FALSE
   use_who_gs[is_na_input] <- FALSE
-  list(ig_nbs = use_ig_nbs, ig_png = use_ig_png, who_gs = use_who_gs)
+  is_birth_measure[is_na_input] <- FALSE
+  list(birth = is_birth_measure,
+       ig_nbs = use_ig_nbs,
+       ig_png = use_ig_png,
+       who_gs = use_who_gs)
 }
 
 # Parameter validation ---------------------------------------------------------

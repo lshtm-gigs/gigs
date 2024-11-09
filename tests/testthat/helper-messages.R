@@ -44,16 +44,6 @@ test_error_unrecyclable <- function(names) {
          "recycled with `vctrs\\:\\:vec_recycle_common\\(\\)`.")
 }
 
-#' Generate a 'your acronym is too long!' error, like from [validate_acronym()]
-#' @param length The length of the non-scalar acronym data, used to generate
-#'   the error message
-#' @returns A single-length character vector which describes an error message
-#'   that gigs should output for non-scalar acronym inputs.
-test_error_acronym_not_scalar <- function(length) {
-  paste0("Assertion on 'acronym' failed. Must be of length == 1, but has ",
-         "length ", length, ".")
-}
-
 # Error/warning string functions for .gigs_options issues ----------------------
 
 #' Replicate error/warning messages from gigs for bad input data (TESTING

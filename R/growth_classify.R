@@ -519,8 +519,9 @@ classify_headsize <- function(.data,
 #'   will be printed to the console. Warnings from `classify_growth()` will
 #'   still be printed even if `.verbose` is `FALSE`.
 #' @note For size-for-GA and small vulnerable newborn analyses, centiles and
-#'   categorisations will only be applied on birthweights, i.e. rows where
-#'   the column referred to by `age_days` is between `0` and `0.5`.
+#'   categorisations will only be applied for birth measurements. These are
+#'   considered to be the observation per level of `id` where `age_days` is
+#'   smallest, provided that `age_days` is between `<3`.
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.
@@ -610,6 +611,9 @@ classify_headsize <- function(.data,
 #' Accogli A, Geraldo AF, Piccolo G, Riva A, Scala M, Balagura G, et al.
 #' **Diagnostic Approach to Macrocephaly in Children**. *Frontiers in
 #' Paediatrics* 2022, *9:794069* \doi{10.3389/fped.2021.794069}
+#' @returns A tabular object of the same class that was provided as `.data`,
+#'   with new columns named according to `.new`. The new columns will depend
+#'   on the values supplied for `.outcomes`.
 #' @importFrom rlang eval_tidy enquo
 #' @export
 classify_growth <- function(
@@ -1118,7 +1122,7 @@ msg_classify_growth <- function(all, requested, run, missing) {
     msg_strings[idx] <- paste0(analysis_msg_strings[chr_analysis], ": ",
                                chr_was_run)
   }
-  c("`gigs::classify_growth()`", msg_strings)
+  msg_strings
 }
 
 # SRR tags ---------------------------------------------------------------------
