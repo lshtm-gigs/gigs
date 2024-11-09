@@ -106,6 +106,9 @@ For size-for-GA and small vulnerable newborn analyses, centiles and
 categorisations will only be applied for birth measurements. These are
 considered to be the observation per level of \code{id} where \code{age_days} is
 smallest, provided that \code{age_days} is between \verb{<3}.
+
+Categorical (factor) columns produced here may contain unused factor
+levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
 }
 \examples{
 # This dummy dataset contains data from two people, from birth (<3 days) to

@@ -40,6 +40,10 @@ WHO guidelines, which stipulate that recumbent length should not be
 measured after 730 days. Instead, standing height should be used.
 Implausible z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.
+
+The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+\code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 wlz <- c(-5.5, -3, 0, 3, 5.5)

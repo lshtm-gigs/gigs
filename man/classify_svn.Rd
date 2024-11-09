@@ -79,6 +79,10 @@ Term-LGA \tab \code{"Term LGA"}    \tab \code{p} > 0.9       \tab
 \emph{Abbreviations:} SGA, small-for-gestational age; AGA,
 appropriate-for-gestational age; LGA, large-for-gestational age.
 }
+\note{
+Categorical (factor) columns produced here may contain unused factor
+levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
+}
 \examples{
 data <- data.frame(
   wt_kg = c(1.5, 2.6, 2.6, 3.5),
@@ -100,4 +104,9 @@ Royal College of Obstetricians and Gynaecologists. \strong{The Investigation and
 Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
 31.} \emph{Technical report, Royal College of Obstetricians and Gynaecologists,
 London, 2013.}
+}
+\seealso{
+See \code{\link[=classify_sfga]{classify_sfga()}} for size-for-GA classifications which are not
+stratified by whether a newborn is term. See \code{\link[=classify_growth]{classify_growth()}} to run
+this analysis and others at the same time.
 }

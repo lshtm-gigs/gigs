@@ -28,10 +28,15 @@ Cut-offs for head size categories are:
 \strong{Z-score bounds} \cr
 Severe microcephaly       \tab \code{"microcephaly_severe"} \tab \code{hcaz} =< -3      \cr
 Microcephaly              \tab \code{"microcephaly"}        \tab -3 < \code{hcaz} =< -2 \cr
-Normal head circumference \tab \code{"normal_headcirc"}      \tab \code{abs(hcaz)} < 2 \cr
+Normal head circumference \tab \code{"normal_headcirc"}     \tab \code{abs(hcaz)} < 2   \cr
 Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} >= 2       \cr
 Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} >= 3
 }
+}
+\note{
+The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+\code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 hcaz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)

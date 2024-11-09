@@ -34,6 +34,11 @@ Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 =< \code{p} =< 0.9 \cr
 Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 }
+\note{
+The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+\code{\link[=droplevels]{droplevels()}} or similar.
+}
 \examples{
 p <- c(0.01, 0.07, 0.25, 0.75, 0.93, 0.99)
 categorise_sfga(p = p, severe = FALSE)
@@ -51,5 +56,5 @@ London, 2013.}
 }
 \seealso{
 \code{\link[=classify_sfga]{classify_sfga()}}, which wraps this function for easy use in
-analytic pipelines.
+\code{data.frame}-based analytic pipelines.
 }

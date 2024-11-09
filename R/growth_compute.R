@@ -37,9 +37,11 @@
 #'   sex = c("F", "M", "F", "M"),
 #'   severe = TRUE
 #' )
-#' @inherit categorise_sfga details
+#' @inherit categorise_sfga details note
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
-#'   adhere to the [vctrs] recycling rules.
+#'   adhere to the [vctrs] recycling rules. The returned factor will have unused
+#'   levels if none of your observed z-scores/centiles fit given categories. To
+#'   drop these, you will need to use [droplevels()] or similar.
 #' @inherit categorise_sfga references
 #' @export
 compute_sfga <- function(weight_kg,
@@ -63,7 +65,7 @@ compute_sfga <- function(weight_kg,
 #'   vector, containing small vulnerable newborn classifications. Its levels
 #'   are `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
 #'   "Term LGA")`.
-#' @inherit categorise_svn details references
+#' @inherit categorise_svn details note references
 #' @examples
 #' compute_svn(
 #'   weight_kg = c(1.5, 2.6, 2.6, 3.5),
@@ -84,7 +86,7 @@ compute_svn <- function(weight_kg, gest_days, sex) {
 #' standards
 #'
 #' @inheritParams compute_wasting
-#' @inherit categorise_stunting params note details references return
+#' @inherit categorise_stunting params details note references return
 #' @inherit gigs_waz params
 #' @examples
 #' # The first observation for each infant in `id` uses the INTERGROWTH-21st
@@ -184,7 +186,7 @@ compute_stunting <- function(lenht_cm,
 #'   gest_days = c(245, 245, 245, 280, 280, 280),
 #'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
-#' @inherit categorise_wasting details references return
+#' @inherit categorise_wasting details note references return
 #' @export
 compute_wasting <- function(weight_kg,
                             lenht_cm,
@@ -208,7 +210,7 @@ compute_wasting <- function(weight_kg,
 #' growth standards
 #'
 #' @inheritParams compute_wasting
-#' @inherit categorise_wasting params references return
+#' @inherit categorise_wasting params note references return
 #' @inherit gigs_waz params
 #' @examples
 #' # The first observation for each infant in `id` uses the INTERGROWTH-21st
@@ -241,7 +243,7 @@ compute_wasting <- function(weight_kg,
 #'   gest_days = c(245, 245, 245, 280, 280, 280),
 #'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
-#' @inherit categorise_wfa details references return
+#' @inherit categorise_wfa details note references return
 #' @export
 compute_wfa <- function(weight_kg,
                         age_days,
@@ -287,7 +289,7 @@ compute_wfa <- function(weight_kg,
 #'   gest_days = c(245, 245, 245, 280, 280, 280),
 #'   sex = c("M", "M", "M", "F", "F", "F")
 #' )
-#' @inherit categorise_headsize details references return
+#' @inherit categorise_headsize details note references return
 #' @export
 compute_headsize <- function(headcirc_cm, age_days, gest_days, sex, id = NULL) {
   validated <- validate_hcaz_params(headcirc_cm = headcirc_cm,

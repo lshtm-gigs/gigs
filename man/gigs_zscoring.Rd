@@ -45,7 +45,7 @@ circumference in cm.}
 A numeric vector of z-scores, derived using the appropriate growth
 standard for each element-wise combination of \code{gest_days} and \code{age_days}.
 For \code{gigs_wlz()}, all birth WLZs will be missing (\code{NA}), as there is no
-INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} Newborn standard for weight-for-length.
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn standard for weight-for-length.
 }
 \description{
 These functions calculate z-scores for weight-for-age (WAZs),

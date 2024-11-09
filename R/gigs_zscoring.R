@@ -94,7 +94,7 @@
 #' @returns A numeric vector of z-scores, derived using the appropriate growth
 #'   standard for each element-wise combination of `gest_days` and `age_days`.
 #'   For `gigs_wlz()`, all birth WLZs will be missing (`NA`), as there is no
-#'   INTERGROWTH-21<sup>st<sup> Newborn standard for weight-for-length.
+#'   INTERGROWTH-21<sup>st</sup> Newborn standard for weight-for-length.
 #' @note These functions expect vectors which are recyclable with
 #'   [vctrs::vec_recycle_common()].
 #' @rdname gigs_zscoring

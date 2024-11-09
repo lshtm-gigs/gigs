@@ -51,7 +51,9 @@ Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+adhere to the \link{vctrs} recycling rules. The returned factor will have unused
+levels if none of your observed z-scores/centiles fit given categories. To
+drop these, you will need to use \code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 # By default, does not differentiate between p < 0.03 and p < 0.10

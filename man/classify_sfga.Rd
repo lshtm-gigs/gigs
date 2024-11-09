@@ -71,6 +71,10 @@ Appropriate-for-GA    \tab \code{"AGA"}     \tab 0.1 =< \code{p} =< 0.9 \cr
 Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 }
+\note{
+Categorical (factor) columns produced here may contain unused factor
+levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
+}
 \examples{
 data <- data.frame(
  wt_kg = c(2.2, 2.5, 3.3, 4.0),
@@ -92,4 +96,9 @@ Royal College of Obstetricians and Gynaecologists. \strong{The Investigation and
 Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
 31.} \emph{Technical report, Royal College of Obstetricians and Gynaecologists,
 London, 2013.}
+}
+\seealso{
+See \code{\link[=classify_svn]{classify_svn()}} for size-for-GA classifications which are
+stratified by whether a newborn is term. See \code{\link[=classify_growth]{classify_growth()}} to run
+this analysis and others at the same time.
 }

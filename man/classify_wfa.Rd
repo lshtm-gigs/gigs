@@ -81,6 +81,10 @@ Overweight           \tab \code{"overweight"}         \tab \code{waz} >= 2      
 Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
 }
 }
+\note{
+Categorical (factor) columns produced here may contain unused factor
+levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
+}
 \examples{
 # This dummy dataset contains data from two people, from birth (<3 days) to
 # 500 days of age.
@@ -120,4 +124,8 @@ pp. 64-65.
 for stunting, wasting and underweight'} \emph{in} \emph{Guide to DHS Statistics DHS-7}
 Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 \url{https://dhsprogram.com/data/Guide-to-DHS-Statistics/Nutritional_Status.htm}
+}
+\seealso{
+See \code{\link[=classify_growth]{classify_growth()}} to run this analysis and others at the same
+time.
 }

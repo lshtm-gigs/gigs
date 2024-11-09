@@ -29,7 +29,10 @@
 #'     Large-for-GA          \tab `"LGA"`     \tab `p` > 0.9
 #'   }
 #' @seealso [classify_sfga()], which wraps this function for easy use in
-#'   analytic pipelines.
+#'   `data.frame`-based analytic pipelines.
+#' @note The returned factor will have unused levels if none of your observed
+#'   data fit given categories. To drop these, you will need to use
+#'   [droplevels()] or similar.
 #' @references
 #' WHO. **Physical status: the use and interpretation of anthropometry. Report
 #' of a WHO Expert Committee.** *World Health Organisation Technical Report
@@ -51,7 +54,7 @@ categorise_sfga <- function(p, severe = FALSE) {
 #' Categorise birthweight centiles and gestational ages into small vulnerable
 #' newborn strata
 #'
-#' @inheritParams categorise_sfga
+#' @inherit categorise_sfga params note
 #' @param gest_days A numeric vector of length one or more with gestational
 #'   age(s) in days. Used to determine whether infants are term or preterm (a
 #'   gestational age > 259 days means an infant is term).
@@ -134,6 +137,10 @@ categorise_svn <- function(p, gest_days) {
 #'   measured after 730 days. Instead, standing height should be used.
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
+#'
+#'   The returned factor will have unused levels if none of your observed
+#'   data fit given categories. To drop these, you will need to use
+#'   [droplevels()] or similar.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
 #' *Recommendations for data collection, analysis and reporting on
@@ -178,6 +185,10 @@ categorise_stunting <- function(lhaz, outliers = FALSE) {
 #'   measured after 730 days. Instead, standing height should be used.
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
+#'
+#'   The returned factor will have unused levels if none of your observed
+#'   data fit given categories. To drop these, you will need to use
+#'   [droplevels()] or similar.
 #' @examples
 #' wlz <- c(-5.5, -3, 0, 3, 5.5)
 #' categorise_wasting(wlz, outliers = FALSE)
@@ -218,6 +229,7 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
 #' categorise_wfa(waz, outliers = FALSE)
 #' categorise_wfa(waz, outliers = TRUE)
 #' @inherit categorise_stunting references
+#' @inherit categorise_sfga note
 #' @export
 categorise_wfa <- function(waz, outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
@@ -258,6 +270,7 @@ categorise_wfa <- function(waz, outliers = FALSE) {
 #' Accogli A, Geraldo AF, Piccolo G, Riva A, Scala M, Balagura G, et al.
 #' **Diagnostic Approach to Macrocephaly in Children**. *Frontiers in
 #' Paediatrics* 2022, *9:794069* \doi{10.3389/fped.2021.794069}
+#' @inherit categorise_sfga note
 #' @export
 categorise_headsize <- function(hcaz) {
   catch_and_throw_validate_issues(expr = {

@@ -34,6 +34,11 @@ Overweight           \tab \code{"overweight"}         \tab \code{waz} >= 2      
 Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
 }
 }
+\note{
+The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+\code{\link[=droplevels]{droplevels()}} or similar.
+}
 \examples{
 waz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)
 categorise_wfa(waz, outliers = FALSE)

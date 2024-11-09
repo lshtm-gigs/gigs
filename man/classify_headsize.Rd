@@ -73,10 +73,14 @@ Cut-offs for head size categories are:
 \strong{Z-score bounds} \cr
 Severe microcephaly       \tab \code{"microcephaly_severe"} \tab \code{hcaz} =< -3      \cr
 Microcephaly              \tab \code{"microcephaly"}        \tab -3 < \code{hcaz} =< -2 \cr
-Normal head circumference \tab \code{"normal_headcirc"}      \tab \code{abs(hcaz)} < 2 \cr
+Normal head circumference \tab \code{"normal_headcirc"}     \tab \code{abs(hcaz)} < 2   \cr
 Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} >= 2       \cr
 Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} >= 3
 }
+}
+\note{
+Categorical (factor) columns produced here may contain unused factor
+levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
 }
 \examples{
 # This dummy dataset contains data from two people, from birth (<3 days) to
@@ -114,4 +118,8 @@ Barros FC. \strong{Microcephaly in Brazil: how to interpret reported numbers?}
 Accogli A, Geraldo AF, Piccolo G, Riva A, Scala M, Balagura G, et al.
 \strong{Diagnostic Approach to Macrocephaly in Children}. \emph{Frontiers in
 Paediatrics} 2022, \emph{9:794069} \doi{10.3389/fped.2021.794069}
+}
+\seealso{
+See \code{\link[=classify_growth]{classify_growth()}} to run this analysis and others at the same
+time.
 }

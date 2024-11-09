@@ -65,6 +65,17 @@ Overweight     \tab \code{"overweight"}           \tab \code{wlz} >= 2      \cr
 Outlier        \tab \code{"outlier"}              \tab \code{abs(wlz)} > 5
 }
 }
+\note{
+This function assumes that your measurements were taken according to
+WHO guidelines, which stipulate that recumbent length should not be
+measured after 730 days. Instead, standing height should be used.
+Implausible z-score bounds are sourced from the referenced WHO report, and
+classification cut-offs from the DHS manual.
+
+The returned factor will have unused levels if none of your observed
+data fit given categories. To drop these, you will need to use
+\code{\link[=droplevels]{droplevels()}} or similar.
+}
 \examples{
 # The first observation for each infant in `id` uses the INTERGROWTH-21st
 #  Newborn Size standards; the next two use either the INTERGROWTH-21st

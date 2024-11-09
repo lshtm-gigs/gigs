@@ -52,6 +52,11 @@
 #'   classify_sfga(weight_kg = wt_kg,
 #'                 gest_days = gestage,
 #'                 sex = sex)
+#' @note Categorical (factor) columns produced here may contain unused factor
+#'   levels; use [droplevels()] or similar to remove these.
+#' @seealso See [classify_svn()] for size-for-GA classifications which are
+#'   stratified by whether a newborn is term. See [classify_growth()] to run
+#'   this analysis and others at the same time.
 #' @inherit categorise_sfga details references
 #' @export
 classify_sfga <- function(
@@ -86,7 +91,7 @@ classify_sfga <- function(
 #' Classify small vulnerable newborns in `data.frame`-like objects with the
 #' INTERGROWTH-21<sup>st</sup> weight-for-gestational age standard
 #'
-#' @inherit classify_sfga params
+#' @inherit classify_sfga params note
 #' @param .new A two-length character vector with names for the output
 #'   columns. These inputs will be repaired if necessary using
 #'   [vctrs::vec_as_names()], which will print any changes to the console. If
@@ -113,6 +118,9 @@ classify_sfga <- function(
 #'                gest_days = gestage,
 #'                sex = sex)
 #' @inherit classify_sfga references
+#' @seealso See [classify_sfga()] for size-for-GA classifications which are not
+#'   stratified by whether a newborn is term. See [classify_growth()] to run
+#'   this analysis and others at the same time.
 #' @export
 classify_svn <- function(.data,
                           weight_kg,
@@ -146,7 +154,7 @@ classify_svn <- function(.data,
 #' Classify stunting in `data.frame`-like objects with GIGS-recommended growth
 #' standards
 #'
-#' @inherit classify_sfga params
+#' @inherit classify_sfga params note
 #' @param lenht_cm <[`data-masking`][rlang::args_data_masking]> The name of a
 #'   column in `.data` which is a numeric vector of length/height values in cm.
 #' @param age_days <[`data-masking`][rlang::args_data_masking]> The name of a
@@ -203,6 +211,8 @@ classify_svn <- function(.data,
 #'                     age_days = agedays,
 #'                     gest_days = gestage,
 #'                     sex = sex)
+#' @seealso See [classify_growth()] to run this analysis and others at the same
+#' time.
 #' @export
 classify_stunting <- function(
     .data,
@@ -239,7 +249,7 @@ classify_stunting <- function(
 #' Classify wasting in `data.frame`-like objects with GIGS-recommended growth
 #' standards
 #'
-#' @inheritParams classify_stunting
+#' @inherit classify_stunting params note
 #' @inheritParams classify_sfga
 #' @param .new A three-length character vector with names for the output
 #'   columns. These inputs will be repaired if necessary using
@@ -256,6 +266,7 @@ classify_stunting <- function(
 #'   * `wasting_outliers` - Factor of wasting categories with outlier flagging
 #' @inherit categorise_wasting details
 #' @inherit categorise_stunting references
+#' @inherit classify_stunting seealso
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.
@@ -323,7 +334,7 @@ classify_wasting <- function(.data,
 #' Classify weight-for-age in `data.frame`-like objects with GIGS-recommended
 #' growth standards
 #'
-#' @inheritParams classify_stunting
+#' @inherit classify_stunting params note
 #' @inheritParams classify_sfga
 #' @param .new A three-length character vector with names for the output
 #'   columns. These inputs will be repaired if necessary using
@@ -340,6 +351,7 @@ classify_wasting <- function(.data,
 #'     flagging
 #' @inherit categorise_wfa details
 #' @inherit categorise_stunting references
+#' @inherit classify_stunting seealso
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.
@@ -402,7 +414,7 @@ classify_wfa <- function(.data,
 #' Classify head size in `data.frame`-like objects with GIGS-recommended
 #' growth standards
 #'
-#' @inheritParams classify_stunting
+#' @inherit classify_stunting params note
 #' @inheritParams classify_sfga
 #' @param headcirc_cm <[`data-masking`][rlang::args_data_masking]> The name of a
 #'   column in `.data` which is a numeric vector of head circumference values in
@@ -419,6 +431,7 @@ classify_wfa <- function(.data,
 #'   * `hcaz` - Numeric vector of weight-for-length/height zscores
 #'   * `headsize` - Factor of head size categories
 #' @inherit categorise_headsize details references
+#' @inherit classify_stunting seealso
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.
@@ -522,6 +535,9 @@ classify_headsize <- function(.data,
 #'   categorisations will only be applied for birth measurements. These are
 #'   considered to be the observation per level of `id` where `age_days` is
 #'   smallest, provided that `age_days` is between `<3`.
+#'
+#'   Categorical (factor) columns produced here may contain unused factor
+#'   levels; use [droplevels()] or similar to remove these.
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.
