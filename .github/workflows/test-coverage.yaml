@@ -21,10 +21,9 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install gyro from Github
+      - name: Install autotest from Github
         run: |
-          options(repos = c(ropenscireviewtools = "https://ropensci-review-tools.r-universe.dev", CRAN = "https://cloud.r-project.org"))
-          install.packages ("autotest")
+          Rscript -e "remotes::install_github('ropensci-review-tools/autotest')"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
