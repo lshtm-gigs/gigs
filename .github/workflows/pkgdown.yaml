@@ -41,6 +41,13 @@ jobs:
             any::purrr
             any::cowplot
             any::ggsci
+            any::anthro
+            any::AGD
+            any::childsds
+            github::ki-tools/growthstandards
+            github::nutriverse/intergrowth
+            any::sitar
+            any::zscorer
             local::.
           needs: website
 
