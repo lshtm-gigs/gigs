@@ -17,11 +17,6 @@ names(gigs::who_gs_coeffs)
 head(gigs::who_gs_coeffs$lhfa$male)
 }
 \references{
-de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. \strong{The
-WHO Multicentre Growth Reference Study: planning, study design, and
-methodology} \emph{Food Nutr Bull.} 2004, \strong{25(1 Suppl):S15-26.}
-\doi{10.1177/15648265040251s104}
-
 World Health Organisation. \strong{WHO child growth standards:
 length/height-for-age, weight-for-age, weight-for-length, weight-for-height
 and body mass index-for-age: methods and development.} \emph{Technical report,
@@ -31,9 +26,5 @@ World Health Organisation. \strong{WHO child growth standards: head
 circumference-for-age, arm circumference-for-age, triceps skinfold-for-age
 and subscapular skinfold-for-age: methods and development.} \emph{Technical
 report, WHO, Geneva}, 2007.
-
-Cole TJ. \strong{The LMS method for constructing normalized growth standards.}
-\emph{Eur J Clin Nutr.} 1990, \strong{44(1):45-60.} PMID:
-\href{https://pubmed.ncbi.nlm.nih.gov/2354692/}{2354692}
 }
 \keyword{data}

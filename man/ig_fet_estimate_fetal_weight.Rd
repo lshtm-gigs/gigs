@@ -40,8 +40,3 @@ Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 Project.} \emph{Ultrasound Obstet Gynecol} 2016, \strong{49:478-486}
 \doi{10.1002/uog.17347}
 }
-\seealso{
-Get z-scores/centiles for estimated fetal weights at known
-gestational ages using the \code{\link[=ig_fet_value2zscore]{ig_fet_value2zscore()}} or
-\code{\link[=ig_fet_value2centile]{ig_fet_value2centile()}} functions, respectively.
-}

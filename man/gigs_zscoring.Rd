@@ -41,6 +41,12 @@ height when \code{age_days >= 731}.}
 \item{headcirc_cm}{Numeric vector of length one or more with head
 circumference in cm.}
 }
+\value{
+A numeric vector of z-scores, derived using the appropriate growth
+standard for each element-wise combination of \code{gest_days} and \code{age_days}.
+For \code{gigs_wlz()}, all birth WLZs will be missing (\code{NA}), as there is no
+INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{<sup>}} Newborn standard for weight-for-length.
+}
 \description{
 These functions calculate z-scores for weight-for-age (WAZs),
 length/height-for-age (LHAZs), weight-for-length/height (WLZs), or
@@ -89,4 +95,55 @@ For \code{gigs_wlz()}, two WHO standards are available:
 \note{
 These functions expect vectors which are recyclable with
 \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.
+}
+\examples{
+gest_days <- c(rep(35 * 7, 3), rep(35 * 7, 3))
+age_days <- c(0, 100, 500, 2, 100, 500)
+sex <- rep.int(c("M", "F"), c(3, 3))
+wt_kg <- c(3, 6, 9, 3, 6, 9)
+len_cm <- rep.int(c(52.2, 60.4, 75), 2)
+head_cm <- rep.int(c(30, 40, 49), 2)
+ids <- factor(rep.int(c("A", "B"), c(3, 3)))
+
+# Weight-for-age z-score (WAZ)
+waz <- gigs_waz(weight_kg = wt_kg,
+                age_days = age_days,
+                gest_days = gest_days,
+                sex = sex,
+                id = ids)
+print(waz)
+
+# Note - if you don't specify 'id' you'll get different results!
+waz_no_id <- gigs_waz(weight_kg = wt_kg,
+                      age_days = age_days,
+                      gest_days = gest_days,
+                      sex = sex)
+print(waz == waz_no_id)
+
+# Length/height-for-age z-score (LHAZ)
+lhaz <- gigs_lhaz(lenht_cm = len_cm,
+                  age_days = age_days,
+                  gest_days = gest_days,
+                  sex = sex,
+                  id = ids)
+print(lhaz)
+
+# Weight-for-length/height z-score (WLZ)
+#   Note: There's no at-birth standards for weight-for-length, so elements 1
+#   and 4 have `NA` values
+wlz <- gigs_wlz(weight_kg = wt_kg,
+                lenht_cm = len_cm,
+                age_days = age_days,
+                gest_days = gest_days,
+                sex = sex,
+                id = ids)
+print(wlz)
+
+# Head circumference-for-age z-score (HCAZ)
+hcaz <- gigs_hcaz(headcirc_cm = head_cm,
+                  age_days = age_days,
+                  gest_days = gest_days,
+                  sex = sex,
+                  id = ids)
+print(hcaz)
 }

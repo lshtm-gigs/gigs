@@ -6,7 +6,7 @@
 \title{Data extract from the Low birthweight Infant Feeding Exploration (LIFE) study}
 \format{
 A data frame with 2,191 rows and 10 variables:
-\itemize{
+\describe{
 \item{\code{id}:}{  Unique ID for each infant in the dataset (1--300).}
 \item{\code{visitweek}:}{  Chronological age in weeks (±1) when study visit
 occurred (0--26).}

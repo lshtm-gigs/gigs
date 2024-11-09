@@ -5,21 +5,26 @@
 \alias{ig_fet}
 \title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Standards growth curve data}
 \source{
-\href{https://intergrowth21.tghn.org/pregnancy-dating/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Pregnancy Dating (CRL)}
+\href{https://intergrowth21.com/tools-resources/pregnancy-dating/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Pregnancy Dating (CRL)}
 
-\href{https://intergrowth21.tghn.org/symphysis-fundal-height/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Symphysis-Fundal Height standard}
+\href{https://intergrowth21.com/tools-resources/symphysis-fundal-height/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Symphysis-Fundal Height standard}
 
-\href{https://intergrowth21.tghn.org/fetal-growth/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standards}
+\href{https://intergrowth21.com/tools-resources/fetal-growth/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Growth standards}
 
-\href{https://intergrowth21.tghn.org/fetal-doppler/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards}
+\href{https://intergrowth21.com/tools-resources/fetal-doppler/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal Doppler standards}
 
-\href{https://intergrowth21.tghn.org/gestational-weight-gain/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Gestational Weight Gain standard}
+\href{https://intergrowth21.com/tools-resources/gestational-weight-gain/}{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Gestational Weight Gain standard}
 }
 \description{
 A set of nested lists containing tables with reference values at different
 z-scores/centiles for valid gestational ages in days. The list is ordered
 by acronym first, then by z-score/centile (as available - some Fetal
 standards only have centile tables).
+}
+\note{
+Where possible, tables were taken from the online sources here. If not
+available on the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} website, they were taken from
+the publications listed here.
 }
 \examples{
 names(gigs::ig_fet)

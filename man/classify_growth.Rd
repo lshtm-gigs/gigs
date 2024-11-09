@@ -92,14 +92,20 @@ messages about which analyses were requested versus which were performed
 will be printed to the console. Warnings from \code{classify_growth()} will
 still be printed even if \code{.verbose} is \code{FALSE}.}
 }
+\value{
+A tabular object of the same class that was provided as \code{.data},
+with new columns named according to \code{.new}. The new columns will depend
+on the values supplied for \code{.outcomes}.
+}
 \description{
 This function permits classification of multiple growth indicators (stunting,
 wasting, weight-for-age, and more) at once in \code{data.frame}-like objects.
 }
 \note{
 For size-for-GA and small vulnerable newborn analyses, centiles and
-categorisations will only be applied on birthweights, i.e. rows where
-the column referred to by \code{age_days} is between \code{0} and \code{0.5}.
+categorisations will only be applied for birth measurements. These are
+considered to be the observation per level of \code{id} where \code{age_days} is
+smallest, provided that \code{age_days} is between \verb{<3}.
 }
 \examples{
 # This dummy dataset contains data from two people, from birth (<3 days) to

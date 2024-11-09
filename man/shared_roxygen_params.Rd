@@ -6,7 +6,7 @@
 \arguments{
 \item{y}{Numeric vector of length one or more with anthropometric
 measurement(s) to convert to centiles/z-scores. Units depend on which
-\code{acronym}(s) are in use.}
+\code{acronym} is in use.}
 
 \item{z, p}{Numeric vector of length one or more with centiles/z-scores to
 convert to values. For \code{p}, gigs will warn you if elements of \code{p} are not
@@ -22,7 +22,7 @@ Many of the parameters in \verb{[gigs]} are shared between different functions.
 This roxygen block makes sharing these parameters more simple.
 }
 \note{
-Input vectors other than \code{acronym} are recycled by
+Input vectors other than \code{acronym} and \code{family} are recycled by
 \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
 rules.
 }

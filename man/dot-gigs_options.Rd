@@ -3,6 +3,10 @@
 \name{.gigs_options}
 \alias{.gigs_options}
 \title{Package-level gigs options}
+\value{
+A named environment, where each name maps onto a specific option for
+the GIGS package.
+}
 \description{
 An environment containing six named character vectors. These
 define how gigs handles inputs with missing, undefined, or invalid

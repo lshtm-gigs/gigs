@@ -101,7 +101,3 @@ Management of the Small-for-Gestational-Age Fetus: Green-top Guideline No.
 31.} \emph{Technical report, Royal College of Obstetricians and Gynaecologists,
 London, 2013.}
 }
-\seealso{
-\code{\link[=ig_nbs_wfga_value2centile]{ig_nbs_wfga_value2centile()}}, which this function uses to get
-a centile for each observation.
-}

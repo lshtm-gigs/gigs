@@ -33,7 +33,10 @@ Other contributors:
 \itemize{
   \item Linda Vesel (\href{https://orcid.org/0000-0003-3753-4172}{ORCID}) [data contributor]
   \item Eric Ohuma (\href{https://orcid.org/0000-0002-3116-2593}{ORCID}) [data contributor]
-  \item Bill & Melinda Gates Foundation [funder, copyright holder]
+  \item Chitra Saraswati (\href{https://orcid.org/0000-0002-8159-0414}{ORCID}) [reviewer]
+  \item Victor Ordu (\href{https://orcid.org/0000-0003-3716-0668}{ORCID}) [reviewer]
+  \item Bill & Melinda Gates Foundation [funder]
+  \item London School of Hygiene & Tropical Medicine [copyright holder]
 }
 
 }
