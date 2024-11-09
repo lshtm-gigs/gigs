@@ -46,12 +46,24 @@ used in downstream analyses.
 remotes::install_github(repo = "lshtm-gigs/gigs")
 ```
 
-## Terminology
+## Rationale + terminology
 
-GIGS operates on anthropometric measurements, and can convert between
-these and *z-scores*/*centiles*. Z-scores and centiles represent the
-location of a measurement within a normal distribution of values, such
-that:
+When working with growth measurements from individual children, it is
+helpful to compare those measurements to a growth standard, which
+represents average growth for an population of children. This allows
+assessment of individual growth - for example, that a baby was born
+small, but later caught up to its peers in size. It also allows you to
+compare measurements from different children.
+
+These standards of growth can be made in different ways, but the best
+studies utilise international samples made of up thousands of healthy
+fetuses, newborns, or children. In **gigs**, you’ll find different
+international growth standards, allowing you to compare growth measures
+from children with different ages, weights, heights, and more.
+
+In general, you’ll use **gigs** to transform raw growth measures to
+*z-scores* or *centiles*. Z-scores and centiles represent the location
+of a measurement within a normal distribution of values, such that:
 
 - A *z-score* is the number of standard deviations from the mean for a
   given anthropometric measurement (e.g. height or weight).
@@ -63,12 +75,12 @@ that:
   centile.
 
 In growth data, z-scores and centiles represent the size a fetus,
-newborn, or child relative to its peers. Its size is considered relative
-to some standardising variable, which is usually age but could also be
-another variable such as their length. By tracking a child’s relative
-size as they grow, you can see if they are achieving their growth
-potential or not. If not, this may indicate underlying issues such as
-ill health or undernutrition.
+newborn, or child relative to its peers. Size here is considered
+relative to a standardising variable, which is usually age but could
+also be another variable such as their length. By tracking a child’s
+relative size as they grow, you can see if they are achieving their
+growth potential or not. If not, this may indicate underlying issues
+such as ill health or undernutrition.
 
 ## Classification functions
 
@@ -466,8 +478,8 @@ Health Centre, London School of Hygiene & Tropical Medicine
 
 ### Citation
 
-Parker SR, Vesel L, Ohuma EO (2023). *gigs: Assess Fetal, Newborn, and Child Growth with International Standards*.
-<https://github.com/lshtm-gigs/gigs/>.
+Parker S, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
+Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 
