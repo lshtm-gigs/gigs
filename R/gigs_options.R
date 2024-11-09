@@ -127,6 +127,8 @@ gigs_options_set <- function(new_value, silent = FALSE) {
 #' @seealso The `gigs_option_get()`, `gigs_option_set()` and
 #'   `gigs_options_set()` functions, which can be used to get and set values in
 #'   `.gigs_options`.
+#' @returns A named environment, where each name maps onto a specific option for
+#'   the GIGS package.
 #' @examples
 #' # Get the names of all available options
 #' names(.gigs_options)
