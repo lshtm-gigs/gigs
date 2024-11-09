@@ -38,7 +38,6 @@ cluttering the console output.
 
 ```{r setup}
 library(gigs)
-gigs_options_set(new_value = "quiet")
 ```
 
 This vignette has two examples for applying gigs. The first is using gigs to
@@ -134,7 +133,7 @@ ggplot_waz_simple |>
                   dpi = 300)
 ```
 
-```{r waz_simple_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
+```{r waz_simple_include, fig.align = "center", out.width="95%", echo = FALSE, fig.alt = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
 knitr::include_graphics("gigs_waz_simple.png")
 ```
 
@@ -239,7 +238,7 @@ ggplot_waz_complex |>
                   dpi = 300)
 ```
 
-```{r waz_complex_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
+```{r waz_complex_include, fig.align = "center", out.width="95%", echo = FALSE, fig.alt = "A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants."}
 knitr::include_graphics("gigs_waz_complex.png")
 ```
 
@@ -310,7 +309,7 @@ ggplot_sfga |>
                   dpi = 300)
 ```
 
-```{r sfga_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA) in 300 infants from the LIFE study. 72.56% of infants were SGA, 25% were AGA, and 2.44% were LGA."}
+```{r sfga_include, fig.align = "center", out.width="95%", echo = FALSE, fig.alt = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA) in 300 infants from the LIFE study. 72.56% of infants were SGA, 25% were AGA, and 2.44% were LGA."}
 knitr::include_graphics("gigs_sfga.png")
 ```
 
@@ -377,9 +376,8 @@ ggplot_svn |>
                   dpi = 300)
 ```
 
-```{r svn_include, fig.align = "center", out.width="95%", echo = FALSE, alt.text = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA), stratified by whether infants were term or preterm. Of 300 infants from the LIFE study, 15.24% were preterm SGA, 25% were preterm AGA, 2.44% were preterm LGA, and 57.32% were term SGA."}
+```{r svn_include, fig.align = "center", out.width="95%", echo = FALSE, fig.alt = "A bar chart showing the proportion of cases categorised as small-for-gestational age (SGA), appropriate-for-GA (AGA), and large-for-GA (LGA), stratified by whether infants were term or preterm. Of 300 infants from the LIFE study, 15.24% were preterm SGA, 25% were preterm AGA, 2.44% were preterm LGA, and 57.32% were term SGA."}
 knitr::include_graphics("gigs_svn.png")
 ```
-
 
 # References
