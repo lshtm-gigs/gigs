@@ -335,7 +335,7 @@ generated with the following function:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">out</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We’re using the <a href="https://bench.r-lib.org/" class="external-link">bench</a> package throughout this
-vignette, specifically the <code>bench::press()</code> function, which
+vignette, specifically the <code><a href="http://bench.r-lib.org/reference/press.html" class="external-link">bench::press()</a></code> function, which
 lets us compare function scaling by iterating through increasing amounts
 of observations.</p>
 </div>
@@ -375,7 +375,7 @@ packages.</p>
 <h4 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
 </h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">temp_bp_who_gs_most</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">temp_bp_who_gs_most</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
 <span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">selector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">input_len</span><span class="op">)</span></span>
@@ -385,7 +385,7 @@ packages.</p>
 <span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
 <span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
 <span>    <span class="va">age_years</span> <span class="op">&lt;-</span> <span class="va">age_days</span> <span class="op">/</span> <span class="fl">365.25</span></span>
-<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">age_days</span>, <span class="va">sex</span>,</span>
 <span>                                family <span class="op">=</span> <span class="st">"who_gs"</span>, acronym <span class="op">=</span> <span class="va">ac_who_gs</span><span class="op">)</span>,</span>
@@ -412,7 +412,7 @@ packages.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">temp_bp_who_gs_zscorer</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span><span class="va">temp_bp_who_gs_zscorer</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
 <span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">5000</span>, <span class="fl">10000</span>, <span class="fl">15000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">selector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">input_len</span><span class="op">)</span></span>
@@ -423,7 +423,7 @@ packages.</p>
 <span>      weight <span class="op">=</span> <span class="va">weight_kg</span>, age <span class="op">=</span> <span class="va">age_days</span>,</span>
 <span>      sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
-<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, max_iterations <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>      zscorer <span class="op">=</span> <span class="fu">zscorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">addWGSR</a></span><span class="op">(</span></span>
 <span>        <span class="va">df_zscorer</span>, sex <span class="op">=</span> <span class="st">"sex"</span>, firstPart <span class="op">=</span> <span class="st">"weight"</span>, secondPart <span class="op">=</span> <span class="st">"age"</span>,</span>
@@ -448,7 +448,7 @@ packages.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>In Stata, the commands are run inside a do-file which utilises the <a href="https://www.github.com/mcaceresb/stata-benchmark" class="external-link">benchmark</a>
 package for Stata. This code essentially does the same as
-<code>bench::press()</code>, but for the packages we’re testing in
+<code><a href="http://bench.r-lib.org/reference/press.html" class="external-link">bench::press()</a></code>, but for the packages we’re testing in
 Stata.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
@@ -642,7 +642,7 @@ functions:</p>
 <h4 id="r-1">R<a class="anchor" aria-label="anchor" href="#r-1"></a>
 </h4>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bp_ig_nbs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">bp_ig_nbs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
 <span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">z</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span><span class="op">)</span></span>
@@ -651,7 +651,7 @@ functions:</p>
 <span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
-<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2centile</a></span><span class="op">(</span>y <span class="op">=</span><span class="va">weight_kg</span>, x <span class="op">=</span> <span class="va">gest_days</span>, sex <span class="op">=</span> <span class="va">sex</span>,</span>
 <span>                                 family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_nbs</span><span class="op">)</span>,</span>
@@ -757,7 +757,7 @@ benchmark these functions:</p>
 <h4 id="r-2">R<a class="anchor" aria-label="anchor" href="#r-2"></a>
 </h4>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bp_ig_png</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">bp_ig_png</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
 <span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
@@ -766,7 +766,7 @@ benchmark these functions:</p>
 <span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
-<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">pma_weeks</span>, <span class="va">sex</span>,</span>
 <span>                                family <span class="op">=</span> <span class="st">"ig_png"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_png</span><span class="op">)</span>,</span>
@@ -831,7 +831,7 @@ packages:</p>
 <h4 id="r-3">R<a class="anchor" aria-label="anchor" href="#r-3"></a>
 </h4>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bp_ig_fet</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">bp_ig_fet</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
 <span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">gest_days</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
@@ -839,7 +839,7 @@ packages:</p>
 <span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">ofd_mm</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
 <span>    <span class="va">ofd_cm</span> <span class="op">&lt;-</span> <span class="va">ofd_mm</span> <span class="op">/</span> <span class="fl">10</span></span>
-<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">ofd_mm</span>, <span class="va">gest_days</span>,</span>
 <span>                                family <span class="op">=</span> <span class="st">"ig_fet"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_fet</span><span class="op">)</span>,</span>

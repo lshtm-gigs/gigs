@@ -71,14 +71,16 @@
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"lshtm-gigs/gigs"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a>
+<h2 id="rationale--terminology">Rationale + terminology<a class="anchor" aria-label="anchor" href="#rationale--terminology"></a>
 </h2>
-<p>GIGS operates on anthropometric measurements, and can convert between these and <em>z-scores</em>/<em>centiles</em>. Z-scores and centiles represent the location of a measurement within a normal distribution of values, such that:</p>
+<p>When working with growth measurements from individual children, it is helpful to compare those measurements to a growth standard, which represents average growth for an population of children. This allows assessment of individual growth - for example, that a baby was born small, but later caught up to its peers in size. It also allows you to compare measurements from different children.</p>
+<p>These standards of growth can be made in different ways, but the best studies utilise international samples made of up thousands of healthy fetuses, newborns, or children. In <strong>gigs</strong>, you’ll find different international growth standards, allowing you to compare growth measures from children with different ages, weights, heights, and more.</p>
+<p>In general, you’ll use <strong>gigs</strong> to transform raw growth measures to <em>z-scores</em> or <em>centiles</em>. Z-scores and centiles represent the location of a measurement within a normal distribution of values, such that:</p>
 <ul>
 <li>A <em>z-score</em> is the number of standard deviations from the mean for a given anthropometric measurement (e.g. height or weight).</li>
 <li>A <em>centile</em> represents the proportion of measurements in some distribution which we would expect to be lower than a measurement we’ve taken. In <em>gigs</em>, these are represented as a value between <code>0</code> and <code>1</code>. For example, <code>0.5</code> corresponds to the 50<sup>th</sup> centile (i.e. the mean), whereas <code>0.75</code> corresponds to the 75<sup>th</sup> centile.</li>
 </ul>
-<p>In growth data, z-scores and centiles represent the size a fetus, newborn, or child relative to its peers. Its size is considered relative to some standardising variable, which is usually age but could also be another variable such as their length. By tracking a child’s relative size as they grow, you can see if they are achieving their growth potential or not. If not, this may indicate underlying issues such as ill health or undernutrition.</p>
+<p>In growth data, z-scores and centiles represent the size a fetus, newborn, or child relative to its peers. Size here is considered relative to a standardising variable, which is usually age but could also be another variable such as their length. By tracking a child’s relative size as they grow, you can see if they are achieving their growth potential or not. If not, this may indicate underlying issues such as ill health or undernutrition.</p>
 </div>
 <div class="section level2">
 <h2 id="classification-functions">Classification functions<a class="anchor" aria-label="anchor" href="#classification-functions"></a>
@@ -808,7 +810,7 @@ Component standards
 <div class="section level3">
 <h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
-<p>Parker SR, Vesel L, Ohuma EO (2023). <em>gigs: Assess Fetal, Newborn, and Child Growth with International Standards</em>. <a href="https://github.com/lshtm-gigs/gigs/" class="external-link uri">https://github.com/lshtm-gigs/gigs/</a>.</p>
+<p>Parker S, Vesel L, Ohuma EO (2024). <em>gigs: Assess Fetal, Newborn, and Child Growth</em>. <a href="https://github.com/lshtm-gigs/gigs/" class="external-link uri">https://github.com/lshtm-gigs/gigs/</a>.</p>
 </div>
 </div>
 <div class="section level2">
