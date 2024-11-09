@@ -145,45 +145,41 @@ you need for this.
 
 We start by generating WAZs using each growth standard. To do this, we need to
 use the gigs conversion functions. These take vectors of growth data and convert
-them into z-scores or centiles. To get the right function, follow the gigs
-conversion function naming scheme:
+them into z-scores or centiles. You can use either `value2zscore()` or
+`value2zcentile()` depending on which conversion you want to do. You then pass
+in two parameters, `family` and `acronym`, which describe:
 
-1. Start with the broad set of growth standards you want to use
+- `family`: The broad set of growth standards you want to use
    * `ig_fet` - `r intergrowth21st` Fetal standards [@Papageorghiou2014AInternationalPregnancy; @Stirnemann2017InternationalProject; @Papageorghiou2016InternationalCountries; @Papageorghiou2014BInternationalPregnancy; @Drukker2020InternationalProject; @Rodriguez-Sibaja2021FetalProject; @Stirnemann2020IntergrowthWeight]
    * `ig_nbs` - `r intergrowth21st` Newborn Size Standards (incl. very preterm) [@Villar2014InternationalProject; @Villar2016INTERGROWTH-21stCharts; @Villar2017BodyProject]
    * `ig_png` - `r intergrowth21st` Postnatal Growth Standards [@Villar2015PostnatalProject]
    * `who_gs` - WHO Child Growth Standards [@WHOMulticentreGrowthReferenceStudyGroup2006WHOAge; @WHO2006WHODevelopment; @WHO2007WHODevelopment]
-2. The type of conversion you want to perform:
-   *  `value2zscore`
-   *  `value2centile`
-   *  `zscore2value`
-   *  `centile2value`
-3. Then use an acronym to tell gigs exactly which growth standard to use. Valid
-  acronyms are detailed in the documentation for each conversion function. You
-  can provide acronyms either:
-   * As an argument within a function call, e.g.
-     * `ig_nbs_value2zscore(..., acronym = "wfga")`
-     * `ig_png_value2zscore(..., acronym = "wfa")`
-     * `who_gs_value2zscore(..., acronym = "wfa")`
-   * As part of the function name, e.g.
-     * `ig_nbs_wfga_value2zscore()`
-     * `ig_png_wfa_value2zscore()`
-     * `who_gs_wfa_value2zscore()`
+
+- `acronym`: The specific growth standard you want to use, e.g. for the
+  `r intergrowth21st` Postnatal Growth Standards:
+   *  `"wfa"` (weight-for-age)
+   *  `"lfa"` (length-for-age)
+   *  `"hcfa"` (head circumference-for-age)
+   *  `"wfl"` (weight-for-length)
 
 ```{r complex_gen_WAZs}
-waz_nbs <- with(life6mo, ig_nbs_value2zscore(y = wt_kg,
-                                             gest_days = gestage,
-                                             sex = sex,
-                                             acronym = "wfga"))
-waz_who <- with(life6mo, who_gs_value2zscore(y =  wt_kg,
-                                             x = age_days,
-                                             sex = sex,
-                                             acronym = "wfa"))
-waz_png <- with(life6mo, ig_png_value2zscore(y =  wt_kg,
-                                             x = pma / 7,
-                                             sex = sex,
-                                             acronym = "wfa"))
+waz_nbs <- with(life6mo, value2zscore(y = wt_kg,
+                                      x = gestage,
+                                      sex = sex,
+                                      family = "ig_nbs",
+                                      acronym = "wfga"))
+waz_who <- with(life6mo, value2zscore(y =  wt_kg,
+                                      x = age_days,
+                                      sex = sex,
+                                      family = "who_gs",
+                                      acronym = "wfa"))
+waz_png <- with(life6mo, value2zscore(y =  wt_kg,
+                                      x = pma / 7,
+                                      sex = sex,
+                                      family = "ig_png",
+                                      acronym = "wfa"))
 ```
+
 This "out of bounds" warning from GIGS tells us that for 128 observations GIGS
 couldn't calculate a z-score, because the post-menstrual age for those
 observations was outside the range of the `r intergrowth21st` Postnatal Growth

@@ -47,9 +47,11 @@ compute_sfga <- function(weight_kg,
                          sex,
                          severe = FALSE) {
   checkmate::qassert(severe, rules = "B1")
-  validated <- validate_ig_nbs(y = weight_kg, gest_days = gest_days, sex = sex,
-                               acronym = "wfga", y_name = "weight_kg")
-  p <- do.call(validated, what = ig_nbs_v2c_internal)
+  inputs <- validate_inputs(y = weight_kg, x = gest_days, sex = sex,
+                            yzp_name = "weight_kg", x_name = "gest_days",
+                            family = "ig_nbs", acronym = "wfga")
+  p <- do.call(what = ig_nbs_v2c_internal,
+               args = inputs[!names(inputs) == "family"])
   categorise_sfga_internal(p, severe = severe)
 }
 
@@ -70,9 +72,11 @@ compute_sfga <- function(weight_kg,
 #' )
 #' @export
 compute_svn <- function(weight_kg, gest_days, sex) {
-  validated <- validate_ig_nbs(y = weight_kg, gest_days = gest_days, sex = sex,
-                               acronym = "wfga", y_name = "weight_kg")
-  p <- do.call(validated, what = ig_nbs_v2c_internal)
+  inputs <- validate_inputs(y = weight_kg, x = gest_days, sex = sex,
+                            yzp_name = "weight_kg", x_name = "gest_days",
+                            family = "ig_nbs", acronym = "wfga")
+  p <- do.call(what = ig_nbs_v2c_internal,
+               args = inputs[!names(inputs) == "family"])
   categorise_svn_internal(p, gest_days = gest_days)
 }
 

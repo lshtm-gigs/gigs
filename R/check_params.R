@@ -70,12 +70,12 @@ handle_oob_centiles <- function(vec) {
 
 #' @rdname handle_var
 #' @noRd
-handle_invalid_chr_options <- function(vec, gigs_opt, varname, options, is_na) {
+handle_invalid_sex_chr <- function(vec, gigs_opt, varname, is_na) {
   handle_var(vec = vec,
              varname = varname,
              option = gigs_opt,
-             test_lgl = !is_na & !vec %in% options,
-             msg_fn = msg_invalid_sex_acronym)
+             test_lgl = !is_na & !vec %in% c("M", "F"),
+             msg_fn = msg_invalid_sex_chrs)
 }
 
 #' @rdname handle_var
@@ -91,91 +91,79 @@ handle_oob_xvar <- function(vec, varname, is_oob) {
              msg_fn = msg_oob_xvar)
 }
 
-# `error()`/`warning()` messages for missing/undefined/invalid inputs ----------
+# Error/warning message generators for sub-par inputs --------------------------
 
 #' String production functions for `error()`/`warning()` messages regarding
 #'   missing, undefined, or invalid data inputs
-#'
+#' @param varname A single-length character vector with the variable name
+#' @param lgl A logical vector indicating which elements of a given vector are
+#'   'not expected' - e.g. undefined or missing (`NA`)..
+#' @returns Single-length character vector with information on the number of
+#'   invalid data points relevant to the inputted `lgl_*` parameter.
+#' @rdname msg_general
+#' @noRd
+msg_general <- function(varname, lgl, flavour_text) {
+  sum <- sum(lgl)
+  total <- length(lgl)
+  count <- switch(as.character(sum == total),
+                  "TRUE" = paste0("All (", total, ")"),
+                  "FALSE" = paste0(sum, " in ", total))
+  paste0("Argument `", varname, "`: ", count, " elements were ", flavour_text)
+}
+
+#' @rdname msg_general
 #' @param lgl_oob_centiles Logical vector of length one or more denoting whether
 #'   a centile value provided to a gigs `*_centile2value()` function was between
 #'   0 and 1.
 #' @param varname The variable name, which will be included in the returned
 #'   string.
-#' @returns Single-length character vector with information on the number of
-#'   invalid data points relevant to the inputted `lgl_*` parameter.
-#' @rdname msg_oob_centiles
 #' @noRd
 msg_oob_centiles <- function(lgl_oob_centiles, varname) {
-  paste0("Argument `", varname, "`: ", sum(lgl_oob_centiles), " in ",
-         length(lgl_oob_centiles), " elements were not between 0 and 1.")
+  msg_general(varname = varname, lgl_oob_centiles,
+              flavour_text = "not between 0 and 1.")
 }
 
-#' @rdname msg_oob_centiles
+#' @rdname msg_general
 #' @param lgl_missing_data Logical vector of length one or more denoting
 #'   whether each element of a vector was `!is.nan() & is.na()`.
 #' @noRd
 msg_missing_data <- function(lgl_missing_data, varname) {
-  if (all(lgl_missing_data) & varname == "acronym") {
-    stop("Argument `", varname, "`: All elements were missing (`NA`).")
-  }
-  paste0("Argument `", varname, "`: ", sum(lgl_missing_data), " in ",
-         length(lgl_missing_data), " elements were missing (`NA`).")
+  msg_general(varname = varname, lgl_missing_data,
+              flavour_text = "missing (`NA`).")
 }
 
-#' @rdname msg_oob_centiles
+#' @rdname msg_general
 #' @param lgl_undefined_data Logical vector of length one or more denoting
 #'   whether each element of a vector was either `NaN`, `-Inf`, or `Inf`.
 #' @noRd
 msg_undefined_data <- function(lgl_undefined_data, varname) {
-  paste0("Argument `", varname, "`: ", sum(lgl_undefined_data),
-         " in ", length(lgl_undefined_data), " elements were undefined (`NaN`,",
-         " `Inf`, or `-Inf`).")
+  msg_general(
+    varname = varname, lgl_undefined_data,
+    flavour_text = "undefined (`NaN`, `Inf`, or `-Inf`)."
+  )
 }
 
-#' @rdname msg_oob_centiles
+#' @rdname msg_general
 #' @param lgl_oob_xvar Logical vector of length one or more denoting whether
 #'   each element of `x`/an equivalent argument provided to a gigs conversion
 #'   function was within the bounds for its growth standard.
 #' @noRd
 msg_oob_xvar <- function(lgl_oob_xvar, varname) {
-  standard <- get(x = "standard", envir = parent.frame(n = 3))
-  paste0("Argument `", varname, "`: ", sum(lgl_oob_xvar), " in ",
-         length(lgl_oob_xvar), " elements were out-of-bounds (see the '",
-         standard, "' conversion functions documentation).")
+  family <- get(x = "family", envir = parent.frame(n = 3))
+  flavour_text <- paste0("out-of-bounds (see the GIGS conversion function",
+                         " documentation for bounds).")
+  msg_general(varname = varname, lgl = lgl_oob_xvar,
+              flavour_text = flavour_text)
 }
 
-#' @rdname msg_oob_centiles
-#' @param lgl_invalid_sex_acronym Logical vector of length one or more denoting
-#'   whether elements of `sex` or `acronym` are valid. For `sex`, this means
-#'   being one of `"M"` or `"F"`. For `acronym`, this means being a valid
-#'   growth standard acronym as provided in the documentation for the different
-#'   gigs conversion functions.
+#' @rdname msg_general
+#' @param lgl_invalid_sex Logical vector of length one or more denoting
+#'   whether elements of `sex` are valid. For `sex`, this means
+#'   being one of `"M"` or `"F"`.
 #' @noRd
-msg_invalid_sex_acronym <- function(lgl_invalid_sex_acronym, varname) {
-  count <- sum(lgl_invalid_sex_acronym)
-  len <- length(lgl_invalid_sex_acronym)
-  all_invalid <- count == len
-  chr_x_in_y <- if (all_invalid) "All" else paste0(count, " in ", len)
-
-  if (varname == "sex") {
-    paste0("Argument `sex`: ", chr_x_in_y, " elements were neither ",
-             "\"M\" nor \"F\".")
-  } else {
-    if (all_invalid) {
-      acronym <- get(x = "acronym", envir = parent.frame(n = 3))
-      standard <- get(x = "standard", envir = parent.frame(n = 4))
-      valid_acronyms <- names(get(standard, envir = rlang::ns_env("gigs")))
-      valid_acronyms <- paste_sep_commas_quoted(valid_acronyms)
-      rlang::abort(
-        c("Invalid `acronym` value:",
-          "x" = paste0("Value of `acronym` was `\"", acronym, "\"`."),
-          "!" = paste0("Value of `acronym` must be one of ", valid_acronyms,
-                       ".")),
-        call = rlang::caller_env(n = 5),
-        class = "gigs_invalid_acronym"
-      )
-    }
-  }
+msg_invalid_sex_chrs <- function(lgl_invalid_sex, varname) {
+  msg_general(varname = varname, lgl = lgl_invalid_sex,
+              flavour_text = "neither \"M\" nor \"F\".")
 }
 
 # Parameter-checking functions for character/numeric vectors -------------------
@@ -227,13 +215,19 @@ validate_numeric <- function(num, varname) {
 #'   numeric, (2) having length >= 1, (3) being atomic, and (4) + (5) being
 #'   checked for missing/undefined data.
 #' @noRd
-validate_yzp <- function(y = NULL, z = NULL, p = NULL, y_name = NULL) {
+validate_yzp <- function(y = NULL, z = NULL, p = NULL, yzp_name = NULL) {
   yzp <- list(y = y, z = z, p = p)
   yzp_nulls <- c(y = is.null(y), z = is.null(z), p = is.null(p))
   if (sum(yzp_nulls) == 3L) {
-    rlang::abort("Your `y`/`z`/`p` argument must not be `NULL`.", call = NULL)
+    cli::cli_abort(c("!" = paste0("Argument `", yzp_name,
+                                  "` must not be `NULL`.")),
+                   class = "gigs_yzp_is_null",
+                   call = NULL)
   }
-  yzp_name <- if (is.null(y_name)) names(yzp_nulls)[!yzp_nulls] else y_name
+
+  if (is.null(yzp_name)) {
+    yzp_name <- names(yzp_nulls)[!yzp_nulls]
+  }
   vec <- yzp[!yzp_nulls][[1]]
   vec <- validate_numeric(vec, yzp_name)
 
@@ -248,23 +242,23 @@ validate_yzp <- function(y = NULL, z = NULL, p = NULL, y_name = NULL) {
 #' Validate user-inputted x variables prior to growth standard conversion
 #'
 #' @param x A numeric vector of `x` values to check.
-#' @param standard A single string containing a code for a set of growth
+#' @param family A single string containing a code for a set of growth
 #'   standards, either `"ig_fet"`, `"ig_nbs`", `"ig_png"` or `"who_gs"`.
 #' @param acronym A single-length character vector containing an
 #'   already-validated `acronym` value.
+#' @param varname A single string containing a variable name for
+#'   [handle_oob_xvar()] to print. Default = `"x"`.
 #' @returns A numeric vector identical to `x`, except elements not within the
 #'   permitted bounds for `acronym` are replaced with `NA`. Throws informative
 #'   errors if `x` is not numeric, is non-atomic, or is zero-length.
 #' @noRd
-validate_xvar <- function(x, acronym, standard, x_name) {
-  checkmate::qassert(standard, rules = "S1")
-  if (is.null(x_name)) x_name <- "x"
-  x <- validate_numeric(x, varname = x_name)
+validate_xvar <- function(x, family, acronym, varname = "x") {
+  x <- validate_numeric(x, varname = varname)
 
   # Check for out of bounds where `x` was not NA or undefined
-  range <- xvar_ranges[[standard]][[acronym]]
+  range <- xvar_ranges[[family]][[acronym]]
   is_oob <- !is.na(x) & !inrange(x, range)
-  handle_oob_xvar(vec = x, varname = x_name, is_oob = is_oob)
+  handle_oob_xvar(vec = x, varname = varname, is_oob = is_oob)
 }
 
 #' Validate user-inputted sexes prior to growth standard conversion
@@ -283,32 +277,9 @@ validate_sex <- function(sex) {
   chr |>
     remove_attributes() |>
     handle_missing_data(varname = varname, is_na = chr_is_na, is_nan = FALSE) |>
-    handle_invalid_chr_options(gigs_opt = "handle_invalid_sex",
-                               varname = varname,
-                               options = c("M", "F"),
-                               is_na = chr_is_na)
-}
-
-#' Validate user-inputted acronyms prior to growth standard conversion
-#'
-#' @param acronym A single-length character vector; will be a user-inputted
-#'   acronym.
-#' @param allowed_acronyms Character vector with acceptable values for
-#'   `acronym`. An error will be thrown is `acronym` is not
-#'   `%in% allowed_acronyms`.
-#' @returns Returns `acronym`, with values not `%in% allowed_acronyms` set to
-#'   `NA`. Will throw an error if `acronym` is not a character vector.
-#' @noRd
-validate_acronym <- function(acronym, allowed_acronyms, standard) {
-  varname <- "acronym"
-  gigs_opt <- "handle_invalid_acronym"
-  acronym <- acronym |>
-    checkmate::qassert(rules = "S1", .var.name = varname) |>
-    checkmate::qassert(rules = "V1", .var.name = varname)
-  acronym |>
-    remove_attributes() |>
-    handle_invalid_chr_options(gigs_opt = gigs_opt, varname = varname,
-                               options = allowed_acronyms, is_na = FALSE)
+    handle_invalid_sex_chr(gigs_opt = "handle_invalid_sex",
+                           varname = varname,
+                           is_na = chr_is_na)
 }
 
 #' Validate user-inputted IDs for z-scoring/growth analysis
@@ -336,7 +307,7 @@ validate_id <- function(id) {
                test_lgl = is.na(id) & !is.nan(id),
                msg_fn = msg_missing_data)
   } else {
-    factor(x = "A")
+    NULL
   }
 }
 
@@ -379,7 +350,7 @@ validation_alerts <- function(alerts,
 #' Throw warnings *then* errors when validating GIGS inputs.
 #' @param warnings,errors A list of warnings or errors, captured by the
 #'   `rlang::try_fetch()`/`rlang::cnd_muffle()`/`rlang::zap()` construct in
-#'   `catch_and_throw_validate_issues()`.
+#'   [catch_and_throw_validate_issues()].
 #' @inheritParams catch_and_throw_validate_issues
 #' @noRd
 validation_warnings_errors <- function(warnings,
@@ -431,7 +402,7 @@ catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
 #' @param ... A set of named arguments. These must be named as some names
 #'   (e.g. `"acronym"`) are treated differently, and error message formatting
 #'   needs to name the wacky arguments.
-#' @param y_name,x_name Single-length character vectors with standard-specific
+#' @param yzp_name,x_name Single-length character vectors with standard-specific
 #'   names for `y` and `x`. If `NULL`, error messages will print out that there
 #'   are issues with `'y'` and `'x'`, instead of standard-specific variables
 #'   like `bpd_mm` or `gest_days`.
@@ -440,12 +411,12 @@ catch_and_throw_validate_issues <- function(expr, call = rlang::caller_env()) {
 #'   because they are zero length or because they cannot be recycled.
 #' @noRd
 validate_parameter_lengths <- function(...,
-                                       y_name = NULL,
+                                       yzp_name = NULL,
                                        x_name = NULL,
                                        call = rlang::caller_env()) {
   inputs <- list(...)
-  if (!is.null(y_name)) {
-    names(inputs)[names(inputs) == "y"] <- y_name
+  if (!is.null(yzp_name)) {
+    names(inputs)[names(inputs) == "y"] <- yzp_name
   }
   if (!is.null(x_name)) {
     names(inputs)[names(inputs) == "x"] <- x_name
@@ -463,92 +434,64 @@ validate_parameter_lengths <- function(...,
   # Stop with informative error if any inputs have length 0
   is_zero_length <- input_lengths == 0
   if (any(is_zero_length)) {
-    err_input_is_zero_length(varnames, is_zero_length, call)
+    zero_len_names <- varnames[is_zero_length]
+    err_input_is_zero_length(zero_len_names, call)
   }
 
   # Stop with informative error if inputs are not recyclable
   is_max_input_length <- input_lengths == max(input_lengths)
   is_unrecyclable <- input_lengths != 1 & !is_max_input_length
-  is_unrecyclable[varnames == "acronym"] <- FALSE
   if (any(is_unrecyclable)) {
-    err_inputs_unrecyclable(varnames, is_unrecyclable, call)
+    err_inputs_unrecyclable(
+      unrecyclable_names = varnames[is_unrecyclable],
+      unrecyclable_lengths = input_lengths[is_unrecyclable],
+      max_length = max(input_lengths),
+      call = rlang::caller_env()
+    )
   }
   invisible(inputs)
 }
 
 #' Format errors where inputs are zero-length
-#' @param varnames A character vector with variable names.
-#' @param is_zero_length A logical vector the same length as `varnames`, which
-#'   is used to pluck out values in `varnames` to be used by `rlang::abort()`.
-#' @returns Is only called to throw errors, which tell the user which of their
-#'   input(s) was zero-length.
+#' @param zero_len_names A character vector with the names of non-scalar
+#'   variables which have zero elements.
+#' @returns An error from `cli`, which tell the user which of their inputs was
+#'   zero-length.
 #' @noRd
-err_input_is_zero_length <- function(varnames,
-                                     is_zero_length,
-                                     call = rlang::caller_env) {
-  zero_len_names <- varnames[is_zero_length]
-  count <- sum(is_zero_length)
-
-  if (any(zero_len_names == "acronym")) {
-    str_acronym_err <- paste0("Variable `acronym`: Input had length 0, but ",
-                              "must have length 1.")
-  } else {
-    str_acronym_err <- ""
-  }
-
-  # If only one input is zero-length, throw errors for one variable
-  if (all(zero_len_names == "acronym")) {
-    rlang::abort(str_acronym_err, call = call)
-  } else if (count == 1) {
-    rlang::abort(
-      paste0("Variable `", zero_len_names, "`: Input had length 0, but ",
-             "must have length 1 or greater."),
-      call = call, class = "gigs_err_zero_length"
-    )
-  }
-
-  # If multiple inputs are zero-length, need to print differently for vectors
-  # (`z`/`y`/`p`/`x`/`sex` etc.) vs scalar (`acronym`)
-  varname_str <- paste0(zero_len_names[zero_len_names != "acronym"],
-                        collapse = "`, `")
-  if (length(zero_len_names[zero_len_names != "acronym"]) == 1) {
-    var_str <- "Variable"
-    input_str <- "Input"
-  } else {
-    var_str <- "Variables"
-    input_str <- "Inputs"
-  }
-  rlang::abort(
-    c("!" = "You must not provide zero-length data.",
-      "i" = paste0("", var_str, " `", varname_str, "`: ", input_str, " had ",
-                   "length 0, but must have length 1 or greater."),
-      "i" = str_acronym_err),
-    call = call, class = "gigs_err_zero_length"
+err_input_is_zero_length <- function(zero_len_names, call) {
+  cli::cli_abort(
+    c("!" = "Non-scalar variables must have length {.strong 1 or greater}.",
+      "x" = "{.var {zero_len_names}} had length 0."),
+    class = "gigs_err_zero_length",
+    call = call
   )
 }
 
 #' Format errors where inputs are unrecyclable
-#' @param varnames A character vector with variable names.
+#' @param varnames A character vector with the name of each non-scalar variable.
+#' @param varnames An integer vector with the length of each non-scalar
+#'   variable.
+#' @param max_length The length of the longest non-scalar variable.
 #' @param is_unrecyclable A logical vector the same length as `varnames`, which
 #'   is used to pluck out values in `varnames` to be used by `rlang::abort()`.
 #' @returns Is only called to throw errors, which tell the user which of their
 #'   inputs have bad lengths for tidyverse-style recycling.
 #' @noRd
-err_inputs_unrecyclable <- function(varnames,
+err_inputs_unrecyclable <- function(unrecyclable_names,
+                                    unrecyclable_lengths,
+                                    max_length,
                                     is_unrecyclable,
                                     call = rlang::caller_env()) {
-  unrecyclable_names <- varnames[is_unrecyclable]
-  count <- sum(is_unrecyclable)
-  var_str <- if(count > 1) "Variables" else "Variable"
-  input_str <- if(count > 1) "Inputs" else "Input"
-  varname_str <- paste0(unrecyclable_names, collapse = "', '")
-  rlang::abort(
-    message =
-      paste0(var_str, " '", varname_str, "': ", input_str, " cannot be ",
-             "recycled with `vctrs::vec_recycle_common()`. Check the ",
-             "documentation to ensure your inputs adhere to the vctrs ",
-             "recycling rules ",
-             "(https://vctrs.r-lib.org/reference/vec_recycle.html)."),
+  cli::cli_abort(
+    c("!" = paste0("{.var {unrecyclable_names}} cannot be recycled with ",
+                   "{.fun vctrs::vec_recycle_common}."),
+      "x" = paste0("{.var {unrecyclable_names}} had length{?s} ",
+                   "{.val {unrecyclable_lengths}}, but should have length ",
+                   "{.val {as.integer(1)}} or {.val {max_length}}."),
+      "i" = paste0("Ensure your inputs adhere to the vctrs recycling rules ",
+                   "using {.url ",
+                   "https://vctrs.r-lib.org/reference/vec_recycle.html}.")
+    ),
     class = "gigs_err_unrecyclable",
     call = call
   )

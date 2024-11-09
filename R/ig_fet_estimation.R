@@ -18,9 +18,6 @@
 #'                              headcirc_mm = 24:26)
 #' @returns Numeric vector with estimated fetal weight(s) in g, with the same
 #'   length as the longest input vector.
-#' @seealso Get z-scores/centiles for estimated fetal weights at known
-#'   gestational ages using the [ig_fet_value2zscore()] or
-#'   [ig_fet_value2centile()] functions, respectively.
 #' @references
 #' Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al.
 #' **International Estimated Fetal Weight Standards of the INTERGROWTH-21st

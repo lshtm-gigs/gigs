@@ -72,13 +72,15 @@ test_msg_undefined <- function(name, length, int_undefined) {
 #' Replicate error/warning messages from gigs for bad input data (TESTING
 #' ONLY)
 #' @param varname Single-length character vector with a variable name.
-#' @param length Expected length of the variable specified by `name`.
+#' @param len Expected length of the variable specified by `name`.
 #' @param int_undefined Number of elements in `name` which were expected to
 #'   be missing in whatever test is calling this function.
 #' @note Used for testing only. Mimics the output of [msg_missing_data()].
-test_msg_missing <- function(varname, length, int_undefined) {
-  paste0("Argument `", varname, "`: ", int_undefined,
-         " in ", length, " elements were missing \\(`NA`\\).")
+test_msg_missing <- function(varname, len, int_undefined) {
+  lgl <- rep_len(x = FALSE, length.out = len)
+  force(int_undefined)
+  lgl[(1:int_undefined)] <- TRUE
+  msg_missing_data(lgl_missing_data = lgl, varname = varname)
 }
 
 #' Replicate error/warning messages from gigs for bad input data (TESTING
@@ -101,21 +103,16 @@ test_msg_centile_oob <- function(length, int_undefined) {
 #' @param int_undefined Number of elements in `x` which were expected to
 #'   be outside the proper bounds (for each standard/acronym) in whatever test
 #'   is calling this function.
-#' @param standard Single-length character vector denoting the collection of
-#'   growth standards in use. Should be one of `"ig_fet"`, `"ig_nbs"`,
-#'   `"ig_png"`, or `"who_gs"`.
 #' @note Used for testing only. Mimics the output of [msg_oob_xvar()].
-test_msg_xvar_oob <- function(x_name, length, int_undefined, standard) {
+test_msg_xvar_oob <- function(x_name, length, int_undefined) {
   paste0("Argument `", x_name, "`: ", int_undefined, " in ", length,
-         " elements were out-of-bounds \\(see the '", standard, "' conversion ",
-         "functions documentation\\).")
+         " elements were out-of-bounds \\(see the GIGS conversion",
+         " function documentation for bounds\\).")
 }
 
 
 #' Replicate error/warning messages from gigs for bad input data (TESTING
 #' ONLY)
-#' @param varname Single-length character vector with a variable name, either
-#'   `"sex"` or `"acronym"`.
 #' @param length Expected length of the variable specified by `name`.
 #' @param int_undefined Number of elements in `x` which were expected to
 #'   be invalid (not in `names(gigs::ig_nbs)`) in whatever test is calling this
@@ -123,24 +120,13 @@ test_msg_xvar_oob <- function(x_name, length, int_undefined, standard) {
 #' @param standard Collection of growth standards in use. Should be one of
 #'   `"ig_fet"`, `"ig_nbs"`, `"ig_png"`, or `"who_gs"`. Default = `"ig_nbs"`.
 #' @note Used for testing only. Mimics the output of
-#'   [msg_invalid_sex_acronym()].
+#'   [msg_invalid_sex_chrs()].
 #' @noRd
-test_msg_acronym_sex_invalid <- function(varname,
-                                         len,
-                                         int_undefined,
-                                         standard = "ig_nbs") {
-  see_sentence <- paste0("See the '", standard, "' documentation for valid ",
-                         "'acronym' values.")
-  chr_x_in_y <- if (int_undefined == len) "All" else {
-    paste(int_undefined, "in", len)
-  }
-
-  if (varname == "sex") {
-    paste0("Argument `sex`: ", chr_x_in_y, " elements were neither \"M\" nor ",
-           "\"F\".")
-  } else {
-    paste0("Argument `acronym`: All elements were invalid. ", see_sentence)
-}
+test_msg_sex_invalid <- function(len, int_undefined) {
+  lgl <- rep_len(x = FALSE, length.out = len)
+  force(int_undefined)
+  lgl[(1:int_undefined)] <- TRUE
+  msg_invalid_sex_chrs(lgl_invalid_sex = lgl, varname = "sex")
 }
 
 #' Replicate error/warning messages from gigs for bad input data (TESTING

@@ -41,8 +41,6 @@
 #'     classification
 #'   * `sfga_severe` - Factor of size-for-GA categories with severe small-for-GA
 #'     classification
-#' @seealso [ig_nbs_wfga_value2centile()], which this function uses to get
-#'   a centile for each observation.
 #' @examples
 #' data <- data.frame(
 #'  wt_kg = c(2.2, 2.5, 3.3, 4.0),
@@ -66,14 +64,17 @@ classify_sfga <- function(
   err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
   checkmate::qassert(.new, rules = "S3")
 
-  p <- validate_ig_nbs(
+  inputs <- validate_inputs(
     y = eval_tidy(enquo(weight_kg), .data),
-    gest_days = eval_tidy(enquo(gest_days), .data),
+    x = eval_tidy(enquo(gest_days), .data),
     sex = eval_tidy(enquo(sex), .data),
+    family = "ig_nbs",
     acronym = "wfga",
-    y_name = "weight_kg"
-  ) |>
-    do.call(what = ig_nbs_v2c_internal)
+    yzp_name = "weight_kg",
+    x_name = "gest_days"
+  )
+  p <- do.call(what = ig_nbs_v2c_internal,
+                args = inputs[!names(inputs) == "family"])
 
   .new <- repair_.new_names(.new = list("sfga" = .new), mode = "specific")
   .data[[.new[1]]] <- p
@@ -111,8 +112,6 @@ classify_sfga <- function(
 #'   classify_svn(weight_kg = wt_kg,
 #'                gest_days = gestage,
 #'                sex = sex)
-#' @seealso [ig_nbs_wfga_value2centile()], which this function uses to get
-#'   a centile for each observation.
 #' @inherit classify_sfga references
 #' @export
 classify_svn <- function(.data,
@@ -124,14 +123,17 @@ classify_svn <- function(.data,
   checkmate::qassert(.new, rules = "S2")
   err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
 
-  p <- validate_ig_nbs(
+  inputs <- validate_inputs(
     y = eval_tidy(enquo(weight_kg), .data),
-    gest_days = eval_tidy(enquo(gest_days), .data),
+    x = eval_tidy(enquo(gest_days), .data),
     sex = eval_tidy(enquo(sex), .data),
+    family = "ig_nbs",
     acronym = "wfga",
-    y_name = "weight_kg"
-  ) |>
-    do.call(what = ig_nbs_v2c_internal)
+    yzp_name = "weight_kg",
+    x_name = "gest_days"
+  )
+  p <- do.call(what = ig_nbs_v2c_internal,
+                args = inputs[!names(inputs) == "family"])
 
   .new <- repair_.new_names(.new = list("svn" = .new), mode = "specific")
   .data[[.new[1]]] <- p
@@ -709,31 +711,36 @@ classify_growth <- function(
       if (missing_weight) next
       bweight_centile_not_calculated <- !.new[[outcome]][1] %in% names(.data)
       if (bweight_centile_not_calculated) {
-        is_birthweight <- gigs_zscoring_lgls(
-          gest_days = growth_data[["gest_days"]],
-          age_days = growth_data[["age_days"]],
-          id = id)[["ig_nbs"]]
-        ig_nbs_wfga_p <- rep(NA_real_, nrow(.data))
-        ig_nbs_wfga_p[is_birthweight] <- fn_on_subset(
+        bw_centile <- rep(NA_real_, nrow(.data))
+        bw_centile[cached_gigs_lgls$ig_nbs] <- fn_on_subset(
           fn = ig_nbs_v2c_internal,
-          lgl = is_birthweight,
+          lgl = cached_gigs_lgls$ig_nbs,
           growth_data[["weight_kg"]],
           growth_data[["gest_days"]],
           growth_data[["sex"]],
           acronym = "wfga"
         )
-        .data[[.new[[outcome]][1]]] <- ig_nbs_wfga_p
+        is_birth_who_gs <- cached_gigs_lgls$birth & cached_gigs_lgls$who_gs
+        bw_centile[is_birth_who_gs] <- pnorm(fn_on_subset(
+          fn = who_gs_v2z_internal,
+          lgl = is_birth_who_gs,
+          growth_data[["weight_kg"]],
+          growth_data[["gest_days"]],
+          growth_data[["sex"]],
+          acronym = "wfga"
+        ))
+        .data[[.new[[outcome]][1]]] <- bw_centile
       }
       if (outcome == "sfga") {
         .data[[.new[[outcome]][2]]] <- categorise_sfga_internal(
-          p = ig_nbs_wfga_p, severe = FALSE
+          p = bw_centile, severe = FALSE
         )
         .data[[.new[[outcome]][3]]] <- categorise_sfga_internal(
-          p = ig_nbs_wfga_p, severe = TRUE
+          p = bw_centile, severe = TRUE
         )
       } else {
         .data[[.new[[outcome]][2]]] <- categorise_svn_internal(
-          p = ig_nbs_wfga_p, gest_days = growth_data[["gest_days"]]
+          p = bw_centile, gest_days = growth_data[["gest_days"]]
         )
       }
     }
@@ -794,7 +801,8 @@ classify_growth <- function(
                                missing = c(weight_kg = missing_weight,
                                            lenht_cm = missing_lenht,
                                            headcirc_cm = missing_headcirc))
-    rlang::inform(msg, class = "gigs_classify_growth_msg")
+   cli::cli_h1(text = "{.fun gigs::classify_growth}")
+   cli::cli_inform(msg, class = "gigs_classify_growth_msg")
   }
   .data
 }

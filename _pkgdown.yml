@@ -37,32 +37,13 @@ reference:
   - title: Get z-scores using recommended standards
     contents:
       - gigs_waz
-  - title: INTERGROWTH-21<sup>st</sup> Newborn Size Standards
-    desc: >
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Newborn Size 
-      Standards.
-    contents:
-      - ig_nbs_value2centile
-      - ig_nbs_centile2value
   - title: >
-      INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards for Preterm Infants
-    desc: > 
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Postnatal Growth
-      Standards for Preterm Infants.
+      Convert between values and z-scores/centiles using international growth
+      standards
     contents:
-      - ig_png_value2zscore
-      - ig_png_zscore2value
-  - title: INTERGROWTH-21<sup>st</sup> Fetal Standards
-    desc: >
-      Conversion functions for the INTERGROWTH-21<sup>st</sup> Fetal Standards.
-    contents:
-      - ig_fet_value2zscore
-      - ig_fet_zscore2value
-  - title: WHO Child Growth Standards
-    desc: Conversion functions for the WHO Child Growth Standards.
-    contents:
-      - who_gs_value2zscore
-      - who_gs_zscore2value
+      - value2zscore
+      - zscore2value
+      - report_units
   - title: INTERGROWTH-21<sup>st</sup> Estimation Functions
     desc: Estimation functions from the INTERGROWTH-21<sup>st</sup> Project.
     contents:
