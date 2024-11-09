@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, size = "tiny", 
                       dev.args = list(png = list(type = "cairo")))
 library(gigs)
@@ -513,7 +513,7 @@ ffmfga_female_p3 <- bland_altman_plot(actual = ffmfga_female, predicted = repl_c
 
 ## Observed vs fitted values
 
-```{r comparison_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values.", warning = FALSE, message = FALSE, alt.text = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values."}
+```{r comparison_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values.", warning = FALSE, message = FALSE, fig.alt = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values."}
 overall_legend <- cowplot::get_legend(fmfga_male_p1)
 fmfga_male_p1_noleg <- fmfga_male_p1 + ggplot2::theme(legend.position = "none")
 plotlist <- list(fmfga_male_p1_noleg, fmfga_female_p1, bfpfga_male_p1, bfpfga_female_p1, ffmfga_male_p1, ffmfga_female_p1)
@@ -523,7 +523,7 @@ cowplot::plot_grid(plotlist = list(cp, overall_legend), labels = NULL, ncol = 1,
 
 ## Bland-Altman plots
 ### Reference vs. predicted values
-```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements.", warning = FALSE, message = FALSE, alt.text = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values."}
+```{r bland_altman_plots, echo = F, fig.width = 8, fig.height = 12, fig.cap = "Bland-Altman plots for observed and estimated centile values for body composition measures according to gestational age and sex. Circles show differences between observed and estimated values for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to the average of the two measurements.", warning = FALSE, message = FALSE, fig.alt = "Observed and estimated normative centiles for body composition measures according to gestational age and sex. Centiles (3rd, 10th, 50th, 90th, and 97th) for fat mass (**a** males; **b** females); body fat percentage (**c** males; **d** females); and fat-free mass (**e** males; **f** females) according to gestational age. Red circles show the observed value for that centile and gestational age; dashed lines show estimates from linear equations fitted to these observed values."}
 plotlist <- list(fmfga_male_p2, fmfga_female_p2, bfpfga_male_p2, bfpfga_female_p2, ffmfga_male_p2, ffmfga_female_p2)
 cowplot::plot_grid(plotlist = plotlist, labels = "auto", ncol = 2, rel_heights = 5, rel_widths = 0.5)
 ```

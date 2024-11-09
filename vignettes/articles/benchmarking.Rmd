@@ -84,7 +84,7 @@ no <- if (knitr::is_html_output()) {
   knitr::asis_output(x = "✘")
 }
 half <- if (knitr::is_html_output()) {
-  knitr::asis_output(x = "❕")
+  knitr::asis_output(x = "⚠️")
 } else {
   knitr::asis_output(x = "⚠")
 }
@@ -100,8 +100,8 @@ Growth standards, `r intergrowth21st` Newborn Size standards (including Very
 Preterm), and the `r intergrowth21st` Postnatal Growth standards for preterm
 infants. A tick (`r yes`) indicates that a package contains functions for all
 growth standards within a set, a cross (`r no`) indicates that a package has no
-functions for a set of growth standards, and an exclamation mark/warning sign
-(`r half`) indicates that some standards in a set are implemented, but not others.
+functions for a set of growth standards, and a warning sign (`r half`) indicates
+that some standards in a set are implemented, but not others.
 
 ```{r arrows, echo = FALSE}
 ig21st <- if (knitr::is_html_output()) {
@@ -130,7 +130,7 @@ harr <- knitr::asis_output(x = "&harr;")
 
 # Shared benchmark code
 
-```{r load_gigs, eval = FALSE}
+```{r load_gigs}
 library(gigs)
 ```
 
@@ -150,9 +150,9 @@ expected measurements for each observation. This dataset can then be used to
 compare speeds for each package. These datasets are generated with the following
 function:
 ```{r benchmark_dataset, echo = TRUE}
-benchmark_dataset <- function(n, standard, acronym) {
-  data <- rlang::eval_bare(rlang::parse_expr(paste0("gigs::", standard)))
-  if (standard == "ig_fet") {
+benchmark_dataset <- function(n, family, acronym) {
+  data <- get(family, envir = asNamespace("gigs"))
+  if (family == "ig_fet") {
     xvars <- data[[acronym]][[1]][[1]]
   } else {
     xvars <- data[[acronym]][[1]][[1]][[1]]
@@ -172,19 +172,16 @@ benchmark_dataset <- function(n, standard, acronym) {
       sex <- sample(c("M", "F"), size = n, replace = TRUE)
     }
   )
-  gigs_fn <- rlang::eval_bare(
-    rlang::parse_expr(paste0("gigs::", paste0(standard, "_zscore2value")))
-  )
-  out <- if (standard != "ig_fet") {
-    if (standard == "ig_nbs") {
-      list(z = z, gest_days = x, sex = sex, acronym = acronym)
-    } else {
-      list(z = z, x = x, sex = sex, acronym = acronym)
-    }
+  gigs_fn <- get("zscore2value", envir = asNamespace("gigs"))
+  out <- if (family != "ig_fet") {
+    list(z = z, x = x, sex = sex, family = family, acronym = acronym)
   } else {
-    list(z = z, x = x, acronym = acronym)
+    list(z = z, x = x, family = family, acronym = acronym)
   }
   out$y <- do.call(what = gigs_fn, args = out)
+  if (family == "ig_fet") {
+    out$sex <- NA
+  }
   as.data.frame(out, stringsAsFactors = FALSE)
 }
 ```
@@ -252,7 +249,7 @@ in a variety of other packages.
 # Generate 100,000-row dataset
 ac_who_gs <- "wfa"
 ds_who_gs <- benchmark_dataset(n = 100000,
-                               standard = "who_gs",
+                               family = "who_gs",
                                acronym = ac_who_gs)
 ```
 
@@ -275,21 +272,18 @@ temp_bp_who_gs_most <- bench::press(
     sex <- ds_who_gs$sex[selector]
     sex_gs <- ifelse(sex == "M", "Male", "Female")
     age_years <- age_days / 365.25
-    df_zscorer <- data.frame(
-      weight = weight_kg, age = age_days,
-      sex = ifelse(sex == "M", 1, 2)
-    )
     bm_who_gs <- bench::mark(
       check = FALSE, filter_gc = TRUE, time_unit = "ms", min_iterations = 30,
-      gigs = gigs::who_gs_value2zscore(weight_kg, age_days, sex, ac_who_gs),
+      gigs = gigs::value2zscore(weight_kg, age_days, sex,
+                                family = "who_gs", acronym = ac_who_gs),
       anthro = anthro::anthro_zscores(weight = weight_kg,
-                                     age = age_days,
-                                     sex = sex)$zwei,
+                                      age = age_days,
+                                      sex = sex)$zwei,
       AGD = AGD::y2z(y = weight_kg,
-                    x = age_days,
-                    sex = sex,
-                    ref = AGD::who.wgt,
-                    tail.adjust = TRUE),
+                     x = age_days,
+                     sex = sex,
+                     ref = AGD::who.wgt,
+                     tail.adjust = TRUE),
       childsds = childsds::sds(value = weight_kg,
                               age = age_years,
                               sex = sex,
@@ -298,8 +292,8 @@ temp_bp_who_gs_most <- bench::press(
                               item = "weight",
                               ref = childsds::who.ref),
       gs = growthstandards::who_value2zscore(y = weight_kg, x = age_days,
-                                            y_var = "wtkg", x_var = "agedays",
-                                            sex = sex_gs),
+                                             y_var = "wtkg", x_var = "agedays",
+                                             sex = sex_gs),
       sitar = sitar::LMS2z(y = weight_kg, x = age_years, sex = sex,
                           measure = "wt", ref = sitar::who06)
     )
@@ -381,7 +375,7 @@ rm(gigs_0_4_0, zanthro_1_0_2, lens, n_inputs, input_len)
 
 ## Package comparisons: timing
 
-```{r plot_timings_who_gs, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for different software packages. The results can be read about below."}
+```{r plot_timings_who_gs, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for different software packages. The results can be read about below."}
 plot_bp(bp_who_gs, bp_who_gs_stata)
 ```
 
@@ -403,7 +397,7 @@ measurements to z-scores.
 
 Focussing on the faster R implementations reveals some interesting patterns:
 
-```{r plot_timings_who_gs_faster, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below."}
+```{r plot_timings_who_gs_faster, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below."}
 bp_who_gs |>
   dplyr::filter(desc %in% c("gigs", "childsds", "gs", "sitar", "AGD")) |>
   plot_bp()
@@ -412,16 +406,14 @@ bp_who_gs |>
 The `sitar` package is far and away the fastest here, taking
 ~`r max_median(bp_who_gs, "sitar")` ms to process 100,000 inputs. This is because
 it uses the monthly LMS coefficients to calculate its z-scores. Whilst this is
-quicker, it does induce some degree of imprecision when compared to the other
-packages.
+quicker, it does induce some imprecision when compared to the other packages.
 
-Next fastest was the `growthstandards` package was the fastest at
+Next fastest was the `growthstandards` package at
 ~`r max_median(bp_who_gs, "gs")` ms for 100,000 inputs, followed by `gigs`
 (~`r max_median(bp_who_gs, "gigs")` ms), `childsds`
 (~`r max_median(bp_who_gs, "childsds")` ms), and lastly `AGD`
 (~`r max_median(bp_who_gs, "AGD")` ms). Interestingly, `AGD` starts out
-much slower than the other 'fast' packages, but appears to scale more
-efficiently.
+much slower than the other 'fast' packages, but may scale more efficiently.
 
 ## Package comparisons: numerical consistency
 In our testing of the WHO standards, we found that the tested packages mostly
@@ -439,9 +431,9 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
                             sex = "M") |>
   dplyr::mutate(
-    weight_kg = gigs::who_gs_wfa_zscore2value(z, age_days, sex),
+    weight_kg = gigs::zscore2value(z, age_days, sex, "who_gs", "wfa"),
     # GIGS z-score
-    z_gigs = gigs::who_gs_wfa_value2zscore(weight_kg, age_days, sex),
+    z_gigs = gigs::value2zscore(weight_kg, age_days, sex, "who_gs", "wfa"),
     # growthstandards z-score
     z_growthstandards = growthstandards::who_wtkg2zscore(
       age_days, weight_kg, "Male"
@@ -477,7 +469,7 @@ Stata, and in the `growthstandards` package for R. Let's make a new dataset,
 ```{r ds_ig_nbs}
 ac_ig_nbs <- "wfga"
 ds_ig_nbs <- benchmark_dataset(n = 100000,
-                               standard = "ig_nbs",
+                               family = "ig_nbs",
                                acronym = ac_ig_nbs)
 ```
 
@@ -495,13 +487,14 @@ bp_ig_nbs <- bench::press(
   {
     p <- pnorm(ds_ig_nbs$z[1:input_len])
     weight_kg <- ds_ig_nbs$y[1:input_len]
-    gest_days <- ds_ig_nbs$gest_days[1:input_len]
+    gest_days <- ds_ig_nbs$x[1:input_len]
     acronym <- ds_ig_nbs$acronym[1:input_len]
     sex <- ds_ig_nbs$sex[1:input_len]
     sex_gs <- ifelse(sex == "M", "Male", "Female")
     bench::mark(
       check = FALSE, filter_gc = TRUE, time_unit = "ms", min_iterations = 50,
-      gigs = gigs::ig_nbs_value2centile(weight_kg, gest_days, sex, ac_ig_nbs),
+      gigs = gigs::value2centile(y =weight_kg, x = gest_days, sex = sex,
+                                 family = "ig_nbs", acronym = ac_ig_nbs),
       gs = growthstandards::igb_value2centile(val = weight_kg,
                                               gagebrth = gest_days,
                                               sex = sex_gs, var = "wtkg")
@@ -543,7 +536,7 @@ bp_ig_nbs_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_nbs, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below."}
+```{r plot_timings_ig_nbs, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below."}
 plot_bp(bp_ig_nbs, bp_ig_nbs_stata)
 ```
 
@@ -567,8 +560,8 @@ interpolating LMS coefficients in the WHO standards.
 ```{r discrepancies_ig_nbs, eval = TRUE}
 weight_kg <- 3
 gestage <- seq(274, 278, 0.5)
-gigs <- gigs::ig_nbs_value2centile(y = weight_kg, gest_days = gestage,
-                                   sex = "M", acronym = "wfga")
+gigs <- gigs::value2centile(y = weight_kg, x = gestage, sex = "M",
+                            family = "ig_nbs", acronym = "wfga")
 gs <- growthstandards::igb_value2centile(val = weight_kg, gagebrth = gestage,
                                          sex = "Male", var = "wtkg")
 waldo::compare(gigs, gs / 100, x_arg = "gigs", y_arg = "growthstandards")
@@ -581,7 +574,7 @@ Stata, and in the `growthstandards` package. Let's make a new dataset,
 ```{r ds_ig_png}
 ac_ig_png <- "wfa"
 ds_ig_png <- benchmark_dataset(n = 100000,
-                               standard = "ig_png",
+                               family = "ig_png",
                                acronym = ac_ig_png)
 ```
 
@@ -605,7 +598,8 @@ bp_ig_png <- bench::press(
     sex_gs <- ifelse(sex == "M", "Male", "Female")
     bench::mark(
       check = FALSE, filter_gc = TRUE, time_unit = "ms", min_iterations = 50,
-      gigs = gigs::ig_png_value2zscore(weight_kg, pma_weeks, sex, ac_ig_png),
+      gigs = gigs::value2zscore(weight_kg, pma_weeks, sex,
+                                family = "ig_png", acronym = ac_ig_png),
       gs = growthstandards::igprepost_value2zscore(val = weight_kg,
                                                    pmagedays = pma_days,
                                                    sex = sex_gs, var = "wtkg")
@@ -647,7 +641,7 @@ bp_ig_png_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_png, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below."}
+```{r plot_timings_ig_png, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below."}
 plot_bp(bp_ig_png, bp_ig_png_stata)
 ```
 
@@ -668,7 +662,7 @@ three packages:
 ```{r ds_ig_fet}
 ac_ig_fet <- "ofdfga"
 ds_ig_fet <- benchmark_dataset(n = 100000,
-                               standard = "ig_fet",
+                               family = "ig_fet",
                                acronym = ac_ig_fet)
 ```
 
@@ -691,7 +685,8 @@ bp_ig_fet <- bench::press(
     ofd_cm <- ofd_mm / 10
     bench::mark(
       check = FALSE, filter_gc = TRUE, time_unit = "ms", min_iterations = 50,
-      gigs = gigs::ig_fet_value2zscore(ofd_mm, gest_days, ac_ig_fet),
+      gigs = gigs::value2zscore(ofd_mm, gest_days,
+                                family = "ig_fet", acronym = ac_ig_fet),
       gs = growthstandards::igfet_value2zscore(val = ofd_cm,
                                                gagedays = gest_days,
                                                var = "ofdcm"),
@@ -734,7 +729,7 @@ bp_ig_fet_stata <-  data.frame(input_len = input_len,
 rm(gigs_0_4_0, input_len)
 ```
 
-```{r plot_timings_ig_fet, echo = FALSE, alt.text = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below."}
+```{r plot_timings_ig_fet, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below."}
 plot_bp(bp_ig_fet, bp_ig_fet_stata)
 ```
 
