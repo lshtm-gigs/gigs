@@ -1,12 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  benchmarking: benchmarking.html
+  articles/benchmarking: benchmarking.html
   gigs: gigs.html
-  ig-nbs-body-composition: ig-nbs-body-composition.html
-last_built: 2024-07-01T13:19Z
+  articles/ig-nbs-body-composition: ig-nbs-body-composition.html
+last_built: 2024-11-09T03:02Z
 urls:
-  reference: https://simpar1471.github.io/gigs/reference
-  article: https://simpar1471.github.io/gigs/articles
-
+  reference: https://lshtm-gigs.github.io/gigs/reference
+  article: https://lshtm-gigs.github.io/gigs/articles

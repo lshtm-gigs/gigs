@@ -5,71 +5,47 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.">
 <title>Assess Fetal, Newborn, and Child Growth with International Standards • gigs</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Assess Fetal, Newborn, and Child Growth with International Standards">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Assess Fetal, Newborn, and Child Growth with International Standards">
+<meta name="description" content="Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.">
 <meta property="og:description" content="Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.">
-<meta property="og:image" content="https://simpar1471.github.io/gigs/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<meta property="og:image" content="https://lshtm-gigs.github.io/gigs/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="articles/gigs.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="articles/index.html">Articles</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="articles/gigs.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-home">
 <div class="row">
@@ -83,8 +59,8 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Produced as part of the Guidance for International Growth Standards project, <strong>gigs</strong> provides a single, simple interface for working with the WHO Child Growth standards and outputs from the INTERGROWTH-21<sup>st</sup> project. You will find functions for converting from anthropometric measures (e.g. weight or length) to z-scores and centiles, and the inverse. Also included are functions for classifying newborn and infant growth according to literature-based cut-offs.</p>
-<p><strong>gigs</strong> is be of use to anyone interested in fetal and child growth, including child health researchers, policymakers, and clinicians. This package is best suited to growth data where the gestational age of each child is known, as the use of the growth standards included in <strong>gigs</strong> is gestational age-dependent. We recommend you check out the <a href="#available-standards">available standards</a> section to see if your anthropometric measurements can be converted to z-scores/centiles by <strong>gigs</strong>. We recommend using <strong>gigs</strong> to generate continuous or categorical measures of fetal/newborn/child growth, which can then be used in downstream analyses.</p>
+<p>Produced as part of the Guidance for International Growth Standards project at the London School of Hygiene &amp; Tropical Medicine, <strong>gigs</strong> provides a single, simple interface for working with the WHO Child Growth standards and outputs from the INTERGROWTH-21<sup>st</sup> project. You will find functions for converting from anthropometric measures (e.g. weight or length) to z-scores and centiles, and the inverse. Also included are functions for classifying newborn and infant growth according to literature-based cut-offs.</p>
+<p><strong>gigs</strong> is of use to anyone interested in fetal and child growth, including child health researchers, policymakers, and clinicians. This package is best suited to growth data where the gestational age (GA) of each child is known, as the use of the growth standards included in <strong>gigs</strong> is GA-dependent. We recommend you check out the <a href="#available-international-growth-standards">available standards</a> section to see if your anthropometric measurements can be converted to z-scores/centiles by <strong>gigs</strong>. We recommend using <strong>gigs</strong> to generate continuous or categorical measures of fetal/newborn/child growth, which can then be used in downstream analyses.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -92,70 +68,167 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># You can install the development version from GitHub with `remotes`:</span></span>
 <span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"lshtm-gigs/gigs"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"lshtm-gigs/gigs"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="available-standards">Available standards<a class="anchor" aria-label="anchor" href="#available-standards"></a>
+<h2 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a>
 </h2>
+<p>GIGS operates on anthropometric measurements, and can convert between these and <em>z-scores</em>/<em>centiles</em>. Z-scores and centiles represent the location of a measurement within a normal distribution of values, such that:</p>
+<ul>
+<li>A <em>z-score</em> is the number of standard deviations from the mean for a given anthropometric measurement (e.g. height or weight).</li>
+<li>A <em>centile</em> represents the proportion of measurements in some distribution which we would expect to be lower than a measurement we’ve taken. In <em>gigs</em>, these are represented as a value between <code>0</code> and <code>1</code>. For example, <code>0.5</code> corresponds to the 50<sup>th</sup> centile (i.e. the mean), whereas <code>0.75</code> corresponds to the 75<sup>th</sup> centile.</li>
+</ul>
+<p>In growth data, z-scores and centiles represent the size a fetus, newborn, or child relative to its peers. Its size is considered relative to some standardising variable, which is usually age but could also be another variable such as their length. By tracking a child’s relative size as they grow, you can see if they are achieving their growth potential or not. If not, this may indicate underlying issues such as ill health or undernutrition.</p>
+</div>
+<div class="section level2">
+<h2 id="classification-functions">Classification functions<a class="anchor" aria-label="anchor" href="#classification-functions"></a>
+</h2>
+<p>GIGS includes a number of functions which permit fast identification of at-risk infants through classification of suboptimal growth. The cut-offs used are sourced from research literature; you can check the function documentation to see these sources.</p>
+<div class="section level3">
+<h3 id="growth-classification-in-dataframe-like-objects">Growth classification in <code>data.frame</code>-like objects<a class="anchor" aria-label="anchor" href="#growth-classification-in-dataframe-like-objects"></a>
+</h3>
+<p>Use the <code><a href="reference/classify_growth.html">classify_growth()</a></code> function to quickly compute growth indicators in <code>data.frame</code>-like objects. All <code>classify_*()</code>-style functions in GIGS use <a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masking</a>, so you provide a <code>data.frame</code>-like object in the <code>.data</code> argument and then refer to your column names directly. In <code><a href="reference/classify_growth.html">classify_growth()</a></code>, you can also use the <code>.analyses</code> argument to specify which growth indicators you want to classify.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">life6mo_newborns</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="reference/life6mo.html">life6mo</a></span><span class="op">[</span><span class="va">life6mo</span><span class="op">$</span><span class="va">age_days</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Use classify_growth() to get multiple growth indicators at once</span></span>
+<span><span class="va">life6mo_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_growth.html">classify_growth</a></span><span class="op">(</span></span>
+<span>        .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
+<span>        gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>        age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
+<span>        weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
+<span>        lenht_cm <span class="op">=</span> <span class="va">len_cm</span>,</span>
+<span>        id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
+<span>        .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── `gigs::classify_growth()` ───────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ✔ Small vulnerable newborns: Success</span></span>
+<span><span class="co">#&gt; ✔ Stunting: Success</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">life6mo_classified</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm</span></span>
+<span><span class="co">#&gt; 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333</span></span>
+<span><span class="co">#&gt; 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667</span></span>
+<span><span class="co">#&gt; 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667</span></span>
+<span><span class="co">#&gt; 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334</span></span>
+<span><span class="co">#&gt;    birthweight_centile         svn       lhaz        stunting stunting_outliers</span></span>
+<span><span class="co">#&gt; 1          0.010765424    Term SGA -3.5406446 stunting_severe   stunting_severe</span></span>
+<span><span class="co">#&gt; 28         0.002833163 Preterm SGA -2.2854751        stunting          stunting</span></span>
+<span><span class="co">#&gt; 36         0.756367868 Preterm AGA -0.6087434    not_stunting      not_stunting</span></span>
+<span><span class="co">#&gt; 56         0.126440075 Preterm AGA -1.6989568    not_stunting      not_stunting</span></span></code></pre></div>
+<p>When using <code><a href="reference/classify_growth.html">classify_growth()</a></code>, you will be informed which of the analyses you wanted to run were successful. In the example below, because <code>lenht_cm</code> is not specified, stunting indicators cannot be computed.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">life6mo_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_growth.html">classify_growth</a></span><span class="op">(</span></span>
+<span>        .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
+<span>        gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>        age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
+<span>        weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
+<span>        id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
+<span>        .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── `gigs::classify_growth()` ───────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ✔ Small vulnerable newborns: Success</span></span>
+<span><span class="co">#&gt; ! Stunting: Not computed (`lenht_cm` not supplied)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">life6mo_classified</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm</span></span>
+<span><span class="co">#&gt; 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333</span></span>
+<span><span class="co">#&gt; 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667</span></span>
+<span><span class="co">#&gt; 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667</span></span>
+<span><span class="co">#&gt; 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334</span></span>
+<span><span class="co">#&gt;    birthweight_centile         svn</span></span>
+<span><span class="co">#&gt; 1          0.010765424    Term SGA</span></span>
+<span><span class="co">#&gt; 28         0.002833163 Preterm SGA</span></span>
+<span><span class="co">#&gt; 36         0.756367868 Preterm AGA</span></span>
+<span><span class="co">#&gt; 56         0.126440075 Preterm AGA</span></span></code></pre></div>
+<p>You can also use <code>classify_*()</code> functions which are specific to the growth indicator you’d like to calculate, for example <code><a href="reference/classify_svn.html">classify_svn()</a></code> to get small, vulnerable newborn classifications for each infant:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Small vulnerable newborns - note no ID parameter, as it is assumed that all</span></span>
+<span><span class="co"># measures are taken at birth</span></span>
+<span><span class="va">life6mo_svn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_svn.html">classify_svn</a></span><span class="op">(</span></span>
+<span>  .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
+<span>  weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
+<span>  gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">life6mo_svn</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm</span></span>
+<span><span class="co">#&gt; 1   1     273   M         0 273        0  2.30 42.06667    33.26667 9.433333</span></span>
+<span><span class="co">#&gt; 28  4     250   F         0 250        0  1.50 42.03333    30.03333 8.066667</span></span>
+<span><span class="co">#&gt; 36  5     238   F         0 238        0  2.39 43.46667    33.63333 9.166667</span></span>
+<span><span class="co">#&gt; 56  8     240   F         0 240        0  1.80 41.73333    31.46667 8.033334</span></span>
+<span><span class="co">#&gt;    birthweight_centile         svn</span></span>
+<span><span class="co">#&gt; 1          0.010765424    Term SGA</span></span>
+<span><span class="co">#&gt; 28         0.002833163 Preterm SGA</span></span>
+<span><span class="co">#&gt; 36         0.756367868 Preterm AGA</span></span>
+<span><span class="co">#&gt; 56         0.126440075 Preterm AGA</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="conversion-functions">Conversion functions<a class="anchor" aria-label="anchor" href="#conversion-functions"></a>
+</h2>
+<div class="section level3">
+<h3 id="available-international-growth-standards">Available international growth standards<a class="anchor" aria-label="anchor" href="#available-international-growth-standards"></a>
+</h3>
+<p>GIGS facilitates the proper use of international growth standards, which are growth charts developed using international samples of healthy singleton children born to mothers that had their health needs met during pregnancy. They represent an international standard of ‘optimal’ growth. GIGS implements international growth standards from the WHO and INTERGROWTH-21<sup>st</sup> project:</p>
 <ul>
 <li>
 <code>ig_nbs</code> - INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm)
 <details><summary>
 Component standards
 </summary><table class="table">
-<colgroup>
-<col width="12%">
-<col width="55%">
-<col width="8%">
-<col width="23%">
-</colgroup>
 <thead><tr class="header">
 <th>Acronym</th>
 <th>Description</th>
 <th>Unit</th>
 <th>
-<code>gest_days</code> range</th>
+<code>x</code> range</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>wfga</code></td>
-<td>weight-or-gestational age</td>
+<td>weight-for-GA</td>
 <td>kg</td>
 <td>168 to 300 days</td>
 </tr>
 <tr class="even">
 <td><code>lfga</code></td>
-<td>length-for-gestational age</td>
+<td>length-for-GA</td>
 <td>cm</td>
 <td>168 to 300 days</td>
 </tr>
 <tr class="odd">
 <td><code>hcfga</code></td>
-<td>head circumference-for-gestational age</td>
+<td>head circumference-for-GA</td>
 <td>cm</td>
 <td>168 to 300 days</td>
 </tr>
 <tr class="even">
 <td><code>wlrfga</code></td>
-<td>weight-to-length ratio-for-gestational age</td>
+<td>weight-to-length ratio-for-GA</td>
 <td>kg/cm</td>
 <td>168 to 300 days</td>
 </tr>
 <tr class="odd">
 <td><code>ffmfga</code></td>
-<td>fat-free mass-for-gestational age</td>
+<td>fat-free mass-for-GA</td>
 <td>kg</td>
 <td>266 to 294 days</td>
 </tr>
 <tr class="even">
 <td><code>bfpfga</code></td>
-<td>body fat percentage-for-gestational age</td>
+<td>body fat percentage-for-GA</td>
 <td>%</td>
 <td>266 to 294 days</td>
 </tr>
 <tr class="odd">
 <td><code>fmfga</code></td>
-<td>fat mass-for-gestational age</td>
+<td>fat mass-for-GA</td>
 <td>kg</td>
 <td>266 to 294 days</td>
 </tr>
@@ -179,19 +252,19 @@ Component standards
 <td><code>wfa</code></td>
 <td>weight-for-age</td>
 <td>kg</td>
-<td>27 to &lt;64 exact weeks</td>
+<td>27 to ≤64 exact weeks</td>
 </tr>
 <tr class="even">
 <td><code>lfa</code></td>
 <td>length-for-age</td>
 <td>cm</td>
-<td>27 to &lt;64 exact weeks</td>
+<td>27 to ≤64 exact weeks</td>
 </tr>
 <tr class="odd">
 <td><code>hcfa</code></td>
 <td>head circumference-for-age</td>
 <td>cm</td>
-<td>27 to &lt;64 exact weeks</td>
+<td>27 to ≤64 exact weeks</td>
 </tr>
 <tr class="even">
 <td><code>wfl</code></td>
@@ -208,10 +281,10 @@ Component standards
 Component standards
 </summary><table class="table">
 <colgroup>
-<col width="9%">
-<col width="69%">
-<col width="5%">
-<col width="15%">
+<col width="11%">
+<col width="64%">
+<col width="6%">
+<col width="17%">
 </colgroup>
 <thead><tr class="header">
 <th>Acronym</th>
@@ -223,123 +296,129 @@ Component standards
 <tbody>
 <tr class="odd">
 <td><code>hcfga</code></td>
-<td>head circumference-for-gestational age</td>
+<td>head circumference-for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>bpdfga</code></td>
-<td>biparietal diameter-for-gestational age</td>
+<td>biparietal diameter-for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>acfga</code></td>
-<td>abdominal circumference-for-gestational age</td>
+<td>abdominal circumference-for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>flfga</code></td>
-<td>femur length-for-gestational age</td>
+<td>femur length-for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>ofdfga</code></td>
-<td>occipito-frontal diameter for-gestational age</td>
+<td>occipito-frontal diameter for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>efwfga</code></td>
-<td>estimated fetal weight-for-gestational age</td>
+<td>estimated fetal weight-for-GA</td>
 <td>g</td>
 <td>154 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>sfhfga</code></td>
-<td>symphisis-fundal height-for-gestational age</td>
+<td>symphisis-fundal height-for-GA</td>
 <td>mm</td>
 <td>112 to 294 days</td>
 </tr>
 <tr class="even">
 <td><code>crlfga</code></td>
-<td>crown-rump length-for-gestational age</td>
+<td>crown-rump length-for-GA</td>
 <td>mm</td>
 <td>58 to 105 days</td>
 </tr>
 <tr class="odd">
 <td><code>gafcrl</code></td>
-<td>gestational age-for-crown-rump length</td>
+<td>GA-for-crown-rump length</td>
 <td>days</td>
 <td>15 to 95 mm</td>
 </tr>
 <tr class="even">
 <td><code>gwgfga</code></td>
-<td>gestational weight gain-for-gestational age</td>
+<td>gestational weight gain-for-GA</td>
 <td>kg</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>pifga</code></td>
-<td>pulsatility index-for-gestational age</td>
+<td>pulsatility index-for-GA</td>
 <td></td>
 <td>168 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>rifga</code></td>
-<td>resistance index-for-gestational age</td>
+<td>resistance index-for-GA</td>
 <td></td>
 <td>168 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>sdrfga</code></td>
-<td>systolic/diastolic ratio-for-gestational age</td>
+<td>systolic/diastolic ratio-for-GA</td>
 <td></td>
 <td>168 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>tcdfga</code></td>
-<td>transcerebellar diameter-for-gestational age</td>
+<td>transcerebellar diameter-for-GA</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="odd">
 <td><code>tcdfga</code></td>
-<td>gestational age-for-transcerebellar diameter</td>
+<td>GA-for-transcerebellar diameter</td>
 <td>mm</td>
 <td>98 to 280 days</td>
 </tr>
 <tr class="even">
 <td><code>poffga</code></td>
-<td>parietal-occipital fissure-for-gestational age</td>
+<td>parietal-occipital fissure-for-GA</td>
 <td>mm</td>
 <td>105 to 252 days</td>
 </tr>
 <tr class="odd">
 <td><code>sffga</code></td>
-<td>Sylvian fissue-for-gestational age</td>
+<td>Sylvian fissue-for-GA</td>
 <td>mm</td>
 <td>105 to 252 days</td>
 </tr>
 <tr class="even">
 <td><code>avfga</code></td>
-<td>anterior horn of the lateral ventricle-for-gestational age</td>
+<td>anterior horn of the lateral ventricle-for-GA</td>
 <td>mm</td>
 <td>105 to 252 days</td>
 </tr>
 <tr class="odd">
 <td><code>pvfga</code></td>
-<td>atrium of the posterior horn of the lateral ventricle-for-gestational age</td>
+<td>atrium of the posterior horn of the lateral ventricle-for-GA</td>
 <td>mm</td>
 <td>105 to 252 days</td>
 </tr>
 <tr class="even">
 <td><code>cmfga</code></td>
-<td>cisterna magna-for-gestational age</td>
+<td>cisterna magna-for-GA</td>
 <td>mm</td>
 <td>105 to 252 days</td>
+</tr>
+<tr class="odd">
+<td><code>hefwfga</code></td>
+<td>Hadlock estimated fetal weight-for-GA</td>
+<td>g</td>
+<td>126 to 287 days</td>
 </tr>
 </tbody>
 </table></details>
@@ -423,61 +502,47 @@ Component standards
 </li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="conversion-functions">Conversion functions<a class="anchor" aria-label="anchor" href="#conversion-functions"></a>
-</h2>
-<div class="section level3">
-<h3 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a>
-</h3>
-<p>The package operates with on measured anthropometric values, and can convert between these and <em>z-scores</em>/<em>centiles</em>. Z-scores and centiles represent the location of a measurement within a normal distribution of values, such that:</p>
-<ul>
-<li>A <em>z-score</em> is the number of standard deviations from the mean for a given anthropometric measurement (e.g. height or weight).</li>
-<li>A <em>centile</em> represents the proportion of measurements in some distribution which we would expect to be lower than a measurement we’ve taken, represented as a value between 0 and 1.</li>
-</ul>
-</div>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
-<p>Conversion functions are named according to the set of standards in use, the component standard from that set, then the type of conversion. For example, to convert <em>values to z-scores</em> in the <em>weight-for-GA</em> standard from the <em>INTERGROWTH-21<sup>st</sup> Newborn Size Standards</em> would be: <code>ig_nbs</code>/<code>_wfga</code>/<code>_value2zscore()</code></p>
-<p>Similarly, the conversion of length-for-age values to centiles in term and preterm infants could be performed with the WHO Child Growth standards and INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards, respectively:</p>
+<p>Conversion functions are named according to the conversion they perform. Either they convert measured values to z-scores/centiles (<code><a href="reference/value2zscore.html">value2zscore()</a></code>/<code><a href="reference/value2zscore.html">value2centile()</a></code>), or they generate expected values for given z-scores/centiles (<code><a href="reference/zscore2value.html">zscore2value()</a></code>/<code><a href="reference/zscore2value.html">centile2value()</a></code>).</p>
+<p>You tell gigs which international growth standard to use with the <code>family</code> and <code>acronym</code> parameters. The <code>family</code> parameter tells gigs which set of standards you want to use - e.g. <code>"ig_nbs"</code> for the INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm). The <code>acronym</code> parameter describes which exact growth standard you want out of all the growth standards in your ‘family’ of standards.</p>
+<p>For example, to convert <em>values to z-scores</em> in the <em>weight-for-GA</em> standard from the <em>INTERGROWTH-21<sup>st</sup> Newborn Size standards</em>, you would run <code>value2zscore(..., family = "ig_nbs", acronym = "wfga")</code>.</p>
+<p>Similarly, the conversion of length-for-age values to centiles in term and preterm infants could be performed with the <em>WHO Child Growth standards</em> and <em>INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards</em>, respectively:</p>
 <ul>
-<li>Term infants: <code>who_gs</code>/<code>_lhfa</code>/<code>_value2zscore()</code>
+<li>Preterm infants: <code>value2centile(..., family = "ig_png", acronym = "lfa")</code>
 </li>
-<li>Preterm infants: <code>ig_png</code>/<code>_lfa</code>/<code>_value2centile()</code>
+<li>Term infants: <code>value2centile(..., family = "who_gs", acronym = "lhfa")</code>
 </li>
 </ul>
-<p>If the component standard is not included in the function call, it should be passed to the <code>acronym</code> parameter of the general function call. For example, these two function calls would behave in the same way:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ig_nbs_value2centile.html">ig_nbs_value2zscore</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">25.7</span>, gest_days <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span>, acronym <span class="op">=</span> <span class="st">"hcfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.18</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/ig_nbs_value2centile.html">ig_nbs_hcfga_value2zscore</a></span><span class="op">(</span>headcirc_cm <span class="op">=</span> <span class="fl">25.7</span>, gest_days <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.18</span></span></code></pre></div>
-<p>A vector of <code>acronym</code> values can be used if you want to convert with different standards for each input.</p>
+<p>If you don’t know which units are used for a given growth standard, the <code><a href="reference/report_units.html">report_units()</a></code> function will help you. Run it with your <code>family</code> and <code>acronym</code> combination to get help:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/report_units.html">report_units</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; You're using "wfga" from the INTERGROWTH-21st Newborn Size Standards</span></span>
+<span><span class="co">#&gt; ("ig_nbs").</span></span>
+<span><span class="co">#&gt; ℹ Units for `y`: Weight (kg).</span></span>
+<span><span class="co">#&gt; ℹ Units for `x`: Gestational age (days).</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="values-to-z-scorescentiles">Values to z-scores/centiles<a class="anchor" aria-label="anchor" href="#values-to-z-scorescentiles"></a>
 </h3>
 <p>These functions allow easy conversion from measured values to z-scores or centiles for the standard used.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert from z-scores for individual values...</span></span>
-<span><span class="fu"><a href="reference/ig_nbs_value2centile.html">ig_nbs_value2zscore</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0.785</span>, gest_days <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/value2zscore.html">value2zscore</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0.785</span>, x <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>             family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span></span>
 <span><span class="co"># .. or for multiple inputs</span></span>
-<span><span class="fu"><a href="reference/ig_nbs_value2centile.html">ig_nbs_wfga_value2centile</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="fl">0.785</span>,</span>
-<span>                          gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">175</span>, <span class="fl">196</span>, by <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
-<span>                          sex <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/value2zscore.html">value2centile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0.785</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">175</span>, <span class="fl">196</span>, by <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>, sex <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>              family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.75 0.50 0.25 0.09</span></span>
 <span></span>
-<span><span class="co"># You can do the same for centiles</span></span>
-<span><span class="fu"><a href="reference/ig_png_value2zscore.html">ig_png_wfa_value2centile</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.86</span>, <span class="fl">3.12</span>, <span class="fl">3.12</span>, <span class="fl">3.43</span>, <span class="fl">3.77</span>, <span class="fl">4.10</span><span class="op">)</span>,</span>
-<span>                         pma_weeks <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>                         sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># You can also get centiles</span></span>
+<span><span class="fu"><a href="reference/value2zscore.html">value2centile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.86</span>, <span class="fl">3.12</span>, <span class="fl">3.12</span>, <span class="fl">3.43</span>, <span class="fl">3.77</span>, <span class="fl">4.10</span><span class="op">)</span>, x <span class="op">=</span> <span class="fl">40</span>, sex <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>              family <span class="op">=</span> <span class="st">"ig_png"</span>,  acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.10 0.25 0.25 0.50 0.75 0.90</span></span></code></pre></div>
 </div>
@@ -485,35 +550,38 @@ Component standards
 <h3 id="z-scorescentiles-to-values">Z-scores/centiles to values<a class="anchor" aria-label="anchor" href="#z-scorescentiles-to-values"></a>
 </h3>
 <p>These functions convert z-scores to expected anthropometric measurements. They are mostly useful for the creation of reference curves (see below).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert from z-scores for individual values...</span></span>
-<span><span class="fu"><a href="reference/ig_nbs_centile2value.html">ig_nbs_zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fl">0</span>, gest_days <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/zscore2value.html">zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fl">0</span>, x <span class="op">=</span> <span class="fl">182</span>, sex <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>             family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.785</span></span>
 <span></span>
 <span><span class="co"># .. or for multiple inputs</span></span>
-<span><span class="fu"><a href="reference/ig_nbs_centile2value.html">ig_nbs_wfga_zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fl">0</span>, gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">182</span>, <span class="fl">204</span>, by <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>, sex <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/zscore2value.html">zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fl">0</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">182</span>, <span class="fl">204</span>, by <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>, sex <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>             family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.785 0.893 1.013 1.147</span></span>
 <span></span>
 <span><span class="co"># You can do the same for centiles</span></span>
-<span><span class="fu"><a href="reference/ig_png_zscore2value.html">ig_png_wfa_centile2value</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
-<span>                            pma_weeks <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>                            sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/zscore2value.html">centile2value</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.9</span><span class="op">)</span>, x <span class="op">=</span> <span class="fl">40</span>, sex <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>              family <span class="op">=</span> <span class="st">"ig_png"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 2.87 3.12 3.43 3.77 4.11</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="reference-curves">Reference curves<a class="anchor" aria-label="anchor" href="#reference-curves"></a>
 </h4>
 <p>We can use gigs to generate reference curves for the standards by getting curves for the expected weight at multiple z-scores across multiple gestational ages. We would usually recommend <a href="https://ggplot2.tidyverse.org/" class="external-link"><code>ggplot2</code></a> for such visualisation, but do not use it here to reduce our package’s dependencies.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">z_score_range</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">:</span><span class="fl">2</span></span>
 <span><span class="va">gestage_range</span> <span class="op">&lt;-</span> <span class="fl">168</span><span class="op">:</span><span class="fl">230</span></span>
 <span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">z_score_range</span>,</span>
 <span>               FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                 <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="reference/ig_nbs_centile2value.html">ig_nbs_wfga_zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>,</span>
-<span>                                                gest_days <span class="op">=</span> <span class="va">gestage_range</span>,</span>
-<span>                                                sex <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span></span>
+<span>                 <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="reference/zscore2value.html">zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>,</span>
+<span>                                    x <span class="op">=</span> <span class="va">gestage_range</span>,</span>
+<span>                                    sex <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>                                    family <span class="op">=</span> <span class="st">"ig_nbs"</span>,</span>
+<span>                                    acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span>
 <span>               <span class="op">}</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">ref</span>, x <span class="op">=</span> <span class="va">gestage_range</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, type <span class="op">=</span> <span class="st">"l"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>,</span>
 <span>        xlab <span class="op">=</span> <span class="st">"Gestational age (days)"</span>,</span>
@@ -521,75 +589,20 @@ Component standards
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Weight-for-GA in very preterm newborns"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">gestage_range</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="va">ref</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ref</span><span class="op">)</span><span class="op">]</span>, legend <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="op">-</span><span class="fl">2</span>,</span>
 <span>       title <span class="op">=</span> <span class="st">"Z-score"</span>, col <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">1</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example_zp2v_curves-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_zp2v_curves-1.png" alt="A growth chart for weight against gestational age, with lines for each SD from +2 to -2." width="100%"></p>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="classification-functions">Classification functions<a class="anchor" aria-label="anchor" href="#classification-functions"></a>
-</h2>
-<p>These functions allow for quick identification of at-risk infants through classification of suboptimal growth. The cut-offs used are sourced from research literature; you can check the function documentation to see these sources.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Size for gestational age</span></span>
-<span><span class="fu"><a href="reference/classify_sfga.html">classify_sfga</a></span><span class="op">(</span></span>
-<span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.1</span>, <span class="fl">3.2</span>, <span class="fl">4.5</span><span class="op">)</span>,</span>
-<span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">252</span>, <span class="fl">259</span>, <span class="fl">290</span><span class="op">)</span>,</span>
-<span>  sex <span class="op">=</span> <span class="st">"M"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] SGA AGA LGA</span></span>
-<span><span class="co">#&gt; Levels: SGA AGA LGA</span></span>
-<span></span>
-<span><span class="co"># Small vulnerable newborns</span></span>
-<span><span class="fu"><a href="reference/classify_svn.html">classify_svn</a></span><span class="op">(</span></span>
-<span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.1</span>, <span class="fl">3.2</span>, <span class="fl">4.5</span><span class="op">)</span>,</span>
-<span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">252</span>, <span class="fl">259</span>, <span class="fl">290</span><span class="op">)</span>,</span>
-<span>  sex <span class="op">=</span> <span class="st">"M"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] Preterm SGA Term AGA    Term LGA   </span></span>
-<span><span class="co">#&gt; Levels: Preterm SGA Preterm AGA Preterm LGA Term SGA Term AGA Term LGA</span></span>
-<span></span>
-<span><span class="co"># Stunting, i.e. low length increase relative to age</span></span>
-<span><span class="fu"><a href="reference/classify_stunting.html">classify_stunting</a></span><span class="op">(</span></span>
-<span>  lenht_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">42.3</span>, <span class="fl">75.4</span>, <span class="fl">72.83</span><span class="op">)</span>,</span>
-<span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">252</span>, <span class="fl">525</span>, <span class="fl">245</span><span class="op">)</span>,</span>
-<span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">238</span>, <span class="fl">259</span>, <span class="fl">266</span><span class="op">)</span>,</span>
-<span>  sex <span class="op">=</span> <span class="st">"M"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] stunting_severe stunting        not_stunting   </span></span>
-<span><span class="co">#&gt; Levels: stunting_severe stunting not_stunting</span></span>
-<span></span>
-<span><span class="co"># Wasting, i.e. low weight increase relative to length/height</span></span>
-<span><span class="fu"><a href="reference/classify_wasting.html">classify_wasting</a></span><span class="op">(</span></span>
-<span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.75</span>, <span class="fl">2.18</span>, <span class="fl">5.30</span>, <span class="fl">6.75</span><span class="op">)</span>,</span>
-<span>  lenht_cm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">67.7</span>, <span class="fl">46.6</span>, <span class="fl">55.8</span>, <span class="fl">80.1</span><span class="op">)</span>,</span>
-<span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">268</span>, <span class="fl">247</span>, <span class="fl">250</span>, <span class="fl">278</span><span class="op">)</span>,</span>
-<span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">33</span>, <span class="fl">230</span>, <span class="fl">278</span><span class="op">)</span>,</span>
-<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span>,</span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] wasting_severe wasting        not_wasting    wasting_severe</span></span>
-<span><span class="co">#&gt; Levels: wasting_severe wasting not_wasting overweight</span></span>
-<span></span>
-<span><span class="co"># Weight-for-age, i.e. low weight increase relative to age</span></span>
-<span><span class="fu"><a href="reference/classify_wfa.html">classify_wfa</a></span><span class="op">(</span></span>
-<span>  weight_kg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.1</span>, <span class="fl">7.2</span>, <span class="fl">6.1</span>, <span class="fl">9.1</span>, <span class="fl">9.4</span><span class="op">)</span>,</span>
-<span>  age_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">435</span>, <span class="fl">501</span>, <span class="fl">323</span>, <span class="fl">201</span>, <span class="fl">154</span><span class="op">)</span>,</span>
-<span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">36</span>, <span class="fl">27</span>, <span class="fl">37</span>, <span class="fl">40</span>, <span class="fl">28</span><span class="op">)</span>,</span>
-<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] underweight_severe underweight_severe normal_weight      overweight        </span></span>
-<span><span class="co">#&gt; [5] &lt;NA&gt;              </span></span>
-<span><span class="co">#&gt; Levels: underweight_severe underweight normal_weight overweight</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
 <h1 id="other-packages">Other packages<a class="anchor" aria-label="anchor" href="#other-packages"></a>
 </h1>
-<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in gigs. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in gigs - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A green tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and an exclamation mark (❕) indicates that some of these standards are implemented but not others.</p>
+<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in gigs. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in gigs - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
 <table class="table">
 <colgroup>
-<col width="37%">
+<col width="39%">
 <col width="4%">
-<col width="8%">
+<col width="7%">
 <col width="11%">
 <col width="11%">
 <col width="12%">
@@ -624,6 +637,15 @@ Component standards
 <td>Values → z-scores</td>
 </tr>
 <tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values ↔︎ z-scores</td>
+</tr>
+<tr class="even">
 <td><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
 <td>R</td>
 <td>✅</td>
@@ -632,26 +654,27 @@ Component standards
 <td>❌</td>
 <td>Values → z-scores/centiles</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
 <td>R</td>
 <td>✅</td>
 <td>✅</td>
-<td>❌</td>
-<td>❕</td>
+<td>⚠️</td>
+<td>⚠️</td>
 <td>Values ↔︎ z-scores/centiles</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
 <td>R</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
-<td>❕</td>
-<td>NA</td>
+<td>⚠️</td>
+<td>Values → z-scores/centiles</td>
 </tr>
-<tr class="even">
-<td><a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a></td>
+<tr class="odd">
+<td>
+<a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a> (Stata)</td>
 <td>Stata</td>
 <td>✅</td>
 <td>✅</td>
@@ -659,8 +682,9 @@ Component standards
 <td>✅</td>
 <td>Values ↔︎ z-scores/centiles</td>
 </tr>
-<tr class="odd">
-<td><a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a></td>
+<tr class="even">
+<td>
+<a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a> (Stata)</td>
 <td>Stata</td>
 <td>✅</td>
 <td>❌</td>
@@ -670,53 +694,122 @@ Component standards
 </tr>
 </tbody>
 </table>
-<p>We have benchmarked some of these implementations against each other for conversion of values to z-scores in the WHO Child Growth standards. At 100,000 inputs, each package took:</p>
-<table class="table">
+<p>We have benchmarked some of these implementations against each other for conversion of values to z-scores in the WHO Child Growth Standards and different sets of INTERGROWTH-21<sup>st</sup> standards. The table below shows relative speed of each software package when processing 100,000 inputs. The code used to generate these timings can be seen online in the GIGS benchmarking <a href="https://lshtm-gigs.github.io/gigs/articles/benchmarking.html">article</a>.</p>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="72%">
-<col width="27%">
+<col width="41%">
+<col width="4%">
+<col width="10%">
+<col width="14%">
+<col width="14%">
+<col width="15%">
 </colgroup>
 <thead><tr class="header">
-<th>Package</th>
-<th>Time taken (100,000 inputs)</th>
+<th align="left">Software</th>
+<th>Platform</th>
+<th>WHO (0-5 years) (ms)</th>
+<th>IG-21<sup>st</sup> NBS (ms)</th>
+<th>IG-21<sup>st</sup> PNG (ms)</th>
+<th>IG-21<sup>st</sup> Fetal (ms)</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
-<td>125 ms</td>
+<td align="left"><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
+<td>R</td>
+<td>100</td>
+<td>80</td>
+<td>20</td>
+<td>8</td>
 </tr>
 <tr class="even">
-<td><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
-<td>126 ms</td>
+<td align="left"><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
+<td>R</td>
+<td>2211</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
 </tr>
 <tr class="odd">
-<td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
-<td>128 ms</td>
+<td align="left"><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
+<td>R</td>
+<td>119</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
 </tr>
 <tr class="even">
-<td><a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a></td>
-<td>0.41 seconds</td>
+<td align="left"><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
+<td>R</td>
+<td>125</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
 </tr>
 <tr class="odd">
-<td><a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a></td>
-<td>2.05 seconds</td>
+<td align="left"><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
+<td>R</td>
+<td>88</td>
+<td>72</td>
+<td>43</td>
+<td>10</td>
 </tr>
 <tr class="even">
-<td><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
-<td>2.24 seconds</td>
+<td align="left"><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
+<td>R</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>16</td>
 </tr>
 <tr class="odd">
-<td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
-<td>NA (no WHO functions)</td>
+<td align="left"><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
+<td>R</td>
+<td>46</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://cran.r-project.org/web/packages/zscorer/index.html" class="external-link">zscorer</a></td>
+<td>R</td>
+<td>NA</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td align="left">
+<a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a> (Stata)</td>
+<td>Stata</td>
+<td>405</td>
+<td>471</td>
+<td>164</td>
+<td>93</td>
+</tr>
+<tr class="even">
+<td align="left">
+<a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a> (Stata)</td>
+<td>Stata</td>
+<td>2046</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
 </tr>
 </tbody>
 </table>
-<p>The results can be seen in the online benchmarking <a href="https://lshtm-gigs.github.io/gigs/articles/benchmarking.html" class="external-link">article</a>.</p>
-<p>The WHO and INTERGROWTH-21<sup>st</sup> standards are also available in standalone form, available from the <a href="https://www.who.int/tools/child-growth-standards/software" class="external-link">WHO website</a> and <a href="https://intergrowth21.tghn.org/intergrowth-21st-applications/" class="external-link">INTERGROWTH-21<sup>st</sup> website</a>, respectively. The INTERGROWTH-21<sup>st</sup> website also includes download links for Excel-based calculators in some standards.</p>
+<p>Note: <code>zscorer</code> is NA because we couldn’t time it for 100,000 inputs (it takes too long).</p>
+<p>The WHO and INTERGROWTH-21<sup>st</sup> standards are also available in standalone form, available from the <a href="https://www.who.int/tools/child-growth-standards/software" class="external-link">WHO website</a> and <a href="https://intergrowth21.com/" class="external-link">INTERGROWTH-21<sup>st</sup> website</a>, respectively. The INTERGROWTH-21<sup>st</sup> website also includes download links for Excel-based calculators in some standards.</p>
 <div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+<h2 id="authors--citation">Authors + Citation<a class="anchor" aria-label="anchor" href="#authors--citation"></a>
 </h2>
+<p><strong>S. R. Parker</strong> Maternal, Adolescent, Reproductive, and Child Health Centre, London School of Hygiene &amp; Tropical Medicine</p>
+<p><strong>Dr L. Vesel</strong> Ariadne Labs, Brigham and Women’s Hospital Harvard T.H. Chan School of Public Health</p>
+<p><strong>Professor E. O. Ohuma</strong> Maternal, Adolescent, Reproductive, and Child Health Centre, London School of Hygiene &amp; Tropical Medicine</p>
+<div class="section level3">
+<h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h3>
 <p>Parker SR, Vesel L, Ohuma EO (2023). <em>gigs: Assess Fetal, Newborn, and Child Growth with International Standards</em>. <a href="https://github.com/lshtm-gigs/gigs/" class="external-link uri">https://github.com/lshtm-gigs/gigs/</a>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -759,7 +852,7 @@ Component standards
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Simon Parker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-8214-4496" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Bill &amp; Melinda Gates Foundation <br><small class="roles"> Funder, copyright holder </small>  </li>
+<li>Bill &amp; Melinda Gates Foundation <br><small class="roles"> Funder </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -785,15 +878,15 @@ Component standards
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

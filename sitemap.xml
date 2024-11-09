@@ -1,117 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://simpar1471.github.io/gigs/404.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/articles/benchmarking.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/articles/gigs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/articles/ig-nbs-body-composition.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/index.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_sfga.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_stunting.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_svn.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_wasting.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/classify_wfa.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/gigs-package.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/gigs_options.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_fet.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_estimate_fetal_weight.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_estimate_ga.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_value2zscore.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_fet_zscore2value.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_centile2value.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_coeffs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_nbs_value2centile.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_png.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_png_value2zscore.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/ig_png_zscore2value.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/life6mo.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/shared_roxygen_params.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/shared_value2zscore_returns.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/shared_zscore2value_returns.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs_coeffs.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs_value2zscore.html</loc>
-  </url>
-  <url>
-    <loc>https://simpar1471.github.io/gigs/reference/who_gs_zscore2value.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://lshtm-gigs.github.io/gigs/404.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/CONTRIBUTING.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/LICENSE.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/articles/benchmarking.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/articles/gigs.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/articles/ig-nbs-body-composition.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/articles/index.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/authors.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/index.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/news/index.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_headsize.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_sfga.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_stunting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_svn.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_wasting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/categorise_wfa.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_growth.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_headsize.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_sfga.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_stunting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_svn.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_wasting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/classify_wfa.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_headsize.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_sfga.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_stunting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_svn.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_wasting.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/compute_wfa.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/dot-gigs_options.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/gigs-package.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/gigs_options.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/gigs_zscoring.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_fet.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_fet_estimate_fetal_weight.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_fet_estimate_ga.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_nbs.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_nbs_coeffs.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/ig_png.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/index.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/life6mo.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/report_units.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/shared_roxygen_params.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/value2zscore.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/who_gs.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/who_gs_coeffs.html</loc></url>
+<url><loc>https://lshtm-gigs.github.io/gigs/reference/zscore2value.html</loc></url>
 </urlset>
+

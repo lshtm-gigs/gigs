@@ -5,71 +5,47 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="A comparison of gigs' performance against other growth analysis packages.">
 <title>Benchmarking gigs against other software packages • gigs</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Benchmarking gigs against other software packages">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Benchmarking gigs against other software packages">
+<meta name="description" content="A comparison of gigs' performance against other growth analysis packages.">
 <meta property="og:description" content="A comparison of gigs' performance against other growth analysis packages.">
-<meta property="og:image" content="https://simpar1471.github.io/gigs/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<meta property="og:image" content="https://lshtm-gigs.github.io/gigs/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/gigs.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/index.html">Articles</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/gigs.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lshtm-gigs/gigs/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -81,7 +57,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Benchmarking gigs against other software packages</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lshtm-gigs/gigs/blob/HEAD/vignettes/articles/benchmarking.Rmd" class="external-link"><code>vignettes/articles/benchmarking.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lshtm-gigs/gigs/blob/master/vignettes/articles/benchmarking.Rmd" class="external-link"><code>vignettes/articles/benchmarking.Rmd</code></a></small>
       <div class="d-none name"><code>benchmarking.Rmd</code></div>
     </div>
 
@@ -91,13 +67,13 @@
 <h2 id="rationale">Rationale<a class="anchor" aria-label="anchor" href="#rationale"></a>
 </h2>
 <p>This short article describes the performance of gigs relative to a
-non-exhaustive group of R and non-R packages designed to implement child
-growth standards.</p>
+non-exhaustive group of R and non-R packages which implement
+international growth standards which are also found in gigs.</p>
 <table class="table">
 <colgroup>
-<col width="79%">
-<col width="10%">
-<col width="10%">
+<col width="45%">
+<col width="27%">
+<col width="27%">
 </colgroup>
 <thead><tr class="header">
 <th>Package name</th>
@@ -106,7 +82,17 @@ growth standards.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
+<td align="left">R</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
 <td><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
+<td align="left">R</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
 <td align="left">R</td>
 <td align="left">Yes</td>
 </tr>
@@ -116,22 +102,36 @@ growth standards.</p>
 <td align="left">Yes</td>
 </tr>
 <tr class="odd">
-<td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
+<td><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
 <td align="left">R</td>
-<td align="left">No</td>
+<td align="left">Yes</td>
 </tr>
 <tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/zscorer/index.html" class="external-link">zscorer</a></td>
+<td align="left">R</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
 <td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
 <td align="left">R</td>
 <td align="left">No</td>
 </tr>
+<tr class="even">
+<td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
+<td align="left">R</td>
+<td align="left">No</td>
+</tr>
 <tr class="odd">
-<td><a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a></td>
+<td>
+<a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a>
+(Stata)</td>
 <td align="left">Stata</td>
 <td align="left">No</td>
 </tr>
 <tr class="even">
-<td><a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a></td>
+<td>
+<a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a>
+(Stata)</td>
 <td align="left">Stata</td>
 <td align="left">No</td>
 </tr>
@@ -140,33 +140,180 @@ growth standards.</p>
 <p>Thus far, there is no comprehensive benchmark comparing these
 different packages. This short article will compare the speed of each
 package from 1 to 100000 inputs, checking how fast each package can
-convert weight values to z-scores in the WHO Child Growth standards.</p>
-<p>We have performed these benchmarks on a Windows 10 system running a
-Ryzen 7 3700X processor and 16GB of DDR4 RAM, using R version 4.3.2. The
-Stata benchmarks have been run on the same system in Stata 18.0
-(revision 15 May 2023), using the <a href="https://github.com/mcaceresb/stata-benchmark" class="external-link">benchmark</a>
+convert weight values to z-scores in different growth standards.</p>
+<p>We performed these benchmarks on R version 4.4.1, using a Windows 10
+system with a Ryzen 7 3700X processor and 16GB of DDR4 RAM. The Stata
+benchmarks were run in Stata 18.0 (revision 15 May 2023) on the same
+system, using the <a href="https://github.com/mcaceresb/stata-benchmark" class="external-link">benchmark</a>
 package for Stata.</p>
-<div class="section level3">
-<h3 id="set-up-benchmark-dataset">Set up benchmark dataset<a class="anchor" aria-label="anchor" href="#set-up-benchmark-dataset"></a>
-</h3>
-<p>The benchmarking and package comparisons will all use the same
-100,000-row dataset comprised of data which can be used to convert
-between z-scores and centiles in the WHO weight-for-age standard. The
-z-scores, <code>x</code> variable and sexes for each row are generated
-randomly with a pre-specified seed. As gigs is validated against the
-published growth curve data from the WHO, we use it to generate weight
-values in kg for each observation. This dataset can then be used to
-compare speed and accuracy in conversion between values and
-z-scores/centiles for the packages mentioned above.</p>
+<p>Other R packages can be used to analyse growth data with
+international standards, but have limitations which are not present in
+gigs. There are also software packages external to R which implement
+these standards. The table below describes these packages, and to what
+extent they have implemented functions that let users convert
+anthropometric measurements to z-scores/centiles in each set of
+standards implemented in gigs - the WHO Child Growth standards,
+INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very
+Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
+for preterm infants. A tick (✅) indicates that a package contains
+functions for all growth standards within a set, a cross (❌) indicates
+that a package has no functions for a set of growth standards, and a
+warning sign (⚠️) indicates that some standards in a set are
+implemented, but not others.</p>
+<table class="table">
+<colgroup>
+<col width="13%">
+<col width="7%">
+<col width="13%">
+<col width="12%">
+<col width="12%">
+<col width="13%">
+<col width="27%">
+</colgroup>
+<thead><tr class="header">
+<th>Software</th>
+<th>Platform</th>
+<th>WHO (0-5 years)</th>
+<th>IG-21<sup>st</sup> NBS</th>
+<th>IG-21<sup>st</sup> PNG</th>
+<th>IG-21<sup>st</sup> Fetal</th>
+<th>Functionality</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
+<td>R</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>Values ↔︎ z-scores/centiles</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values → z-scores</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values ↔︎ z-scores</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values → z-scores/centiles</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
+<td>R</td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+<td>⚠️</td>
+<td>Values ↔︎ z-scores/centiles</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
+<td>R</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>⚠️</td>
+<td>Values → z-scores/centiles</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values ↔︎ z-scores/centiles</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/zscorer/index.html" class="external-link">zscorer</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values → z-scores/centiles</td>
+</tr>
+<tr class="odd">
+<td>
+<a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a>
+(Stata)</td>
+<td>Stata</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>Values ↔︎ z-scores/centiles</td>
+</tr>
+<tr class="even">
+<td>
+<a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a>
+(Stata)</td>
+<td>Stata</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values → z-scores/centiles</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="shared-benchmark-code">Shared benchmark code<a class="anchor" aria-label="anchor" href="#shared-benchmark-code"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">who_gs_dataset</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">acronym</span> <span class="op">=</span> <span class="st">"wfa"</span>, <span class="va">seed</span> <span class="op">=</span> <span class="fl">154237890</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_seed.html" class="external-link">with_seed</a></span><span class="op">(</span></span>
-<span>    <span class="va">seed</span>,</span>
-<span>    code <span class="op">=</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></span><span class="op">)</span></span></code></pre></div>
+<p>In this vignette, we perform benchmark performance in each a growth
+standard from each set of growth standards implemented in gigs. These
+are the:</p>
+<ul>
+<li>WHO child growth standards (0-5 years)</li>
+<li>INTERGROWTH-21<sup>st</sup> Newborn Size standards</li>
+<li>INTERGROWTH-21<sup>st</sup> Postnatal Growth standards</li>
+<li>INTERGROWTH-21<sup>st</sup> Fetal standards</li>
+</ul>
+<p>The benchmarks utilise pre-generated datasets for growth standard.
+The z-scores, <code>x</code> variable and sexes for each row are
+generated (pseudo)randomly. Because the <code>gigs</code> test suite
+validates its functions against published growth curve data from the WHO
+and the INTERGROWTH-21<sup>st</sup> Project, we use <code>gigs</code> to
+generate expected measurements for each observation. This dataset can
+then be used to compare speeds for each package. These datasets are
+generated with the following function:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">benchmark_dataset</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">family</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">family</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-internal.html" class="external-link">asNamespace</a></span><span class="op">(</span><span class="st">"gigs"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">family</span> <span class="op">==</span> <span class="st">"ig_fet"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">xvars</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[[</span><span class="va">acronym</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">xvars</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[[</span><span class="va">acronym</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_seed.html" class="external-link">with_seed</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">154237890</span>, code <span class="op">=</span> <span class="op">{</span></span>
 <span>      <span class="co"># Random z-scores around 0</span></span>
 <span>      <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_seed.html" class="external-link">with_seed</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">154237890</span>, code <span class="op">=</span> <span class="op">{</span></span>
 <span>      <span class="co"># X variables are non-discrete but within bounds of the desired acronym</span></span>
-<span>      <span class="va">xvars</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/who_gs_coeffs.html">who_gs_coeffs</a></span><span class="op">[[</span><span class="va">acronym</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
 <span>      <span class="va">x</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">xvars</span>, size <span class="op">=</span> <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>      <span class="va">x_jitter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span>, min <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">x_jitter</span>, size <span class="op">=</span> <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -175,304 +322,226 @@ z-scores/centiles for the packages mentioned above.</p>
 <span>      <span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span>
-<span>  <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep_len</a></span><span class="op">(</span><span class="va">acronym</span>, <span class="va">n</span><span class="op">)</span></span>
-<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="va">x</span>, sex <span class="op">=</span> <span class="va">sex</span>, acronym <span class="op">=</span> <span class="va">acronym</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>      y <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/who_gs_zscore2value.html">who_gs_zscore2value</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="va">x</span>, sex <span class="op">=</span> <span class="va">sex</span>, acronym <span class="op">=</span> <span class="va">acronym</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="va">out</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z"</span>, <span class="st">"x"</span>, <span class="st">"sex"</span>, <span class="st">"acronym"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Generate 100,000-row dataset</span></span>
-<span><span class="va">bench_dataset</span> <span class="op">&lt;-</span> <span class="fu">who_gs_dataset</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span></span></code></pre></div>
-<p>The first 10 rows of this dataset look like this:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bench_dataset</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="center">z</th>
-<th align="center">x</th>
-<th align="center">sex</th>
-<th align="center">acronym</th>
-<th align="center">y</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="center">0.1783916</td>
-<td align="center">1480.29104</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">16.593835</td>
-</tr>
-<tr class="even">
-<td align="center">1.0806829</td>
-<td align="center">758.04165</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">13.377723</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.7026929</td>
-<td align="center">1076.37115</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">12.558484</td>
-</tr>
-<tr class="even">
-<td align="center">0.0950173</td>
-<td align="center">1425.04165</td>
-<td align="center">M</td>
-<td align="center">wfa</td>
-<td align="center">16.348601</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.4482927</td>
-<td align="center">368.91555</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">8.497343</td>
-</tr>
-<tr class="even">
-<td align="center">-0.3574745</td>
-<td align="center">792.04165</td>
-<td align="center">M</td>
-<td align="center">wfa</td>
-<td align="center">12.043674</td>
-</tr>
-<tr class="odd">
-<td align="center">1.1661293</td>
-<td align="center">1358.10063</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">18.188497</td>
-</tr>
-<tr class="even">
-<td align="center">-0.0874651</td>
-<td align="center">54.29104</td>
-<td align="center">M</td>
-<td align="center">wfa</td>
-<td align="center">5.300828</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.4768519</td>
-<td align="center">1176.10063</td>
-<td align="center">F</td>
-<td align="center">wfa</td>
-<td align="center">13.485699</td>
-</tr>
-<tr class="even">
-<td align="center">0.8001542</td>
-<td align="center">784.29104</td>
-<td align="center">M</td>
-<td align="center">wfa</td>
-<td align="center">13.710762</td>
-</tr>
-</tbody>
-</table>
-</div>
+<span>  <span class="va">gigs_fn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"zscore2value"</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-internal.html" class="external-link">asNamespace</a></span><span class="op">(</span><span class="st">"gigs"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">family</span> <span class="op">!=</span> <span class="st">"ig_fet"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="va">x</span>, sex <span class="op">=</span> <span class="va">sex</span>, family <span class="op">=</span> <span class="va">family</span>, acronym <span class="op">=</span> <span class="va">acronym</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, x <span class="op">=</span> <span class="va">x</span>, family <span class="op">=</span> <span class="va">family</span>, acronym <span class="op">=</span> <span class="va">acronym</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">out</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span>what <span class="op">=</span> <span class="va">gigs_fn</span>, args <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">family</span> <span class="op">==</span> <span class="st">"ig_fet"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">out</span><span class="op">$</span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">out</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>We’re using the <a href="https://bench.r-lib.org/" class="external-link">bench</a> package throughout this
+vignette, specifically the <code>bench::press()</code> function, which
+lets us compare function scaling by iterating through increasing amounts
+of observations.</p>
 </div>
 <div class="section level2">
-<h2 id="benchmark-code">Benchmark code<a class="anchor" aria-label="anchor" href="#benchmark-code"></a>
+<h2 id="who-growth-standards">WHO Growth Standards<a class="anchor" aria-label="anchor" href="#who-growth-standards"></a>
 </h2>
-<p>The <code>mbench_pkg()</code> function is used to benchmark each
-package over a range of input sizes. Each call to it produces a tabular
-output containing the median time required for <code>pkg_expr</code> to
-operate on the data, ranging from 1 to 100,000 inputs.</p>
+<p>The World Health Organisation (WHO) Child Growth Standards are
+included in gigs with the various <code>who_gs_*</code>conversion
+functions. These standards are implemented in a variety of other
+packages.</p>
+<div class="section level3">
+<h3 id="set-up-benchmark-dataset">Set up benchmark dataset<a class="anchor" aria-label="anchor" href="#set-up-benchmark-dataset"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mbench_pkg</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pkg_expr</span>, <span class="va">pkg_name</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">n_inputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">5000</span>, <span class="fl">10000</span>, <span class="fl">25000</span>, <span class="fl">50000</span>, <span class="fl">75000</span>, <span class="fl">100000</span><span class="op">)</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">map_dfr</a></span><span class="op">(</span>.x <span class="op">=</span> <span class="va">n_inputs</span>,</span>
-<span>                 .f <span class="op">=</span> \<span class="op">(</span><span class="va">no_of_inputs</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                   <span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">bench_dataset</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">no_of_inputs</span><span class="op">)</span>, <span class="op">]</span></span>
-<span>                   <span class="va">mbench</span> <span class="op">&lt;-</span> <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu">microbenchmark</span><span class="op">(</span></span>
-<span>                     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">dataset</span>, test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">pkg_expr</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                     times <span class="op">=</span> <span class="fl">25</span></span>
-<span>                   <span class="op">)</span></span>
-<span>                   <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>n_inputs <span class="op">=</span> <span class="va">no_of_inputs</span>,</span>
-<span>                     median_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mbench</span><span class="op">)</span><span class="op">$</span><span class="va">median</span>,</span>
-<span>                     time_units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mbench</span><span class="op">)</span>, which <span class="op">=</span> <span class="st">"unit"</span><span class="op">)</span><span class="op">)</span></span>
-<span>                 <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>n_inputs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">n_inputs</span><span class="op">)</span>,</span>
-<span>                  median_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">median_time</span><span class="op">)</span>,</span>
-<span>                  package <span class="op">=</span> <span class="va">pkg_name</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="anthro">
-<code>anthro</code><a class="anchor" aria-label="anchor" href="#anthro"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">anthro_timings</span> <span class="op">&lt;-</span> <span class="fu">mbench_pkg</span><span class="op">(</span></span>
-<span>  pkg_expr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="fu">anthro</span><span class="fu">::</span><span class="fu">anthro_zscores</span><span class="op">(</span>sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                          age <span class="op">=</span> <span class="va">x</span>,</span>
-<span>                                          weight <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">zwei</span><span class="op">)</span>,</span>
-<span>  pkg_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"R: anthro"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"anthro"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Generate 100,000-row dataset</span></span>
+<span><span class="va">ac_who_gs</span> <span class="op">&lt;-</span> <span class="st">"wfa"</span></span>
+<span><span class="va">ds_who_gs</span> <span class="op">&lt;-</span> <span class="fu">benchmark_dataset</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>,</span>
+<span>                               family <span class="op">=</span> <span class="st">"who_gs"</span>,</span>
+<span>                               acronym <span class="op">=</span> <span class="va">ac_who_gs</span><span class="op">)</span></span></code></pre></div>
+<p>The first 10 rows of this dataset look like this:</p>
+<pre><code><span><span class="co">##              z         x sex family acronym         y</span></span>
+<span><span class="co">## 1   0.17839158  542.3057   M who_gs     wfa 11.119034</span></span>
+<span><span class="co">## 2   1.08068286  436.8223   F who_gs     wfa 10.829792</span></span>
+<span><span class="co">## 3  -0.70269294 1070.1117   F who_gs     wfa 12.524220</span></span>
+<span><span class="co">## 4   0.09501730    6.0000   M who_gs     wfa  3.502423</span></span>
+<span><span class="co">## 5  -0.44829268 1465.8223   F who_gs     wfa 15.135840</span></span>
+<span><span class="co">## 6  -0.35747447 1527.0000   M who_gs     wfa 15.958518</span></span>
+<span><span class="co">## 7   1.16612927  431.3057   M who_gs     wfa 11.512052</span></span>
+<span><span class="co">## 8  -0.08746512  653.3057   F who_gs     wfa 10.832094</span></span>
+<span><span class="co">## 9  -0.47685189  948.1117   M who_gs     wfa 12.765554</span></span>
+<span><span class="co">## 10  0.80015420  581.3677   M who_gs     wfa 12.206283</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="childsds">
-<code>childsds</code><a class="anchor" aria-label="anchor" href="#childsds"></a>
+<h3 id="timing">Timing<a class="anchor" aria-label="anchor" href="#timing"></a>
 </h3>
+<div class="section level4">
+<h4 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
+</h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">childsds_timings</span> <span class="op">&lt;-</span> <span class="fu">mbench_pkg</span><span class="op">(</span></span>
-<span>  pkg_expr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="fu">childsds</span><span class="fu">::</span><span class="fu">sds</span><span class="op">(</span>value <span class="op">=</span> <span class="va">y</span>,</span>
-<span>                                 age <span class="op">=</span> <span class="va">x</span> <span class="op">/</span> <span class="fl">365.25</span>,</span>
-<span>                                 sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                 male <span class="op">=</span> <span class="st">"M"</span>,</span>
-<span>                                 female <span class="op">=</span> <span class="st">"F"</span>,</span>
-<span>                                 item <span class="op">=</span> <span class="st">"weight"</span>,</span>
-<span>                                 ref <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="va">who.ref</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  pkg_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"R: childsds"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"childsds"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">temp_bp_who_gs_most</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">selector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">input_len</span><span class="op">)</span></span>
+<span>    <span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">age_days</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
+<span>    <span class="va">age_years</span> <span class="op">&lt;-</span> <span class="va">age_days</span> <span class="op">/</span> <span class="fl">365.25</span></span>
+<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">age_days</span>, <span class="va">sex</span>,</span>
+<span>                                family <span class="op">=</span> <span class="st">"who_gs"</span>, acronym <span class="op">=</span> <span class="va">ac_who_gs</span><span class="op">)</span>,</span>
+<span>      anthro <span class="op">=</span> <span class="fu">anthro</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro_zscores</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                                      age <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>                                      sex <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">$</span><span class="va">zwei</span>,</span>
+<span>      AGD <span class="op">=</span> <span class="fu">AGD</span><span class="fu">::</span><span class="fu"><a href="https://stefvanbuuren.name/AGD/reference/y2z.html" class="external-link">y2z</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                     x <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>                     sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                     ref <span class="op">=</span> <span class="fu">AGD</span><span class="fu">::</span><span class="va"><a href="https://stefvanbuuren.name/AGD/reference/References-WHO.html" class="external-link">who.wgt</a></span>,</span>
+<span>                     tail.adjust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>      childsds <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/childsds/man/sds.html" class="external-link">sds</a></span><span class="op">(</span>value <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                              age <span class="op">=</span> <span class="va">age_years</span>,</span>
+<span>                              sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                              male <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>                              female <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>                              item <span class="op">=</span> <span class="st">"weight"</span>,</span>
+<span>                              ref <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/childsds/man/who.ref.html" class="external-link">who.ref</a></span><span class="op">)</span>,</span>
+<span>      gs <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/who_value2zscore.html" class="external-link">who_value2zscore</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">weight_kg</span>, x <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>                                             y_var <span class="op">=</span> <span class="st">"wtkg"</span>, x_var <span class="op">=</span> <span class="st">"agedays"</span>,</span>
+<span>                                             sex <span class="op">=</span> <span class="va">sex_gs</span><span class="op">)</span>,</span>
+<span>      sitar <span class="op">=</span> <span class="fu">sitar</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sitar/man/LMS2z.html" class="external-link">LMS2z</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">weight_kg</span>, x <span class="op">=</span> <span class="va">age_years</span>, sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                          measure <span class="op">=</span> <span class="st">"wt"</span>, ref <span class="op">=</span> <span class="fu">sitar</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/sitar/man/who06.html" class="external-link">who06</a></span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">temp_bp_who_gs_zscorer</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">5000</span>, <span class="fl">10000</span>, <span class="fl">15000</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">selector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">input_len</span><span class="op">)</span></span>
+<span>    <span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">age_days</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_who_gs</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="va">selector</span><span class="op">]</span></span>
+<span>    <span class="va">df_zscorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>      weight <span class="op">=</span> <span class="va">weight_kg</span>, age <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>      sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="va">bm_who_gs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, max_iterations <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>      zscorer <span class="op">=</span> <span class="fu">zscorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">addWGSR</a></span><span class="op">(</span></span>
+<span>        <span class="va">df_zscorer</span>, sex <span class="op">=</span> <span class="st">"sex"</span>, firstPart <span class="op">=</span> <span class="st">"weight"</span>, secondPart <span class="op">=</span> <span class="st">"age"</span>,</span>
+<span>        index <span class="op">=</span> <span class="st">"wfa"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bp_who_gs</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">temp_bp_who_gs_most</span>, <span class="va">temp_bp_who_gs_zscorer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>desc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">expression</span>, which <span class="op">=</span> <span class="st">"description"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="va">expression</span>, <span class="op">!</span><span class="va">result</span>, <span class="op">!</span><span class="va">memory</span>, <span class="op">!</span><span class="va">time</span>, <span class="op">!</span><span class="va">gc</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="growthstandards">
-<code>growthstandards</code><a class="anchor" aria-label="anchor" href="#growthstandards"></a>
-</h3>
+<div class="section level4">
+<h4 id="stata">Stata<a class="anchor" aria-label="anchor" href="#stata"></a>
+</h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">growthstandards_timings</span> <span class="op">&lt;-</span> <span class="fu">mbench_pkg</span><span class="op">(</span></span>
-<span>  pkg_expr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span></span>
-<span>    <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu">who_value2zscore</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, x <span class="op">=</span> <span class="va">x</span>,</span>
-<span>                                      sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>,</span>
-<span>                                                   <span class="st">"Female"</span><span class="op">)</span>,</span>
-<span>                                      y_var <span class="op">=</span> <span class="st">"wtkg"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  pkg_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"R: growthstandards"</span>,</span>
-<span>                   <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"growthstandards"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="gigs">
-<code>gigs</code><a class="anchor" aria-label="anchor" href="#gigs"></a>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gigs_timings</span> <span class="op">&lt;-</span> <span class="fu">mbench_pkg</span><span class="op">(</span></span>
-<span>  pkg_expr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/who_gs_value2zscore.html">who_gs_value2zscore</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, x <span class="op">=</span> <span class="va">x</span>, sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                             acronym <span class="op">=</span> <span class="va">acronym</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  pkg_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"R: gigs"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"gigs"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="stata">Stata<a class="anchor" aria-label="anchor" href="#stata"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save .dta file equivalent of benchmarking table. This can be used to benchmark</span></span>
 <span><span class="co"># Stata packages.</span></span>
-<span><span class="fu">haven</span><span class="fu">::</span><span class="fu">write_dta</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bench_dataset</span>,</span>
-<span>                 path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"exclude"</span>, <span class="st">"statabench"</span>, <span class="st">"bench_dataset.dta"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">haven</span><span class="fu">::</span><span class="fu">write_dta</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">ds_who_gs</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"exclude"</span>, <span class="st">"statabench"</span>, <span class="st">"bench_ds_who_gs.dta"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>In Stata, the commands are run inside a do-file which utilises the <a href="https://www.github.com/mcaceresb/stata-benchmark" class="external-link">benchmark</a>
-package for Stata. This script essentially does the same as
-<code>mbench_pkg()</code>, but for the <a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">Stata gigs
-package</a> and the zanthro package.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_dataset.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> <span class="kw">double</span> z_gigs = who_gs(<span class="fu">y</span>, <span class="st">"wfa"</span>, <span class="st">"v2z"</span>), <span class="co">///</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>        xvar(x) sex(sex) sexcode(<span class="fu">m</span>=M, f=<span class="fu">F</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>}</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_dataset.dta"</span>, <span class="kw">clear</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> z_anthro = zanthro(<span class="fu">y</span>, wa, WHO), xvar(x) gender(sex) <span class="co">///</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>                gencode(male=M, female=<span class="fu">F</span>) ageunit(<span class="fu">day</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>}</span></code></pre></div>
-<p>The outputs from this script give a table of timings that look like
-this:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">stata_timings</span></span></code></pre></div>
-<pre><code><span><span class="co">##    n_inputs median_time time_units              package</span></span>
-<span><span class="co">## 1         1       0.009    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 2        10       0.008    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 3       100       0.009    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 4       500       0.010    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 5      1000       0.012    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 6      5000       0.028    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 7     10000       0.047    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 8     25000       0.104    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 9     50000       0.198    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 10    75000       0.296    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 11   100000       0.405    seconds    Stata: gigs 0.4.0</span></span>
-<span><span class="co">## 12        1       0.007    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 13       10       0.008    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 14      100       0.009    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 15      500       0.017    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 16     1000       0.027    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 17     5000       0.105    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 18    10000       0.203    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 19    25000       0.479    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 20    50000       0.951    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 21    75000       1.445    seconds Stata: zanthro 1.0.2</span></span>
-<span><span class="co">## 22   100000       2.046    seconds Stata: zanthro 1.0.2</span></span></code></pre>
+package for Stata. This code essentially does the same as
+<code>bench::press()</code>, but for the packages we’re testing in
+Stata.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_ds_who_gs.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> <span class="kw">double</span> z_gigs = who_gs(<span class="fu">y</span>, <span class="st">"wfa"</span>, <span class="st">"v2z"</span>), <span class="co">///</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>            xvar(x) sex(sex) sexcode(<span class="fu">m</span>=M, f=<span class="fu">F</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>}</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_ds_who_gs.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> z_anthro = zanthro(<span class="fu">y</span>, wa, WHO), xvar(x) gender(sex) <span class="co">///</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>            gencode(male=M, female=<span class="fu">F</span>) ageunit(<span class="fu">day</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>}</span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
-<h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+<h3 id="package-comparisons-timing">Package comparisons: timing<a class="anchor" aria-label="anchor" href="#package-comparisons-timing"></a>
 </h3>
-<p>Only by plotting the various timings tables can we see the trends for
-each package:</p>
-<p><img src="benchmarking_files/figure-html/plot_timings-1.png" width="875"></p>
-<p>On the whole, <code>anthro</code> is by far the slowest R package,
-taking around 2.24 seconds to process 100,000 inputs. This is in part
-because <code>anthro</code> computes results in every WHO Child Growth
-standard each time <code>anthro::anthro_zscores()</code> is called, but
-also due to a slower implementation of the WHO LMS process conversion
-than the other packages.</p>
+<p><img src="benchmarking_files/figure-html/plot_timings_who_gs-1.png" alt="A line graph of median time taken against no. of inputs for different software packages. The results can be read about below." width="875"></p>
+<p>On the whole, <code>zscorer</code> is by far the slowest R package,
+taking around 13.705 seconds to process 100,000 inputs. Looking at the
+source code, this is because <code><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">zscorer::addWGSR()</a></code> hasn’t been
+vectorised. Next slowest is <code>anthro</code>, which takes 2.211
+seconds to process 100,000 inputs. This slowdown arises from
+<code>anthro</code> computing results in every WHO Child Growth standard
+each time <code><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro::anthro_zscores()</a></code> is called, but also due
+to a slower implementation of the WHO LMS procedure than the other R
+packages.</p>
 <p>Next slowest is the Stata package <code>zanthro</code>, which takes
-around 2.05 seconds to compute results in a single WHO standard. About 4
-times faster than <code>zanthro</code> is <code>gigs</code> for Stata
-0.4.0, which scales more efficiently than <code>zanthro</code> and takes
-around 0.41 seconds to convert 100,000 measurements to z-scores.</p>
-<p>Leading the pack are three R implementations:
-<code>growthstandards</code>, <code>gigs</code>, and
-<code>childsds</code>. The <code>growthstandards</code> package was the
-fastest at ~125 ms for 100,000 inputs, followed by <code>gigs</code>
-(~128 ms) and <code>childsds</code> (~126 ms).</p>
+around 2.046 seconds to compute results in a single WHO standard. About
+4 times faster than <code>zanthro</code> is <code>gigs</code> for Stata,
+which scales more efficiently than <code>zanthro</code> and takes around
+0.405 seconds to convert 100,000 measurements to z-scores.</p>
+<p>Focussing on the faster R implementations reveals some interesting
+patterns:</p>
+<p><img src="benchmarking_files/figure-html/plot_timings_who_gs_faster-1.png" alt="A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below." width="875"></p>
+<p>The <code>sitar</code> package is far and away the fastest here,
+taking ~46 ms to process 100,000 inputs. This is because it uses the
+monthly LMS coefficients to calculate its z-scores. Whilst this is
+quicker, it does induce some imprecision when compared to the other
+packages.</p>
+<p>Next fastest was the <code>growthstandards</code> package at ~88 ms
+for 100,000 inputs, followed by <code>gigs</code> (~100 ms),
+<code>childsds</code> (~125 ms), and lastly <code>AGD</code> (~119 ms).
+Interestingly, <code>AGD</code> starts out much slower than the other
+‘fast’ packages, but may scale more efficiently.</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="package-output-similarity">Package output similarity<a class="anchor" aria-label="anchor" href="#package-output-similarity"></a>
-</h2>
-<p>The packages also differ slightly in how they convert values to
-centiles/z-scores, which can affect the z-scores computed by each
-package even when inputs are the same. In our testing of the WHO
-standards, we found that the tested packages mostly agreed with each
-other, but that <code>childsds</code> did not correctly perform
-z-scoring in the WHO standards.</p>
-<p>This is because the WHO Child Growth standards constrain z-scores in
-the outer tails (i.e. past 3 z-scores), as there were fewer data
-available at these extreme values. More information on this constraining
-procedure can be found in the reports referenced in the
-<code><a href="../reference/who_gs_value2zscore.html">gigs::who_gs_value2zscore()</a></code> documentation. As
-<code>childsds</code> does not perform this constraining procedure,
-extreme values are computed incorrectly:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="package-comparisons-numerical-consistency">Package comparisons: numerical consistency<a class="anchor" aria-label="anchor" href="#package-comparisons-numerical-consistency"></a>
+</h3>
+<p>In our testing of the WHO standards, we found that the tested
+packages mostly agreed with each other when provided the same inputs,
+except for <code>childsds</code> and <code>sitar</code>.</p>
+<p>For <code>childsds</code>, this is because the WHO Child Growth
+standards constrain z-scores in the outer tails (i.e. past 3 z-scores),
+as their data was more sparse for these extreme values. More information
+on this constraining procedure can be found in the reports referenced in
+the <code>gigs::who_gs_value2zscore()</code> documentation. It appears
+that <code>childsds</code> does not perform this constraining procedure,
+so conversions where <code>abs(z_score) &gt; 3</code> are computed
+incorrectly:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">discrepancies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.03</span>, <span class="op">-</span><span class="fl">2.97</span>, <span class="fl">2.97</span>, <span class="fl">3.03</span><span class="op">)</span>,</span>
 <span>                            age_days <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                            sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    weight_kg <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/who_gs_zscore2value.html">who_gs_wfa_zscore2value</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">age_days</span>, <span class="va">sex</span><span class="op">)</span>,</span>
+<span>    weight_kg <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/zscore2value.html">zscore2value</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">age_days</span>, <span class="va">sex</span>, <span class="st">"who_gs"</span>, <span class="st">"wfa"</span><span class="op">)</span>,</span>
 <span>    <span class="co"># GIGS z-score</span></span>
-<span>    z_gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/who_gs_value2zscore.html">who_gs_wfa_value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">age_days</span>, <span class="va">sex</span><span class="op">)</span>,</span>
+<span>    z_gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">age_days</span>, <span class="va">sex</span>, <span class="st">"who_gs"</span>, <span class="st">"wfa"</span><span class="op">)</span>,</span>
 <span>    <span class="co"># growthstandards z-score</span></span>
-<span>    z_growthstandards <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu">who_wtkg2zscore</span><span class="op">(</span></span>
+<span>    z_growthstandards <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/who_var2zscore.html" class="external-link">who_wtkg2zscore</a></span><span class="op">(</span></span>
 <span>      <span class="va">age_days</span>, <span class="va">weight_kg</span>, <span class="st">"Male"</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># childsds z-score</span></span>
-<span>    z_childsds <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="fu">sds</span><span class="op">(</span></span>
+<span>    z_childsds <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/childsds/man/sds.html" class="external-link">sds</a></span><span class="op">(</span></span>
 <span>      value <span class="op">=</span> <span class="va">weight_kg</span>, age <span class="op">=</span> <span class="va">age_days</span> <span class="op">/</span> <span class="fl">365.25</span>,</span>
 <span>      sex <span class="op">=</span> <span class="va">sex</span>, male <span class="op">=</span> <span class="st">"M"</span>, female <span class="op">=</span> <span class="st">"F"</span>,</span>
-<span>      item <span class="op">=</span> <span class="st">"weight"</span>, ref <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="va">who.ref</span></span>
+<span>      item <span class="op">=</span> <span class="st">"weight"</span>, ref <span class="op">=</span> <span class="fu">childsds</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/childsds/man/who.ref.html" class="external-link">who.ref</a></span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>When we look at these z-scores, you can see that both
 <code>growthstandards</code> and <code>gigs</code> correctly apply the
-constraining procedure; <code>childsds</code> does not. From looking at
-the <code>anthro</code> source code, they also apply the constraining
-procedure.</p>
+constraining procedure; <code>childsds</code> does not. The
+<code>AGD</code> package constrains z-scores if the
+<code>tail.adjust</code> option in <code><a href="https://stefvanbuuren.name/AGD/reference/y2z.html" class="external-link">AGD::y2z()</a></code> is specified,
+and from looking at the <code>anthro</code> source code, they also apply
+the constraining procedure.</p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="9%">
@@ -531,14 +600,432 @@ procedure.</p>
 </tr>
 </tbody>
 </table>
+<p>Discrepancies between <code>sitar</code> and <code>gigs</code> arise
+from <code>sitar</code> relying on monthly LMS values for the WHO Growth
+Standards, instead of the daily tables. This means for the same day,
+<code>sitar</code> and <code>gigs</code> will use slightly different
+lambda/mu/sigma values, and so compute different z-scores for the same
+measurements.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="intergrowth-21st-newborn-size-standards">INTERGROWTH-21<sup>st</sup> Newborn Size standards<a class="anchor" aria-label="anchor" href="#intergrowth-21st-newborn-size-standards"></a>
+</h2>
+<p>The INTERGROWTH-21<sup>st</sup> Newborn Size standards are
+implemented in gigs for R and Stata, and in the
+<code>growthstandards</code> package for R. Let’s make a new dataset,
+<code>ds_ig_nbs</code>, which we will use to benchmark these
+functions:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ac_ig_nbs</span> <span class="op">&lt;-</span> <span class="st">"wfga"</span></span>
+<span><span class="va">ds_ig_nbs</span> <span class="op">&lt;-</span> <span class="fu">benchmark_dataset</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>,</span>
+<span>                               family <span class="op">=</span> <span class="st">"ig_nbs"</span>,</span>
+<span>                               acronym <span class="op">=</span> <span class="va">ac_ig_nbs</span><span class="op">)</span></span></code></pre></div>
+<p>The first 10 rows of this dataset look like this:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ds_ig_nbs</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##              z        x sex family acronym         y</span></span>
+<span><span class="co">## 1   0.17839158 199.6505   M ig_nbs    wfga 1.1849768</span></span>
+<span><span class="co">## 2   1.08068286 213.1492   M ig_nbs    wfga 1.7851534</span></span>
+<span><span class="co">## 3  -0.70269294 174.0968   F ig_nbs    wfga 0.5907529</span></span>
+<span><span class="co">## 4   0.09501730 236.1492   F ig_nbs    wfga 2.0900137</span></span>
+<span><span class="co">## 5  -0.44829268 232.1492   M ig_nbs    wfga 1.8175155</span></span>
+<span><span class="co">## 6  -0.35747447 216.7849   M ig_nbs    wfga 1.4387923</span></span>
+<span><span class="co">## 7   1.16612927 231.6505   F ig_nbs    wfga 2.3235513</span></span>
+<span><span class="co">## 8  -0.08746512 188.6505   M ig_nbs    wfga 0.9236040</span></span>
+<span><span class="co">## 9  -0.47685189 188.7849   F ig_nbs    wfga 0.8110397</span></span>
+<span><span class="co">## 10  0.80015420 276.7849   F ig_nbs    wfga 3.5293549</span></span></code></pre>
+<div class="section level3">
+<h3 id="timing-1">Timing<a class="anchor" aria-label="anchor" href="#timing-1"></a>
+</h3>
+<div class="section level4">
+<h4 id="r-1">R<a class="anchor" aria-label="anchor" href="#r-1"></a>
+</h4>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bp_ig_nbs</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">z</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">gest_days</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_ig_nbs</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2centile</a></span><span class="op">(</span>y <span class="op">=</span><span class="va">weight_kg</span>, x <span class="op">=</span> <span class="va">gest_days</span>, sex <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                                 family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_nbs</span><span class="op">)</span>,</span>
+<span>      gs <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/igb_value2zscore.html" class="external-link">igb_value2centile</a></span><span class="op">(</span>val <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                                              gagebrth <span class="op">=</span> <span class="va">gest_days</span>,</span>
+<span>                                              sex <span class="op">=</span> <span class="va">sex_gs</span>, var <span class="op">=</span> <span class="st">"wtkg"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>desc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">expression</span>, which <span class="op">=</span> <span class="st">"description"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="va">expression</span>, <span class="op">!</span><span class="va">result</span>, <span class="op">!</span><span class="va">memory</span>, <span class="op">!</span><span class="va">time</span>, <span class="op">!</span><span class="va">gc</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="stata-1">Stata<a class="anchor" aria-label="anchor" href="#stata-1"></a>
+</h4>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Save .dta file equivalent of benchmarking table. This can be used to benchmark</span></span>
+<span><span class="co"># Stata packages.</span></span>
+<span><span class="fu">haven</span><span class="fu">::</span><span class="fu">write_dta</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">ds_ig_nbs</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"exclude"</span>, <span class="st">"statabench"</span>, <span class="st">"bench_ds_ig_nbs.dta"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>We can then benchmark the speed of the Stata command:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_ds_ig_nbs.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> <span class="kw">double</span> z_gigs = ig_nbs(<span class="fu">y</span>, <span class="st">"wfga"</span>, <span class="st">"v2z"</span>), <span class="co">///</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>            gest_days(x) sex(sex) sexcode(<span class="fu">m</span>=M, f=<span class="fu">F</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="benchmarking_files/figure-html/plot_timings_ig_nbs-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below." width="875"></p>
+<p>For this set of growth standards, the Stata implementation for GIGS
+is the slowest at ~471 ms. The <code>growthstandards</code> and
+<code>gigs</code> packages are the fastest at ~72 and ~80 ms,
+respectively.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="package-comparisons-numerical-consistency-1">Package comparisons: numerical consistency<a class="anchor" aria-label="anchor" href="#package-comparisons-numerical-consistency-1"></a>
+</h3>
+<p>In our testing of the INTERGROWTH-21<sup>st</sup> Newborn Size
+standards, we found that the implementation in
+<code>growthstandards</code> does not perform coefficient interpolation
+for the INTERGROWTH-21<sup>st</sup> Newborn Size standards which utilise
+mu/sigma/nu/tau coefficients. Instead, <code>growthstandards</code> uses
+<code><a href="https://rdrr.io/r/base/Round.html" class="external-link">round()</a></code> to round non-integer gestational ages to the
+nearest value, then gets mu/sigma/nu/tau coefficients for this rounded
+GA. This leads a smaller-scale version of the z-scoring errors found by
+<a href="https://dx.doi.org/10.1007/s10916-015-0389-x" class="external-link">Kiger <em>et
+al.</em> (2016)</a> when not interpolating LMS coefficients in the WHO
+standards.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">gestage</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">274</span>, <span class="fl">278</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">gigs</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2centile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">weight_kg</span>, x <span class="op">=</span> <span class="va">gestage</span>, sex <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>                            family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span>
+<span><span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/igb_value2zscore.html" class="external-link">igb_value2centile</a></span><span class="op">(</span>val <span class="op">=</span> <span class="va">weight_kg</span>, gagebrth <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>                                         sex <span class="op">=</span> <span class="st">"Male"</span>, var <span class="op">=</span> <span class="st">"wtkg"</span><span class="op">)</span></span>
+<span><span class="fu">waldo</span><span class="fu">::</span><span class="fu"><a href="https://waldo.r-lib.org/reference/compare.html" class="external-link">compare</a></span><span class="op">(</span><span class="va">gigs</span>, <span class="va">gs</span> <span class="op">/</span> <span class="fl">100</span>, x_arg <span class="op">=</span> <span class="st">"gigs"</span>, y_arg <span class="op">=</span> <span class="st">"growthstandards"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     gigs   | growthstandards    </span></span>
+<span><span class="co">## [1] <span style="color: #555555;">0.2536</span> | <span style="color: #555555;">0.2536</span>          [1]</span></span>
+<span><span class="co">## [2] <span style="color: #00BB00;">0.2448</span> - <span style="color: #00BB00;">0.2536</span>          [2]</span></span>
+<span><span class="co">## [3] <span style="color: #555555;">0.2361</span> | <span style="color: #555555;">0.2361</span>          [3]</span></span>
+<span><span class="co">## [4] <span style="color: #00BB00;">0.2278</span> - <span style="color: #00BB00;">0.2196</span>          [4]</span></span>
+<span><span class="co">## [5] <span style="color: #555555;">0.2196</span> | <span style="color: #555555;">0.2196</span>          [5]</span></span>
+<span><span class="co">## [6] <span style="color: #00BB00;">0.2117</span> - <span style="color: #00BB00;">0.2196</span>          [6]</span></span>
+<span><span class="co">## [7] <span style="color: #555555;">0.2040</span> | <span style="color: #555555;">0.2040</span>          [7]</span></span>
+<span><span class="co">## [8] <span style="color: #00BB00;">0.1966</span> - <span style="color: #00BB00;">0.1894</span>          [8]</span></span>
+<span><span class="co">## [9] <span style="color: #555555;">0.1894</span> | <span style="color: #555555;">0.1894</span>          [9]</span></span></code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2 id="intergrowth-21st-postnatal-growth-standards">INTERGROWTH-21<sup>st</sup> Postnatal Growth standards<a class="anchor" aria-label="anchor" href="#intergrowth-21st-postnatal-growth-standards"></a>
+</h2>
+<p>The IG-21<sup>st</sup> Postnatal Growth standards are implemented in
+gigs for R and Stata, and in the <code>growthstandards</code> package.
+Let’s make a new dataset, <code>ds_ig_png</code>, which we will use to
+benchmark these functions:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ac_ig_png</span> <span class="op">&lt;-</span> <span class="st">"wfa"</span></span>
+<span><span class="va">ds_ig_png</span> <span class="op">&lt;-</span> <span class="fu">benchmark_dataset</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>,</span>
+<span>                               family <span class="op">=</span> <span class="st">"ig_png"</span>,</span>
+<span>                               acronym <span class="op">=</span> <span class="va">ac_ig_png</span><span class="op">)</span></span></code></pre></div>
+<p>The first 10 rows of this dataset look like this:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ds_ig_png</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##              z        x sex family acronym         y</span></span>
+<span><span class="co">## 1   0.17839158 58.40312   F ig_png     wfa 6.5562438</span></span>
+<span><span class="co">## 2   1.08068286 32.61149   F ig_png     wfa 1.8816314</span></span>
+<span><span class="co">## 3  -0.70269294 40.05188   M ig_png     wfa 3.1214845</span></span>
+<span><span class="co">## 4   0.09501730 32.00000   F ig_png     wfa 1.4795115</span></span>
+<span><span class="co">## 5  -0.44829268 28.00000   M ig_png     wfa 0.7593354</span></span>
+<span><span class="co">## 6  -0.35747447 45.00000   M ig_png     wfa 4.3490091</span></span>
+<span><span class="co">## 7   1.16612927 47.00000   F ig_png     wfa 5.3082323</span></span>
+<span><span class="co">## 8  -0.08746512 47.18337   M ig_png     wfa 4.9659712</span></span>
+<span><span class="co">## 9  -0.47685189 32.05188   M ig_png     wfa 1.4834561</span></span>
+<span><span class="co">## 10  0.80015420 27.40312   M ig_png     wfa 0.8630054</span></span></code></pre>
+<div class="section level3">
+<h3 id="timing-2">Timing<a class="anchor" aria-label="anchor" href="#timing-2"></a>
+</h3>
+<div class="section level4">
+<h4 id="r-2">R<a class="anchor" aria-label="anchor" href="#r-2"></a>
+</h4>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bp_ig_png</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">weight_kg</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">pma_weeks</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">pma_days</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">pma_weeks</span> <span class="op">*</span> <span class="fl">7</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">ds_ig_png</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">sex_gs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">weight_kg</span>, <span class="va">pma_weeks</span>, <span class="va">sex</span>,</span>
+<span>                                family <span class="op">=</span> <span class="st">"ig_png"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_png</span><span class="op">)</span>,</span>
+<span>      gs <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/igprepost_value2zscore.html" class="external-link">igprepost_value2zscore</a></span><span class="op">(</span>val <span class="op">=</span> <span class="va">weight_kg</span>,</span>
+<span>                                                   pmagedays <span class="op">=</span> <span class="va">pma_days</span>,</span>
+<span>                                                   sex <span class="op">=</span> <span class="va">sex_gs</span>, var <span class="op">=</span> <span class="st">"wtkg"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>desc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">expression</span>, which <span class="op">=</span> <span class="st">"description"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="va">expression</span>, <span class="op">!</span><span class="va">result</span>, <span class="op">!</span><span class="va">memory</span>, <span class="op">!</span><span class="va">time</span>, <span class="op">!</span><span class="va">gc</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="stata-2">Stata<a class="anchor" aria-label="anchor" href="#stata-2"></a>
+</h4>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Save .dta file equivalent of benchmarking table. This can be used to benchmark</span></span>
+<span><span class="co"># Stata packages.</span></span>
+<span><span class="fu">haven</span><span class="fu">::</span><span class="fu">write_dta</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">ds_ig_png</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"exclude"</span>, <span class="st">"statabench"</span>, <span class="st">"bench_ds_ig_png.dta"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_ds_ig_png.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> <span class="kw">double</span> z_gigs = ig_png(<span class="fu">y</span>, <span class="st">"wfga"</span>, <span class="st">"v2z"</span>), <span class="co">///</span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>            xvar(x) sex(sex) sexcode(<span class="fu">m</span>=M, f=<span class="fu">F</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="benchmarking_files/figure-html/plot_timings_ig_png-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below." width="875"></p>
+<p>For the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards, the
+Stata implementation for GIGS is the slowest at ~164 ms. The
+<code>gigs</code> and <code>growthstandards</code> packages are the
+fastest at ~43 and ~20 ms, respectively.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="intergrowth-21st-fetal-standards">INTERGROWTH-21<sup>st</sup> Fetal standards<a class="anchor" aria-label="anchor" href="#intergrowth-21st-fetal-standards"></a>
+</h2>
+<p>The IG-21<sup>st</sup> Fetal standards are implemented in gigs for R
+and Stata, and in the <code>growthstandards</code> and
+<code>intergrowth</code> packages (though more fully in
+<code>intergrowth</code> than in <code>growthstandards</code>, and both
+are missing some standards which are included in <code>gigs</code>).
+Let’s make a new dataset, <code>ds_ig_fet</code>, which we will use to
+benchmark a conversion in a fetal growth standard common to all three
+packages:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ac_ig_fet</span> <span class="op">&lt;-</span> <span class="st">"ofdfga"</span></span>
+<span><span class="va">ds_ig_fet</span> <span class="op">&lt;-</span> <span class="fu">benchmark_dataset</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>,</span>
+<span>                               family <span class="op">=</span> <span class="st">"ig_fet"</span>,</span>
+<span>                               acronym <span class="op">=</span> <span class="va">ac_ig_fet</span><span class="op">)</span></span></code></pre></div>
+<p>The first 10 rows of this dataset look like this:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ds_ig_fet</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="timing-3">Timing<a class="anchor" aria-label="anchor" href="#timing-3"></a>
+</h3>
+<div class="section level4">
+<h4 id="r-3">R<a class="anchor" aria-label="anchor" href="#r-3"></a>
+</h4>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bp_ig_fet</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  input_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25000</span>, <span class="fl">100000</span>, <span class="fl">25000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">gest_days</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">gest_wks</span> <span class="op">&lt;-</span> <span class="va">gest_days</span> <span class="op">/</span> <span class="fl">7</span></span>
+<span>    <span class="va">acronym</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">acronym</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">ofd_mm</span> <span class="op">&lt;-</span> <span class="va">ds_ig_fet</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">input_len</span><span class="op">]</span></span>
+<span>    <span class="va">ofd_cm</span> <span class="op">&lt;-</span> <span class="va">ofd_mm</span> <span class="op">/</span> <span class="fl">10</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      check <span class="op">=</span> <span class="cn">FALSE</span>, filter_gc <span class="op">=</span> <span class="cn">TRUE</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span>, min_iterations <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>      gigs <span class="op">=</span> <span class="fu">gigs</span><span class="fu">::</span><span class="fu"><a href="../reference/value2zscore.html">value2zscore</a></span><span class="op">(</span><span class="va">ofd_mm</span>, <span class="va">gest_days</span>,</span>
+<span>                                family <span class="op">=</span> <span class="st">"ig_fet"</span>, acronym <span class="op">=</span> <span class="va">ac_ig_fet</span><span class="op">)</span>,</span>
+<span>      gs <span class="op">=</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/igfet_value2zscore.html" class="external-link">igfet_value2zscore</a></span><span class="op">(</span>val <span class="op">=</span> <span class="va">ofd_cm</span>,</span>
+<span>                                               gagedays <span class="op">=</span> <span class="va">gest_days</span>,</span>
+<span>                                               var <span class="op">=</span> <span class="st">"ofdcm"</span><span class="op">)</span>,</span>
+<span>      intergrowth <span class="op">=</span> <span class="fu">intergrowth</span><span class="fu">::</span><span class="fu"><a href="https://nutriverse.io/intergrowth/reference/calculate_ofd_gestage.html" class="external-link">calculate_ofd_gestage</a></span><span class="op">(</span>ofd <span class="op">=</span> <span class="va">ofd_mm</span>,</span>
+<span>                                                       gestage <span class="op">=</span> <span class="va">gest_wks</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>desc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">expression</span>, which <span class="op">=</span> <span class="st">"description"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="va">expression</span>, <span class="op">!</span><span class="va">result</span>, <span class="op">!</span><span class="va">memory</span>, <span class="op">!</span><span class="va">time</span>, <span class="op">!</span><span class="va">gc</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="stata-3">Stata<a class="anchor" aria-label="anchor" href="#stata-3"></a>
+</h4>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Save .dta file equivalent of benchmarking table. This can be used to benchmark</span></span>
+<span><span class="co"># Stata packages.</span></span>
+<span><span class="fu">haven</span><span class="fu">::</span><span class="fu">write_dta</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">ds_ig_fet</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"exclude"</span>, <span class="st">"statabench"</span>, <span class="st">"bench_ds_ig_fet.dta"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co">// This is Stata code</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="kw">foreach</span> i <span class="kw">in</span> 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">"benchmarking/bench_ds_ig_fet.dta"</span>, <span class="kw">clear</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">drop</span> <span class="kw">if</span> <span class="dt">_n</span> &gt; <span class="ot">`i'</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">"Number of inputs: `i'"</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>    bench, reps(25) <span class="kw">restore</span> <span class="fu">last</span>: <span class="co">///</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">egen</span> <span class="kw">double</span> z_gigs = ig_fet(<span class="fu">y</span>, <span class="st">"ofdfga"</span>, <span class="st">"v2z"</span>), xvar(x)</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="benchmarking_files/figure-html/plot_timings_ig_fet-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below." width="875"></p>
+<p>For the INTERGROWTH-21<sup>st</sup> Fetal standard for
+occipito-frontal diameter, the GIGS implementation for Stata is the
+slowest to analyse 100,000 inputs at ~93 ms. The R <code>gigs</code>
+package is the fastest at ~8 ms, followed by
+<code>growthstandards</code> at ~10, and then <code>intergrowth</code>
+at ~16.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h2>
+<div class="section level3">
+<h3 id="timings-summary-100000-inputs">Timings summary (100,000 inputs)<a class="anchor" aria-label="anchor" href="#timings-summary-100000-inputs"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="5%">
+<col width="22%">
+<col width="20%">
+<col width="20%">
+<col width="21%">
+</colgroup>
+<thead><tr class="header">
+<th>Software</th>
+<th>Platform</th>
+<th>WHO (0-5 years) (ms)</th>
+<th>IG-21<sup>st</sup> NBS (ms)</th>
+<th>IG-21<sup>st</sup> PNG (ms)</th>
+<th>IG-21<sup>st</sup> Fetal (ms)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
+<td>R</td>
+<td>100</td>
+<td>80</td>
+<td>20</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
+<td>R</td>
+<td>2211</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
+<td>R</td>
+<td>119</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
+<td>R</td>
+<td>125</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
+<td>R</td>
+<td>88</td>
+<td>72</td>
+<td>43</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
+<td>R</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
+<td>R</td>
+<td>46</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/zscorer/index.html" class="external-link">zscorer</a></td>
+<td>R</td>
+<td>NA</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>
+<a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a>
+(Stata)</td>
+<td>Stata</td>
+<td>405</td>
+<td>471</td>
+<td>164</td>
+<td>93</td>
+</tr>
+<tr class="even">
+<td>
+<a href="https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211" class="external-link">zanthro</a>
+(Stata)</td>
+<td>Stata</td>
+<td>2046</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<p>Note: <code>zscorer</code> is NA because we couldn’t time it for
+100,000 inputs (it takes too long).</p>
+</div>
+<div class="section level3">
+<h3 id="why-gigs">Why GIGS?<a class="anchor" aria-label="anchor" href="#why-gigs"></a>
+</h3>
+<p>Overall, though the <code>gigs</code> package for R isn’t always the
+fastest, it is only some milliseconds off, and offers:</p>
+<ul>
+<li>A full complement of international growth standards (i.e. no
+half-implemented sets of growth standards)</li>
+<li>More accurate implementations in some cases</li>
+<li>Growth categorisation functions</li>
+</ul>
+<p>Some users may want to apply growth references in their work - that’s
+fine, and other R packages (e.g. <code>childsds</code> in R and
+<code>zanthro</code> in Stata) offer reference charts which may be of
+use to end-users. However, for international growth standards, we
+believe we offer the best combination of speed and range of
+standards.</p>
+<p>In R, <code>gigs</code> also offers input checking via its options,
+and will tell you if you’re providing non-workable data. We think this
+outweighs a couple of milliseconds’ slowdown. In Stata, where
+<code>gigs</code> consistently runs faster and offers more growth
+standards than <code>zanthro</code>, <code>gigs</code> is the obvious
+choice.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.3.2 (2023-10-31 ucrt)</span></span>
-<span><span class="co">## Platform: x86_64-w64-mingw32/x64 (64-bit)</span></span>
+<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14 ucrt)</span></span>
+<span><span class="co">## Platform: x86_64-w64-mingw32/x64</span></span>
 <span><span class="co">## Running under: Windows 8 x64 (build 9200)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
@@ -558,30 +1045,45 @@ procedure.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] withr_2.5.2       units_0.8-5       testthat_3.2.1    rmarkdown_2.25   </span></span>
-<span><span class="co">## [5] knitr_1.45        vctrs_0.6.5       checkmate_2.3.1   gamlss.dist_6.1-1</span></span>
+<span><span class="co">##  [1] gigs_0.4.1.9000   withr_3.0.1       dplyr_1.1.4       testthat_3.2.1.1 </span></span>
+<span><span class="co">##  [5] rmarkdown_2.28    knitr_1.48        vctrs_0.6.5       rlang_1.1.4      </span></span>
+<span><span class="co">##  [9] gamlss.dist_6.1-1 checkmate_2.3.2  </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] sandwich_3.1-0        utf8_1.2.4            generics_0.1.3       </span></span>
-<span><span class="co">##  [4] tidyr_1.3.0           lattice_0.21-9        digest_0.6.34        </span></span>
-<span><span class="co">##  [7] magrittr_2.0.3        evaluate_0.23         grid_4.3.2           </span></span>
-<span><span class="co">## [10] mvtnorm_1.2-4         fastmap_1.1.1         Matrix_1.6-5         </span></span>
-<span><span class="co">## [13] backports_1.4.1       brio_1.1.4            DBI_1.2.1            </span></span>
-<span><span class="co">## [16] survival_3.5-7        anthro_1.0.1          multcomp_1.4-25      </span></span>
-<span><span class="co">## [19] gigs_0.4.1            purrr_1.0.2           fansi_1.0.6          </span></span>
-<span><span class="co">## [22] scales_1.3.0          TH.data_1.1-2         codetools_0.2-19     </span></span>
-<span><span class="co">## [25] microbenchmark_1.4.10 cli_3.6.2             mitools_2.4          </span></span>
-<span><span class="co">## [28] rlang_1.1.3           childsds_0.8.0        munsell_0.5.0        </span></span>
-<span><span class="co">## [31] splines_4.3.2         tools_4.3.2           growthstandards_0.1.6</span></span>
-<span><span class="co">## [34] dplyr_1.1.4           colorspace_2.1-0      ggplot2_3.4.4        </span></span>
-<span><span class="co">## [37] R6_2.5.1              zoo_1.8-12            lifecycle_1.0.4      </span></span>
-<span><span class="co">## [40] MASS_7.3-60           pkgconfig_2.0.3       pillar_1.9.0         </span></span>
-<span><span class="co">## [43] gtable_0.3.4          glue_1.7.0            Rcpp_1.0.12          </span></span>
-<span><span class="co">## [46] xfun_0.41             tibble_3.2.1          tidyselect_1.2.0     </span></span>
-<span><span class="co">## [49] survey_4.2-1          htmltools_0.5.7       compiler_4.3.2       </span></span>
-<span><span class="co">## [52] prettyunits_1.2.0</span></span></code></pre>
+<span><span class="co">##  [1] tidyselect_1.2.1       farver_2.1.2           anthro_1.0.1          </span></span>
+<span><span class="co">##  [4] fastmap_1.2.0          promises_1.3.0         growthstandards_0.1.6 </span></span>
+<span><span class="co">##  [7] digest_0.6.37          timechange_0.3.0       mime_0.12             </span></span>
+<span><span class="co">## [10] lifecycle_1.0.4        waldo_0.5.3            ellipsis_0.3.2        </span></span>
+<span><span class="co">## [13] survival_3.6-4         processx_3.8.4         magrittr_2.0.3        </span></span>
+<span><span class="co">## [16] compiler_4.4.1         tools_4.4.1            utf8_1.2.4            </span></span>
+<span><span class="co">## [19] data.table_1.16.0      labeling_0.4.3         childsds_0.8.0        </span></span>
+<span><span class="co">## [22] htmlwidgets_1.6.4      pkgbuild_1.4.4         bench_1.1.3           </span></span>
+<span><span class="co">## [25] pkgload_1.4.0          miniUI_0.1.1.1         purrr_1.0.2           </span></span>
+<span><span class="co">## [28] desc_1.4.3             grid_4.4.1             fansi_1.0.6           </span></span>
+<span><span class="co">## [31] diffobj_0.3.5          urlchecker_1.0.1       profvis_0.4.0         </span></span>
+<span><span class="co">## [34] future_1.34.0          xtable_1.8-4           colorspace_2.1-1      </span></span>
+<span><span class="co">## [37] ggplot2_3.5.1          globals_0.16.3         scales_1.3.0          </span></span>
+<span><span class="co">## [40] MASS_7.3-60.2          intergrowth_0.0.0.9001 cli_3.6.3             </span></span>
+<span><span class="co">## [43] survey_4.4-2           crayon_1.5.3           generics_0.1.3        </span></span>
+<span><span class="co">## [46] remotes_2.5.0          rstudioapi_0.16.0      sessioninfo_1.2.2     </span></span>
+<span><span class="co">## [49] DBI_1.2.3              cachem_1.1.0           profmem_0.6.0         </span></span>
+<span><span class="co">## [52] stringr_1.5.1          splines_4.4.1          parallel_4.4.1        </span></span>
+<span><span class="co">## [55] mitools_2.4            devtools_2.4.5         Matrix_1.7-0          </span></span>
+<span><span class="co">## [58] callr_3.7.6            gamlss_5.4-22          listenv_0.9.1         </span></span>
+<span><span class="co">## [61] sitar_1.4.0            tidyr_1.3.1            parallelly_1.38.0     </span></span>
+<span><span class="co">## [64] glue_1.8.0             rematch2_2.1.2         zscorer_0.3.1         </span></span>
+<span><span class="co">## [67] codetools_0.2-20       ps_1.8.0               stringi_1.8.4         </span></span>
+<span><span class="co">## [70] lubridate_1.9.3        rsample_1.2.1          gtable_0.3.5          </span></span>
+<span><span class="co">## [73] later_1.3.2            munsell_0.5.1          tibble_3.2.1          </span></span>
+<span><span class="co">## [76] pillar_1.9.0           furrr_0.3.1            htmltools_0.5.8.1     </span></span>
+<span><span class="co">## [79] brio_1.1.5             gamlss.data_6.0-6      R6_2.5.1              </span></span>
+<span><span class="co">## [82] rprojroot_2.0.4        evaluate_1.0.0         shiny_1.9.1           </span></span>
+<span><span class="co">## [85] lattice_0.22-6         backports_1.5.0        memoise_2.0.1         </span></span>
+<span><span class="co">## [88] httpuv_1.6.15          Rcpp_1.0.13            AGD_0.45.0            </span></span>
+<span><span class="co">## [91] nlme_3.1-164           xfun_0.47              fs_1.6.4              </span></span>
+<span><span class="co">## [94] forcats_1.0.0          usethis_3.0.0          pkgconfig_2.0.3</span></span></code></pre>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -592,15 +1094,15 @@ procedure.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
