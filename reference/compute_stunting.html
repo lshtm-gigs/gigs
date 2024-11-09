@@ -102,7 +102,7 @@ vector, containing stunting classifications. Its levels are
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Cut-offs for stunting categories are:</p>
-<table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Z-score bounds</strong></td></tr><tr><td>Severe stunting</td><td><code>"stunting_severe"</code></td><td><code>lhaz</code> ≤ -3</td></tr><tr><td>Stunting</td><td><code>"stunting"</code></td><td>-3 &lt; <code>lhaz</code> ≤ -2</td></tr><tr><td>No stunting</td><td><code>"not_stunting"</code></td><td><code>lhaz</code> &gt; -2</td></tr><tr><td>Outlier</td><td><code>"outlier"</code></td><td><code>abs(lhaz)</code> &gt; 6</td></tr></table></div>
+<table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Z-score bounds</strong></td></tr><tr><td>Severe stunting</td><td><code>"stunting_severe"</code></td><td><code>lhaz</code> =&lt; -3</td></tr><tr><td>Stunting</td><td><code>"stunting"</code></td><td>-3 &lt; <code>lhaz</code> =&lt; -2</td></tr><tr><td>No stunting</td><td><code>"not_stunting"</code></td><td><code>lhaz</code> &gt; -2</td></tr><tr><td>Outlier</td><td><code>"outlier"</code></td><td><code>abs(lhaz)</code> &gt; 6</td></tr></table></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>This function assumes that your measurements were taken according to
