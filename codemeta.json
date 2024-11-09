@@ -62,11 +62,6 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
-      "identifier": "autotest",
-      "name": "autotest"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
       "provider": {
@@ -213,7 +208,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2143.621KB",
+  "fileSize": "2198.879KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

@@ -3,11 +3,12 @@
 test_that(
   desc = "Relevant `autotest` checks pass",
   code = {
-    testthat::skip(
-      message = paste0(
-        "There is a bug which causes errors in autotest when all tests with ",
-        "issues are not supposed to be tested. For now, I am skipping instead ",
-        "of having testthat fail.")
+    skip_on_ci()
+    skip_on_cran()
+    skip(message = paste0(
+      "There is a bug which causes errors in autotest when all tests with ",
+      "issues are not supposed to be tested. For now, I am skipping instead ",
+      "of having testthat fail.")
     )
     at_table <- autotest::autotest_package(test = FALSE)
     at_table$note <- rep_len(x = NA_character_, length.out = nrow(at_table))

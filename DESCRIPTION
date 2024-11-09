@@ -37,7 +37,6 @@ Imports:
     vctrs,
     cli
 Suggests:
-    autotest,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

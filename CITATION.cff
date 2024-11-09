@@ -151,17 +151,6 @@ references:
   year: '2024'
   doi: 10.32614/CRAN.package.cli
 - type: software
-  title: autotest
-  abstract: 'autotest: Automatic Package Testing'
-  notes: Suggests
-  url: https://docs.ropensci.org/autotest/
-  authors:
-  - family-names: Padgham
-    given-names: Mark
-    email: mark.padgham@email.com
-    orcid: https://orcid.org/0000-0003-2172-5265
-  year: '2024'
-- type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
   notes: Suggests
