@@ -138,13 +138,26 @@ when getting size-for-gestational age (<code>"sfga"</code>) and small vulnerable
 newborn (<code>"svn"</code>) classifications, all strings in <code>.new</code> must be unique.
 Each character vector in <code>.new</code> is repaired with <code>vctrs::as_names()</code>, which
 will issue messages if any elements in <code>.new</code> are changed.</p>
-<ul><li><p><code>"sfga"</code>:  <code>c("birthweight_centile", "sfga", "sfga_severe")</code></p></li>
-<li><p><code>"svn"</code>:  <code>c("birthweight_centile", "svn")</code></p></li>
-<li><p><code>"stunting"</code>:  <code>c("lhaz", "stunting", "stunting_outliers")</code></p></li>
-<li><p><code>"wasting"</code>:  <code>c("wlz", "wasting", "wasting_outliers")</code></p></li>
-<li><p><code>"wfa"</code>:  <code>c("waz", "wfa", "wfa_outliers")</code></p></li>
-<li><p><code>"headsize"</code>:  <code>c("hcaz", "headsize")</code></p></li>
-</ul></dd>
+<dl><dt><code>"sfga"</code>:</dt>
+<dd><p><code>c("birthweight_centile", "sfga", "sfga_severe")</code></p></dd>
+
+<dt><code>"svn"</code>:</dt>
+<dd><p><code>c("birthweight_centile", "svn")</code></p></dd>
+
+<dt><code>"stunting"</code>:</dt>
+<dd><p><code>c("lhaz", "stunting", "stunting_outliers")</code></p></dd>
+
+<dt><code>"wasting"</code>:</dt>
+<dd><p><code>c("wlz", "wasting", "wasting_outliers")</code></p></dd>
+
+<dt><code>"wfa"</code>:</dt>
+<dd><p><code>c("waz", "wfa", "wfa_outliers")</code></p></dd>
+
+<dt><code>"headsize"</code>:</dt>
+<dd><p><code>c("hcaz", "headsize")</code></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg--verbose">.verbose<a class="anchor" aria-label="anchor" href="#arg--verbose"></a></dt>
