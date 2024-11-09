@@ -5,22 +5,22 @@
 \alias{life6mo}
 \title{Data extract from the Low birthweight Infant Feeding Exploration (LIFE) study}
 \format{
-A data frame with 2,511 rows and 10 variables:
-\itemize{
+A data frame with 2,191 rows and 10 variables:
+\describe{
 \item{\code{id}:}{  Unique ID for each infant in the dataset (1--300).}
-\item{\code{gestage}:}{  Best obstetric estimate of gestational age in days
-(201--311).}
-\item{\code{sex}:}{  Sex of the infant as a factor (\code{"M"} = Male; \code{"F"} =
-Female).}
 \item{\code{visitweek}:}{  Chronological age in weeks (±1) when study visit
 occurred (0--26).}
-\item{\code{pma}:}{  Post-menstrual age in days (202--545).}
+\item{\code{sex}:}{  Sex of the infant as a factor (\code{"M"} = Male; \code{"F"} =
+Female).}
+\item{\code{gestage}:}{  Best obstetric estimate of gestational age in days
+(181--291).}
 \item{\code{age_days}:}{  Chronological age in days at each visit; equal to
-\code{pma - gestage} (0--245).}
-\item{\code{weight_g}:}{  Mean weight in g (1271.67--9050.00).}
-\item{\code{len_cm}:}{  Mean length in cm (35.03--72.93).}
-\item{\code{headcirc_cm}:}{  Mean head circumference in cm (23.20--45.17).}
-\item{\code{muac_cm}:}{  Mean mid-upper arm circumference in cm (6.13--17.03).}
+\code{pma - gestage} (0--242).}
+\item{\code{pma}:}{  Post-menstrual age in days (182--528).}
+\item{\code{wt_kg}:}{  Mean weight in kg (1.24--9.40667).}
+\item{\code{len_cm}:}{  Mean length in cm (37.37--72.93).}
+\item{\code{headcirc_cm}:}{  Mean head circumference in cm (23.20--44.87).}
+\item{\code{muac_cm}:}{  Mean mid-upper arm circumference in cm (6.30--16.83).}
 }
 }
 \description{

@@ -1,3 +1,49 @@
+# gigs 0.4.1.9001
+
+* The new version of the package includes many changes recommended by the good
+  folks at [rOpenSci](https://ropensci.org/), who are reviewing the package.
+* **BREAKING CHANGES**:
+  * Conversion between anthropometric values and z-scores/centiles is now 
+    done with `value2zscore()`, `value2centile()`, `zscore2value()`, and 
+    `centile2value()`.
+    *  The `family` and `acronym` arguments are used to select a specific growth
+       standard.
+  * The `classify_*()` family of functions no longer take vectors as input, but
+    instead take `data.frame`-like objects.
+* **NEW FEATURES**:
+  * Use `classify_growth()` to get data on multiple growth indicators at the 
+    same time. It will try to compute as many growth outcomes (i.e. size-for-GA,
+    SVN, stunting, wasting, weight-for-age and head size) as possible based on 
+    the data you provide, and will tell you which analyses were performed.
+  * The GIGS z-scoring functions are explicitly user-facing now. Go check out
+    `gigs_waz()` and friends for easy z-scoring using GIGS-recommended 
+    standards.
+  * An `id` parameter for `classify_growth()` and friends, as well as the GIGS 
+    z-scoring functions. This parameter informs the functions about *who* each 
+    data point is from, so that birth measurements for each individual can be 
+    identified and assessed appropriately.
+  * The `compute_*()` functions for growth analysis. These functions take
+    several vectors containing anthropometric measurements, age, and sex; they
+    return a factor of growth categories. They are equivalent to the 
+    `classify_*()` functions from v0.4.1 and earlier.
+  * The `categorise_*()` functions for growth analysis. These functions take 
+    vectors of growth centiles/z-scores as input, and return a factor of 
+    growth categories.
+  * Added the INTERGROWTH-21st standard for estimated fetal weight based on 
+    the Hadlock formula. The is available through `value2zscore()` and
+    friends provided that `family = "ig_fet"` and `acronym = "hefwfga"`.
+  * You can now set all GIGS options at once with `gigs_options_set()`.
+* **FIXES**:
+  * Z-scoring based on GIGS-recommended standards now accounts for measurements 
+    from different individuals, whereas in earlier versions the z-scoring logic
+    treated data as if it all came from the same individual.
+  * `.gigs_options` is now actively exported by gigs and available to end-users.
+* **INTERNAL/DOCS CHANGES**:
+  * Errors, warnings, and messages from GIGS are now handled with 
+    `rlang::abort()` and friends, and looks much prettier.  
+  * Updates to the 'Getting Started' vignette and 'Benchmarking' article.
+  * Other non-breaking changes to documentation and test suite.
+ 
 # gigs 0.4.1
 
 * Changes to documentation to facilitate `autotest::autotest_package()` pass.

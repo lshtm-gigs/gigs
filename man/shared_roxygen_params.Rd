@@ -6,26 +6,24 @@
 \arguments{
 \item{y}{Numeric vector of length one or more with anthropometric
 measurement(s) to convert to centiles/z-scores. Units depend on which
-\code{acronym}(s) are in use.}
+\code{acronym} is in use.}
 
 \item{z, p}{Numeric vector of length one or more with centiles/z-scores to
-convert to values. For \code{p}, if an element of \code{p} is not between \code{0} and
-\code{1}, gigs will replace it with \code{NA} and warn you. This behaviour can be
-customised using the functions in \link{gigs_options}.}
+convert to values. For \code{p}, gigs will warn you if elements of \code{p} are not
+between \code{0} and \code{1}. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 
 \item{sex}{Character vector of length one or more with sex(es), either \code{"M"}
 (male) or \code{"F"} (female). This argument is case-sensitive. By default, gigs
 will replace elements of \code{sex} which are not \code{"M"} or \code{"F"} with \code{NA}
-and warn you. This behaviour can be customised using the functions in
-\link{gigs_options}.}
+and warn you. You can customise this behaviour using the \link[=gigs_options]{GIGS package-level options}.}
 }
 \description{
 Many of the parameters in \verb{[gigs]} are shared between different functions.
-This roxygen block is designed to make inheriting these parameters as simple
-as possible.
+This roxygen block makes sharing these parameters more simple.
 }
 \note{
-Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules.
+Input vectors other than \code{acronym} and \code{family} are recycled by
+\code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must adhere to the \link{vctrs} recycling
+rules.
 }
 \keyword{internal}

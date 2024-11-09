@@ -32,7 +32,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: | 
+          extra-packages: |
+            github::ropensci-review-tools/autotest
             any::pkgdown
             any::tidyr
             any::viridis
@@ -40,6 +41,13 @@ jobs:
             any::purrr
             any::cowplot
             any::ggsci
+            any::anthro
+            any::AGD
+            any::childsds
+            github::ki-tools/growthstandards
+            github::nutriverse/intergrowth
+            any::sitar
+            any::zscorer
             local::.
           needs: website
 

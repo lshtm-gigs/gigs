@@ -1,45 +1,63 @@
-# Basic correctness test
-# This function is currently unexported and not called from other scripts, so
-# this test is a minor addition to keep coverage up. When the GIGS project
-# publishes its guidance, this test file will be refactored to include
-# errors/warnings, etc.
-test_that(
-  desc = "GIGS head circumference-for-age z-scoring works",
-  code = {
-      for (seed in 4) {
-          withr::with_seed(4, code = {
-              z <- rnorm(n = 15)
-              gest_days <- round(
-                jitter(sample((25:41) * 7, 15, replace = TRUE))
-              )
-              age_days <- round(
-                c(0,
-                  jitter(sample((0:120) * 7, 7, replace = TRUE)),
-                  0,
-                  jitter(sample((0:120) * 7, 6, replace = TRUE)))
-              )
-              sex <- sample(c("M", "F"), size = 15, replace = TRUE)
-
-              pma_days <- gest_days + age_days
-              pma_wks <- pma_days / 7
-
-              gigs_lgls <- gigs_xaz_lgls(gest_days = gest_days,
-                                         age_days = age_days)
-              headcirc <- rep(NA_real_, length(z))
-              headcirc[gigs_lgls$ig_nbs] <-
-                with(gigs_lgls, fn_on_subset(ig_nbs_hcfga_zscore2value, ig_nbs,
-                                             z, gest_days, sex))
-              headcirc[gigs_lgls$ig_png] <-
-                with(gigs_lgls, fn_on_subset(ig_png_hcfa_zscore2value, ig_png,
-                                             z, pma_wks, sex))
-              headcirc[gigs_lgls$who_gs] <-
-                with(gigs_lgls, fn_on_subset(who_gs_hcfa_zscore2value, who_gs,
-                                             z, age_days, sex))
-
-              gigs_z <- gigs_hcaz(headcirc_cm = headcirc, gest_days = gest_days,
-                                  age_days = age_days, sex = sex)
-          })
-          expect_equal(z, gigs_z)
-      }
+#' @srrstats {G5.2, G5.2a, G5.2b} Test out warnings for this *internal*
+#'   function - these will be printed to the console when users supply specific
+#'   data.
+test_that("gigs_zscoring_lgls() produces expected values", {
+  single_chr_gigs_zscoring_lgls <- function(gest_days, age_days, id) {
+    gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
+                                    age_days = age_days,
+                                    id = as.factor(id)) |>
+      unlist()
+    if (sum(gigs_lgls) == 0) {
+      return("none")
+    }
+    c("ig_nbs", "ig_png", "who_gs")[gigs_lgls[2:4]]
   }
-)
+
+  # Should issue a warning if an 'at birth' obs is older than 12hrs --> choosing
+  # not to let the user silence this
+  expect_warning(
+    gigs_zscoring_lgls(2, 279, as.factor("TEST1")),
+    class = "gigs_zscoring_old_birth_obs"
+  )
+
+  # Should issue a warning if an 'at birth' obs has a GA so old it is out of
+  # range of the IG-21st NBS --> choosing not to let the user silence this
+  expect_warning(
+    gigs_zscoring_lgls(0, 301, as.factor("TEST2")),
+    class = "gigs_zscoring_birth_w_large_ga"
+  )
+
+  # Now get both warnings at once
+  warnings <- capture_warnings(
+    gigs_zscoring_lgls(age_days = c(2, 0),
+                       gest_days = c(279, 301),
+                       id = as.factor(c("TEST1", "TEST2")))
+  )
+})
+
+
+#' @srrstats {G5.2, G5.2a, G5.2b} Test out error behaviour for
+#'   gigs_zscoring_lgls() - to ensure it functions correctly, even if the user
+#'   should never see the error.
+test_that("gigs_zscoring_lgls() throws errors", {
+  for (seed in seq(1000, 5000, 1000)) {
+    withr::with_seed(seed, code = {
+      n_age_days <- sample.int(n = 1000, size = 1)
+      age_days <- sample.int(n = 1000, size = n_age_days, replace = TRUE)
+      n_gest_days <- sample.int(n = 1000, size = 1)
+      gest_days <- sample(x = 250:280, size = n_gest_days, replace = TRUE)
+    })
+
+    expect_error(
+      gigs_zscoring_lgls(gest_days = gest_days, age_days = age_days),
+      regexp = paste0("`age_days` had length ", n_age_days,
+                      "; `gest_days` had length ", n_gest_days, "."),
+      class = "gigs_zscoring_inconsistent_lengths"
+    )
+  }
+
+  expect_error(
+    gigs_zscoring_lgls(277, 2, "TEST1"),
+    class = "gigs_zscoring_id_not_factor"
+  )
+})

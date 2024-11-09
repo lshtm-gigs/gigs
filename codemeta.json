@@ -8,19 +8,19 @@
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.4.1",
+  "version": "0.4.1.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.2 (2023-10-31 ucrt)",
+  "runtimePlatform": "R version 4.3.3 (2024-02-29 ucrt)",
   "author": [
     {
       "@type": "Person",
       "givenName": "Simon",
       "familyName": "Parker",
-      "email": "simon.parker@lshtm.ac.uk",
+      "email": "simon.parker1471@outlook.com",
       "@id": "https://orcid.org/0009-0003-8214-4496"
     }
   ],
@@ -41,7 +41,7 @@
   "copyrightHolder": [
     {
       "@type": "Organization",
-      "name": "Bill & Melinda Gates Foundation"
+      "name": "London School of Hygiene & Tropical Medicine"
     }
   ],
   "funder": [
@@ -55,11 +55,16 @@
       "@type": "Person",
       "givenName": "Simon",
       "familyName": "Parker",
-      "email": "simon.parker@lshtm.ac.uk",
+      "email": "simon.parker1471@outlook.com",
       "@id": "https://orcid.org/0009-0003-8214-4496"
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "autotest",
+      "name": "autotest"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -99,6 +104,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
       "provider": {
@@ -131,8 +148,15 @@
     },
     "2": {
       "@type": "SoftwareApplication",
-      "identifier": "stats",
-      "name": "stats"
+      "identifier": "checkmate",
+      "name": "checkmate",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=checkmate"
     },
     "3": {
       "@type": "SoftwareApplication",
@@ -148,17 +172,22 @@
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "checkmate",
-      "name": "checkmate",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=checkmate"
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "5": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "vctrs",
       "name": "vctrs",
@@ -170,23 +199,45 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=vctrs"
     },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "1823.803KB",
+  "fileSize": "2143.621KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
-      "datePublished": "2023",
+      "datePublished": "2024",
       "author": [
         {
           "@type": "Person",
           "givenName": "Simon",
           "familyName": "Parker"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Linda",
+          "familyName": "Vesel"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Eric",
+          "familyName": "Ohuma"
         }
       ],
       "name": "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
       "url": "https://github.com/lshtm-gigs/gigs/",
-      "description": "0.4.1"
+      "description": "0.4.1.9001"
     }
   ],
   "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",

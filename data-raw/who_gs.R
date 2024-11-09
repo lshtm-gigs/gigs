@@ -131,30 +131,3 @@ who_gs <- who_gs |>
     return(.x)
   })
 usethis::use_data(who_gs, overwrite = TRUE)
-
-write_dta_lmsfiles <- function(who_gs_lms) {
-  dta_dir <- file.path("data-raw", "tables", "who_gs", "stata")
-  if (!dir.exists(dta_dir)) dir.create(path = dta_dir)
-  purrr::walk2(
-    .x = who_gs_lms,
-    .y = names(who_gs_lms),
-    .f = ~ {
-      sub_li <- .x
-      m_f <- names(.x)
-      name <- .y
-      full_tbl <- purrr::map2(.x = sub_li,
-                              .y = m_f,
-                              .f = ~ {
-                                dplyr::mutate(.x, sex = ifelse(.y == "male",
-                                                               yes = 1, no = 0))
-                              }) |>
-        purrr::list_rbind() |>
-        dplyr::rename(whoLMS_xvar = 1, whoLMS_sex = sex,
-                      whoLMS_L = L, whoLMS_M = M, whoLMS_S = S)
-      haven::write_dta(data = full_tbl,
-                        path = file.path(dta_dir,
-                                         paste0("whoLMS_", name, ".dta")))
-    }
-  )
-}
-write_dta_lmsfiles(who_gs_lms = who_gs_coeffs)

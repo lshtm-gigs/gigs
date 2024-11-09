@@ -3,6 +3,10 @@
 \name{.gigs_options}
 \alias{.gigs_options}
 \title{Package-level gigs options}
+\value{
+A named environment, where each name maps onto a specific option for
+the GIGS package.
+}
 \description{
 An environment containing six named character vectors. These
 define how gigs handles inputs with missing, undefined, or invalid
@@ -15,22 +19,28 @@ elements:
 variables which are out of bounds for the standard in use?
 \item \code{"handle_invalid_sex"} - How should gigs handle elements of \code{sex} which
 are not one of \code{"M"} or \code{"F"}?
-\item \code{"handle_invalid_acronym"} - In conversion functions, how should gigs
-handle \code{acronym} elements which do not map onto any implemented growth
-standard?
 \item \code{"handle_oob_centiles"} - In \code{centile2value} functions, how should
 gigs handle elements of \code{p} that are not between \code{0} and \code{1}?
 }
 
-By default, each of these options will be set to \code{"warn"}, so you will be
-informed of any invalid data you use as inputs. You can use
-\code{gigs_options_set()} to change this behaviour.
+Each of these options can take one of three values:
+\itemize{
+\item \code{"quiet"} - Invalid elements are set to \code{NA}, silently.
+\item \code{"warn"} - Invalid elements are set to \code{NA}, with warnings issued when
+this is done.
+\item \code{"error"} - Invalid elements will cause informative errors.
+}
+
+By default, each option in \code{.gigs_options} is set to \code{"warn"}, so you will
+be informed of any invalid data used as input. Use  \code{gigs_option_set()} or
+\code{gigs_option_set()} to change this behaviour.
 }
 \examples{
 # Get the names of all available options
 names(.gigs_options)
 }
 \seealso{
-The \code{gigs_option_get()} and \code{gigs_option_set()} functions, which can
-be used to edit the values in \code{.gigs_options}.
+The \code{gigs_option_get()}, \code{gigs_option_set()} and
+\code{gigs_options_set()} functions, which can be used to get and set values in
+\code{.gigs_options}.
 }
