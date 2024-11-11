@@ -1,11 +1,16 @@
-#' Functions to get and set gigs package-level options
+#' Get and set gigs package-level options
 #'
 #' @description By default, gigs will handle invalid input data, e.g. missing
 #'   (`NA`) or undefined (`NaN`, `Inf` and `-Inf`) values, by warning you of
-#'   their presence and replacing the invalid values with `NA`. You can change
-#'   this behaviour with `gigs_option_set()` so that gigs does this silently, or
-#'   make gigs throw errors when confronted with bad data. You can also change
-#'   all GIGS options at once with `gigs_options_set()`.
+#'   their presence and replacing the invalid values with `NA`. It will also 
+#'   warn you about unused factor levels when running growth outcome analyses. 
+#'   
+#'   You can change this input-checking behaviour with `gigs_option_set()` so 
+#'   that gigs does this silently, or make gigs throw errors when confronted 
+#'   with bad data. You can also make gigs drop unused factor levels in its 
+#'   outputs, or silence its warnings about unused factor levels. You can also 
+#'   change all options for gigs input-checking at once using 
+#'   `gigs_input_options_set()`.
 #' @param option A single case-sensitive character variable, one of:
 #'   * `"handle_missing_data"` - How should gigs handle missing (`NA`) elements?
 #'   * `"handle_undefined_data"` - How should gigs handle undefined (`NaN`,
@@ -16,20 +21,32 @@
 #'     are not one of `"M"` or `"F"`?
 #'   * `"handle_oob_centiles"` - In `centile2value` functions, how should
 #'     gigs handle elements of `p` that are not between `0` and `1`?
-#' @param silent A single logical value controlling whether a `message()` will
-#'   be printed to the console describing either:
+#'   * `"handle_unused_levels"` - When generating growth categories as factors, 
+#'     should gigs drop or keep unused factor levels, and should it issue 
+#'     warnings when unused factor levels occur?
+#' @param silent A single logical value controlling whether a message will be 
+#'   printed to the console describing either:
 #'   * The current value of `option` in `gigs_option_get()`.
 #'   * The `new_value` of `option` in `gigs_option_set()`.
 #'
 #'   This argument will not accept an integer in place of a logical value.
-#' @param new_value A single case-sensitive character variable, one of:
+#' @param new_value A single case-sensitive character variable. For all options
+#'   **except** "handle_unused_levels", this should be one of:
 #'   * `"quiet"` - gigs will replace invalid vector elements with `NA` quietly.
-#'   * `"warn"` - gigs will replace invalid vector elements with `NA` loudly.
+#'   * `"warn"` -  gigs will replace invalid vector elements with `NA` loudly.
 #'   * `"error"` - gigs will throw informative errors if any invalid inputs are
 #'     encountered.
+#'   For "handle_unused_levels", `new_value` should be one of:
+#'   * `"keep_quiet"` - Keep unused factor levels, and don't issue a warning. 
+#'   * `"keep_warn"` - Keep unused factor levels, whilst issuing a warning.
+#'   * `"drop_quiet"` - Drop unused factor levels, and don't issue a warning.
+#'   * `"drop_warn"` - Drop unused factor levels, whilst issuing a warning.
+#'   
+#'   By default, GIGS options are `"warn"` for input handling and `"keep_warn"` 
+#'   for `"handle_unused_levels"`
 #' @returns A single-length character vector. For `gigs_option_get()`, the
 #'   current value of `option`; for `gigs_option_get()`, the new value of
-#'   `option`; for `gigs_options_set()`, `new_value`. If `silent = FALSE`
+#'   `option`; for `gigs_input_options_set()`, `new_value`. If `silent = FALSE`
 #'   (default), then informative messages will be printed to the console
 #'   regarding the current/new values of `option`.
 #' @examples
@@ -51,8 +68,8 @@
 #' # Suppress printed output with `silent = TRUE`
 #' gigs_option_set("handle_undefined_data", "quiet", silent = TRUE)
 #'
-#' # Set all GIGS options
-#' gigs_options_set("warn", silent = TRUE)
+#' # Set all GIGS options for input checking
+#' gigs_input_options_set("warn", silent = TRUE)
 #' @name gigs_options
 #' @export
 gigs_option_get <- function(option, silent = FALSE) {
@@ -76,7 +93,13 @@ gigs_option_set <- function(option, new_value, silent = FALSE) {
   checkmate::qassert(silent, rules = "B1")
   checkmate::qassert(new_value, rules = "S1")
   checkmate::assert_subset(option, choices = names(gigs::.gigs_options))
-  checkmate::assert_subset(new_value, choices = c("quiet", "warn", "error"))
+  if (option == "handle_unused_levels") {
+    checkmate::assert_subset(new_value, choices = c("keep_silent", "keep_warn",
+                                                    "drop_silent", "drop_warn"))    
+  } else {
+    checkmate::assert_subset(new_value, choices = c("quiet", "warn", "error"))
+  }
+
   assign(x = option, value = new_value, envir = gigs::.gigs_options,
          inherits = FALSE)
   if (!silent) {
@@ -90,11 +113,12 @@ gigs_option_set <- function(option, new_value, silent = FALSE) {
 
 #' @name gigs_options
 #' @export
-gigs_options_set <- function(new_value, silent = FALSE) {
+gigs_input_options_set <- function(new_value, silent = FALSE) {
   checkmate::qassert(silent, rules = "B1")
   checkmate::qassert(new_value, rules = "S1")
   checkmate::assert_subset(new_value, choices = c("quiet", "warn", "error"))
   for (option in names(.gigs_options)) {
+    if (option == "handle_unused_levels") next
     gigs_option_set(option, new_value, silent = silent)
   }
   invisible(new_value)
@@ -125,8 +149,8 @@ gigs_options_set <- function(new_value, silent = FALSE) {
 #'   be informed of any invalid data used as input. Use  `gigs_option_set()` or
 #'   `gigs_option_set()` to change this behaviour.
 #' @seealso The `gigs_option_get()`, `gigs_option_set()` and
-#'   `gigs_options_set()` functions, which can be used to get and set values in
-#'   `.gigs_options`.
+#'   `gigs_input_options_set()` functions, which can be used to get and set 
+#'   values in `.gigs_options`.
 #' @returns A named environment, where each name maps onto a specific option for
 #'   the GIGS package.
 #' @examples

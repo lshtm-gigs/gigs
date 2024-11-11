@@ -4,14 +4,14 @@
 \alias{gigs_options}
 \alias{gigs_option_get}
 \alias{gigs_option_set}
-\alias{gigs_options_set}
-\title{Functions to get and set gigs package-level options}
+\alias{gigs_input_options_set}
+\title{Get and set gigs package-level options}
 \usage{
 gigs_option_get(option, silent = FALSE)
 
 gigs_option_set(option, new_value, silent = FALSE)
 
-gigs_options_set(new_value, silent = FALSE)
+gigs_input_options_set(new_value, silent = FALSE)
 }
 \arguments{
 \item{option}{A single case-sensitive character variable, one of:
@@ -25,10 +25,13 @@ which are out of bounds for the standard in use?
 are not one of \code{"M"} or \code{"F"}?
 \item \code{"handle_oob_centiles"} - In \code{centile2value} functions, how should
 gigs handle elements of \code{p} that are not between \code{0} and \code{1}?
+\item \code{"handle_unused_levels"} - When generating growth categories as factors,
+should gigs drop or keep unused factor levels, and should it issue
+warnings when unused factor levels occur?
 }}
 
-\item{silent}{A single logical value controlling whether a \code{message()} will
-be printed to the console describing either:
+\item{silent}{A single logical value controlling whether a message will be
+printed to the console describing either:
 \itemize{
 \item The current value of \code{option} in \code{gigs_option_get()}.
 \item The \code{new_value} of \code{option} in \code{gigs_option_set()}.
@@ -36,28 +39,42 @@ be printed to the console describing either:
 
 This argument will not accept an integer in place of a logical value.}
 
-\item{new_value}{A single case-sensitive character variable, one of:
+\item{new_value}{A single case-sensitive character variable. For all options
+\strong{except} "handle_unused_levels", this should be one of:
 \itemize{
 \item \code{"quiet"} - gigs will replace invalid vector elements with \code{NA} quietly.
-\item \code{"warn"} - gigs will replace invalid vector elements with \code{NA} loudly.
+\item \code{"warn"} -  gigs will replace invalid vector elements with \code{NA} loudly.
 \item \code{"error"} - gigs will throw informative errors if any invalid inputs are
 encountered.
-}}
+For "handle_unused_levels", \code{new_value} should be one of:
+\item \code{"keep_quiet"} - Keep unused factor levels, and don't issue a warning.
+\item \code{"keep_warn"} - Keep unused factor levels, whilst issuing a warning.
+\item \code{"drop_quiet"} - Drop unused factor levels, and don't issue a warning.
+\item \code{"drop_warn"} - Drop unused factor levels, whilst issuing a warning.
+}
+
+By default, GIGS options are \code{"warn"} for input handling and \code{"keep_warn"}
+for \code{"handle_unused_levels"}}
 }
 \value{
 A single-length character vector. For \code{gigs_option_get()}, the
 current value of \code{option}; for \code{gigs_option_get()}, the new value of
-\code{option}; for \code{gigs_options_set()}, \code{new_value}. If \code{silent = FALSE}
+\code{option}; for \code{gigs_input_options_set()}, \code{new_value}. If \code{silent = FALSE}
 (default), then informative messages will be printed to the console
 regarding the current/new values of \code{option}.
 }
 \description{
 By default, gigs will handle invalid input data, e.g. missing
 (\code{NA}) or undefined (\code{NaN}, \code{Inf} and \code{-Inf}) values, by warning you of
-their presence and replacing the invalid values with \code{NA}. You can change
-this behaviour with \code{gigs_option_set()} so that gigs does this silently, or
-make gigs throw errors when confronted with bad data. You can also change
-all GIGS options at once with \code{gigs_options_set()}.
+their presence and replacing the invalid values with \code{NA}. It will also
+warn you about unused factor levels when running growth outcome analyses.
+
+You can change this input-checking behaviour with \code{gigs_option_set()} so
+that gigs does this silently, or make gigs throw errors when confronted
+with bad data. You can also make gigs drop unused factor levels in its
+outputs, or silence its warnings about unused factor levels. You can also
+change all options for gigs input-checking at once using
+\code{gigs_input_options_set()}.
 }
 \examples{
 # Show the names of all available options
@@ -78,6 +95,6 @@ print(option_value)
 # Suppress printed output with `silent = TRUE`
 gigs_option_set("handle_undefined_data", "quiet", silent = TRUE)
 
-# Set all GIGS options
-gigs_options_set("warn", silent = TRUE)
+# Set all GIGS options for input checking
+gigs_input_options_set("warn", silent = TRUE)
 }

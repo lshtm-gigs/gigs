@@ -41,6 +41,6 @@ names(.gigs_options)
 }
 \seealso{
 The \code{gigs_option_get()}, \code{gigs_option_set()} and
-\code{gigs_options_set()} functions, which can be used to get and set values in
-\code{.gigs_options}.
+\code{gigs_input_options_set()} functions, which can be used to get and set
+values in \code{.gigs_options}.
 }

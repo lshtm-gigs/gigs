@@ -1,7 +1,7 @@
 Type: Package
 Package: gigs
 Title: Assess Fetal, Newborn, and Child Growth with International Standards
-Version: 0.4.1.9001
+Version: 0.4.1.9002
 Authors@R: c(
     person(given = "Simon", family = "Parker",
            email = "simon.parker1471@outlook.com",

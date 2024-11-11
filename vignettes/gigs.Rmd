@@ -22,29 +22,27 @@ intergrowth21st <- if (knitr::is_html_output()) {
 
 # Introduction
 
-gigs is a package designed to make the implementation of the international
-growth standards from the `r intergrowth21st` project and World Health
-Organisation Child Growth Standards as easy as possible. It provides
-functions for easy and reproducible classification of fetal, newborn, and infant
-growth using international growth standards. The package allows conversions and
+Produced as part of the Guidance for International Growth Standards project at
+the London School of Hygiene & Tropical Medicine, **gigs** provides a single,
+simple interface for working with the WHO Child Growth standards and outputs
+from the `r intergrowth21st` project. It provides functions for easy and
+reproducible classification of fetal, newborn, and infant growth using 
+international growth standards. The package allows conversions and
 classifications of growth measurements to centiles, z-scores, and common
 international metrics such as stunting.
 
 ## Getting started
 
-Let's start by loading the package. We're also turning off the warnings which
-gigs prints if inputs are `NA`, `NaN`, or similarly invalid, as to avoid
-cluttering the console output.
-
+Let's start by loading the package.
 ```{r setup}
 library(gigs)
 ```
 
-This vignette has two examples for applying gigs. The first is using gigs to
-convert growth measurements into centiles or z-scores according to appropriate
-standards from either the `r intergrowth21st` or WHO Child Growth standards. The
-second is using gigs to convert growth measurements to categorical growth
-outcomes, in this case size-for-gestational age.
+This vignette has two examples for applying **gigs**. The first is using 
+**gigs** to convert growth measurements into centiles or z-scores according to
+appropriate standards from either the `r intergrowth21st` or WHO Child Growth 
+standards. The second is using **gigs** to convert growth measurements to 
+categorical growth outcomes, in this case size-for-gestational age.
 
 ## Example data
 This tutorial uses a sample of data from 300 infants enrolled in the Low
@@ -78,24 +76,22 @@ head(life6mo, n = 5)
 # Using gigs to convert growth measurements to z-scores
 
 ## Single-step approach
-The easiest way to use gigs is to let it handle work for you. Using its growth
-classification functions, you can apply GIGS-recommended growth standards for
-each measurement and time point in a dataset. Standards are applied based on the
-best practices advised by WHO and `r intergrowth21st` when using their
+The easiest way to use **gigs** is to let it handle work for you. Using its 
+z-scoring functions, you can apply GIGS-recommended growth standards for
+each measurement and time point in your data. Standards are applied based on the
+best practices advised by WHO and `r intergrowth21st` when using their 
 respective growth standards.
 
-We can use `classify_wfa()` to add weight-for-age z-scores to our dataset in a
-single step. This function works like `dplyr::mutate()` and other
-[data-masking](https://rlang.r-lib.org/reference/args_data_masking.html)
-functions: you refer to columns in `.data` using the raw column names:
+We can use `gigs_waz()` to add weight-for-age z-scores to our dataset in a
+single step:
 
 ```{r simple_gen_WAZs}
-life6mo_zscored <- classify_wfa(.data = life6mo,
-                                weight_kg = wt_kg,
-                                age_days = age_days,
-                                gest_days = gestage,
-                                sex = sex,
-                                id = id)
+life6mo_zscored <- life6mo
+life6mo_zscored$waz <- gigs_waz(weight_kg = life6mo$wt_kg,
+                                age_days = life6mo$age_days,
+                                gest_days = life6mo$gestage,
+                                sex = life6mo$sex,
+                                id = life6mo$id)
 life6mo_zscored[, c("id", "visitweek", "gestage", "age_days", "sex", "waz")] |>
   head(n = 5)
 ```
@@ -138,13 +134,13 @@ knitr::include_graphics("gigs_waz_simple.png")
 ```
 
 ## Multi-step approach
-Instead of letting GIGS do the heavy lifting, you may want to clearly lay out
-the steps taken in your analysis. Luckily, gigs provides all the functionality
-you need for this.
+Instead of letting **gigs** do the heavy lifting, you may want to clearly lay out
+the steps taken in your analysis. Luckily, **gigs** provides all the 
+functionality you need for this.
 
 We start by generating WAZs using each growth standard. To do this, we need to
-use the gigs conversion functions. These take vectors of growth data and convert
-them into z-scores or centiles. You can use either `value2zscore()` or
+use the **gigs** conversion functions. These take vectors of growth data and 
+convert them into z-scores or centiles. You can use either `value2zscore()` or
 `value2zcentile()` depending on which conversion you want to do. You then pass
 in two parameters, `family` and `acronym`, which describe:
 
@@ -179,8 +175,8 @@ waz_png <- with(life6mo, value2zscore(y =  wt_kg,
                                       acronym = "wfa"))
 ```
 
-This "out of bounds" warning from GIGS tells us that for 128 observations GIGS
-couldn't calculate a z-score, because the post-menstrual age for those
+This "out of bounds" warning from *gigs** tells us that it couldn't calculate a 
+z-score for 128 observations, because the post-menstrual age for those
 observations was outside the range of the `r intergrowth21st` Postnatal Growth
 Standards (i.e. 27 to 64 weeks' post-menstrual age).
 
@@ -242,13 +238,14 @@ ggplot_waz_complex |>
 knitr::include_graphics("gigs_waz_complex.png")
 ```
 
-Sure - you *can* do it yourself, but doing it manually is likelier to have you
-applying the wrong standards at each time point. Instead, use the
-`classify_growth()` function and friends to automatically apply the best
-growth standards for each observation you have in a dataset.
+Sure - you *can* do it yourself, but doing it manually makes it more likely to
+apply the wrong growth standard for a given observation. Instead, use the
+`gigs_waz()` function and friends (`gigs_lhaz()`, `gigs_wlz()`, `gigs_hcaz()`) 
+to  automatically use growth standards suggested by GIGS for each observation in 
+your data.
 
 # Using gigs to obtaining growth outcomes from measurements
-The gigs package contains functions which can be used to assess a range of
+The **gigs** package contains functions which can be used to assess a range of
 common growth outcomes:
 
 * Size-for-gestational age with `compute_sfga()`/`classify_sfga()`
@@ -258,7 +255,7 @@ common growth outcomes:
 * Weight-for-age with `compute_wfa()`/`classify_wfa()`
 * Head size with `compute_headsize()`/`classify_headsize()`
 
-You can also obtain classifications for all (or some) of these outcomes
+You can also obtain classifications for some or all of these outcomes
 simultaneously using `classify_growth()`. In this vignette, we will focus on
 size-for-GA and small, vulnerable newborn (SVN) classifications.
 
@@ -322,7 +319,7 @@ of their size-for-GA, whether they were low birth-weight (LBW; birth weight <
 2500g), and whether they were born term or preterm [@Ashorn2023SmallImpact]. In
 a global analysis of SVN type prevalence and mortality, Lawn et al.
 [@Lawn2023SmallCounting] focused on a smaller subset of SVN categories which
-omitted whether infants were LBW. The gigs package offers SVN classification
+omitted whether infants were LBW. The **gigs** package offers SVN classification
 functionality for this smaller subset of SVN categories, as 99.5% of global LBW
 is the consequence of preterm birth and SGA.
 

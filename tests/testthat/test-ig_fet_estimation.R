@@ -94,13 +94,13 @@ test_that("Bad GA estimation calls give good errors", {
     ig_fet_estimate_ga(crl_mm = integer(), headcirc_mm = 50, femurlen_mm = numeric()),
     class = "gigs_err_zero_length"
   )
-
+  
   # NULL for crl_mm + headcirc_mm inputs
   expect_error(
     ig_fet_estimate_ga(crl_mm = NULL, headcirc_mm = NULL, femurlen_mm = 50),
     regexp = "At least one of `crl_mm` or `headcirc_mm` must not be `NULL`"
   )
-
+  
   # NULL for all inputs
   expect_error(
     ig_fet_estimate_ga(crl_mm = NULL, headcirc_mm = NULL, femurlen_mm = NULL),
@@ -119,7 +119,7 @@ test_that(desc = "Bad fetal weight estimation calls give good errors", code = {
     ig_fet_estimate_fetal_weight(abdocirc_mm = 250, headcirc_mm = logical(1)),
     test_error_wrong_type("headcirc_mm", "numeric", "logical")
   )
-
+  
   # Errors based on input length
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = 250),
@@ -133,7 +133,7 @@ test_that(desc = "Bad fetal weight estimation calls give good errors", code = {
     ig_fet_estimate_fetal_weight(abdocirc_mm = numeric(), headcirc_mm = double()),
     class = "gigs_err_zero_length"
   )
-
+  
   # NULL inputs
   expect_error(
     ig_fet_estimate_fetal_weight(abdocirc_mm = NULL, headcirc_mm = 50),
@@ -157,95 +157,95 @@ test_that(desc = "Bad fetal weight estimation calls give good errors", code = {
 #' @srrstats {EA6.0, EA6.0a} Also checks that classes/types of returned objects
 #'   are correct using [checkmate::expect_numeric()].
 test_that(desc = "Invalid values can be replaced with `NA` quietly", code = {
-    # Make gigs *quietly* replace bad data with NA
-    gigs_options_set("quiet", silent = TRUE)
-
-    input_len <- 40
-    headcirc_mm <- rep_len(285:294, length.out = input_len)
-    abdocirc_mm <- rep_len(255:264, length.out = input_len)
-    crl_mm <- rep_len(40:49, length.out = input_len)
-    femurlen_mm <- rep_len(50:59, length.out = input_len)
-
-    # Random set of indices to replace with bad data in each case
-    num_to_replace1 <- 7
-    withr::with_seed(465, code = {
-      replace_ints_1 <- sample(1L:input_len, size = num_to_replace1)
-    })
-    num_to_replace2 <- 8
-    withr::with_seed(420, code = {
-      replace_ints_2 <- sample(1L:input_len, size = num_to_replace2)
-    })
-    replace_ints_3 <- union(replace_ints_1, replace_ints_2)
-    num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
-
-    # Bad input 1: Undefined data (NaN, Inf, -Inf) -----------------------------
-    for (undefined_val in c(NaN, Inf, -Inf)) {
-      ## Do for ig_fet_estimate_fetal_weight
-      out <- ig_fet_estimate_fetal_weight(
-        abdocirc_mm,
-        replace(headcirc_mm, replace_ints_2, undefined_val)
-      )
-      checkmate::expect_numeric(out, len = input_len)
-      expect_true(all(is.na(out[replace_ints_2])))
-
-      ## Do for ig_fet_estimate_fetal_weight
-      out <- ig_fet_estimate_fetal_weight(
-        replace(abdocirc_mm, replace_ints_1, undefined_val),
-        replace(headcirc_mm, replace_ints_2, undefined_val)
-      )
-      checkmate::expect_numeric(out, len = input_len)
-      expect_true(all(is.na(out[replace_ints_3])))
-
-      ## Do for ig_fet_estimate_ga
-      out <- ig_fet_estimate_ga(
-        NULL,
-        replace(femurlen_mm, replace_ints_2, undefined_val),
-        replace(femurlen_mm, replace_ints_1, undefined_val)
-      )
-      checkmate::expect_numeric(out, len = input_len)
-      expect_true(all(is.na(out[replace_ints_3])))
-      out <- ig_fet_estimate_ga(
-        replace(crl_mm, replace_ints_1, undefined_val),
-        abdocirc_mm,
-        femurlen_mm
-      )
-      checkmate::expect_numeric(out, len = input_len)
-      expect_true(all(is.na(out[replace_ints_1])))
-    }
-
-    # Bad input 2: Missing data (NA) -------------------------------------------
+  # Make gigs *quietly* replace bad data with NA
+  gigs_input_options_set("quiet", silent = TRUE)
+  
+  input_len <- 40
+  headcirc_mm <- rep_len(285:294, length.out = input_len)
+  abdocirc_mm <- rep_len(255:264, length.out = input_len)
+  crl_mm <- rep_len(40:49, length.out = input_len)
+  femurlen_mm <- rep_len(50:59, length.out = input_len)
+  
+  # Random set of indices to replace with bad data in each case
+  num_to_replace1 <- 7
+  withr::with_seed(465, code = {
+    replace_ints_1 <- sample(1L:input_len, size = num_to_replace1)
+  })
+  num_to_replace2 <- 8
+  withr::with_seed(420, code = {
+    replace_ints_2 <- sample(1L:input_len, size = num_to_replace2)
+  })
+  replace_ints_3 <- union(replace_ints_1, replace_ints_2)
+  num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
+  
+  # Bad input 1: Undefined data (NaN, Inf, -Inf) -----------------------------
+  for (undefined_val in c(NaN, Inf, -Inf)) {
     ## Do for ig_fet_estimate_fetal_weight
     out <- ig_fet_estimate_fetal_weight(
       abdocirc_mm,
-      replace(headcirc_mm, replace_ints_2, NA)
+      replace(headcirc_mm, replace_ints_2, undefined_val)
     )
     checkmate::expect_numeric(out, len = input_len)
     expect_true(all(is.na(out[replace_ints_2])))
-
+    
     ## Do for ig_fet_estimate_fetal_weight
     out <- ig_fet_estimate_fetal_weight(
-      replace(abdocirc_mm, replace_ints_1, NA),
-      replace(headcirc_mm, replace_ints_2, NA)
+      replace(abdocirc_mm, replace_ints_1, undefined_val),
+      replace(headcirc_mm, replace_ints_2, undefined_val)
     )
     checkmate::expect_numeric(out, len = input_len)
     expect_true(all(is.na(out[replace_ints_3])))
-
+    
     ## Do for ig_fet_estimate_ga
     out <- ig_fet_estimate_ga(
       NULL,
-      replace(femurlen_mm, replace_ints_2, NA),
-      replace(femurlen_mm, replace_ints_1, NA)
+      replace(femurlen_mm, replace_ints_2, undefined_val),
+      replace(femurlen_mm, replace_ints_1, undefined_val)
     )
     checkmate::expect_numeric(out, len = input_len)
     expect_true(all(is.na(out[replace_ints_3])))
     out <- ig_fet_estimate_ga(
-      replace(crl_mm, replace_ints_1, NA),
+      replace(crl_mm, replace_ints_1, undefined_val),
       abdocirc_mm,
       femurlen_mm
     )
     checkmate::expect_numeric(out, len = input_len)
     expect_true(all(is.na(out[replace_ints_1])))
   }
+  
+  # Bad input 2: Missing data (NA) -------------------------------------------
+  ## Do for ig_fet_estimate_fetal_weight
+  out <- ig_fet_estimate_fetal_weight(
+    abdocirc_mm,
+    replace(headcirc_mm, replace_ints_2, NA)
+  )
+  checkmate::expect_numeric(out, len = input_len)
+  expect_true(all(is.na(out[replace_ints_2])))
+  
+  ## Do for ig_fet_estimate_fetal_weight
+  out <- ig_fet_estimate_fetal_weight(
+    replace(abdocirc_mm, replace_ints_1, NA),
+    replace(headcirc_mm, replace_ints_2, NA)
+  )
+  checkmate::expect_numeric(out, len = input_len)
+  expect_true(all(is.na(out[replace_ints_3])))
+  
+  ## Do for ig_fet_estimate_ga
+  out <- ig_fet_estimate_ga(
+    NULL,
+    replace(femurlen_mm, replace_ints_2, NA),
+    replace(femurlen_mm, replace_ints_1, NA)
+  )
+  checkmate::expect_numeric(out, len = input_len)
+  expect_true(all(is.na(out[replace_ints_3])))
+  out <- ig_fet_estimate_ga(
+    replace(crl_mm, replace_ints_1, NA),
+    abdocirc_mm,
+    femurlen_mm
+  )
+  checkmate::expect_numeric(out, len = input_len)
+  expect_true(all(is.na(out[replace_ints_1])))
+}
 )
 
 # Appropriate warnings/errors with bad input data ------------------------------
@@ -255,16 +255,16 @@ test_that(desc = "Invalid values can be replaced with `NA` quietly", code = {
 #'   scope of its algorithms by replacing bad inputs with `NA` and giving clear
 #'   warnings.
 test_that(desc = "Invalid values can be replaced with `NA` with a warning",
-  code = {
-    # Make gigs replace bad data with `NA` and warn
-    gigs_options_set(new_value = "warn", silent = TRUE)
-
-    input_len <- 40
-    headcirc_mm <- rep_len(285:294, length.out = input_len)
-    abdocirc_mm <- rep_len(255:264, length.out = input_len)
-    crl_mm <- rep_len(40:49, length.out = input_len)
-    femurlen_mm <- rep_len(50:59, length.out = input_len)
-
+          code = {
+            # Make gigs replace bad data with `NA` and warn
+            gigs_input_options_set(new_value = "warn", silent = TRUE)
+            
+            input_len <- 40
+            headcirc_mm <- rep_len(285:294, length.out = input_len)
+            abdocirc_mm <- rep_len(255:264, length.out = input_len)
+            crl_mm <- rep_len(40:49, length.out = input_len)
+            femurlen_mm <- rep_len(50:59, length.out = input_len)
+            
     # Random set of indices to replace with bad data in each case
     num_to_replace1 <- 7
     withr::with_seed(465, code = {
@@ -387,8 +387,8 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning",
 
 #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error behaviour.
 test_that(desc = "Invalid values can cause error throwing", code = {
-    # Make gigs error with bad data
-    gigs_options_set(new_value = "error", silent = TRUE)
+  # Make gigs error with bad data
+  gigs_input_options_set(new_value = "error", silent = TRUE)
 
     input_len <- 40
     headcirc_mm <- rep_len(285:294, length.out = input_len)
@@ -489,7 +489,7 @@ test_that(desc = "Invalid values can cause error throwing", code = {
     )
 
     # Make gigs go back to just warning about bad data
-    gigs_options_set(new_value = "warn", silent = TRUE)
+    gigs_input_options_set(new_value = "warn", silent = TRUE)
   }
 )
 

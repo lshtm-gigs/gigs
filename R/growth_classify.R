@@ -309,11 +309,11 @@ classify_wasting <- function(.data,
   checkmate::assert_data_frame(.data, min.rows = 1)
   checkmate::qassert(.new, rules = "S3")
   err_if_.new_in_.data(.new = .new, .data_colnames = colnames(.data))
-
+  
   if (!rlang::quo_is_null(enquo(id))) {
     id <- eval_tidy(enquo(id), .data)
   }
-
+  
   wlz <- validate_wlz_params(
     weight_kg = eval_tidy(enquo(weight_kg), data = .data),
     lenht_cm = eval_tidy(enquo(lenht_cm), data = .data),
@@ -323,7 +323,7 @@ classify_wasting <- function(.data,
     id = id
   ) |>
     do.call(what = gigs_wlz_internal)
-
+  
   .new <- repair_.new_names(.new = list("wasting" = .new), mode = "specific")
   .data[[.new[1]]] <- wlz
   .data[[.new[2]]] <- categorise_wasting_internal(wlz, outliers = FALSE)
@@ -723,7 +723,8 @@ classify_growth <- function(
   cached_gigs_lgls <- with(growth_data,
                            gigs_zscoring_lgls(age_days = age_days,
                                               gest_days = gest_days,
-                                              id = id))
+                                              id = id, 
+                                              call = rlang::current_env()))
 
   # Compute outcomes as provided data allows
   for (outcome in .outcomes) {

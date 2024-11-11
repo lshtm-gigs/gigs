@@ -97,7 +97,7 @@ test_that("Correct errors occur in GIGS conversion functions:", {
 #'   are correct using [checkmate::expect_numeric()]
 test_that(desc = "Invalid values can be replaced with `NA` quietly", {
   # Make gigs *quietly* replace bad data with NA
-  gigs_options_set(new_value = "quiet", silent = TRUE)
+  gigs_input_options_set(new_value = "quiet", silent = TRUE)
 
   # Random set of indices to replace with bad data in each case
   num_to_replace1 <- 85
@@ -160,7 +160,7 @@ test_that(desc = "Invalid values can be replaced with `NA` quietly", {
       checkmate::expect_numeric(out, len = len_x)
       expect_true(all(is.na(out[replace_ints_2])))
     }
-
+    
     # Bad input 4: Out of bounds `x` variable ----------------------------------
     below_lower_bound <- min(x) - replace_ints_1
     above_upper_bound <- max(x) + replace_ints_2
@@ -178,7 +178,7 @@ test_that(desc = "Invalid values can be replaced with `NA` quietly", {
                    sex, family, acronym)
     checkmate::expect_numeric(out, len = len_x)
     expect_true(all(is.na(out[replace_ints_3])))
-
+    
     # Bad input 5: Non-"M"/"F" `sex` variables ---------------------------------
     out <- gigs_fn(zyp, x,
                    replace(sex, replace_ints_2, "invalid_sex"),
@@ -201,8 +201,8 @@ test_that(desc = "Invalid values can be replaced with `NA` quietly", {
 #'   warnings.
 test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
   # Make gigs *noisily* replace bad data with NA
-  gigs_options_set(new_value = "warn", silent = TRUE)
-
+  gigs_input_options_set(new_value = "warn", silent = TRUE)
+  
   # Random set of indices to replace with bad data in each case
   num_to_replace1 <- 30
   withr::with_seed(800, code = {
@@ -214,7 +214,7 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
   })
   replace_ints_3 <- union(replace_ints_1, replace_ints_2)
   num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
-
+  
   family <- "ig_nbs"
   acronym <- "hcfga"
   x <- gigs::ig_nbs[[acronym]][[1]][[1]][[1]]
@@ -222,12 +222,12 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
   sex <- withr::with_seed(25, {
     sample(c("M", "F"), replace = TRUE, size = len_x)
   })
-
+  
   for (fn_name in conv_fns) {
     gigs_fn <- getFromNamespace(fn_name, ns = "gigs")
     zyp <- rep(zyp_cache[[fn_name]], len_x)
     zyp_name <- zyp_name_cache[[fn_name]]
-
+    
     # Bad input 1: Undefined data (NaN, Inf, -Inf) -----------------------------
     for (undefined_val in c(NaN, Inf, -Inf)) {
       ## Replace z/y/p variable and x variable with undefined_val
@@ -241,7 +241,7 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
       expect_match(warnings,
                    test_msg_undefined("x", len_x, num_to_replace3))
     }
-
+    
     # Bad input 2: Missing data (NA) -------------------------------------------
     ## Replace z/y/p variable and x variable with NA
     warnings <- capture_warnings(
@@ -259,7 +259,7 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
     expect_match(warnings,
                  test_msg_missing("sex", len_x, num_to_replace1),
                  fixed = TRUE)
-
+    
     # Bad input 3: Out of bounds centiles (not `> 0` and `< 1`) ----------------
     if (fn_name == "centile2value") {
       expect_warning(
@@ -273,7 +273,7 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
         test_msg_centile_oob(len_x, num_to_replace2)
       )
     }
-
+    
     # Bad input 4: Out of bounds `x` variable ----------------------------------
     below_lower_bound <- min(x) - replace_ints_1
     above_upper_bound <- max(x) + replace_ints_2
@@ -291,7 +291,7 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
               acronym),
       test_msg_xvar_oob("x", len_x, num_to_replace3)
     )
-
+    
     # Bad input 5: Non-"M"/"F" `sex` variables ---------------------------------
     expect_warning(
       gigs_fn(zyp, x, replace(sex, replace_ints_2, "invalid_sex"),
@@ -312,8 +312,8 @@ test_that(desc = "Invalid values can be replaced with `NA` with a warning", {
 #'   behaviour.
 test_that("GIGS conversion functions can throw informative errors", {
   # Make gigs error on bad data
-  gigs_options_set(new_value = "error", silent = TRUE)
-
+  gigs_input_options_set(new_value = "error", silent = TRUE)
+  
   # Random set of indices to replace with bad data in each case
   num_to_replace1 <- 30
   withr::with_seed(100, code = {
@@ -325,7 +325,7 @@ test_that("GIGS conversion functions can throw informative errors", {
   })
   replace_ints_3 <- union(replace_ints_1, replace_ints_2)
   num_to_replace3 <- length(union(replace_ints_1, replace_ints_2))
-
+  
   family <- "ig_nbs"
   acronym <- "wfga"
   x <- gigs::ig_nbs[[acronym]][[1]][[1]][[1]]
@@ -333,12 +333,12 @@ test_that("GIGS conversion functions can throw informative errors", {
   sex <- withr::with_seed(25, {
     sample(c("M", "F"), replace = TRUE, size = len_x)
   })
-
+  
   for (fn_name in conv_fns) {
     gigs_fn <- getFromNamespace(fn_name, ns = "gigs")
     zyp <- rep(zyp_cache[[fn_name]], len_x)
     zyp_name <- zyp_name_cache[[fn_name]]
-
+    
     # Bad input 1: Undefined data (NaN, Inf, -Inf) -----------------------------
     for (undefined_val in c(NaN, Inf, -Inf)) {
       ## Replace z/y/p variable and x variable with undefined_val
@@ -349,7 +349,7 @@ test_that("GIGS conversion functions can throw informative errors", {
         test_msg_undefined("x", len_x, num_to_replace3)
       )
     }
-
+    
     # Bad input 2: Missing data (NA) -------------------------------------------
     ## Replace only x variable with NA
     expect_error(
@@ -414,8 +414,8 @@ test_that("GIGS conversion functions can throw informative errors", {
 #'   inputs.
 test_that("GIGS conversion functions can handle all-`NA` inputs", {
   # Make gigs issue warnings when confronted with suboptimal inputs
-  gigs_options_set(new_value = "warn", silent = TRUE)
-
+  gigs_input_options_set(new_value = "warn", silent = TRUE)
+  
   family <- "ig_png"
   acronym <- "hcfa"
   x <- gigs::ig_png[[acronym]][[1]][[1]][[1]]

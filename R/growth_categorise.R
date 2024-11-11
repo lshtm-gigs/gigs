@@ -296,7 +296,8 @@ categorise_sfga_internal <- function(p, severe) {
     sfga[p < 0.03] <- "SGA(<3)"
     sfga_lvls <- c("SGA(<3)", sfga_lvls)
   }
-  factor(sfga, levels = sfga_lvls)
+  factor(sfga, levels = sfga_lvls) |>
+    handle_factor_levels(outcome = "size-for-GA")
 }
 
 #' Categorise birthweight centiles into small vulnerable newborn strata
@@ -318,7 +319,8 @@ categorise_svn_internal <- function(p, gest_days) {
   svn[!is_preterm & sfga == sfga_lvls[1]] <- levels[4]
   svn[!is_preterm & sfga == sfga_lvls[2]] <- levels[5]
   svn[!is_preterm & sfga == sfga_lvls[3]] <- levels[6]
-  factor(svn, levels = levels)
+  factor(svn, levels = levels) |>
+    handle_factor_levels(outcome = "small vulnerable newborn")
 }
 
 #' Categorise length/height-for-age z-scores into stunting strata (internal)
@@ -336,7 +338,8 @@ categorise_stunting_internal <- function(lhaz, outliers) {
     stunting[abs(lhaz) > 6] <- "outlier"
     stunting_lvls <- c(stunting_lvls, "outlier")
   }
-  factor(stunting, levels = stunting_lvls)
+  factor(stunting, levels = stunting_lvls) |>
+    handle_factor_levels(outcome = "stunting")
 }
 
 #' Categorise weight-for-length/height z-scores into wasting strata (internal)
@@ -355,7 +358,8 @@ categorise_wasting_internal <- function(wlz, outliers) {
     wasting[abs(wlz) > 5] <- "outlier"
     wasting_lvls <- c(wasting_lvls, "outlier")
   }
-  factor(wasting, levels = wasting_lvls)
+  factor(wasting, levels = wasting_lvls) |>
+    handle_factor_levels(outcome = "wasting")
 }
 
 #' Categorise weight-for-age z-scores into weight-for-age strata (internal)
@@ -375,7 +379,8 @@ categorise_wfa_internal <- function(waz, outliers) {
     wfa[waz < -6 | waz > 5] <- "outlier"
     wfa_lvls <- c(wfa_lvls, "outlier")
   }
-  factor(wfa, levels = wfa_lvls)
+  factor(wfa, levels = wfa_lvls) |>
+    handle_factor_levels(outcome = "weight-for-age (underweight)")
 }
 
 #' Categorise head circumference-for-age z-scores into head size strata
@@ -393,7 +398,58 @@ categorise_headsize_internal <- function(hcaz) {
   headsize[hcaz >= 3] <- "macrocephaly_severe"
   headsize_lvls <- c("microcephaly_severe", "microcephaly", "normal_headcirc",
                      "macrocephaly", "macrocephaly_severe")
-  factor(headsize, levels = headsize_lvls)
+  factor(headsize, levels = headsize_lvls) |>
+    handle_factor_levels(outcome = "head size")
+}
+
+#' Handle unused factor levels in categorise_*_internal() function outputs
+#' @param fct A factor, from a categorise_*_internal() function
+#' @param outcome A single-length character vector used to denote the 
+#'   classification being done. Should be one of `c("size-for-GA", 
+#'   "small vulnerable newborns", "stunting", "wasting", "weight-for-age 
+#'   (underweight)", "head size")`. Is case-sensitive.
+#' @returns A factor with unused levels dropped/kept based on how a user has set
+#'   `.gigs_options$handle_unused_levels`.
+#' @noRd
+handle_factor_levels <- function(fct, outcome) {
+  outcome_opts <- c("size-for-GA", "small vulnerable newborn", "stunting",
+                    "wasting", "weight-for-age (underweight)", "head size")
+  if (!outcome %in% outcome_opts) {
+    cli::cli_abort(c("!" = "`outcome` must be one of {.val {outcome_opts}}",
+                     "i" = "`outcome` was {.val {outcome}}."),
+      call = rlang::current_env(),
+      .internal = TRUE
+    )
+  }   
+  if (.gigs_options$handle_unused_levels %in% c("keep_silent", "keep_warn")) {
+    if (.gigs_options$handle_unused_levels == "keep_warn") {
+      unused <- setdiff(levels(fct), fct)
+      if (length(unused) > 0) {
+        cli::cli_alert_warning(
+          paste0("Unused factor levels kept after {outcome} categorisation:",
+                 " {.val {unused}}."),
+          wrap = TRUE,
+          class = "gigs_keeping_unused_fctr_lvls"
+        )
+      }
+    }
+    return(fct)
+  }
+  if (.gigs_options$handle_unused_levels %in% c("drop_silent", "drop_warn")) {
+    fct_dropped <- droplevels(fct)
+    if (.gigs_options$handle_unused_levels == "drop_warn") {
+      unused <- setdiff(levels(fct), levels(fct_dropped))
+      if (length(unused) > 0) {
+        cli::cli_inform(
+          paste0("Unused factor levels dropped after {outcome} categorisation:",
+                 " {.val {unused}}."),
+          wrap = TRUE,
+          class = "gigs_dropping_unused_fctr_lvls"
+        )
+      }
+    return(fct_dropped)
+    }
+  }
 }
 
 # SRR tags ---------------------------------------------------------------------

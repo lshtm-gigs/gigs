@@ -4,4 +4,5 @@
 .gigs_options$handle_oob_xvar <- "warn"
 .gigs_options$handle_invalid_sex <- "warn"
 .gigs_options$handle_oob_centiles <- "warn"
+.gigs_options$handle_unused_levels <- "keep_warn"
 

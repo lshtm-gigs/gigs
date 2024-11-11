@@ -101,14 +101,14 @@ are achieving their growth potential or not. If not, this may indicate
 underlying issues such as ill health or undernutrition.
 
 ## Classification functions
-GIGS includes a number of functions which permit fast identification of at-risk
-infants through classification of suboptimal growth. The cut-offs used are
-sourced from research literature; you can check the function documentation to
-see these sources.
+**gigs** includes a number of functions which permit fast identification of 
+at-risk infants through classification of suboptimal growth. The cut-offs used
+are sourced from research literature; you can check the function documentation
+to see these sources.
 
 ### Growth classification in `data.frame`-like objects
 Use the `classify_growth()` function to quickly compute growth indicators in
-`data.frame`-like objects. All `classify_*()`-style functions in GIGS use
+`data.frame`-like objects. All `classify_*()`-style functions in **gigs** use
 [data-masking](https://rlang.r-lib.org/reference/args_data_masking.html), so you
 provide a `data.frame`-like object in the `.data` argument and then refer to
 your column names directly. In `classify_growth()`, you can also use the
@@ -118,14 +118,14 @@ life6mo_newborns <- gigs::life6mo[life6mo$age_days == 0, ]
 
 # Use classify_growth() to get multiple growth indicators at once
 life6mo_classified <- classify_growth(
-        .data = life6mo_newborns,
-        gest_days = gestage,
-        age_days = age_days,
-        sex = as.character(sex),
-        weight_kg = wt_kg,
-        lenht_cm = len_cm,
-        id = as.factor(id),
-        .outcomes = c("svn", "stunting")
+  .data = life6mo_newborns,
+  gest_days = gestage,
+  age_days = age_days,
+  sex = as.character(sex),
+  weight_kg = wt_kg,
+  lenht_cm = len_cm,
+  id = as.factor(id),
+  .outcomes = c("svn", "stunting")
 )
 
 head(life6mo_classified, n = 4)
@@ -136,13 +136,13 @@ wanted to run were successful. In the example below, because `lenht_cm` is not
 specified, stunting indicators cannot be computed.
 ```{r examples_classification3}
 life6mo_classified <- classify_growth(
-        .data = life6mo_newborns,
-        gest_days = gestage,
-        age_days = age_days,
-        sex = as.character(sex),
-        weight_kg = wt_kg,
-        id = as.factor(id),
-        .outcomes = c("svn", "stunting")
+  .data = life6mo_newborns,
+  gest_days = gestage,
+  age_days = age_days,
+  sex = as.character(sex),
+  weight_kg = wt_kg,
+  id = as.factor(id),
+  .outcomes = c("svn", "stunting")
 )
 
 head(life6mo_classified, n = 4)
@@ -167,11 +167,12 @@ head(life6mo_svn, n = 4)
 ## Conversion functions
 
 ### Available international growth standards
-GIGS facilitates the proper use of international growth standards, which
+*gigs* facilitates the proper use of international growth standards, which
 are growth charts developed using international samples of healthy singleton
 children born to mothers that had their health needs met during pregnancy.
-They represent an international standard of 'optimal' growth. GIGS implements
-international growth standards from the WHO and `r intergrowth21st` project:
+They represent an international standard of 'optimal' growth. **gigs** 
+implements international growth standards from the WHO and `r intergrowth21st` 
+project:
 
 * `ig_nbs` - `r intergrowth21st` Newborn Size standards (including very preterm)
   <details><summary>Component standards</summary>
@@ -250,10 +251,10 @@ they convert measured values to z-scores/centiles
 (`value2zscore()`/`value2centile()`), or they generate expected values for given
 z-scores/centiles (`zscore2value()`/`centile2value()`).
 
-You tell gigs which international growth standard to use with the `family` and
-`acronym` parameters. The `family` parameter tells gigs which set of standards
-you want to use - e.g. `"ig_nbs"` for the `r intergrowth21st` Newborn Size
-standards (including very preterm). The `acronym` parameter describes which
+You tell **gigs** which international growth standard to use with the `family` 
+and `acronym` parameters. The `family` parameter denotes the set of growth 
+standards you want to use - e.g. `"ig_nbs"` for the `r intergrowth21st` Newborn 
+Size standards (including very preterm). The `acronym` parameter describes which
 exact growth standard you want out of all the growth standards in your 'family'
 of standards.
 
@@ -318,7 +319,7 @@ centile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9), x = 40, sex = "M",
 ```
 
 #### Reference curves
-We can use gigs to generate reference curves for the standards by getting
+We can use **gigs** to generate reference curves for the standards by getting
 curves for the expected weight at multiple z-scores across multiple gestational
 ages. We would usually recommend [`ggplot2`](https://ggplot2.tidyverse.org/) for
 such visualisation, but do not use it here to reduce our package's dependencies.
@@ -384,17 +385,17 @@ load("vignettes/articles/benchmarking.rda")
 ```
 
 Other R packages can be used to analyse growth data with international
-standards, but have limitations which are not present in gigs. There are also
+standards, but have limitations which are not present in *gigs*. There are also
 software packages external to R which implement these standards. The table
 below describes these packages, and to what extent they have implemented
 functions that let users convert anthropometric measurements to
-z-scores/centiles in each set of standards implemented in gigs - the WHO Child
-Growth standards, `r intergrowth21st` Newborn Size standards (including Very
-Preterm), and the `r intergrowth21st` Postnatal Growth standards for preterm
-infants. A tick (`r yes`) indicates that all possible standards are included in
-a package, a red cross (`r no`) indicates that these standards are completely
-missing, and a warning sign (`r half`) indicates that some of these standards
-are implemented but not others.
+z-scores/centiles in each set of standards implemented in **gigs** - the WHO 
+Child Growth standards, `r intergrowth21st` Newborn Size standards (including 
+Very Preterm), and the `r intergrowth21st` Postnatal Growth standards for 
+preterm infants. A tick (`r yes`) indicates that all possible standards are 
+included in a package, a red cross (`r no`) indicates that these standards are 
+completely missing, and a warning sign (`r half`) indicates that some of these
+standards are implemented but not others.
 
 | Software        | Platform | WHO (0-5 years) | `r ig21st` NBS | `r ig21st` PNG | `r ig21st` Fetal | Functionality                     |
 |-----------------|----------|-----------------|----------------|----------------|------------------|-----------------------------------|
@@ -404,6 +405,8 @@ are implemented but not others.
 | `r childsds`    | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r growthstans` | R        | `r yes`         | `r yes`        | `r half`       | `r half`         | Values `r harr` z-scores/centiles |
 | `r intergrowth` | R        | `r no`          | `r no`         | `r no`         | `r half`         | Values `r rarr` z-scores/centiles |
+| `r sitar`       | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r harr` z-scores/centiles |
+| `r zscorer`     | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r gigs_stata`  | Stata    | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 
@@ -411,7 +414,7 @@ We have benchmarked some of these implementations against each other for
 conversion of values to z-scores in the WHO Child Growth Standards and different
 sets of `r intergrowth21st` standards. The table below shows relative speed of
 each software package when processing 100,000 inputs. The code used to generate
-these timings can be seen online in the GIGS benchmarking
+these timings can be seen online in the **gigs** benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |
@@ -462,6 +465,6 @@ Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 
-Please note that the gigs project is released with a [Contributor Code of
+Please note that the **gigs** package is released with a [Contributor Code of
 Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project
 you agree to abide by its terms.

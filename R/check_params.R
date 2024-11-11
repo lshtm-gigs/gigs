@@ -504,9 +504,9 @@ err_inputs_unrecyclable <- function(unrecyclable_names,
 #' @srrstats {G2.13, G2.14, G2.14a, G2.14b, G2.16} The various `handle_*`
 #'   functions in this file provide a framework for detecting and handling
 #'   missing, undefined, and other invalid data inputs to gigs functions. The
-#'   behaviour of these functions can be customised using [gigs_options_set()]
-#'   to set invalid values to `NA` silently, set invalid values to `NA` with
-#'   warnings, or to throw errors.
+#'   behaviour of these functions can be customised using 
+#'   [gigs_input_options_set()] to set invalid values to `NA` silently, set 
+#'   invalid values to `NA` with warnings, or to throw errors.
 #' @srrstats {EA2.6} The `remove_attributes()` function is used to make sure
 #'   vector-type inputs with odd class structures (e.g. as in `units` package)
 #'   can still be used as input to [gigs]. This is done after assertions on

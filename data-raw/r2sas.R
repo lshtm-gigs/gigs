@@ -127,7 +127,7 @@ ig_png_centiles <- ig_png_centiles |>
   dplyr::relocate(acronym, x_unit, y_unit, sex, .before = tidyselect::everything()) |>
   write.table_sas(file = "exclude/r2sas/ig_png_centiles.txt", sep = " ")
 
-gigs::gigs_options_set(new_value = "quiet")
+gigs::gigs_input_options_set(new_value = "quiet")
 write.table_sas(gigs::life6mo, file = "exclude/r2sas/life6mo.txt")
 
 

@@ -165,7 +165,8 @@ gigs_waz_internal <- function(weight_kg,
   if (is.null(gigs_lgls)) {
     gigs_lgls <- gigs_zscoring_lgls(gest_days = gest_days,
                                     age_days = age_days,
-                                    id = id)
+                                    id = id, 
+                                    call = rlang::caller_call())
   }
   gigs_lgls <- lapply(X = gigs_lgls, FUN = \(lgl) lgl & !is.na(weight_kg))
 
@@ -329,6 +330,8 @@ gigs_hcaz_internal <- function(headcirc_cm,
 #'   this variable is used to ensure that only the earliest measurement for each
 #'   individual is used as a birth measure. If `NULL` (the default), the
 #'   function will assume the input data comes from the one individual.
+#' @param call A calling environment (default = `rlang::caller_env()`) used to
+#'   improve formatting of warnings/errors.  
 #' @note The logical vectors returned by this function will have `FALSE`
 #'   elements where either `gest_days` or `age_days` is `NA`.
 #' @returns Named list with three logical vectors `ig_nbs`, `ig_png`, and
@@ -336,7 +339,10 @@ gigs_hcaz_internal <- function(headcirc_cm,
 #'   from that named list should be used.
 #' @rdname gigs_xaz
 #' @noRd
-gigs_zscoring_lgls <- function(age_days, gest_days, id = NULL) {
+gigs_zscoring_lgls <- function(age_days, 
+                               gest_days, 
+                               id = NULL, 
+                               call = rlang::caller_env()) {
   len_age_days <- length(age_days)
   len_gest_days <- length(gest_days)
   if (len_age_days != len_gest_days) {
@@ -394,10 +400,9 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id = NULL) {
   is_older_birth <- use_ig_nbs & age_days > 0.5
   if (any(is_older_birth, na.rm = FALSE)) {
     qty_is_older_birth <- sum(is_older_birth)
-    msg <- c("!" = paste0("There {cli::qty(qty_is_older_birth)} {?was/were} ",
-                          "{.val {qty_is_older_birth}} 'at birth' ",
-                          "observation{?s} where {.var age_days} > ",
-                          "{.val {0.5}}."))
+    msg <- c(paste0("There {cli::qty(qty_is_older_birth)} {?was/were} ",
+                    "{.val {qty_is_older_birth}} 'at birth' observation{?s} ",
+                    "where {.var age_days} > {.val {0.5}}."))
     if (id_provided) {
       ids_older_birth <- cli::cli_vec(unique(id[is_older_birth]),
                                       style = list("vec-trunc" = 15))
@@ -405,20 +410,17 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id = NULL) {
                "i" = paste("This occurred for{cli::qty(ids_older_birth)}",
                            "ID{?s} {.val {ids_older_birth}}."))
     }
-    cli::cli_warn(msg,
-                  class = "gigs_zscoring_old_birth_obs",
-                  call = rlang::caller_env(4))
+    cli::cli_warn(msg, class = "gigs_zscoring_old_birth_obs", call = call)
   }
   if (any(is_birth_with_large_ga, na.rm = TRUE)) {
     qty_birth_w_large_ga <- sum(is_birth_with_large_ga)
-    msg <- c("!" = paste("There {cli::qty(qty_birth_w_large_ga)}{?was/were}",
-                         "{.val {qty_birth_w_large_ga}} birth observation{?s}",
-                         "where {.var gest_age} > {.val {300L}}. The WHO",
-                         "Growth standards were used for ",
-                         "{cli::qty(qty_birth_w_large_ga)}{?this/these}",
-                         "{cli::qty(qty_birth_w_large_ga)} observation{?s},",
-                         "instead of the INTERGROWTH-21st Newborn Size",
-                         "standards."))
+    msg <- c(paste("There {cli::qty(qty_birth_w_large_ga)}{?was/were}",
+                   "{.val {qty_birth_w_large_ga}} birth observation{?s} where ",
+                   "{.var gest_age} > {.val {300L}}. The WHO Growth standards ",
+                   "were used for {cli::qty(qty_birth_w_large_ga)}",
+                   "{?this/these}{cli::qty(qty_birth_w_large_ga)} ",
+                   "observation{?s} instead of the INTERGROWTH-21st Newborn ",
+                   "Size standards."))
     if (id_provided) {
       ids_birth_w_large_ga <- cli::cli_vec(unique(id[is_birth_with_large_ga]),
                                            style = list("vec-trunc" = 15))
@@ -426,9 +428,7 @@ gigs_zscoring_lgls <- function(age_days, gest_days, id = NULL) {
                "i" = paste("This occurred for{cli::qty(ids_birth_w_large_ga)}",
                            "ID{?s} {.val {ids_birth_w_large_ga}}."))
     }
-    cli::cli_warn(msg,
-                  class = "gigs_zscoring_birth_w_large_ga",
-                  call = rlang::caller_env(4))
+    cli::cli_warn(msg, class = "gigs_zscoring_birth_w_large_ga", call = call)
   }
 
   # Prevents `NAs are not allowed in subscripted assignments` error

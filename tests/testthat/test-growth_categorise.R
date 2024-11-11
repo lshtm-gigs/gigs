@@ -2,26 +2,24 @@
 
 #' @srrstats {G5.4, G5.4c} Tests to ensure that `categorise_sfga()` reproduces
 #'   expected categories around the categorisation thresholds
-test_that(
-  desc = "Size-for-GA categorisation works as expected",
-  code = {
-    centile <- c(0.01, 0.029, 0.031, 0.09, 0.10, 0.11, 0.89, 0.91, 0.999)
-    sfga <- categorise_sfga(centile, severe = FALSE)
-    sfga_severe <- categorise_sfga(centile, severe = TRUE)
-
-    sfga_lvls <- c("SGA", "AGA", "LGA")
-    sfga_expected <- factor(
-      c("SGA", "SGA", "SGA", "SGA", "AGA", "AGA", "AGA", "LGA", "LGA"),
-      levels = sfga_lvls
-    )
-    sfga_severe_expected <- factor(
-      c("SGA(<3)", "SGA(<3)", "SGA", "SGA", "AGA", "AGA", "AGA", "LGA", "LGA"),
-      levels = c("SGA(<3)", sfga_lvls)
-    )
+test_that("Size-for-GA categorisation works as expected", {
+  centile <- c(0.01, 0.029, 0.031, 0.09, 0.10, 0.11, 0.89, 0.91, 0.999)
+  sfga <- categorise_sfga(centile, severe = FALSE)
+  sfga_severe <- categorise_sfga(centile, severe = TRUE)
+  
+  sfga_lvls <- c("SGA", "AGA", "LGA")
+  sfga_expected <- factor(
+    c("SGA", "SGA", "SGA", "SGA", "AGA", "AGA", "AGA", "LGA", "LGA"),
+    levels = sfga_lvls
+  )
+  sfga_severe_expected <- factor(
+    c("SGA(<3)", "SGA(<3)", "SGA", "SGA", "AGA", "AGA", "AGA", "LGA", "LGA"),
+    levels = c("SGA(<3)", sfga_lvls)
+  )
 
     expect_equal(sfga, sfga_expected)
     expect_equal(sfga_severe, sfga_severe_expected)
-  })
+})
 
 test_that(
   desc = "SVN categorisation works as expected",
@@ -29,7 +27,7 @@ test_that(
     centile <- c(0.01, 0.029, 0.031, 0.09, 0.10, 0.11, 0.89, 0.91, 0.999)
     gest_days <- seq(250, 290, 5)
     svn <- categorise_svn(centile, gest_days = gest_days)
-
+    
     svn_lvls <- paste(c(rep_len("Preterm", 3), rep_len("Term", 3)),
                       rep.int(c("SGA", "AGA", "LGA"), times = 2))
     svn_chr <- paste0(
@@ -46,7 +44,7 @@ test_that(
     lhaz <- c(-6.5, -6, -3.1, -3, -2.9, -2, -1.9, -0.5, -.5, 3, 4.999, 6, 6.5)
     stunting_lvls <- c("stunting_severe", "stunting", "not_stunting")
     stunting_outlier_lvls <- c(stunting_lvls, "outlier")
-
+    
     stunting_expected <- factor(
       c(rep(stunting_lvls[1], 4),
         rep(stunting_lvls[2], 2),

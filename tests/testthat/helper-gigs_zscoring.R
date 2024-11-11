@@ -56,7 +56,7 @@ gigs_random_growth_dataset <- function(n = 10L,
       ) |>
     dplyr::arrange(id, age_days)
   })
-  gigs_options_set("quiet", TRUE)
+  gigs_input_options_set("quiet", TRUE)
 
   gigs_lgls <- with(
     data, suppressWarnings(gigs_zscoring_lgls(age_days, gest_age, id))
@@ -97,8 +97,8 @@ gigs_random_growth_dataset <- function(n = 10L,
                                    yes = pnorm(waz_exp),
                                    no = NA),
       .after = waz_exp, .by = id)
-
-  gigs_options_set("warn", TRUE)
+  
+  gigs_input_options_set("warn", TRUE)
   if (restrict) {
     out <- out |>
       dplyr::filter(complete.cases(weight_kg, lenht_cm, headcirc_cm))

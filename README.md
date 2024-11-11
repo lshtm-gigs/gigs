@@ -85,8 +85,8 @@ such as ill health or undernutrition.
 
 ## Classification functions
 
-GIGS includes a number of functions which permit fast identification of
-at-risk infants through classification of suboptimal growth. The
+**gigs** includes a number of functions which permit fast identification
+of at-risk infants through classification of suboptimal growth. The
 cut-offs used are sourced from research literature; you can check the
 function documentation to see these sources.
 
@@ -94,7 +94,7 @@ function documentation to see these sources.
 
 Use the `classify_growth()` function to quickly compute growth
 indicators in `data.frame`-like objects. All `classify_*()`-style
-functions in GIGS use
+functions in **gigs** use
 [data-masking](https://rlang.r-lib.org/reference/args_data_masking.html),
 so you provide a `data.frame`-like object in the `.data` argument and
 then refer to your column names directly. In `classify_growth()`, you
@@ -106,15 +106,18 @@ life6mo_newborns <- gigs::life6mo[life6mo$age_days == 0, ]
 
 # Use classify_growth() to get multiple growth indicators at once
 life6mo_classified <- classify_growth(
-        .data = life6mo_newborns,
-        gest_days = gestage,
-        age_days = age_days,
-        sex = as.character(sex),
-        weight_kg = wt_kg,
-        lenht_cm = len_cm,
-        id = as.factor(id),
-        .outcomes = c("svn", "stunting")
+  .data = life6mo_newborns,
+  gest_days = gestage,
+  age_days = age_days,
+  sex = as.character(sex),
+  weight_kg = wt_kg,
+  lenht_cm = len_cm,
+  id = as.factor(id),
+  .outcomes = c("svn", "stunting")
 )
+#> ! Unused factor levels kept after small vulnerable newborn categorisation:
+#> "Term AGA" and "Term LGA".
+#> ! Unused factor levels kept after stunting categorisation: "outlier".
 #> 
 #> ── `gigs::classify_growth()` ───────────────────────────────────────────────────
 #> ✔ Small vulnerable newborns: Success
@@ -140,14 +143,16 @@ computed.
 
 ``` r
 life6mo_classified <- classify_growth(
-        .data = life6mo_newborns,
-        gest_days = gestage,
-        age_days = age_days,
-        sex = as.character(sex),
-        weight_kg = wt_kg,
-        id = as.factor(id),
-        .outcomes = c("svn", "stunting")
+  .data = life6mo_newborns,
+  gest_days = gestage,
+  age_days = age_days,
+  sex = as.character(sex),
+  weight_kg = wt_kg,
+  id = as.factor(id),
+  .outcomes = c("svn", "stunting")
 )
+#> ! Unused factor levels kept after small vulnerable newborn categorisation:
+#> "Term AGA" and "Term LGA".
 #> 
 #> ── `gigs::classify_growth()` ───────────────────────────────────────────────────
 #> ✔ Small vulnerable newborns: Success
@@ -179,6 +184,8 @@ life6mo_svn <- classify_svn(
   gest_days = gestage,
   sex = as.character(sex)
 )
+#> ! Unused factor levels kept after small vulnerable newborn categorisation:
+#> "Term AGA" and "Term LGA".
 
 head(life6mo_svn, n = 4)
 #>    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm
@@ -197,12 +204,12 @@ head(life6mo_svn, n = 4)
 
 ### Available international growth standards
 
-GIGS facilitates the proper use of international growth standards, which
-are growth charts developed using international samples of healthy
+*gigs* facilitates the proper use of international growth standards,
+which are growth charts developed using international samples of healthy
 singleton children born to mothers that had their health needs met
 during pregnancy. They represent an international standard of ‘optimal’
-growth. GIGS implements international growth standards from the WHO and
-INTERGROWTH-21<sup>st</sup> project:
+growth. **gigs** implements international growth standards from the WHO
+and INTERGROWTH-21<sup>st</sup> project:
 
 - `ig_nbs` - INTERGROWTH-21<sup>st</sup> Newborn Size standards
   (including very preterm)
@@ -243,29 +250,29 @@ INTERGROWTH-21<sup>st</sup> project:
   Component standards
   </summary>
 
-  | Acronym   | Description                                                  | Unit | `x` range       |
-  |-----------|--------------------------------------------------------------|------|-----------------|
-  | `hcfga`   | head circumference-for-GA                                    | mm   | 98 to 280 days  |
-  | `bpdfga`  | biparietal diameter-for-GA                                   | mm   | 98 to 280 days  |
-  | `acfga`   | abdominal circumference-for-GA                               | mm   | 98 to 280 days  |
-  | `flfga`   | femur length-for-GA                                          | mm   | 98 to 280 days  |
-  | `ofdfga`  | occipito-frontal diameter for-GA                             | mm   | 98 to 280 days  |
-  | `efwfga`  | estimated fetal weight-for-GA                                | g    | 154 to 280 days |
-  | `sfhfga`  | symphisis-fundal height-for-GA                               | mm   | 112 to 294 days |
-  | `crlfga`  | crown-rump length-for-GA                                     | mm   | 58 to 105 days  |
-  | `gafcrl`  | GA-for-crown-rump length                                     | days | 15 to 95 mm     |
-  | `gwgfga`  | gestational weight gain-for-GA                               | kg   | 98 to 280 days  |
-  | `pifga`   | pulsatility index-for-GA                                     |      | 168 to 280 days |
-  | `rifga`   | resistance index-for-GA                                      |      | 168 to 280 days |
-  | `sdrfga`  | systolic/diastolic ratio-for-GA                              |      | 168 to 280 days |
-  | `tcdfga`  | transcerebellar diameter-for-GA                              | mm   | 98 to 280 days  |
-  | `tcdfga`  | GA-for-transcerebellar diameter                              | mm   | 98 to 280 days  |
-  | `poffga`  | parietal-occipital fissure-for-GA                            | mm   | 105 to 252 days |
-  | `sffga`   | Sylvian fissue-for-GA                                        | mm   | 105 to 252 days |
-  | `avfga`   | anterior horn of the lateral ventricle-for-GA                | mm   | 105 to 252 days |
-  | `pvfga`   | atrium of the posterior horn of the lateral ventricle-for-GA | mm   | 105 to 252 days |
-  | `cmfga`   | cisterna magna-for-GA                                        | mm   | 105 to 252 days |
-  | `hefwfga` | Hadlock estimated fetal weight-for-GA                        | g    | 126 to 287 days |
+  | Acronym | Description | Unit | `x` range |
+  |----|----|----|----|
+  | `hcfga` | head circumference-for-GA | mm | 98 to 280 days |
+  | `bpdfga` | biparietal diameter-for-GA | mm | 98 to 280 days |
+  | `acfga` | abdominal circumference-for-GA | mm | 98 to 280 days |
+  | `flfga` | femur length-for-GA | mm | 98 to 280 days |
+  | `ofdfga` | occipito-frontal diameter for-GA | mm | 98 to 280 days |
+  | `efwfga` | estimated fetal weight-for-GA | g | 154 to 280 days |
+  | `sfhfga` | symphisis-fundal height-for-GA | mm | 112 to 294 days |
+  | `crlfga` | crown-rump length-for-GA | mm | 58 to 105 days |
+  | `gafcrl` | GA-for-crown-rump length | days | 15 to 95 mm |
+  | `gwgfga` | gestational weight gain-for-GA | kg | 98 to 280 days |
+  | `pifga` | pulsatility index-for-GA |  | 168 to 280 days |
+  | `rifga` | resistance index-for-GA |  | 168 to 280 days |
+  | `sdrfga` | systolic/diastolic ratio-for-GA |  | 168 to 280 days |
+  | `tcdfga` | transcerebellar diameter-for-GA | mm | 98 to 280 days |
+  | `tcdfga` | GA-for-transcerebellar diameter | mm | 98 to 280 days |
+  | `poffga` | parietal-occipital fissure-for-GA | mm | 105 to 252 days |
+  | `sffga` | Sylvian fissue-for-GA | mm | 105 to 252 days |
+  | `avfga` | anterior horn of the lateral ventricle-for-GA | mm | 105 to 252 days |
+  | `pvfga` | atrium of the posterior horn of the lateral ventricle-for-GA | mm | 105 to 252 days |
+  | `cmfga` | cisterna magna-for-GA | mm | 105 to 252 days |
+  | `hefwfga` | Hadlock estimated fetal weight-for-GA | g | 126 to 287 days |
 
   </details>
 - `who_gs` - WHO Child Growth Standards for term infants
@@ -295,9 +302,9 @@ Either they convert measured values to z-scores/centiles
 (`value2zscore()`/`value2centile()`), or they generate expected values
 for given z-scores/centiles (`zscore2value()`/`centile2value()`).
 
-You tell gigs which international growth standard to use with the
-`family` and `acronym` parameters. The `family` parameter tells gigs
-which set of standards you want to use - e.g. `"ig_nbs"` for the
+You tell **gigs** which international growth standard to use with the
+`family` and `acronym` parameters. The `family` parameter denotes the
+set of growth standards you want to use - e.g. `"ig_nbs"` for the
 INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very
 preterm). The `acronym` parameter describes which exact growth standard
 you want out of all the growth standards in your ‘family’ of standards.
@@ -381,7 +388,7 @@ centile2value(p = c(0.1, 0.25, 0.5, 0.75, 0.9), x = 40, sex = "M",
 
 #### Reference curves
 
-We can use gigs to generate reference curves for the standards by
+We can use **gigs** to generate reference curves for the standards by
 getting curves for the expected weight at multiple z-scores across
 multiple gestational ages. We would usually recommend
 [`ggplot2`](https://ggplot2.tidyverse.org/) for such visualisation, but
@@ -411,50 +418,52 @@ legend(x = min(gestage_range) + 1, y = ref[length(ref)], legend = 2:-2,
 # Other packages
 
 Other R packages can be used to analyse growth data with international
-standards, but have limitations which are not present in gigs. There are
-also software packages external to R which implement these standards.
-The table below describes these packages, and to what extent they have
-implemented functions that let users convert anthropometric measurements
-to z-scores/centiles in each set of standards implemented in gigs - the
-WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size
-standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup>
-Postnatal Growth standards for preterm infants. A tick (✅) indicates
-that all possible standards are included in a package, a red cross (❌)
-indicates that these standards are completely missing, and a warning
-sign (⚠️) indicates that some of these standards are implemented but not
-others.
+standards, but have limitations which are not present in *gigs*. There
+are also software packages external to R which implement these
+standards. The table below describes these packages, and to what extent
+they have implemented functions that let users convert anthropometric
+measurements to z-scores/centiles in each set of standards implemented
+in **gigs** - the WHO Child Growth standards,
+INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very
+Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
+for preterm infants. A tick (✅) indicates that all possible standards
+are included in a package, a red cross (❌) indicates that these
+standards are completely missing, and a warning sign (⚠️) indicates that
+some of these standards are implemented but not others.
 
-| Software                                                                            | Platform | WHO (0-5 years) | IG-21<sup>st</sup> NBS | IG-21<sup>st</sup> PNG | IG-21<sup>st</sup> Fetal | Functionality              |
-|-------------------------------------------------------------------------------------|----------|-----------------|------------------------|------------------------|--------------------------|----------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores          |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | ✅              | ❌                     | ❌                     | ❌                       | Values ↔ z-scores          |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | ✅              | ✅                     | ⚠️                     | ⚠️                       | Values ↔ z-scores/centiles |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ⚠️                       | Values → z-scores/centiles |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
+| Software | Platform | WHO (0-5 years) | IG-21<sup>st</sup> NBS | IG-21<sup>st</sup> PNG | IG-21<sup>st</sup> Fetal | Functionality |
+|----|----|----|----|----|----|----|
+| [gigs](https://www.github.com/lshtm-gigs/gigs/) | R | ✅ | ✅ | ✅ | ✅ | Values ↔ z-scores/centiles |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values ↔ z-scores |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R | ✅ | ✅ | ⚠️ | ⚠️ | Values ↔ z-scores/centiles |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/) | R | ❌ | ❌ | ❌ | ⚠️ | Values → z-scores/centiles |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values ↔ z-scores/centiles |
+| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata) | Stata | ✅ | ✅ | ✅ | ✅ | Values ↔ z-scores/centiles |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
 
 We have benchmarked some of these implementations against each other for
 conversion of values to z-scores in the WHO Child Growth Standards and
 different sets of INTERGROWTH-21<sup>st</sup> standards. The table below
 shows relative speed of each software package when processing 100,000
 inputs. The code used to generate these timings can be seen online in
-the GIGS benchmarking
+the **gigs** benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
-| Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
-|:------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 100                  | 80                          | 20                          | 8                             |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2211                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 119                  | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 125                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 88                   | 72                          | 43                          | 10                            |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
-| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
+| Software | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
+|:---|----|----|----|----|----|
+| [gigs](https://www.github.com/lshtm-gigs/gigs/) | R | 100 | 80 | 20 | 8 |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html) | R | 2211 | ❌ | ❌ | ❌ |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html) | R | 119 | ❌ | ❌ | ❌ |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html) | R | 125 | ❌ | ❌ | ❌ |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R | 88 | 72 | 43 | 10 |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/) | R | ❌ | ❌ | ❌ | 16 |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html) | R | 46 | ❌ | ❌ | ❌ |
+| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html) | R | NA | ❌ | ❌ | ❌ |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata) | Stata | 405 | 471 | 164 | 93 |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata | 2046 | ❌ | ❌ | ❌ |
 
 Note: `zscorer` is NA because we couldn’t time it for 100,000 inputs (it
 takes too long).
@@ -484,6 +493,6 @@ Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
 
-Please note that the gigs project is released with a [Contributor Code
-of Conduct](https://ropensci.org/code-of-conduct/). By contributing to
-this project you agree to abide by its terms.
+Please note that the **gigs** package is released with a [Contributor
+Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing
+to this project you agree to abide by its terms.
