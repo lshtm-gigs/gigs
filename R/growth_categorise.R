@@ -308,7 +308,16 @@ categorise_sfga_internal <- function(p, severe) {
 #' @noRd
 categorise_svn_internal <- function(p, gest_days) {
   is_preterm <- gest_days < 259
+  opt_unused_levels <- gigs_option_get(option = "handle_unused_levels",
+                                       silent = TRUE)
+  on.exit({
+    gigs_option_set(option = "handle_unused_levels",
+                    new_value = opt_unused_levels, silent = TRUE)
+  })
+  gigs_option_set("handle_unused_levels", "keep_silent", TRUE)
   sfga <- categorise_sfga_internal(p, severe = FALSE)
+  gigs_option_set(option = "handle_unused_levels",
+                  new_value = opt_unused_levels, silent = TRUE)
   sfga_lvls <- levels(sfga)
   levels <- c(paste("Preterm", sfga_lvls), paste("Term", sfga_lvls))
 
@@ -418,6 +427,7 @@ handle_factor_levels <- function(fct, outcome) {
     cli::cli_abort(c("!" = "`outcome` must be one of {.val {outcome_opts}}",
                      "i" = "`outcome` was {.val {outcome}}."),
       call = rlang::current_env(),
+      class = "gigs_handle_fctr_lvls_bad_outcome_str",
       .internal = TRUE
     )
   }   
@@ -447,8 +457,8 @@ handle_factor_levels <- function(fct, outcome) {
           class = "gigs_dropping_unused_fctr_lvls"
         )
       }
-    return(fct_dropped)
     }
+    return(fct_dropped)
   }
 }
 
