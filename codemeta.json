@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/lshtm-gigs/gigs/",
   "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.4.1.9001",
+  "version": "0.4.1.9002",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.3 (2024-02-29 ucrt)",
+  "runtimePlatform": "R version 4.4.1 (2024-06-14 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -256,7 +256,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2201.666KB",
+  "fileSize": "2211.192KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -287,5 +287,10 @@
   "readme": "https://github.com/lshtm-gigs/gigs/blob/master/README.md",
   "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/lshtm-gigs/gigs"],
   "developmentStatus": "https://www.repostatus.org/#active",
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/626",
+    "provider": "https://ropensci.org"
+  },
   "keywords": ["growth-standards", "anthropometry", "intergrowth", "r", "who", "r-package", "rstats"]
 }
