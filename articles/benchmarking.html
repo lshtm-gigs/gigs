@@ -475,13 +475,15 @@ Stata.</p>
 </h3>
 <p><img src="benchmarking_files/figure-html/plot_timings_who_gs-1.png" alt="A line graph of median time taken against no. of inputs for different software packages. The results can be read about below." width="875"></p>
 <p>On the whole, <code>zscorer</code> is by far the slowest R package,
-taking around 13.705 seconds to process 100,000 inputs. Looking at the
-source code, this is because <code><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">zscorer::addWGSR()</a></code> hasn’t been
-vectorised. Next slowest is <code>anthro</code>, which takes 2.211
-seconds to process 100,000 inputs. This slowdown arises from
-<code>anthro</code> computing results in every WHO Child Growth standard
-each time <code><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro::anthro_zscores()</a></code> is called, but also due
-to a slower implementation of the WHO LMS procedure than the other R
+taking around 13.705 seconds to process 15,000 inputs. We couldn’t get
+it to process 100,000 inputs in good time. Looking at the source code,
+this is because <code><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">zscorer::addWGSR()</a></code> hasn’t been
+vectorised.</p>
+<p>Next slowest is <code>anthro</code>, which takes 2.211 seconds to
+process 100,000 inputs. This slowdown arises from <code>anthro</code>
+computing results in every WHO Child Growth standard each time
+<code><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro::anthro_zscores()</a></code> is called, but also due to a
+slower implementation of the WHO LMS procedure than the other R
 packages.</p>
 <p>Next slowest is the Stata package <code>zanthro</code>, which takes
 around 2.046 seconds to compute results in a single WHO standard. About
@@ -512,9 +514,9 @@ except for <code>childsds</code> and <code>sitar</code>.</p>
 standards constrain z-scores in the outer tails (i.e. past 3 z-scores),
 as their data was more sparse for these extreme values. More information
 on this constraining procedure can be found in the reports referenced in
-the <code>gigs::who_gs_value2zscore()</code> documentation. It appears
-that <code>childsds</code> does not perform this constraining procedure,
-so conversions where <code>abs(z_score) &gt; 3</code> are computed
+the <code><a href="../reference/who_gs.html">gigs::who_gs</a></code> documentation. It appears that
+<code>childsds</code> does not perform this constraining procedure, so
+conversions where <code>abs(z_score) &gt; 3</code> are computed
 incorrectly:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">discrepancies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.03</span>, <span class="op">-</span><span class="fl">2.97</span>, <span class="fl">2.97</span>, <span class="fl">3.03</span><span class="op">)</span>,</span>
