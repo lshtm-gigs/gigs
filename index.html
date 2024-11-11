@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,25 +85,28 @@
 <div class="section level2">
 <h2 id="classification-functions">Classification functions<a class="anchor" aria-label="anchor" href="#classification-functions"></a>
 </h2>
-<p>GIGS includes a number of functions which permit fast identification of at-risk infants through classification of suboptimal growth. The cut-offs used are sourced from research literature; you can check the function documentation to see these sources.</p>
+<p><strong>gigs</strong> includes a number of functions which permit fast identification of at-risk infants through classification of suboptimal growth. The cut-offs used are sourced from research literature; you can check the function documentation to see these sources.</p>
 <div class="section level3">
 <h3 id="growth-classification-in-dataframe-like-objects">Growth classification in <code>data.frame</code>-like objects<a class="anchor" aria-label="anchor" href="#growth-classification-in-dataframe-like-objects"></a>
 </h3>
-<p>Use the <code><a href="reference/classify_growth.html">classify_growth()</a></code> function to quickly compute growth indicators in <code>data.frame</code>-like objects. All <code>classify_*()</code>-style functions in GIGS use <a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masking</a>, so you provide a <code>data.frame</code>-like object in the <code>.data</code> argument and then refer to your column names directly. In <code><a href="reference/classify_growth.html">classify_growth()</a></code>, you can also use the <code>.analyses</code> argument to specify which growth indicators you want to classify.</p>
+<p>Use the <code><a href="reference/classify_growth.html">classify_growth()</a></code> function to quickly compute growth indicators in <code>data.frame</code>-like objects. All <code>classify_*()</code>-style functions in <strong>gigs</strong> use <a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masking</a>, so you provide a <code>data.frame</code>-like object in the <code>.data</code> argument and then refer to your column names directly. In <code><a href="reference/classify_growth.html">classify_growth()</a></code>, you can also use the <code>.analyses</code> argument to specify which growth indicators you want to classify.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">life6mo_newborns</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="reference/life6mo.html">life6mo</a></span><span class="op">[</span><span class="va">life6mo</span><span class="op">$</span><span class="va">age_days</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Use classify_growth() to get multiple growth indicators at once</span></span>
 <span><span class="va">life6mo_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_growth.html">classify_growth</a></span><span class="op">(</span></span>
-<span>        .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
-<span>        gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
-<span>        age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
-<span>        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
-<span>        weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
-<span>        lenht_cm <span class="op">=</span> <span class="va">len_cm</span>,</span>
-<span>        id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
-<span>        .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
+<span>  .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
+<span>  gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>  age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
+<span>  weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
+<span>  lenht_cm <span class="op">=</span> <span class="va">len_cm</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
+<span>  .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; ! Unused factor levels kept after small vulnerable newborn categorisation:</span></span>
+<span><span class="co">#&gt; "Term AGA" and "Term LGA".</span></span>
+<span><span class="co">#&gt; ! Unused factor levels kept after stunting categorisation: "outlier".</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── `gigs::classify_growth()` ───────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; ✔ Small vulnerable newborns: Success</span></span>
@@ -123,14 +126,16 @@
 <p>When using <code><a href="reference/classify_growth.html">classify_growth()</a></code>, you will be informed which of the analyses you wanted to run were successful. In the example below, because <code>lenht_cm</code> is not specified, stunting indicators cannot be computed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">life6mo_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/classify_growth.html">classify_growth</a></span><span class="op">(</span></span>
-<span>        .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
-<span>        gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
-<span>        age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
-<span>        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
-<span>        weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
-<span>        id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
-<span>        .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
+<span>  .data <span class="op">=</span> <span class="va">life6mo_newborns</span>,</span>
+<span>  gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
+<span>  age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
+<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
+<span>  weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>,</span>
+<span>  .outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"svn"</span>, <span class="st">"stunting"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; ! Unused factor levels kept after small vulnerable newborn categorisation:</span></span>
+<span><span class="co">#&gt; "Term AGA" and "Term LGA".</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── `gigs::classify_growth()` ───────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; ✔ Small vulnerable newborns: Success</span></span>
@@ -157,6 +162,8 @@
 <span>  gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
 <span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; ! Unused factor levels kept after small vulnerable newborn categorisation:</span></span>
+<span><span class="co">#&gt; "Term AGA" and "Term LGA".</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">life6mo_svn</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    id gestage sex visitweek pma age_days wt_kg   len_cm headcirc_cm  muac_cm</span></span>
@@ -177,7 +184,7 @@
 <div class="section level3">
 <h3 id="available-international-growth-standards">Available international growth standards<a class="anchor" aria-label="anchor" href="#available-international-growth-standards"></a>
 </h3>
-<p>GIGS facilitates the proper use of international growth standards, which are growth charts developed using international samples of healthy singleton children born to mothers that had their health needs met during pregnancy. They represent an international standard of ‘optimal’ growth. GIGS implements international growth standards from the WHO and INTERGROWTH-21<sup>st</sup> project:</p>
+<p><em>gigs</em> facilitates the proper use of international growth standards, which are growth charts developed using international samples of healthy singleton children born to mothers that had their health needs met during pregnancy. They represent an international standard of ‘optimal’ growth. <strong>gigs</strong> implements international growth standards from the WHO and INTERGROWTH-21<sup>st</sup> project:</p>
 <ul>
 <li>
 <code>ig_nbs</code> - INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm)
@@ -283,10 +290,10 @@ Component standards
 Component standards
 </summary><table class="table">
 <colgroup>
-<col width="11%">
-<col width="64%">
-<col width="6%">
-<col width="17%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
 </colgroup>
 <thead><tr class="header">
 <th>Acronym</th>
@@ -508,7 +515,7 @@ Component standards
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
 <p>Conversion functions are named according to the conversion they perform. Either they convert measured values to z-scores/centiles (<code><a href="reference/value2zscore.html">value2zscore()</a></code>/<code><a href="reference/value2zscore.html">value2centile()</a></code>), or they generate expected values for given z-scores/centiles (<code><a href="reference/zscore2value.html">zscore2value()</a></code>/<code><a href="reference/zscore2value.html">centile2value()</a></code>).</p>
-<p>You tell gigs which international growth standard to use with the <code>family</code> and <code>acronym</code> parameters. The <code>family</code> parameter tells gigs which set of standards you want to use - e.g. <code>"ig_nbs"</code> for the INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm). The <code>acronym</code> parameter describes which exact growth standard you want out of all the growth standards in your ‘family’ of standards.</p>
+<p>You tell <strong>gigs</strong> which international growth standard to use with the <code>family</code> and <code>acronym</code> parameters. The <code>family</code> parameter denotes the set of growth standards you want to use - e.g. <code>"ig_nbs"</code> for the INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm). The <code>acronym</code> parameter describes which exact growth standard you want out of all the growth standards in your ‘family’ of standards.</p>
 <p>For example, to convert <em>values to z-scores</em> in the <em>weight-for-GA</em> standard from the <em>INTERGROWTH-21<sup>st</sup> Newborn Size standards</em>, you would run <code>value2zscore(..., family = "ig_nbs", acronym = "wfga")</code>.</p>
 <p>Similarly, the conversion of length-for-age values to centiles in term and preterm infants could be performed with the <em>WHO Child Growth standards</em> and <em>INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards</em>, respectively:</p>
 <ul>
@@ -573,7 +580,7 @@ Component standards
 <div class="section level4">
 <h4 id="reference-curves">Reference curves<a class="anchor" aria-label="anchor" href="#reference-curves"></a>
 </h4>
-<p>We can use gigs to generate reference curves for the standards by getting curves for the expected weight at multiple z-scores across multiple gestational ages. We would usually recommend <a href="https://ggplot2.tidyverse.org/" class="external-link"><code>ggplot2</code></a> for such visualisation, but do not use it here to reduce our package’s dependencies.</p>
+<p>We can use <strong>gigs</strong> to generate reference curves for the standards by getting curves for the expected weight at multiple z-scores across multiple gestational ages. We would usually recommend <a href="https://ggplot2.tidyverse.org/" class="external-link"><code>ggplot2</code></a> for such visualisation, but do not use it here to reduce our package’s dependencies.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">z_score_range</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">:</span><span class="fl">2</span></span>
 <span><span class="va">gestage_range</span> <span class="op">&lt;-</span> <span class="fl">168</span><span class="op">:</span><span class="fl">230</span></span>
@@ -599,16 +606,16 @@ Component standards
 <div class="section level1">
 <h1 id="other-packages">Other packages<a class="anchor" aria-label="anchor" href="#other-packages"></a>
 </h1>
-<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in gigs. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in gigs - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
-<table class="table">
+<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in <em>gigs</em>. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in <strong>gigs</strong> - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="39%">
-<col width="4%">
-<col width="7%">
-<col width="11%">
-<col width="11%">
-<col width="12%">
-<col width="13%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th>Software</th>
@@ -675,6 +682,24 @@ Component standards
 <td>Values → z-scores/centiles</td>
 </tr>
 <tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values ↔︎ z-scores/centiles</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/zscorer/index.html" class="external-link">zscorer</a></td>
+<td>R</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Values → z-scores/centiles</td>
+</tr>
+<tr class="odd">
 <td>
 <a href="https://www.github.com/lshtm-gigs/gigs-stata/" class="external-link">gigs</a> (Stata)</td>
 <td>Stata</td>
@@ -696,15 +721,15 @@ Component standards
 </tr>
 </tbody>
 </table>
-<p>We have benchmarked some of these implementations against each other for conversion of values to z-scores in the WHO Child Growth Standards and different sets of INTERGROWTH-21<sup>st</sup> standards. The table below shows relative speed of each software package when processing 100,000 inputs. The code used to generate these timings can be seen online in the GIGS benchmarking <a href="https://lshtm-gigs.github.io/gigs/articles/benchmarking.html">article</a>.</p>
+<p>We have benchmarked some of these implementations against each other for conversion of values to z-scores in the WHO Child Growth Standards and different sets of INTERGROWTH-21<sup>st</sup> standards. The table below shows relative speed of each software package when processing 100,000 inputs. The code used to generate these timings can be seen online in the <strong>gigs</strong> benchmarking <a href="https://lshtm-gigs.github.io/gigs/articles/benchmarking.html">article</a>.</p>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="41%">
-<col width="4%">
-<col width="10%">
-<col width="14%">
-<col width="14%">
-<col width="15%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Software</th>
@@ -816,7 +841,7 @@ Component standards
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
-<p>Please note that the gigs project is released with a <a href="https://ropensci.org/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
+<p>Please note that the <strong>gigs</strong> package is released with a <a href="https://ropensci.org/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
 </div>
 </div>
 

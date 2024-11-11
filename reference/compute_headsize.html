@@ -9,7 +9,7 @@ standards"><meta property="og:image" content="https://lshtm-gigs.github.io/gigs/
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,8 +122,10 @@ Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 <span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> There was <span style="color: #0000BB;">1</span> 'at birth' observation where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was <span style="color: #0000BB;">1</span> 'at birth' observation where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> This occurred for ID <span style="color: #0000BB;">B</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after head size categorisation:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"microcephaly_severe"</span>, <span style="color: #0000BB;">"microcephaly"</span>, and <span style="color: #0000BB;">"macrocephaly_severe"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] normal_headcirc normal_headcirc macrocephaly    normal_headcirc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] normal_headcirc macrocephaly   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 Levels: microcephaly_severe microcephaly normal_headcirc ... macrocephaly_severe</span>
@@ -137,6 +139,8 @@ Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 <span class="r-in"><span>  gest_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">245</span>, <span class="fl">245</span>, <span class="fl">245</span>, <span class="fl">280</span>, <span class="fl">280</span>, <span class="fl">280</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"M"</span>, <span class="st">"F"</span>, <span class="st">"F"</span>, <span class="st">"F"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after head size categorisation:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"microcephaly_severe"</span> and <span style="color: #0000BB;">"macrocephaly_severe"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] normal_headcirc normal_headcirc macrocephaly    microcephaly   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] normal_headcirc macrocephaly   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 Levels: microcephaly_severe microcephaly normal_headcirc ... macrocephaly_severe</span>

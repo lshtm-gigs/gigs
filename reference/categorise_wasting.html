@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,9 +95,11 @@ Rockville, Maryland, USA: ICF (2020). pp. 431-435.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">wlz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5.5</span>, <span class="op">-</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">5.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">categorise_wasting</span><span class="op">(</span><span class="va">wlz</span>, outliers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after wasting categorisation: <span style="color: #0000BB;">"wasting"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] wasting_severe wasting_severe not_wasting    overweight     overweight    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: wasting_severe wasting not_wasting overweight</span>
 <span class="r-in"><span><span class="fu">categorise_wasting</span><span class="op">(</span><span class="va">wlz</span>, outliers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after wasting categorisation: <span style="color: #0000BB;">"wasting"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] outlier        wasting_severe not_wasting    overweight     outlier       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: wasting_severe wasting not_wasting overweight outlier</span>
 </code></pre></div>

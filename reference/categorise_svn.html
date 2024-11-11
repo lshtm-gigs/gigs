@@ -9,7 +9,7 @@ newborn strata"><meta property="og:image" content="https://lshtm-gigs.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,6 +99,8 @@ uses to stratify <code>p</code> into size-for-gestational age categories.</p></d
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.07</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.93</span>, <span class="fl">0.99</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gest_days</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">250</span>, <span class="fl">250</span>, <span class="fl">280</span>, <span class="fl">280</span>, <span class="fl">280</span><span class="op">)</span> <span class="co"># 3 preterm, 3 term</span></span></span>
 <span class="r-in"><span><span class="fu">categorise_svn</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, gest_days <span class="op">=</span> <span class="va">gest_days</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after small vulnerable newborn categorisation:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"Preterm LGA"</span> and <span style="color: #0000BB;">"Term SGA"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] Preterm SGA Preterm SGA Preterm AGA Term AGA    Term LGA    Term LGA   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: Preterm SGA Preterm AGA Preterm LGA Term SGA Term AGA Term LGA</span>
 </code></pre></div>

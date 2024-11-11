@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,29 +68,27 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>gigs is a package designed to make the implementation of the
-international growth standards from the INTERGROWTH-21<sup>st</sup>
-project and World Health Organisation Child Growth Standards as easy as
-possible. It provides functions for easy and reproducible classification
-of fetal, newborn, and infant growth using international growth
-standards. The package allows conversions and classifications of growth
-measurements to centiles, z-scores, and common international metrics
-such as stunting.</p>
+<p>Produced as part of the Guidance for International Growth Standards
+project at the London School of Hygiene &amp; Tropical Medicine,
+<strong>gigs</strong> provides a single, simple interface for working
+with the WHO Child Growth standards and outputs from the
+INTERGROWTH-21<sup>st</sup> project. It provides functions for easy and
+reproducible classification of fetal, newborn, and infant growth using
+international growth standards. The package allows conversions and
+classifications of growth measurements to centiles, z-scores, and common
+international metrics such as stunting.</p>
 <div class="section level3">
 <h3 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h3>
-<p>Let’s start by loading the package. We’re also turning off the
-warnings which gigs prints if inputs are <code>NA</code>,
-<code>NaN</code>, or similarly invalid, as to avoid cluttering the
-console output.</p>
+<p>Let’s start by loading the package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></span><span class="op">)</span></span></code></pre></div>
-<p>This vignette has two examples for applying gigs. The first is using
-gigs to convert growth measurements into centiles or z-scores according
-to appropriate standards from either the INTERGROWTH-21<sup>st</sup> or
-WHO Child Growth standards. The second is using gigs to convert growth
-measurements to categorical growth outcomes, in this case
-size-for-gestational age.</p>
+<p>This vignette has two examples for applying <strong>gigs</strong>.
+The first is using <strong>gigs</strong> to convert growth measurements
+into centiles or z-scores according to appropriate standards from either
+the INTERGROWTH-21<sup>st</sup> or WHO Child Growth standards. The
+second is using <strong>gigs</strong> to convert growth measurements to
+categorical growth outcomes, in this case size-for-gestational age.</p>
 </div>
 <div class="section level3">
 <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
@@ -139,25 +137,22 @@ gestational age. We also convert <code>sex</code> from a
 <div class="section level3">
 <h3 id="single-step-approach">Single-step approach<a class="anchor" aria-label="anchor" href="#single-step-approach"></a>
 </h3>
-<p>The easiest way to use gigs is to let it handle work for you. Using
-its growth classification functions, you can apply GIGS-recommended
-growth standards for each measurement and time point in a dataset.
+<p>The easiest way to use <strong>gigs</strong> is to let it handle work
+for you. Using its z-scoring functions, you can apply GIGS-recommended
+growth standards for each measurement and time point in your data.
 Standards are applied based on the best practices advised by WHO and
 INTERGROWTH-21<sup>st</sup> when using their respective growth
 standards.</p>
-<p>We can use <code><a href="../reference/classify_wfa.html">classify_wfa()</a></code> to add weight-for-age z-scores
-to our dataset in a single step. This function works like
-<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> and other <a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masking</a>
-functions: you refer to columns in <code>.data</code> using the raw
-column names:</p>
+<p>We can use <code><a href="../reference/gigs_zscoring.html">gigs_waz()</a></code> to add weight-for-age z-scores to
+our dataset in a single step:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">life6mo_zscored</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_wfa.html">classify_wfa</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">life6mo</span>,</span>
-<span>                                weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
-<span>                                age_days <span class="op">=</span> <span class="va">age_days</span>,</span>
-<span>                                gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
-<span>                                sex <span class="op">=</span> <span class="va">sex</span>,</span>
-<span>                                id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: <span style="color: #BBBB00;">!</span> There were <span style="color: #0000BB;">134</span> 'at birth' observations where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span></span>
+<code class="sourceCode R"><span><span class="va">life6mo_zscored</span> <span class="op">&lt;-</span> <span class="va">life6mo</span></span>
+<span><span class="va">life6mo_zscored</span><span class="op">$</span><span class="va">waz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gigs_zscoring.html">gigs_waz</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">life6mo</span><span class="op">$</span><span class="va">wt_kg</span>,</span>
+<span>                                age_days <span class="op">=</span> <span class="va">life6mo</span><span class="op">$</span><span class="va">age_days</span>,</span>
+<span>                                gest_days <span class="op">=</span> <span class="va">life6mo</span><span class="op">$</span><span class="va">gestage</span>,</span>
+<span>                                sex <span class="op">=</span> <span class="va">life6mo</span><span class="op">$</span><span class="va">sex</span>,</span>
+<span>                                id <span class="op">=</span> <span class="va">life6mo</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in gigs_waz(weight_kg = life6mo$wt_kg, age_days = life6mo$age_days, : There were <span style="color: #0000BB;">134</span> 'at birth' observations where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This occurred for IDs <span style="color: #0000BB;">2</span>, <span style="color: #0000BB;">3</span>, <span style="color: #0000BB;">6</span>, <span style="color: #0000BB;">7</span>, <span style="color: #0000BB;">12</span>, <span style="color: #0000BB;">13</span>, <span style="color: #0000BB;">14</span>, <span style="color: #0000BB;">16</span>, <span style="color: #0000BB;">20</span>, <span style="color: #0000BB;">21</span>, <span style="color: #0000BB;">22</span>, <span style="color: #0000BB;">23</span>, <span style="color: #0000BB;">24</span>, …, <span style="color: #0000BB;">295</span>,</span></span>
 <span><span class="co">#&gt;   and <span style="color: #0000BB;">298</span>.</span></span>
 <span><span class="va">life6mo_zscored</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"visitweek"</span>, <span class="st">"gestage"</span>, <span class="st">"age_days"</span>, <span class="st">"sex"</span>, <span class="st">"waz"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
@@ -179,16 +174,17 @@ irrespective of their relative size at birth.</p>
 <div class="section level3">
 <h3 id="multi-step-approach">Multi-step approach<a class="anchor" aria-label="anchor" href="#multi-step-approach"></a>
 </h3>
-<p>Instead of letting GIGS do the heavy lifting, you may want to clearly
-lay out the steps taken in your analysis. Luckily, gigs provides all the
-functionality you need for this.</p>
+<p>Instead of letting <strong>gigs</strong> do the heavy lifting, you
+may want to clearly lay out the steps taken in your analysis. Luckily,
+<strong>gigs</strong> provides all the functionality you need for
+this.</p>
 <p>We start by generating WAZs using each growth standard. To do this,
-we need to use the gigs conversion functions. These take vectors of
-growth data and convert them into z-scores or centiles. You can use
-either <code><a href="../reference/value2zscore.html">value2zscore()</a></code> or <code>value2zcentile()</code>
-depending on which conversion you want to do. You then pass in two
-parameters, <code>family</code> and <code>acronym</code>, which
-describe:</p>
+we need to use the <strong>gigs</strong> conversion functions. These
+take vectors of growth data and convert them into z-scores or centiles.
+You can use either <code><a href="../reference/value2zscore.html">value2zscore()</a></code> or
+<code>value2zcentile()</code> depending on which conversion you want to
+do. You then pass in two parameters, <code>family</code> and
+<code>acronym</code>, which describe:</p>
 <ul>
 <li>
 <code>family</code>: The broad set of growth standards you want to
@@ -244,9 +240,9 @@ e.g. for the INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards:
 <span>                                      acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in value2zscore(y = wt_kg, x = pma/7, sex = sex, family = "ig_png", : Input arguments have invalid values:</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Argument `x`: 128 in 2191 elements were out-of-bounds (see the GIGS conversion function documentation for bounds).</span></span></code></pre></div>
-<p>This “out of bounds” warning from GIGS tells us that for 128
-observations GIGS couldn’t calculate a z-score, because the
-post-menstrual age for those observations was outside the range of the
+<p>This “out of bounds” warning from *gigs** tells us that it couldn’t
+calculate a z-score for 128 observations, because the post-menstrual age
+for those observations was outside the range of the
 INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards (i.e. 27 to 64
 weeks’ post-menstrual age).</p>
 <p>Nonetheless, we now have standard-specific WAZs. We can use a chain
@@ -277,18 +273,19 @@ PMA.</p>
 <p>On plotting the mean WAZ for each visit week, we get the same plot as
 when we used the z-scores from <code><a href="../reference/classify_wfa.html">classify_wfa()</a></code>!</p>
 <p><img src="gigs_waz_complex.png" alt="A line graph showing mean WAZ by visit week in 300 infants from the LIFE study. There is a line for preterm infants (dotted) and term infants (solid). Term infants in this study were consistently smaller than the preterm participants." width="95%" style="display: block; margin: auto;"></p>
-<p>Sure - you <em>can</em> do it yourself, but doing it manually is
-likelier to have you applying the wrong standards at each time point.
-Instead, use the <code><a href="../reference/classify_growth.html">classify_growth()</a></code> function and friends to
-automatically apply the best growth standards for each observation you
-have in a dataset.</p>
+<p>Sure - you <em>can</em> do it yourself, but doing it manually makes
+it more likely to apply the wrong growth standard for a given
+observation. Instead, use the <code><a href="../reference/gigs_zscoring.html">gigs_waz()</a></code> function and
+friends (<code><a href="../reference/gigs_zscoring.html">gigs_lhaz()</a></code>, <code><a href="../reference/gigs_zscoring.html">gigs_wlz()</a></code>,
+<code><a href="../reference/gigs_zscoring.html">gigs_hcaz()</a></code>) to automatically use growth standards
+suggested by GIGS for each observation in your data.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="using-gigs-to-obtaining-growth-outcomes-from-measurements">Using gigs to obtaining growth outcomes from measurements<a class="anchor" aria-label="anchor" href="#using-gigs-to-obtaining-growth-outcomes-from-measurements"></a>
 </h2>
-<p>The gigs package contains functions which can be used to assess a
-range of common growth outcomes:</p>
+<p>The <strong>gigs</strong> package contains functions which can be
+used to assess a range of common growth outcomes:</p>
 <ul>
 <li>Size-for-gestational age with
 <code><a href="../reference/compute_sfga.html">compute_sfga()</a></code>/<code><a href="../reference/classify_sfga.html">classify_sfga()</a></code>
@@ -309,10 +306,10 @@ range of common growth outcomes:</p>
 <code><a href="../reference/compute_headsize.html">compute_headsize()</a></code>/<code><a href="../reference/classify_headsize.html">classify_headsize()</a></code>
 </li>
 </ul>
-<p>You can also obtain classifications for all (or some) of these
-outcomes simultaneously using <code><a href="../reference/classify_growth.html">classify_growth()</a></code>. In this
-vignette, we will focus on size-for-GA and small, vulnerable newborn
-(SVN) classifications.</p>
+<p>You can also obtain classifications for some or all of these outcomes
+simultaneously using <code><a href="../reference/classify_growth.html">classify_growth()</a></code>. In this vignette,
+we will focus on size-for-GA and small, vulnerable newborn (SVN)
+classifications.</p>
 <div class="section level3">
 <h3 id="size-for-ga">Size-for-GA<a class="anchor" aria-label="anchor" href="#size-for-ga"></a>
 </h3>
@@ -349,10 +346,10 @@ combination of their size-for-GA, whether they were low birth-weight
 (LBW; birth weight &lt; 2500g), and whether they were born term or
 preterm<span class="citation"><sup>17</sup></span>. In a global analysis
 of SVN type prevalence and mortality, Lawn et al.<span class="citation"><sup>18</sup></span> focused on a smaller subset of SVN
-categories which omitted whether infants were LBW. The gigs package
-offers SVN classification functionality for this smaller subset of SVN
-categories, as 99.5% of global LBW is the consequence of preterm birth
-and SGA.</p>
+categories which omitted whether infants were LBW. The
+<strong>gigs</strong> package offers SVN classification functionality
+for this smaller subset of SVN categories, as 99.5% of global LBW is the
+consequence of preterm birth and SGA.</p>
 <p>To classify SVN in gigs, the <code><a href="../reference/compute_svn.html">compute_svn()</a></code> function can
 be used. We can then convert the counts for each SVN category to
 percentages, and plot the results:</p>
@@ -361,6 +358,8 @@ percentages, and plot the results:</p>
 <span>                             <span class="fu"><a href="../reference/compute_svn.html">compute_svn</a></span><span class="op">(</span>weight_kg <span class="op">=</span> <span class="va">wt_kg</span>,</span>
 <span>                                         gest_days <span class="op">=</span> <span class="va">gestage</span>,</span>
 <span>                                         sex <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Unused factor levels kept after small vulnerable newborn categorisation:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">"Term AGA"</span> and <span style="color: #0000BB;">"Term LGA"</span>.</span></span>
 <span><span class="va">svn_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">life6mo_newborns</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">svn</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">svn</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">svn_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">svn_summary</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">svn_summary</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">svn_summary</span></span>

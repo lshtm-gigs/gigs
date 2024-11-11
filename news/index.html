@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.1.9001" id="gigs-0419001">gigs 0.4.1.9001<a class="anchor" aria-label="anchor" href="#gigs-0419001"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.1.9002" id="gigs-0419002">gigs 0.4.1.9002<a class="anchor" aria-label="anchor" href="#gigs-0419002"></a></h2>
 <ul><li>The new version of the package includes many changes recommended by the good folks at <a href="https://ropensci.org/" class="external-link">rOpenSci</a>, who are reviewing the package.</li>
 <li>
 <strong>BREAKING CHANGES</strong>:
@@ -46,12 +46,15 @@
 <li>
 <strong>NEW FEATURES</strong>:
 <ul><li>Use <code><a href="../reference/classify_growth.html">classify_growth()</a></code> to get data on multiple growth indicators at the same time. It will try to compute as many growth outcomes (i.e. size-for-GA, SVN, stunting, wasting, weight-for-age and head size) as possible based on the data you provide, and will tell you which analyses were performed.</li>
-<li>The GIGS z-scoring functions are explicitly user-facing now. Go check out <code><a href="../reference/gigs_zscoring.html">gigs_waz()</a></code> and friends for easy z-scoring using GIGS-recommended standards.</li>
-<li>An <code>id</code> parameter for <code><a href="../reference/classify_growth.html">classify_growth()</a></code> and friends, as well as the GIGS z-scoring functions. This parameter informs the functions about <em>who</em> each data point is from, so that birth measurements for each individual can be identified and assessed appropriately.</li>
+<li>The GIGS z-scoring functions are now explicitly user-facing. Check out <code><a href="../reference/gigs_zscoring.html">gigs_waz()</a></code> and friends for easy z-scoring using growth standards suggested by GIGS.</li>
+<li>An <code>id</code> parameter for <code><a href="../reference/classify_growth.html">classify_growth()</a></code> and friends, as well as the gigs z-scoring functions. This parameter informs the functions about <em>who</em> each data point is from, so that birth measurements for each individual can be identified and assessed appropriately.</li>
 <li>The <code>compute_*()</code> functions for growth analysis. These functions take several vectors containing anthropometric measurements, age, and sex; they return a factor of growth categories. They are equivalent to the <code>classify_*()</code> functions from v0.4.1 and earlier.</li>
 <li>The <code>categorise_*()</code> functions for growth analysis. These functions take vectors of growth centiles/z-scores as input, and return a factor of growth categories.</li>
 <li>Added the INTERGROWTH-21st standard for estimated fetal weight based on the Hadlock formula. The is available through <code><a href="../reference/value2zscore.html">value2zscore()</a></code> and friends provided that <code>family = "ig_fet"</code> and <code>acronym = "hefwfga"</code>.</li>
-<li>You can now set all GIGS options at once with <code><a href="../reference/gigs_options.html">gigs_options_set()</a></code>.</li>
+<li>Added a new package-level option - <code>"handle_unused_levels"</code>. This option matters when you’re categorising growth data, but want gigs to drop unused levels in your newly-made factors.
+<ul><li>By default, <code>.gigs_options$handle_unused_levels</code> is <code>"keep_warn"</code>. So gigs will tell you that there are unused factor levels, but not drop them. Change it to <code>"drop_warn"</code> or <code>"drop_silent"</code>to drop the unused factor levels automatically.</li>
+</ul></li>
+<li>You can now set all gigs input-checking options at once with <code><a href="../reference/gigs_options.html">gigs_input_options_set()</a></code>.</li>
 </ul></li>
 <li>
 <strong>FIXES</strong>:
@@ -61,7 +64,7 @@
 </ul></li>
 <li>
 <strong>INTERNAL/DOCS CHANGES</strong>:
-<ul><li>Errors, warnings, and messages from GIGS are now handled with <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> and friends, and looks much prettier.<br></li>
+<ul><li>Errors, warnings, and messages from GIGS are now handled with <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> and friends, and look much prettier.</li>
 <li>Updates to the ‘Getting Started’ vignette and ‘Benchmarking’ article.</li>
 <li>Other non-breaking changes to documentation and test suite.</li>
 </ul></li>

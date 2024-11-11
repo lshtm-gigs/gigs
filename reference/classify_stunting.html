@@ -9,7 +9,7 @@ standards"><meta property="og:image" content="https://lshtm-gigs.github.io/gigs/
 
     <a class="navbar-brand me-2" href="../index.html">gigs</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,8 +162,11 @@ time.</p></div>
 <span class="r-in"><span>                    gest_days <span class="op">=</span> <span class="va">gestage</span>,</span></span>
 <span class="r-in"><span>                    sex <span class="op">=</span> <span class="va">sex</span>,</span></span>
 <span class="r-in"><span>                    id <span class="op">=</span> <span class="va">child</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #BBBB00;">!</span> There was <span style="color: #0000BB;">1</span> 'at birth' observation where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was <span style="color: #0000BB;">1</span> 'at birth' observation where `age_days` &gt; <span style="color: #0000BB;">0.5</span>.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> This occurred for ID <span style="color: #0000BB;">B</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after stunting categorisation: <span style="color: #0000BB;">"stunting_severe"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after stunting categorisation: <span style="color: #0000BB;">"stunting_severe"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and <span style="color: #0000BB;">"outlier"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   child agedays gestage sex length_cm        lhaz     stunting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     A       0     245   M      52.2  2.82368563 not_stunting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     A     100     245   M      60.4  0.88764438 not_stunting</span>
@@ -186,6 +189,9 @@ time.</p></div>
 <span class="r-in"><span>                    age_days <span class="op">=</span> <span class="va">agedays</span>,</span></span>
 <span class="r-in"><span>                    gest_days <span class="op">=</span> <span class="va">gestage</span>,</span></span>
 <span class="r-in"><span>                    sex <span class="op">=</span> <span class="va">sex</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after stunting categorisation: <span style="color: #0000BB;">"stunting_severe"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Unused factor levels kept after stunting categorisation: <span style="color: #0000BB;">"stunting_severe"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and <span style="color: #0000BB;">"outlier"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   child agedays gestage sex length_cm        lhaz     stunting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     A       0     245   M      52.2  2.82368563 not_stunting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     A     100     245   M      60.4  0.88764438 not_stunting</span>
