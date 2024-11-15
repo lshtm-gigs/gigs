@@ -42,7 +42,10 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 \value{
 An object of class factor with the same length as the longest input
 vector, containing stunting classifications. Its levels are
-\code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE} (the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}.
+\code{c("stunting_severe", "stunting", "not_stunting")} if \code{outliers = FALSE} (the default), else \code{c("stunting_severe", "stunting", "not_stunting", "outlier")}. By default, gigs will inform you this object
+contains unused factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Get stunting categories using multiple vectors and GIGS-recommended growth
@@ -66,10 +69,6 @@ WHO guidelines, which stipulate that recumbent length should not be
 measured after 730 days. Instead, standing height should be used.
 Implausible z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.
-
-The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-\code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 # The first observation for each infant in `id` uses the INTERGROWTH-21st

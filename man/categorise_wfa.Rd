@@ -16,7 +16,10 @@ implausible z-score thresholds should be applied. Default = \code{FALSE}.}
 \value{
 An object of class factor with the same length as \code{waz}, containing
 weight-for-age classifications. Its levels are \code{c("underweight_severe", "underweight", "normal", "overweight")} if \code{outliers = FALSE} (the
-default), else \code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.
+default), else \code{c("underweight_severe", "underweight", "normal", "overweight", "outlier")}.  By default, gigs will inform you this object
+contains unused factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Categorise weight-for-age z-scores into weight-for-age strata
@@ -33,11 +36,6 @@ Normal weight        \tab \code{"normal_weight"}      \tab \code{abs(waz)} < 2  
 Overweight           \tab \code{"overweight"}         \tab \code{waz} >= 2      \cr
 Outlier              \tab \code{"outlier"}        \tab \code{waz} < -6 or \code{waz} > 5
 }
-}
-\note{
-The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-\code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 waz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)

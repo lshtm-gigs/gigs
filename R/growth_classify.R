@@ -53,7 +53,10 @@
 #'                 gest_days = gestage,
 #'                 sex = sex)
 #' @note Categorical (factor) columns produced here may contain unused factor
-#'   levels; use [droplevels()] or similar to remove these.
+#'   levels. By default, gigs will inform you if these columns have unused 
+#'   factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @seealso See [classify_svn()] for size-for-GA classifications which are
 #'   stratified by whether a newborn is term. See [classify_growth()] to run
 #'   this analysis and others at the same time.
@@ -537,7 +540,10 @@ classify_headsize <- function(.data,
 #'   smallest, provided that `age_days` is between `<3`.
 #'
 #'   Categorical (factor) columns produced here may contain unused factor
-#'   levels; use [droplevels()] or similar to remove these.
+#'   levels. By default, gigs will inform you if these columns have unused
+#'   factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.

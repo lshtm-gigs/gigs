@@ -14,7 +14,10 @@ head circumference-for-age z-scores (HCAZs).}
 \value{
 An object of class factor with the same length as \code{hcaz}, containing
 head circumference-for-age classifications. Its levels are
-\code{c("microcephaly_severe", "microcephaly", "normal_headcirc", "macrocephaly", "macrocephaly_severe")}.
+\code{c("microcephaly_severe", "microcephaly", "normal_headcirc", "macrocephaly", "macrocephaly_severe")}. By default, gigs will inform you
+this object contains unused factor levels. You can change this behaviour
+using the \link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Categorise head circumference-for-age z-scores into head
@@ -32,11 +35,6 @@ Normal head circumference \tab \code{"normal_headcirc"}     \tab \code{abs(hcaz)
 Macrocephaly              \tab \code{"macrocephaly"}        \tab \code{hcaz} >= 2       \cr
 Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} >= 3
 }
-}
-\note{
-The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-\code{\link[=droplevels]{droplevels()}} or similar.
 }
 \examples{
 hcaz <- c(-6.5, -3.5, -2.5, 0, 2.5, 3.5)

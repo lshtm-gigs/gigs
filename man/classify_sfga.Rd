@@ -73,7 +73,10 @@ Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 \note{
 Categorical (factor) columns produced here may contain unused factor
-levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
+levels. By default, gigs will inform you if these columns have unused
+factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \examples{
 data <- data.frame(

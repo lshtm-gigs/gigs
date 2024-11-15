@@ -20,7 +20,10 @@ gestational age > 259 days means an infant is term).}
 \value{
 An object of class factor with the same length as the longest input
 vector, containing small vulnerable newborn classifications. Its levels
-are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}.
+are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}. By default, gigs will inform you this object contains unused
+factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Categorise birthweight centiles and gestational ages into small vulnerable

@@ -31,7 +31,10 @@ values below the third centile (\code{0.03}) as \code{"SGA(<3)"}. Default = \cod
 \value{
 An object of class factor with the same length as the longest input
 vector, containing size-for-GA classifications. If \code{severe = FALSE}, levels
-are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}.
+are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}. By default, gigs will inform you this object
+contains unused factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Get size-for-gestational age categories using multiple vectors and the
@@ -51,9 +54,7 @@ Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules. The returned factor will have unused
-levels if none of your observed z-scores/centiles fit given categories. To
-drop these, you will need to use \code{\link[=droplevels]{droplevels()}} or similar.
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 # By default, does not differentiate between p < 0.03 and p < 0.10

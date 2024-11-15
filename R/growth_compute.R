@@ -21,7 +21,10 @@
 #' @returns An object of class factor with the same length as the longest input
 #'   vector, containing size-for-GA classifications. If `severe = FALSE`, levels
 #'   are `c("SGA", "AGA", "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)",
-#'   "SGA", "AGA", "LGA")`.
+#'   "SGA", "AGA", "LGA")`. By default, gigs will inform you this object 
+#'   contains unused factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @examples
 #' # By default, does not differentiate between p < 0.03 and p < 0.10
 #' compute_sfga(
@@ -39,9 +42,7 @@
 #' )
 #' @inherit categorise_sfga details note
 #' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
-#'   adhere to the [vctrs] recycling rules. The returned factor will have unused
-#'   levels if none of your observed z-scores/centiles fit given categories. To
-#'   drop these, you will need to use [droplevels()] or similar.
+#'   adhere to the [vctrs] recycling rules.
 #' @inherit categorise_sfga references
 #' @export
 compute_sfga <- function(weight_kg,
@@ -64,7 +65,10 @@ compute_sfga <- function(weight_kg,
 #' @returns An object of class factor with the same length as the longest input
 #'   vector, containing small vulnerable newborn classifications. Its levels
 #'   are `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
-#'   "Term LGA")`.
+#'   "Term LGA")`. By default, gigs will inform you this object contains unused 
+#'   factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @inherit categorise_svn details note references
 #' @examples
 #' compute_svn(

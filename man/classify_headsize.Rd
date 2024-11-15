@@ -80,7 +80,10 @@ Severe macrocephaly       \tab \code{"macrocephaly_severe"} \tab \code{hcaz} >= 
 }
 \note{
 Categorical (factor) columns produced here may contain unused factor
-levels; use \code{\link[=droplevels]{droplevels()}} or similar to remove these.
+levels. By default, gigs will inform you if these columns have unused
+factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \examples{
 # This dummy dataset contains data from two people, from birth (<3 days) to

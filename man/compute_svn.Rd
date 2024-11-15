@@ -28,7 +28,10 @@ and warn you. You can customise this behaviour using the \link[=gigs_options]{GI
 \value{
 An object of class factor with the same length as the longest input
 vector, containing small vulnerable newborn classifications. Its levels
-are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}.
+are \code{c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")}. By default, gigs will inform you this object contains unused
+factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Get small vulnerable newborn categories using multiple vectors and the
@@ -59,9 +62,7 @@ appropriate-for-gestational age; LGA, large-for-gestational age.
 }
 \note{
 Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
-adhere to the \link{vctrs} recycling rules. The returned factor will have unused
-levels if none of your observed z-scores/centiles fit given categories. To
-drop these, you will need to use \code{\link[=droplevels]{droplevels()}} or similar.
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 compute_svn(

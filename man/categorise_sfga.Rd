@@ -17,7 +17,10 @@ values below the third centile as \code{"SGA(<3)"}. Default = \code{FALSE}.}
 }
 \value{
 An object of class factor with the same length as \code{p}, containing
-size-for-GA classifications. If \code{severe = FALSE}, levels are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}.
+size-for-GA classifications. If \code{severe = FALSE}, levels are \code{c("SGA", "AGA", "LGA")}. If \code{severe = TRUE}, levels are \code{c("SGA(<3)", "SGA", "AGA", "LGA")}. By default, gigs will inform you this object contains unused
+factor levels. You can change this behaviour using the
+\link[=gigs_options]{GIGS package-level option}
+\code{.gigs_options$handle_unused_levels}.
 }
 \description{
 Categorise birthweight centiles into size-for-gestational age strata
@@ -35,9 +38,8 @@ Large-for-GA          \tab \code{"LGA"}     \tab \code{p} > 0.9
 }
 }
 \note{
-The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-\code{\link[=droplevels]{droplevels()}} or similar.
+Input vectors are recycled by \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}, and must
+adhere to the \link{vctrs} recycling rules.
 }
 \examples{
 p <- c(0.01, 0.07, 0.25, 0.75, 0.93, 0.99)
