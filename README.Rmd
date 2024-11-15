@@ -167,7 +167,7 @@ head(life6mo_svn, n = 4)
 ## Conversion functions
 
 ### Available international growth standards
-*gigs* facilitates the proper use of international growth standards, which
+**gigs** facilitates the proper use of international growth standards, which
 are growth charts developed using international samples of healthy singleton
 children born to mothers that had their health needs met during pregnancy.
 They represent an international standard of 'optimal' growth. **gigs** 
