@@ -31,11 +31,12 @@
 #'
 #'   This argument will not accept an integer in place of a logical value.
 #' @param new_value A single case-sensitive character variable. For all options
-#'   **except** "handle_unused_levels", this should be one of:
+#'   **except** `"handle_unused_levels"`, this should be one of:
 #'   * `"quiet"` - gigs will replace invalid vector elements with `NA` quietly.
 #'   * `"warn"` -  gigs will replace invalid vector elements with `NA` loudly.
 #'   * `"error"` - gigs will throw informative errors if any invalid inputs are
 #'     encountered.
+#'  
 #'   For "handle_unused_levels", `new_value` should be one of:
 #'   * `"keep_quiet"` - Keep unused factor levels, and don't issue a warning. 
 #'   * `"keep_warn"` - Keep unused factor levels, whilst issuing a warning.
@@ -43,7 +44,7 @@
 #'   * `"drop_warn"` - Drop unused factor levels, whilst issuing a warning.
 #'   
 #'   By default, GIGS options are `"warn"` for input handling and `"keep_warn"` 
-#'   for `"handle_unused_levels"`
+#'   for `"handle_unused_levels"`.
 #' @returns A single-length character vector. For `gigs_option_get()`, the
 #'   current value of `option`; for `gigs_option_get()`, the new value of
 #'   `option`; for `gigs_input_options_set()`, `new_value`. If `silent = FALSE`

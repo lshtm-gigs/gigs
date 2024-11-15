@@ -40,13 +40,16 @@ printed to the console describing either:
 This argument will not accept an integer in place of a logical value.}
 
 \item{new_value}{A single case-sensitive character variable. For all options
-\strong{except} "handle_unused_levels", this should be one of:
+\strong{except} \code{"handle_unused_levels"}, this should be one of:
 \itemize{
 \item \code{"quiet"} - gigs will replace invalid vector elements with \code{NA} quietly.
 \item \code{"warn"} -  gigs will replace invalid vector elements with \code{NA} loudly.
 \item \code{"error"} - gigs will throw informative errors if any invalid inputs are
 encountered.
+}
+
 For "handle_unused_levels", \code{new_value} should be one of:
+\itemize{
 \item \code{"keep_quiet"} - Keep unused factor levels, and don't issue a warning.
 \item \code{"keep_warn"} - Keep unused factor levels, whilst issuing a warning.
 \item \code{"drop_quiet"} - Drop unused factor levels, and don't issue a warning.
@@ -54,7 +57,7 @@ For "handle_unused_levels", \code{new_value} should be one of:
 }
 
 By default, GIGS options are \code{"warn"} for input handling and \code{"keep_warn"}
-for \code{"handle_unused_levels"}}
+for \code{"handle_unused_levels"}.}
 }
 \value{
 A single-length character vector. For \code{gigs_option_get()}, the
