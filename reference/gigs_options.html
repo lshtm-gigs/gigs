@@ -103,17 +103,16 @@ printed to the console describing either:</p><ul><li><p>The current value of <co
 
 <dt id="arg-new-value">new_value<a class="anchor" aria-label="anchor" href="#arg-new-value"></a></dt>
 <dd><p>A single case-sensitive character variable. For all options
-<strong>except</strong> "handle_unused_levels", this should be one of:</p><ul><li><p><code>"quiet"</code> - gigs will replace invalid vector elements with <code>NA</code> quietly.</p></li>
+<strong>except</strong> <code>"handle_unused_levels"</code>, this should be one of:</p><ul><li><p><code>"quiet"</code> - gigs will replace invalid vector elements with <code>NA</code> quietly.</p></li>
 <li><p><code>"warn"</code> -  gigs will replace invalid vector elements with <code>NA</code> loudly.</p></li>
 <li><p><code>"error"</code> - gigs will throw informative errors if any invalid inputs are
-encountered.
-For "handle_unused_levels", <code>new_value</code> should be one of:</p></li>
-<li><p><code>"keep_quiet"</code> - Keep unused factor levels, and don't issue a warning.</p></li>
+encountered.</p></li>
+</ul><p>For "handle_unused_levels", <code>new_value</code> should be one of:</p><ul><li><p><code>"keep_quiet"</code> - Keep unused factor levels, and don't issue a warning.</p></li>
 <li><p><code>"keep_warn"</code> - Keep unused factor levels, whilst issuing a warning.</p></li>
 <li><p><code>"drop_quiet"</code> - Drop unused factor levels, and don't issue a warning.</p></li>
 <li><p><code>"drop_warn"</code> - Drop unused factor levels, whilst issuing a warning.</p></li>
 </ul><p>By default, GIGS options are <code>"warn"</code> for input handling and <code>"keep_warn"</code>
-for <code>"handle_unused_levels"</code></p></dd>
+for <code>"handle_unused_levels"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
