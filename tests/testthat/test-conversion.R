@@ -499,10 +499,27 @@ test_that("GIGS conversion functions warn on bad `family` or `acronym`", {
   }
 })
 
+test_that("Conversion fns fail correctly if (not) providing `sex`", {
+  for (fn_name in conv_fns) {
+    gigs_fn <- getFromNamespace(fn_name, ns = "gigs")
+    zyp <- zyp_cache[[fn_name]]
+
+    expect_error(
+      gigs_fn(zyp, 5, "M", "ig_fet", "hefwfga"),
+      class = "gigs_sex_not_null_for_ig_fet"
+    )
+
+    expect_error(
+      gigs_fn(zyp, 5, NULL, "ig_nbs", "wfga"),
+      class = "gigs_sex_null_for_not_ig_fet"
+    )
+  }
+})
+
 # Testing of `report_units()` --------------------------------------------------
 
-#' @srrstats {G5.4, G5.4c} Tests ensure that `gigs` functions can be used to
-#'   replicate published growth charts, within a tolerance.
+#' @srrstats {G5.4, G5.4c} Tests ensure that `report_units()` prints the right
+#'   messages.
 #' @srrstats {G5.2, G5.2a, G5.2b} Explicit tests of error and warning behaviour.
 test_that("The `report_units()` function works as expected", {
   family <- "ig_fet"

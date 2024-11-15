@@ -380,13 +380,15 @@ plot_bp(bp_who_gs, bp_who_gs_stata)
 ```
 
 On the whole, `zscorer` is by far the slowest R package, taking around
-`r max_median(bp_who_gs, "zscorer") / 1000` seconds to process 100,000
-inputs. Looking at the source code, this is because `zscorer::addWGSR()` hasn't
-been vectorised. Next slowest is `anthro`, which takes
-`r max_median(bp_who_gs, "anthro") / 1000` seconds to process 100,000
-inputs. This slowdown arises from `anthro` computing results in every WHO Child
-Growth standard each time `anthro::anthro_zscores()` is called, but also due to
-a slower implementation of the WHO LMS procedure than the other R packages.
+`r max_median(bp_who_gs, "zscorer") / 1000` seconds to process 15,000 inputs. We
+couldn't get it to process 100,000 inputs in good time. Looking at the source
+code, this is because `zscorer::addWGSR()` hasn't been vectorised.
+
+Next slowest is `anthro`, which takes `r max_median(bp_who_gs, "anthro") / 1000`
+seconds to process 100,000 inputs. This slowdown arises from `anthro` computing
+results in every WHO Child Growth standard each time `anthro::anthro_zscores()`
+is called, but also due to a slower implementation of the WHO LMS procedure than
+the other R packages.
 
 Next slowest is the Stata package `zanthro`, which takes around
 `r max_median(bp_who_gs_stata, "stata_zanthro") / 1000` seconds to compute
@@ -423,9 +425,9 @@ agreed with each other when provided the same inputs, except for `childsds` and
 For `childsds`, this is because the WHO Child Growth standards constrain
 z-scores in the outer tails (i.e. past 3 z-scores), as their data was more
 sparse for these extreme values. More information on this constraining procedure
-can be found in the reports referenced in the `gigs::who_gs_value2zscore()`
-documentation. It appears that `childsds` does not perform this constraining
-procedure, so conversions where `abs(z_score) > 3` are computed incorrectly:
+can be found in the reports referenced in the `gigs::who_gs` documentation. It
+appears that `childsds` does not perform this constraining procedure, so
+conversions where `abs(z_score) > 3` are computed incorrectly:
 ```{r discrepancies_who_gs}
 discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
