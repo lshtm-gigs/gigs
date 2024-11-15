@@ -61,18 +61,15 @@ implausible z-score thresholds should be applied. Default = <code>FALSE</code>.<
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class factor with the same length as <code>waz</code>, containing
 weight-for-age classifications. Its levels are <code>c("underweight_severe", "underweight", "normal", "overweight")</code> if <code>outliers = FALSE</code> (the
-default), else <code>c("underweight_severe", "underweight", "normal", "overweight", "outlier")</code>.</p>
+default), else <code>c("underweight_severe", "underweight", "normal", "overweight", "outlier")</code>.  By default, gigs will inform you this object
+contains unused factor levels. You can change this behaviour using the
+<a href="gigs_options.html">GIGS package-level option</a>
+<code>.gigs_options$handle_unused_levels</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Cut-offs for weight-for-age categories are:</p>
 <table class="table table"><tr><td><strong>Category</strong></td><td><strong>Factor level</strong></td><td><strong>Z-score bounds</strong></td></tr><tr><td>Severely underweight</td><td><code>"underweight_severe"</code></td><td><code>waz</code> =&lt; -3</td></tr><tr><td>Underweight</td><td><code>"underweight"</code></td><td>-3 &lt; <code>waz</code> =&lt; -2</td></tr><tr><td>Normal weight</td><td><code>"normal_weight"</code></td><td><code>abs(waz)</code> &lt; 2</td></tr><tr><td>Overweight</td><td><code>"overweight"</code></td><td><code>waz</code> &gt;= 2</td></tr><tr><td>Outlier</td><td><code>"outlier"</code></td><td><code>waz</code> &lt; -6 or <code>waz</code> &gt; 5</td></tr></table></div>
-    <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-<code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
-    </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p><strong>'Implausible z-score values'</strong> <em>in</em> World Health Organization (ed.)

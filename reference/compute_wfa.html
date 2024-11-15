@@ -90,7 +90,11 @@ implausible z-score thresholds should be applied. Default = <code>FALSE</code>.<
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class factor with the same length as <code>wlz</code>, containing
 wasting classifications. Its levels are <code>c("wasting_severe", "wasting", "not_wasting", "overweight")</code> if <code>outliers = FALSE</code> (the default), else
-<code>c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")</code>.</p>
+<code>c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")</code>.
+By default, gigs will inform you this object contains unused factor levels.
+You can change this behaviour using the
+<a href="gigs_options.html">GIGS package-level option</a>
+<code>.gigs_options$handle_unused_levels</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -103,9 +107,6 @@ WHO guidelines, which stipulate that recumbent length should not be
 measured after 730 days. Instead, standing height should be used.
 Implausible z-score bounds are sourced from the referenced WHO report, and
 classification cut-offs from the DHS manual.</p>
-<p>The returned factor will have unused levels if none of your observed
-data fit given categories. To drop these, you will need to use
-<code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

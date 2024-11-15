@@ -77,7 +77,10 @@ and warn you. You can customise this behaviour using the <a href="gigs_options.h
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class factor with the same length as the longest input
 vector, containing small vulnerable newborn classifications. Its levels
-are <code>c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")</code>.</p>
+are <code>c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA", "Term LGA")</code>. By default, gigs will inform you this object contains unused
+factor levels. You can change this behaviour using the
+<a href="gigs_options.html">GIGS package-level option</a>
+<code>.gigs_options$handle_unused_levels</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -88,9 +91,7 @@ appropriate-for-gestational age; LGA, large-for-gestational age.</p>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Input vectors are recycled by <code><a href="https://vctrs.r-lib.org/reference/vec_recycle.html" class="external-link">vctrs::vec_recycle_common()</a></code>, and must
-adhere to the vctrs recycling rules. The returned factor will have unused
-levels if none of your observed z-scores/centiles fit given categories. To
-drop these, you will need to use <code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar.</p>
+adhere to the vctrs recycling rules.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

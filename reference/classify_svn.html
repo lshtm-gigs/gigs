@@ -111,7 +111,10 @@ appropriate-for-gestational age; LGA, large-for-gestational age.</p>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Categorical (factor) columns produced here may contain unused factor
-levels; use <code><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels()</a></code> or similar to remove these.</p>
+levels. By default, gigs will inform you if these columns have unused
+factor levels. You can change this behaviour using the
+<a href="gigs_options.html">GIGS package-level option</a>
+<code>.gigs_options$handle_unused_levels</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
