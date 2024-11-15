@@ -17,7 +17,10 @@
 #' @returns An object of class factor with the same length as `p`, containing
 #'   size-for-GA classifications. If `severe = FALSE`, levels are `c("SGA",
 #'   "AGA", "LGA")`. If `severe = TRUE`, levels are `c("SGA(<3)", "SGA", "AGA",
-#'   "LGA")`.
+#'   "LGA")`. By default, gigs will inform you this object contains unused 
+#'   factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @details Cut-offs for size-for-gestational age categorisations are:
 #'
 #'   \tabular{lll}{
@@ -30,9 +33,8 @@
 #'   }
 #' @seealso [classify_sfga()], which wraps this function for easy use in
 #'   `data.frame`-based analytic pipelines.
-#' @note The returned factor will have unused levels if none of your observed
-#'   data fit given categories. To drop these, you will need to use
-#'   [droplevels()] or similar.
+#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
+#'   adhere to the [vctrs] recycling rules.
 #' @references
 #' WHO. **Physical status: the use and interpretation of anthropometry. Report
 #' of a WHO Expert Committee.** *World Health Organisation Technical Report
@@ -61,7 +63,10 @@ categorise_sfga <- function(p, severe = FALSE) {
 #' @returns An object of class factor with the same length as the longest input
 #'   vector, containing small vulnerable newborn classifications. Its levels
 #'   are `c("Preterm SGA", "Preterm AGA", "Preterm LGA", "Term SGA", "Term AGA",
-#'   "Term LGA")`.
+#'   "Term LGA")`. By default, gigs will inform you this object contains unused 
+#'   factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @examples
 #' p <- c(0.01, 0.07, 0.25, 0.75, 0.93, 0.99)
 #' gest_days <- c(250, 250, 250, 280, 280, 280) # 3 preterm, 3 term
@@ -87,8 +92,6 @@ categorise_sfga <- function(p, severe = FALSE) {
 #'
 #'   *Abbreviations:* SGA, small-for-gestational age; AGA,
 #'     appropriate-for-gestational age; LGA, large-for-gestational age.
-#' @note Input vectors are recycled by [vctrs::vec_recycle_common()], and must
-#'   adhere to the [vctrs] recycling rules.
 #' @references
 #' Lawn JE, Ohuma EO, Bradley E, Idueta LS, Hazel E, Okwaraji YB et al.
 #' **Small babies, big risks: global estimates of prevalence and mortality for
@@ -117,7 +120,10 @@ categorise_svn <- function(p, gest_days) {
 #'   vector, containing stunting classifications. Its levels are
 #'   `c("stunting_severe", "stunting", "not_stunting")` if `outliers =
 #'   FALSE` (the default), else `c("stunting_severe", "stunting",
-#'   "not_stunting", "outlier")`.
+#'   "not_stunting", "outlier")`. By default, gigs will inform you this object 
+#'   contains unused factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @details Cut-offs for stunting categories are:
 #'
 #'   \tabular{lll}{
@@ -137,10 +143,6 @@ categorise_svn <- function(p, gest_days) {
 #'   measured after 730 days. Instead, standing height should be used.
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
-#'
-#'   The returned factor will have unused levels if none of your observed
-#'   data fit given categories. To drop these, you will need to use
-#'   [droplevels()] or similar.
 #' @references
 #' **'Implausible z-score values'** *in* World Health Organization (ed.)
 #' *Recommendations for data collection, analysis and reporting on
@@ -168,7 +170,11 @@ categorise_stunting <- function(lhaz, outliers = FALSE) {
 #' @returns An object of class factor with the same length as `wlz`, containing
 #'   wasting classifications. Its levels are `c("wasting_severe", "wasting",
 #'   "not_wasting", "overweight")` if `outliers = FALSE` (the default), else
-#'   `c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")`.
+#'   `c("wasting_severe", "wasting", "not_wasting", "overweight", "outlier")`. 
+#'   By default, gigs will inform you this object contains unused factor levels.
+#'   You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @details Cut-offs for wasting categories are:
 #'
 #'   \tabular{lll}{
@@ -185,10 +191,6 @@ categorise_stunting <- function(lhaz, outliers = FALSE) {
 #'   measured after 730 days. Instead, standing height should be used.
 #'   Implausible z-score bounds are sourced from the referenced WHO report, and
 #'   classification cut-offs from the DHS manual.
-#'
-#'   The returned factor will have unused levels if none of your observed
-#'   data fit given categories. To drop these, you will need to use
-#'   [droplevels()] or similar.
 #' @examples
 #' wlz <- c(-5.5, -3, 0, 3, 5.5)
 #' categorise_wasting(wlz, outliers = FALSE)
@@ -212,7 +214,10 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
 #'   weight-for-age classifications. Its levels are `c("underweight_severe",
 #'   "underweight", "normal", "overweight")` if `outliers = FALSE` (the
 #'   default), else `c("underweight_severe", "underweight", "normal",
-#'   "overweight", "outlier")`.
+#'   "overweight", "outlier")`.  By default, gigs will inform you this object 
+#'   contains unused factor levels. You can change this behaviour using the 
+#'   [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`.
 #' @details Cut-offs for weight-for-age categories are:
 #'
 #'   \tabular{lll}{
@@ -229,7 +234,6 @@ categorise_wasting <- function(wlz, outliers = FALSE) {
 #' categorise_wfa(waz, outliers = FALSE)
 #' categorise_wfa(waz, outliers = TRUE)
 #' @inherit categorise_stunting references
-#' @inherit categorise_sfga note
 #' @export
 categorise_wfa <- function(waz, outliers = FALSE) {
   checkmate::qassert(outliers, rules = "B1")
@@ -247,7 +251,10 @@ categorise_wfa <- function(waz, outliers = FALSE) {
 #' @returns An object of class factor with the same length as `hcaz`, containing
 #'   head circumference-for-age classifications. Its levels are
 #'   `c("microcephaly_severe", "microcephaly", "normal_headcirc",
-#'   "macrocephaly", "macrocephaly_severe")`.
+#'   "macrocephaly", "macrocephaly_severe")`. By default, gigs will inform you
+#'   this object contains unused factor levels. You can change this behaviour 
+#'   using the [GIGS package-level option][gigs_options] 
+#'   `.gigs_options$handle_unused_levels`. 
 #' @details Cut-offs for head size categories are:
 #'
 #'   \tabular{lll}{
@@ -270,7 +277,6 @@ categorise_wfa <- function(waz, outliers = FALSE) {
 #' Accogli A, Geraldo AF, Piccolo G, Riva A, Scala M, Balagura G, et al.
 #' **Diagnostic Approach to Macrocephaly in Children**. *Frontiers in
 #' Paediatrics* 2022, *9:794069* \doi{10.3389/fped.2021.794069}
-#' @inherit categorise_sfga note
 #' @export
 categorise_headsize <- function(hcaz) {
   catch_and_throw_validate_issues(expr = {
