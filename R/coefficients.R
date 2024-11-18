@@ -8,7 +8,7 @@
 #'   (female).
 #' @param acronym A single character variable denoting which coefficient-based
 #'   growth standard is in use.
-#' @param coeff_tbls A with LMS or MSNT coefficient tables for the growth
+#' @param coeffs A with LMS or MSNT coefficient tables for the growth
 #'   standard specified by `acronym`, taken from  `gigs::who_gs_coeffs` or
 #'   `gigs::ig_nbs_coeffs`.
 #' @param coeff_names Character vector denoting the names of coefficients in
@@ -27,7 +27,8 @@
 #' @rdname retrieve_coefficients
 #' @importFrom stats setNames
 #' @noRd
-retrieve_coefficients <- function(x, sex, coeff_tbls, coeff_names) {
+retrieve_coefficients <- function(x, sex, coeffs) {
+  coeff_names <- names(coeffs[[1]])[-1]
   # Initialise empty list which will contain vectors with each coeff
   len_x <- length(x)
   empty_vec <- rep(NA_real_, len_x)
@@ -38,11 +39,11 @@ retrieve_coefficients <- function(x, sex, coeff_tbls, coeff_names) {
   # Iterate through sexes, and reassign values in out_li based on outputs from
   # stats::approx(). For loops used to avoid the environment/assignment
   # constraints of nested *apply() calls
-  xvars <- coeff_tbls[[1]][[1]]
+  xvars <- coeffs[[1]][[1]]
   is_na_sex <- is.na(sex)
-  for (chr_sex in names(coeff_tbls)) {
+  for (chr_sex in names(coeffs)) {
     curr_sex <- if (chr_sex == "male") "M" else "F"
-    tbl_coeffs <- coeff_tbls[[chr_sex]]
+    tbl_coeffs <- coeffs[[chr_sex]]
     is_curr_sex <- curr_sex == sex
     is_curr_sex[is_na_sex] <- FALSE
     for (idx in seq_along(coeff_names)) {

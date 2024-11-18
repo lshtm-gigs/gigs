@@ -6,7 +6,7 @@ description: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  dpi = 120, message = FALSE, warning = FALSE,
+  dpi = 120, message = FALSE, warning = FALSE, comment = "#>",
   dev.args = list(png = list(type = "cairo"))
 )
 

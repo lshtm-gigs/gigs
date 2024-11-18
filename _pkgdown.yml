@@ -8,6 +8,7 @@ articles:
   - gigs
   - articles/ig-nbs-body-composition
   - articles/benchmarking
+  - articles/extending-ig-nbs
 reference:
   - title: Get growth indicator classifications in `data.frame`-like objects
     contents:
@@ -57,6 +58,8 @@ reference:
     contents:
       - ig_nbs
       - ig_nbs_coeffs
+      - ig_nbs_ext
+      - ig_nbs_ext_coeffs
       - ig_png
       - ig_fet
       - who_gs

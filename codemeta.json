@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.1 (2024-06-14 ucrt)",
+  "runtimePlatform": "R version 4.3.3 (2024-02-29 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -180,6 +180,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=viridis"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "mfp",
+      "name": "mfp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mfp"
     }
   ],
   "softwareRequirements": {
@@ -256,7 +268,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2216.786KB",
+  "fileSize": "2257.837KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

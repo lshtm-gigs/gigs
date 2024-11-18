@@ -55,8 +55,7 @@ who_gs_v2z_internal <- function(y, x, sex, acronym) {
 #' @noRd
 who_gs_lms <- function(x, sex, acronym) {
   retrieve_coefficients(x = x, sex = sex,
-                        coeff_tbls = gigs::who_gs_coeffs[[acronym]],
-                        coeff_names = c("L", "M", "S"))
+                        coeffs = gigs::who_gs_coeffs[[acronym]])
 }
 
 # INTERNAL: Manipulate LMS values for the WHO Growth standards -----------------

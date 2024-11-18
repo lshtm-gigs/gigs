@@ -54,6 +54,11 @@ standard for Hadlock-based estimated fetal weight).
 \code{"wlrfga"}.
 \item Between 266 and 280 days for \code{"fmfga"}, \code{"bfpfga"}, and \code{"ffmfga"}.
 }
+\item Extended INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards
+(family = \code{"ig_nbs_ext"})
+\itemize{
+\item Between 154 and 314 days for \code{"wfga"}, \code{"lfga"}, and \code{"hcfga"}.
+}
 \item INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth Standards (family =
 \code{"ig_png"})
 \itemize{

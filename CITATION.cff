@@ -344,4 +344,19 @@ references:
     email: garnier@njit.edu
   year: '2024'
   doi: 10.32614/CRAN.package.viridis
+- type: software
+  title: mfp
+  abstract: 'mfp: Multivariable Fractional Polynomials'
+  notes: Suggests
+  url: https://github.com/georgheinze/mfp/issues/
+  repository: https://CRAN.R-project.org/package=mfp
+  authors:
+  - family-names: Ambler
+    given-names: Gareth
+    email: gareth@stats.ucl.ac.uk
+  - family-names: Benner
+    given-names: Axel
+    email: benner@dkfz.de
+  year: '2024'
+  doi: 10.32614/CRAN.package.mfp
 

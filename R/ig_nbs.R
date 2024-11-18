@@ -1,8 +1,9 @@
 # INTERNAL: INTERGROWTH-21st Newborn Size standards conversion logic -----------
 
-#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Fetal standards
+#' Convert centiles to values in the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' standards
 #' @inherit zscore2value params return
-#' @note This function will fail if given inputs of different lengths.
+#' @note This function will fail if `length(acronym) != 1`.
 #' @noRd
 ig_nbs_c2v_internal <- function(p, x, sex, acronym) {
   gest_days <- x
@@ -12,19 +13,19 @@ ig_nbs_c2v_internal <- function(p, x, sex, acronym) {
     y <- ig_nbs_bodycomp_p2v(p, gest_days, sex, acronym)
   } else {
     vpns_lim <- 231
-    # y <- rep_len(x = NA_real_, length = length(p))
     y <- ifelse(
       test = gest_days >= vpns_lim,
-      yes = ig_nbs_msnt_p2v(p, gest_days, sex, acronym),
+      yes = ig_nbs_msnt_p2v(p, gest_days, sex, gigs::ig_nbs_coeffs[[acronym]]),
       no = ig_vpns_zscore2value(z = qnorm(p), gest_days, sex, acronym)
     )
   }
   y
 }
 
-#' Convert z-scores to values in the INTERGROWTH-21<sup>st</sup> Fetal standards
+#' Convert values to centiles in the INTERGROWTH-21<sup>st</sup> Newborn Size
+#' standards
 #' @inherit zscore2value params return
-#' @note This function will fail if given inputs of different lengths.
+#' @note This function will fail if `length(acronym) != 1`.
 #' @noRd
 ig_nbs_v2c_internal <- function(y, x, sex, acronym) {
   gest_days <- x
@@ -36,7 +37,7 @@ ig_nbs_v2c_internal <- function(y, x, sex, acronym) {
     vpns_lim <- 231
     p <- ifelse(
       test = gest_days >= vpns_lim,
-      yes = ig_nbs_msnt_v2p(y, gest_days, sex, acronym),
+      yes = ig_nbs_msnt_v2p(y, gest_days, sex, gigs::ig_nbs_coeffs[[acronym]]),
       no = pnorm(ig_vpns_value2zscore(y, gest_days, sex, acronym))
     )
   }
@@ -75,9 +76,8 @@ ig_nbs_v2c_internal <- function(y, x, sex, acronym) {
 #' INTERGROWTH-21st Project.** *Lancet* 2014, **384(9946):857-68.**
 #' \doi{10.1016/S0140-6736(14)60932-6}
 #' @noRd
-ig_nbs_msnt <- function(gest_days, sex, acronym) {
-  retrieve_coefficients(gest_days, sex, gigs::ig_nbs_coeffs[[acronym]],
-                        c("mu", "sigma", "nu", "tau"))
+ig_nbs_msnt <- function(gest_days, sex, coeffs) {
+  retrieve_coefficients(x = gest_days, sex = sex, coeffs = coeffs)
 }
 
 #' @rdname ig_nbs_msnt
@@ -87,8 +87,8 @@ ig_nbs_msnt <- function(gest_days, sex, acronym) {
 #'   each elementwise combination of `y`, `gest_days`, `sex`, and `acronym`. The
 #'   units of this vector will depend on each value in `acronym`.
 #' @noRd
-ig_nbs_msnt_p2v <- function(p, gest_days, sex, acronym) {
-  msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
+ig_nbs_msnt_p2v <- function(p, gest_days, sex, coeffs) {
+  msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, coeffs = coeffs)
   y <- rep_len(x = NA_real_, length.out = length(p))
   # Remove NA p/mu/sigma/nu/tau values, or qST3C() will fail
   lgl_complete_msnt <- !is.na(p) & stats::complete.cases(as.data.frame(msnt))
@@ -110,14 +110,14 @@ ig_nbs_msnt_p2v <- function(p, gest_days, sex, acronym) {
 #' @returns Numeric vector the same length as `y` with centiles for each
 #'   elementwise combination of `y`, `gest_days`, `sex`, and `acronym`.
 #' @noRd
-ig_nbs_msnt_v2p <- function(y, gest_days, sex, acronym) {
-  msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, acronym = acronym)
+ig_nbs_msnt_v2p <- function(y, gest_days, sex, coeffs) {
+  msnt <- ig_nbs_msnt(gest_days = gest_days, sex = sex, coeffs = coeffs)
   p <- rep_len(x = NA_real_, length.out = length(y))
   # Remove NA y/mu/sigma/nu/tau values, or pST3() will fail
   lgl_complete_msnt <- !is.na(y) & stats::complete.cases(as.data.frame(msnt))
   msnt_no_na <- lapply(X = msnt, \(coeff) coeff[lgl_complete_msnt])
   if (any(lgl_complete_msnt)) {
-    p[lgl_complete_msnt] <- gamlss.dist::pST3C(q =y[lgl_complete_msnt],
+    p[lgl_complete_msnt] <- gamlss.dist::pST3C(q = y[lgl_complete_msnt],
                                                mu = msnt_no_na[[1]],
                                                sigma = msnt_no_na[[2]],
                                                nu = msnt_no_na[[3]],
@@ -290,5 +290,5 @@ ig_nbs_bodycomp_v2p <- function(y, gest_days, sex, acronym) {
 #'   this script are provided with vectors that have already been validated.
 #' @srrstats {G2.13, G2.14, G2.14a, G2.14b, G2.16} All internal functions in
 #'   this script are provided with vectors that have already checked for
-#' missing/undefined/out-of-bounds data.
+#'   missing/undefined/out-of-bounds data.
 NULL

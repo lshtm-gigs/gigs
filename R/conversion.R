@@ -39,6 +39,9 @@
 #'     - Between 168 and 300 days for `"wfga"`, `"lfga"`, `"hcfga"`, and
 #'       `"wlrfga"`.
 #'     - Between 266 and 280 days for `"fmfga"`, `"bfpfga"`, and `"ffmfga"`.
+#'   * Extended INTERGROWTH-21<sup>st</sup> Newborn Size Standards
+#'     (family = `"ig_nbs_ext"`)
+#'     - Between 154 and 314 days for `"wfga"`, `"lfga"`, and `"hcfga"`.
 #'   * INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards (family =
 #'     `"ig_png"`)
 #'     - Between 27 and 64 weeks for `"wfa"`, `"lfa"`, and `"hcfa"`.
@@ -87,7 +90,7 @@ value2zscore <- function(y, x, sex = NULL, family, acronym) {
                             family = family, acronym = acronym)
   fn <- retrieve_internal_v2_fn(family)
   out <- do.call(what = fn, args = inputs[!names(inputs) == "family"])
-  if (family == "ig_nbs") out <- qnorm(out)
+  if (family %in% c("ig_nbs", "ig_nbs_ext")) out <- qnorm(out)
   out
 }
 
@@ -98,7 +101,7 @@ value2centile <- function(y, x, sex = NULL, family, acronym) {
                             family = family, acronym = acronym)
   fn <- retrieve_internal_v2_fn(family)
   out <- do.call(what = fn, args = inputs[!names(inputs) == "family"])
-  if (family != "ig_nbs") out <- pnorm(out)
+  if (!family %in% c("ig_nbs", "ig_nbs_ext")) out <- pnorm(out)
   out
 }
 
@@ -123,7 +126,7 @@ zscore2value <- function(z, x, sex = NULL, family, acronym) {
   inputs <- validate_inputs(z = z, x = x, sex = sex, family = family,
                             acronym = acronym, yzp_name = "z")
   fn <- retrieve_internal_2v_fn(family)
-  if (family == "ig_nbs") {
+  if (family %in% c("ig_nbs", "ig_nbs_ext")) {
     names(inputs)[1] <- "p"
     inputs[[1]] <- pnorm(inputs[[1]])
   }
@@ -136,7 +139,7 @@ centile2value <- function(p, x, sex = NULL, family, acronym) {
   inputs <- validate_inputs(p = p, x = x, sex = sex, family = family,
                             acronym = acronym, yzp_name = "p")
   fn <- retrieve_internal_2v_fn(family)
-  if (family != "ig_nbs") {
+  if (!family %in% c("ig_nbs", "ig_nbs_ext")) {
     names(inputs)[1] <- "z"
     inputs[[1]] <- qnorm(inputs[[1]])
   }
@@ -231,19 +234,24 @@ report_units <- function(family, acronym) {
 #'   Will be one of `c("ig_fet", "ig_nbs", "ig_png", "who_gs")`.
 #' @returns An internal conversion function from gigs.
 #' @rdname retrieve_internal_conv_fns
+#' @importFrom utils getFromNamespace
 #' @noRd
 retrieve_internal_v2_fn <- function(family) {
-  string <- paste0(c(family, switch(family, ig_nbs = "v2c", "v2z"), "internal"),
+  string <- paste0(c(family,
+                     switch(family, ig_nbs = "v2c", ig_nbs_ext = "v2c", "v2z"),
+                     "internal"),
                    collapse = "_")
-  get(string, envir = asNamespace("gigs"))
+  getFromNamespace(string, ns = "gigs")
 }
 
 #' @rdname retrieve_internal_conv_fns
 #' @noRd
 retrieve_internal_2v_fn <- function(family) {
-  string <- paste0(c(family, switch(family, ig_nbs = "c2v", "z2v"), "internal"),
+  string <- paste0(c(family,
+                     switch(family, ig_nbs = "c2v", ig_nbs_ext = "c2v", "z2v"),
+                     "internal"),
                    collapse = "_")
-  get(string, envir = asNamespace("gigs"))
+  getFromNamespace(string, ns = "gigs")
 }
 
 

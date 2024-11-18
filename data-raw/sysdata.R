@@ -1,6 +1,6 @@
 # GIGS internal family names - used for checks + error/warning messages --------
 
-gigs_family_names <- c("who_gs", "ig_nbs", "ig_png", "ig_fet")
+gigs_family_names <- c("who_gs", "ig_nbs", "ig_png", "ig_fet", "ig_nbs_ext")
 
 # Normative body composition standards -----------------------------------------
 

@@ -14,12 +14,13 @@
     -   Added the INTERGROWTH-21st standard for estimated fetal weight based on the Hadlock formula. The is available through `value2zscore()` and friends provided that `family = "ig_fet"` and `acronym = "hefwfga"`.
     -   Added a new package-level option - `"handle_unused_levels"`. This option matters when you're categorising growth data, but want gigs to drop unused levels in your newly-made factors.
         -   By default, `.gigs_options$handle_unused_levels` is `"keep_warn"`. So gigs will tell you that there are unused factor levels, but not drop them. Change it to `"drop_warn"` or `"drop_silent"`to drop the unused factor levels automatically.
+    -   Added extended versions of the INTERGROWTH-21<sup>st</sup> Newborn Size standards for weight-for-GA, length-for-GA, and head circumference-for-GA. These extended versions have a GA range from 154 days (22<sup>+0</sup> to 44<sup>+6</sup> weeks). You can access these extended standards by setting `family = "ig_nbs_ext"` in GIGS conversion functions.
     -   You can now set all gigs input-checking options at once with `gigs_input_options_set()`.
 -   **FIXES**:
     -   Z-scoring based on GIGS-recommended standards now accounts for measurements from different individuals, whereas in earlier versions the z-scoring logic treated data as if it all came from the same individual.
     -   `.gigs_options` is now actively exported by gigs and available to end-users.
 -   **INTERNAL/DOCS CHANGES**:
-    -   Errors, warnings, and messages from GIGS are now handled with `rlang::abort()` and friends, and look much prettier.
+    -   Errors, warnings, and messages from GIGS are now handled with `cli::cli_abort()` and friends, and look much prettier.
     -   Updates to the 'Getting Started' vignette and 'Benchmarking' article.
     -   Other non-breaking changes to documentation and test suite.
 

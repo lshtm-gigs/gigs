@@ -46,7 +46,8 @@ Suggests:
     ggsci,
     bench,
     cowplot,
-    viridis
+    viridis,
+    mfp
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

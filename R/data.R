@@ -60,6 +60,46 @@ NULL
 #' @keywords data
 NULL
 
+#' INTERGROWTH-21<sup>st</sup> Extended Newborn Size Standards (including very
+#' preterm) growth curve data
+#'
+#' @name ig_nbs_ext
+#' @note
+#' The tables in this package are combined versions of the tables published by
+#' Villar *et al.* (2014) and Villar *et al.* (2016), so they cover `168` to
+#' `300` days' gestational age. They have been extrapolated by Simon Parker
+#' (with guidance from Eric Ohuma) to include a wider range of gestational ages,
+#' and should be applied carefully by researchers. More detail on the
+#' extrapolation process is available in an article on the package website.
+#' @inherit ig_nbs description source references
+#' @examples
+#' names(gigs::ig_nbs_ext)
+#' head(gigs::ig_nbs_ext$wfga$male$zscores)
+#' @docType data
+#' @keywords data
+NULL
+
+#' INTERGROWTH-21<sup>st</sup> Extended Newborn Size Standards GAMLSS
+#' coefficients
+#'
+#' @name ig_nbs_ext_coeffs
+#' @description
+#' A set of nested lists containing mu, sigma, nu and tau values across
+#' gestational ages for either sex, for the extended INTERGROWTH-21<sup>st</sup>
+#' weight/length/head circumference-for-gestational age standards in newborns.
+#' The lists are ordered by acronym, then sex.
+#' @inherit ig_nbs_coeffs references source
+#' @note The mu and sigma coefficients have been extrapolated by Simon Parker
+#' (with guidance from Eric Ohuma) to include a wider range of gestational ages,
+#' and should be applied carefully by researchers. More detail on the
+#' extrapolation process is available in an article on the package website.
+#' @examples
+#' names(gigs::ig_nbs_ext_coeffs)
+#' head(gigs::ig_nbs_ext_coeffs$wfga$male)
+#' @docType data
+#' @keywords data
+NULL
+
 #' INTERGROWTH-21<sup>st</sup> Postnatal Growth Standards growth curve data
 #'
 #' @name ig_png
