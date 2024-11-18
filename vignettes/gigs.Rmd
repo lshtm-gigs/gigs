@@ -14,9 +14,9 @@ vignette: >
 ```{r knitr_opts, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 intergrowth21st <- if (knitr::is_html_output()) {
-  "INTERGROWTH-21<sup>st</sup>"
+  knitr::asis_output(x = "INTERGROWTH-21<sup>st</sup>")
 } else {
-  "INTERGROWTH-21\textsuperscript{st}"
+  knitr::asis_output(x = "INTERGROWTH-21\textsupercript{st}")
 }
 ```
 

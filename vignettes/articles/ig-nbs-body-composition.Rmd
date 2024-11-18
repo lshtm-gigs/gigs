@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, size = "tiny", 
+knitr::opts_chunk$set(echo = TRUE, size = "tiny", comment = "#>",
                       dev.args = list(png = list(type = "cairo")))
 library(gigs)
 fmfga_male <- tibble::as_tibble(gigs::ig_nbs$fmfga$male$centiles)
