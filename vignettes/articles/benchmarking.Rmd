@@ -30,9 +30,9 @@ load(file = file.path("benchmarking.rda"))
 ```
 
 # Rationale
-This short article describes the performance of gigs relative to a
+This short article describes the performance of **gigs** relative to a
 non-exhaustive group of R and non-R packages which implement international
-growth standards which are also found in gigs.
+growth standards which are also found in **gigs**.
 
 ```{r pkgnames, echo = FALSE}
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
@@ -91,17 +91,21 @@ half <- if (knitr::is_html_output()) {
 ```
 
 Other R packages can be used to analyse growth data with international
-standards, but have limitations which are not present in gigs. There are also
-software packages external to R which implement these standards. The table
+standards, but have limitations which are not present in **gigs**. There are
+also software packages external to R which implement these standards. The table
 below describes these packages, and to what extent they have implemented
 functions that let users convert anthropometric measurements to
-z-scores/centiles in each set of standards implemented in gigs - the WHO Child
-Growth standards, `r intergrowth21st` Newborn Size standards (including Very
-Preterm), and the `r intergrowth21st` Postnatal Growth standards for preterm
-infants. A tick (`r yes`) indicates that a package contains functions for all
-growth standards within a set, a cross (`r no`) indicates that a package has no
-functions for a set of growth standards, and a warning sign (`r half`) indicates
-that some standards in a set are implemented, but not others.
+z-scores/centiles in each set of standards implemented in **gigs** - the WHO
+Child Growth standards, `r intergrowth21st` Newborn Size standards (including
+Very Preterm), and the `r intergrowth21st` Postnatal Growth standards for
+preterm infants. No other packages (except **gigs** for Stata) includes the
+extended versions of the `r intergrowth21st` Newborn Size standards (incl. Very
+Preterm).
+
+A tick (`r yes`) indicates that all possible standards are
+included in a package, a red cross (`r no`) indicates that these standards are
+completely missing, and a warning sign (`r half`) indicates that some of these
+standards are implemented but not others.
 
 ```{r arrows, echo = FALSE}
 ig21st <- if (knitr::is_html_output()) {
@@ -135,7 +139,8 @@ library(gigs)
 ```
 
 In this vignette, we perform benchmark performance in each a growth standard
-from each set of growth standards implemented in gigs. These are the:
+from each set of growth standards implemented in **gigs**, excluding the
+extended `r intergrowth21st` Newborn Size standards. These are the:
 
 * WHO child growth standards (0-5 years)
 * `r intergrowth21st` Newborn Size standards
@@ -144,8 +149,8 @@ from each set of growth standards implemented in gigs. These are the:
 
 The benchmarks utilise pre-generated datasets for growth standard. The z-scores,
 `x` variable and sexes for each row are generated (pseudo)randomly. Because the
-`gigs` test suite validates its functions against published growth curve data
-from the WHO and the `r intergrowth21st` Project, we use `gigs` to generate
+**gigs** test suite validates its functions against published growth curve data
+from the WHO and the `r intergrowth21st` Project, we use **gigs** to generate
 expected measurements for each observation. This dataset can then be used to
 compare speeds for each package. These datasets are generated with the following
 function:
@@ -236,12 +241,13 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
 
 We're using the `{bench}` package throughout this vignette, specifically the
 `bench::press()` function, which lets us compare function scaling by iterating
-through increasing amounts of observations.
+through increasing numbers of observations.
 
 # WHO Growth Standards
-The World Health Organisation (WHO) Child Growth Standards are included in gigs
-with the various `who_gs_*`conversion functions. These standards are implemented
-in a variety of other packages.
+The World Health Organisation (WHO) Child Growth Standards describe postnatal
+growth in multiple anthropometric measures from birth (0 days) to up to 1856
+days for specific standards (e.g. weight-for-age), and are also implemented in a
+variety of other packages.
 
 ## Set up benchmark dataset
 
@@ -335,8 +341,10 @@ haven::write_dta(
 ```
 
 In Stata, the commands are run inside a do-file which utilises the
-[benchmark](https://www.github.com/mcaceresb/stata-benchmark) package for Stata. This code essentially does the same as
-`bench::press()`, but for the packages we're testing in Stata.
+[benchmark](https://www.github.com/mcaceresb/stata-benchmark) package for Stata.
+This code essentially does the same as `bench::press()`, but for the packages
+we're testing in Stata.
+
 ```{stata stata_bench_code_who_gs, eval = FALSE}
 // This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
@@ -379,23 +387,23 @@ rm(gigs_0_4_0, zanthro_1_0_2, lens, n_inputs, input_len)
 plot_bp(bp_who_gs, bp_who_gs_stata)
 ```
 
-On the whole, `zscorer` is by far the slowest R package, taking around
+On the whole, **zscorer** is by far the slowest R package, taking around
 `r max_median(bp_who_gs, "zscorer") / 1000` seconds to process 15,000 inputs. We
 couldn't get it to process 100,000 inputs in good time. Looking at the source
 code, this is because `zscorer::addWGSR()` hasn't been vectorised.
 
-Next slowest is `anthro`, which takes `r max_median(bp_who_gs, "anthro") / 1000`
-seconds to process 100,000 inputs. This slowdown arises from `anthro` computing
-results in every WHO Child Growth standard each time `anthro::anthro_zscores()`
-is called, but also due to a slower implementation of the WHO LMS procedure than
-the other R packages.
+Next slowest is **anthro**, which takes
+`r max_median(bp_who_gs, "anthro") / 1000` seconds to process 100,000 inputs.
+This slowdown arises from **anthro** computing results in every WHO Child Growth
+standard each time `anthro::anthro_zscores()` is called, but also due to a
+slower implementation of the WHO LMS procedure than the other R packages.
 
-Next slowest is the Stata package `zanthro`, which takes around
+Next slowest is the Stata package **zanthro**, which takes around
 `r max_median(bp_who_gs_stata, "stata_zanthro") / 1000` seconds to compute
-results in a single WHO standard. About 4 times faster than `zanthro` is `gigs`
-for Stata, which scales more efficiently than `zanthro` and takes around
-`r max_median(bp_who_gs_stata, "stata_gigs") / 1000` seconds to convert 100,000
-measurements to z-scores.
+results in a single WHO standard. About 4 times faster than **zanthro** is
+**gigs** for Stata, which scales more efficiently than **zanthro** and takes
+around `r max_median(bp_who_gs_stata, "stata_gigs") / 1000` seconds to convert
+100,000 measurements to z-scores.
 
 Focussing on the faster R implementations reveals some interesting patterns:
 
@@ -405,29 +413,36 @@ bp_who_gs |>
   plot_bp()
 ```
 
-The `sitar` package is far and away the fastest here, taking
-~`r max_median(bp_who_gs, "sitar")` ms to process 100,000 inputs. This is because
-it uses the monthly LMS coefficients to calculate its z-scores. Whilst this is
-quicker, it does induce some imprecision when compared to the other packages.
+The **sitar** package is far and away the fastest here, taking
+~`r max_median(bp_who_gs, "sitar")` ms to process 100,000 inputs. This is
+because it uses the monthly LMS coefficients to calculate its z-scores. Whilst
+this is quicker, it does induce some imprecision when compared to the other
+packages.
 
 Next fastest was the `growthstandards` package at
-~`r max_median(bp_who_gs, "gs")` ms for 100,000 inputs, followed by `gigs`
-(~`r max_median(bp_who_gs, "gigs")` ms), `childsds`
-(~`r max_median(bp_who_gs, "childsds")` ms), and lastly `AGD`
-(~`r max_median(bp_who_gs, "AGD")` ms). Interestingly, `AGD` starts out
-much slower than the other 'fast' packages, but may scale more efficiently.
+~`r max_median(bp_who_gs, "gs")` ms for 100,000 inputs, followed by **gigs**
+(~`r max_median(bp_who_gs, "gigs")` ms), **childsds**
+(~`r max_median(bp_who_gs, "childsds")` ms), and lastly **AGD**
+(~`r max_median(bp_who_gs, "AGD")` ms). Interestingly, **AGD** starts out
+much slower than the other 'fast' packages, but may scale more efficiently as
+you reach ~250,000 or more inputs.
+
+Additionally, **gigs** is faster that **growthstandards** up to ~30,000 inputs
+but ends up slower at 100,000 inputs. This may be due to the input checks
+performed in **gigs**, which scale worse than the conversion code itself.
 
 ## Package comparisons: numerical consistency
 In our testing of the WHO standards, we found that the tested packages mostly
-agreed with each other when provided the same inputs, except for `childsds` and
-`sitar`.
+agreed with each other when provided the same inputs, except for **childsds**
+and **sitar**.
 
-For `childsds`, this is because the WHO Child Growth standards constrain
+For **childsds**, this is because the WHO Child Growth standards constrain
 z-scores in the outer tails (i.e. past 3 z-scores), as their data was more
 sparse for these extreme values. More information on this constraining procedure
 can be found in the reports referenced in the `gigs::who_gs` documentation. It
-appears that `childsds` does not perform this constraining procedure, so
+appears that **childsds** does not perform this constraining procedure, so
 conversions where `abs(z_score) > 3` are computed incorrectly:
+
 ```{r discrepancies_who_gs}
 discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
@@ -449,18 +464,19 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
   )
 ```
 
-When we look at these z-scores, you can see that both `growthstandards` and
-`gigs` correctly apply the constraining procedure; `childsds` does not. The
-`AGD` package constrains z-scores if the `tail.adjust` option in `AGD::y2z()` is
-specified, and from looking at the `anthro` source code, they also apply the
+When we look at these z-scores, you can see that both **growthstandards** and
+**gigs** correctly apply the constraining procedure; **childsds** does not.
+**AGD** constrains z-scores if the `tail.adjust` option in `AGD::y2z()` is
+specified, and from looking at the **anthro** source code, they also apply the
 constraining procedure.
+
 ```{r discrepancies_who_gs_kable, echo = FALSE}
 knitr::kable(discrepancies, align = "ccccc")
 ```
 
-Discrepancies between `sitar` and `gigs` arise from `sitar` relying on monthly
+Discrepancies between **sitar** and **gigs** arise from **sitar** relying on monthly
 LMS values for the WHO Growth Standards, instead of the daily tables. This means
-for the same day, `sitar` and `gigs` will use slightly different lambda/mu/sigma
+for the same day, **sitar** and **gigs** will use slightly different lambda/mu/sigma
 values, and so compute different z-scores for the same measurements.
 
 # INTERGROWTH-21<sup>st</sup> Newborn Size standards
@@ -544,7 +560,7 @@ plot_bp(bp_ig_nbs, bp_ig_nbs_stata)
 
 For this set of growth standards, the Stata implementation for GIGS is the
 slowest at ~`r max_median(bp_ig_nbs_stata, "stata_gigs")` ms. The
-`growthstandards` and `gigs` packages are the fastest at
+`growthstandards` and **gigs** packages are the fastest at
 ~`r max_median(bp_ig_nbs, "gs")` and ~`r max_median(bp_ig_nbs, "gigs")` ms,
 respectively.
 
@@ -649,7 +665,7 @@ plot_bp(bp_ig_png, bp_ig_png_stata)
 
 For the `r intergrowth21st` Postnatal Growth standards, the Stata implementation
 for GIGS is the slowest at ~`r max_median(bp_ig_png_stata, "stata_gigs")` ms.
-The `gigs` and `growthstandards` packages are the fastest at
+The **gigs** and `growthstandards` packages are the fastest at
 ~`r max_median(bp_ig_png, "gs")` and ~`r max_median(bp_ig_png, "gigs")` ms,
 respectively.
 
@@ -657,7 +673,7 @@ respectively.
 The `r ig21st` Fetal standards are implemented in gigs for R and Stata, and in
 the `growthstandards` and `intergrowth` packages (though more fully in
 `intergrowth`  than in `growthstandards`, and both are missing some standards
-which are included in `gigs`). Let's make a new dataset, `ds_ig_fet`, which we
+which are included in **gigs**). Let's make a new dataset, `ds_ig_fet`, which we
 will use to benchmark a conversion in a fetal growth standard common to all
 three packages:
 
@@ -737,7 +753,7 @@ plot_bp(bp_ig_fet, bp_ig_fet_stata)
 
 For the `r intergrowth21st` Fetal standard for occipito-frontal diameter, the
 GIGS implementation for Stata is the slowest to analyse 100,000 inputs at
-~`r max_median(bp_ig_fet_stata, "stata_gigs")` ms. The R `gigs` package is the
+~`r max_median(bp_ig_fet_stata, "stata_gigs")` ms. The R **gigs** package is the
 fastest at ~`r max_median(bp_ig_fet, "gigs")` ms, followed by `growthstandards`
 at ~`r max_median(bp_ig_fet, "gs")`, and then `intergrowth` at
 ~`r max_median(bp_ig_fet, "intergrowth")`.
@@ -775,11 +791,11 @@ max_len_bench <- list(
 | `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["stata_gigs"]]`    | `r max_len_bench[[2]][["stata_gigs"]]` | `r max_len_bench[[3]][["stata_gigs"]]` | `r max_len_bench[[4]][["stata_gigs"]]`  |
 | `r zanthro`     | Stata    | `r max_len_bench[[1]][["stata_zanthro"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
 
-Note: `zscorer` is NA because we couldn't time it for 100,000 inputs (it takes
+Note: **zscorer** is NA because we couldn't time it for 100,000 inputs (it takes
 too long).
 
 ## Why GIGS?
-Overall, though the `gigs` package for R isn't always the fastest, it is only
+Overall, though the **gigs** package for R isn't always the fastest, it is only
 some milliseconds off, and offers:
 
   * A full complement of international growth standards (i.e. no
@@ -788,15 +804,16 @@ some milliseconds off, and offers:
   * Growth categorisation functions
 
 Some users may want to apply growth references in their work - that's fine, and
-other R packages (e.g. `childsds` in R and `zanthro` in Stata) offer reference
-charts which may be of use to end-users. However, for international growth
-standards, we believe we offer the best combination of speed and range of
+other R packages (e.g. **childsds** in R and **zanthro** in Stata) offer
+reference charts which may be of use to end-users. However, for international
+growth standards, we believe we offer the best combination of speed and range of
 standards.
 
-In R, `gigs` also offers input checking via its options, and will tell you if
-you're providing non-workable data. We think this outweighs a couple of
-milliseconds' slowdown. In Stata, where `gigs` consistently runs faster and
-offers more growth standards than `zanthro`, `gigs` is the obvious choice.
+In R, **gigs** also offers input checking via its options, and will tell you if
+you're providing non-workable data. We think this benefit outweighs some
+milliseconds-worth of slowdown. In Stata, where **gigs** consistently runs
+faster and offers more growth standards than **zanthro**, **gigs** is the
+obvious choice.
 
 # Session information
 ```{r session_info1, echo = TRUE, eval = FALSE}

@@ -188,6 +188,17 @@ project:
   | `fmfga`  | fat mass-for-GA               | kg    | 266 to 294 days |
 
   </details>
+* `ig_nbs_ext` - `r intergrowth21st` Extended Newborn Size standards (including
+  very preterm)
+  <details><summary>Component standards</summary>
+
+  | Acronym  | Description                   | Unit  | `x` range       |
+  |----------|-------------------------------|-------|-----------------|
+  | `wfga`   | weight-for-GA                 | kg    | 154 to 314 days |
+  | `lfga`   | length-for-GA                 | cm    | 154 to 314 days |
+  | `hcfga`  | head circumference-for-GA     | cm    | 154 to 314 days |
+
+  </details>
 * `ig_png` - `r intergrowth21st` Postnatal Growth of Preterm Infants standards
   <details><summary>Component standards</summary>
 
@@ -385,14 +396,18 @@ load("vignettes/articles/benchmarking.rda")
 ```
 
 Other R packages can be used to analyse growth data with international
-standards, but have limitations which are not present in *gigs*. There are also
-software packages external to R which implement these standards. The table
+standards, but have limitations which are not present in **gigs**. There are
+also software packages external to R which implement these standards. The table
 below describes these packages, and to what extent they have implemented
 functions that let users convert anthropometric measurements to
 z-scores/centiles in each set of standards implemented in **gigs** - the WHO 
 Child Growth standards, `r intergrowth21st` Newborn Size standards (including 
 Very Preterm), and the `r intergrowth21st` Postnatal Growth standards for 
-preterm infants. A tick (`r yes`) indicates that all possible standards are 
+preterm infants. No other packages (except **gigs** for Stata) includes the
+extended versions of the `r intergrowth21st` Newborn Size standards (incl. Very
+Preterm).
+
+A tick (`r yes`) indicates that all possible standards are
 included in a package, a red cross (`r no`) indicates that these standards are 
 completely missing, and a warning sign (`r half`) indicates that some of these
 standards are implemented but not others.
