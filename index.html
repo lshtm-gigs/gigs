@@ -8,8 +8,8 @@
 <title>Assess Fetal, Newborn, and Child Growth with International Standards • gigs</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Assess Fetal, Newborn, and Child Growth with International Standards">
 <meta name="description" content="Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.">
 <meta property="og:description" content="Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.">
@@ -245,6 +245,40 @@ Component standards
 </table></details>
 </li>
 <li>
+<code>ig_nbs_ext</code> - INTERGROWTH-21<sup>st</sup> Extended Newborn Size standards (including very preterm)
+<details><summary>
+Component standards
+</summary><table class="table">
+<thead><tr class="header">
+<th>Acronym</th>
+<th>Description</th>
+<th>Unit</th>
+<th>
+<code>x</code> range</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>wfga</code></td>
+<td>weight-for-GA</td>
+<td>kg</td>
+<td>154 to 314 days</td>
+</tr>
+<tr class="even">
+<td><code>lfga</code></td>
+<td>length-for-GA</td>
+<td>cm</td>
+<td>154 to 314 days</td>
+</tr>
+<tr class="odd">
+<td><code>hcfga</code></td>
+<td>head circumference-for-GA</td>
+<td>cm</td>
+<td>154 to 314 days</td>
+</tr>
+</tbody>
+</table></details>
+</li>
+<li>
 <code>ig_png</code> - INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards
 <details><summary>
 Component standards
@@ -290,10 +324,10 @@ Component standards
 Component standards
 </summary><table class="table">
 <colgroup>
-<col width="25%">
-<col width="25%">
-<col width="25%">
-<col width="25%">
+<col width="11%">
+<col width="64%">
+<col width="6%">
+<col width="17%">
 </colgroup>
 <thead><tr class="header">
 <th>Acronym</th>
@@ -607,15 +641,15 @@ Component standards
 <h1 id="other-packages">Other packages<a class="anchor" aria-label="anchor" href="#other-packages"></a>
 </h1>
 <p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in <em>gigs</em>. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in <strong>gigs</strong> - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
-<col width="14%">
-<col width="14%">
-<col width="14%">
-<col width="14%">
-<col width="14%">
-<col width="14%">
-<col width="14%">
+<col width="39%">
+<col width="4%">
+<col width="7%">
+<col width="11%">
+<col width="11%">
+<col width="12%">
+<col width="13%">
 </colgroup>
 <thead><tr class="header">
 <th>Software</th>
@@ -724,12 +758,12 @@ Component standards
 <p>We have benchmarked some of these implementations against each other for conversion of values to z-scores in the WHO Child Growth Standards and different sets of INTERGROWTH-21<sup>st</sup> standards. The table below shows relative speed of each software package when processing 100,000 inputs. The code used to generate these timings can be seen online in the <strong>gigs</strong> benchmarking <a href="https://lshtm-gigs.github.io/gigs/articles/benchmarking.html">article</a>.</p>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="16%">
-<col width="16%">
-<col width="16%">
-<col width="16%">
-<col width="16%">
-<col width="16%">
+<col width="41%">
+<col width="4%">
+<col width="10%">
+<col width="14%">
+<col width="14%">
+<col width="15%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Software</th>

@@ -8,8 +8,8 @@
 <title>Benchmarking gigs against other software packages • gigs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Benchmarking gigs against other software packages">
 <meta name="description" content="A comparison of gigs' performance against other growth analysis packages.">
 <meta property="og:description" content="A comparison of gigs' performance against other growth analysis packages.">
@@ -66,9 +66,10 @@
 <div class="section level2">
 <h2 id="rationale">Rationale<a class="anchor" aria-label="anchor" href="#rationale"></a>
 </h2>
-<p>This short article describes the performance of gigs relative to a
-non-exhaustive group of R and non-R packages which implement
-international growth standards which are also found in gigs.</p>
+<p>This short article describes the performance of <strong>gigs</strong>
+relative to a non-exhaustive group of R and non-R packages which
+implement international growth standards which are also found in
+<strong>gigs</strong>.</p>
 <table class="table">
 <colgroup>
 <col width="45%">
@@ -141,25 +142,28 @@ international growth standards which are also found in gigs.</p>
 different packages. This short article will compare the speed of each
 package from 1 to 100000 inputs, checking how fast each package can
 convert weight values to z-scores in different growth standards.</p>
-<p>We performed these benchmarks on R version 4.4.1, using a Windows 10
+<p>We performed these benchmarks on R version 4.3.3, using a Windows 10
 system with a Ryzen 7 3700X processor and 16GB of DDR4 RAM. The Stata
 benchmarks were run in Stata 18.0 (revision 15 May 2023) on the same
 system, using the <a href="https://github.com/mcaceresb/stata-benchmark" class="external-link">benchmark</a>
 package for Stata.</p>
 <p>Other R packages can be used to analyse growth data with
 international standards, but have limitations which are not present in
-gigs. There are also software packages external to R which implement
-these standards. The table below describes these packages, and to what
-extent they have implemented functions that let users convert
-anthropometric measurements to z-scores/centiles in each set of
-standards implemented in gigs - the WHO Child Growth standards,
-INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very
-Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
-for preterm infants. A tick (✅) indicates that a package contains
-functions for all growth standards within a set, a cross (❌) indicates
-that a package has no functions for a set of growth standards, and a
-warning sign (⚠️) indicates that some standards in a set are
-implemented, but not others.</p>
+<strong>gigs</strong>. There are also software packages external to R
+which implement these standards. The table below describes these
+packages, and to what extent they have implemented functions that let
+users convert anthropometric measurements to z-scores/centiles in each
+set of standards implemented in <strong>gigs</strong> - the WHO Child
+Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards
+(including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal
+Growth standards for preterm infants. No other packages (except
+<strong>gigs</strong> for Stata) includes the extended versions of the
+INTERGROWTH-21<sup>st</sup> Newborn Size standards (incl. Very
+Preterm).</p>
+<p>A tick (✅) indicates that all possible standards are included in a
+package, a red cross (❌) indicates that these standards are completely
+missing, and a warning sign (⚠️) indicates that some of these standards
+are implemented but not others.</p>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -283,8 +287,9 @@ implemented, but not others.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></span><span class="op">)</span></span></code></pre></div>
 <p>In this vignette, we perform benchmark performance in each a growth
-standard from each set of growth standards implemented in gigs. These
-are the:</p>
+standard from each set of growth standards implemented in
+<strong>gigs</strong>, excluding the extended
+INTERGROWTH-21<sup>st</sup> Newborn Size standards. These are the:</p>
 <ul>
 <li>WHO child growth standards (0-5 years)</li>
 <li>INTERGROWTH-21<sup>st</sup> Newborn Size standards</li>
@@ -293,12 +298,12 @@ are the:</p>
 </ul>
 <p>The benchmarks utilise pre-generated datasets for growth standard.
 The z-scores, <code>x</code> variable and sexes for each row are
-generated (pseudo)randomly. Because the <code>gigs</code> test suite
+generated (pseudo)randomly. Because the <strong>gigs</strong> test suite
 validates its functions against published growth curve data from the WHO
-and the INTERGROWTH-21<sup>st</sup> Project, we use <code>gigs</code> to
-generate expected measurements for each observation. This dataset can
-then be used to compare speeds for each package. These datasets are
-generated with the following function:</p>
+and the INTERGROWTH-21<sup>st</sup> Project, we use
+<strong>gigs</strong> to generate expected measurements for each
+observation. This dataset can then be used to compare speeds for each
+package. These datasets are generated with the following function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">benchmark_dataset</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">family</span>, <span class="va">acronym</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">family</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-internal.html" class="external-link">asNamespace</a></span><span class="op">(</span><span class="st">"gigs"</span><span class="op">)</span><span class="op">)</span></span>
@@ -336,16 +341,16 @@ generated with the following function:</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We’re using the <a href="https://bench.r-lib.org/" class="external-link">bench</a> package throughout this
 vignette, specifically the <code><a href="http://bench.r-lib.org/reference/press.html" class="external-link">bench::press()</a></code> function, which
-lets us compare function scaling by iterating through increasing amounts
+lets us compare function scaling by iterating through increasing numbers
 of observations.</p>
 </div>
 <div class="section level2">
 <h2 id="who-growth-standards">WHO Growth Standards<a class="anchor" aria-label="anchor" href="#who-growth-standards"></a>
 </h2>
-<p>The World Health Organisation (WHO) Child Growth Standards are
-included in gigs with the various <code>who_gs_*</code>conversion
-functions. These standards are implemented in a variety of other
-packages.</p>
+<p>The World Health Organisation (WHO) Child Growth Standards describe
+postnatal growth in multiple anthropometric measures from birth (0 days)
+to up to 1856 days for specific standards (e.g. weight-for-age), and are
+also implemented in a variety of other packages.</p>
 <div class="section level3">
 <h3 id="set-up-benchmark-dataset">Set up benchmark dataset<a class="anchor" aria-label="anchor" href="#set-up-benchmark-dataset"></a>
 </h3>
@@ -356,17 +361,17 @@ packages.</p>
 <span>                               family <span class="op">=</span> <span class="st">"who_gs"</span>,</span>
 <span>                               acronym <span class="op">=</span> <span class="va">ac_who_gs</span><span class="op">)</span></span></code></pre></div>
 <p>The first 10 rows of this dataset look like this:</p>
-<pre><code><span><span class="co">##              z         x sex family acronym         y</span></span>
-<span><span class="co">## 1   0.17839158  542.3057   M who_gs     wfa 11.119034</span></span>
-<span><span class="co">## 2   1.08068286  436.8223   F who_gs     wfa 10.829792</span></span>
-<span><span class="co">## 3  -0.70269294 1070.1117   F who_gs     wfa 12.524220</span></span>
-<span><span class="co">## 4   0.09501730    6.0000   M who_gs     wfa  3.502423</span></span>
-<span><span class="co">## 5  -0.44829268 1465.8223   F who_gs     wfa 15.135840</span></span>
-<span><span class="co">## 6  -0.35747447 1527.0000   M who_gs     wfa 15.958518</span></span>
-<span><span class="co">## 7   1.16612927  431.3057   M who_gs     wfa 11.512052</span></span>
-<span><span class="co">## 8  -0.08746512  653.3057   F who_gs     wfa 10.832094</span></span>
-<span><span class="co">## 9  -0.47685189  948.1117   M who_gs     wfa 12.765554</span></span>
-<span><span class="co">## 10  0.80015420  581.3677   M who_gs     wfa 12.206283</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;              z         x sex family acronym         y</span></span>
+<span><span class="co">#&gt; 1   0.17839158  542.3057   M who_gs     wfa 11.119034</span></span>
+<span><span class="co">#&gt; 2   1.08068286  436.8223   F who_gs     wfa 10.829792</span></span>
+<span><span class="co">#&gt; 3  -0.70269294 1070.1117   F who_gs     wfa 12.524220</span></span>
+<span><span class="co">#&gt; 4   0.09501730    6.0000   M who_gs     wfa  3.502423</span></span>
+<span><span class="co">#&gt; 5  -0.44829268 1465.8223   F who_gs     wfa 15.135840</span></span>
+<span><span class="co">#&gt; 6  -0.35747447 1527.0000   M who_gs     wfa 15.958518</span></span>
+<span><span class="co">#&gt; 7   1.16612927  431.3057   M who_gs     wfa 11.512052</span></span>
+<span><span class="co">#&gt; 8  -0.08746512  653.3057   F who_gs     wfa 10.832094</span></span>
+<span><span class="co">#&gt; 9  -0.47685189  948.1117   M who_gs     wfa 12.765554</span></span>
+<span><span class="co">#&gt; 10  0.80015420  581.3677   M who_gs     wfa 12.206283</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="timing">Timing<a class="anchor" aria-label="anchor" href="#timing"></a>
@@ -474,49 +479,56 @@ Stata.</p>
 <h3 id="package-comparisons-timing">Package comparisons: timing<a class="anchor" aria-label="anchor" href="#package-comparisons-timing"></a>
 </h3>
 <p><img src="benchmarking_files/figure-html/plot_timings_who_gs-1.png" alt="A line graph of median time taken against no. of inputs for different software packages. The results can be read about below." width="875"></p>
-<p>On the whole, <code>zscorer</code> is by far the slowest R package,
-taking around 13.705 seconds to process 15,000 inputs. We couldn’t get
-it to process 100,000 inputs in good time. Looking at the source code,
-this is because <code><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">zscorer::addWGSR()</a></code> hasn’t been
+<p>On the whole, <strong>zscorer</strong> is by far the slowest R
+package, taking around 14.129 seconds to process 15,000 inputs. We
+couldn’t get it to process 100,000 inputs in good time. Looking at the
+source code, this is because <code><a href="https://rdrr.io/pkg/zscorer/man/addWGSR.html" class="external-link">zscorer::addWGSR()</a></code> hasn’t been
 vectorised.</p>
-<p>Next slowest is <code>anthro</code>, which takes 2.211 seconds to
-process 100,000 inputs. This slowdown arises from <code>anthro</code>
-computing results in every WHO Child Growth standard each time
-<code><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro::anthro_zscores()</a></code> is called, but also due to a
-slower implementation of the WHO LMS procedure than the other R
-packages.</p>
-<p>Next slowest is the Stata package <code>zanthro</code>, which takes
-around 2.046 seconds to compute results in a single WHO standard. About
-4 times faster than <code>zanthro</code> is <code>gigs</code> for Stata,
-which scales more efficiently than <code>zanthro</code> and takes around
-0.405 seconds to convert 100,000 measurements to z-scores.</p>
+<p>Next slowest is <strong>anthro</strong>, which takes 1.974 seconds to
+process 100,000 inputs. This slowdown arises from
+<strong>anthro</strong> computing results in every WHO Child Growth
+standard each time <code><a href="https://rdrr.io/pkg/anthro/man/anthro_zscores.html" class="external-link">anthro::anthro_zscores()</a></code> is called, but
+also due to a slower implementation of the WHO LMS procedure than the
+other R packages.</p>
+<p>Next slowest is the Stata package <strong>zanthro</strong>, which
+takes around 2.046 seconds to compute results in a single WHO standard.
+About 4 times faster than <strong>zanthro</strong> is
+<strong>gigs</strong> for Stata, which scales more efficiently than
+<strong>zanthro</strong> and takes around 0.405 seconds to convert
+100,000 measurements to z-scores.</p>
 <p>Focussing on the faster R implementations reveals some interesting
 patterns:</p>
 <p><img src="benchmarking_files/figure-html/plot_timings_who_gs_faster-1.png" alt="A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below." width="875"></p>
-<p>The <code>sitar</code> package is far and away the fastest here,
-taking ~46 ms to process 100,000 inputs. This is because it uses the
+<p>The <strong>sitar</strong> package is far and away the fastest here,
+taking ~45 ms to process 100,000 inputs. This is because it uses the
 monthly LMS coefficients to calculate its z-scores. Whilst this is
 quicker, it does induce some imprecision when compared to the other
 packages.</p>
-<p>Next fastest was the <code>growthstandards</code> package at ~88 ms
-for 100,000 inputs, followed by <code>gigs</code> (~100 ms),
-<code>childsds</code> (~125 ms), and lastly <code>AGD</code> (~119 ms).
-Interestingly, <code>AGD</code> starts out much slower than the other
-‘fast’ packages, but may scale more efficiently.</p>
+<p>Next fastest was the <code>growthstandards</code> package at ~90 ms
+for 100,000 inputs, followed by <strong>gigs</strong> (~92 ms),
+<strong>childsds</strong> (~118 ms), and lastly <strong>AGD</strong>
+(~120 ms). Interestingly, <strong>AGD</strong> starts out much slower
+than the other ‘fast’ packages, but may scale more efficiently as you
+reach ~250,000 or more inputs.</p>
+<p>Additionally, <strong>gigs</strong> is faster that
+<strong>growthstandards</strong> up to ~30,000 inputs but ends up slower
+at 100,000 inputs. This may be due to the input checks performed in
+<strong>gigs</strong>, which scale worse than the conversion code
+itself.</p>
 </div>
 <div class="section level3">
 <h3 id="package-comparisons-numerical-consistency">Package comparisons: numerical consistency<a class="anchor" aria-label="anchor" href="#package-comparisons-numerical-consistency"></a>
 </h3>
 <p>In our testing of the WHO standards, we found that the tested
 packages mostly agreed with each other when provided the same inputs,
-except for <code>childsds</code> and <code>sitar</code>.</p>
-<p>For <code>childsds</code>, this is because the WHO Child Growth
+except for <strong>childsds</strong> and <strong>sitar</strong>.</p>
+<p>For <strong>childsds</strong>, this is because the WHO Child Growth
 standards constrain z-scores in the outer tails (i.e. past 3 z-scores),
 as their data was more sparse for these extreme values. More information
 on this constraining procedure can be found in the reports referenced in
 the <code><a href="../reference/who_gs.html">gigs::who_gs</a></code> documentation. It appears that
-<code>childsds</code> does not perform this constraining procedure, so
-conversions where <code>abs(z_score) &gt; 3</code> are computed
+<strong>childsds</strong> does not perform this constraining procedure,
+so conversions where <code>abs(z_score) &gt; 3</code> are computed
 incorrectly:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">discrepancies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.03</span>, <span class="op">-</span><span class="fl">2.97</span>, <span class="fl">2.97</span>, <span class="fl">3.03</span><span class="op">)</span>,</span>
@@ -538,12 +550,12 @@ incorrectly:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>When we look at these z-scores, you can see that both
-<code>growthstandards</code> and <code>gigs</code> correctly apply the
-constraining procedure; <code>childsds</code> does not. The
-<code>AGD</code> package constrains z-scores if the
-<code>tail.adjust</code> option in <code><a href="https://stefvanbuuren.name/AGD/reference/y2z.html" class="external-link">AGD::y2z()</a></code> is specified,
-and from looking at the <code>anthro</code> source code, they also apply
-the constraining procedure.</p>
+<strong>growthstandards</strong> and <strong>gigs</strong> correctly
+apply the constraining procedure; <strong>childsds</strong> does not.
+<strong>AGD</strong> constrains z-scores if the <code>tail.adjust</code>
+option in <code><a href="https://stefvanbuuren.name/AGD/reference/y2z.html" class="external-link">AGD::y2z()</a></code> is specified, and from looking at the
+<strong>anthro</strong> source code, they also apply the constraining
+procedure.</p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="9%">
@@ -602,12 +614,12 @@ the constraining procedure.</p>
 </tr>
 </tbody>
 </table>
-<p>Discrepancies between <code>sitar</code> and <code>gigs</code> arise
-from <code>sitar</code> relying on monthly LMS values for the WHO Growth
-Standards, instead of the daily tables. This means for the same day,
-<code>sitar</code> and <code>gigs</code> will use slightly different
-lambda/mu/sigma values, and so compute different z-scores for the same
-measurements.</p>
+<p>Discrepancies between <strong>sitar</strong> and
+<strong>gigs</strong> arise from <strong>sitar</strong> relying on
+monthly LMS values for the WHO Growth Standards, instead of the daily
+tables. This means for the same day, <strong>sitar</strong> and
+<strong>gigs</strong> will use slightly different lambda/mu/sigma
+values, and so compute different z-scores for the same measurements.</p>
 </div>
 </div>
 <div class="section level2">
@@ -626,17 +638,17 @@ functions:</p>
 <p>The first 10 rows of this dataset look like this:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_ig_nbs</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##              z        x sex family acronym         y</span></span>
-<span><span class="co">## 1   0.17839158 199.6505   M ig_nbs    wfga 1.1849768</span></span>
-<span><span class="co">## 2   1.08068286 213.1492   M ig_nbs    wfga 1.7851534</span></span>
-<span><span class="co">## 3  -0.70269294 174.0968   F ig_nbs    wfga 0.5907529</span></span>
-<span><span class="co">## 4   0.09501730 236.1492   F ig_nbs    wfga 2.0900137</span></span>
-<span><span class="co">## 5  -0.44829268 232.1492   M ig_nbs    wfga 1.8175155</span></span>
-<span><span class="co">## 6  -0.35747447 216.7849   M ig_nbs    wfga 1.4387923</span></span>
-<span><span class="co">## 7   1.16612927 231.6505   F ig_nbs    wfga 2.3235513</span></span>
-<span><span class="co">## 8  -0.08746512 188.6505   M ig_nbs    wfga 0.9236040</span></span>
-<span><span class="co">## 9  -0.47685189 188.7849   F ig_nbs    wfga 0.8110397</span></span>
-<span><span class="co">## 10  0.80015420 276.7849   F ig_nbs    wfga 3.5293549</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;              z        x sex family acronym         y</span></span>
+<span><span class="co">#&gt; 1   0.17839158 199.6505   M ig_nbs    wfga 1.1849768</span></span>
+<span><span class="co">#&gt; 2   1.08068286 213.1492   M ig_nbs    wfga 1.7851534</span></span>
+<span><span class="co">#&gt; 3  -0.70269294 174.0968   F ig_nbs    wfga 0.5907529</span></span>
+<span><span class="co">#&gt; 4   0.09501730 236.1492   F ig_nbs    wfga 2.0900137</span></span>
+<span><span class="co">#&gt; 5  -0.44829268 232.1492   M ig_nbs    wfga 1.8175155</span></span>
+<span><span class="co">#&gt; 6  -0.35747447 216.7849   M ig_nbs    wfga 1.4387923</span></span>
+<span><span class="co">#&gt; 7   1.16612927 231.6505   F ig_nbs    wfga 2.3235513</span></span>
+<span><span class="co">#&gt; 8  -0.08746512 188.6505   M ig_nbs    wfga 0.9236040</span></span>
+<span><span class="co">#&gt; 9  -0.47685189 188.7849   F ig_nbs    wfga 0.8110397</span></span>
+<span><span class="co">#&gt; 10  0.80015420 276.7849   F ig_nbs    wfga 3.5293549</span></span></code></pre>
 <div class="section level3">
 <h3 id="timing-1">Timing<a class="anchor" aria-label="anchor" href="#timing-1"></a>
 </h3>
@@ -688,7 +700,7 @@ functions:</p>
 <p><img src="benchmarking_files/figure-html/plot_timings_ig_nbs-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below." width="875"></p>
 <p>For this set of growth standards, the Stata implementation for GIGS
 is the slowest at ~471 ms. The <code>growthstandards</code> and
-<code>gigs</code> packages are the fastest at ~72 and ~80 ms,
+<strong>gigs</strong> packages are the fastest at ~75 and ~85 ms,
 respectively.</p>
 </div>
 </div>
@@ -714,16 +726,16 @@ standards.</p>
 <span><span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu">growthstandards</span><span class="fu">::</span><span class="fu"><a href="https://ki-tools.github.io/growthstandards/reference/igb_value2zscore.html" class="external-link">igb_value2centile</a></span><span class="op">(</span>val <span class="op">=</span> <span class="va">weight_kg</span>, gagebrth <span class="op">=</span> <span class="va">gestage</span>,</span>
 <span>                                         sex <span class="op">=</span> <span class="st">"Male"</span>, var <span class="op">=</span> <span class="st">"wtkg"</span><span class="op">)</span></span>
 <span><span class="fu">waldo</span><span class="fu">::</span><span class="fu"><a href="https://waldo.r-lib.org/reference/compare.html" class="external-link">compare</a></span><span class="op">(</span><span class="va">gigs</span>, <span class="va">gs</span> <span class="op">/</span> <span class="fl">100</span>, x_arg <span class="op">=</span> <span class="st">"gigs"</span>, y_arg <span class="op">=</span> <span class="st">"growthstandards"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     gigs   | growthstandards    </span></span>
-<span><span class="co">## [1] <span style="color: #555555;">0.2536</span> | <span style="color: #555555;">0.2536</span>          [1]</span></span>
-<span><span class="co">## [2] <span style="color: #00BB00;">0.2448</span> - <span style="color: #00BB00;">0.2536</span>          [2]</span></span>
-<span><span class="co">## [3] <span style="color: #555555;">0.2361</span> | <span style="color: #555555;">0.2361</span>          [3]</span></span>
-<span><span class="co">## [4] <span style="color: #00BB00;">0.2278</span> - <span style="color: #00BB00;">0.2196</span>          [4]</span></span>
-<span><span class="co">## [5] <span style="color: #555555;">0.2196</span> | <span style="color: #555555;">0.2196</span>          [5]</span></span>
-<span><span class="co">## [6] <span style="color: #00BB00;">0.2117</span> - <span style="color: #00BB00;">0.2196</span>          [6]</span></span>
-<span><span class="co">## [7] <span style="color: #555555;">0.2040</span> | <span style="color: #555555;">0.2040</span>          [7]</span></span>
-<span><span class="co">## [8] <span style="color: #00BB00;">0.1966</span> - <span style="color: #00BB00;">0.1894</span>          [8]</span></span>
-<span><span class="co">## [9] <span style="color: #555555;">0.1894</span> | <span style="color: #555555;">0.1894</span>          [9]</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;     gigs   | growthstandards    </span></span>
+<span><span class="co">#&gt; [1] <span style="color: #555555;">0.2536</span> | <span style="color: #555555;">0.2536</span>          [1]</span></span>
+<span><span class="co">#&gt; [2] <span style="color: #00BB00;">0.2448</span> - <span style="color: #00BB00;">0.2536</span>          [2]</span></span>
+<span><span class="co">#&gt; [3] <span style="color: #555555;">0.2361</span> | <span style="color: #555555;">0.2361</span>          [3]</span></span>
+<span><span class="co">#&gt; [4] <span style="color: #00BB00;">0.2278</span> - <span style="color: #00BB00;">0.2196</span>          [4]</span></span>
+<span><span class="co">#&gt; [5] <span style="color: #555555;">0.2196</span> | <span style="color: #555555;">0.2196</span>          [5]</span></span>
+<span><span class="co">#&gt; [6] <span style="color: #00BB00;">0.2117</span> - <span style="color: #00BB00;">0.2196</span>          [6]</span></span>
+<span><span class="co">#&gt; [7] <span style="color: #555555;">0.2040</span> | <span style="color: #555555;">0.2040</span>          [7]</span></span>
+<span><span class="co">#&gt; [8] <span style="color: #00BB00;">0.1966</span> - <span style="color: #00BB00;">0.1894</span>          [8]</span></span>
+<span><span class="co">#&gt; [9] <span style="color: #555555;">0.1894</span> | <span style="color: #555555;">0.1894</span>          [9]</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -741,17 +753,17 @@ benchmark these functions:</p>
 <p>The first 10 rows of this dataset look like this:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_ig_png</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##              z        x sex family acronym         y</span></span>
-<span><span class="co">## 1   0.17839158 58.40312   F ig_png     wfa 6.5562438</span></span>
-<span><span class="co">## 2   1.08068286 32.61149   F ig_png     wfa 1.8816314</span></span>
-<span><span class="co">## 3  -0.70269294 40.05188   M ig_png     wfa 3.1214845</span></span>
-<span><span class="co">## 4   0.09501730 32.00000   F ig_png     wfa 1.4795115</span></span>
-<span><span class="co">## 5  -0.44829268 28.00000   M ig_png     wfa 0.7593354</span></span>
-<span><span class="co">## 6  -0.35747447 45.00000   M ig_png     wfa 4.3490091</span></span>
-<span><span class="co">## 7   1.16612927 47.00000   F ig_png     wfa 5.3082323</span></span>
-<span><span class="co">## 8  -0.08746512 47.18337   M ig_png     wfa 4.9659712</span></span>
-<span><span class="co">## 9  -0.47685189 32.05188   M ig_png     wfa 1.4834561</span></span>
-<span><span class="co">## 10  0.80015420 27.40312   M ig_png     wfa 0.8630054</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;              z        x sex family acronym         y</span></span>
+<span><span class="co">#&gt; 1   0.17839158 58.40312   F ig_png     wfa 6.5562438</span></span>
+<span><span class="co">#&gt; 2   1.08068286 32.61149   F ig_png     wfa 1.8816314</span></span>
+<span><span class="co">#&gt; 3  -0.70269294 40.05188   M ig_png     wfa 3.1214845</span></span>
+<span><span class="co">#&gt; 4   0.09501730 32.00000   F ig_png     wfa 1.4795115</span></span>
+<span><span class="co">#&gt; 5  -0.44829268 28.00000   M ig_png     wfa 0.7593354</span></span>
+<span><span class="co">#&gt; 6  -0.35747447 45.00000   M ig_png     wfa 4.3490091</span></span>
+<span><span class="co">#&gt; 7   1.16612927 47.00000   F ig_png     wfa 5.3082323</span></span>
+<span><span class="co">#&gt; 8  -0.08746512 47.18337   M ig_png     wfa 4.9659712</span></span>
+<span><span class="co">#&gt; 9  -0.47685189 32.05188   M ig_png     wfa 1.4834561</span></span>
+<span><span class="co">#&gt; 10  0.80015420 27.40312   M ig_png     wfa 0.8630054</span></span></code></pre>
 <div class="section level3">
 <h3 id="timing-2">Timing<a class="anchor" aria-label="anchor" href="#timing-2"></a>
 </h3>
@@ -802,8 +814,8 @@ benchmark these functions:</p>
 <p><img src="benchmarking_files/figure-html/plot_timings_ig_png-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below." width="875"></p>
 <p>For the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards, the
 Stata implementation for GIGS is the slowest at ~164 ms. The
-<code>gigs</code> and <code>growthstandards</code> packages are the
-fastest at ~43 and ~20 ms, respectively.</p>
+<strong>gigs</strong> and <code>growthstandards</code> packages are the
+fastest at ~43 and ~23 ms, respectively.</p>
 </div>
 </div>
 </div>
@@ -814,7 +826,7 @@ fastest at ~43 and ~20 ms, respectively.</p>
 and Stata, and in the <code>growthstandards</code> and
 <code>intergrowth</code> packages (though more fully in
 <code>intergrowth</code> than in <code>growthstandards</code>, and both
-are missing some standards which are included in <code>gigs</code>).
+are missing some standards which are included in <strong>gigs</strong>).
 Let’s make a new dataset, <code>ds_ig_fet</code>, which we will use to
 benchmark a conversion in a fetal growth standard common to all three
 packages:</p>
@@ -876,10 +888,10 @@ packages:</p>
 <p><img src="benchmarking_files/figure-html/plot_timings_ig_fet-1.png" alt="A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below." width="875"></p>
 <p>For the INTERGROWTH-21<sup>st</sup> Fetal standard for
 occipito-frontal diameter, the GIGS implementation for Stata is the
-slowest to analyse 100,000 inputs at ~93 ms. The R <code>gigs</code>
-package is the fastest at ~8 ms, followed by
-<code>growthstandards</code> at ~10, and then <code>intergrowth</code>
-at ~16.</p>
+slowest to analyse 100,000 inputs at ~93 ms. The R <strong>gigs</strong>
+package is the fastest at ~11 ms, followed by
+<code>growthstandards</code> at ~13, and then <code>intergrowth</code>
+at ~17.</p>
 </div>
 </div>
 </div>
@@ -910,15 +922,15 @@ at ~16.</p>
 <tr class="odd">
 <td><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
 <td>R</td>
-<td>100</td>
-<td>80</td>
-<td>20</td>
-<td>8</td>
+<td>92</td>
+<td>85</td>
+<td>23</td>
+<td>11</td>
 </tr>
 <tr class="even">
 <td><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
 <td>R</td>
-<td>2211</td>
+<td>1974</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -926,7 +938,7 @@ at ~16.</p>
 <tr class="odd">
 <td><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
 <td>R</td>
-<td>119</td>
+<td>120</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -934,7 +946,7 @@ at ~16.</p>
 <tr class="even">
 <td><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
 <td>R</td>
-<td>125</td>
+<td>118</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -942,10 +954,10 @@ at ~16.</p>
 <tr class="odd">
 <td><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
 <td>R</td>
-<td>88</td>
-<td>72</td>
+<td>90</td>
+<td>75</td>
 <td>43</td>
-<td>10</td>
+<td>13</td>
 </tr>
 <tr class="even">
 <td><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
@@ -953,12 +965,12 @@ at ~16.</p>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
-<td>16</td>
+<td>17</td>
 </tr>
 <tr class="odd">
 <td><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
 <td>R</td>
-<td>46</td>
+<td>45</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -993,14 +1005,14 @@ at ~16.</p>
 </tr>
 </tbody>
 </table>
-<p>Note: <code>zscorer</code> is NA because we couldn’t time it for
+<p>Note: <strong>zscorer</strong> is NA because we couldn’t time it for
 100,000 inputs (it takes too long).</p>
 </div>
 <div class="section level3">
 <h3 id="why-gigs">Why GIGS?<a class="anchor" aria-label="anchor" href="#why-gigs"></a>
 </h3>
-<p>Overall, though the <code>gigs</code> package for R isn’t always the
-fastest, it is only some milliseconds off, and offers:</p>
+<p>Overall, though the <strong>gigs</strong> package for R isn’t always
+the fastest, it is only some milliseconds off, and offers:</p>
 <ul>
 <li>A full complement of international growth standards (i.e. no
 half-implemented sets of growth standards)</li>
@@ -1008,17 +1020,17 @@ half-implemented sets of growth standards)</li>
 <li>Growth categorisation functions</li>
 </ul>
 <p>Some users may want to apply growth references in their work - that’s
-fine, and other R packages (e.g. <code>childsds</code> in R and
-<code>zanthro</code> in Stata) offer reference charts which may be of
-use to end-users. However, for international growth standards, we
+fine, and other R packages (e.g. <strong>childsds</strong> in R and
+<strong>zanthro</strong> in Stata) offer reference charts which may be
+of use to end-users. However, for international growth standards, we
 believe we offer the best combination of speed and range of
 standards.</p>
-<p>In R, <code>gigs</code> also offers input checking via its options,
-and will tell you if you’re providing non-workable data. We think this
-outweighs a couple of milliseconds’ slowdown. In Stata, where
-<code>gigs</code> consistently runs faster and offers more growth
-standards than <code>zanthro</code>, <code>gigs</code> is the obvious
-choice.</p>
+<p>In R, <strong>gigs</strong> also offers input checking via its
+options, and will tell you if you’re providing non-workable data. We
+think this benefit outweighs some milliseconds-worth of slowdown. In
+Stata, where <strong>gigs</strong> consistently runs faster and offers
+more growth standards than <strong>zanthro</strong>,
+<strong>gigs</strong> is the obvious choice.</p>
 </div>
 </div>
 <div class="section level2">
@@ -1026,64 +1038,58 @@ choice.</p>
 </h2>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14 ucrt)</span></span>
-<span><span class="co">## Platform: x86_64-w64-mingw32/x64</span></span>
-<span><span class="co">## Running under: Windows 8 x64 (build 9200)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## locale:</span></span>
-<span><span class="co">## [1] LC_COLLATE=English_United Kingdom.1252 </span></span>
-<span><span class="co">## [2] LC_CTYPE=English_United Kingdom.1252   </span></span>
-<span><span class="co">## [3] LC_MONETARY=English_United Kingdom.1252</span></span>
-<span><span class="co">## [4] LC_NUMERIC=C                           </span></span>
-<span><span class="co">## [5] LC_TIME=English_United Kingdom.1252    </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## time zone: Europe/London</span></span>
-<span><span class="co">## tzcode source: internal</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## attached base packages:</span></span>
-<span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] gigs_0.4.1.9000   withr_3.0.1       dplyr_1.1.4       testthat_3.2.1.1 </span></span>
-<span><span class="co">##  [5] rmarkdown_2.28    knitr_1.48        vctrs_0.6.5       rlang_1.1.4      </span></span>
-<span><span class="co">##  [9] gamlss.dist_6.1-1 checkmate_2.3.2  </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] tidyselect_1.2.1       farver_2.1.2           anthro_1.0.1          </span></span>
-<span><span class="co">##  [4] fastmap_1.2.0          promises_1.3.0         growthstandards_0.1.6 </span></span>
-<span><span class="co">##  [7] digest_0.6.37          timechange_0.3.0       mime_0.12             </span></span>
-<span><span class="co">## [10] lifecycle_1.0.4        waldo_0.5.3            ellipsis_0.3.2        </span></span>
-<span><span class="co">## [13] survival_3.6-4         processx_3.8.4         magrittr_2.0.3        </span></span>
-<span><span class="co">## [16] compiler_4.4.1         tools_4.4.1            utf8_1.2.4            </span></span>
-<span><span class="co">## [19] data.table_1.16.0      labeling_0.4.3         childsds_0.8.0        </span></span>
-<span><span class="co">## [22] htmlwidgets_1.6.4      pkgbuild_1.4.4         bench_1.1.3           </span></span>
-<span><span class="co">## [25] pkgload_1.4.0          miniUI_0.1.1.1         purrr_1.0.2           </span></span>
-<span><span class="co">## [28] desc_1.4.3             grid_4.4.1             fansi_1.0.6           </span></span>
-<span><span class="co">## [31] diffobj_0.3.5          urlchecker_1.0.1       profvis_0.4.0         </span></span>
-<span><span class="co">## [34] future_1.34.0          xtable_1.8-4           colorspace_2.1-1      </span></span>
-<span><span class="co">## [37] ggplot2_3.5.1          globals_0.16.3         scales_1.3.0          </span></span>
-<span><span class="co">## [40] MASS_7.3-60.2          intergrowth_0.0.0.9001 cli_3.6.3             </span></span>
-<span><span class="co">## [43] survey_4.4-2           crayon_1.5.3           generics_0.1.3        </span></span>
-<span><span class="co">## [46] remotes_2.5.0          rstudioapi_0.16.0      sessioninfo_1.2.2     </span></span>
-<span><span class="co">## [49] DBI_1.2.3              cachem_1.1.0           profmem_0.6.0         </span></span>
-<span><span class="co">## [52] stringr_1.5.1          splines_4.4.1          parallel_4.4.1        </span></span>
-<span><span class="co">## [55] mitools_2.4            devtools_2.4.5         Matrix_1.7-0          </span></span>
-<span><span class="co">## [58] callr_3.7.6            gamlss_5.4-22          listenv_0.9.1         </span></span>
-<span><span class="co">## [61] sitar_1.4.0            tidyr_1.3.1            parallelly_1.38.0     </span></span>
-<span><span class="co">## [64] glue_1.8.0             rematch2_2.1.2         zscorer_0.3.1         </span></span>
-<span><span class="co">## [67] codetools_0.2-20       ps_1.8.0               stringi_1.8.4         </span></span>
-<span><span class="co">## [70] lubridate_1.9.3        rsample_1.2.1          gtable_0.3.5          </span></span>
-<span><span class="co">## [73] later_1.3.2            munsell_0.5.1          tibble_3.2.1          </span></span>
-<span><span class="co">## [76] pillar_1.9.0           furrr_0.3.1            htmltools_0.5.8.1     </span></span>
-<span><span class="co">## [79] brio_1.1.5             gamlss.data_6.0-6      R6_2.5.1              </span></span>
-<span><span class="co">## [82] rprojroot_2.0.4        evaluate_1.0.0         shiny_1.9.1           </span></span>
-<span><span class="co">## [85] lattice_0.22-6         backports_1.5.0        memoise_2.0.1         </span></span>
-<span><span class="co">## [88] httpuv_1.6.15          Rcpp_1.0.13            AGD_0.45.0            </span></span>
-<span><span class="co">## [91] nlme_3.1-164           xfun_0.47              fs_1.6.4              </span></span>
-<span><span class="co">## [94] forcats_1.0.0          usethis_3.0.0          pkgconfig_2.0.3</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; R version 4.3.3 (2024-02-29 ucrt)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: Windows 8 x64 (build 9200)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt; [1] LC_COLLATE=English_United Kingdom.1252 </span></span>
+<span><span class="co">#&gt; [2] LC_CTYPE=English_United Kingdom.1252   </span></span>
+<span><span class="co">#&gt; [3] LC_MONETARY=English_United Kingdom.1252</span></span>
+<span><span class="co">#&gt; [4] LC_NUMERIC=C                           </span></span>
+<span><span class="co">#&gt; [5] LC_TIME=English_United Kingdom.1252    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time zone: Europe/London</span></span>
+<span><span class="co">#&gt; tzcode source: internal</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt;  [1] gigs_0.4.1.9002   mfp_1.5.4.1       survival_3.5-8    viridis_0.6.5    </span></span>
+<span><span class="co">#&gt;  [5] viridisLite_0.4.2 cowplot_1.1.3     bench_1.1.3       ggsci_3.2.0      </span></span>
+<span><span class="co">#&gt;  [9] withr_3.0.1       units_0.8-5       dplyr_1.1.4       testthat_3.2.1.1 </span></span>
+<span><span class="co">#&gt; [13] rmarkdown_2.28    knitr_1.48        cli_3.6.3         vctrs_0.6.5      </span></span>
+<span><span class="co">#&gt; [17] rlang_1.1.4       gamlss.dist_6.1-1 checkmate_2.3.2  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] tidyselect_1.2.1       farver_2.1.2           anthro_1.0.1          </span></span>
+<span><span class="co">#&gt;  [4] fastmap_1.1.1          promises_1.2.1         growthstandards_0.1.6 </span></span>
+<span><span class="co">#&gt;  [7] digest_0.6.34          timechange_0.3.0       mime_0.12             </span></span>
+<span><span class="co">#&gt; [10] lifecycle_1.0.4        magrittr_2.0.3         compiler_4.3.3        </span></span>
+<span><span class="co">#&gt; [13] tools_4.3.3            utf8_1.2.4             labeling_0.4.3        </span></span>
+<span><span class="co">#&gt; [16] childsds_0.8.0         purrr_1.0.2            numDeriv_2016.8-1.1   </span></span>
+<span><span class="co">#&gt; [19] grid_4.3.3             fansi_1.0.6            xtable_1.8-4          </span></span>
+<span><span class="co">#&gt; [22] colorspace_2.1-1       future_1.34.0          ggplot2_3.5.1         </span></span>
+<span><span class="co">#&gt; [25] globals_0.16.3         scales_1.3.0           MASS_7.3-60.0.1       </span></span>
+<span><span class="co">#&gt; [28] intergrowth_0.0.0.9001 survey_4.4-2           generics_0.1.3        </span></span>
+<span><span class="co">#&gt; [31] DBI_1.2.3              profmem_0.6.0          stringr_1.5.1         </span></span>
+<span><span class="co">#&gt; [34] splines_4.3.3          parallel_4.3.3         mitools_2.4           </span></span>
+<span><span class="co">#&gt; [37] Matrix_1.6-5           gamlss_5.4-22          listenv_0.9.1         </span></span>
+<span><span class="co">#&gt; [40] sitar_1.4.0            tidyr_1.3.1            glue_1.7.0            </span></span>
+<span><span class="co">#&gt; [43] parallelly_1.38.0      zscorer_0.3.1          codetools_0.2-19      </span></span>
+<span><span class="co">#&gt; [46] stringi_1.8.4          lubridate_1.9.3        rsample_1.2.1         </span></span>
+<span><span class="co">#&gt; [49] gtable_0.3.5           later_1.3.2            munsell_0.5.1         </span></span>
+<span><span class="co">#&gt; [52] tibble_3.2.1           pillar_1.9.0           furrr_0.3.1           </span></span>
+<span><span class="co">#&gt; [55] htmltools_0.5.8.1      brio_1.1.5             gamlss.data_6.0-6     </span></span>
+<span><span class="co">#&gt; [58] R6_2.5.1               evaluate_1.0.0         shiny_1.9.1           </span></span>
+<span><span class="co">#&gt; [61] lattice_0.22-5         backports_1.5.0        httpuv_1.6.13         </span></span>
+<span><span class="co">#&gt; [64] Rcpp_1.0.13            AGD_0.45.0             gridExtra_2.3         </span></span>
+<span><span class="co">#&gt; [67] nlme_3.1-164           xfun_0.48              forcats_1.0.0         </span></span>
+<span><span class="co">#&gt; [70] pkgconfig_2.0.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -8,8 +8,8 @@
 <title>INTERGROWTH-21st Body Composition Equations • gigs</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="INTERGROWTH-21st Body Composition Equations">
 <meta name="description" content="Deriving the INTERGROWTH-21&lt;sup&gt;st&lt;/sup&gt; body composition equations.
 ">
@@ -81,14 +81,14 @@ formatted. Consider the standard for fat mass for gestational age
 (<code>"fmfga"</code>) in females:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fmfga_female</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
-<span><span class="co">##   gest_days   P03   P10   P50   P90   P97</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>       266    29   123   324   525   619</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>       273    62   156   357   558   652</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>       280    96   190   391   592   686</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>       287   127   221   422   623   717</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>       294   150   244   445   646   740</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 6</span></span></span>
+<span><span class="co">#&gt;   gest_days   P03   P10   P50   P90   P97</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       266    29   123   324   525   619</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       273    62   156   357   558   652</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       280    96   190   391   592   686</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       287   127   221   422   623   717</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>       294   150   244   445   646   740</span></span></code></pre>
 <div class="section level4">
 <h4 id="differences-between-each-ga-in-fmfga">Differences between each GA in <code>fmfga</code><a class="anchor" aria-label="anchor" href="#differences-between-each-ga-in-fmfga"></a>
 </h4>
@@ -116,13 +116,13 @@ the <code>all_equal</code> column.</p>
 <p>Let’s check the results for <code>fmfga_female</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">check_differences</span><span class="op">(</span><span class="va">fmfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
-<span><span class="co">##   gest_days P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>       273       33       33       33       33       33 TRUE     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>       280       34       34       34       34       34 TRUE     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>       287       31       31       31       31       31 TRUE     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>       294       23       23       23       23       23 TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
+<span><span class="co">#&gt;   gest_days P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       273       33       33       33       33       33 TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       280       34       34       34       34       34 TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       287       31       31       31       31       31 TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       294       23       23       23       23       23 TRUE</span></span></code></pre>
 <p>The differences in fat mass are equal across percentiles at all
 gestational ages, according to the <code>all_equal</code> column. If the
 standard deviation
@@ -149,19 +149,19 @@ y = \mu + z\times\sigma
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">other_standards</span>,</span>
 <span>       FUN <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu">check_differences</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">all_equal</span><span class="op">)</span>,</span>
 <span>       FUN.VALUE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] FALSE  TRUE  TRUE  TRUE  TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] FALSE  TRUE  TRUE  TRUE  TRUE</span></span></code></pre>
 <p><strong>No.</strong> The first value, corresponding to
 <code>fmfga_male</code>, is <code>FALSE</code>. Let’s see what the
 differences look like for this table:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">check_differences</span><span class="op">(</span><span class="va">fmfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
-<span><span class="co">##   gest_days P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
-<span><span class="co">##       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>       273       <span style="color: #BB0000;">NA</span>       38       39       39       39 FALSE    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>       280       40       40       40       40       40 TRUE     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>       287       42       42       42       42       42 TRUE     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>       294       24       24       24       24       24 TRUE</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
+<span><span class="co">#&gt;   gest_days P03_diff P10_diff P50_diff P90_diff P97_diff all_equal</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       273       <span style="color: #BB0000;">NA</span>       38       39       39       39 FALSE    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>       280       40       40       40       40       40 TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>       287       42       42       42       42       42 TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>       294       24       24       24       24       24 TRUE</span></span></code></pre>
 <p>The issue here is a value of <code>38</code> rather than the
 <code>39</code>s in the <code>P10_diff</code> column - but this
 difference is small enough to be a consequence of rounding, as opposed
@@ -268,8 +268,8 @@ the console.</li>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fmfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">fmfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">fmfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = 96787.8   -1056.77381 * x + 3.83673 * x^2  -0.00462 * x^3</span></span>
-<span><span class="co">## sigma = 152.0728</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = 96787.8   -1056.77381 * x + 3.83673 * x^2  -0.00462 * x^3</span></span>
+<span><span class="co">#&gt; sigma = 152.0728</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females">Females<a class="anchor" aria-label="anchor" href="#females"></a>
@@ -277,8 +277,8 @@ the console.</li>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fmfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">fmfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">fmfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = 44432.51429   -490.7602 * x + 1.80321 * x^2  -0.00219 * x^3</span></span>
-<span><span class="co">## sigma = 156.8449</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = 44432.51429   -490.7602 * x + 1.80321 * x^2  -0.00219 * x^3</span></span>
+<span><span class="co">#&gt; sigma = 156.8449</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -291,8 +291,8 @@ the console.</li>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bfpfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">bfpfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">bfpfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = 1521.84857   -16.62398 * x + 0.0605 * x^2  -7e-05 * x^3</span></span>
-<span><span class="co">## sigma = 3.6562</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = 1521.84857   -16.62398 * x + 0.0605 * x^2  -7e-05 * x^3</span></span>
+<span><span class="co">#&gt; sigma = 3.6562</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females-1">Females<a class="anchor" aria-label="anchor" href="#females-1"></a>
@@ -300,8 +300,8 @@ the console.</li>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bfpfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">bfpfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">bfpfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = -66.09143 + + 0.48102 * x  -0.00073 * x^2</span></span>
-<span><span class="co">## sigma = 3.9547</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = -66.09143 + + 0.48102 * x  -0.00073 * x^2</span></span>
+<span><span class="co">#&gt; sigma = 3.9547</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -314,8 +314,8 @@ the console.</li>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ffmfga_male</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">ffmfga</span><span class="op">$</span><span class="va">male</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">ffmfga_male</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = 347879.97143   -3780.52721 * x + 13.73032 * x^2  -0.01652 * x^3</span></span>
-<span><span class="co">## sigma = 276.5094</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = 347879.97143   -3780.52721 * x + 13.73032 * x^2  -0.01652 * x^3</span></span>
+<span><span class="co">#&gt; sigma = 276.5094</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="females-2">Females<a class="anchor" aria-label="anchor" href="#females-2"></a>
@@ -323,8 +323,8 @@ the console.</li>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ffmfga_female</span> <span class="op">&lt;-</span> <span class="fu">gigs</span><span class="fu">::</span><span class="va"><a href="../reference/ig_nbs.html">ig_nbs</a></span><span class="op">$</span><span class="va">ffmfga</span><span class="op">$</span><span class="va">female</span><span class="op">$</span><span class="va">centiles</span></span>
 <span><span class="fu">extract_eqn</span><span class="op">(</span><span class="va">ffmfga_female</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## y = 154457.42857   -1689.0085 * x + 6.20845 * x^2  -0.00753 * x^3</span></span>
-<span><span class="co">## sigma = 261.0625</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; y = 154457.42857   -1689.0085 * x + 6.20845 * x^2  -0.00753 * x^3</span></span>
+<span><span class="co">#&gt; sigma = 261.0625</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -454,13 +454,13 @@ composition standard.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fmfga_M"</span> , <span class="st">"fmfga_F"</span> , <span class="st">"bfpfga_M"</span>, <span class="st">"bfpfga_F"</span>,</span>
 <span>                      <span class="st">"ffmfga_M"</span>, <span class="st">"ffmfga_F"</span><span class="op">)</span></span>
 <span><span class="va">models</span></span></code></pre></div>
-<pre><code><span><span class="co">##             intercept             x          x^2           x^3         SD</span></span>
-<span><span class="co">## fmfga_M   96787.80000 -1056.7738095  3.836734694 -0.0046161322 152.072842</span></span>
-<span><span class="co">## fmfga_F   44432.51429  -490.7602041  1.803206997 -0.0021865889 156.844908</span></span>
-<span><span class="co">## bfpfga_M   1521.84857   -16.6239796  0.060495627 -0.0000728863   3.656170</span></span>
-<span><span class="co">## bfpfga_F    -66.09143     0.4810204 -0.000728863  0.0000000000   3.954716</span></span>
-<span><span class="co">## ffmfga_M 347879.97143 -3780.5272109 13.730320700 -0.0165208941 276.509412</span></span>
-<span><span class="co">## ffmfga_F 154457.42857 -1689.0085034  6.208454810 -0.0075315841 261.062458</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;             intercept             x          x^2           x^3         SD</span></span>
+<span><span class="co">#&gt; fmfga_M   96787.80000 -1056.7738095  3.836734694 -0.0046161322 152.072842</span></span>
+<span><span class="co">#&gt; fmfga_F   44432.51429  -490.7602041  1.803206997 -0.0021865889 156.844908</span></span>
+<span><span class="co">#&gt; bfpfga_M   1521.84857   -16.6239796  0.060495627 -0.0000728863   3.656170</span></span>
+<span><span class="co">#&gt; bfpfga_F    -66.09143     0.4810204 -0.000728863  0.0000000000   3.954716</span></span>
+<span><span class="co">#&gt; ffmfga_M 347879.97143 -3780.5272109 13.730320700 -0.0165208941 276.509412</span></span>
+<span><span class="co">#&gt; ffmfga_F 154457.42857 -1689.0085034  6.208454810 -0.0075315841 261.062458</span></span></code></pre>
 <p>The <code>body_comp_centile2value()</code> will estimate
 <code>y</code> for a given gestational age in days (<code>x</code>),
 <code>sex</code> and <code>acronym</code>. The
