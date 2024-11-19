@@ -99,4 +99,18 @@ zscore2value(-2:2, 0, "M", family = "who_gs", acronym = "wfa")
 
 # Or obtain centiles...
 centile2value(pnorm(-2:2), 0, "M", family = "who_gs", acronym = "wfa")
+
+# Inputs will be recycled if necessary
+centile2value(3, 280, c("M", "F"), family = "ig_nbs", acronym = "wfga")
+}
+\references{
+\itemize{
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal standards see the
+\code{\link[=ig_fet]{gigs::ig_fet}} documentation
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standards see the
+\code{\link[=ig_nbs]{gigs::ig_nbs}} documentation
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standards see the
+\code{\link[=ig_png]{gigs::ig_png}} documentation
+\item For the WHO Growth standards see the \code{\link[=who_gs]{gigs::who_gs}} documentation
+}
 }

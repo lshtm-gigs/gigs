@@ -67,6 +67,14 @@
 #'   case-sensitive.
 #' @srrstats {G2.3b} Explicit reference to `acronym` and `family`
 #'   case-sensitivity.
+#' @references
+#' * For the INTERGROWTH-21<sup>st</sup> Fetal standards see the
+#'   [`gigs::ig_fet`][ig_fet] documentation
+#' * For the INTERGROWTH-21<sup>st</sup> Newborn Size standards see the
+#'   [`gigs::ig_nbs`][ig_nbs] documentation
+#' * For the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards see the
+#'   [`gigs::ig_png`][ig_png] documentation
+#' * For the WHO Growth standards see the [`gigs::who_gs`][who_gs] documentation
 #' @note Inputs other than `acronym` and `family` will be recycled by
 #'   [vctrs::vec_recycle_common()], and must adhere to the [vctrs] recycling
 #'   rules.
@@ -82,7 +90,7 @@
 #' value2centile(3, 0, "M", family = "who_gs", acronym = "wfa")
 #'
 #' # Inputs will be recycled if necessary
-#' value2centile(3, 0, c("M", "F"), family = "ig_nbs", acronym = "wfga")
+#' value2centile(2.5, 280, c("M", "F"), family = "ig_nbs", acronym = "wfga")
 #' @importFrom stats qnorm pnorm
 #' @export
 value2zscore <- function(y, x, sex = NULL, family, acronym) {
@@ -119,7 +127,10 @@ value2centile <- function(y, x, sex = NULL, family, acronym) {
 #'
 #' # Or obtain centiles...
 #' centile2value(pnorm(-2:2), 0, "M", family = "who_gs", acronym = "wfa")
-#' @inheritParams value2zscore
+#'
+#' # Inputs will be recycled if necessary
+#' centile2value(3, 280, c("M", "F"), family = "ig_nbs", acronym = "wfga")
+#' @inherit value2zscore params references
 #' @rdname zscore2value
 #' @export
 zscore2value <- function(z, x, sex = NULL, family, acronym) {

@@ -432,7 +432,7 @@ legend(x = min(gestage_range) + 1, y = ref[length(ref)], legend = 2:-2,
 # Other packages
 
 Other R packages can be used to analyse growth data with international
-standards, but have limitations which are not present in *gigs*. There
+standards, but have limitations which are not present in **gigs**. There
 are also software packages external to R which implement these
 standards. The table below describes these packages, and to what extent
 they have implemented functions that let users convert anthropometric
@@ -440,10 +440,14 @@ measurements to z-scores/centiles in each set of standards implemented
 in **gigs** - the WHO Child Growth standards,
 INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very
 Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
-for preterm infants. A tick (✅) indicates that all possible standards
-are included in a package, a red cross (❌) indicates that these
-standards are completely missing, and a warning sign (⚠️) indicates that
-some of these standards are implemented but not others.
+for preterm infants. No other packages (except **gigs** for Stata)
+includes the extended versions of the INTERGROWTH-21<sup>st</sup>
+Newborn Size standards (incl. Very Preterm).
+
+A tick (✅) indicates that all possible standards are included in a
+package, a red cross (❌) indicates that these standards are completely
+missing, and a warning sign (⚠️) indicates that some of these standards
+are implemented but not others.
 
 | Software                                                                            | Platform | WHO (0-5 years) | IG-21<sup>st</sup> NBS | IG-21<sup>st</sup> PNG | IG-21<sup>st</sup> Fetal | Functionality              |
 |-------------------------------------------------------------------------------------|----------|-----------------|------------------------|------------------------|--------------------------|----------------------------|
@@ -468,13 +472,13 @@ the **gigs** benchmarking
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
 |:------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 100                  | 80                          | 20                          | 8                             |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2211                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 119                  | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 125                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 88                   | 72                          | 43                          | 10                            |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 16                            |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 92                   | 85                          | 23                          | 11                            |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 1974                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 120                  | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 118                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 90                   | 75                          | 43                          | 13                            |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 17                            |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 45                   | ❌                          | ❌                          | ❌                            |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
@@ -502,7 +506,7 @@ Health Centre, London School of Hygiene & Tropical Medicine
 
 ### Citation
 
-Parker S, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
+Parker SR, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
 Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 
 ## Code of Conduct
@@ -510,3 +514,97 @@ Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 Please note that the **gigs** package is released with a [Contributor
 Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing
 to this project you agree to abide by its terms.
+
+
+## References
+
+- INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very
+  preterm)
+  - Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman
+    DG, et al. **International standards for newborn weight, length, and
+    head circumference by gestational age and sex: the Newborn
+    Cross-Sectional Study of the INTERGROWTH-21st Project.** *Lancet*
+    2014, **384(9946):857-68.** doi:
+    [10.1016/S0140-6736(14)60932-6](https://dx.doi.org/10.1016/S0140-6736(14)60932-6)
+  - Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et
+    al. **INTERGROWTH-21st very preterm size at birth reference
+    charts.** *Lancet* 2016, **387(10021):844-45.** doi:
+    [10.1016/S0140-6736(16)00384-6](https://dx.doi.org/10.1016/S0140-6736(16)00384-6)
+  - Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani
+    F, et al. **Body composition at birth and its relationship with
+    neonatal anthropometric ratios: the newborn body composition study
+    of the INTERGROWTH-21st project.** *Pediatric Research* 2017,
+    **82:305-316.** doi:
+    [10.1038/pr.2017.52](https://dx.doi.org/10.1038/pr.2017.52)
+- INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants
+  standards
+  - Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et
+    al. **Postnatal growth standards for preterm infants: the Preterm
+    Postnatal Follow-up Study of the INTERGROWTH-21st Project.** *Lancet
+    Glob Health* 2015, *3(11):e681-e691.* doi:
+    [10.1016/S2214-109X(15)00163-1](https://dx.doi.org/10.1016/S2214-109X(15)00163-1)
+- INTERGROWTH-21<sup>st</sup> Fetal standards
+  - Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L,
+    Lambert A et al. **International standards for fetal growth based on
+    serial ultrasound measurements: the Fetal Growth Longitudinal Study
+    of the INTERGROWTH-21st Project.** *Lancet* 2014,
+    **384(9946):869-79.** doi:
+    [10.1016/S0140-6736(14)61490-2](https://dx.doi.org/10.1016/S0140-6736(14)61490-2)
+  - Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG
+    et al. **International Estimated Fetal Weight Standards of the
+    INTERGROWTH-21st Project.** *Ultrasound Obstet Gynecol* 2016,
+    **49:478-486** doi:
+    [10.1002/uog.17347](https://dx.doi.org/10.1002/uog.17347)
+  - Stirnemann J, Salomon LJ, Papageorghiou AT. **INTERGROWTH-21st
+    standards for Hadlock’s estimation of fetal weight.** *Ultrasound
+    Obstet Gynecol* 2020, **56(6):946-948** doi:
+    [10.1002/uog.22000](https://dx.doi.org/10.1002/uog.22000)
+  - Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R
+    et al. **International standards for symphysis-fundal height based
+    on serial measurements from the Fetal Growth Longitudinal Study of
+    the INTERGROWTH-21st Project: prospective cohort study in eight
+    countries.** *BMJ* 2016, **355:i5662** doi:
+    [10.1136/bmj.i5662](https://dx.doi.org/10.1136/bmj.i5662)
+  - Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L,
+    Barros FC et al. **International standards for early fetal size and
+    pregnancy dating based on ultrasound measurement of crown-rump
+    length in the first trimester of pregnancy.** *Ultrasound Obstet
+    Gynecol* 2014, **44(6):641-48** doi:
+    [10.1002/uog.13448](https://dx.doi.org/10.1002/uog.13448)
+  - Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al.
+    **Gestational weight gain standards based on women enrolled in the
+    Fetal Growth Longitudinal Study of the INTERGROWTH-21st Project: a
+    prospective longitudinal cohort study.** *BMJ* 2016, **352:i555**
+    doi: [10.1136/bmj.i555](https://dx.doi.org/10.1136/bmj.i555)
+  - Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S
+    et al. **International gestational age-specific centiles for
+    umbilical artery Doppler indices: a longitudinal prospective cohort
+    study of the INTERGROWTH-21st Project.** *Am J Obstet Gynecol* 2021,
+    **222(6):602.e1-602.e15** doi:
+    [10.1016/j.ajog.2020.01.012](https://dx.doi.org/10.1016/j.ajog.2020.01.012)
+  - Rodriguez-Sibaja MJ, Villar J, Ohuma EO, Napolitano R, Heyl S,
+    Carvalho M et al. **Fetal cerebellar growth and Sylvian fissure
+    maturation: international standards from Fetal Growth Longitudinal
+    Study of INTERGROWTH-21st Project** *Ultrasound Obstet Gynecol*
+    2021, **57(4):614-623** doi:
+    [10.1002/uog.22017](https://dx.doi.org/10.1002/uog.22017)
+  - Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp
+    B et al. **International standards for fetal brain structures based
+    on serial ultrasound measurements from Fetal Growth Longitudinal
+    Study of INTERGROWTH-21st Project** *Ultrasound Obstet Gynecol*
+    2020, **56(3):359-370** doi:
+    [10.1002/uog.21990](https://dx.doi.org/10.1002/uog.21990)
+- WHO Child Growth Standards
+  - de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA,
+    Martines J. **The WHO Multicentre Growth Reference Study: planning,
+    study design, and methodology** *Food Nutr Bull.* 2004, **25(1
+    Suppl):S15-26.** doi:
+    [10.1177/15648265040251s104](https://dx.doi.org/10.1177/15648265040251s104)
+  - World Health Organisation. **WHO child growth standards:
+    length/height-for-age, weight-for-age, weight-for-length,
+    weight-for-height and body mass index-for-age: methods and
+    development.** *Technical report, WHO, Geneva*, 2006.
+  - World Health Organisation. **WHO child growth standards: head
+    circumference-for-age, arm circumference-for-age, triceps
+    skinfold-for-age and subscapular skinfold-for-age: methods and
+    development.** *Technical report, WHO, Geneva*, 2007.

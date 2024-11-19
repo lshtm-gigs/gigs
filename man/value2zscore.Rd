@@ -109,7 +109,18 @@ value2zscore(3, 0, "M", family = "who_gs", acronym = "wfa")
 value2centile(3, 0, "M", family = "who_gs", acronym = "wfa")
 
 # Inputs will be recycled if necessary
-value2centile(3, 0, c("M", "F"), family = "ig_nbs", acronym = "wfga")
+value2centile(2.5, 280, c("M", "F"), family = "ig_nbs", acronym = "wfga")
+}
+\references{
+\itemize{
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Fetal standards see the
+\code{\link[=ig_fet]{gigs::ig_fet}} documentation
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size standards see the
+\code{\link[=ig_nbs]{gigs::ig_nbs}} documentation
+\item For the INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Postnatal Growth standards see the
+\code{\link[=ig_png]{gigs::ig_png}} documentation
+\item For the WHO Growth standards see the \code{\link[=who_gs]{gigs::who_gs}} documentation
+}
 }
 \seealso{
 \code{\link[=report_units]{report_units()}} will tell you the units needed for \code{y} and \code{x}, for

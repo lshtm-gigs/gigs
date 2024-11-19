@@ -27,12 +27,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Simon Parker \email{simon.parker1471@outlook.com} (\href{https://orcid.org/0009-0003-8214-4496}{ORCID})
+\strong{Maintainer}: Simon R Parker \email{simon.parker1471@outlook.com} (\href{https://orcid.org/0009-0003-8214-4496}{ORCID})
 
 Other contributors:
 \itemize{
-  \item Linda Vesel (\href{https://orcid.org/0000-0003-3753-4172}{ORCID}) [data contributor]
-  \item Eric Ohuma (\href{https://orcid.org/0000-0002-3116-2593}{ORCID}) [data contributor]
+  \item Linda Vesel (\href{https://orcid.org/0000-0003-3753-4172}{ORCID}) [data contributor, contributor]
+  \item Eric O Ohuma (\href{https://orcid.org/0000-0002-3116-2593}{ORCID}) [data contributor, contributor]
   \item Chitra Saraswati (\href{https://orcid.org/0000-0002-8159-0414}{ORCID}) [reviewer]
   \item Victor Ordu (\href{https://orcid.org/0000-0003-3716-0668}{ORCID}) [reviewer]
   \item Bill & Melinda Gates Foundation [funder]

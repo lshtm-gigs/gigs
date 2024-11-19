@@ -3,12 +3,12 @@ Package: gigs
 Title: Assess Fetal, Newborn, and Child Growth with International Standards
 Version: 0.4.1.9002
 Authors@R: c(
-    person(given = "Simon", family = "Parker",
+    person(given = c("Simon", "R"), family = "Parker",
            email = "simon.parker1471@outlook.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0003-8214-4496")),
-    person("Linda", "Vesel", role = "dtc",
+    person(given = "Linda", family = "Vesel", role = c("dtc", "ctb"),
            comment = c(ORCID = "0000-0003-3753-4172")),
-    person("Eric", "Ohuma", role = "dtc",
+    person(given = c("Eric", "O"), family = "Ohuma", role = c("dtc", "ctb"),
            comment = c(ORCID = "0000-0002-3116-2593")),
     person("Chitra", "Saraswati", role = "rev",
            comment = c(ORCID = "0000-0002-8159-0414")),

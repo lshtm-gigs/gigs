@@ -19,7 +19,7 @@ abstract: Convert between anthropometric measures and z-scores/centiles in multi
   easy and reproducible for clinicians, researchers and policy-makers.
 authors:
 - family-names: Parker
-  given-names: Simon
+  given-names: Simon R
   email: simon.parker1471@outlook.com
   orcid: https://orcid.org/0009-0003-8214-4496
 preferred-citation:
@@ -28,8 +28,6 @@ preferred-citation:
   authors:
   - family-names: Parker
     given-names: Simon
-    email: simon.parker1471@outlook.com
-    orcid: https://orcid.org/0009-0003-8214-4496
   - family-names: Vesel
     given-names: Linda
   - family-names: Ohuma
@@ -41,7 +39,7 @@ repository-code: https://github.com/lshtm-gigs/gigs
 url: https://github.com/lshtm-gigs/gigs/
 contact:
 - family-names: Parker
-  given-names: Simon
+  given-names: Simon R
   email: simon.parker1471@outlook.com
   orcid: https://orcid.org/0009-0003-8214-4496
 keywords:

@@ -18,7 +18,7 @@
   "author": [
     {
       "@type": "Person",
-      "givenName": "Simon",
+      "givenName": ["Simon", "R"],
       "familyName": "Parker",
       "email": "simon.parker1471@outlook.com",
       "@id": "https://orcid.org/0009-0003-8214-4496"
@@ -33,7 +33,19 @@
     },
     {
       "@type": "Person",
-      "givenName": "Eric",
+      "givenName": ["Eric", "O"],
+      "familyName": "Ohuma",
+      "@id": "https://orcid.org/0000-0002-3116-2593"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Linda",
+      "familyName": "Vesel",
+      "@id": "https://orcid.org/0000-0003-3753-4172"
+    },
+    {
+      "@type": "Person",
+      "givenName": ["Eric", "O"],
       "familyName": "Ohuma",
       "@id": "https://orcid.org/0000-0002-3116-2593"
     }
@@ -53,7 +65,7 @@
   "maintainer": [
     {
       "@type": "Person",
-      "givenName": "Simon",
+      "givenName": ["Simon", "R"],
       "familyName": "Parker",
       "email": "simon.parker1471@outlook.com",
       "@id": "https://orcid.org/0009-0003-8214-4496"
@@ -268,7 +280,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2259.994KB",
+  "fileSize": "2267.909KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
