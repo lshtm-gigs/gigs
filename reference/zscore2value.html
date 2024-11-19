@@ -127,6 +127,17 @@ case-sensitive.</p></dd>
     <p>Numeric vector of expected measurements with length equal to the
 longest input vector.</p>
     </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
+<ul><li><p>For the INTERGROWTH-21<sup>st</sup> Fetal standards see the
+<code><a href="ig_fet.html">gigs::ig_fet</a></code> documentation</p></li>
+<li><p>For the INTERGROWTH-21<sup>st</sup> Newborn Size standards see the
+<code><a href="ig_nbs.html">gigs::ig_nbs</a></code> documentation</p></li>
+<li><p>For the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards see the
+<code><a href="ig_png.html">gigs::ig_png</a></code> documentation</p></li>
+<li><p>For the WHO Growth standards see the <code><a href="who_gs.html">gigs::who_gs</a></code> documentation</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -137,6 +148,12 @@ longest input vector.</p>
 <span class="r-in"><span><span class="co"># Or obtain centiles...</span></span></span>
 <span class="r-in"><span><span class="fu">centile2value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, <span class="fl">0</span>, <span class="st">"M"</span>, family <span class="op">=</span> <span class="st">"who_gs"</span>, acronym <span class="op">=</span> <span class="st">"wfa"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.459312 2.880651 3.346400 3.858619 4.419354</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Inputs will be recycled if necessary</span></span></span>
+<span class="r-in"><span><span class="fu">centile2value</span><span class="op">(</span><span class="fl">3</span>, <span class="fl">280</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Input arguments have invalid values:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> Argument `p`: All (1) elements were not between 0 and 1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA NA</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -144,7 +161,7 @@ longest input vector.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Simon Parker, Bill &amp; Melinda Gates Foundation.</p>
+  <p>Developed by Simon R Parker, Bill &amp; Melinda Gates Foundation.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -137,6 +137,17 @@ input vector.</p>
 rules.</p>
     </div>
     <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
+<ul><li><p>For the INTERGROWTH-21<sup>st</sup> Fetal standards see the
+<code><a href="ig_fet.html">gigs::ig_fet</a></code> documentation</p></li>
+<li><p>For the INTERGROWTH-21<sup>st</sup> Newborn Size standards see the
+<code><a href="ig_nbs.html">gigs::ig_nbs</a></code> documentation</p></li>
+<li><p>For the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards see the
+<code><a href="ig_png.html">gigs::ig_png</a></code> documentation</p></li>
+<li><p>For the WHO Growth standards see the <code><a href="who_gs.html">gigs::who_gs</a></code> documentation</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="report_units.html">report_units()</a></code> will tell you the units needed for <code>y</code> and <code>x</code>, for
 any combination of <code>family</code> and <code>acronym</code>.</p></div>
@@ -153,10 +164,8 @@ any combination of <code>family</code> and <code>acronym</code>.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.231394</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inputs will be recycled if necessary</span></span></span>
-<span class="r-in"><span><span class="fu">value2centile</span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Input arguments have invalid values:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">ℹ</span> Argument `x`: All (1) elements were out-of-bounds (see the GIGS conversion function documentation for bounds).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA NA</span>
+<span class="r-in"><span><span class="fu">value2centile</span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">280</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, family <span class="op">=</span> <span class="st">"ig_nbs"</span>, acronym <span class="op">=</span> <span class="st">"wfga"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01444696 0.02267229</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -164,7 +173,7 @@ any combination of <code>family</code> and <code>acronym</code>.</p></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Simon Parker, Bill &amp; Melinda Gates Foundation.</p>
+  <p>Developed by Simon R Parker, Bill &amp; Melinda Gates Foundation.</p>
 </div>
 
 <div class="pkgdown-footer-right">

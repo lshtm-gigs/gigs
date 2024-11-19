@@ -640,7 +640,8 @@ Component standards
 <div class="section level1">
 <h1 id="other-packages">Other packages<a class="anchor" aria-label="anchor" href="#other-packages"></a>
 </h1>
-<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in <em>gigs</em>. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in <strong>gigs</strong> - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
+<p>Other R packages can be used to analyse growth data with international standards, but have limitations which are not present in <strong>gigs</strong>. There are also software packages external to R which implement these standards. The table below describes these packages, and to what extent they have implemented functions that let users convert anthropometric measurements to z-scores/centiles in each set of standards implemented in <strong>gigs</strong> - the WHO Child Growth standards, INTERGROWTH-21<sup>st</sup> Newborn Size standards (including Very Preterm), and the INTERGROWTH-21<sup>st</sup> Postnatal Growth standards for preterm infants. No other packages (except <strong>gigs</strong> for Stata) includes the extended versions of the INTERGROWTH-21<sup>st</sup> Newborn Size standards (incl. Very Preterm).</p>
+<p>A tick (✅) indicates that all possible standards are included in a package, a red cross (❌) indicates that these standards are completely missing, and a warning sign (⚠️) indicates that some of these standards are implemented but not others.</p>
 <table class="table">
 <colgroup>
 <col width="39%">
@@ -777,15 +778,15 @@ Component standards
 <tr class="odd">
 <td align="left"><a href="https://www.github.com/lshtm-gigs/gigs/" class="external-link">gigs</a></td>
 <td>R</td>
-<td>100</td>
-<td>80</td>
-<td>20</td>
-<td>8</td>
+<td>92</td>
+<td>85</td>
+<td>23</td>
+<td>11</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://cran.r-project.org/web/packages/anthro/index.html" class="external-link">anthro</a></td>
 <td>R</td>
-<td>2211</td>
+<td>1974</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -793,7 +794,7 @@ Component standards
 <tr class="odd">
 <td align="left"><a href="https://cran.r-project.org/web/packages/AGD/index.html" class="external-link">AGD</a></td>
 <td>R</td>
-<td>119</td>
+<td>120</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -801,7 +802,7 @@ Component standards
 <tr class="even">
 <td align="left"><a href="https://cran.r-project.org/web/packages/childsds/index.html" class="external-link">childsds</a></td>
 <td>R</td>
-<td>125</td>
+<td>118</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -809,10 +810,10 @@ Component standards
 <tr class="odd">
 <td align="left"><a href="https://www.github.com/ki-tools/growthstandards/" class="external-link">ki-tools/growthstandards</a></td>
 <td>R</td>
-<td>88</td>
-<td>72</td>
+<td>90</td>
+<td>75</td>
 <td>43</td>
-<td>10</td>
+<td>13</td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://github.com/nutriverse/intergrowth/" class="external-link">nutriverse/intergrowth</a></td>
@@ -820,12 +821,12 @@ Component standards
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
-<td>16</td>
+<td>17</td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="https://cran.r-project.org/web/packages/sitar/index.html" class="external-link">sitar</a></td>
 <td>R</td>
-<td>46</td>
+<td>45</td>
 <td>❌</td>
 <td>❌</td>
 <td>❌</td>
@@ -869,13 +870,65 @@ Component standards
 <div class="section level3">
 <h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
-<p>Parker S, Vesel L, Ohuma EO (2024). <em>gigs: Assess Fetal, Newborn, and Child Growth</em>. <a href="https://github.com/lshtm-gigs/gigs/" class="external-link uri">https://github.com/lshtm-gigs/gigs/</a>.</p>
+<p>Parker SR, Vesel L, Ohuma EO (2024). <em>gigs: Assess Fetal, Newborn, and Child Growth</em>. <a href="https://github.com/lshtm-gigs/gigs/" class="external-link uri">https://github.com/lshtm-gigs/gigs/</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
 <p>Please note that the <strong>gigs</strong> package is released with a <a href="https://ropensci.org/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<ul>
+<li>INTERGROWTH-21<sup>st</sup> Newborn Size standards (including very preterm)
+<ul>
+<li>Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. <strong>International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project.</strong> <em>Lancet</em> 2014, <strong>384(9946):857-68.</strong> doi: <a href="https://dx.doi.org/10.1016/S0140-6736(14)60932-6" class="external-link">10.1016/S0140-6736(14)60932-6</a>
+</li>
+<li>Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH et al. <strong>INTERGROWTH-21st very preterm size at birth reference charts.</strong> <em>Lancet</em> 2016, <strong>387(10021):844-45.</strong> doi: <a href="https://dx.doi.org/10.1016/S0140-6736(16)00384-6" class="external-link">10.1016/S0140-6736(16)00384-6</a>
+</li>
+<li>Villar J, Puglia FA, Fenton TR, Ismal LC, Staines-Urias E, Giuliani F, et al. <strong>Body composition at birth and its relationship with neonatal anthropometric ratios: the newborn body composition study of the INTERGROWTH-21st project.</strong> <em>Pediatric Research</em> 2017, <strong>82:305-316.</strong> doi: <a href="https://dx.doi.org/10.1038/pr.2017.52" class="external-link">10.1038/pr.2017.52</a>
+</li>
+</ul>
+</li>
+<li>INTERGROWTH-21<sup>st</sup> Postnatal Growth of Preterm Infants standards
+<ul>
+<li>Villar J, Giuliani F, Bhutta ZA, Bertino E, Ohuma EO, Ismail LC et al. <strong>Postnatal growth standards for preterm infants: the Preterm Postnatal Follow-up Study of the INTERGROWTH-21st Project.</strong> <em>Lancet Glob Health</em> 2015, <em>3(11):e681-e691.</em> doi: <a href="https://dx.doi.org/10.1016/S2214-109X(15)00163-1" class="external-link">10.1016/S2214-109X(15)00163-1</a>
+</li>
+</ul>
+</li>
+<li>INTERGROWTH-21<sup>st</sup> Fetal standards
+<ul>
+<li>Papageorghiou AT, Ohuma EO, Altman DG, Todros T, Cheikh Ismail L, Lambert A et al. <strong>International standards for fetal growth based on serial ultrasound measurements: the Fetal Growth Longitudinal Study of the INTERGROWTH-21st Project.</strong> <em>Lancet</em> 2014, <strong>384(9946):869-79.</strong> doi: <a href="https://dx.doi.org/10.1016/S0140-6736(14)61490-2" class="external-link">10.1016/S0140-6736(14)61490-2</a>
+</li>
+<li>Stirnemann J, Villar J, Salomon LJ, Ohuma EO, Lamber A, Victoria CG et al. <strong>International Estimated Fetal Weight Standards of the INTERGROWTH-21st Project.</strong> <em>Ultrasound Obstet Gynecol</em> 2016, <strong>49:478-486</strong> doi: <a href="https://dx.doi.org/10.1002/uog.17347" class="external-link">10.1002/uog.17347</a>
+</li>
+<li>Stirnemann J, Salomon LJ, Papageorghiou AT. <strong>INTERGROWTH-21st standards for Hadlock’s estimation of fetal weight.</strong> <em>Ultrasound Obstet Gynecol</em> 2020, <strong>56(6):946-948</strong> doi: <a href="https://dx.doi.org/10.1002/uog.22000" class="external-link">10.1002/uog.22000</a>
+</li>
+<li>Papageorghiou AT, Ohuma EO, Gravett MG, Lamber A, Noble JA, Pang R et al. <strong>International standards for symphysis-fundal height based on serial measurements from the Fetal Growth Longitudinal Study of the INTERGROWTH-21st Project: prospective cohort study in eight countries.</strong> <em>BMJ</em> 2016, <strong>355:i5662</strong> doi: <a href="https://dx.doi.org/10.1136/bmj.i5662" class="external-link">10.1136/bmj.i5662</a>
+</li>
+<li>Papageorghiou AT, Kennedy SH, Salomon LJ, Ohuma EO, Cheikh Ismail L, Barros FC et al. <strong>International standards for early fetal size and pregnancy dating based on ultrasound measurement of crown-rump length in the first trimester of pregnancy.</strong> <em>Ultrasound Obstet Gynecol</em> 2014, <strong>44(6):641-48</strong> doi: <a href="https://dx.doi.org/10.1002/uog.13448" class="external-link">10.1002/uog.13448</a>
+</li>
+<li>Cheikh Ismail L, Bishop DC, Pang R, Ohuma EO, Kac G, Abrams B et al. <strong>Gestational weight gain standards based on women enrolled in the Fetal Growth Longitudinal Study of the INTERGROWTH-21st Project: a prospective longitudinal cohort study.</strong> <em>BMJ</em> 2016, <strong>352:i555</strong> doi: <a href="https://dx.doi.org/10.1136/bmj.i555" class="external-link">10.1136/bmj.i555</a>
+</li>
+<li>Drukker L, Staines-Urias E, Villar J, Barros FC, Carvalho M, Munim S et al. <strong>International gestational age-specific centiles for umbilical artery Doppler indices: a longitudinal prospective cohort study of the INTERGROWTH-21st Project.</strong> <em>Am J Obstet Gynecol</em> 2021, <strong>222(6):602.e1-602.e15</strong> doi: <a href="https://dx.doi.org/10.1016/j.ajog.2020.01.012" class="external-link">10.1016/j.ajog.2020.01.012</a>
+</li>
+<li>Rodriguez-Sibaja MJ, Villar J, Ohuma EO, Napolitano R, Heyl S, Carvalho M et al. <strong>Fetal cerebellar growth and Sylvian fissure maturation: international standards from Fetal Growth Longitudinal Study of INTERGROWTH-21st Project</strong> <em>Ultrasound Obstet Gynecol</em> 2021, <strong>57(4):614-623</strong> doi: <a href="https://dx.doi.org/10.1002/uog.22017" class="external-link">10.1002/uog.22017</a>
+</li>
+<li>Napolitano R, Molloholli M, Donadono V, Ohuma EO, Wanyonyi SZ, Kemp B et al. <strong>International standards for fetal brain structures based on serial ultrasound measurements from Fetal Growth Longitudinal Study of INTERGROWTH-21st Project</strong> <em>Ultrasound Obstet Gynecol</em> 2020, <strong>56(3):359-370</strong> doi: <a href="https://dx.doi.org/10.1002/uog.21990" class="external-link">10.1002/uog.21990</a>
+</li>
+</ul>
+</li>
+<li>WHO Child Growth Standards
+<ul>
+<li>de Onis M, Garza C, Victora CG, Onyango AW, Frongillo EA, Martines J. <strong>The WHO Multicentre Growth Reference Study: planning, study design, and methodology</strong> <em>Food Nutr Bull.</em> 2004, <strong>25(1 Suppl):S15-26.</strong> doi: <a href="https://dx.doi.org/10.1177/15648265040251s104" class="external-link">10.1177/15648265040251s104</a>
+</li>
+<li>World Health Organisation. <strong>WHO child growth standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and body mass index-for-age: methods and development.</strong> <em>Technical report, WHO, Geneva</em>, 2006.</li>
+<li>World Health Organisation. <strong>WHO child growth standards: head circumference-for-age, arm circumference-for-age, triceps skinfold-for-age and subscapular skinfold-for-age: methods and development.</strong> <em>Technical report, WHO, Geneva</em>, 2007.</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -912,7 +965,7 @@ Component standards
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Simon Parker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-8214-4496" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Simon R Parker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-8214-4496" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Bill &amp; Melinda Gates Foundation <br><small class="roles"> Funder </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
@@ -936,7 +989,7 @@ Component standards
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Simon Parker, Bill &amp; Melinda Gates Foundation.</p>
+  <p>Developed by Simon R Parker, Bill &amp; Melinda Gates Foundation.</p>
 </div>
 
 <div class="pkgdown-footer-right">
