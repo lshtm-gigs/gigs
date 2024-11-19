@@ -181,25 +181,3 @@ for (acronym in c("wfga", "lfga", "hcfga")) {
 
 usethis::use_data(ig_nbs_ext, overwrite = TRUE)
 usethis::use_data(ig_nbs_ext_coeffs, overwrite = TRUE)
-
-# Save extended INTERGROWTH-21st NBS coeffs .dta file for use in stata-gigs ----
-dta_dir <- file.path("data-raw", "tables", "ig_nbs_ext")
-if (!dir.exists(dta_dir)) dir.create(dta_dir)
-dta_dir <- file.path(dta_dir, "stata")
-if (!dir.exists(dta_dir)) dir.create(dta_dir)
-
-for (acronym in names(gigs::ig_nbs_ext_coeffs)) {
-  male <- gigs::ig_nbs_ext_coeffs[[acronym]]$male |>
-    dplyr::rename(gest_age = gest_days) |>
-    dplyr::mutate(sex = 1)
-  colnames(male) <- paste0("nbs_extMSNT_", colnames(male))
-  female <- gigs::ig_nbs_ext_coeffs[[acronym]]$female |>
-    dplyr::rename(gest_age = gest_days) |>
-    dplyr::mutate(sex = 0)
-  colnames(female) <- paste0("nbs_extMSNT_", colnames(female))
-  dplyr::bind_rows(male, female) |>
-    haven::write_dta(
-      path = file.path(dta_dir, paste0("ig_nbs_extGAMLSS_", acronym, ".dta")),
-      version = 15
-    )
-}

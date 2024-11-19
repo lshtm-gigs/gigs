@@ -3,7 +3,7 @@
 library(gigs)
 
 # GAMLSS coefficients ----------------------------------------------------------
-write_dta_gamlssfiles <- function(gamlss_tbls) {
+write_dta_gamlssfiles <- function(gamlss_tbls, filestem) {
   dta_dir <- file.path("exclude", "r2stata", "coeffs")
   if (!dir.exists(dta_dir)) dir.create(dta_dir)
   purrr::map2(
@@ -29,11 +29,11 @@ write_dta_gamlssfiles <- function(gamlss_tbls) {
         })
       haven::write_dta(data = out,
                        path = file.path(dta_dir,
-                                        paste0("ig_nbsGAMLSS_",
-                                               acronym, ".dta")))
+                                        paste0(filestem, acronym, ".dta")))
     })
 }
-write_dta_gamlssfiles(gigs::ig_nbs_coeffs)
+write_dta_gamlssfiles(gigs::ig_nbs_coeffs, filestem = "ig_nbsGAMLSS_")
+write_dta_gamlssfiles(gigs::ig_nbs_ext_coeffs, filestem = "ig_nbs_extGAMLSS_")
 
 # LMS coefficients -------------------------------------------------------------
 write_dta_lmsfiles <- function(who_gs_lms) {
