@@ -391,6 +391,7 @@ zscorer <- knitr::asis_output(x = "[zscorer](https://cran.r-project.org/web/pack
 gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)")
 zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata)")
 intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
+gigs_sas <- knitr::asis_output(x = "[gigs](https://github.com/SASPAC/gigs/) (SAS)")
 
 load("vignettes/articles/benchmarking.rda")
 ```
@@ -424,12 +425,14 @@ standards are implemented but not others.
 | `r zscorer`     | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r gigs_stata`  | Stata    | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
+| `r gigs_sas`    | SAS      | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 
-We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth Standards and different
-sets of `r intergrowth21st` standards. The table below shows relative speed of
-each software package when processing 100,000 inputs. The code used to generate
-these timings can be seen online in the **gigs** benchmarking
+We have benchmarked these implementations (excluding **gigs** for SAS) against
+each other for conversion of values to z-scores in the WHO Child Growth
+Standards and different sets of `r intergrowth21st` standards. The table below
+shows the relative speed of each software package when processing 100,000
+inputs. The code used to generate these timings can be seen online in the
+**gigs** benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |

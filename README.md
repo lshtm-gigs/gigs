@@ -461,13 +461,14 @@ are implemented but not others.
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 | [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
+| [gigs](https://github.com/SASPAC/gigs/) (SAS)                                       | SAS      | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 
-We have benchmarked some of these implementations against each other for
-conversion of values to z-scores in the WHO Child Growth Standards and
-different sets of INTERGROWTH-21<sup>st</sup> standards. The table below
-shows relative speed of each software package when processing 100,000
-inputs. The code used to generate these timings can be seen online in
-the **gigs** benchmarking
+We have benchmarked these implementations (excluding **gigs** for SAS)
+against each other for conversion of values to z-scores in the WHO Child
+Growth Standards and different sets of INTERGROWTH-21<sup>st</sup>
+standards. The table below shows the relative speed of each software
+package when processing 100,000 inputs. The code used to generate these
+timings can be seen online in the **gigs** benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
@@ -514,7 +515,6 @@ Child Growth*. <https://github.com/lshtm-gigs/gigs/>.
 Please note that the **gigs** package is released with a [Contributor
 Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing
 to this project you agree to abide by its terms.
-
 
 ## References
 

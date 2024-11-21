@@ -45,6 +45,7 @@ zscorer <- knitr::asis_output(x = "[zscorer](https://cran.r-project.org/web/pack
 gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)")
 zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata)")
 intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
+gigs_sas <- knitr::asis_output(x = "[gigs](https://github.com/SASPAC/gigs/) (SAS)")
 ```
 
 | Package name    | Language | On CRAN? |
@@ -59,6 +60,7 @@ intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.c
 | `r intergrowth` | R        | No       |
 | `r gigs_stata`  | Stata    | No       |
 | `r zanthro`     | Stata    | No       |
+| `r gigs_sas`    | SAS      | No       |
 
 Thus far, there is no comprehensive benchmark comparing these different
 packages. This short article will compare the speed of each package from 1 to
@@ -131,6 +133,7 @@ harr <- knitr::asis_output(x = "&harr;")
 | `r zscorer`     | R        | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
 | `r gigs_stata`  | Stata    | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 | `r zanthro`     | Stata    | `r yes`         | `r no`         | `r no`         | `r no`           | Values `r rarr` z-scores/centiles |
+| `r gigs_sas`    | SAS      | `r yes`         | `r yes`        | `r yes`        | `r yes`          | Values `r harr` z-scores/centiles |
 
 # Shared benchmark code
 
