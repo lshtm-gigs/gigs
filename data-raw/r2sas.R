@@ -54,7 +54,6 @@ ig_fet_centiles <- ig_fet_centiles |>
   dplyr::relocate(acronym, x_unit, y_unit, .before = tidyselect::everything()) |>
   write.table_sas(file = "exclude/r2sas/ig_fet_centiles.txt", sep = " ")
 
-
 ig_nbs_zscores <- list()
 for (standard in names(gigs::ig_nbs)) {
   li_zscores <- list()
@@ -128,8 +127,22 @@ ig_png_centiles <- ig_png_centiles |>
   write.table_sas(file = "exclude/r2sas/ig_png_centiles.txt", sep = " ")
 
 gigs::gigs_input_options_set(new_value = "quiet")
-write.table_sas(gigs::life6mo, file = "exclude/r2sas/life6mo.txt")
 
+# IG-21st Extended NBS coeffs -----------------------------------------------------------
+
+n_sex <- nrow(gigs::ig_nbs_ext_coeffs$wfga$male)
+dplyr::bind_rows(
+  dplyr::bind_rows(gigs::ig_nbs_ext_coeffs$wfga) |>
+    dplyr::mutate(acronym = "WFGA"),
+  dplyr::bind_rows(gigs::ig_nbs_ext_coeffs$lfga) |>
+    dplyr::mutate(acronym = "LFGA"),
+  dplyr::bind_rows(gigs::ig_nbs_ext_coeffs$hcfga) |>
+    dplyr::mutate(acronym = "HCFGA"),
+) |> dplyr::mutate(
+  sex = rep.int(c(rep_len("M", n_sex), rep_len("F", n_sex)), 3)
+) |>
+  relocate(acronym, sex) |>
+  write.table_sas(file = "exclude/r2sas/ig_nbs_ext_coeffs.txt", sep = " ")
 
 # LIFE dataset -----------------------------------------------------------------
 life6mo_sas <- gigs::life6mo |>
@@ -137,18 +150,17 @@ life6mo_sas <- gigs::life6mo |>
   write.table_sas(file = "exclude/r2sas/life6mo.txt")
 
 # LIFE dataset (for package comparisons) ---------------------------------------
-life6mo_comp <- gigs::life6mo |>
+life6mo_comp_without_id <- gigs::life6mo |>
   dplyr::mutate(
-    weight_kg = weight_g / 1000,
     sex = as.character(sex),
     gest_days = pma - age_days) |>
   dplyr::select(!muac_cm) |>
-  gigs::classify_growth(weight_kg = weight_kg,
+  gigs::classify_growth(weight_kg = wt_kg,
                         lenht_cm = len_cm,
                         headcirc_cm = headcirc_cm,
                         sex = sex,
                         age_days = age_days,
-                        gest_days = gest_days) |>
+                        gest_days = gestage) |>
   dplyr::select(id, visitweek,
                 birthweight_centile, sfga, sfga_severe, svn,
                 lhaz, stunting, stunting_outliers,
@@ -156,4 +168,25 @@ life6mo_comp <- gigs::life6mo |>
                 waz, wfa, wfa_outliers,
                 hcaz, headsize) |>
   dplyr::mutate(dplyr::across(dplyr::where(is.factor), as.character))
-write.table_sas(life6mo_comp, file = "exclude/r2sas/life6mo_comparison.txt")
+write.table_sas(life6mo_comp_without_id, file = "exclude/r2sas/life6mo_comparison_without_id.txt")
+
+life6mo_comp_with_id <- gigs::life6mo |>
+dplyr::mutate(
+    sex = as.character(sex),
+    gest_days = pma - age_days) |>
+dplyr::select(!muac_cm) |>
+gigs::classify_growth(weight_kg = wt_kg,
+                        lenht_cm = len_cm,
+                        headcirc_cm = headcirc_cm,
+                        sex = sex,
+                        age_days = age_days,
+                        gest_days = gestage,
+                        id = as.factor(id)) |>
+dplyr::select(id, visitweek,
+                birthweight_centile, sfga, sfga_severe, svn,
+                lhaz, stunting, stunting_outliers,
+                wlz, wasting, wasting_outliers,
+                waz, wfa, wfa_outliers,
+                hcaz, headsize) |>
+dplyr::mutate(dplyr::across(dplyr::where(is.factor), as.character))
+write.table_sas(life6mo_comp_with_id, file = "exclude/r2sas/life6mo_comparison_with_id.txt")
