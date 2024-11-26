@@ -70,9 +70,11 @@ z-scores in different growth standards.
 We performed these benchmarks on R version
 `r session_info[[1]][["major"]]`.`r session_info[[1]][["minor"]]`, using a
 Windows 10 system with a Ryzen 7 3700X processor and 16GB of DDR4 RAM. The Stata
-benchmarks were run in Stata 18.0 (revision 15 May 2023) on the same system,
+benchmarks were run in Stata 18.0 (revision 16 Oct 2024) on the same system,
 using the [benchmark](https://github.com/mcaceresb/stata-benchmark) package for
-Stata.
+Stata. The SAS benchmarks were also performed on this system, using SAS 9.4
+(9.04.01M6P111518), in a custom benchmarking process detailed in a code block
+at the bottom of this article.
 
 ```{r yes_no_half, echo = FALSE}
 yes <- if (knitr::is_html_output()) {
@@ -145,7 +147,7 @@ In this vignette, we perform benchmark performance in each a growth standard
 from each set of growth standards implemented in **gigs**, excluding the
 extended `r intergrowth21st` Newborn Size standards. These are the:
 
-* WHO child growth standards (0-5 years)
+* WHO Child Growth Standards (0-5 years)
 * `r intergrowth21st` Newborn Size standards
 * `r intergrowth21st` Postnatal Growth standards
 * `r intergrowth21st` Fetal standards
@@ -201,19 +203,21 @@ max_median <- function(bp, name) {
 
 pkg_str <- function(pkgname) paste("R:", pkgname, packageVersion(pkg = pkgname))
 
-ver_stata_gigs <- "0.4.0"
-ver_stata_zanthro <- "1.0.2"
-plot_bp <- function(bp_r, bp_stata = NULL) {
+ver_zanthro_stata <- "1.0.2"
+ver_gigs_sas <- "0.1.8"
+ver_gigs_stata <- "1.1.1"
+plot_bp <- function(bp) {
   key_pkg_colour <- c("gs" = "#925E9FFF",
                       "gigs" = "#00468BFF",
                       "anthro" = "#AD002AFF",
-                      "AGD" = "cornflowerblue",
+                      "AGD" = "#FFA3FF",
                       "intergrowth" = "#FDAF91FF",
                       "childsds" = "#663300FF",
                       "sitar" = "#005500FF",
                       "zscorer" = "#009900",
-                      "stata_gigs" = "skyblue",
-                      "stata_zanthro" = "darkolivegreen4")
+                      "gigs_stata" = "skyblue",
+                      "zanthro_stata" = "darkolivegreen4",
+                      "gigs_sas" = "#8585e0")
   key_pkg_label <- c("gs" = pkg_str("growthstandards"),
                      "gigs" = pkg_str("gigs"),
                      "anthro" = pkg_str("anthro"),
@@ -222,14 +226,15 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
                      "childsds" = pkg_str("childsds"),
                      "sitar" = pkg_str("sitar"),
                      "zscorer" = pkg_str("zscorer"),
-                     "stata_gigs" = paste("Stata: gigs", ver_stata_gigs),
-                     "stata_zanthro" = paste("Stata: zanthro",
-                                             ver_stata_zanthro))
-  bp <- bp_r  |>
-    dplyr::select(desc, input_len, median)
-  if (!is.null(bp_stata)) {
-    suppressMessages(suppressWarnings(bp <- dplyr::full_join(bp, bp_stata)))
-  }
+                     "gigs_stata" = paste("Stata: gigs", ver_gigs_stata),
+                     "zanthro_stata" = paste("Stata: zanthro",
+                                             ver_zanthro_stata),
+                     "gigs_sas" = paste("SAS: gigs", ver_gigs_sas))
+  key_pkg_breaks <- dplyr::summarise(bp, max_time = max(median), .by = desc) |>
+    dplyr::arrange(max_time) |>
+    dplyr::pull(desc) |>
+    rev()
+  key_pkg_label <- key_pkg_label[names(key_pkg_label) %in% key_pkg_breaks]
   bp |>
     ggplot2::ggplot(ggplot2::aes(x = input_len, y = median, colour = desc)) +
     ggplot2::geom_line() +
@@ -237,7 +242,8 @@ plot_bp <- function(bp_r, bp_stata = NULL) {
     ggplot2::labs(x = "Input lengths", y = "Median time taken (ms)",
                   colour = "Package") +
     ggplot2::scale_colour_manual(values = key_pkg_colour,
-                                 labels = key_pkg_label) +
+                                 labels = key_pkg_label,
+                                 breaks = key_pkg_breaks) +
     ggplot2::theme_bw()
 }
 ```
@@ -328,13 +334,13 @@ temp_bp_who_gs_zscorer <- bench::press(
     )
   })
 
-bp_who_gs <- dplyr::bind_rows(temp_bp_who_gs_most, temp_bp_who_gs_zscorer) |>
+bp_who_gs_r <- dplyr::bind_rows(temp_bp_who_gs_most, temp_bp_who_gs_zscorer) |>
   dplyr::mutate(desc = attr(expression, which = "description")) |>
-  dplyr::select(!expression, !result, !memory, !time, !gc)
+  dplyr::select(input_len, median, desc)
 ```
 
 ### Stata
-```{r, eval = FALSE}
+```{r stata_ds_who_gs, eval = FALSE}
 # Save .dta file equivalent of benchmarking table. This can be used to benchmark
 # Stata packages.
 haven::write_dta(
@@ -351,43 +357,62 @@ we're testing in Stata.
 ```{stata stata_bench_code_who_gs, eval = FALSE}
 // This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
-	use "benchmarking/bench_ds_who_gs.dta", clear
+	use "bench_ds_who_gs.dta", clear
 	qui drop if _n > `i'
-	di "Number of inputs: `i'"
+	di "For who_gs gigs_stata - Number of inputs: `i'"
 	bench, reps(25) restore last: ///
 		qui egen double z_gigs = who_gs(y, "wfa", "v2z"), ///
-		    xvar(x) sex(sex) sexcode(m=M, f=F)
+			xvar(x) sex(sex) sexcode(m=M, f=F)
 }
 
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
-	use "benchmarking/bench_ds_who_gs.dta", clear
+	use "bench_ds_who_gs.dta", clear
 	qui drop if _n > `i'
-	di "Number of inputs: `i'"
+	di "For who_gs zanthro_stata - Number of inputs: `i'"
 	bench, reps(25) restore last: ///
 		qui egen z_anthro = zanthro(y, wa, WHO), xvar(x) gender(sex) ///
-            gencode(male=M, female=F) ageunit(day)
+			gencode(male=M, female=F) ageunit(day)
 }
 ```
 
 ```{r bp_who_gs_stata, echo = FALSE, eval = FALSE}
-input_len <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_4_0 <- c(0.009, 0.008, 0.009, 0.010, 0.012, 0.028, 0.047, 0.104, 0.198,
-                0.296, 0.405)
-zanthro_1_0_2 <- c(0.007, 0.008, 0.009, 0.017, 0.027, 0.105, 0.203, 0.479,
-                   0.951, 1.4450, 2.046)
-lens <- lengths(list(gigs_0_4_0, zanthro_1_0_2))
-n_inputs <- unlist(lapply(X = lens, FUN = \(x) input_len[seq_len(x)]))
-bp_who_gs_stata <-  data.frame(input_len = n_inputs,
-                               median = c(gigs_0_4_0, zanthro_1_0_2) * 1000,
-                               desc = c(rep("stata_gigs", lens[1]),
-                                        rep("stata_zanthro", lens[2])))
-rm(gigs_0_4_0, zanthro_1_0_2, lens, n_inputs, input_len)
+bp_who_gs_stata <- read.csv("exclude/statabench/stata_bench.csv")
+bp_who_gs_stata <- bp_who_gs_stata[bp_who_gs_stata$acronym == "who_gs", ]
+bp_who_gs_stata <- bp_who_gs_stata[, -4]
+```
+
+### SAS
+```{r sas_ds_who_gs, eval = FALSE}
+# Save .txt file equivalent of benchmarking table. This can be used to benchmark
+# SAS package.
+write.table(ds_who_gs,
+            file = file.path("exclude", "sasbench", "bench_ds_who_gs.txt"),
+            sep = ",",
+            row.names = FALSE,
+            col.names = FALSE,
+            quote = FALSE)
+```
+
+In SAS, the commands are run inside a script described at the [bottom of this
+article](#sas-code). This code essentially does the same as `bench::press()`,
+but for the SAS implementation of **gigs**.
+
+```{r bp_who_gs_sas, echo = FALSE, eval = FALSE}
+sas_who_gs <- read.csv("exclude/sasbench/sas_bench.csv")
+sas_who_gs <- sas_who_gs[sas_who_gs$family == "who_gs", ]
+bp_who_gs_sas <- data.frame(input_len = sas_who_gs$k,
+                            median = sas_who_gs$median,
+                            desc = "gigs_sas")
+rm(sas_who_gs)
 ```
 
 ## Package comparisons: timing
+```{r make_bp_who_gs, eval = FALSE, echo = FALSE}
+bp_who_gs <- dplyr::bind_rows(bp_who_gs_r, bp_who_gs_stata, bp_who_gs_sas)
+```
 
 ```{r plot_timings_who_gs, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for different software packages. The results can be read about below."}
-plot_bp(bp_who_gs, bp_who_gs_stata)
+plot_bp(bp_who_gs)
 ```
 
 On the whole, **zscorer** is by far the slowest R package, taking around
@@ -402,17 +427,18 @@ standard each time `anthro::anthro_zscores()` is called, but also due to a
 slower implementation of the WHO LMS procedure than the other R packages.
 
 Next slowest is the Stata package **zanthro**, which takes around
-`r max_median(bp_who_gs_stata, "stata_zanthro") / 1000` seconds to compute
+`r max_median(bp_who_gs, "zanthro_stata") / 1000` seconds to compute
 results in a single WHO standard. About 4 times faster than **zanthro** is
 **gigs** for Stata, which scales more efficiently than **zanthro** and takes
-around `r max_median(bp_who_gs_stata, "stata_gigs") / 1000` seconds to convert
+around `r max_median(bp_who_gs, "gigs_stata") / 1000` seconds to convert
 100,000 measurements to z-scores.
 
-Focussing on the faster R implementations reveals some interesting patterns:
+Focussing now on the faster implementations reveals some interesting patterns:
 
 ```{r plot_timings_who_gs_faster, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for a faster subset of the software packages analysed. The results can be read about below."}
 bp_who_gs |>
-  dplyr::filter(desc %in% c("gigs", "childsds", "gs", "sitar", "AGD")) |>
+  dplyr::filter(desc %in% c("gigs", "childsds", "gs", "sitar", "AGD",
+                            "gigs_sas")) |>
   plot_bp()
 ```
 
@@ -422,17 +448,21 @@ because it uses the monthly LMS coefficients to calculate its z-scores. Whilst
 this is quicker, it does induce some imprecision when compared to the other
 packages.
 
-Next fastest was the `growthstandards` package at
+In R, the next fastest was the **growthstandards** package at
 ~`r max_median(bp_who_gs, "gs")` ms for 100,000 inputs, followed by **gigs**
-(~`r max_median(bp_who_gs, "gigs")` ms), **childsds**
-(~`r max_median(bp_who_gs, "childsds")` ms), and lastly **AGD**
-(~`r max_median(bp_who_gs, "AGD")` ms). Interestingly, **AGD** starts out
-much slower than the other 'fast' packages, but may scale more efficiently as
-you reach ~250,000 or more inputs.
+(~`r max_median(bp_who_gs, "gigs")` ms), **AGD**
+(~`r max_median(bp_who_gs, "AGD")` ms, and lastly **childsds**
+(~`r max_median(bp_who_gs, "childsds")` ms).
 
-Additionally, **gigs** is faster that **growthstandards** up to ~30,000 inputs
-but ends up slower at 100,000 inputs. This may be due to the input checks
-performed in **gigs**, which scale worse than the conversion code itself.
+If you're a SAS user, you'll find **gigs** for SAS slower than its R
+equivalent, but still much faster than Stata at
+~`r max_median(bp_who_gs, "gigs_sas")` milliseconds.
+
+Interestingly, **AGD** starts out much slower than the other 'fast' R packages,
+but may scale more efficiently as you reach larger sets of inputs. Additionally,
+**gigs** is faster than **growthstandards** up to ~34,000 inputs but ends up
+slower at 100,000 inputs. This may be due to the input checks performed in
+**gigs**, which scale worse than the conversion code itself.
 
 ## Package comparisons: numerical consistency
 In our testing of the WHO standards, we found that the tested packages mostly
@@ -484,7 +514,7 @@ values, and so compute different z-scores for the same measurements.
 
 # INTERGROWTH-21<sup>st</sup> Newborn Size standards
 The `r intergrowth21st` Newborn Size standards are implemented in gigs for R and
-Stata, and in the `growthstandards` package for R. Let's make a new dataset,
+Stata, and in the **growthstandards** package for R. Let's make a new dataset,
 `ds_ig_nbs`, which we will use to benchmark these functions:
 
 ```{r ds_ig_nbs}
@@ -503,7 +533,7 @@ ds_ig_nbs[1:10, ]
 ## Timing
 ### R
 ```{r bp_ig_nbs, echo = TRUE, eval = FALSE}
-bp_ig_nbs <- bench::press(
+bp_ig_nbs_r <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
   {
     p <- pnorm(ds_ig_nbs$z[1:input_len])
@@ -522,7 +552,7 @@ bp_ig_nbs <- bench::press(
     )
   }) |>
   dplyr::mutate(desc = attr(expression, which = "description")) |>
-  dplyr::select(!expression, !result, !memory, !time, !gc)
+  dplyr::select(input_len, median, desc)
 ```
 ### Stata
 ```{r, eval = FALSE}
@@ -538,41 +568,68 @@ We can then benchmark the speed of the Stata command:
 ```{stata stata_bench_code_ig_nbs, eval = FALSE}
 // This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
-	use "benchmarking/bench_ds_ig_nbs.dta", clear
+	use "bench_ds_ig_nbs.dta", clear
 	qui drop if _n > `i'
-	di "Number of inputs: `i'"
+	di "For ig_nbs gigs_stata - Number of inputs: `i'"
 	bench, reps(25) restore last: ///
 		qui egen double z_gigs = ig_nbs(y, "wfga", "v2z"), ///
-		    gest_days(x) sex(sex) sexcode(m=M, f=F)
+			gest_days(gest_days) sex(sex) sexcode(m=M, f=F)
 }
 ```
 
 ```{r bp_ig_nbs_stata, echo = FALSE, eval = FALSE}
-input_len <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_4_0 <- c(0.009, 0.004, 0.005, 0.006, 0.008, 0.027, 0.048, 0.111, 0.220,
-                0.334, 0.471)
-bp_ig_nbs_stata <-  data.frame(input_len = input_len,
-                               median = gigs_0_4_0 * 1000,
-                               desc = "stata_gigs")
-rm(gigs_0_4_0, input_len)
+bp_ig_nbs_stata <- read.csv("exclude/statabench/stata_bench.csv")
+bp_ig_nbs_stata <- bp_ig_nbs_stata[bp_ig_nbs_stata$acronym == "ig_nbs", ]
+bp_ig_nbs_stata <- bp_ig_nbs_stata[, -4]
+```
+
+### SAS
+```{r sas_ds_ig_nbs, eval = FALSE}
+# Save .txt file equivalent of benchmarking table. This can be used to benchmark
+# SAS package.
+write.table(ds_ig_nbs,
+            file = file.path("exclude", "sasbench", "bench_ds_ig_nbs.txt"),
+            sep = ",",
+            row.names = FALSE,
+            col.names = FALSE,
+            quote = FALSE)
+```
+
+In SAS, the commands are run inside a script described at the [bottom of this
+article](#sas-code). This code essentially does the same as `bench::press()`,
+but for the SAS implementation of **gigs**.
+
+```{r bp_ig_nbs_sas, echo = FALSE, eval = FALSE}
+sas_ig_nbs <- read.csv(file = "exclude/sasbench/sas_bench.csv")
+sas_ig_nbs <- sas_ig_nbs[sas_ig_nbs$family == "ig_nbs", ]
+bp_ig_nbs_sas <-  data.frame(input_len = sas_ig_nbs$k,
+                             median = sas_ig_nbs$median,
+                             desc = "gigs_sas")
+rm(sas_ig_nbs)
+```
+
+## Package comparisons: timing
+```{r make_bp_ig_nbs, eval = FALSE, echo = FALSE}
+bp_ig_nbs <- dplyr::bind_rows(bp_ig_nbs_r, bp_ig_nbs_stata, bp_ig_nbs_sas)
 ```
 
 ```{r plot_timings_ig_nbs, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Newborn Size standard for weight-for-gestational age. The results can be read about below."}
-plot_bp(bp_ig_nbs, bp_ig_nbs_stata)
+plot_bp(bp_ig_nbs)
 ```
 
 For this set of growth standards, the Stata implementation for GIGS is the
-slowest at ~`r max_median(bp_ig_nbs_stata, "stata_gigs")` ms. The
-`growthstandards` and **gigs** packages are the fastest at
-~`r max_median(bp_ig_nbs, "gs")` and ~`r max_median(bp_ig_nbs, "gigs")` ms,
+slowest at ~`r max_median(bp_ig_nbs, "gigs_stata")` ms. Next is
+**gigs** for SAS, which is much faster at ~`r max_median(bp_ig_nbs, "gigs_sas")`
+ms. The **growthstandards** and **gigs** packages are the fastest at
+~`r max_median(bp_ig_nbs, "gs")` ms and ~`r max_median(bp_ig_nbs, "gigs")` ms,
 respectively.
 
 ## Package comparisons: numerical consistency
 In our testing of the `r intergrowth21st` Newborn Size standards, we found that
-the implementation in `growthstandards` does not perform coefficient
+the implementation in **growthstandards** does not perform coefficient
 interpolation for the `r intergrowth21st` Newborn Size standards which
-utilise mu/sigma/nu/tau coefficients. Instead, `growthstandards` uses `round()`
-to round non-integer gestational ages to the nearest value, then gets
+utilise mu/sigma/nu/tau coefficients. Instead, **growthstandards** uses
+`round()` to round non-integer gestational ages to the nearest value, then gets
 mu/sigma/nu/tau coefficients for this rounded GA. This leads a smaller-scale
 version of the z-scoring errors found by
 [Kiger *et al.* (2016)](https://dx.doi.org/10.1007/s10916-015-0389-x) when not
@@ -590,7 +647,7 @@ waldo::compare(gigs, gs / 100, x_arg = "gigs", y_arg = "growthstandards")
 
 # INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
 The `r ig21st` Postnatal Growth standards are implemented in gigs for R and
-Stata, and in the `growthstandards` package. Let's make a new dataset,
+Stata, and in the **growthstandards** package. Let's make a new dataset,
 `ds_ig_png`, which we will use to benchmark these functions:
 ```{r ds_ig_png}
 ac_ig_png <- "wfa"
@@ -608,7 +665,7 @@ ds_ig_png[1:10, ]
 ## Timing
 ### R
 ```{r bp_ig_png, echo = TRUE, eval = FALSE}
-bp_ig_png <- bench::press(
+bp_ig_png_r <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
   {
     weight_kg <- ds_ig_png$y[1:input_len]
@@ -627,7 +684,7 @@ bp_ig_png <- bench::press(
     )
   }) |>
   dplyr::mutate(desc = attr(expression, which = "description")) |>
-  dplyr::select(!expression, !result, !memory, !time, !gc)
+  dplyr::select(input_len, median, desc)
 ```
 
 ### Stata
@@ -643,42 +700,69 @@ haven::write_dta(
 ```{stata stata_bench_code_ig_png, eval = FALSE}
 // This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
-	use "benchmarking/bench_ds_ig_png.dta", clear
+	use "bench_ds_ig_png.dta", clear
 	qui drop if _n > `i'
 	di "Number of inputs: `i'"
 	bench, reps(25) restore last: ///
-		qui egen double z_gigs = ig_png(y, "wfga", "v2z"), ///
-		    xvar(x) sex(sex) sexcode(m=M, f=F)
+		qui egen double z_gigs = ig_png(y, "wfa", "v2z"), ///
+			xvar(x) sex(sex) sexcode(m=M, f=F)
 }
 ```
 
 ```{r bp_ig_png_stata, echo = FALSE, eval = FALSE}
-input_len <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_4_0 <- c(0.003, 0.002, 0.002, 0.003, 0.004, 0.010, 0.019, 0.043, 0.082,
-                0.114, 0.164)
-bp_ig_png_stata <-  data.frame(input_len = input_len,
-                               median = gigs_0_4_0 * 1000,
-                               desc = "stata_gigs")
-rm(gigs_0_4_0, input_len)
+bp_ig_png_stata <- read.csv("exclude/statabench/stata_bench.csv")
+bp_ig_png_stata <- bp_ig_png_stata[bp_ig_png_stata$acronym == "ig_png", ]
+bp_ig_png_stata <- bp_ig_png_stata[, -4]
+```
+
+### SAS
+```{r sas_ds_ig_png, eval = FALSE}
+# Save .txt file equivalent of benchmarking table. This can be used to benchmark
+# SAS package.
+write.table(ds_ig_png,
+            file = file.path("exclude", "sasbench", "bench_ds_ig_png.txt"),
+            sep = ",",
+            row.names = FALSE,
+            col.names = FALSE,
+            quote = FALSE)
+```
+
+In SAS, the commands are run inside a script described at the [bottom of this
+article](#sas-code). This code essentially does the same as `bench::press()`,
+but for the SAS implementation of **gigs**.
+
+```{r bp_ig_png_sas, echo = FALSE, eval = FALSE}
+sas_ig_png <- read.csv("exclude/sasbench/sas_bench.csv")
+sas_ig_png <- sas_ig_png[sas_ig_png$family == "ig_png", ]
+bp_ig_png_sas <-  data.frame(input_len = sas_ig_png$k,
+                             median = sas_ig_png$median,
+                             desc = "gigs_sas")
+rm(sas_ig_png)
+```
+
+## Package comparisons: timing
+```{r make_bp_ig_png, eval = FALSE, echo = FALSE}
+bp_ig_png <- dplyr::bind_rows(bp_ig_png_r, bp_ig_png_stata, bp_ig_png_sas)
 ```
 
 ```{r plot_timings_ig_png, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Postnatal Growth standard for weight-for-age. The results can be read about below."}
-plot_bp(bp_ig_png, bp_ig_png_stata)
+plot_bp(bp_ig_png)
 ```
 
 For the `r intergrowth21st` Postnatal Growth standards, the Stata implementation
-for GIGS is the slowest at ~`r max_median(bp_ig_png_stata, "stata_gigs")` ms.
-The **gigs** and `growthstandards` packages are the fastest at
+for GIGS is the slowest at ~`r max_median(bp_ig_png, "gigs_stata")` ms. Next is
+**gigs** for SAS, which takes around ~`r max_median(bp_ig_png, "gigs_sas")` ms.
+The **gigs** and **growthstandards** packages are the fastest at
 ~`r max_median(bp_ig_png, "gs")` and ~`r max_median(bp_ig_png, "gigs")` ms,
 respectively.
 
 # INTERGROWTH-21<sup>st</sup> Fetal standards
 The `r ig21st` Fetal standards are implemented in gigs for R and Stata, and in
-the `growthstandards` and `intergrowth` packages (though more fully in
-`intergrowth`  than in `growthstandards`, and both are missing some standards
-which are included in **gigs**). Let's make a new dataset, `ds_ig_fet`, which we
-will use to benchmark a conversion in a fetal growth standard common to all
-three packages:
+the **growthstandards** and **intergrowth** packages (though more fully in
+**intergrowth**  than in **growthstandards**, and both are missing some
+standards which are included in **gigs**). Let's make a new dataset,
+`ds_ig_fet`, which we will use to benchmark a conversion in a fetal growth
+standard common to all three packages:
 
 ```{r ds_ig_fet}
 ac_ig_fet <- "ofdfga"
@@ -696,7 +780,7 @@ ds_ig_fet[1:10, ]
 ## Timing
 ### R
 ```{r bp_ig_fet, echo = TRUE, eval = FALSE}
-bp_ig_fet <- bench::press(
+bp_ig_fet_r <- bench::press(
   input_len = c(1, 1000, 10000, seq(25000, 100000, 25000)),
   {
     gest_days <- ds_ig_fet$x[1:input_len]
@@ -716,7 +800,7 @@ bp_ig_fet <- bench::press(
     )
   }) |>
   dplyr::mutate(desc = attr(expression, which = "description")) |>
-  dplyr::select(!expression, !result, !memory, !time, !gc)
+  dplyr::select(input_len, median, desc)
 ```
 
 ### Stata
@@ -732,7 +816,7 @@ haven::write_dta(
 ```{stata stata_bench_code_ig_fet, eval = FALSE}
 // This is Stata code
 foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
-	use "benchmarking/bench_ds_ig_fet.dta", clear
+	use "bench_ds_ig_fet.dta", clear
 	qui drop if _n > `i'
 	di "Number of inputs: `i'"
 	bench, reps(25) restore last: ///
@@ -741,43 +825,69 @@ foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
 ```
 
 ```{r bp_ig_fet_stata, echo = FALSE, eval = FALSE}
-input_len <- c(1, 10, 100, 500, 1000, 5000, 10000, seq(25000, 100000, 25000))
-gigs_0_4_0 <- c(0.002, 0.003, 0.002, 0.003, 0.004, 0.006, 0.012, 0.025, 0.046,
-                0.066, 0.093)
-bp_ig_fet_stata <-  data.frame(input_len = input_len,
-                               median = gigs_0_4_0 * 1000,
-                               desc = "stata_gigs")
-rm(gigs_0_4_0, input_len)
+bp_ig_fet_stata <- read.csv("exclude/statabench/stata_bench.csv")
+bp_ig_fet_stata <- bp_ig_fet_stata[bp_ig_fet_stata$acronym == "ig_fet", ]
+bp_ig_fet_stata <- bp_ig_fet_stata[, -4]
+```
+
+### SAS
+```{r sas_ds_ig_fet, eval = FALSE}
+# Save .txt file equivalent of benchmarking table. This can be used to benchmark
+# SAS package.
+write.table(ds_ig_fet,
+            file = file.path("exclude", "sasbench", "bench_ds_ig_fet.txt"),
+            sep = ",",
+            row.names = FALSE,
+            col.names = FALSE,
+            quote = FALSE)
+```
+
+In SAS, the commands are run inside a script described at the [bottom of this
+article](#sas-code). This code essentially does the same as `bench::press()`,
+but for the SAS implementation of **gigs**.
+
+```{r bp_ig_fet_sas, echo = FALSE, eval = FALSE}
+sas_ig_fet <- read.csv("exclude/sasbench/sas_bench.csv")
+sas_ig_fet <- sas_ig_fet[sas_ig_fet$family == "ig_fet", ]
+bp_ig_fet_sas <-  data.frame(input_len = sas_ig_fet$k,
+                             median = sas_ig_fet$median,
+                             desc = "gigs_sas")
+rm(sas_ig_fet)
+```
+
+## Package comparisons: timing
+```{r make_bp_ig_fet, eval = FALSE, echo = FALSE}
+bp_ig_fet <- dplyr::bind_rows(bp_ig_fet_r, bp_ig_fet_stata, bp_ig_fet_sas)
 ```
 
 ```{r plot_timings_ig_fet, echo = FALSE, fig.alt = "A line graph of median time taken against no. of inputs for the analysed software packages in the INTERGROWTH-21st Fetal standard for occipito-frontal diameter-for-gestational age. The results can be read about below."}
-plot_bp(bp_ig_fet, bp_ig_fet_stata)
+plot_bp(bp_ig_fet)
 ```
 
 For the `r intergrowth21st` Fetal standard for occipito-frontal diameter, the
-GIGS implementation for Stata is the slowest to analyse 100,000 inputs at
-~`r max_median(bp_ig_fet_stata, "stata_gigs")` ms. The R **gigs** package is the
-fastest at ~`r max_median(bp_ig_fet, "gigs")` ms, followed by `growthstandards`
-at ~`r max_median(bp_ig_fet, "gs")`, and then `intergrowth` at
-~`r max_median(bp_ig_fet, "intergrowth")`.
+GIGS implementation for SAS is the slowest to analyse 100,000 inputs at
+~`r max_median(bp_ig_fet, "gigs_sas")` ms. Next is **gigs** for Stata, at
+~`r max_median(bp_ig_fet, "gigs_stata")` ms. The R **gigs** package is the
+fastest at ~`r max_median(bp_ig_fet, "gigs")` ms, followed by
+**growthstandards** at ~`r max_median(bp_ig_fet, "gs")`ms, and then
+**intergrowth** at ~`r max_median(bp_ig_fet, "intergrowth")`ms.
 
 # Summary
 
 ## Timings summary (100,000 inputs)
 
 ```{r save_timings, echo = FALSE, eval = FALSE}
-max_median_all <- function(bp_r, bp_stata) {
-  bp_both <- dplyr::bind_rows(bp_r[, colnames(bp_stata)], bp_stata)
-  vapply(X = unique(bp_both$desc),
-         FUN = \(desc) max_median(bp_both, desc),
+max_median_all <- function(bp) {
+  vapply(X = unique(bp$desc),
+         FUN = \(desc) max_median(bp, desc),
          FUN.VALUE = double(1L))
 }
 
 max_len_bench <- list(
-  who_gs = max_median_all(bp_who_gs, bp_who_gs_stata),
-  ig_nbs = max_median_all(bp_ig_nbs, bp_ig_nbs_stata),
-  ig_png = max_median_all(bp_ig_png, bp_ig_png_stata),
-  ig_fet = max_median_all(bp_ig_fet, bp_ig_fet_stata)
+  who_gs = max_median_all(bp_who_gs),
+  ig_nbs = max_median_all(bp_ig_nbs),
+  ig_png = max_median_all(bp_ig_png),
+  ig_fet = max_median_all(bp_ig_fet)
 )
 ```
 
@@ -791,8 +901,9 @@ max_len_bench <- list(
 | `r intergrowth` | R        | `r no`                                    | `r no`                                 | `r no`                                 | `r max_len_bench[[4]][["intergrowth"]]` |
 | `r sitar`       | R        | `r max_len_bench[[1]][["sitar"]]`         | `r no`                                 | `r no`                                 | `r no`                                  |
 | `r zscorer`     | R        | NA                                        | `r no`                                 | `r no`                                 | `r no`                                  |
-| `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["stata_gigs"]]`    | `r max_len_bench[[2]][["stata_gigs"]]` | `r max_len_bench[[3]][["stata_gigs"]]` | `r max_len_bench[[4]][["stata_gigs"]]`  |
-| `r zanthro`     | Stata    | `r max_len_bench[[1]][["stata_zanthro"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r gigs_stata`  | Stata    | `r max_len_bench[[1]][["gigs_stata"]]`    | `r max_len_bench[[2]][["gigs_stata"]]` | `r max_len_bench[[3]][["gigs_stata"]]` | `r max_len_bench[[4]][["gigs_stata"]]`  |
+| `r zanthro`     | Stata    | `r max_len_bench[[1]][["zanthro_stata"]]` | `r no`                                 | `r no`                                 | `r no`                                  |
+| `r gigs_sas`    | SAS      | `r max_len_bench[[1]][["gigs_sas"]]`      | `r max_len_bench[[2]][["gigs_sas"]]`   | `r max_len_bench[[3]][["gigs_sas"]]`   | `r max_len_bench[[4]][["gigs_sas"]]`    |
 
 Note: **zscorer** is NA because we couldn't time it for 100,000 inputs (it takes
 too long).
@@ -836,5 +947,214 @@ session_info
 [//]: # (Code to save/load all timings tables in a separate .rda file)
 ```{r save_benchmarking_rda, eval = FALSE, echo = FALSE}
 save(file = file.path("vignettes/articles/benchmarking.rda"),
-     list = ls(pattern = "^(bp)"), max_len_bench, session_info)
+     bp_who_gs, bp_ig_nbs, bp_ig_png, bp_ig_fet, max_len_bench, session_info)
+```
+
+# Non-R code
+
+## Stata code
+
+```{stata, eval = FALSE}
+// Set path to directory with benchmarking datasets
+local path = "D:\path\to\directory"
+cd "`path'"
+
+log using "`path'\statabench.log", replace text nomsg
+
+// WHO Child Growth Standards
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "bench_ds_who_gs.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen double z_gigs = who_gs(y, "wfa", "v2z"), ///
+			xvar(x) sex(sex) sexcode(m=M, f=F)
+}
+
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "bench_ds_who_gs.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen z_anthro = zanthro(y, wa, WHO), xvar(x) gender(sex) ///
+			gencode(male=M, female=F) ageunit(day)
+}
+
+// IG-21st Newborn Size Standards
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "bench_ds_ig_nbs.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen double z_gigs = ig_nbs(y, "wfga", "v2z"), ///
+			gest_days(gest_days) sex(sex) sexcode(m=M, f=F)
+}
+
+// IG-21st Postnatal Growth Standards
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "bench_ds_ig_png.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen double z_gigs = ig_png(y, "wfa", "v2z"), ///
+			xvar(x) sex(sex) sexcode(m=M, f=F)
+}
+
+// IG-21st Fetal Standards
+foreach i in 1 10 100 500 1000 5000 10000 25000 50000 75000 100000 {
+	use "bench_ds_ig_fet.dta", clear
+	qui drop if _n > `i'
+	di "Number of inputs: `i'"
+	bench, reps(25) restore last: ///
+		qui egen double z_gigs = ig_fet(y, "ofdfga", "v2z"), xvar(x)
+}
+
+log close
+```
+
+The resulting log file has our timings, albeit in a slightly annoying format.
+This bit of R code converts that file into a CSV for easy reading into R.
+
+```{r extract_stata_timings, eval = FALSE}
+# logfile <- "../exclude/statabench/statabench.log"
+logfile <- readr::read_lines("exclude/statabench/statabench.log")
+
+logfile_to_df <- function(logfile, acronym) {
+  pattern <- paste0("^For ", acronym, "|Average")
+  log_subset <- logfile[grepl(x = logfile, pattern = pattern)]
+
+  hits <- which(grepl(x = log_subset, pattern = paste0("^For ", acronym)))
+  pasted <- paste(log_subset[hits], log_subset[hits + 1])
+
+  n_inputs <- stringr::str_extract(pasted, pattern = "(?<=inputs\\: ).*(?= A)") |>
+    as.integer()
+  median <- stringr::str_extract(pasted, pattern = "(?<=runs\\: ).*(?= s)") |>
+    as.double()
+  desc_pattern <- paste0("(?<=", acronym, " ).*(?= -)")
+  desc <- stringr::str_extract(pasted, pattern = desc_pattern)
+  df <- data.frame(input_len = n_inputs,
+                   median = median * 1000, # Convert secs to ms
+                   desc = desc,
+                   acronym = acronym)
+}
+
+stata_bench <- purrr::map_dfr(.x = c("who_gs", "ig_nbs", "ig_png", "ig_fet"),
+                              .f = \(acronym) logfile_to_df(logfile, acronym))
+write.csv(stata_bench, file = "exclude/statabench/stata_bench.csv",
+          row.names = FALSE)
+
+rm(logfile_to_df, logfile, stata_bench)
+```
+
+## SAS code
+
+Unlike the Stata benchmarking code, the SAS code automatically outputs the
+data to a CSV file.
+
+```{sas, eval = FALSE}
+/* SAS benchmarking code - Written by Bartosz Jablonski, Nov 2024 */
+/*                                                                */
+/* To run this script, you need to install the GIGS package for   */
+/* SAS. This requires you to follow the installation instructions */
+/* at  https://github.com/SASPAC/gigs/.                           */
+
+filename packages "D:\Users\tadeo\Documents\SASPAC";
+%include packages(SPFinit.sas);
+%loadPackage(gigs)
+
+/* path for files with data */
+%let path=D:\Users\tadeo\Documents\gigs\exclude\sasbench;
+
+data bench_ds_ig_fet;
+infile "&path/bench_ds_ig_fet.txt" dlm=",";
+input z x family :$20. acronym :$20. y; /* sex :$2.;*/
+run;
+
+%macro readFiles(file);
+data &file.;
+infile "&path/&file..txt" dlm=",";
+input
+z x sex :$2. family :$20. acronym :$20. y;
+run;
+%mend readFiles;
+
+%readFiles(bench_ds_ig_nbs)
+%readFiles(bench_ds_ig_png)
+%readFiles(bench_ds_who_gs)
+
+
+%macro loopBench(data,call,reps=25);
+%array(i[11] (1 10 100 500 1000 5000 10000 25000 50000 75000 100000),macarray=Y) /**/
+%put %do_over(i);
+
+SASFILE &data. load;
+
+%local j k l;
+%do j=1 %to &iHBOUND.;
+  %let k=%i(&j.);
+
+
+  %do l=1 %to &reps.; /* read data set read the "number of repetitions" times */
+
+  data loop_&data._&k._&l.(BUFSIZE=4k compress=no);
+    t0=time();
+    u=0;
+
+    do until(_E_);
+      set
+          &data.(obs=&k.) /* select only k first observations */
+      end=_E_;
+      /*n+(round(z,0.000001)=round(&call.,0.000001));*/
+      t=time();
+      n=&call.; /* function call on a single observation */
+      u+(time()-t);
+    end;
+
+    t=(time()-t0);
+    k=&k.;
+    l=&l.;
+    output;
+    stop;
+  run;
+  %end;
+%end;
+
+SASFILE &data. close;
+
+%mend loopBench;
+
+
+options nomprint nosymbolgen nomlogic nonotes;
+%loopBench(bench_ds_ig_fet,gigs_ig_fet_value2zscore(y, x, acronym))
+%loopBench(bench_ds_ig_nbs,gigs_ig_nbs_value2zscore(y, x, sex, acronym))
+%loopBench(bench_ds_ig_png,gigs_ig_png_value2zscore(y, x, sex, acronym))
+%loopBench(bench_ds_who_gs,gigs_who_gs_value2zscore(y, x, sex, acronym))
+options notes;
+
+data _all_;
+  set loop_:;
+run;
+
+proc sort data=_all_ out=plot;
+  by family k l ;
+run;
+
+proc sql;
+create table plot as
+select family, k, avg(t) label='time in seconds' as tt, avg(u) as uu
+from _all_
+group by family, k;
+run;
+
+proc print data=plot;
+
+data sas_bench;
+  set plot;
+  median=tt*1000;
+run;
+
+proc export data=sas_bench
+  file="&path\sas_bench.csv"
+  dbms=csv replace;
+run;
 ```

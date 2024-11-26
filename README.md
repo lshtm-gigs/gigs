@@ -472,17 +472,18 @@ timings can be seen online in the **gigs** benchmarking
 [article](https://lshtm-gigs.github.io/gigs/articles/benchmarking.html).
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
-|:------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 92                   | 85                          | 23                          | 11                            |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 1974                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 120                  | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 118                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 90                   | 75                          | 43                          | 13                            |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 17                            |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 45                   | ❌                          | ❌                          | ❌                            |
+|-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
+| [gigs](https://www.github.com/lshtm-gigs/gigs/)                                     | R        | 98                   | 78                          | 20                          | 10                            |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2162                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 119                  | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 127                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 91                   | 70                          | 41                          | 11                            |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 18                            |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
-| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 405                  | 471                         | 164                         | 93                            |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 2046                 | ❌                          | ❌                          | ❌                            |
+| [gigs](https://www.github.com/lshtm-gigs/gigs-stata/) (Stata)                       | Stata    | 348                  | 377                         | 109                         | 57                            |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 1059                 | ❌                          | ❌                          | ❌                            |
+| [gigs](https://github.com/SASPAC/gigs/) (SAS)                                       | SAS      | 181                  | 184                         | 88                          | 87                            |
 
 Note: `zscorer` is NA because we couldn’t time it for 100,000 inputs (it
 takes too long).
