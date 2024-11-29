@@ -41,10 +41,12 @@ used in downstream analyses.
 
 ## Installation
 
+You can install the development version of **gigs** from GitHub with
+`pak`:
+
 ``` r
-# You can install the development version from GitHub with `remotes`:
-# install.packages("remotes")
-remotes::install_github(repo = "lshtm-gigs/gigs")
+# install.packages("pak")
+pak::pkg_install(pkg = "lshtm-gigs/gigs")
 ```
 
 ## Rationale + terminology
@@ -500,7 +502,7 @@ download links for Excel-based calculators in some standards.
 **S. R. Parker** Maternal, Adolescent, Reproductive, and Child Health
 Centre, London School of Hygiene & Tropical Medicine
 
-**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital Harvard T.H.
+**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital, Harvard T.H.
 Chan School of Public Health
 
 **Professor E. O. Ohuma** Maternal, Adolescent, Reproductive, and Child
