@@ -3,7 +3,7 @@
 \docType{data}
 \name{ig_nbs_ext_coeffs}
 \alias{ig_nbs_ext_coeffs}
-\title{INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Extended Newborn Size Standards GAMLSS
+\title{Extended INTERGROWTH-21\if{html}{\out{<sup>}}st\if{html}{\out{</sup>}} Newborn Size Standards GAMLSS
 coefficients}
 \source{
 Mu/sigma/nu/tau values were provided by Dr Eric Ohuma.

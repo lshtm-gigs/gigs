@@ -60,7 +60,7 @@ NULL
 #' @keywords data
 NULL
 
-#' INTERGROWTH-21<sup>st</sup> Extended Newborn Size Standards (including very
+#' Extended INTERGROWTH-21<sup>st</sup> Newborn Size Standards (including very
 #' preterm) growth curve data
 #'
 #' @name ig_nbs_ext
@@ -79,7 +79,7 @@ NULL
 #' @keywords data
 NULL
 
-#' INTERGROWTH-21<sup>st</sup> Extended Newborn Size Standards GAMLSS
+#' Extended INTERGROWTH-21<sup>st</sup> Newborn Size Standards GAMLSS
 #' coefficients
 #'
 #' @name ig_nbs_ext_coeffs

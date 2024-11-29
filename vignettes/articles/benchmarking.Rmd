@@ -554,6 +554,7 @@ bp_ig_nbs_r <- bench::press(
   dplyr::mutate(desc = attr(expression, which = "description")) |>
   dplyr::select(input_len, median, desc)
 ```
+
 ### Stata
 ```{r, eval = FALSE}
 # Save .dta file equivalent of benchmarking table. This can be used to benchmark

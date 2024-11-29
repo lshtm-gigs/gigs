@@ -128,7 +128,7 @@ ig_png_centiles <- ig_png_centiles |>
 
 gigs::gigs_input_options_set(new_value = "quiet")
 
-# IG-21st Extended NBS coeffs -----------------------------------------------------------
+# Extended IG-21st NBS coeffs -----------------------------------------------------------
 
 n_sex <- nrow(gigs::ig_nbs_ext_coeffs$wfga$male)
 dplyr::bind_rows(

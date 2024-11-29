@@ -229,7 +229,7 @@ and INTERGROWTH-21<sup>st</sup> project:
   | `fmfga`  | fat mass-for-GA               | kg    | 266 to 294 days |
 
   </details>
-- `ig_nbs_ext` - INTERGROWTH-21<sup>st</sup> Extended Newborn Size
+- `ig_nbs_ext` - Extended INTERGROWTH-21<sup>st</sup> Newborn Size
   standards (including very preterm)
   <details>
   <summary>

@@ -58,10 +58,11 @@ measures of fetal/newborn/child growth, which can then be used in downstream
 analyses.
 
 ## Installation
+
+You can install the development version of **gigs** from GitHub with `pak`:
 ```{r installation, eval = FALSE}
-# You can install the development version from GitHub with `remotes`:
-# install.packages("remotes")
-remotes::install_github(repo = "lshtm-gigs/gigs")
+# install.packages("pak")
+pak::pkg_install(pkg = "lshtm-gigs/gigs")
 ```
 
 ## Rationale + terminology
@@ -188,7 +189,7 @@ project:
   | `fmfga`  | fat mass-for-GA               | kg    | 266 to 294 days |
 
   </details>
-* `ig_nbs_ext` - `r intergrowth21st` Extended Newborn Size standards (including
+* `ig_nbs_ext` - Extended `r intergrowth21st` Newborn Size standards (including
   very preterm)
   <details><summary>Component standards</summary>
 
@@ -471,7 +472,7 @@ Excel-based calculators in some standards.
 **S. R. Parker** Maternal, Adolescent, Reproductive, and Child Health
 Centre, London School of Hygiene & Tropical Medicine
 
-**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital Harvard T.H.
+**Dr L. Vesel** Ariadne Labs, Brigham and Women’s Hospital, Harvard T.H.
 Chan School of Public Health
 
 **Professor E. O. Ohuma** Maternal, Adolescent, Reproductive, and Child
