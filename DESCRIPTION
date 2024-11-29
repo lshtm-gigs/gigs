@@ -34,7 +34,7 @@ Imports:
     gamlss.dist,
     stats,
     rlang,
-    vctrs,
+    vctrs (>= 0.4.0),
     cli
 Suggests:
     knitr,

@@ -258,6 +258,7 @@
       "@type": "SoftwareApplication",
       "identifier": "vctrs",
       "name": "vctrs",
+      "version": ">= 0.4.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -280,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2268.377KB",
+  "fileSize": "2268.388KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
