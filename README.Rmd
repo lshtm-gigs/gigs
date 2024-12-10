@@ -28,12 +28,12 @@ library(gigs)
 # gigs <img src="man/figures/logo.png" align="right" height="138" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
-[![pkgcheck](https://github.com/ropsensci/gigs/workflows/pkgcheck/badge.svg)](https://github.com/ropsensci/gigs/actions?query=workflow%3Apkgcheck)
-[![test-coverage](https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/ropsensci/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/ropsensci/gigs)
+[![pkgcheck](https://github.com/ropensci/gigs/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/gigs/actions?query=workflow%3Apkgcheck)
+[![test-coverage](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/github/ropensci/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/ropensci/gigs)
 [![ropensci](https://badges.ropensci.org/626_status.svg)](https://github.com/ropensci/software-review/issues/626)
 <!-- badges: end -->
 
@@ -62,7 +62,7 @@ analyses.
 You can install the development version of **gigs** from GitHub with `pak`:
 ```{r installation, eval = FALSE}
 # install.packages("pak")
-pak::pkg_install(pkg = "ropsensci/gigs")
+pak::pkg_install(pkg = "ropensci/gigs")
 ```
 
 ## Rationale + terminology
@@ -385,11 +385,11 @@ half <- if (knitr::is_html_output()) {
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
 AGD <- knitr::asis_output(x = "[AGD](https://cran.r-project.org/web/packages/AGD/index.html)")
 childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
-gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/ropsensci/gigs/)")
+gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/ropensci/gigs/)")
 growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
 sitar <- knitr::asis_output(x = "[sitar](https://cran.r-project.org/web/packages/sitar/index.html)")
 zscorer <- knitr::asis_output(x = "[zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)")
-gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/ropsensci/gigs-stata/) (Stata)")
+gigs_stata <- knitr::asis_output(x = "[gigs](https://www.github.com/ropensci/gigs-stata/) (Stata)")
 zanthro <- knitr::asis_output(x = "[zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata)")
 intergrowth <- knitr::asis_output(x = "[nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)")
 gigs_sas <- knitr::asis_output(x = "[gigs](https://github.com/SASPAC/gigs/) (SAS)")
@@ -434,7 +434,7 @@ Standards and different sets of `r intergrowth21st` standards. The table below
 shows the relative speed of each software package when processing 100,000
 inputs. The code used to generate these timings can be seen online in the
 **gigs** benchmarking
-[article](https://ropsensci.github.io/gigs/articles/benchmarking.html).
+[article](https://ropensci.github.io/gigs/articles/benchmarking.html).
 
 | Software        | Platform | WHO (0-5 years) (ms)                      | `r ig21st` NBS (ms)                    | `r ig21st` PNG (ms)                    | `r ig21st` Fetal (ms)                   |
 |-----------------|----------|-------------------------------------------|----------------------------------------|----------------------------------------|-----------------------------------------|
@@ -481,7 +481,7 @@ Health Centre, London School of Hygiene & Tropical Medicine
 ### Citation
 
 Parker SR, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
-Child Growth*. <https://github.com/ropsensci/gigs/>.
+Child Growth*. <https://github.com/ropensci/gigs/>.
 
 ## Code of Conduct
 

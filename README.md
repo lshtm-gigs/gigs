@@ -5,15 +5,15 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
-[![pkgcheck](https://github.com/ropsensci/gigs/workflows/pkgcheck/badge.svg)](https://github.com/ropsensci/gigs/actions?query=workflow%3Apkgcheck)
-[![test-coverage](https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml)
-[![codecov](https://codecov.io/github/ropsensci/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/ropsensci/gigs)
+[![pkgcheck](https://github.com/ropensci/gigs/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/gigs/actions?query=workflow%3Apkgcheck)
+[![test-coverage](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/github/ropensci/gigs/graph/badge.svg?token=G5BIYGV5JL)](https://codecov.io/github/ropensci/gigs)
 [![ropensci](https://badges.ropensci.org/626_status.svg)](https://github.com/ropensci/software-review/issues/626)
 <!-- badges: end -->
 
@@ -46,7 +46,7 @@ You can install the development version of **gigs** from GitHub with
 
 ``` r
 # install.packages("pak")
-pak::pkg_install(pkg = "ropsensci/gigs")
+pak::pkg_install(pkg = "ropensci/gigs")
 ```
 
 ## Rationale + terminology
@@ -453,7 +453,7 @@ are implemented but not others.
 
 | Software                                                                            | Platform | WHO (0-5 years) | IG-21<sup>st</sup> NBS | IG-21<sup>st</sup> PNG | IG-21<sup>st</sup> Fetal | Functionality              |
 |-------------------------------------------------------------------------------------|----------|-----------------|------------------------|------------------------|--------------------------|----------------------------|
-| [gigs](https://www.github.com/ropsensci/gigs/)                                      | R        | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
+| [gigs](https://www.github.com/ropensci/gigs/)                                       | R        | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores          |
 | [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | ✅              | ❌                     | ❌                     | ❌                       | Values ↔ z-scores          |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
@@ -461,7 +461,7 @@ are implemented but not others.
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌              | ❌                     | ❌                     | ⚠️                       | Values → z-scores/centiles |
 | [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | ✅              | ❌                     | ❌                     | ❌                       | Values ↔ z-scores/centiles |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
-| [gigs](https://www.github.com/ropsensci/gigs-stata/) (Stata)                        | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
+| [gigs](https://www.github.com/ropensci/gigs-stata/) (Stata)                         | Stata    | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | ✅              | ❌                     | ❌                     | ❌                       | Values → z-scores/centiles |
 | [gigs](https://github.com/SASPAC/gigs/) (SAS)                                       | SAS      | ✅              | ✅                     | ✅                     | ✅                       | Values ↔ z-scores/centiles |
 
@@ -471,11 +471,11 @@ Growth Standards and different sets of INTERGROWTH-21<sup>st</sup>
 standards. The table below shows the relative speed of each software
 package when processing 100,000 inputs. The code used to generate these
 timings can be seen online in the **gigs** benchmarking
-[article](https://ropsensci.github.io/gigs/articles/benchmarking.html).
+[article](https://ropensci.github.io/gigs/articles/benchmarking.html).
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
 |-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/ropsensci/gigs/)                                      | R        | 103                  | 84                          | 23                          | 9                             |
+| [gigs](https://www.github.com/ropensci/gigs/)                                       | R        | 103                  | 84                          | 23                          | 9                             |
 | [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2274                 | ❌                          | ❌                          | ❌                            |
 | [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 122                  | ❌                          | ❌                          | ❌                            |
 | [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 128                  | ❌                          | ❌                          | ❌                            |
@@ -483,7 +483,7 @@ timings can be seen online in the **gigs** benchmarking
 | [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 17                            |
 | [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
-| [gigs](https://www.github.com/ropsensci/gigs-stata/) (Stata)                        | Stata    | 348                  | 377                         | 109                         | 57                            |
+| [gigs](https://www.github.com/ropensci/gigs-stata/) (Stata)                         | Stata    | 348                  | 377                         | 109                         | 57                            |
 | [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata    | 1059                 | ❌                          | ❌                          | ❌                            |
 | [gigs](https://github.com/SASPAC/gigs/) (SAS)                                       | SAS      | 181                  | 184                         | 88                          | 87                            |
 
@@ -511,7 +511,7 @@ Health Centre, London School of Hygiene & Tropical Medicine
 ### Citation
 
 Parker SR, Vesel L, Ohuma EO (2024). *gigs: Assess Fetal, Newborn, and
-Child Growth*. <https://github.com/ropsensci/gigs/>.
+Child Growth*. <https://github.com/ropensci/gigs/>.
 
 ## Code of Conduct
 

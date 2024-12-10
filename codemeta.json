@@ -281,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2267.775KB",
+  "fileSize": "2267.764KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -310,7 +310,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/gigs/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/gigs/blob/master/README.md",
-  "contIntegration": ["https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/ropsensci/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/ropsensci/gigs"],
+  "contIntegration": ["https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/ropensci/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/ropensci/gigs"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
