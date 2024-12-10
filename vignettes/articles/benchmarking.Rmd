@@ -50,7 +50,7 @@ gigs_sas <- knitr::asis_output(x = "[gigs](https://github.com/SASPAC/gigs/) (SAS
 
 | Package name    | Language | On CRAN? |
 |-----------------|:---------|:---------|
-| `r gigs_r`      | R        | Yes      |
+| `r gigs_r`      | R        | No       |
 | `r anthro`      | R        | Yes      |
 | `r AGD`         | R        | Yes      |
 | `r childsds`    | R        | Yes      |
@@ -206,18 +206,9 @@ pkg_str <- function(pkgname) paste("R:", pkgname, packageVersion(pkg = pkgname))
 ver_zanthro_stata <- "1.0.2"
 ver_gigs_sas <- "0.1.8"
 ver_gigs_stata <- "1.1.1"
-plot_bp <- function(bp) {
-  key_pkg_colour <- c("gs" = "#925E9FFF",
-                      "gigs" = "#00468BFF",
-                      "anthro" = "#AD002AFF",
-                      "AGD" = "#FFA3FF",
-                      "intergrowth" = "#FDAF91FF",
-                      "childsds" = "#663300FF",
-                      "sitar" = "#005500FF",
-                      "zscorer" = "#009900",
-                      "gigs_stata" = "skyblue",
-                      "zanthro_stata" = "darkolivegreen4",
-                      "gigs_sas" = "#8585e0")
+if (!exists("key_pkg_label")) {
+  # Generate key_pkg_label if doesn't already exist --> otherwise use cached
+  # version in benchmarking.rda
   key_pkg_label <- c("gs" = pkg_str("growthstandards"),
                      "gigs" = pkg_str("gigs"),
                      "anthro" = pkg_str("anthro"),
@@ -230,6 +221,19 @@ plot_bp <- function(bp) {
                      "zanthro_stata" = paste("Stata: zanthro",
                                              ver_zanthro_stata),
                      "gigs_sas" = paste("SAS: gigs", ver_gigs_sas))
+}
+plot_bp <- function(bp) {
+  key_pkg_colour <- c("gs" = "#925E9FFF",
+                      "gigs" = "#00468BFF",
+                      "anthro" = "#AD002AFF",
+                      "AGD" = "#FFA3FF",
+                      "intergrowth" = "#FDAF91FF",
+                      "childsds" = "#663300FF",
+                      "sitar" = "#005500FF",
+                      "zscorer" = "#009900",
+                      "gigs_stata" = "skyblue",
+                      "zanthro_stata" = "darkolivegreen4",
+                      "gigs_sas" = "#8585e0")
   key_pkg_breaks <- dplyr::summarise(bp, max_time = max(median), .by = desc) |>
     dplyr::arrange(max_time) |>
     dplyr::pull(desc) |>
@@ -948,7 +952,8 @@ session_info
 [//]: # (Code to save/load all timings tables in a separate .rda file)
 ```{r save_benchmarking_rda, eval = FALSE, echo = FALSE}
 save(file = file.path("vignettes/articles/benchmarking.rda"),
-     bp_who_gs, bp_ig_nbs, bp_ig_png, bp_ig_fet, max_len_bench, session_info)
+     bp_who_gs, bp_ig_nbs, bp_ig_png, bp_ig_fet, max_len_bench, session_info,
+     key_pkg_label)
 ```
 
 # Non-R code
