@@ -4,9 +4,9 @@
   "identifier": "gigs",
   "description": "Convert between anthropometric measures and z-scores/centiles in multiple growth standards, and classify fetal, newborn, and child growth accordingly. With a simple interface to growth standards from the World Health Organisation and International Fetal and Newborn Growth Consortium for the 21st Century, gigs makes growth assessment easy and reproducible for clinicians, researchers and policy-makers.",
   "name": "gigs: Assess Fetal, Newborn, and Child Growth with International Standards",
-  "relatedLink": "https://lshtm-gigs.github.io/gigs/",
-  "codeRepository": "https://github.com/lshtm-gigs/gigs/",
-  "issueTracker": "https://github.com/lshtm-gigs/gigs/issues",
+  "relatedLink": "https://docs.ropensci.org/gigs",
+  "codeRepository": "https://github.com/ropensci/gigs/",
+  "issueTracker": "https://github.com/ropensci/gigs/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
   "version": "0.4.1.9002",
   "programmingLanguage": {
@@ -281,7 +281,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2268.386KB",
+  "fileSize": "2267.939KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -289,7 +289,7 @@
       "author": [
         {
           "@type": "Person",
-          "givenName": "Simon",
+          "givenName": ["Simon", "R"],
           "familyName": "Parker"
         },
         {
@@ -299,18 +299,18 @@
         },
         {
           "@type": "Person",
-          "givenName": "Eric",
+          "givenName": ["Eric", "O"],
           "familyName": "Ohuma"
         }
       ],
       "name": "{gigs}: Assess Fetal, Newborn, and Child Growth with International Standards",
-      "url": "https://github.com/lshtm-gigs/gigs/",
+      "url": "https://github.com/ropensci/gigs/",
       "description": "0.4.1.9002"
     }
   ],
-  "releaseNotes": "https://github.com/lshtm-gigs/gigs/blob/master/NEWS.md",
-  "readme": "https://github.com/lshtm-gigs/gigs/blob/master/README.md",
-  "contIntegration": ["https://github.com/lshtm-gigs/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/lshtm-gigs/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/lshtm-gigs/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/lshtm-gigs/gigs"],
+  "releaseNotes": "https://github.com/ropensci/gigs/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/gigs/blob/master/README.md",
+  "contIntegration": ["https://github.com/ropsensci/gigs/actions/workflows/R-CMD-check.yaml", "https://github.com/ropsensci/gigs/actions?query=workflow%3Apkgcheck", "https://github.com/ropsensci/gigs/actions/workflows/test-coverage.yaml", "https://codecov.io/github/ropsensci/gigs"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",

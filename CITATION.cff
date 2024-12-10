@@ -11,7 +11,7 @@ title: 'gigs: Assess Fetal, Newborn, and Child Growth with International Standar
 version: 0.4.1.9002
 identifiers:
 - type: url
-  value: https://lshtm-gigs.github.io/gigs/
+  value: https://docs.ropensci.org/gigs
 abstract: Convert between anthropometric measures and z-scores/centiles in multiple
   growth standards, and classify fetal, newborn, and child growth accordingly. With
   a simple interface to growth standards from the World Health Organisation and International
@@ -27,16 +27,18 @@ preferred-citation:
   title: 'gigs: Assess Fetal, Newborn, and Child Growth with International Standards'
   authors:
   - family-names: Parker
-    given-names: Simon
+    given-names: Simon R
+    email: simon.parker1471@outlook.com
+    orcid: https://orcid.org/0009-0003-8214-4496
   - family-names: Vesel
     given-names: Linda
   - family-names: Ohuma
-    given-names: Eric
+    given-names: Eric O
   year: '2024'
   notes: 0.4.1.9002
-  url: https://github.com/lshtm-gigs/gigs/
-repository-code: https://github.com/lshtm-gigs/gigs
-url: https://github.com/lshtm-gigs/gigs/
+  url: https://github.com/ropensci/gigs/
+repository-code: https://github.com/ropensci/gigs
+url: https://github.com/ropensci/gigs/
 contact:
 - family-names: Parker
   given-names: Simon R

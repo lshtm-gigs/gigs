@@ -24,9 +24,8 @@ Description: Convert between anthropometric measures and z-scores/centiles
     Growth Consortium for the 21st Century, gigs makes growth assessment
     easy and reproducible for clinicians, researchers and policy-makers.
 License: GPL (>= 3)
-URL: https://github.com/lshtm-gigs/gigs/,
-    https://lshtm-gigs.github.io/gigs/
-BugReports: https://github.com/lshtm-gigs/gigs/issues
+URL: https://github.com/ropensci/gigs/, https://docs.ropensci.org/gigs
+BugReports: https://github.com/ropensci/gigs/issues
 Depends: 
     R (>= 4.1.0)
 Imports:

@@ -30,7 +30,7 @@ You can check out the tidyverse guide on [how to create a great issue](https://c
 
 ### Pull request process
 
-*   Fork the package and clone onto your computer. If you haven't done this before, you can use `usethis::create_from_github("lshtm-gigs/gigs", fork = TRUE)`.
+*   Fork the package and clone onto your computer. If you haven't done this before, you can use `usethis::create_from_github("ropensci/gigs", fork = TRUE)`.
 
 *   Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
     If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing. 

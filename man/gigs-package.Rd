@@ -14,15 +14,15 @@ age, stunting, wasting, and weight-for-age.
 \examples{
 \dontrun{
 help(package = "gigs")
-browseURL("https://www.github.com/lshtm-gigs/gigs")
+browseURL("https://www.github.com/ropensci/gigs")
 }
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/lshtm-gigs/gigs/}
-  \item \url{https://lshtm-gigs.github.io/gigs/}
-  \item Report bugs at \url{https://github.com/lshtm-gigs/gigs/issues}
+  \item \url{https://github.com/ropensci/gigs/}
+  \item \url{https://docs.ropensci.org/gigs}
+  \item Report bugs at \url{https://github.com/ropensci/gigs/issues}
 }
 
 }

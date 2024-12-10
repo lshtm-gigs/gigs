@@ -38,7 +38,7 @@ growth standards which are also found in **gigs**.
 anthro <- knitr::asis_output(x = "[anthro](https://cran.r-project.org/web/packages/anthro/index.html)")
 AGD <- knitr::asis_output(x = "[AGD](https://cran.r-project.org/web/packages/AGD/index.html)")
 childsds <- knitr::asis_output(x = "[childsds](https://cran.r-project.org/web/packages/childsds/index.html)")
-gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/lshtm-gigs/gigs/)")
+gigs_r <- knitr::asis_output(x = "[gigs](https://www.github.com/ropensci/gigs/)")
 growthstans <- knitr::asis_output(x = "[ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)")
 sitar <- knitr::asis_output(x = "[sitar](https://cran.r-project.org/web/packages/sitar/index.html)")
 zscorer <- knitr::asis_output(x = "[zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)")

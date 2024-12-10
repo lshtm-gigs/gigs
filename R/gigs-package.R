@@ -10,7 +10,7 @@
 #' @examples
 #' \dontrun{
 #' help(package = "gigs")
-#' browseURL("https://www.github.com/lshtm-gigs/gigs")
+#' browseURL("https://www.github.com/ropensci/gigs")
 #' }
 #' @keywords internal
 "_PACKAGE"
