@@ -1,6 +1,6 @@
-# gigs 0.4.1.9002
+# gigs 0.5.0
 
--   The new version of the package includes many changes recommended by the good folks at [rOpenSci](https://ropensci.org/), who are reviewing the package.
+-   The new version of the package includes many changes recommended by the good folks at [rOpenSci](https://ropensci.org/), who have reviewed (and now host!) the package.
 -   **BREAKING CHANGES**:
     -   Conversion between anthropometric values and z-scores/centiles is now done with `value2zscore()`, `value2centile()`, `zscore2value()`, and `centile2value()`.
         -   The `family` and `acronym` arguments are used to select a specific growth standard.

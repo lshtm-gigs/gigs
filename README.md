@@ -475,12 +475,12 @@ timings can be seen online in the **gigs** benchmarking
 
 | Software                                                                            | Platform | WHO (0-5 years) (ms) | IG-21<sup>st</sup> NBS (ms) | IG-21<sup>st</sup> PNG (ms) | IG-21<sup>st</sup> Fetal (ms) |
 |-------------------------------------------------------------------------------------|----------|----------------------|-----------------------------|-----------------------------|-------------------------------|
-| [gigs](https://www.github.com/ropsensci/gigs/)                                      | R        | 98                   | 78                          | 20                          | 10                            |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2162                 | ❌                          | ❌                          | ❌                            |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 119                  | ❌                          | ❌                          | ❌                            |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 127                  | ❌                          | ❌                          | ❌                            |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 91                   | 70                          | 41                          | 11                            |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 18                            |
+| [gigs](https://www.github.com/ropsensci/gigs/)                                      | R        | 103                  | 84                          | 23                          | 9                             |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html)                 | R        | 2274                 | ❌                          | ❌                          | ❌                            |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html)                       | R        | 122                  | ❌                          | ❌                          | ❌                            |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html)             | R        | 128                  | ❌                          | ❌                          | ❌                            |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/)        | R        | 92                   | 73                          | 42                          | 11                            |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/)                | R        | ❌                   | ❌                          | ❌                          | 17                            |
 | [sitar](https://cran.r-project.org/web/packages/sitar/index.html)                   | R        | 46                   | ❌                          | ❌                          | ❌                            |
 | [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html)               | R        | NA                   | ❌                          | ❌                          | ❌                            |
 | [gigs](https://www.github.com/ropsensci/gigs-stata/) (Stata)                        | Stata    | 348                  | 377                         | 109                         | 57                            |
