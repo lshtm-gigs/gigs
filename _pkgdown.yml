@@ -1,6 +1,4 @@
-template:
-  bootstrap: 5
-  bootswatch: journal
+url: https://docs.ropensci.org/gigs
 articles:
 - title: All vignettes
   contents:
