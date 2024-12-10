@@ -22,21 +22,6 @@ authors:
   given-names: Simon R
   email: simon.parker1471@outlook.com
   orcid: https://orcid.org/0009-0003-8214-4496
-preferred-citation:
-  type: manual
-  title: 'gigs: Assess Fetal, Newborn, and Child Growth with International Standards'
-  authors:
-  - family-names: Parker
-    given-names: Simon R
-    email: simon.parker1471@outlook.com
-    orcid: https://orcid.org/0009-0003-8214-4496
-  - family-names: Vesel
-    given-names: Linda
-  - family-names: Ohuma
-    given-names: Eric O
-  year: '2024'
-  notes: 0.5.0
-  url: https://github.com/ropensci/gigs/
 repository-code: https://github.com/ropensci/gigs
 url: https://github.com/ropensci/gigs/
 contact:
