@@ -1,5 +1,6 @@
 # gigs 0.5.1
 
+- Update package installation instructions.
 - Minor changes to benchmarking vignette to facilitate docs building.
 
 # gigs 0.5.0

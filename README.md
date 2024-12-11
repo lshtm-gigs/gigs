@@ -10,7 +10,6 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/R-CMD-check.yaml)
 [![pkgcheck](https://github.com/ropensci/gigs/workflows/pkgcheck/badge.svg)](https://github.com/ropensci/gigs/actions?query=workflow%3Apkgcheck)
-[![test-coverage](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/ropensci/gigs/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/ropensci/gigs/graph/badge.svg?token=FZcgqIpQL4)](https://codecov.io/github/ropensci/gigs)
 [![CRAN
 version](https://www.r-pkg.org/badges/version/gigs)](https://www.r-pkg.org/pkg/gigs)
@@ -41,12 +40,17 @@ used in downstream analyses.
 
 ## Installation
 
-You can install the development version of **gigs** from GitHub with
-`pak`:
+You can install the development version of **gigs** from
+[GitHub](https://www.github.com/ropensci/gigs) with `pak`, or from the
+[ropensci R-universe](https://ropensci.r-universe.dev/builds):
 
 ``` r
 # install.packages("pak")
 pak::pkg_install(pkg = "ropensci/gigs")
+```
+
+``` r
+install.packages("gigs", repos = "https://ropensci.r-universe.dev")
 ```
 
 ## Rationale + terminology
