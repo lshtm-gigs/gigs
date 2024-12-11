@@ -75,7 +75,7 @@ categorise_sfga <- function(p, severe = FALSE) {
 #'
 #'   \tabular{llll}{
 #'     \strong{SVN category} \tab \strong{Factor level} \tab
-#'       \strong{Gestational age range} \tab \strong{Centile bounds} \cr
+#'       \strong{Centile bounds} \tab \strong{Gestational age range} \cr
 #'     Preterm-SGA \tab `"Preterm SGA"` \tab `p` < 0.1       \tab
 #'       `gest_days` < 259  \cr
 #'     Preterm-AGA \tab `"Preterm AGA"` \tab 0.1 =< `p` =< 0.9 \tab

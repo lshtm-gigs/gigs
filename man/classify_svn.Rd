@@ -61,7 +61,7 @@ Cut-offs for small, vulnerable newborn categorisations are:
 
 \tabular{llll}{
 \strong{SVN category} \tab \strong{Factor level} \tab
-\strong{Gestational age range} \tab \strong{Centile bounds} \cr
+\strong{Centile bounds} \tab \strong{Gestational age range} \cr
 Preterm-SGA \tab \code{"Preterm SGA"} \tab \code{p} < 0.1       \tab
 \code{gest_days} < 259  \cr
 Preterm-AGA \tab \code{"Preterm AGA"} \tab 0.1 =< \code{p} =< 0.9 \tab
