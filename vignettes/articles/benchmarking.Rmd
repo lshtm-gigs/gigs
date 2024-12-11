@@ -480,8 +480,8 @@ can be found in the reports referenced in the `gigs::who_gs` documentation. It
 appears that **childsds** does not perform this constraining procedure, so
 conversions where `abs(z_score) > 3` are computed incorrectly:
 
-```{r discrepancies_who_gs}
-discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
+```{r discrepancies_who_gs, echo = TRUE, eval = FALSE}
+discrepancies_who_gs <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
                             age_days = 0,
                             sex = "M") |>
   dplyr::mutate(
@@ -501,6 +501,10 @@ discrepancies <- data.frame(z = c(-3.03, -2.97, 2.97, 3.03),
   )
 ```
 
+```{r discrepancies_who_gs_eval, echo = FALSE, eval = TRUE}
+discrepancies_who_gs
+```
+
 When we look at these z-scores, you can see that both **growthstandards** and
 **gigs** correctly apply the constraining procedure; **childsds** does not.
 **AGD** constrains z-scores if the `tail.adjust` option in `AGD::y2z()` is
@@ -508,7 +512,7 @@ specified, and from looking at the **anthro** source code, they also apply the
 constraining procedure.
 
 ```{r discrepancies_who_gs_kable, echo = FALSE}
-knitr::kable(discrepancies, align = "ccccc")
+knitr::kable(discrepancies_who_gs, align = "ccccc")
 ```
 
 Discrepancies between **sitar** and **gigs** arise from **sitar** relying on monthly
@@ -640,7 +644,7 @@ version of the z-scoring errors found by
 [Kiger *et al.* (2016)](https://dx.doi.org/10.1007/s10916-015-0389-x) when not
 interpolating LMS coefficients in the WHO standards.
 
-```{r discrepancies_ig_nbs, eval = TRUE}
+```{r discrepancies_ig_nbs, eval = FALSE}
 weight_kg <- 3
 gestage <- seq(274, 278, 0.5)
 gigs <- gigs::value2centile(y = weight_kg, x = gestage, sex = "M",
@@ -648,6 +652,15 @@ gigs <- gigs::value2centile(y = weight_kg, x = gestage, sex = "M",
 gs <- growthstandards::igb_value2centile(val = weight_kg, gagebrth = gestage,
                                          sex = "Male", var = "wtkg")
 waldo::compare(gigs, gs / 100, x_arg = "gigs", y_arg = "growthstandards")
+```
+
+```{r discrepancies_ig_nbs_cache, eval = FALSE, echo = FALSE}
+discrepancies_ig_nbs <- waldo::compare(gigs, gs / 100, x_arg = "gigs", y_arg = "growthstandards")
+```
+
+
+```{r discrepancies_ig_nbs_waldo_output, eval = TRUE, echo = FALSE}
+discrepancies_ig_nbs
 ```
 
 # INTERGROWTH-21<sup>st</sup> Postnatal Growth standards
@@ -953,7 +966,7 @@ session_info
 ```{r save_benchmarking_rda, eval = FALSE, echo = FALSE}
 save(file = file.path("vignettes/articles/benchmarking.rda"),
      bp_who_gs, bp_ig_nbs, bp_ig_png, bp_ig_fet, max_len_bench, session_info,
-     key_pkg_label)
+     key_pkg_label, discrepancies_who_gs, discrepancies_ig_nbs)
 ```
 
 # Non-R code

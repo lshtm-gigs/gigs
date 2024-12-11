@@ -1,3 +1,7 @@
+# gigs 0.5.1
+
+- Minor changes to benchmarking vignette to facilitate docs building.
+
 # gigs 0.5.0
 
 -   The new version of the package includes many changes recommended by the good folks at [rOpenSci](https://ropensci.org/), who have reviewed (and now host!) the package.
