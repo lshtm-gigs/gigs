@@ -1,7 +1,7 @@
 Type: Package
 Package: gigs
 Title: Assess Fetal, Newborn, and Child Growth with International Standards
-Version: 0.5.1
+Version: 0.5.1.9000
 Authors@R: c(
     person(given = c("Simon", "R"), family = "Parker",
            email = "simon.parker1471@outlook.com",
@@ -46,7 +46,8 @@ Suggests:
     bench,
     cowplot,
     viridis,
-    mfp
+    mfp,
+    tidyr (>= 1.0.0)
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

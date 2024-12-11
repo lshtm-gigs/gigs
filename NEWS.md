@@ -1,3 +1,7 @@
+# gigs (development version)
+
+- More changes to online articles to facilitate rOpenSci website building.
+
 # gigs 0.5.1
 
 - Update package installation instructions.
