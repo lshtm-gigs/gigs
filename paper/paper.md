@@ -48,7 +48,7 @@ of Preterm Infants Standards [@Villar2015PostnatalProject]; and the WHO Child Gr
 [@WHOMulticentreGrowthReferenceStudyGroup2006WHOAge; @WHO2006WHODevelopment; 
 @WHO2007WHODevelopment]. Also included are functions to classify growth for 
 indicators including size-for-gestational age, small vulnerable newborns 
-[@Ashorn2023SmallImpact, @Lawn2023SmallCounting], stunting, wasting, 
+[@Ashorn2023SmallImpact; @Lawn2023SmallCounting], stunting, wasting, 
 weight-for-age (underweight), and micro/macrocephaly.
 
 # Statement of need
@@ -72,27 +72,31 @@ standards implemented within:
   @Villar2017BodyProject]
 - INTERGROWTH-21^st^ Postnatal Growth of Preterm Infants Standards 
   [@Villar2015PostnatalProject]
-- WHO Child Growth Standards[@WHOMulticentreGrowthReferenceStudyGroup2006WHOAge;
-  @WHO2006WHODevelopment; @WHO2007WHODevelopment]
+- WHO Child Growth Standards 
+  [@WHOMulticentreGrowthReferenceStudyGroup2006WHOAge; @WHO2006WHODevelopment; 
+  @WHO2007WHODevelopment]
 
 This is more growth standards than made available in other R packages designed 
 to perform the same sorts of analyses. The following table displays 
 functionality of other R packages designed to implement the above growth 
-standards:
+standards. A tick (✓) indicates that all possible standards are
+included in a package, a cross (✘) indicates that these standards are 
+completely missing, and a warning sign (⚠) indicates that some of these
+standards are implemented but not others.:
 
 | Software | Platform | WHO (0-5 years) | IG-21^st^ NBS | IG-21^st^ PNG | IG-21^st^ Fetal | Functionality |
 |----|----|----|----|----|----|----|
-| [gigs](https://www.github.com/ropensci/gigs/) | R | ✅ | ✅ | ✅ | ✅ | Values ↔ z-scores/centiles |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values ↔ z-scores |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R | ✅ | ✅ | ⚠️ | ⚠️ | Values ↔ z-scores/centiles |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/) | R | ❌ | ❌ | ❌ | ⚠️ | Values → z-scores/centiles |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values ↔ z-scores/centiles |
-| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html) | R | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
-| [gigs](https://www.github.com/ropensci/gigs-stata/) (Stata) | Stata | ✅ | ✅ | ✅ | ✅ | Values ↔ z-scores/centiles |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata | ✅ | ❌ | ❌ | ❌ | Values → z-scores/centiles |
-| [gigs](https://github.com/SASPAC/gigs/) (SAS) | SAS | ✅ | ✅ | ✅ | ✅ | Values ↔ z-scores/centiles |
+| [gigs](https://www.github.com/ropensci/gigs/) | R | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
+| [anthro](https://cran.r-project.org/web/packages/anthro/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores |
+| [AGD](https://cran.r-project.org/web/packages/AGD/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values ↔ z-scores |
+| [childsds](https://cran.r-project.org/web/packages/childsds/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
+| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R | ✓ | ✓ | ⚠|  ⚠| Values ↔ z-scores/centiles |
+| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/) | R | ✘ | ✘ | ✘ | ⚠| Values → z-scores/centiles |
+| [sitar](https://cran.r-project.org/web/packages/sitar/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values ↔ z-scores/centiles |
+| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
+| [gigs](https://www.github.com/ropensci/gigs-stata/) (Stata) | Stata | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
+| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
+| [gigs](https://github.com/SASPAC/gigs/) (SAS) | SAS | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
 
 The R [package website](https://docs.ropensci.org/gigs/) also includes 
 benchmarks of these packages relative to each other. For speed, ``gigs`` (for R)
