@@ -77,43 +77,38 @@ standards implemented within:
   @WHO2007WHODevelopment]
 
 This is more growth standards than made available in other R packages designed 
-to perform the same sorts of analyses. The following table displays 
-functionality of other R packages designed to implement the above growth 
-standards. A tick (✓) indicates that all possible standards are
-included in a package, a cross (✘) indicates that these standards are 
-completely missing, and a warning sign (⚠) indicates that some of these
-standards are implemented but not others.:
+to perform the same sorts of analyses. For example, the WHO Child Growth 
+Standards are implemented in many other packages: the ``zanthro`` package for 
+Stata [@vidmar_standardizing_2013], and the R packages ``anthro`` [@r_anthro], 
+``AGD`` [@r_AGD], ``childsds`` [@r_childsds], ``growthstandards`` 
+[@r_growthstandards], ``sitar`` [@r_sitar], and ``zscorer`` [@r_zscorer]. 
+However, only ``gigs`` implements the full set of INTERGROWTH-21^st^ Fetal 
+standards and INTERGROWTH-21^st^ Postnatal Growth of Preterm Infants standards.
 
-| Software | Platform | WHO (0-5 years) | IG-21^st^ NBS | IG-21^st^ PNG | IG-21^st^ Fetal | Functionality |
-|----|----|----|----|----|----|----|
-| [gigs](https://www.github.com/ropensci/gigs/) | R | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
-| [anthro](https://cran.r-project.org/web/packages/anthro/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores |
-| [AGD](https://cran.r-project.org/web/packages/AGD/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values ↔ z-scores |
-| [childsds](https://cran.r-project.org/web/packages/childsds/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
-| [ki-tools/growthstandards](https://www.github.com/ki-tools/growthstandards/) | R | ✓ | ✓ | ⚠|  ⚠| Values ↔ z-scores/centiles |
-| [nutriverse/intergrowth](https://github.com/nutriverse/intergrowth/) | R | ✘ | ✘ | ✘ | ⚠| Values → z-scores/centiles |
-| [sitar](https://cran.r-project.org/web/packages/sitar/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values ↔ z-scores/centiles |
-| [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html) | R | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
-| [gigs](https://www.github.com/ropensci/gigs-stata/) (Stata) | Stata | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
-| [zanthro](https://journals.sagepub.com/doi/epdf/10.1177/1536867X1301300211) (Stata) | Stata | ✓ | ✘ | ✘ | ✘ | Values → z-scores/centiles |
-| [gigs](https://github.com/SASPAC/gigs/) (SAS) | SAS | ✓ | ✓ | ✓ | ✓ | Values ↔ z-scores/centiles |
+When benchmarked against each other, ``gigs`` for R outperforms almost all 
+the packages mentioned above, or is at most a few milliseconds slower. It does 
+this whilst checking inputs to ensure they are formatted correctly, to make life
+easier for ``gigs`` users. For example, it will detect missing (`NA`) or 
+infinite (`-Inf`/`Inf`) numeric inputs, and flag these to the user at the 
+console. Full benchmarking results are available on the [package documentation 
+website](https://docs.ropensci.org/gigs/articles/benchmarking.html).
 
-The R [package website](https://docs.ropensci.org/gigs/) also includes 
-benchmarks of these packages relative to each other. For speed, ``gigs`` (for R)
-outperforms almost all existing packages, or is at most a few milliseconds 
-slower. It does this whilst checking inputs to ensure they are formatted 
-correctly, to make life easier for ``gigs`` users. ``gigs`` is already in use by
+In addition to the R package, a 
+[Stata package](https://www.github.com/lshtm-gigs/gigs-stata/) and 
+[SAS package](https://www.github.com/SASPAC/gigs/) are available for users of 
+these statistical softwares. All versions of ``gigs`` are already in use by 
 researchers at LSHTM, Harvard, and an international collaboration studying 
-**... requires elaboration**. Thanks to its speed, input checking, and thorough
-test suite, we believe it will come to be used widely by those looking to assess
-newborn, infant, or child growth in R.
+**... requires elaboration**, led by Eric Ohuma. Thanks to its speed, input 
+checking, and unit test-backed accuracy, we believe ``gigs`` will be used widely
+by those looking to assess newborn, infant, or child growth in R.
 
 # Acknowledgements
 
 The development of this package was supported by the Bill & Melinda Gates 
-Foundation under grant number 046290. We also want to thank our rOpenSci 
-reviewers and handling editor - Victor Ordu, Chitra Saraswati, and Rebecca 
-Killick - whose feedback and guidance through the rOpenSci software review 
-process has been extremely useful.
+Foundation (BMGF) under grant number 046290. BMGF had no specific input on the 
+content of the package. We also want to thank our rOpenSci reviewers - Victor 
+Ordu and Chitra Saraswati - and handling editor Rebecca Killick, whose feedback 
+and guidance through the rOpenSci software review process has been extremely 
+useful.
 
 # References
