@@ -22,6 +22,21 @@ authors:
   given-names: Simon R
   email: simon.parker1471@outlook.com
   orcid: https://orcid.org/0009-0003-8214-4496
+preferred-citation:
+  type: manual
+  title: 'gigs: Assess Fetal, Newborn, and Child Growth with International Standards'
+  authors:
+  - family-names: Parker
+    given-names: Simon R
+    email: simon.parker1471@outlook.com
+    orcid: https://orcid.org/0009-0003-8214-4496
+  - family-names: Vesel
+    given-names: Linda
+  - family-names: Ohuma
+    given-names: Eric O
+  year: '2024'
+  notes: 0.4.1.9002
+  url: https://github.com/ropensci/gigs/
 repository-code: https://github.com/ropensci/gigs
 url: https://github.com/ropensci/gigs/
 contact:
@@ -330,21 +345,6 @@ references:
     email: garnier@njit.edu
   year: '2024'
   doi: 10.32614/CRAN.package.viridis
-- type: software
-  title: mfp
-  abstract: 'mfp: Multivariable Fractional Polynomials'
-  notes: Suggests
-  url: https://github.com/georgheinze/mfp/issues/
-  repository: https://CRAN.R-project.org/package=mfp
-  authors:
-  - family-names: Ambler
-    given-names: Gareth
-    email: gareth@stats.ucl.ac.uk
-  - family-names: Benner
-    given-names: Axel
-    email: benner@dkfz.de
-  year: '2024'
-  doi: 10.32614/CRAN.package.mfp
 - type: software
   title: tidyr
   abstract: 'tidyr: Tidy Messy Data'
