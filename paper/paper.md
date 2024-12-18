@@ -1,6 +1,6 @@
 ---
 title: |
-  'gigs: Assess Fetal, Newborn, and Child Growth with International Standards in R'
+  'gigs: A package for standardising fetal, neonatal, and child growth assessment'
 tags:
   - R
   - intergrowth
@@ -53,13 +53,27 @@ weight-for-age (underweight), and micro/macrocephaly.
 
 # Statement of need
 
-Not all research groups have the ability to implement growth standards in 
-software, and may make errors whilst doing so. Furthermore, researchers must 
-pick and choose the right growth standards for their work - which is not always 
-achieved in practice [@perumal_who_2015]. The ``gigs`` package makes these
-issues less common. Firstly, extensive unit testing ensures that each growth 
-standard in ``gigs`` is accurate to published charts, for all of the growth 
-standards implemented within:
+Without accurate global data on newborn and child growth patterns using 
+appropriate tools, true gaps and achievements in newborn and child health and 
+survival will not be revealed. Those most vulnerable to poor growth outcomes 
+will not be properly identified, tracking progress towards global targets (e.g. the 
+Sustainable Development Goals) will be more difficult, and evaluating what 
+changes are 'true progress' will be even more challenging. The ``gigs`` package 
+allows researchers, policy-makers, and other key stakeholders to apply and 
+correctly identify at-risk, vulnerable infants at a population level. This can 
+then inform appropriate interventions to make progress towards global, national 
+and local goals. Similarly, use of appropriate standards by clinicians will 
+enable proper identification of at-risk infants and inform the clinical care 
+management and decision-making.
+
+Applying appropriate growth standards can be difficult - not all 
+research groups have the ability to implement growth standards in software, and 
+may make errors whilst doing so. Furthermore, researchers must pick and choose 
+the right growth standards for their work - which is not always achieved in 
+practice [@perumal_who_2015]. The ``gigs`` package makes these issues less 
+common. Firstly, extensive unit testing ensures that each growth standard in 
+``gigs`` is accurate to published charts, for every growth standard we've 
+implemented:
 
 - The INTERGROWTH-21^st^ Fetal Standards 
   [@Papageorghiou2014AInternationalPregnancy; @Stirnemann2017InternationalProject;
@@ -97,10 +111,12 @@ In addition to the R package, a
 [Stata package](https://www.github.com/lshtm-gigs/gigs-stata/) and 
 [SAS package](https://www.github.com/SASPAC/gigs/) are available for users of 
 these statistical softwares. All versions of ``gigs`` are already in use by 
-researchers at LSHTM, Harvard, and an international collaboration studying 
-**... requires elaboration**, led by Eric Ohuma. Thanks to its speed, input 
-checking, and unit test-backed accuracy, we believe ``gigs`` will be used widely
-by those looking to assess newborn, infant, or child growth in R.
+researchers at LSHTM, Harvard, the [Small Vulnerable Newborn 
+Collaboration](https://www.thelancet.com/series/small-vulnerable-newborns) and 
+an international collaboration investigating stillbirths, led by Eric Ohuma. 
+Thanks to its speed, input checking, and unit test-backed accuracy, we believe 
+``gigs`` will be used widely by those looking to assess newborn, infant, or 
+child growth in R.
 
 # Acknowledgements
 
