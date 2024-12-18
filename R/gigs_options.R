@@ -127,9 +127,9 @@ gigs_input_options_set <- function(new_value, silent = FALSE) {
 
 #' @name .gigs_options
 #' @title Package-level gigs options
-#' @description An environment containing six named character vectors. These
-#'   define how gigs handles inputs with missing, undefined, or invalid
-#'   elements:
+#' @description An environment containing seven named character vectors. The
+#'   first six define how gigs handles input data with missing, undefined, or
+#'   invalid elements. The last (`"handle_unused_levels"`)
 #'   * `"handle_missing_data"` - How should gigs handle missing (`NA`) elements?
 #'   * `"handle_undefined_data"` - How should gigs handle undefined (`NaN`,
 #'       `Inf`, `-Inf`) elements?
@@ -139,21 +139,30 @@ gigs_input_options_set <- function(new_value, silent = FALSE) {
 #'     are not one of `"M"` or `"F"`?
 #'   * `"handle_oob_centiles"` - In `centile2value` functions, how should
 #'     gigs handle elements of `p` that are not between `0` and `1`?
+#'   * `"handle_unused_levels"` - When generating growth categories as factors,
+#'     should gigs drop or keep unused factor levels, and should it issue
+#'     warnings when unused factor levels occur?
 #'
-#'   Each of these options can take one of three values:
+#'   Each of the input-checking options can take one of three values:
 #'   * `"quiet"` - Invalid elements are set to `NA`, silently.
 #'   * `"warn"` - Invalid elements are set to `NA`, with warnings issued when
 #'     this is done.
 #'   * `"error"` - Invalid elements will cause informative errors.
 #'
-#'   By default, each option in `.gigs_options` is set to `"warn"`, so you will
-#'   be informed of any invalid data used as input. Use  `gigs_option_set()` or
-#'   `gigs_option_set()` to change this behaviour.
+#'   For "handle_unused_levels", there are four valid choices:
+#'   * `"keep_quiet"` - Keep unused factor levels, and don't issue a warning.
+#'   * `"keep_warn"` - Keep unused factor levels, whilst issuing a warning.
+#'   * `"drop_quiet"` - Drop unused factor levels, and don't issue a warning.
+#'   * `"drop_warn"` - Drop unused factor levels, whilst issuing a warning.
+#'
+#'   You can use `gigs_option_set()` or `gigs_option_set()` to change these
+#'   options on a one-by-one basis. To change all the input-checking options to
+#'   a specific value, use `gigs_input_options_set()`.
 #' @seealso The `gigs_option_get()`, `gigs_option_set()` and
 #'   `gigs_input_options_set()` functions, which can be used to get and set 
 #'   values in `.gigs_options`.
-#' @returns A named environment, where each name maps onto a specific option for
-#'   the GIGS package.
+#' @returns A named environment, where each name maps onto a specific **gigs**
+#'   option.
 #' @examples
 #' # Get the names of all available options
 #' names(.gigs_options)

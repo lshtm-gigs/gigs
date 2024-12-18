@@ -4,13 +4,13 @@
 \alias{.gigs_options}
 \title{Package-level gigs options}
 \value{
-A named environment, where each name maps onto a specific option for
-the GIGS package.
+A named environment, where each name maps onto a specific \strong{gigs}
+option.
 }
 \description{
-An environment containing six named character vectors. These
-define how gigs handles inputs with missing, undefined, or invalid
-elements:
+An environment containing seven named character vectors. The
+first six define how gigs handles input data with missing, undefined, or
+invalid elements. The last (\code{"handle_unused_levels"})
 \itemize{
 \item \code{"handle_missing_data"} - How should gigs handle missing (\code{NA}) elements?
 \item \code{"handle_undefined_data"} - How should gigs handle undefined (\code{NaN},
@@ -21,9 +21,12 @@ variables which are out of bounds for the standard in use?
 are not one of \code{"M"} or \code{"F"}?
 \item \code{"handle_oob_centiles"} - In \code{centile2value} functions, how should
 gigs handle elements of \code{p} that are not between \code{0} and \code{1}?
+\item \code{"handle_unused_levels"} - When generating growth categories as factors,
+should gigs drop or keep unused factor levels, and should it issue
+warnings when unused factor levels occur?
 }
 
-Each of these options can take one of three values:
+Each of the input-checking options can take one of three values:
 \itemize{
 \item \code{"quiet"} - Invalid elements are set to \code{NA}, silently.
 \item \code{"warn"} - Invalid elements are set to \code{NA}, with warnings issued when
@@ -31,9 +34,17 @@ this is done.
 \item \code{"error"} - Invalid elements will cause informative errors.
 }
 
-By default, each option in \code{.gigs_options} is set to \code{"warn"}, so you will
-be informed of any invalid data used as input. Use  \code{gigs_option_set()} or
-\code{gigs_option_set()} to change this behaviour.
+For "handle_unused_levels", there are four valid choices:
+\itemize{
+\item \code{"keep_quiet"} - Keep unused factor levels, and don't issue a warning.
+\item \code{"keep_warn"} - Keep unused factor levels, whilst issuing a warning.
+\item \code{"drop_quiet"} - Drop unused factor levels, and don't issue a warning.
+\item \code{"drop_warn"} - Drop unused factor levels, whilst issuing a warning.
+}
+
+You can use \code{gigs_option_set()} or \code{gigs_option_set()} to change these
+options on a one-by-one basis. To change all the input-checking options to
+a specific value, use \code{gigs_input_options_set()}.
 }
 \examples{
 # Get the names of all available options
