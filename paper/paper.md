@@ -46,7 +46,6 @@ time) among vulnerable infants. For clinicians, the ``gigs`` also provides
 support in choosing which standards to use when assessing growth of individual 
 infants.
 
-
 # Statement of need
 
 Without accurate global data on newborn and child growth patterns using 
