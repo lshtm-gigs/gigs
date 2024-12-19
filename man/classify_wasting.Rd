@@ -136,5 +136,6 @@ Rockville, Maryland, USA: ICF (2020). pp. 431-435.
 }
 \seealso{
 See \code{\link[=classify_growth]{classify_growth()}} to run this analysis and others at the same
-time.
+time. See \code{\link[=gigs_waz]{gigs_waz()}} to learn which growth standard will be used for
+different combinations of gestational/chronological age.
 }

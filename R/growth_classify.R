@@ -215,7 +215,8 @@ classify_svn <- function(.data,
 #'                     gest_days = gestage,
 #'                     sex = sex)
 #' @seealso See [classify_growth()] to run this analysis and others at the same
-#' time.
+#'   time. See [gigs_waz()] to learn which growth standard will be used for 
+#'   different combinations of gestational/chronological age.
 #' @export
 classify_stunting <- function(
     .data,
@@ -537,13 +538,15 @@ classify_headsize <- function(.data,
 #' @note For size-for-GA and small vulnerable newborn analyses, centiles and
 #'   categorisations will only be applied for birth measurements. These are
 #'   considered to be the observation per level of `id` where `age_days` is
-#'   smallest, provided that `age_days` is between `<3`.
+#'   smallest, provided that `age_days` is `<3`.
 #'
 #'   Categorical (factor) columns produced here may contain unused factor
 #'   levels. By default, gigs will inform you if these columns have unused
 #'   factor levels. You can change this behaviour using the 
 #'   [GIGS package-level option][gigs_options] 
 #'   `.gigs_options$handle_unused_levels`.
+#' @seealso See [gigs_waz()] to learn which growth standard will be used for 
+#'   different combinations of gestational/chronological age.
 #' @examples
 #' # This dummy dataset contains data from two people, from birth (<3 days) to
 #' # 500 days of age.

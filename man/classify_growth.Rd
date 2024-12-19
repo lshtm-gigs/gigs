@@ -105,7 +105,7 @@ wasting, weight-for-age, and more) at once in \code{data.frame}-like objects.
 For size-for-GA and small vulnerable newborn analyses, centiles and
 categorisations will only be applied for birth measurements. These are
 considered to be the observation per level of \code{id} where \code{age_days} is
-smallest, provided that \code{age_days} is between \verb{<3}.
+smallest, provided that \code{age_days} is \verb{<3}.
 
 Categorical (factor) columns produced here may contain unused factor
 levels. By default, gigs will inform you if these columns have unused
@@ -203,4 +203,8 @@ Barros FC. \strong{Microcephaly in Brazil: how to interpret reported numbers?}
 Accogli A, Geraldo AF, Piccolo G, Riva A, Scala M, Balagura G, et al.
 \strong{Diagnostic Approach to Macrocephaly in Children}. \emph{Frontiers in
 Paediatrics} 2022, \emph{9:794069} \doi{10.3389/fped.2021.794069}
+}
+\seealso{
+See \code{\link[=gigs_waz]{gigs_waz()}} to learn which growth standard will be used for
+different combinations of gestational/chronological age.
 }
